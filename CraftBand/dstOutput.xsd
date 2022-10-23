@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dstOutput" targetNamespace="http://tempuri.org/dstOutput.xsd" xmlns:mstns="http://tempuri.org/dstOutput.xsd" xmlns="http://tempuri.org/dstOutput.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dstOutput" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="dstOutput" msprop:Generator_DataSetName="dstOutput">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="tblOutput" msprop:Generator_RowEvHandlerName="tblOutputRowChangeEventHandler" msprop:Generator_RowDeletedName="tblOutputRowDeleted" msprop:Generator_RowDeletingName="tblOutputRowDeleting" msprop:Generator_RowEvArgName="tblOutputRowChangeEvent" msprop:Generator_TablePropName="tblOutput" msprop:Generator_RowChangedName="tblOutputRowChanged" msprop:Generator_UserTableName="tblOutput" msprop:Generator_RowChangingName="tblOutputRowChanging" msprop:Generator_RowClassName="tblOutputRow" msprop:Generator_TableClassName="tblOutputDataTable" msprop:Generator_TableVarName="tabletblOutput">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_iNo" msprop:Generator_ColumnPropNameInTable="f_iNoColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_iNo" msprop:Generator_UserColumnName="f_iNo" msprop:Generator_ColumnVarNameInTable="columnf_iNo" type="xs:int" default="1" />
+              <xs:element name="f_b空行区分" msprop:Generator_ColumnPropNameInTable="f_b空行区分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b空行区分" msprop:Generator_UserColumnName="f_b空行区分" msprop:Generator_ColumnVarNameInTable="columnf_b空行区分" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_sカテゴリー" msprop:Generator_ColumnPropNameInTable="f_sカテゴリーColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sカテゴリー" msprop:Generator_UserColumnName="f_sカテゴリー" msprop:Generator_ColumnVarNameInTable="columnf_sカテゴリー" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s番号" msprop:Generator_ColumnPropNameInTable="f_s番号Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s番号" msprop:Generator_UserColumnName="f_s番号" msprop:Generator_ColumnVarNameInTable="columnf_s番号" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_sタイプ" msprop:Generator_ColumnPropNameInTable="f_sタイプColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sタイプ" msprop:Generator_UserColumnName="f_sタイプ" msprop:Generator_ColumnVarNameInTable="columnf_sタイプ" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s編みかた名" msprop:Generator_ColumnPropNameInTable="f_s編みかた名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s編みかた名" msprop:Generator_UserColumnName="f_s編みかた名" msprop:Generator_ColumnVarNameInTable="columnf_s編みかた名" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s編みひも名" msprop:Generator_ColumnPropNameInTable="f_s編みひも名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s編みひも名" msprop:Generator_UserColumnName="f_s編みひも名" msprop:Generator_ColumnVarNameInTable="columnf_s編みひも名" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_i周数" msprop:Generator_ColumnPropNameInTable="f_i周数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i周数" msprop:Generator_UserColumnName="f_i周数" msprop:Generator_ColumnVarNameInTable="columnf_i周数" type="xs:int" minOccurs="0" />
+              <xs:element name="f_i段数" msprop:Generator_ColumnPropNameInTable="f_i段数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i段数" msprop:Generator_UserColumnName="f_i段数" msprop:Generator_ColumnVarNameInTable="columnf_i段数" type="xs:short" minOccurs="0" />
+              <xs:element name="f_s高さ" msprop:Generator_ColumnPropNameInTable="f_s高さColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s高さ" msprop:Generator_UserColumnName="f_s高さ" msprop:Generator_ColumnVarNameInTable="columnf_s高さ" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s長さ" msprop:Generator_ColumnPropNameInTable="f_s長さColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s長さ" msprop:Generator_UserColumnName="f_s長さ" msprop:Generator_ColumnVarNameInTable="columnf_s長さ" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s本幅" msprop:Generator_ColumnPropNameInTable="f_s本幅Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s本幅" msprop:Generator_UserColumnName="f_s本幅" msprop:Generator_ColumnVarNameInTable="columnf_s本幅" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_sひも本数" msprop:Generator_ColumnPropNameInTable="f_sひも本数Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sひも本数" msprop:Generator_UserColumnName="f_sひも本数" msprop:Generator_ColumnVarNameInTable="columnf_sひも本数" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_sひも長" msprop:Generator_ColumnPropNameInTable="f_sひも長Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sひも長" msprop:Generator_UserColumnName="f_sひも長" msprop:Generator_ColumnVarNameInTable="columnf_sひも長" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_s色" msprop:Generator_ColumnPropNameInTable="f_s色Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s色" msprop:Generator_UserColumnName="f_s色" msprop:Generator_ColumnVarNameInTable="columnf_s色" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_sメモ" msprop:Generator_ColumnPropNameInTable="f_sメモColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sメモ" msprop:Generator_UserColumnName="f_sメモ" msprop:Generator_ColumnVarNameInTable="columnf_sメモ" type="xs:string" default="" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="tblOutputPKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblOutput" />
+      <xs:field xpath="mstns:f_iNo" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>CraftBand</RootNamespace>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <UseWindowsForms>True</UseWindowsForms>
+    <Product>CraftBand</Product>
+    <Company>LaboHarusawa</Company>
+    <Authors>MihoHarusawa</Authors>
+    <Title>クラフトバンドのライブラリ</Title>
+    <Copyright>Copyright © LaboHarusawa 2022</Copyright>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="dstWork.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dstWork.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dstMasterTables.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dstMasterTables.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dstOutput.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dstOutput.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="dstDataTables.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dstDataTables.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="My Project\Resources.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dstWork.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dstWork.Designer.vb</LastGenOutput>
+    </None>
+    <None Update="dstMasterTables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dstMasterTables.Designer.vb</LastGenOutput>
+    </None>
+    <None Update="dstOutput.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dstOutput.Designer.vb</LastGenOutput>
+    </None>
+    <None Update="dstDataTables.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dstDataTables.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System.Configuration.Assemblies" />
+    <Import Include="System.Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="My Project\Resources.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

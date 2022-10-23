@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dstWork" targetNamespace="http://tempuri.org/dstWork.xsd" xmlns:mstns="http://tempuri.org/dstWork.xsd" xmlns="http://tempuri.org/dstWork.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dstWork" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="dstWork" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dstWork">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="tblColor" msprop:Generator_RowEvHandlerName="tblColorRowChangeEventHandler" msprop:Generator_RowDeletedName="tblColorRowDeleted" msprop:Generator_RowDeletingName="tblColorRowDeleting" msprop:Generator_RowEvArgName="tblColorRowChangeEvent" msprop:Generator_TablePropName="tblColor" msprop:Generator_RowChangedName="tblColorRowChanged" msprop:Generator_UserTableName="tblColor" msprop:Generator_RowChangingName="tblColorRowChanging" msprop:Generator_RowClassName="tblColorRow" msprop:Generator_TableClassName="tblColorDataTable" msprop:Generator_TableVarName="tabletblColor">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Display" msprop:Generator_ColumnPropNameInTable="DisplayColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Display" msprop:Generator_UserColumnName="Display" msprop:Generator_ColumnVarNameInTable="columnDisplay" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnVarNameInTable="columnValue" type="xs:string" default="" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblLane" msprop:Generator_RowEvHandlerName="tblLaneRowChangeEventHandler" msprop:Generator_RowDeletedName="tblLaneRowDeleted" msprop:Generator_RowDeletingName="tblLaneRowDeleting" msprop:Generator_RowEvArgName="tblLaneRowChangeEvent" msprop:Generator_TablePropName="tblLane" msprop:Generator_RowChangedName="tblLaneRowChanged" msprop:Generator_UserTableName="tblLane" msprop:Generator_RowChangingName="tblLaneRowChanging" msprop:Generator_RowClassName="tblLaneRow" msprop:Generator_TableClassName="tblLaneDataTable" msprop:Generator_TableVarName="tabletblLane">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Display" msprop:Generator_ColumnPropNameInTable="DisplayColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Display" msprop:Generator_UserColumnName="Display" msprop:Generator_ColumnVarNameInTable="columnDisplay" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnVarNameInTable="columnValue" type="xs:short" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblColor" />
+      <xs:field xpath="mstns:Value" />
+    </xs:unique>
+    <xs:unique name="tblLane_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblLane" />
+      <xs:field xpath="mstns:Value" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
