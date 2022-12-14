@@ -29,13 +29,14 @@ Partial Class frmVirsion
         Me.txtDescription = New System.Windows.Forms.TextBox()
         Me.lblVersion = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.lnkLabo = New System.Windows.Forms.LinkLabel()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn終了
         '
         Me.btn終了.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.btn終了.Location = New System.Drawing.Point(417, 187)
+        Me.btn終了.Location = New System.Drawing.Point(435, 187)
         Me.btn終了.Name = "btn終了"
         Me.btn終了.Size = New System.Drawing.Size(111, 46)
         Me.btn終了.TabIndex = 26
@@ -54,7 +55,7 @@ Partial Class frmVirsion
         'lblDescription
         '
         Me.lblDescription.AutoSize = True
-        Me.lblDescription.Location = New System.Drawing.Point(116, 54)
+        Me.lblDescription.Location = New System.Drawing.Point(116, 49)
         Me.lblDescription.Name = "lblDescription"
         Me.lblDescription.Size = New System.Drawing.Size(224, 20)
         Me.lblDescription.TabIndex = 28
@@ -62,7 +63,7 @@ Partial Class frmVirsion
         '
         'txtDescription
         '
-        Me.txtDescription.Location = New System.Drawing.Point(116, 93)
+        Me.txtDescription.Location = New System.Drawing.Point(116, 81)
         Me.txtDescription.Multiline = True
         Me.txtDescription.Name = "txtDescription"
         Me.txtDescription.ReadOnly = True
@@ -73,7 +74,7 @@ Partial Class frmVirsion
         'lblVersion
         '
         Me.lblVersion.AutoSize = True
-        Me.lblVersion.Location = New System.Drawing.Point(116, 187)
+        Me.lblVersion.Location = New System.Drawing.Point(116, 174)
         Me.lblVersion.Name = "lblVersion"
         Me.lblVersion.Size = New System.Drawing.Size(56, 20)
         Me.lblVersion.TabIndex = 31
@@ -88,11 +89,22 @@ Partial Class frmVirsion
         Me.PictureBox1.TabIndex = 32
         Me.PictureBox1.TabStop = False
         '
+        'lnkLabo
+        '
+        Me.lnkLabo.AutoSize = True
+        Me.lnkLabo.Location = New System.Drawing.Point(116, 204)
+        Me.lnkLabo.Name = "lnkLabo"
+        Me.lnkLabo.Size = New System.Drawing.Size(302, 20)
+        Me.lnkLabo.TabIndex = 33
+        Me.lnkLabo.TabStop = True
+        Me.lnkLabo.Text = "https://labo.com/CraftBand/craftbandmesh/"
+        '
         'frmVirsion
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(537, 245)
+        Me.ClientSize = New System.Drawing.Size(558, 242)
+        Me.Controls.Add(Me.lnkLabo)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.lblVersion)
         Me.Controls.Add(Me.txtDescription)
@@ -118,4 +130,5 @@ Partial Class frmVirsion
     Friend WithEvents txtDescription As TextBox
     Friend WithEvents lblVersion As Label
     Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents lnkLabo As LinkLabel
 End Class

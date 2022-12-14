@@ -48,7 +48,8 @@ Class clsCalcMesh
     Private Property _i垂直ひも数_楕円 As Integer 'ゼロ以上
     '側面
     Private Property _d高さの合計 As Double '側面の合計値,ゼロ以上
-    Private Property _d周の最大値 As Double '厚さの最大値,ゼロ以上
+    Private Property _d周の最大値 As Double '周の最大値,ゼロ以上
+    Private Property _d周の最小値 As Double '周の最小値,ゼロ以上
     Private Property _d垂直ひも長合計 As Double '側面の合計値,ゼロ以上
     Private Property _d厚さの最大値 As Double '厚さの最大値,ゼロ以上
 
@@ -74,11 +75,39 @@ Class clsCalcMesh
 
         _d高さの合計 = 0
         _d周の最大値 = 0
+        _d周の最小値 = 0
         _d垂直ひも長合計 = 0
         _d厚さの最大値 = 0
     End Sub
 
 #Region "プロパティ値"
+    ReadOnly Property p_d内側_高さ As Double
+        Get
+            Return _d高さの合計
+        End Get
+    End Property
+    ReadOnly Property p_d厚さ As Double
+        Get
+            'issues#4
+            'If _d底の周 < _d周の最大値 Then
+            '    Dim thick As Double = 8
+            '    If 0 < _d径の合計 Then
+            '        thick = 2 * PAI
+            '    End If
+            '    Return _d厚さの最大値 + (_d周の最大値 - _d底の周) / thick
+            'Else
+            '    Return _d厚さの最大値
+            'End If
+            Return _d厚さの最大値
+        End Get
+    End Property
+    ReadOnly Property p_d外側_高さ As Double
+        Get
+            Return _d高さの合計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        End Get
+    End Property
+
+    '底のサイズ
     ReadOnly Property p_d内側_横 As Double
         Get
             Return _d縦横の横 + 2 * _d径の合計
@@ -89,39 +118,39 @@ Class clsCalcMesh
             Return _d縦横の縦 + 2 * _d径の合計
         End Get
     End Property
-    ReadOnly Property p_d内側_高さ As Double
-        Get
-            Return _d高さの合計
-        End Get
-    End Property
-    ReadOnly Property p_d厚さ As Double
-        Get
-            If _d底の周 < _d周の最大値 Then
-                Dim thick As Double = 8
-                If 0 < _d径の合計 Then
-                    thick = 2 * PAI
-                End If
-                Return _d厚さの最大値 + (_d周の最大値 - _d底の周) / thick
-            Else
-                Return _d厚さの最大値
-            End If
-        End Get
-    End Property
     ReadOnly Property p_d外側_横 As Double
         Get
-            Return p_d内側_横 + p_d厚さ * 2
+            Return p_d内側_横 + (g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ") * 2)
         End Get
     End Property
     ReadOnly Property p_d外側_縦 As Double
         Get
-            Return p_d内側_縦 + p_d厚さ * 2
+            Return p_d内側_縦 + (g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ") * 2)
         End Get
     End Property
-    ReadOnly Property p_d外側_高さ As Double
+
+    '厚さ(1/2づつ内側・外側)と最大・最小を考慮する issue#4
+    ReadOnly Property p_d内側_最小横 As Double
         Get
-            Return _d高さの合計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            Return p_d内側_横 * (_d周の最小値 / _d底の周) - p_d厚さ
         End Get
     End Property
+    ReadOnly Property p_d内側_最小縦 As Double
+        Get
+            Return p_d内側_縦 * (_d周の最小値 / _d底の周) - p_d厚さ
+        End Get
+    End Property
+    ReadOnly Property p_d外側_最大横 As Double
+        Get
+            Return p_d外側_横 * (_d周の最大値 / _d底の周) + p_d厚さ
+        End Get
+    End Property
+    ReadOnly Property p_d外側_最大縦 As Double
+        Get
+            Return p_d外側_縦 * (_d周の最大値 / _d底の周) + p_d厚さ
+        End Get
+    End Property
+
 
     '表示文字列
     Public ReadOnly Property p_s内側_横 As String
@@ -164,6 +193,23 @@ Class clsCalcMesh
             Return ""
         End Get
     End Property
+    Public ReadOnly Property p_s内側_最小横 As String
+        Get
+            If isValid計算_横 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d内側_最小横)
+            End If
+            Return ""
+        End Get
+    End Property
+    Public ReadOnly Property p_s内側_最小縦 As String
+        Get
+            If isValid計算_縦 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d内側_最小縦)
+            End If
+            Return ""
+        End Get
+    End Property
+
 
     Public ReadOnly Property p_s外側_横 As String
         Get
@@ -209,6 +255,22 @@ Class clsCalcMesh
                     thick = 2 * PAI
                 End If
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d周の最大値 + _d厚さの最大値 * thick)
+            End If
+            Return ""
+        End Get
+    End Property
+    Public ReadOnly Property p_s外側_最大横 As String
+        Get
+            If isValid計算_横 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d外側_最大横)
+            End If
+            Return ""
+        End Get
+    End Property
+    Public ReadOnly Property p_s外側_最大縦 As String
+        Get
+            If isValid計算_縦 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d外側_最大縦)
             End If
             Return ""
         End Get
@@ -343,7 +405,7 @@ Class clsCalcMesh
         sb.AppendFormat("Target:({0},{1},{2}) Lane({3})", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅).AppendLine()
         sb.AppendFormat("Mesh:({0},{1}) RoundVert({2}) Short Lane({3}) BandCount({4}) ", _d縦横の横, _d縦横の縦, _d縦横の垂直ひも間の周, _d最上と最下の短いひもの幅, _i垂直ひも数_縦横).AppendLine()
         sb.AppendFormat("Oval:r({0}) Circle({1}) BandCount({2})", _d径の合計, _d底の周, _i垂直ひも数_楕円).AppendLine()
-        sb.AppendFormat("Side:H({0}) Circle({1}) VerticalLength({2}) Thickness({3})", _d高さの合計, _d周の最大値, _d垂直ひも長合計, _d厚さの最大値).AppendLine()
+        sb.AppendFormat("Side:H({0}) Circle({1},{2}) VerticalLength({3}) Thickness({4})", _d高さの合計, _d周の最小値, _d周の最大値, _d垂直ひも長合計, _d厚さの最大値).AppendLine()
         Return sb.ToString
     End Function
 
@@ -765,13 +827,13 @@ Class clsCalcMesh
     End Function
 
     '縦寸法から横ひも(底楕円が設定されていればその分マイナス)
-
     Private Function calc_Target_横(d基本のひも幅 As Double) As Boolean
         Dim d横ひも間のすき間 As Double = 0
 
         Dim d縦 As Double = _d縦_目標 - _d径の合計 * 2
         Dim yoko As Integer = Math.Truncate(d縦 / (d基本のひも幅 + d横ひも間のすき間)) 'ドット以下切り捨て
-        Dim n長い横ひもの本数 As Integer = getOddHalf(yoko)
+        'issue#2
+        Dim n長い横ひもの本数 As Integer = getOddHalf(yoko, ((g_clsSelectBasics.p_i本幅 / 2) < _I基本のひも幅))
         If n長い横ひもの本数 < 1 Then
             '縦寸法が小さすぎるため横ひもを置けません。
             p_sメッセージ = My.Resources.CalcTooShortHeight
@@ -779,32 +841,48 @@ Class clsCalcMesh
         End If
 
         Dim n短い横ひも数 As Integer = n長い横ひもの本数 - 1 'fix
-
         Dim n短い横ひもn本幅 As Integer = _I基本のひも幅 '開始値
+
+        '短い横ひもで埋める分
         Dim dLeft As Double = d縦 - (n長い横ひもの本数 * (d基本のひも幅 + d横ひも間のすき間))
 
+        Dim dLeft2 As Double = dLeft - (n短い横ひも数 * (g_clsSelectBasics.p_d指定本幅(n短い横ひもn本幅) + d横ひも間のすき間))
+        If dLeft2 < 0 Then
+            '広すぎるので減らしていく
+            Do While True
+                If 1 < n短い横ひもn本幅 Then
+                    n短い横ひもn本幅 -= 1
+                Else
+                    '減らせない
+                    Exit Do
+                End If
+                dLeft2 = dLeft - (n短い横ひも数 * (g_clsSelectBasics.p_d指定本幅(n短い横ひもn本幅) + d横ひも間のすき間))
+                If 0 < dLeft2 Then
+                    Exit Do
+                End If
+            Loop
+
+        Else
+            '狭すぎるので増やしていく
+            Do While True
+                dLeft2 = dLeft - (n短い横ひも数 * (g_clsSelectBasics.p_d指定本幅(n短い横ひもn本幅) + d横ひも間のすき間))
+                If dLeft2 <= g_clsSelectBasics.p_d指定本幅(g_clsSelectBasics.p_i本幅) * 2 Then
+                    Exit Do
+                ElseIf n短い横ひもn本幅 < g_clsSelectBasics.p_i本幅 Then
+                    n短い横ひもn本幅 += 1
+                    Continue Do
+                Else
+                    '増やせない
+                    Exit Do
+                End If
+            Loop
+
+        End If
+        '最上と最下の短いひもで調整する分
         Dim dLeftAdjust As Double = 0
-        Do While True
-
-            Dim dLeft2 As Double = dLeft - (n短い横ひも数 * (g_clsSelectBasics.p_d指定本幅(n短い横ひもn本幅) + d横ひも間のすき間))
-            If dLeft2 <= 0 Then
-                Exit Do
-
-            ElseIf dLeft2 <= g_clsSelectBasics.p_d指定本幅(g_clsSelectBasics.p_i本幅) * 2 Then
-                dLeftAdjust = dLeft2 / 2
-                Exit Do
-
-            ElseIf n短い横ひもn本幅 < g_clsSelectBasics.p_i本幅 Then
-                n短い横ひもn本幅 += 1
-                Continue Do
-
-            Else
-                '不足承知
-                dLeftAdjust = dLeft2 / 2
-                Exit Do
-
-            End If
-        Loop
+        If 0 < dLeft2 Then
+            dLeftAdjust = dLeft2 / 2
+        End If
 
         '***結果をセット
         With _Data.p_row底_縦横
@@ -841,7 +919,8 @@ Class clsCalcMesh
         Dim d横 As Double = _d横_目標 - _d径の合計 * 2
         Dim n縦ひもn本幅 As Integer = _I基本のひも幅
         Dim tate As Integer = Math.Truncate(d横 / d基本のひも幅) 'ドット以下切り捨て
-        Dim n縦ひもの本数 = getOddHalf(tate)
+        'issue#2
+        Dim n縦ひもの本数 = getOddHalf(tate, ((g_clsSelectBasics.p_i本幅 / 2) < _I基本のひも幅))
         If n縦ひもの本数 <= 1 Then
             '横寸法が小さすぎるため縦ひもを置けません。
             p_sメッセージ = My.Resources.CalcNoShortWidth
@@ -904,7 +983,7 @@ Class clsCalcMesh
         Do While ret AndAlso (_d高さの合計 < _d高さ_目標)
             row.f_i周数 = row.f_i周数 + 1
             ret = ret And calc_側面(CalcCategory.Side, row, "f_i周数")
-            If dLastHeight = _d高さの合計 Then
+            If dLastHeight >= _d高さの合計 Then
                 '編みかた'{0}'の設定を確認してください。
                 p_sメッセージ = String.Format(My.Resources.CalcZeroPatternHeight, row.f_s編みかた名)
                 Return False
@@ -932,7 +1011,7 @@ Class clsCalcMesh
         Do While _d高さ_目標 < _d高さの合計 AndAlso 1 < row.f_i周数
             row.f_i周数 = row.f_i周数 - 1
             ret = ret And calc_側面(CalcCategory.Side, row, "f_i周数")
-            If dLastHeight = _d高さの合計 Then
+            If dLastHeight <= _d高さの合計 Then
                 '編みかた'{0}'の設定を確認してください。
                 p_sメッセージ = String.Format(My.Resources.CalcZeroPatternHeight, row.f_s編みかた名)
                 Return False
@@ -947,7 +1026,8 @@ Class clsCalcMesh
         Dim ret As Boolean = True
         Dim firstnum As Integer = clsDataTables.LargerNumber(table, 0)
         If firstnum < 1 Then
-            Dim patts() As String = g_clsMasterTables.GetPatternNames(False, False)
+            'issues#3
+            Dim patts() As String = g_clsMasterTables.GetPatternNames(False, False, True)
             If 0 < patts.Count Then
                 Dim any As Integer = New System.Random().Next(patts.Count)
                 Dim row As tbl側面Row = Nothing
@@ -973,7 +1053,8 @@ Class clsCalcMesh
         Return ret
     End Function
 
-    Private Shared Function getOddHalf(ByVal num As Integer) As Integer
+    '1/2値の奇数、偶数ならプラス/マイナス1(issue#2)
+    Private Shared Function getOddHalf(ByVal num As Integer, ByVal isUp As Boolean) As Integer
         If num <= 0 Then
             Return 0
         ElseIf num <= 2 Then
@@ -988,7 +1069,11 @@ Class clsCalcMesh
         ElseIf half2 Mod 2 = 1 Then
             Return half2
         Else
-            Return half2 - 1
+            If isUp Then
+                Return half2 + 1
+            Else
+                Return half2 - 1
+            End If
         End If
     End Function
 
@@ -1244,10 +1329,11 @@ Class clsCalcMesh
                     Return True '1回目でNullセット済
 
                 Else
+                    '(issue#5)楕円底の場合は、ひも1幅は自身の本幅
                     If row.f_b周連続区分 Then
-                        row.f_dひも長 = mst.GetContinuoutBandLength(row.f_d周長, _i垂直ひも数_縦横, row.f_i周数)
+                        row.f_dひも長 = mst.GetContinuoutBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横, row.f_i周数)
                     Else
-                        row.f_dひも長 = mst.GetBandLength(row.f_d周長, _i垂直ひも数_縦横)
+                        row.f_dひも長 = mst.GetBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横)
                     End If
                 End If
 
@@ -1282,10 +1368,11 @@ Class clsCalcMesh
             ' tbl編みかたRow
             Dim mst As clsPatternDataRow = g_clsMasterTables.GetPatternRecord(row.f_s編みかた名, row.f_iひも番号)
             If mst.IsValid Then
+                '(issue#5)楕円底の場合は、ひも1幅は自身の本幅
                 If row.f_b周連続区分 Then
-                    row.f_dひも長 = mst.GetContinuoutBandLength(row.f_d周長, _i垂直ひも数_縦横 + row.f_i差しひも累計, row.f_i周数)
+                    row.f_dひも長 = mst.GetContinuoutBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横 + row.f_i差しひも累計, row.f_i周数)
                 Else
-                    row.f_dひも長 = mst.GetBandLength(row.f_d周長, _i垂直ひも数_縦横)
+                    row.f_dひも長 = mst.GetBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横)
                 End If
             Else
                 '1回目で処理済
@@ -1429,6 +1516,15 @@ Class clsCalcMesh
             _d厚さの最大値 = obj4
         End If
 
+        '周の最小値
+        Dim obj5 As Object = _Data.p_tbl側面.Compute("MIN(f_d周長)", "f_d周長 IS NOT NULL")
+        If IsDBNull(obj5) OrElse obj5 < 0 Then
+            _d周の最小値 = -1
+        Else
+            _d周の最小値 = obj5
+        End If
+
+
         Return ret
     End Function
 
@@ -1476,6 +1572,7 @@ Class clsCalcMesh
 
         Else
             Dim ret As Boolean = True
+            Dim nひも1何本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
             For Each drow As clsDataRow In groupRow
                 Dim mst As New clsPatternDataRow(grpMst.IndexDataRow(drow))
                 If mst.IsValid Then
@@ -1486,10 +1583,10 @@ Class clsCalcMesh
                     drow.Value("f_d厚さ") = mst.Value("f_d厚さ")
 
                     If drow.Value("f_b周連続区分") Then
-                        drow.Value("f_dひも長") = mst.GetContinuoutBandLength(drow.Value("f_d周長"), p_i垂直ひも数, i周数)
+                        drow.Value("f_dひも長") = mst.GetContinuoutBandLength(nひも1何本幅, drow.Value("f_d周長"), p_i垂直ひも数, i周数)
                         drow.Value("f_iひも本数") = mst.Value("f_iひも数")
                     Else
-                        drow.Value("f_dひも長") = mst.GetBandLength(drow.Value("f_d周長"), p_i垂直ひも数)
+                        drow.Value("f_dひも長") = mst.GetBandLength(nひも1何本幅, drow.Value("f_d周長"), p_i垂直ひも数)
                         drow.Value("f_iひも本数") = i周数 * mst.Value("f_iひも数")
                     End If
 
@@ -1670,7 +1767,7 @@ Class clsCalcMesh
     Dim _ColorBandMaxLength As New Dictionary(Of String, SortedDictionary(Of Integer, Double))
 
     '出力するひも長を「連続ひも長」フィールドにセットする
-    Private Function set底楕円_連続ひも長() As Boolean
+    Private Function set底楕円_連続ひも長(ByVal d垂直ひも長 As Double) As Boolean
         Dim res = (From row As tbl底_楕円Row In _Data.p_tbl底_楕円
                    Select Idx = row.f_iひも番号
                    Order By Idx).Distinct
@@ -1728,9 +1825,7 @@ Class clsCalcMesh
         '差しひも
         Dim conda As String = "f_b差しひも区分"
         For Each row As tbl底_楕円Row In _Data.p_tbl底_楕円.Select(conda, "f_i番号 ASC")
-            row.f_d連続ひも長 = (row.f_dひも長 + row.f_dひも長加算) +
-            _d垂直ひも長合計 _
-            + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
+            row.f_d連続ひも長 = (row.f_dひも長 + row.f_dひも長加算) + d垂直ひも長
         Next
 
         _Data.p_tbl底_楕円.AcceptChanges()
@@ -1810,9 +1905,15 @@ Class clsCalcMesh
     'ひもの出力値
     Private Sub row_Band(ByVal row As tblOutputRow, ByVal lane As Integer, ByVal count As Integer, ByVal length As Double, ByVal color As String)
         row.f_s本幅 = lane
-        row.f_sひも本数 = outCountText(count)
-        row.f_sひも長 = outLengthText(length)
-        row.f_s色 = color
+
+        'issues#1
+        If 0 < lane Then
+            row.f_sひも本数 = outCountText(count)
+            row.f_sひも長 = outLengthText(length)
+            row.f_s色 = color
+        Else
+            Exit Sub
+        End If
         '
         Dim bandLength As SortedDictionary(Of Integer, Double)
         Dim bandMaxLength As SortedDictionary(Of Integer, Double)
@@ -1849,7 +1950,9 @@ Class clsCalcMesh
             Return False
         End If
 
-        set底楕円_連続ひも長()
+        Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
+
+        set底楕円_連続ひも長(d垂直ひも長)
         set側面_連続ひも長()
 
         _ColorBandLength.Clear()
@@ -1863,6 +1966,8 @@ Class clsCalcMesh
         row.f_sカテゴリー = text底縦横()
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
+        row.f_s編みかた名 = name '名前
 
         With _Data.p_row底_縦横
             If 0 < .Value("f_i長い横ひもの本数") Then
@@ -1870,8 +1975,9 @@ Class clsCalcMesh
                 row.f_sタイプ = text横置き()
                 row.f_s編みかた名 = text長い横ひも()
                 row_Band(row, .Value("f_i長い横ひも"), .Value("f_i長い横ひもの本数"),
-                _d縦横の横 + 2 * (_d径の合計 + _d垂直ひも長合計 + .Value("f_d垂直ひも長加算")), "")
+                _d縦横の横 + 2 * (_d径の合計 + d垂直ひも長), "")
                 row.f_s長さ = outLengthText(_d縦横の横)
+                row.f_sメモ = .Value("f_s横ひものメモ")
 
                 Dim n短い横ひもの数 As Integer = .Value("f_i長い横ひもの本数") - 1
                 Dim n異なる幅の数 As Integer = 0
@@ -1921,8 +2027,9 @@ Class clsCalcMesh
                 row.f_sタイプ = text縦置き()
                 row.f_s編みかた名 = text縦ひも()
                 row_Band(row, .Value("f_i縦ひも"), .Value("f_i縦ひもの本数"),
-                    _d縦横の縦 + 2 * (_d径の合計 + _d垂直ひも長合計 + .Value("f_d垂直ひも長加算")), "")
+                    _d縦横の縦 + 2 * (_d径の合計 + d垂直ひも長), "")
                 row.f_s長さ = outLengthText(_d縦横の縦)
+                row.f_sメモ = .Value("f_s縦ひものメモ")
             End If
 
             If .Value("f_b始末ひも区分") Then
@@ -2059,28 +2166,50 @@ Class clsCalcMesh
         '***計算寸法
         row = output.NextNewRow
         row.f_sカテゴリー = text計算寸法()
-        row.f_s編みかた名 = name '名前
-        row.f_s長さ = text内側()
+        row.f_sひも本数 = text内側()
         row.f_sひも長 = text外側()
-        row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
+        row.f_s高さ = text内側()
+        row.f_s長さ = text外側()
 
         row = output.NextNewRow
-        row.f_s編みかた名 = text横寸法()
-        row.f_s長さ = outLengthText(p_d内側_横)
+        row.f_s色 = text横寸法() & text底()
+        row.f_sメモ = text横寸法() & text最大()
+        row.f_sひも本数 = outLengthText(p_d内側_横)
         row.f_sひも長 = outLengthText(p_d外側_横)
+        row.f_s高さ = outLengthText(p_d内側_最小横)
+        row.f_s長さ = outLengthText(p_d外側_最大横)
+        row.f_s編みかた名 = String.Format("{0}={1}{2}", text底楕円の径(), outLengthText(_d径の合計), g_clsSelectBasics.p_unit出力時の寸法単位.Str)
 
         row = output.NextNewRow
-        row.f_s編みかた名 = text縦寸法()
-        row.f_s長さ = outLengthText(p_d内側_縦)
+        row.f_s色 = text縦寸法() & text底()
+        row.f_sメモ = text縦寸法() & text最大()
+        row.f_sひも本数 = outLengthText(p_d内側_縦)
         row.f_sひも長 = outLengthText(p_d外側_縦)
+        row.f_s高さ = outLengthText(p_d内側_最小縦)
+        row.f_s長さ = outLengthText(p_d外側_最大縦)
+        row.f_s編みかた名 = String.Format("{0}={1}{2}", text厚さ(), outLengthText(p_d厚さ), g_clsSelectBasics.p_unit出力時の寸法単位.Str)
 
         row = output.NextNewRow
-        row.f_s編みかた名 = text高さ寸法()
-        row.f_s長さ = outLengthText(p_d内側_高さ)
+        row.f_s色 = text高さ寸法()
+        row.f_sメモ = text高さ寸法()
+        row.f_sひも本数 = outLengthText(p_d内側_高さ)
         row.f_sひも長 = outLengthText(p_d外側_高さ)
+        row.f_s高さ = outLengthText(p_d内側_高さ)
+        row.f_s長さ = outLengthText(p_d外側_高さ)
+        row.f_s編みかた名 = String.Format("{0}={1}", text垂直ひも数(), p_i垂直ひも数)
+
+        row = output.NextNewRow
+        row.f_s色 = text垂直ひも長()
+        row.f_sひも本数 = outLengthText(d垂直ひも長)
+        row.f_sメモ = My.Resources.CalcOutTurn
+        row.f_s高さ = outLengthText(d垂直ひも長 - p_d内側_高さ)
+        row.f_s編みかた名 = String.Format("{0}={1}{2}", My.Resources.CalcOutAverageMesh, outLengthText(_d周の最大値 / p_i垂直ひも数), g_clsSelectBasics.p_unit出力時の寸法単位.Str)
+
+        output.AddBlankLine()
 
         '集計値
         row = output.NextNewRow
+        row.f_sカテゴリー = My.Resources.CalcOutSum
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         '最短
         row.f_s長さ = My.Resources.CalcOutShortest
@@ -2106,6 +2235,7 @@ Class clsCalcMesh
             If 0 < bandsum Then
                 row = output.NextNewRow
                 row.f_s長さ = outLengthText(bandsum)
+                row.f_s色 = color
             End If
         Next
 
@@ -2232,6 +2362,31 @@ Class clsCalcMesh
 
     Private Function text本() As String
         Return _frmMain.lbl長い横ひもの本数_単位.Text
+    End Function
+
+    Private Function text底() As String
+        Return _frmMain.lbl底.Text
+    End Function
+
+    Private Function text最大() As String
+        Return _frmMain.lbl最大.Text
+    End Function
+
+    Private Function text底楕円の径() As String
+        Return _frmMain.lbl底楕円の径.Text
+    End Function
+
+    Private Function text垂直ひも数() As String
+        Return _frmMain.lbl垂直ひも数.Text
+    End Function
+
+    Private Function text厚さ() As String
+        Return _frmMain.lbl厚さ.Text
+    End Function
+
+    Private Function text垂直ひも長() As String
+        'dgv側面
+        Return _frmMain.f_d垂直ひも長2.HeaderText
     End Function
 
 #End Region

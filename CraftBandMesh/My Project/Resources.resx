@@ -201,11 +201,20 @@
   <data name="CalcNoTargetWidth" xml:space="preserve">
     <value>横寸法が指定されていないため、すき間の寸法を計算できません。</value>
   </data>
+  <data name="CalcOutAverageMesh" xml:space="preserve">
+    <value>目の平均</value>
+  </data>
   <data name="CalcOutLonguest" xml:space="preserve">
     <value>最長{0,8}</value>
   </data>
   <data name="CalcOutShortest" xml:space="preserve">
     <value>最短</value>
+  </data>
+  <data name="CalcOutSum" xml:space="preserve">
+    <value>集計値</value>
+  </data>
+  <data name="CalcOutTurn" xml:space="preserve">
+    <value>折り返し</value>
   </data>
   <data name="CalcTooShortHeight" xml:space="preserve">
     <value>縦寸法が小さすぎるため横ひもを置けません。</value>

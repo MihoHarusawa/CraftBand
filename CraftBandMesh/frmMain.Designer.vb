@@ -113,6 +113,20 @@ Partial Class frmMain
         Me.txt厚さ = New System.Windows.Forms.TextBox()
         Me.btn規定値 = New System.Windows.Forms.Button()
         Me.btnリセット = New System.Windows.Forms.Button()
+        Me.txt内側_横 = New System.Windows.Forms.TextBox()
+        Me.txt内側_縦 = New System.Windows.Forms.TextBox()
+        Me.txt内側_高さ = New System.Windows.Forms.TextBox()
+        Me.txt外側_横 = New System.Windows.Forms.TextBox()
+        Me.txt外側_縦 = New System.Windows.Forms.TextBox()
+        Me.txt外側_高さ = New System.Windows.Forms.TextBox()
+        Me.txt内側_底の周 = New System.Windows.Forms.TextBox()
+        Me.txt外側_底の周 = New System.Windows.Forms.TextBox()
+        Me.txt内側_最大周 = New System.Windows.Forms.TextBox()
+        Me.txt外側_最大周 = New System.Windows.Forms.TextBox()
+        Me.txt外側_最大縦 = New System.Windows.Forms.TextBox()
+        Me.txt外側_最大横 = New System.Windows.Forms.TextBox()
+        Me.txt内側_最小縦 = New System.Windows.Forms.TextBox()
+        Me.txt内側_最小横 = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -149,6 +163,8 @@ Partial Class frmMain
         Me.lbl横置きの計 = New System.Windows.Forms.Label()
         Me.lbl垂直ひも長加算_単位 = New System.Windows.Forms.Label()
         Me.grp縦置き = New System.Windows.Forms.GroupBox()
+        Me.lbl縦ひものメモ = New System.Windows.Forms.Label()
+        Me.txt縦ひものメモ = New System.Windows.Forms.TextBox()
         Me.lbl縦ひも_単位 = New System.Windows.Forms.Label()
         Me.txt_ひとつのすき間の寸法_本幅分 = New System.Windows.Forms.TextBox()
         Me.lbl_ひとつのすき間の寸法_本幅分 = New System.Windows.Forms.Label()
@@ -158,6 +174,8 @@ Partial Class frmMain
         Me.lblすき間の寸法 = New System.Windows.Forms.Label()
         Me.lbl縦ひもの本数_単位 = New System.Windows.Forms.Label()
         Me.grp横置き = New System.Windows.Forms.GroupBox()
+        Me.lbl横ひものメモ = New System.Windows.Forms.Label()
+        Me.txt横ひものメモ = New System.Windows.Forms.TextBox()
         Me.lbl横ひも間のすき間_単位 = New System.Windows.Forms.Label()
         Me.lbl短い横ひもlength = New System.Windows.Forms.Label()
         Me.lbl異なる幅_単位 = New System.Windows.Forms.Label()
@@ -267,25 +285,15 @@ Partial Class frmMain
         Me.txtメモ = New System.Windows.Forms.TextBox()
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl内側 = New System.Windows.Forms.Label()
-        Me.txt内側_横 = New System.Windows.Forms.TextBox()
         Me.lbl計算寸法 = New System.Windows.Forms.Label()
-        Me.txt内側_縦 = New System.Windows.Forms.TextBox()
         Me.lbl計算寸法縦 = New System.Windows.Forms.Label()
-        Me.txt内側_高さ = New System.Windows.Forms.TextBox()
         Me.lbl計算寸法高さ = New System.Windows.Forms.Label()
         Me.lbl計算寸法_単位 = New System.Windows.Forms.Label()
         Me.lbl外側 = New System.Windows.Forms.Label()
-        Me.txt外側_横 = New System.Windows.Forms.TextBox()
-        Me.txt外側_縦 = New System.Windows.Forms.TextBox()
-        Me.txt外側_高さ = New System.Windows.Forms.TextBox()
         Me.lbl計算寸法横 = New System.Windows.Forms.Label()
         Me.lbl計算寸法底の周 = New System.Windows.Forms.Label()
         Me.lbl計算寸法最大周 = New System.Windows.Forms.Label()
         Me.btn終了 = New System.Windows.Forms.Button()
-        Me.txt内側_底の周 = New System.Windows.Forms.TextBox()
-        Me.txt外側_底の周 = New System.Windows.Forms.TextBox()
-        Me.txt内側_最大周 = New System.Windows.Forms.TextBox()
-        Me.txt外側_最大周 = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.cmb基本色 = New System.Windows.Forms.ComboBox()
@@ -300,6 +308,10 @@ Partial Class frmMain
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lbl単位 = New System.Windows.Forms.Label()
         Me.btnDEBUG = New System.Windows.Forms.Button()
+        Me.lbl計算寸法最大縦 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
+        Me.lbl底 = New System.Windows.Forms.Label()
+        Me.lbl最大 = New System.Windows.Forms.Label()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -676,7 +688,7 @@ Partial Class frmMain
         Me.chk斜めの補強ひも.Location = New System.Drawing.Point(432, 103)
         Me.chk斜めの補強ひも.Name = "chk斜めの補強ひも"
         Me.chk斜めの補強ひも.Size = New System.Drawing.Size(123, 24)
-        Me.chk斜めの補強ひも.TabIndex = 5
+        Me.chk斜めの補強ひも.TabIndex = 3
         Me.chk斜めの補強ひも.Text = "斜めの補強ひも"
         Me.ToolTip1.SetToolTip(Me.chk斜めの補強ひも, "底の対角線にクロスして貼るひもを置く場合はチェックON")
         Me.chk斜めの補強ひも.UseVisualStyleBackColor = True
@@ -695,10 +707,10 @@ Partial Class frmMain
         'btnひもリスト
         '
         Me.btnひもリスト.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnひもリスト.Location = New System.Drawing.Point(756, 609)
+        Me.btnひもリスト.Location = New System.Drawing.Point(756, 650)
         Me.btnひもリスト.Name = "btnひもリスト"
         Me.btnひもリスト.Size = New System.Drawing.Size(111, 46)
-        Me.btnひもリスト.TabIndex = 49
+        Me.btnひもリスト.TabIndex = 55
         Me.btnひもリスト.Text = "ひもリスト(&L)"
         Me.ToolTip1.SetToolTip(Me.btnひもリスト, "入力値に基づきひも幅と長さのリストを表示します")
         Me.btnひもリスト.UseVisualStyleBackColor = True
@@ -707,7 +719,7 @@ Partial Class frmMain
         '
         Me.lbl垂直ひも数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl垂直ひも数.AutoSize = True
-        Me.lbl垂直ひも数.Location = New System.Drawing.Point(407, 584)
+        Me.lbl垂直ひも数.Location = New System.Drawing.Point(407, 625)
         Me.lbl垂直ひも数.Name = "lbl垂直ひも数"
         Me.lbl垂直ひも数.Size = New System.Drawing.Size(77, 20)
         Me.lbl垂直ひも数.TabIndex = 28
@@ -718,7 +730,7 @@ Partial Class frmMain
         '
         Me.txt垂直ひも数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txt垂直ひも数.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txt垂直ひも数.Location = New System.Drawing.Point(487, 582)
+        Me.txt垂直ひも数.Location = New System.Drawing.Point(487, 623)
         Me.txt垂直ひも数.Name = "txt垂直ひも数"
         Me.txt垂直ひも数.ReadOnly = True
         Me.txt垂直ひも数.Size = New System.Drawing.Size(75, 27)
@@ -730,7 +742,7 @@ Partial Class frmMain
         '
         Me.lbl底楕円の径.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl底楕円の径.AutoSize = True
-        Me.lbl底楕円の径.Location = New System.Drawing.Point(218, 584)
+        Me.lbl底楕円の径.Location = New System.Drawing.Point(218, 625)
         Me.lbl底楕円の径.Name = "lbl底楕円の径"
         Me.lbl底楕円の径.Size = New System.Drawing.Size(91, 20)
         Me.lbl底楕円の径.TabIndex = 26
@@ -741,7 +753,7 @@ Partial Class frmMain
         '
         Me.txt底楕円の径.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txt底楕円の径.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txt底楕円の径.Location = New System.Drawing.Point(315, 582)
+        Me.txt底楕円の径.Location = New System.Drawing.Point(315, 623)
         Me.txt底楕円の径.Name = "txt底楕円の径"
         Me.txt底楕円の径.ReadOnly = True
         Me.txt底楕円の径.Size = New System.Drawing.Size(75, 27)
@@ -781,7 +793,7 @@ Partial Class frmMain
         Me.nud垂直ひも長加算.Minimum = New Decimal(New Integer() {99999, 0, 0, -2147483648})
         Me.nud垂直ひも長加算.Name = "nud垂直ひも長加算"
         Me.nud垂直ひも長加算.Size = New System.Drawing.Size(68, 27)
-        Me.nud垂直ひも長加算.TabIndex = 3
+        Me.nud垂直ひも長加算.TabIndex = 1
         Me.nud垂直ひも長加算.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.ToolTip1.SetToolTip(Me.nud垂直ひも長加算, "差しひもも含めた全ての垂直ひもに加える長さ")
         '
@@ -791,7 +803,7 @@ Partial Class frmMain
         Me.lbl垂直ひも長加算.Location = New System.Drawing.Point(431, 71)
         Me.lbl垂直ひも長加算.Name = "lbl垂直ひも長加算"
         Me.lbl垂直ひも長加算.Size = New System.Drawing.Size(107, 20)
-        Me.lbl垂直ひも長加算.TabIndex = 2
+        Me.lbl垂直ひも長加算.TabIndex = 0
         Me.lbl垂直ひも長加算.Text = "垂直ひも長加算"
         Me.ToolTip1.SetToolTip(Me.lbl垂直ひも長加算, "差しひもも含めた全ての垂直ひもに加える長さ")
         '
@@ -858,7 +870,7 @@ Partial Class frmMain
         '
         Me.lbl厚さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl厚さ.AutoSize = True
-        Me.lbl厚さ.Location = New System.Drawing.Point(577, 584)
+        Me.lbl厚さ.Location = New System.Drawing.Point(577, 625)
         Me.lbl厚さ.Name = "lbl厚さ"
         Me.lbl厚さ.Size = New System.Drawing.Size(34, 20)
         Me.lbl厚さ.TabIndex = 30
@@ -869,7 +881,7 @@ Partial Class frmMain
         '
         Me.txt厚さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txt厚さ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.txt厚さ.Location = New System.Drawing.Point(618, 582)
+        Me.txt厚さ.Location = New System.Drawing.Point(618, 623)
         Me.txt厚さ.Name = "txt厚さ"
         Me.txt厚さ.ReadOnly = True
         Me.txt厚さ.Size = New System.Drawing.Size(75, 27)
@@ -898,6 +910,160 @@ Partial Class frmMain
         Me.btnリセット.Text = "リセット(&R)"
         Me.ToolTip1.SetToolTip(Me.btnリセット, "入力した値をクリアします")
         Me.btnリセット.UseVisualStyleBackColor = True
+        '
+        'txt内側_横
+        '
+        Me.txt内側_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_横.Location = New System.Drawing.Point(94, 690)
+        Me.txt内側_横.Name = "txt内側_横"
+        Me.txt内側_横.ReadOnly = True
+        Me.txt内側_横.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_横.TabIndex = 35
+        Me.txt内側_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_横, "底の内側の横寸法")
+        '
+        'txt内側_縦
+        '
+        Me.txt内側_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_縦.Location = New System.Drawing.Point(180, 690)
+        Me.txt内側_縦.Name = "txt内側_縦"
+        Me.txt内側_縦.ReadOnly = True
+        Me.txt内側_縦.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_縦.TabIndex = 38
+        Me.txt内側_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_縦, "底の内側の縦寸法")
+        '
+        'txt内側_高さ
+        '
+        Me.txt内側_高さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_高さ.Location = New System.Drawing.Point(266, 690)
+        Me.txt内側_高さ.Name = "txt内側_高さ"
+        Me.txt内側_高さ.ReadOnly = True
+        Me.txt内側_高さ.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_高さ.TabIndex = 41
+        Me.txt内側_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_高さ, "側面の高さの合計")
+        '
+        'txt外側_横
+        '
+        Me.txt外側_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_横.Location = New System.Drawing.Point(94, 721)
+        Me.txt外側_横.Name = "txt外側_横"
+        Me.txt外側_横.ReadOnly = True
+        Me.txt外側_横.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_横.TabIndex = 36
+        Me.txt外側_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_横, "底の内側の横寸法に、バンドの底の厚さを加えた値")
+        '
+        'txt外側_縦
+        '
+        Me.txt外側_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_縦.Location = New System.Drawing.Point(180, 721)
+        Me.txt外側_縦.Name = "txt外側_縦"
+        Me.txt外側_縦.ReadOnly = True
+        Me.txt外側_縦.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_縦.TabIndex = 39
+        Me.txt外側_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_縦, "底の内側の縦寸法に、バンドの底の厚さを加えた値")
+        '
+        'txt外側_高さ
+        '
+        Me.txt外側_高さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_高さ.Location = New System.Drawing.Point(266, 721)
+        Me.txt外側_高さ.Name = "txt外側_高さ"
+        Me.txt外側_高さ.ReadOnly = True
+        Me.txt外側_高さ.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_高さ.TabIndex = 42
+        Me.txt外側_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_高さ, "側面の高さの合計に、バンドの底の厚さを加えた値")
+        '
+        'txt内側_底の周
+        '
+        Me.txt内側_底の周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_底の周.Location = New System.Drawing.Point(352, 690)
+        Me.txt内側_底の周.Name = "txt内側_底の周"
+        Me.txt内側_底の周.ReadOnly = True
+        Me.txt内側_底の周.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_底の周.TabIndex = 44
+        Me.txt内側_底の周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_底の周, "縦横・楕円底の周にに立ち上げ時の増分を加えた、側面の最下段の周長")
+        '
+        'txt外側_底の周
+        '
+        Me.txt外側_底の周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_底の周.Location = New System.Drawing.Point(352, 721)
+        Me.txt外側_底の周.Name = "txt外側_底の周"
+        Me.txt外側_底の周.ReadOnly = True
+        Me.txt外側_底の周.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_底の周.TabIndex = 45
+        Me.txt外側_底の周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_底の周, "底の周の内側の値に、バンドの底の厚さを加えた値")
+        '
+        'txt内側_最大周
+        '
+        Me.txt内側_最大周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_最大周.Location = New System.Drawing.Point(461, 690)
+        Me.txt内側_最大周.Name = "txt内側_最大周"
+        Me.txt内側_最大周.ReadOnly = True
+        Me.txt内側_最大周.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_最大周.TabIndex = 47
+        Me.txt内側_最大周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_最大周, "側面の周長の最大値")
+        '
+        'txt外側_最大周
+        '
+        Me.txt外側_最大周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_最大周.Location = New System.Drawing.Point(461, 721)
+        Me.txt外側_最大周.Name = "txt外側_最大周"
+        Me.txt外側_最大周.ReadOnly = True
+        Me.txt外側_最大周.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_最大周.TabIndex = 48
+        Me.txt外側_最大周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_最大周, "側面の周長の最大値に底の厚さを加えた値")
+        '
+        'txt外側_最大縦
+        '
+        Me.txt外側_最大縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_最大縦.Location = New System.Drawing.Point(633, 721)
+        Me.txt外側_最大縦.Name = "txt外側_最大縦"
+        Me.txt外側_最大縦.ReadOnly = True
+        Me.txt外側_最大縦.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_最大縦.TabIndex = 54
+        Me.txt外側_最大縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_最大縦, "縦(底)に「周長比率対底の周」の最大値を乗算し、厚さをプラス")
+        '
+        'txt外側_最大横
+        '
+        Me.txt外側_最大横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt外側_最大横.Location = New System.Drawing.Point(547, 721)
+        Me.txt外側_最大横.Name = "txt外側_最大横"
+        Me.txt外側_最大横.ReadOnly = True
+        Me.txt外側_最大横.Size = New System.Drawing.Size(80, 27)
+        Me.txt外側_最大横.TabIndex = 51
+        Me.txt外側_最大横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt外側_最大横, "横(底)に「周長比率対底の周」の最大値を乗算し、厚さをプラス")
+        '
+        'txt内側_最小縦
+        '
+        Me.txt内側_最小縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_最小縦.Location = New System.Drawing.Point(633, 690)
+        Me.txt内側_最小縦.Name = "txt内側_最小縦"
+        Me.txt内側_最小縦.ReadOnly = True
+        Me.txt内側_最小縦.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_最小縦.TabIndex = 53
+        Me.txt内側_最小縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_最小縦, "縦(底)に「周長比率対底の周」の最小値を乗算し厚さをマイナス")
+        '
+        'txt内側_最小横
+        '
+        Me.txt内側_最小横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.txt内側_最小横.Location = New System.Drawing.Point(547, 690)
+        Me.txt内側_最小横.Name = "txt内側_最小横"
+        Me.txt内側_最小横.ReadOnly = True
+        Me.txt内側_最小横.Size = New System.Drawing.Size(80, 27)
+        Me.txt内側_最小横.TabIndex = 50
+        Me.txt内側_最小横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.txt内側_最小横, "横(底)に「周長比率対底の周」の最小値を乗算し、厚さをマイナス")
         '
         'MenuStrip1
         '
@@ -967,47 +1133,47 @@ Partial Class frmMain
         'ToolStripMenuItemEditSelectBand
         '
         Me.ToolStripMenuItemEditSelectBand.Name = "ToolStripMenuItemEditSelectBand"
-        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditSelectBand.Text = "バンドの種類選択(&S)"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(213, 6)
         '
         'ToolStripMenuItemEditReset
         '
         Me.ToolStripMenuItemEditReset.Name = "ToolStripMenuItemEditReset"
-        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditReset.Text = "リセット(&R)"
         '
         'ToolStripMenuItemEditDefault
         '
         Me.ToolStripMenuItemEditDefault.Name = "ToolStripMenuItemEditDefault"
-        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditDefault.Text = "規定値(&D)"
         '
         'ToolStripMenuItemEditCalc
         '
         Me.ToolStripMenuItemEditCalc.Name = "ToolStripMenuItemEditCalc"
-        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditCalc.Text = "概算(&C)"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(213, 6)
         '
         'ToolStripMenuItemEditList
         '
         Me.ToolStripMenuItemEditList.Name = "ToolStripMenuItemEditList"
-        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditList.Text = "ひもリスト(&L)"
         '
         'ToolStripMenuItemEditDefaultFile
         '
         Me.ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
-        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditDefaultFile.Text = "規定値保存(&F)"
         '
         'ToolStripMenuItemSetting
@@ -1116,7 +1282,7 @@ Partial Class frmMain
         Me.TabControl.Location = New System.Drawing.Point(19, 171)
         Me.TabControl.Name = "TabControl"
         Me.TabControl.SelectedIndex = 0
-        Me.TabControl.Size = New System.Drawing.Size(848, 405)
+        Me.TabControl.Size = New System.Drawing.Size(848, 446)
         Me.TabControl.TabIndex = 22
         '
         'tpage底縦横
@@ -1132,7 +1298,7 @@ Partial Class frmMain
         Me.tpage底縦横.Location = New System.Drawing.Point(4, 29)
         Me.tpage底縦横.Name = "tpage底縦横"
         Me.tpage底縦横.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage底縦横.Size = New System.Drawing.Size(840, 372)
+        Me.tpage底縦横.Size = New System.Drawing.Size(840, 413)
         Me.tpage底縦横.TabIndex = 0
         Me.tpage底縦横.Text = "底(縦横)"
         Me.tpage底縦横.UseVisualStyleBackColor = True
@@ -1141,7 +1307,7 @@ Partial Class frmMain
         '
         Me.lbl縦置きの計.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl縦置きの計.AutoSize = True
-        Me.lbl縦置きの計.Location = New System.Drawing.Point(335, 345)
+        Me.lbl縦置きの計.Location = New System.Drawing.Point(335, 386)
         Me.lbl縦置きの計.Name = "lbl縦置きの計"
         Me.lbl縦置きの計.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.lbl縦置きの計.Size = New System.Drawing.Size(77, 20)
@@ -1164,12 +1330,14 @@ Partial Class frmMain
         Me.lbl垂直ひも長加算_単位.Location = New System.Drawing.Point(646, 71)
         Me.lbl垂直ひも長加算_単位.Name = "lbl垂直ひも長加算_単位"
         Me.lbl垂直ひも長加算_単位.Size = New System.Drawing.Size(35, 20)
-        Me.lbl垂直ひも長加算_単位.TabIndex = 4
+        Me.lbl垂直ひも長加算_単位.TabIndex = 2
         Me.lbl垂直ひも長加算_単位.Text = "mm"
         '
         'grp縦置き
         '
         Me.grp縦置き.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.grp縦置き.Controls.Add(Me.lbl縦ひものメモ)
+        Me.grp縦置き.Controls.Add(Me.txt縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.chk始末ひも)
         Me.grp縦置き.Controls.Add(Me.chk横寸法優先)
         Me.grp縦置き.Controls.Add(Me.nudひとつのすき間の寸法)
@@ -1186,12 +1354,28 @@ Partial Class frmMain
         Me.grp縦置き.Controls.Add(Me.lbl縦ひもの本数_単位)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひもの本数)
         Me.grp縦置き.Controls.Add(Me.nud縦ひもの本数)
-        Me.grp縦置き.Location = New System.Drawing.Point(415, 140)
+        Me.grp縦置き.Location = New System.Drawing.Point(415, 137)
         Me.grp縦置き.Name = "grp縦置き"
-        Me.grp縦置き.Size = New System.Drawing.Size(408, 226)
-        Me.grp縦置き.TabIndex = 2
+        Me.grp縦置き.Size = New System.Drawing.Size(408, 265)
+        Me.grp縦置き.TabIndex = 4
         Me.grp縦置き.TabStop = False
         Me.grp縦置き.Text = "縦置き"
+        '
+        'lbl縦ひものメモ
+        '
+        Me.lbl縦ひものメモ.AutoSize = True
+        Me.lbl縦ひものメモ.Location = New System.Drawing.Point(16, 228)
+        Me.lbl縦ひものメモ.Name = "lbl縦ひものメモ"
+        Me.lbl縦ひものメモ.Size = New System.Drawing.Size(81, 20)
+        Me.lbl縦ひものメモ.TabIndex = 16
+        Me.lbl縦ひものメモ.Text = "縦ひものメモ"
+        '
+        'txt縦ひものメモ
+        '
+        Me.txt縦ひものメモ.Location = New System.Drawing.Point(157, 228)
+        Me.txt縦ひものメモ.Name = "txt縦ひものメモ"
+        Me.txt縦ひものメモ.Size = New System.Drawing.Size(231, 27)
+        Me.txt縦ひものメモ.TabIndex = 17
         '
         'lbl縦ひも_単位
         '
@@ -1265,6 +1449,8 @@ Partial Class frmMain
         '
         'grp横置き
         '
+        Me.grp横置き.Controls.Add(Me.lbl横ひものメモ)
+        Me.grp横置き.Controls.Add(Me.txt横ひものメモ)
         Me.grp横置き.Controls.Add(Me.nud横ひも間のすき間)
         Me.grp横置き.Controls.Add(Me.lbl横ひも間のすき間_単位)
         Me.grp横置き.Controls.Add(Me.lbl横ひも間のすき間)
@@ -1287,10 +1473,26 @@ Partial Class frmMain
         Me.grp横置き.Controls.Add(Me.nud長い横ひもの本数)
         Me.grp横置き.Location = New System.Drawing.Point(28, 21)
         Me.grp横置き.Name = "grp横置き"
-        Me.grp横置き.Size = New System.Drawing.Size(381, 316)
+        Me.grp横置き.Size = New System.Drawing.Size(381, 354)
         Me.grp横置き.TabIndex = 0
         Me.grp横置き.TabStop = False
         Me.grp横置き.Text = "横置き"
+        '
+        'lbl横ひものメモ
+        '
+        Me.lbl横ひものメモ.AutoSize = True
+        Me.lbl横ひものメモ.Location = New System.Drawing.Point(27, 319)
+        Me.lbl横ひものメモ.Name = "lbl横ひものメモ"
+        Me.lbl横ひものメモ.Size = New System.Drawing.Size(81, 20)
+        Me.lbl横ひものメモ.TabIndex = 20
+        Me.lbl横ひものメモ.Text = "横ひものメモ"
+        '
+        'txt横ひものメモ
+        '
+        Me.txt横ひものメモ.Location = New System.Drawing.Point(182, 316)
+        Me.txt横ひものメモ.Name = "txt横ひものメモ"
+        Me.txt横ひものメモ.Size = New System.Drawing.Size(184, 27)
+        Me.txt横ひものメモ.TabIndex = 21
         '
         'lbl横ひも間のすき間_単位
         '
@@ -1370,7 +1572,7 @@ Partial Class frmMain
         Me.tpage底楕円.Location = New System.Drawing.Point(4, 29)
         Me.tpage底楕円.Name = "tpage底楕円"
         Me.tpage底楕円.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage底楕円.Size = New System.Drawing.Size(840, 372)
+        Me.tpage底楕円.Size = New System.Drawing.Size(840, 413)
         Me.tpage底楕円.TabIndex = 1
         Me.tpage底楕円.Text = "底(楕円)"
         Me.tpage底楕円.UseVisualStyleBackColor = True
@@ -1770,7 +1972,7 @@ Partial Class frmMain
         Me.tpage側面.Location = New System.Drawing.Point(4, 29)
         Me.tpage側面.Name = "tpage側面"
         Me.tpage側面.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage側面.Size = New System.Drawing.Size(840, 372)
+        Me.tpage側面.Size = New System.Drawing.Size(840, 413)
         Me.tpage側面.TabIndex = 2
         Me.tpage側面.Text = "側面"
         Me.tpage側面.UseVisualStyleBackColor = True
@@ -2154,7 +2356,7 @@ Partial Class frmMain
         Me.tpage追加品.Location = New System.Drawing.Point(4, 29)
         Me.tpage追加品.Name = "tpage追加品"
         Me.tpage追加品.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage追加品.Size = New System.Drawing.Size(840, 372)
+        Me.tpage追加品.Size = New System.Drawing.Size(840, 413)
         Me.tpage追加品.TabIndex = 3
         Me.tpage追加品.Text = "追加品"
         Me.tpage追加品.UseVisualStyleBackColor = True
@@ -2436,7 +2638,7 @@ Partial Class frmMain
         Me.tpageメモ他.Location = New System.Drawing.Point(4, 29)
         Me.tpageメモ他.Name = "tpageメモ他"
         Me.tpageメモ他.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpageメモ他.Size = New System.Drawing.Size(840, 372)
+        Me.tpageメモ他.Size = New System.Drawing.Size(840, 413)
         Me.tpageメモ他.TabIndex = 4
         Me.tpageメモ他.Text = "メモ他"
         Me.tpageメモ他.UseVisualStyleBackColor = True
@@ -2492,77 +2694,47 @@ Partial Class frmMain
         '
         Me.lbl内側.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl内側.AutoSize = True
-        Me.lbl内側.Location = New System.Drawing.Point(47, 652)
+        Me.lbl内側.Location = New System.Drawing.Point(29, 693)
         Me.lbl内側.Name = "lbl内側"
         Me.lbl内側.Size = New System.Drawing.Size(39, 20)
-        Me.lbl内側.TabIndex = 37
+        Me.lbl内側.TabIndex = 32
         Me.lbl内側.Text = "内側"
-        '
-        'txt内側_横
-        '
-        Me.txt内側_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt内側_横.Location = New System.Drawing.Point(112, 649)
-        Me.txt内側_横.Name = "txt内側_横"
-        Me.txt内側_横.ReadOnly = True
-        Me.txt内側_横.Size = New System.Drawing.Size(113, 27)
-        Me.txt内側_横.TabIndex = 38
-        Me.txt内側_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lbl計算寸法
         '
         Me.lbl計算寸法.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法.AutoSize = True
-        Me.lbl計算寸法.Location = New System.Drawing.Point(23, 584)
+        Me.lbl計算寸法.Location = New System.Drawing.Point(23, 625)
         Me.lbl計算寸法.Name = "lbl計算寸法"
         Me.lbl計算寸法.Size = New System.Drawing.Size(69, 20)
         Me.lbl計算寸法.TabIndex = 23
         Me.lbl計算寸法.Text = "計算寸法"
         '
-        'txt内側_縦
-        '
-        Me.txt内側_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt内側_縦.Location = New System.Drawing.Point(229, 649)
-        Me.txt内側_縦.Name = "txt内側_縦"
-        Me.txt内側_縦.ReadOnly = True
-        Me.txt内側_縦.Size = New System.Drawing.Size(113, 27)
-        Me.txt内側_縦.TabIndex = 39
-        Me.txt内側_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
         'lbl計算寸法縦
         '
         Me.lbl計算寸法縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法縦.AutoSize = True
-        Me.lbl計算寸法縦.Location = New System.Drawing.Point(289, 620)
+        Me.lbl計算寸法縦.Location = New System.Drawing.Point(209, 661)
         Me.lbl計算寸法縦.Name = "lbl計算寸法縦"
         Me.lbl計算寸法縦.Size = New System.Drawing.Size(24, 20)
-        Me.lbl計算寸法縦.TabIndex = 33
+        Me.lbl計算寸法縦.TabIndex = 37
         Me.lbl計算寸法縦.Text = "縦"
-        '
-        'txt内側_高さ
-        '
-        Me.txt内側_高さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt内側_高さ.Location = New System.Drawing.Point(346, 649)
-        Me.txt内側_高さ.Name = "txt内側_高さ"
-        Me.txt内側_高さ.ReadOnly = True
-        Me.txt内側_高さ.Size = New System.Drawing.Size(113, 27)
-        Me.txt内側_高さ.TabIndex = 40
-        Me.txt内側_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lbl計算寸法高さ
         '
         Me.lbl計算寸法高さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法高さ.AutoSize = True
-        Me.lbl計算寸法高さ.Location = New System.Drawing.Point(404, 620)
+        Me.lbl計算寸法高さ.Location = New System.Drawing.Point(287, 661)
         Me.lbl計算寸法高さ.Name = "lbl計算寸法高さ"
         Me.lbl計算寸法高さ.Size = New System.Drawing.Size(34, 20)
-        Me.lbl計算寸法高さ.TabIndex = 34
+        Me.lbl計算寸法高さ.TabIndex = 40
         Me.lbl計算寸法高さ.Text = "高さ"
         '
         'lbl計算寸法_単位
         '
         Me.lbl計算寸法_単位.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法_単位.AutoSize = True
-        Me.lbl計算寸法_単位.Location = New System.Drawing.Point(159, 584)
+        Me.lbl計算寸法_単位.Location = New System.Drawing.Point(159, 625)
         Me.lbl計算寸法_単位.Name = "lbl計算寸法_単位"
         Me.lbl計算寸法_単位.Size = New System.Drawing.Size(35, 20)
         Me.lbl計算寸法_単位.TabIndex = 25
@@ -2572,121 +2744,51 @@ Partial Class frmMain
         '
         Me.lbl外側.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl外側.AutoSize = True
-        Me.lbl外側.Location = New System.Drawing.Point(47, 683)
+        Me.lbl外側.Location = New System.Drawing.Point(29, 724)
         Me.lbl外側.Name = "lbl外側"
         Me.lbl外側.Size = New System.Drawing.Size(39, 20)
-        Me.lbl外側.TabIndex = 43
+        Me.lbl外側.TabIndex = 33
         Me.lbl外側.Text = "外側"
-        '
-        'txt外側_横
-        '
-        Me.txt外側_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt外側_横.Location = New System.Drawing.Point(112, 680)
-        Me.txt外側_横.Name = "txt外側_横"
-        Me.txt外側_横.ReadOnly = True
-        Me.txt外側_横.Size = New System.Drawing.Size(113, 27)
-        Me.txt外側_横.TabIndex = 44
-        Me.txt外側_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt外側_縦
-        '
-        Me.txt外側_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt外側_縦.Location = New System.Drawing.Point(229, 680)
-        Me.txt外側_縦.Name = "txt外側_縦"
-        Me.txt外側_縦.ReadOnly = True
-        Me.txt外側_縦.Size = New System.Drawing.Size(113, 27)
-        Me.txt外側_縦.TabIndex = 45
-        Me.txt外側_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt外側_高さ
-        '
-        Me.txt外側_高さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt外側_高さ.Location = New System.Drawing.Point(346, 680)
-        Me.txt外側_高さ.Name = "txt外側_高さ"
-        Me.txt外側_高さ.ReadOnly = True
-        Me.txt外側_高さ.Size = New System.Drawing.Size(113, 27)
-        Me.txt外側_高さ.TabIndex = 46
-        Me.txt外側_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lbl計算寸法横
         '
         Me.lbl計算寸法横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法横.AutoSize = True
-        Me.lbl計算寸法横.Location = New System.Drawing.Point(180, 620)
+        Me.lbl計算寸法横.Location = New System.Drawing.Point(120, 661)
         Me.lbl計算寸法横.Name = "lbl計算寸法横"
         Me.lbl計算寸法横.Size = New System.Drawing.Size(24, 20)
-        Me.lbl計算寸法横.TabIndex = 32
+        Me.lbl計算寸法横.TabIndex = 34
         Me.lbl計算寸法横.Text = "横"
         '
         'lbl計算寸法底の周
         '
         Me.lbl計算寸法底の周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法底の周.AutoSize = True
-        Me.lbl計算寸法底の周.Location = New System.Drawing.Point(517, 620)
+        Me.lbl計算寸法底の周.Location = New System.Drawing.Point(366, 661)
         Me.lbl計算寸法底の周.Name = "lbl計算寸法底の周"
         Me.lbl計算寸法底の周.Size = New System.Drawing.Size(51, 20)
-        Me.lbl計算寸法底の周.TabIndex = 35
+        Me.lbl計算寸法底の周.TabIndex = 43
         Me.lbl計算寸法底の周.Text = "底の周"
         '
         'lbl計算寸法最大周
         '
         Me.lbl計算寸法最大周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl計算寸法最大周.AutoSize = True
-        Me.lbl計算寸法最大周.Location = New System.Drawing.Point(625, 620)
+        Me.lbl計算寸法最大周.Location = New System.Drawing.Point(477, 661)
         Me.lbl計算寸法最大周.Name = "lbl計算寸法最大周"
         Me.lbl計算寸法最大周.Size = New System.Drawing.Size(54, 20)
-        Me.lbl計算寸法最大周.TabIndex = 36
+        Me.lbl計算寸法最大周.TabIndex = 46
         Me.lbl計算寸法最大周.Text = "最大周"
         '
         'btn終了
         '
         Me.btn終了.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn終了.Location = New System.Drawing.Point(756, 661)
+        Me.btn終了.Location = New System.Drawing.Point(756, 702)
         Me.btn終了.Name = "btn終了"
         Me.btn終了.Size = New System.Drawing.Size(111, 46)
-        Me.btn終了.TabIndex = 50
+        Me.btn終了.TabIndex = 56
         Me.btn終了.Text = "終了(&X)"
         Me.btn終了.UseVisualStyleBackColor = True
-        '
-        'txt内側_底の周
-        '
-        Me.txt内側_底の周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt内側_底の周.Location = New System.Drawing.Point(463, 649)
-        Me.txt内側_底の周.Name = "txt内側_底の周"
-        Me.txt内側_底の周.ReadOnly = True
-        Me.txt内側_底の周.Size = New System.Drawing.Size(113, 27)
-        Me.txt内側_底の周.TabIndex = 41
-        Me.txt内側_底の周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt外側_底の周
-        '
-        Me.txt外側_底の周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt外側_底の周.Location = New System.Drawing.Point(463, 680)
-        Me.txt外側_底の周.Name = "txt外側_底の周"
-        Me.txt外側_底の周.ReadOnly = True
-        Me.txt外側_底の周.Size = New System.Drawing.Size(113, 27)
-        Me.txt外側_底の周.TabIndex = 47
-        Me.txt外側_底の周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt内側_最大周
-        '
-        Me.txt内側_最大周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt内側_最大周.Location = New System.Drawing.Point(580, 649)
-        Me.txt内側_最大周.Name = "txt内側_最大周"
-        Me.txt内側_最大周.ReadOnly = True
-        Me.txt内側_最大周.Size = New System.Drawing.Size(113, 27)
-        Me.txt内側_最大周.TabIndex = 42
-        Me.txt内側_最大周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt外側_最大周
-        '
-        Me.txt外側_最大周.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txt外側_最大周.Location = New System.Drawing.Point(580, 680)
-        Me.txt外側_最大周.Name = "txt外側_最大周"
-        Me.txt外側_最大周.ReadOnly = True
-        Me.txt外側_最大周.Size = New System.Drawing.Size(113, 27)
-        Me.txt外側_最大周.TabIndex = 48
-        Me.txt外側_最大周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'OpenFileDialog1
         '
@@ -2765,10 +2867,10 @@ Partial Class frmMain
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 716)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 757)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(886, 26)
-        Me.StatusStrip1.TabIndex = 51
+        Me.StatusStrip1.TabIndex = 57
         Me.StatusStrip1.Text = "StatusStrip1"
         '
         'ToolStripStatusLabel1
@@ -2787,7 +2889,7 @@ Partial Class frmMain
         '
         Me.lbl単位.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl単位.AutoSize = True
-        Me.lbl単位.Location = New System.Drawing.Point(98, 584)
+        Me.lbl単位.Location = New System.Drawing.Point(98, 625)
         Me.lbl単位.Name = "lbl単位"
         Me.lbl単位.Size = New System.Drawing.Size(42, 20)
         Me.lbl単位.TabIndex = 24
@@ -2796,19 +2898,67 @@ Partial Class frmMain
         'btnDEBUG
         '
         Me.btnDEBUG.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnDEBUG.Location = New System.Drawing.Point(758, 578)
+        Me.btnDEBUG.Location = New System.Drawing.Point(758, 619)
         Me.btnDEBUG.Name = "btnDEBUG"
         Me.btnDEBUG.Size = New System.Drawing.Size(81, 27)
-        Me.btnDEBUG.TabIndex = 52
+        Me.btnDEBUG.TabIndex = 58
         Me.btnDEBUG.Text = "DEBUG"
         Me.btnDEBUG.UseVisualStyleBackColor = True
         Me.btnDEBUG.Visible = False
+        '
+        'lbl計算寸法最大縦
+        '
+        Me.lbl計算寸法最大縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl計算寸法最大縦.AutoSize = True
+        Me.lbl計算寸法最大縦.Location = New System.Drawing.Point(660, 661)
+        Me.lbl計算寸法最大縦.Name = "lbl計算寸法最大縦"
+        Me.lbl計算寸法最大縦.Size = New System.Drawing.Size(24, 20)
+        Me.lbl計算寸法最大縦.TabIndex = 52
+        Me.lbl計算寸法最大縦.Text = "縦"
+        '
+        'lbl計算寸法最大横
+        '
+        Me.lbl計算寸法最大横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl計算寸法最大横.AutoSize = True
+        Me.lbl計算寸法最大横.Location = New System.Drawing.Point(574, 661)
+        Me.lbl計算寸法最大横.Name = "lbl計算寸法最大横"
+        Me.lbl計算寸法最大横.Size = New System.Drawing.Size(24, 20)
+        Me.lbl計算寸法最大横.TabIndex = 49
+        Me.lbl計算寸法最大横.Text = "横"
+        '
+        'lbl底
+        '
+        Me.lbl底.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl底.AutoSize = True
+        Me.lbl底.Location = New System.Drawing.Point(160, 661)
+        Me.lbl底.Name = "lbl底"
+        Me.lbl底.Size = New System.Drawing.Size(34, 20)
+        Me.lbl底.TabIndex = 59
+        Me.lbl底.Text = "(底)"
+        '
+        'lbl最大
+        '
+        Me.lbl最大.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl最大.AutoSize = True
+        Me.lbl最大.Location = New System.Drawing.Point(604, 661)
+        Me.lbl最大.Name = "lbl最大"
+        Me.lbl最大.Size = New System.Drawing.Size(49, 20)
+        Me.lbl最大.TabIndex = 60
+        Me.lbl最大.Text = "(最大)"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(886, 742)
+        Me.ClientSize = New System.Drawing.Size(886, 783)
+        Me.Controls.Add(Me.lbl最大)
+        Me.Controls.Add(Me.lbl底)
+        Me.Controls.Add(Me.lbl計算寸法最大縦)
+        Me.Controls.Add(Me.lbl計算寸法最大横)
+        Me.Controls.Add(Me.txt外側_最大縦)
+        Me.Controls.Add(Me.txt外側_最大横)
+        Me.Controls.Add(Me.txt内側_最小縦)
+        Me.Controls.Add(Me.txt内側_最小横)
         Me.Controls.Add(Me.btnリセット)
         Me.Controls.Add(Me.btn規定値)
         Me.Controls.Add(Me.btn概算)
@@ -2866,7 +3016,7 @@ Partial Class frmMain
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(904, 763)
+        Me.MinimumSize = New System.Drawing.Size(904, 830)
         Me.Name = "frmMain"
         Me.Text = "四角底と楕円底"
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3163,4 +3313,16 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents ToolStripMenuItemEditList As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItemEditDefaultFile As ToolStripMenuItem
+    Friend WithEvents lbl計算寸法最大縦 As Label
+    Friend WithEvents lbl計算寸法最大横 As Label
+    Friend WithEvents txt外側_最大縦 As TextBox
+    Friend WithEvents txt外側_最大横 As TextBox
+    Friend WithEvents txt内側_最小縦 As TextBox
+    Friend WithEvents txt内側_最小横 As TextBox
+    Friend WithEvents lbl底 As Label
+    Friend WithEvents lbl最大 As Label
+    Friend WithEvents lbl縦ひものメモ As Label
+    Friend WithEvents txt縦ひものメモ As TextBox
+    Friend WithEvents lbl横ひものメモ As Label
+    Friend WithEvents txt横ひものメモ As TextBox
 End Class

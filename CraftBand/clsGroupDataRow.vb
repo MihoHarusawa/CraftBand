@@ -101,6 +101,15 @@ Public Class clsGroupDataRow
         Return IndexDataRow(idx)
     End Function
 
+    '指定インデックス値・名前のフィールド値を返す
+    Function GetIndexNameValue(ByVal idx As Int16, ByVal name As String) As Object
+        If _map.ContainsKey(idx) Then
+            Return _map(idx).Value(name)
+        Else
+            Return Nothing
+        End If
+    End Function
+
     '指定名のフィールド値を返す(最初のレコードから)
     Function GetNameValue(ByVal name As String) As Object
         If Me.Count = 0 Then

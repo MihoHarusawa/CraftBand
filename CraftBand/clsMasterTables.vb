@@ -171,7 +171,8 @@ Public Class clsMasterTables
         If after.GetHashCode <> _copyTable.GetHashCode Then
             Return False 'make sure
         End If
-        If after.GetChanges Is Nothing AndAlso Not _copyDataSet.HasChanges Then
+        If after.GetChanges Is Nothing AndAlso Not _copyDataSet.HasChanges _
+            AndAlso before.Rows.Count = after.Rows.Count Then '変更なく削除だけの時対策
             Return False 'no change
         End If
         IsDirty = True
@@ -371,7 +372,9 @@ Public Class clsMasterTables
 
 
     '編みかた名の配列を返す　f_s編みかた名順
-    Public Function GetPatternNames(ByVal is縁専用 As Boolean, ByVal is底使用 As Boolean) As String()
+    '(issue#3)縁でも底でもなく、is概算用=Trueの時は、概算で使える編みかた
+    Public Function GetPatternNames(ByVal is縁専用 As Boolean, ByVal is底使用 As Boolean,
+                                    Optional ByVal is概算用 As Boolean = False) As String()
 
         Dim table As tbl編みかたDataTable = _dstMasterTables.Tables("tbl編みかた")
         Dim res
@@ -385,13 +388,19 @@ Public Class clsMasterTables
                    Where row.f_b底使用区分 And Not row.f_b非表示
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
+        ElseIf is概算用 Then
+            '側面用、概算で使える(高さ比率対ひも幅が正、ひも長比率対周長が正)
+            res = (From row As tbl編みかたRow In table
+                   Where Not row.f_b縁専用区分 And Not row.f_b非表示 And 0 < row.f_d高さ比率対ひも幅 And 0 < row.f_dひも長比率対周長
+                   Select PatternName = row.f_s編みかた名
+                   Order By PatternName).Distinct.ToList
         Else
+            '側面用の全て
             res = (From row As tbl編みかたRow In table
                    Where Not row.f_b縁専用区分 And Not row.f_b非表示
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
         End If
-
         Return res.ToArray
     End Function
 
@@ -454,19 +463,21 @@ Public Class clsMasterTables
             Return g_clsSelectBasics.p_d指定本幅(lane) * Me.Value("f_d垂直ひも長比率対ひも幅")
         End Function
 
-        'f_dひも長 にセットする1本の値
-        Public Function GetBandLength(ByVal length As Double, ByVal vertcount As Integer) As Double
+        'f_dひも長 にセットする1本の値(issue#5:ひも1の幅を追加)
+        Public Function GetBandLength(ByVal lane1 As Integer, ByVal length As Double, ByVal vertcount As Integer) As Double
             Return length * Me.Value("f_dひも長比率対周長") _
                 + Me.Value("f_dひも長加算1目あたり") * vertcount _
+                + Me.Value("f_dひも1幅係数1目あたり") * g_clsSelectBasics.p_d指定本幅(lane1) * vertcount _
                 + Me.Value("f_dひも長加算1周あたり") _
                 + Me.Value("f_dひも長加算ひもあたり")
         End Function
 
-        'f_dひも長 にセットする周連続の値
-        Public Function GetContinuoutBandLength(ByVal length As Double, ByVal vertcount As Integer, ByVal rounds As Integer) As Double
+        'f_dひも長 にセットする周連続の値(issue#5:ひも1の幅を追加)
+        Public Function GetContinuoutBandLength(ByVal lane1 As Integer, ByVal length As Double, ByVal vertcount As Integer, ByVal rounds As Integer) As Double
             Return _
                 rounds * (length * Me.Value("f_dひも長比率対周長") _
                 + Me.Value("f_dひも長加算1目あたり") * vertcount _
+                + Me.Value("f_dひも1幅係数1目あたり") * g_clsSelectBasics.p_d指定本幅(lane1) * vertcount _
                 + Me.Value("f_dひも長加算1周あたり")) _
                 + Me.Value("f_dひも長加算ひもあたり")
         End Function

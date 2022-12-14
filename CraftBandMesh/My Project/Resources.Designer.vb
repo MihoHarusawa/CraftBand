@@ -295,6 +295,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  目の平均 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutAverageMesh() As String
+            Get
+                Return ResourceManager.GetString("CalcOutAverageMesh", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  最長{0,8} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutLonguest() As String
@@ -309,6 +318,24 @@ Namespace My.Resources
         Friend ReadOnly Property CalcOutShortest() As String
             Get
                 Return ResourceManager.GetString("CalcOutShortest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  集計値 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSum() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSum", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  折り返し に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutTurn() As String
+            Get
+                Return ResourceManager.GetString("CalcOutTurn", resourceCulture)
             End Get
         End Property
         

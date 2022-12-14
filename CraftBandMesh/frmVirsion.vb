@@ -1,4 +1,5 @@
 ﻿
+Imports System.IO
 Imports CraftBand
 
 Public Class frmVirsion
@@ -10,4 +11,15 @@ Public Class frmVirsion
         lblVersion.Text = String.Format("FileVersion {0} / {1}", viExe.FileVersion, viDll.FileVersion)
 
     End Sub
+
+    Private Sub lnkLabo_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkLabo.LinkClicked
+        lnkLabo.LinkVisited = True
+        Try
+            System.Diagnostics.Process.Start("cmd", "/C start " & lnkLabo.Text)
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "frmVirsion.lnkLabo_LinkClicked", lnkLabo.Text)
+        End Try
+    End Sub
+
+
 End Class

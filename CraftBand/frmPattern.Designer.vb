@@ -37,6 +37,7 @@ Partial Class frmPattern
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvData = New System.Windows.Forms.DataGridView()
         Me.BindingSource編みかた = New System.Windows.Forms.BindingSource(Me.components)
         Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
@@ -61,6 +62,7 @@ Partial Class frmPattern
         Me.f_dひも長比率対周長 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長加算1目あたり = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長加算1周あたり = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも1幅係数1目あたり = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長加算ひもあたり = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d厚さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -79,7 +81,7 @@ Partial Class frmPattern
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_s編みかた名, Me.f_iひも番号, Me.f_s編みひも名, Me.f_b縁専用区分, Me.f_b底使用区分, Me.f_i周あたり段数, Me.f_iひも数, Me.f_i本幅初期値, Me.f_b周連続区分, Me.f_d高さ比率対ひも幅, Me.f_d垂直ひも長比率対ひも幅, Me.f_dひも長比率対周長, Me.f_dひも長加算1目あたり, Me.f_dひも長加算1周あたり, Me.f_dひも長加算ひもあたり, Me.f_dひも長加算初期値, Me.f_d厚さ, Me.f_b非表示, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_s編みかた名, Me.f_iひも番号, Me.f_s編みひも名, Me.f_b縁専用区分, Me.f_b底使用区分, Me.f_i周あたり段数, Me.f_iひも数, Me.f_i本幅初期値, Me.f_b周連続区分, Me.f_d高さ比率対ひも幅, Me.f_d垂直ひも長比率対ひも幅, Me.f_dひも長比率対周長, Me.f_dひも長加算1目あたり, Me.f_dひも長加算1周あたり, Me.f_dひも1幅係数1目あたり, Me.f_dひも長加算ひもあたり, Me.f_dひも長加算初期値, Me.f_d厚さ, Me.f_b非表示, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSource編みかた
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
@@ -323,11 +325,23 @@ Partial Class frmPattern
         Me.f_dひも長加算1周あたり.ToolTipText = "1周につき1回、この値をひも長に加える"
         Me.f_dひも長加算1周あたり.Width = 67
         '
+        'f_dひも1幅係数1目あたり
+        '
+        Me.f_dひも1幅係数1目あたり.DataPropertyName = "f_dひも1幅係数1目あたり"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも1幅係数1目あたり.DefaultCellStyle = DataGridViewCellStyle10
+        Me.f_dひも1幅係数1目あたり.HeaderText = "ひも1幅係数1目あたり"
+        Me.f_dひも1幅係数1目あたり.MinimumWidth = 6
+        Me.f_dひも1幅係数1目あたり.Name = "f_dひも1幅係数1目あたり"
+        Me.f_dひも1幅係数1目あたり.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも1幅係数1目あたり.ToolTipText = "ひも1の幅にこの値と垂直ひも数を乗算してひも長に加える"
+        Me.f_dひも1幅係数1目あたり.Width = 125
+        '
         'f_dひも長加算ひもあたり
         '
         Me.f_dひも長加算ひもあたり.DataPropertyName = "f_dひも長加算ひもあたり"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算ひもあたり.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算ひもあたり.DefaultCellStyle = DataGridViewCellStyle11
         Me.f_dひも長加算ひもあたり.HeaderText = "ひも長加算ひもあたり"
         Me.f_dひも長加算ひもあたり.MinimumWidth = 6
         Me.f_dひも長加算ひもあたり.Name = "f_dひも長加算ひもあたり"
@@ -337,8 +351,8 @@ Partial Class frmPattern
         'f_dひも長加算初期値
         '
         Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle12
         Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
         Me.f_dひも長加算初期値.MinimumWidth = 6
         Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
@@ -349,8 +363,8 @@ Partial Class frmPattern
         'f_d厚さ
         '
         Me.f_d厚さ.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle13
         Me.f_d厚さ.HeaderText = "厚さ"
         Me.f_d厚さ.MinimumWidth = 6
         Me.f_d厚さ.Name = "f_d厚さ"
@@ -424,6 +438,7 @@ Partial Class frmPattern
     Friend WithEvents f_dひも長比率対周長 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算1目あたり As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算1周あたり As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも1幅係数1目あたり As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算ひもあたり As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_d厚さ As DataGridViewTextBoxColumn

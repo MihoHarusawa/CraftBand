@@ -676,7 +676,7 @@ Namespace Tables
                 Me.columnf_s基本色.DefaultValue = CType("",String)
                 Me.columnf_i基本のひも幅.DefaultValue = CType(0,Short)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.00",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.10",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -830,6 +830,8 @@ Namespace Tables
             
             Private columnf_b補強ひも区分 As Global.System.Data.DataColumn
             
+            Private columnf_s横ひものメモ As Global.System.Data.DataColumn
+            
             Private columnf_b斜めの補強ひも区分 As Global.System.Data.DataColumn
             
             Private columnf_d垂直ひも長加算 As Global.System.Data.DataColumn
@@ -843,6 +845,8 @@ Namespace Tables
             Private columnf_dひとつのすき間の寸法 As Global.System.Data.DataColumn
             
             Private columnf_b始末ひも区分 As Global.System.Data.DataColumn
+            
+            Private columnf_s縦ひものメモ As Global.System.Data.DataColumn
             
             Private columnf_b楕円底個別設定 As Global.System.Data.DataColumn
             
@@ -943,6 +947,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s横ひものメモColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s横ひものメモ
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_b斜めの補強ひも区分Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_b斜めの補強ひも区分
@@ -994,6 +1006,14 @@ Namespace Tables
             Public ReadOnly Property f_b始末ひも区分Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_b始末ひも区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s縦ひものメモColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s縦ひものメモ
                 End Get
             End Property
             
@@ -1066,6 +1086,7 @@ Namespace Tables
                         ByVal f_i最上と最下の短いひもの幅 As Short,  _
                         ByVal f_d横ひも間のすき間 As Double,  _
                         ByVal f_b補強ひも区分 As Boolean,  _
+                        ByVal f_s横ひものメモ As String,  _
                         ByVal f_b斜めの補強ひも区分 As Boolean,  _
                         ByVal f_d垂直ひも長加算 As Double,  _
                         ByVal f_i縦ひも As Short,  _
@@ -1073,11 +1094,12 @@ Namespace Tables
                         ByVal f_b横寸法優先区分 As Boolean,  _
                         ByVal f_dひとつのすき間の寸法 As Double,  _
                         ByVal f_b始末ひも区分 As Boolean,  _
+                        ByVal f_s縦ひものメモ As String,  _
                         ByVal f_b楕円底個別設定 As Boolean,  _
                         ByVal f_d楕円底円弧の半径加算 As Double,  _
                         ByVal f_d楕円底周の加算 As Double) As tbl底_縦横Row
                 Dim rowtbl底_縦横Row As tbl底_縦横Row = CType(Me.NewRow,tbl底_縦横Row)
-                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_b横寸法優先区分, f_dひとつのすき間の寸法, f_b始末ひも区分, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算}
+                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_b横寸法優先区分, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算}
                 rowtbl底_縦横Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl底_縦横Row)
                 Return rowtbl底_縦横Row
@@ -1107,6 +1129,7 @@ Namespace Tables
                 Me.columnf_i最上と最下の短いひもの幅 = MyBase.Columns("f_i最上と最下の短いひもの幅")
                 Me.columnf_d横ひも間のすき間 = MyBase.Columns("f_d横ひも間のすき間")
                 Me.columnf_b補強ひも区分 = MyBase.Columns("f_b補強ひも区分")
+                Me.columnf_s横ひものメモ = MyBase.Columns("f_s横ひものメモ")
                 Me.columnf_b斜めの補強ひも区分 = MyBase.Columns("f_b斜めの補強ひも区分")
                 Me.columnf_d垂直ひも長加算 = MyBase.Columns("f_d垂直ひも長加算")
                 Me.columnf_i縦ひも = MyBase.Columns("f_i縦ひも")
@@ -1114,6 +1137,7 @@ Namespace Tables
                 Me.columnf_b横寸法優先区分 = MyBase.Columns("f_b横寸法優先区分")
                 Me.columnf_dひとつのすき間の寸法 = MyBase.Columns("f_dひとつのすき間の寸法")
                 Me.columnf_b始末ひも区分 = MyBase.Columns("f_b始末ひも区分")
+                Me.columnf_s縦ひものメモ = MyBase.Columns("f_s縦ひものメモ")
                 Me.columnf_b楕円底個別設定 = MyBase.Columns("f_b楕円底個別設定")
                 Me.columnf_d楕円底円弧の半径加算 = MyBase.Columns("f_d楕円底円弧の半径加算")
                 Me.columnf_d楕円底周の加算 = MyBase.Columns("f_d楕円底周の加算")
@@ -1136,6 +1160,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_d横ひも間のすき間)
                 Me.columnf_b補強ひも区分 = New Global.System.Data.DataColumn("f_b補強ひも区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_b補強ひも区分)
+                Me.columnf_s横ひものメモ = New Global.System.Data.DataColumn("f_s横ひものメモ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s横ひものメモ)
                 Me.columnf_b斜めの補強ひも区分 = New Global.System.Data.DataColumn("f_b斜めの補強ひも区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_b斜めの補強ひも区分)
                 Me.columnf_d垂直ひも長加算 = New Global.System.Data.DataColumn("f_d垂直ひも長加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -1150,6 +1176,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_dひとつのすき間の寸法)
                 Me.columnf_b始末ひも区分 = New Global.System.Data.DataColumn("f_b始末ひも区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_b始末ひも区分)
+                Me.columnf_s縦ひものメモ = New Global.System.Data.DataColumn("f_s縦ひものメモ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s縦ひものメモ)
                 Me.columnf_b楕円底個別設定 = New Global.System.Data.DataColumn("f_b楕円底個別設定", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_b楕円底個別設定)
                 Me.columnf_d楕円底円弧の半径加算 = New Global.System.Data.DataColumn("f_d楕円底円弧の半径加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -1163,6 +1191,7 @@ Namespace Tables
                 Me.columnf_i最上と最下の短いひもの幅.DefaultValue = CType(0,Short)
                 Me.columnf_d横ひも間のすき間.DefaultValue = CType(0R,Double)
                 Me.columnf_b補強ひも区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_s横ひものメモ.DefaultValue = CType("",String)
                 Me.columnf_b斜めの補強ひも区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_d垂直ひも長加算.DefaultValue = CType(0R,Double)
                 Me.columnf_i縦ひも.DefaultValue = CType(0,Short)
@@ -1170,6 +1199,7 @@ Namespace Tables
                 Me.columnf_b横寸法優先区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_dひとつのすき間の寸法.DefaultValue = CType(-1R,Double)
                 Me.columnf_b始末ひも区分.DefaultValue = CType(true,Boolean)
+                Me.columnf_s縦ひものメモ.DefaultValue = CType("",String)
                 Me.columnf_b楕円底個別設定.DefaultValue = CType(false,Boolean)
                 Me.columnf_d楕円底円弧の半径加算.DefaultValue = CType(0R,Double)
                 Me.columnf_d楕円底周の加算.DefaultValue = CType(0R,Double)
@@ -3332,6 +3362,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s横ひものメモ() As String
+                Get
+                    If Me.Isf_s横ひものメモNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_s横ひものメモColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_s横ひものメモColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_b斜めの補強ひも区分() As Boolean
                 Get
                     If Me.Isf_b斜めの補強ひも区分Null Then
@@ -3432,6 +3477,21 @@ Namespace Tables
                 End Get
                 Set
                     Me(Me.tabletbl底_縦横.f_b始末ひも区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s縦ひものメモ() As String
+                Get
+                    If Me.Isf_s縦ひものメモNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_s縦ひものメモColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_s縦ひものメモColumn) = value
                 End Set
             End Property
             
@@ -3566,6 +3626,18 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s横ひものメモNull() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_s横ひものメモColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s横ひものメモNull()
+                Me(Me.tabletbl底_縦横.f_s横ひものメモColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_b斜めの補強ひも区分Null() As Boolean
                 Return Me.IsNull(Me.tabletbl底_縦横.f_b斜めの補強ひも区分Column)
             End Function
@@ -3646,6 +3718,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_b始末ひも区分Null()
                 Me(Me.tabletbl底_縦横.f_b始末ひも区分Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s縦ひものメモNull() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_s縦ひものメモColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s縦ひものメモNull()
+                Me(Me.tabletbl底_縦横.f_s縦ひものメモColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

@@ -414,6 +414,8 @@ Namespace Tables
             
             Private columnf_dひも長加算1目あたり As Global.System.Data.DataColumn
             
+            Private columnf_dひも1幅係数1目あたり As Global.System.Data.DataColumn
+            
             Private columnf_dひも長加算1周あたり As Global.System.Data.DataColumn
             
             Private columnf_dひも長加算ひもあたり As Global.System.Data.DataColumn
@@ -567,6 +569,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも1幅係数1目あたりColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも1幅係数1目あたり
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_dひも長加算1周あたりColumn() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dひも長加算1周あたり
@@ -664,6 +674,7 @@ Namespace Tables
                         ByVal f_d垂直ひも長比率対ひも幅 As Double,  _
                         ByVal f_dひも長比率対周長 As Double,  _
                         ByVal f_dひも長加算1目あたり As Double,  _
+                        ByVal f_dひも1幅係数1目あたり As Double,  _
                         ByVal f_dひも長加算1周あたり As Double,  _
                         ByVal f_dひも長加算ひもあたり As Double,  _
                         ByVal f_dひも長加算初期値 As Double,  _
@@ -671,7 +682,7 @@ Namespace Tables
                         ByVal f_b非表示 As Boolean,  _
                         ByVal f_s備考 As String) As tbl編みかたRow
                 Dim rowtbl編みかたRow As tbl編みかたRow = CType(Me.NewRow,tbl編みかたRow)
-                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_b非表示, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも1幅係数1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_b非表示, f_s備考}
                 rowtbl編みかたRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl編みかたRow)
                 Return rowtbl編みかたRow
@@ -713,6 +724,7 @@ Namespace Tables
                 Me.columnf_d垂直ひも長比率対ひも幅 = MyBase.Columns("f_d垂直ひも長比率対ひも幅")
                 Me.columnf_dひも長比率対周長 = MyBase.Columns("f_dひも長比率対周長")
                 Me.columnf_dひも長加算1目あたり = MyBase.Columns("f_dひも長加算1目あたり")
+                Me.columnf_dひも1幅係数1目あたり = MyBase.Columns("f_dひも1幅係数1目あたり")
                 Me.columnf_dひも長加算1周あたり = MyBase.Columns("f_dひも長加算1周あたり")
                 Me.columnf_dひも長加算ひもあたり = MyBase.Columns("f_dひも長加算ひもあたり")
                 Me.columnf_dひも長加算初期値 = MyBase.Columns("f_dひも長加算初期値")
@@ -750,6 +762,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_dひも長比率対周長)
                 Me.columnf_dひも長加算1目あたり = New Global.System.Data.DataColumn("f_dひも長加算1目あたり", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算1目あたり)
+                Me.columnf_dひも1幅係数1目あたり = New Global.System.Data.DataColumn("f_dひも1幅係数1目あたり", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも1幅係数1目あたり)
                 Me.columnf_dひも長加算1周あたり = New Global.System.Data.DataColumn("f_dひも長加算1周あたり", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算1周あたり)
                 Me.columnf_dひも長加算ひもあたり = New Global.System.Data.DataColumn("f_dひも長加算ひもあたり", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -780,6 +794,7 @@ Namespace Tables
                 Me.columnf_d垂直ひも長比率対ひも幅.DefaultValue = CType(1R,Double)
                 Me.columnf_dひも長比率対周長.DefaultValue = CType(1R,Double)
                 Me.columnf_dひも長加算1目あたり.DefaultValue = CType(0R,Double)
+                Me.columnf_dひも1幅係数1目あたり.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算1周あたり.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算ひもあたり.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算初期値.DefaultValue = CType(0R,Double)
@@ -1969,7 +1984,7 @@ Namespace Tables
                 Me.columnf_sバージョン = New Global.System.Data.DataColumn("f_sバージョン", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sバージョン)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.00",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.10",String)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -2299,6 +2314,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも1幅係数1目あたり() As Double
+                Get
+                    If Me.Isf_dひも1幅係数1目あたりNull Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletbl編みかた.f_dひも1幅係数1目あたりColumn),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl編みかた.f_dひも1幅係数1目あたりColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_dひも長加算1周あたり() As Double
                 Get
                     If Me.Isf_dひも長加算1周あたりNull Then
@@ -2505,6 +2535,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dひも長加算1目あたりNull()
                 Me(Me.tabletbl編みかた.f_dひも長加算1目あたりColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも1幅係数1目あたりNull() As Boolean
+                Return Me.IsNull(Me.tabletbl編みかた.f_dひも1幅係数1目あたりColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも1幅係数1目あたりNull()
+                Me(Me.tabletbl編みかた.f_dひも1幅係数1目あたりColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

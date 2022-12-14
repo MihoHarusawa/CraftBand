@@ -337,6 +337,8 @@ Public Class frmMain
             End If
             nud横ひも間のすき間.Value = .Value("f_d横ひも間のすき間") 'マイナス可
             chk補強ひも.Checked = .Value("f_b補強ひも区分")
+            txt横ひものメモ.Text = .Value("f_s横ひものメモ")
+
             nud垂直ひも長加算.Value = .Value("f_d垂直ひも長加算") 'マイナス可
             chk斜めの補強ひも.Checked = .Value("f_b斜めの補強ひも区分")
 
@@ -345,6 +347,7 @@ Public Class frmMain
             chk横寸法優先.Checked = .Value("f_b横寸法優先区分")
             dispValidValueNud(nudひとつのすき間の寸法, .Value("f_dひとつのすき間の寸法"))
             chk始末ひも.Checked = .Value("f_b始末ひも区分")
+            txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
             chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
             nud楕円底円弧の半径加算.Value = .Value("f_d楕円底円弧の半径加算")
@@ -398,8 +401,13 @@ Public Class frmMain
             txt外側_高さ.Text = .p_s外側_高さ
             txt内側_底の周.Text = .p_s内側_底の周
             txt外側_底の周.Text = .p_s外側_底の周
+
             txt内側_最大周.Text = .p_s内側_最大周
             txt外側_最大周.Text = .p_s外側_最大周
+            txt内側_最小横.Text = .p_s内側_最小横
+            txt外側_最大横.Text = .p_s外側_最大横
+            txt内側_最小縦.Text = .p_s内側_最小縦
+            txt外側_最大縦.Text = .p_s外側_最大縦
 
             txt垂直ひも数.Text = .p_i垂直ひも数
             txt底楕円の径.Text = .p_s径の合計
@@ -530,6 +538,8 @@ Public Class frmMain
             .Value("f_i最上と最下の短いひもの幅") = nud最上と最下の短いひもの幅.Value
             .Value("f_d横ひも間のすき間") = nud横ひも間のすき間.Value   'マイナス可
             .Value("f_b補強ひも区分") = chk補強ひも.Checked
+            .Value("f_s横ひものメモ") = txt横ひものメモ.Text
+
             .Value("f_d垂直ひも長加算") = nud垂直ひも長加算.Value  'マイナス可
             .Value("f_b斜めの補強ひも区分") = chk斜めの補強ひも.Checked
 
@@ -538,6 +548,7 @@ Public Class frmMain
             .Value("f_b横寸法優先区分") = chk横寸法優先.Checked
             .Value("f_dひとつのすき間の寸法") = nudひとつのすき間の寸法.Value
             .Value("f_b始末ひも区分") = chk始末ひも.Checked
+            .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
             .Value("f_b楕円底個別設定") = chk楕円底個別設定.Checked
             .Value("f_d楕円底円弧の半径加算") = nud楕円底円弧の半径加算.Value
