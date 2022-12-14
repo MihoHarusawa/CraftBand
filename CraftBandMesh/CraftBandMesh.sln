@@ -10,7 +10,13 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandMesh", "CraftBandM
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBand", "..\CraftBand\CraftBand.vbproj", "{39FE3574-F1A1-41C2-9D5A-A5FC6830B80A}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "..\Installer\Installer.vdproj", "{4651167E-2B36-4834-A19E-B6082A1B22F2}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer_x64", "..\Installer\Installer.vdproj", "{4651167E-2B36-4834-A19E-B6082A1B22F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{6C7E0449-B537-4CF5-96BF-10F9F598FD6D}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,17 +1,17 @@
-両プライマリ項目	
-CraftBand.dll	
-CraftBandMesh.dll	
-CraftBandMesh.dll.config	
-CraftBandMesh.runtimeconfig.json	
-	
-MeshのPublish項目	
-CraftBandMesh.deps.json	
-CraftBandMesh.exe	
-System.Configuration.ConfigurationManeger.dll	
-CraftBand.pdb	シンボル
-CraftBandMesh.pdb	シンボル
+CraftBandMeshのPublish項目	
+ CraftBand.dll	
+ CraftBand.pdb	シンボル
+ CraftBandMesh.deps.json	
+ CraftBandMesh.dll	
+ CraftBandMesh.dll.config	
+ CraftBandMesh.exe	
+ CraftBandMesh.pdb	シンボル
+ CraftBandMesh.runtimeconfig.json	
+ System.Configuration.ConfigurationManeger.dll	
 	
 CraftBandのみの項目	
-CraftBand.deps.json	
-	
-CraftBandMesh.XML	
+ CraftBand.deps.json	
+
+追加ファイル	
+ IconMesh.ico	
+ CraftBandMesh.XML
