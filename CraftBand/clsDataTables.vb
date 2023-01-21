@@ -1,4 +1,5 @@
 ﻿
+Imports System.Windows.Forms
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 
@@ -11,6 +12,7 @@ Public Class clsDataTables
     Dim _dstDataTables As dstDataTables
     Dim _ExeName As String
 
+    Public Property LastError As String 'ファイルエラー文字列
 
     'tbl目標寸法は1レコードのみ
     Public Property p_row目標寸法 As clsDataRow 'tbl目標寸法Row
@@ -108,6 +110,7 @@ Public Class clsDataTables
         End Get
     End Property
 
+    'ファイル読み取り、エラーはLastError
     Public Function Load(ByVal fpath As String) As Boolean
         If Not IO.File.Exists(fpath) Then
             Return False
@@ -117,6 +120,8 @@ Public Class clsDataTables
         Try
             Dim readmode As System.Data.XmlReadMode = _dstDataTables.ReadXml(fpath, System.Data.XmlReadMode.IgnoreSchema)
         Catch ex As Exception
+            '指定されたファイル'{0}'は読み取れませんでした。
+            LastError = String.Format(My.Resources.WarningBadWorkData, fpath)
             g_clsLog.LogException(ex, "clsDataTables.Load", fpath)
             Return False
         End Try
@@ -153,6 +158,8 @@ Public Class clsDataTables
             Return True
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsDataTables.Save", fpath)
+            '指定されたファイル'{0}'への保存ができませんでした。
+            LastError = String.Format(My.Resources.WarningFileSaveError, fpath)
             Return False
         End Try
     End Function

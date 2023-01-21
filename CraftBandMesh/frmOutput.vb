@@ -4,7 +4,7 @@ Imports CraftBand
 
 Public Class frmOutput
 
-    Dim _EncShiftJis As System.Text.Encoding
+    'Dim _EncShiftJis As System.Text.Encoding
     Dim _Output As clsOutput
     Dim _BlankColumnIndex As Integer = -1
 
@@ -16,8 +16,8 @@ Public Class frmOutput
         ' InitializeComponent() 呼び出しの後で初期化を追加します。
         _Output = output
 
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
-        _EncShiftJis = System.Text.Encoding.GetEncoding("shift_jis")
+        'Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
+        '_EncShiftJis = System.Text.Encoding.GetEncoding("shift_jis")
 
     End Sub
 
@@ -63,111 +63,125 @@ Public Class frmOutput
     End Sub
 
 
-    Private Function PaddingSpace(ByVal str As String, ByVal keta As Integer, ByVal isRight As Boolean) As String
-        If str Is Nothing Then
-            str = ""
-        End If
-        Const space As String = " "
+    'Private Function PaddingSpace(ByVal str As String, ByVal keta As Integer, ByVal isRight As Boolean) As String
+    '    If str Is Nothing Then
+    '        str = ""
+    '    End If
+    '    Const space As String = " "
 
-        '（文字数　=　桁　-　(対象文字列のバイト数 - 対象文字列の文字列数)）
-        Dim padLength As Integer = keta - (_EncShiftJis.GetByteCount(str) - str.Length)
-        If padLength <= 0 Then
-            Return str
-        End If
+    '    '（文字数　=　桁　-　(対象文字列のバイト数 - 対象文字列の文字列数)）
+    '    Dim padLength As Integer = keta - (_EncShiftJis.GetByteCount(str) - str.Length)
+    '    If padLength <= 0 Then
+    '        Return str
+    '    End If
 
-        If isRight Then
-            Return str.PadLeft(padLength, space.ToCharArray()(0)) '右寄せ
-        Else
-            Return str.PadRight(padLength, space.ToCharArray()(0)) '左寄せ
-        End If
-    End Function
+    '    If isRight Then
+    '        Return str.PadLeft(padLength, space.ToCharArray()(0)) '右寄せ
+    '    Else
+    '        Return str.PadRight(padLength, space.ToCharArray()(0)) '左寄せ
+    '    End If
+    'End Function
 
     Private Sub btnCSV出力_Click(sender As Object, e As EventArgs) Handles btnCSV出力.Click
-        Dim fpath As String = IO.Path.GetFileNameWithoutExtension(_Output.FilePath) & "_"
-        fpath = IO.Path.ChangeExtension(fpath, ".csv")
-        fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
 
-        Dim sb As New System.Text.StringBuilder
+        Dim errmsg As String = Nothing
+        If Not mdlGrid.GridCsvOut(dgvOutput, _Output.FilePath, errmsg) Then
+            MessageBox.Show(errmsg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
 
-        For Each col As DataGridViewColumn In dgvOutput.Columns
-            If col.Visible Then
-                sb.Append("""").Append(col.HeaderText).Append(""",")
-            End If
-        Next
-        sb.AppendLine()
 
-        For Each row As DataGridViewRow In dgvOutput.Rows
+        'Dim fpath As String = IO.Path.GetFileNameWithoutExtension(_Output.FilePath) & "_"
+        'fpath = IO.Path.ChangeExtension(fpath, ".csv")
+        'fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
 
-            For Each col As DataGridViewColumn In dgvOutput.Columns
-                If col.Visible Then
-                    sb.Append("""").Append(row.Cells(col.Index).Value).Append(""",")
-                End If
-            Next
-            sb.AppendLine()
-        Next
+        'Dim sb As New System.Text.StringBuilder
 
-        Try
-            My.Computer.FileSystem.WriteAllText(fpath, sb.ToString, False)
+        'For Each col As DataGridViewColumn In dgvOutput.Columns
+        '    If col.Visible Then
+        '        sb.Append("""").Append(col.HeaderText).Append(""",")
+        '    End If
+        'Next
+        'sb.AppendLine()
 
-            Dim p As New Process
-            p.StartInfo.FileName = fpath
-            p.StartInfo.UseShellExecute = True
-            p.Start()
+        'For Each row As DataGridViewRow In dgvOutput.Rows
 
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "frmOutput.btnCSV出力_Click")
-            '指定されたファイル'{0}'への保存ができませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningFileSaveError, fpath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End Try
+        '    For Each col As DataGridViewColumn In dgvOutput.Columns
+        '        If col.Visible Then
+        '            sb.Append("""").Append(row.Cells(col.Index).Value).Append(""",")
+        '        End If
+        '    Next
+        '    sb.AppendLine()
+        'Next
+
+        'Try
+        '    My.Computer.FileSystem.WriteAllText(fpath, sb.ToString, False)
+
+        '    Dim p As New Process
+        '    p.StartInfo.FileName = fpath
+        '    p.StartInfo.UseShellExecute = True
+        '    p.Start()
+
+        'Catch ex As Exception
+        '    g_clsLog.LogException(ex, "frmOutput.btnCSV出力_Click")
+        '    '指定されたファイル'{0}'への保存ができませんでした。
+        '    Dim msg As String = String.Format(My.Resources.WarningFileSaveError, fpath)
+        '    MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        'End Try
     End Sub
 
     Private Sub btnTXT出力_Click(sender As Object, e As EventArgs) Handles btnTXT出力.Click
-        Dim fpath As String = IO.Path.GetFileNameWithoutExtension(_Output.FilePath) & "_"
-        fpath = IO.Path.ChangeExtension(fpath, ".txt")
-        fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
 
-        Dim sb As New System.Text.StringBuilder
+        Dim errmsg As String = Nothing
+        If Not mdlGrid.GridTxtOut(dgvOutput, _Output.FilePath, errmsg) Then
+            MessageBox.Show(errmsg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
 
-        For Each col As DataGridViewColumn In dgvOutput.Columns
-            If col.Visible Then
-                Dim str As String = col.HeaderText
-                Dim len As Integer = col.Width / 5
-                Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                sb.Append(PaddingSpace(str, len, isRight)).Append(" ")
-            End If
-        Next
-        sb.AppendLine()
 
-        For Each row As DataGridViewRow In dgvOutput.Rows
-            For Each col As DataGridViewColumn In dgvOutput.Columns
-                If col.Visible Then
-                    Dim str As String = row.Cells(col.Index).Value.ToString
-                    Dim len As Integer = col.Width / 5
-                    If len < 2 Then
-                        len = 2
-                    End If
-                    Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                    sb.Append(PaddingSpace(str, len, isRight)).Append(" ")
-                End If
-            Next
-            sb.AppendLine()
-        Next
+        'Dim fpath As String = IO.Path.GetFileNameWithoutExtension(_Output.FilePath) & "_"
+        'fpath = IO.Path.ChangeExtension(fpath, ".txt")
+        'fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
 
-        Try
-            My.Computer.FileSystem.WriteAllText(fpath, sb.ToString, False)
+        'Dim sb As New System.Text.StringBuilder
 
-            Dim p As New Process
-            p.StartInfo.FileName = fpath
-            p.StartInfo.UseShellExecute = True
-            p.Start()
+        'For Each col As DataGridViewColumn In dgvOutput.Columns
+        '    If col.Visible Then
+        '        Dim str As String = col.HeaderText
+        '        Dim len As Integer = col.Width / 5
+        '        Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+        '        sb.Append(PaddingSpace(str, len, isRight)).Append(" ")
+        '    End If
+        'Next
+        'sb.AppendLine()
 
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "frmOutput.btnTXT出力_Click")
-            '指定されたファイル'{0}'への保存ができませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningFileSaveError, fpath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        'For Each row As DataGridViewRow In dgvOutput.Rows
+        '    For Each col As DataGridViewColumn In dgvOutput.Columns
+        '        If col.Visible Then
+        '            Dim str As String = row.Cells(col.Index).Value.ToString
+        '            Dim len As Integer = col.Width / 5
+        '            If len < 2 Then
+        '                len = 2
+        '            End If
+        '            Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+        '            sb.Append(PaddingSpace(str, len, isRight)).Append(" ")
+        '        End If
+        '    Next
+        '    sb.AppendLine()
+        'Next
 
-        End Try
+        'Try
+        '    My.Computer.FileSystem.WriteAllText(fpath, sb.ToString, False)
+
+        '    Dim p As New Process
+        '    p.StartInfo.FileName = fpath
+        '    p.StartInfo.UseShellExecute = True
+        '    p.Start()
+
+        'Catch ex As Exception
+        '    g_clsLog.LogException(ex, "frmOutput.btnTXT出力_Click")
+        '    '指定されたファイル'{0}'への保存ができませんでした。
+        '    Dim msg As String = String.Format(My.Resources.WarningFileSaveError, fpath)
+        '    MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+        'End Try
     End Sub
 End Class

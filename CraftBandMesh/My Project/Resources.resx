@@ -204,15 +204,6 @@
   <data name="CalcOutAverageMesh" xml:space="preserve">
     <value>目の平均</value>
   </data>
-  <data name="CalcOutLonguest" xml:space="preserve">
-    <value>最長{0,8}</value>
-  </data>
-  <data name="CalcOutShortest" xml:space="preserve">
-    <value>最短</value>
-  </data>
-  <data name="CalcOutSum" xml:space="preserve">
-    <value>集計値</value>
-  </data>
   <data name="CalcOutTurn" xml:space="preserve">
     <value>折り返し</value>
   </data>
@@ -253,14 +244,6 @@
   <data name="TitleException" xml:space="preserve">
     <value>例外発生</value>
     <comment>mdlMain</comment>
-  </data>
-  <data name="WarningBadWorkData" xml:space="preserve">
-    <value>指定されたファイル'{0}'は読み取れませんでした。</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="WarningFileSaveError" xml:space="preserve">
-    <value>指定されたファイル'{0}'への保存ができませんでした。</value>
-    <comment>frmMain</comment>
   </data>
   <data name="WarningWidthPrime" xml:space="preserve">
     <value>横寸法優先の条件を満たしません。</value>

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CraftBandMesh": {
+      "commandName": "Project"
+    },
+    "プロファイル 1": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\miho\\Desktop\\test.xml"
+    }
+  }
+}

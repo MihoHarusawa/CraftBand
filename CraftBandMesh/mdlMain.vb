@@ -66,6 +66,10 @@ Module mdlMain
 
         'フォーム表示
         _MainForm = New frmMain
+        If 0 < CmdArgs.Count AndAlso IO.File.Exists(CmdArgs(0)) Then
+            'issue#8
+            _MainForm._sFilePath = CmdArgs(0)
+        End If
         Dim result As DialogResult = _MainForm.ShowDialog
         'ダイアログ表示終了
         g_clsLog.LogResourceMessage(clsLog.LogLevel.Steps, "LOG_FormEnd", result)

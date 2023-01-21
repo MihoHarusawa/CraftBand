@@ -12,11 +12,12 @@ Public Class frmMain
     Dim _clsCalcMesh As New clsCalcMesh(_clsDataTables, Me)
 
     '編集中のファイルパス
-    Dim _sFilePath As String = Nothing
+    Friend _sFilePath As String = Nothing '起動時引数があればセット(issue#8)
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
     Dim _isChangingByCode As Boolean = False
+
 
 #Region "基本的な画面処理"
 
@@ -31,7 +32,13 @@ Public Class frmMain
         btnDEBUG.Visible = (clsLog.LogLevel.Debug <= g_clsLog.Level)
 #End If
 
-        Dim lastFilePath As String = My.Settings.LastFilePath
+        Dim lastFilePath As String
+        If Not String.IsNullOrWhiteSpace(_sFilePath) Then
+            lastFilePath = _sFilePath
+            _sFilePath = Nothing
+        Else
+            lastFilePath = My.Settings.LastFilePath
+        End If
         If Not String.IsNullOrWhiteSpace(lastFilePath) AndAlso IO.File.Exists(lastFilePath) Then
             If _clsDataTables.Load(lastFilePath) Then
                 _sFilePath = lastFilePath
@@ -616,9 +623,7 @@ Public Class frmMain
         If _clsDataTables.Load(My.Settings.DefaultFilePath) Then
             DispTables(_clsDataTables)
         Else
-            '指定されたファイル'{0}'は読み取れませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningBadWorkData, My.Settings.DefaultFilePath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -706,9 +711,7 @@ Public Class frmMain
         If _clsDataTables.Save(SaveFileDialog1.FileName) Then
             My.Settings.DefaultFilePath = SaveFileDialog1.FileName
         Else
-            '指定されたファイル'{0}'への保存ができませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningFileSaveError, SaveFileDialog1.FileName)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -842,9 +845,7 @@ Public Class frmMain
             _sFilePath = OpenFileDialog1.FileName
             setStartEditing()
         Else
-            '指定されたファイル'{0}'は読み取れませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningBadWorkData, OpenFileDialog1.FileName)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -861,9 +862,7 @@ Public Class frmMain
             setStartEditing()
 
         Else
-            '指定されたファイル'{0}'への保存ができませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningFileSaveError, SaveFileDialog1.FileName)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -881,9 +880,7 @@ Public Class frmMain
         If _clsDataTables.Save(_sFilePath) Then
             setStartEditing()
         Else
-            '指定されたファイル'{0}'への保存ができませんでした。
-            Dim msg As String = String.Format(My.Resources.WarningFileSaveError, _sFilePath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -915,9 +912,7 @@ Public Class frmMain
 
                 SaveTables(_clsDataTables)
                 If Not _clsDataTables.Save(_sFilePath) Then
-                    '指定されたファイル'{0}'への保存ができませんでした。
-                    Dim msg As String = String.Format(My.Resources.WarningFileSaveError, _sFilePath)
-                    MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Exit Sub
                 End If
             End If
@@ -927,6 +922,34 @@ Public Class frmMain
         Me.Close()
     End Sub
 
+    'issue#8 DragDrop
+    Private Sub frmMain_DragEnter(sender As Object, e As DragEventArgs) Handles MyBase.DragEnter
+        'コントロール内にドラッグされたとき実行される
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            'ドラッグされたデータ形式を調べ、ファイルのときはコピーアイコン
+            e.Effect = DragDropEffects.Copy
+        Else
+            'ファイル以外は受け付けない
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub frmMain_DragDrop(sender As Object, e As DragEventArgs) Handles MyBase.DragDrop
+        Dim fileNames As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
+        For Each fname In fileNames
+            If IsContinueEditing() Then
+                Exit Sub
+            End If
+            If _clsDataTables.Load(fname) Then
+                DispTables(_clsDataTables)
+                _sFilePath = fname
+                setStartEditing()
+                Exit Sub
+            Else
+                MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Next
+    End Sub
 #End Region
 
 #Region "底(縦横)のコントロール"
@@ -1543,6 +1566,10 @@ Public Class frmMain
             End If
         Next
     End Sub
+
+
+
+
 #End Region
 
 End Class

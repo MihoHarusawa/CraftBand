@@ -1,6 +1,7 @@
 ﻿Imports System.Configuration
 Imports System.Drawing
 Imports System.IO
+Imports System.Text
 Imports System.Windows.Forms
 Imports System.Xml
 
@@ -116,6 +117,7 @@ Public Module mdlDllMain
     End Class
 
     Friend __paras As DllParameters
+    Friend __encShiftJis As System.Text.Encoding
 
     Public Function Initialize(ByVal paras As DllParameters) As Boolean
         If paras.Log Is Nothing Then
@@ -124,6 +126,10 @@ Public Module mdlDllMain
             Return False
         End If
         __paras = paras
+
+        'shift_jisを扱えるようにする
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
+        __encShiftJis = System.Text.Encoding.GetEncoding("shift_jis")
 
         '*ログ
         g_clsLog = paras.Log

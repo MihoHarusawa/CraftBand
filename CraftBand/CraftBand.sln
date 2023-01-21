@@ -3,7 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CraftBand", "CraftBand.vbproj", "{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBand", "CraftBand.vbproj", "{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}"
+EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandMesh", "..\CraftBandMesh\CraftBandMesh.vbproj", "{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer_x64", "..\Installer\Installer.vdproj", "{EF936B78-C094-4537-82DA-A9777C05DA76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A} = {337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}
+		{D5A60DC2-70F9-408E-947E-437DCCFD9B3C} = {D5A60DC2-70F9-408E-947E-437DCCFD9B3C}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{DC610EA1-F1A9-4498-8ED5-FA428594A320}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +29,14 @@ Global
 		{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{337D6E78-0EE8-4D07-BEFD-FD27D54AA59A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF936B78-C094-4537-82DA-A9777C05DA76}.Debug|Any CPU.ActiveCfg = Debug
+		{EF936B78-C094-4537-82DA-A9777C05DA76}.Debug|Any CPU.Build.0 = Debug
+		{EF936B78-C094-4537-82DA-A9777C05DA76}.Release|Any CPU.ActiveCfg = Release
+		{EF936B78-C094-4537-82DA-A9777C05DA76}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -31,6 +31,7 @@ Partial Class frmOutput
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOutput))
         Me.dgvOutput = New System.Windows.Forms.DataGridView()
         Me.BindingSourceOutput = New System.Windows.Forms.BindingSource(Me.components)
@@ -41,6 +42,7 @@ Partial Class frmOutput
         Me.f_b空行区分 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_sカテゴリー = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s本幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも本数 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも長 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -66,7 +68,7 @@ Partial Class frmOutput
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvOutput.AutoGenerateColumns = False
         Me.dgvOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvOutput.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iNo, Me.f_b空行区分, Me.f_sカテゴリー, Me.f_s番号, Me.f_s本幅, Me.f_sひも本数, Me.f_sひも長, Me.f_s色, Me.f_sタイプ, Me.f_s編みかた名, Me.f_s編みひも名, Me.f_i周数, Me.f_i段数, Me.f_s高さ, Me.f_s長さ, Me.f_sメモ})
+        Me.dgvOutput.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iNo, Me.f_b空行区分, Me.f_sカテゴリー, Me.f_s番号, Me.f_s記号, Me.f_s本幅, Me.f_sひも本数, Me.f_sひも長, Me.f_s色, Me.f_sタイプ, Me.f_s編みかた名, Me.f_s編みひも名, Me.f_i周数, Me.f_i段数, Me.f_s高さ, Me.f_s長さ, Me.f_sメモ})
         Me.dgvOutput.DataSource = Me.BindingSourceOutput
         Me.dgvOutput.Location = New System.Drawing.Point(12, 12)
         Me.dgvOutput.Name = "dgvOutput"
@@ -154,11 +156,22 @@ Partial Class frmOutput
         Me.f_s番号.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.f_s番号.Width = 26
         '
+        'f_s記号
+        '
+        Me.f_s記号.DataPropertyName = "f_s記号"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomCenter
+        Me.f_s記号.DefaultCellStyle = DataGridViewCellStyle2
+        Me.f_s記号.HeaderText = "記号"
+        Me.f_s記号.MinimumWidth = 6
+        Me.f_s記号.Name = "f_s記号"
+        Me.f_s記号.ReadOnly = True
+        Me.f_s記号.Width = 57
+        '
         'f_s本幅
         '
         Me.f_s本幅.DataPropertyName = "f_s本幅"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_s本幅.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_s本幅.DefaultCellStyle = DataGridViewCellStyle3
         Me.f_s本幅.HeaderText = "本幅"
         Me.f_s本幅.MinimumWidth = 6
         Me.f_s本幅.Name = "f_s本幅"
@@ -169,8 +182,8 @@ Partial Class frmOutput
         'f_sひも本数
         '
         Me.f_sひも本数.DataPropertyName = "f_sひも本数"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_sひも本数.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_sひも本数.DefaultCellStyle = DataGridViewCellStyle4
         Me.f_sひも本数.HeaderText = "ひも本数"
         Me.f_sひも本数.MinimumWidth = 6
         Me.f_sひも本数.Name = "f_sひも本数"
@@ -181,8 +194,8 @@ Partial Class frmOutput
         'f_sひも長
         '
         Me.f_sひも長.DataPropertyName = "f_sひも長"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_sひも長.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_sひも長.DefaultCellStyle = DataGridViewCellStyle5
         Me.f_sひも長.HeaderText = "ひも長"
         Me.f_sひも長.MinimumWidth = 6
         Me.f_sひも長.Name = "f_sひも長"
@@ -233,8 +246,8 @@ Partial Class frmOutput
         'f_i周数
         '
         Me.f_i周数.DataPropertyName = "f_i周数"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i周数.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i周数.DefaultCellStyle = DataGridViewCellStyle6
         Me.f_i周数.HeaderText = "周数"
         Me.f_i周数.MinimumWidth = 6
         Me.f_i周数.Name = "f_i周数"
@@ -245,8 +258,8 @@ Partial Class frmOutput
         'f_i段数
         '
         Me.f_i段数.DataPropertyName = "f_i段数"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i段数.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i段数.DefaultCellStyle = DataGridViewCellStyle7
         Me.f_i段数.HeaderText = "段数"
         Me.f_i段数.MinimumWidth = 6
         Me.f_i段数.Name = "f_i段数"
@@ -257,8 +270,8 @@ Partial Class frmOutput
         'f_s高さ
         '
         Me.f_s高さ.DataPropertyName = "f_s高さ"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_s高さ.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_s高さ.DefaultCellStyle = DataGridViewCellStyle8
         Me.f_s高さ.HeaderText = "高さ"
         Me.f_s高さ.MinimumWidth = 6
         Me.f_s高さ.Name = "f_s高さ"
@@ -269,8 +282,8 @@ Partial Class frmOutput
         'f_s長さ
         '
         Me.f_s長さ.DataPropertyName = "f_s長さ"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_s長さ.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_s長さ.DefaultCellStyle = DataGridViewCellStyle9
         Me.f_s長さ.HeaderText = "長さ"
         Me.f_s長さ.MinimumWidth = 6
         Me.f_s長さ.Name = "f_s長さ"
@@ -316,6 +329,7 @@ Partial Class frmOutput
     Friend WithEvents f_b空行区分 As DataGridViewCheckBoxColumn
     Friend WithEvents f_sカテゴリー As DataGridViewTextBoxColumn
     Friend WithEvents f_s番号 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s記号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s本幅 As DataGridViewTextBoxColumn
     Friend WithEvents f_sひも本数 As DataGridViewTextBoxColumn
     Friend WithEvents f_sひも長 As DataGridViewTextBoxColumn

@@ -10,11 +10,11 @@
     <Company>LaboHarusawa</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>クラフトバンド・四角底と楕円底の計算</Title>
-    <Copyright>Copyright © LaboHarusawa 2022</Copyright>
+    <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.1.0.0</FileVersion>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

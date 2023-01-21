@@ -676,7 +676,7 @@ Namespace Tables
                 Me.columnf_s基本色.DefaultValue = CType("",String)
                 Me.columnf_i基本のひも幅.DefaultValue = CType(0,Short)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.10",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.1.1",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -1965,6 +1965,8 @@ Namespace Tables
             
             Private columnf_d高さ As Global.System.Data.DataColumn
             
+            Private columnf_d高さ比率 As Global.System.Data.DataColumn
+            
             Private columnf_d垂直ひも長 As Global.System.Data.DataColumn
             
             Private columnf_d周長 As Global.System.Data.DataColumn
@@ -2116,6 +2118,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_d高さ比率Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_d高さ比率
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_d垂直ひも長Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_d垂直ひも長
@@ -2236,6 +2246,7 @@ Namespace Tables
                         ByVal f_b周連続区分 As Boolean,  _
                         ByVal f_b次周連続区分 As Boolean,  _
                         ByVal f_d高さ As Double,  _
+                        ByVal f_d高さ比率 As Double,  _
                         ByVal f_d垂直ひも長 As Double,  _
                         ByVal f_d周長 As Double,  _
                         ByVal f_d周長比率対底の周 As String,  _
@@ -2246,7 +2257,7 @@ Namespace Tables
                         ByVal f_iひも本数 As Integer,  _
                         ByVal f_sメモ As String) As tbl側面Row
                 Dim rowtbl側面Row As tbl側面Row = CType(Me.NewRow,tbl側面Row)
-                Dim columnValuesArray() As Object = New Object() {f_i番号, f_s編みかた名, f_s編みひも名, f_iひも番号, f_bError, f_i何本幅, f_i周数, f_s色, f_i段数, f_b周連続区分, f_b次周連続区分, f_d高さ, f_d垂直ひも長, f_d周長, f_d周長比率対底の周, f_dひも長加算, f_dひも長, f_d厚さ, f_d連続ひも長, f_iひも本数, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_i番号, f_s編みかた名, f_s編みひも名, f_iひも番号, f_bError, f_i何本幅, f_i周数, f_s色, f_i段数, f_b周連続区分, f_b次周連続区分, f_d高さ, f_d高さ比率, f_d垂直ひも長, f_d周長, f_d周長比率対底の周, f_dひも長加算, f_dひも長, f_d厚さ, f_d連続ひも長, f_iひも本数, f_sメモ}
                 rowtbl側面Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl側面Row)
                 Return rowtbl側面Row
@@ -2287,6 +2298,7 @@ Namespace Tables
                 Me.columnf_b周連続区分 = MyBase.Columns("f_b周連続区分")
                 Me.columnf_b次周連続区分 = MyBase.Columns("f_b次周連続区分")
                 Me.columnf_d高さ = MyBase.Columns("f_d高さ")
+                Me.columnf_d高さ比率 = MyBase.Columns("f_d高さ比率")
                 Me.columnf_d垂直ひも長 = MyBase.Columns("f_d垂直ひも長")
                 Me.columnf_d周長 = MyBase.Columns("f_d周長")
                 Me.columnf_d周長比率対底の周 = MyBase.Columns("f_d周長比率対底の周")
@@ -2325,6 +2337,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_b次周連続区分)
                 Me.columnf_d高さ = New Global.System.Data.DataColumn("f_d高さ", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d高さ)
+                Me.columnf_d高さ比率 = New Global.System.Data.DataColumn("f_d高さ比率", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_d高さ比率)
                 Me.columnf_d垂直ひも長 = New Global.System.Data.DataColumn("f_d垂直ひも長", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d垂直ひも長)
                 Me.columnf_d周長 = New Global.System.Data.DataColumn("f_d周長", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -2357,6 +2371,7 @@ Namespace Tables
                 Me.columnf_i段数.DefaultValue = CType(0,Short)
                 Me.columnf_b周連続区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_b次周連続区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_d高さ比率.DefaultValue = CType(0R,Double)
                 Me.columnf_d周長比率対底の周.DefaultValue = CType("1",String)
                 Me.columnf_dひも長加算.DefaultValue = CType(0R,Double)
                 Me.columnf_d厚さ.DefaultValue = CType(0R,Double)
@@ -4590,6 +4605,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_d高さ比率() As Double
+                Get
+                    If Me.Isf_d高さ比率Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletbl側面.f_d高さ比率Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl側面.f_d高さ比率Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d垂直ひも長() As Double
                 Get
                     If Me.Isf_d垂直ひも長Null Then
@@ -4841,6 +4871,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_d高さNull()
                 Me(Me.tabletbl側面.f_d高さColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_d高さ比率Null() As Boolean
+                Return Me.IsNull(Me.tabletbl側面.f_d高さ比率Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_d高さ比率Null()
+                Me(Me.tabletbl側面.f_d高さ比率Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

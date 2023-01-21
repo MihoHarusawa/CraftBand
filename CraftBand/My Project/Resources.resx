@@ -141,6 +141,24 @@
     <value>{0}が変更されました。選択されたファイルを読み直しますか？</value>
     <comment>frmBasic</comment>
   </data>
+  <data name="CalcOutCount" xml:space="preserve">
+    <value>{0} 本</value>
+  </data>
+  <data name="CalcOutCutList" xml:space="preserve">
+    <value>カットリスト</value>
+  </data>
+  <data name="CalcOutLane" xml:space="preserve">
+    <value>{0}幅</value>
+  </data>
+  <data name="CalcOutLonguest" xml:space="preserve">
+    <value>最長</value>
+  </data>
+  <data name="CalcOutShortest" xml:space="preserve">
+    <value>面積長</value>
+  </data>
+  <data name="CalcOutSum" xml:space="preserve">
+    <value>集計値</value>
+  </data>
   <data name="ErrAddRecord" xml:space="preserve">
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>
@@ -189,5 +207,14 @@
   </data>
   <data name="LOG_FormEnd" xml:space="preserve">
     <value>ダイアログ表示終了</value>
+  </data>
+  <data name="WarningBadWorkData" xml:space="preserve">
+    <value>指定されたファイル'{0}'は読み取れませんでした。</value>
+  </data>
+  <data name="WarningFileSaveError" xml:space="preserve">
+    <value>指定されたファイル'{0}'への保存ができませんでした。</value>
+  </data>
+  <data name="WarningFileStartError" xml:space="preserve">
+    <value>ファイル'{0}'を起動できませんでした。</value>
   </data>
 </root>

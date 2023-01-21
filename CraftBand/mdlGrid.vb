@@ -1,6 +1,8 @@
 ﻿Imports System.ComponentModel.Design.ObjectSelectorEditor
 Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports CraftBand.Tables
 
 Public Module mdlGrid
     Public Const cRowHeightIdxOne As Integer = 34
@@ -155,6 +157,136 @@ Public Module mdlGrid
         Return widthStr.Length
     End Function
 
+    Public Function GridCsvOut(ByVal dgv As System.Windows.Forms.DataGridView, ByVal filepath As String, ByRef errmsg As String) As Boolean
+        Dim fpath As String = IO.Path.GetFileNameWithoutExtension(filepath) & "_"
+        fpath = IO.Path.ChangeExtension(fpath, ".csv")
+        fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
+
+        Dim sb As New System.Text.StringBuilder
+
+        For Each col As DataGridViewColumn In dgv.Columns
+            If col.Visible Then
+                sb.Append("""").Append(col.HeaderText).Append(""",")
+            End If
+        Next
+        sb.AppendLine()
+
+        For Each row As DataGridViewRow In dgv.Rows
+
+            For Each col As DataGridViewColumn In dgv.Columns
+                If col.Visible Then
+                    sb.Append("""").Append(row.Cells(col.Index).Value).Append(""",")
+                End If
+            Next
+            sb.AppendLine()
+        Next
+
+        Try
+            '上書き
+            Using sw As New System.IO.StreamWriter(fpath, False, __encShiftJis)
+                sw.Write(sb.ToString)
+                sw.Close()
+            End Using
+        Catch ex As Exception
+            '指定されたファイル'{0}'への保存ができませんでした。
+            errmsg = String.Format(My.Resources.WarningFileSaveError, fpath)
+            g_clsLog.LogException(ex, "mdlGrid.GridCsvOut", errmsg)
+            Return False
+        End Try
+
+        Try
+            Dim p As New Process
+            p.StartInfo.FileName = fpath
+            p.StartInfo.UseShellExecute = True
+            p.Start()
+        Catch ex As Exception
+            'ファイル'{0}'を起動できませんでした。
+            errmsg = String.Format(My.Resources.WarningFileStartError, fpath)
+            g_clsLog.LogException(ex, "mdlGrid.GridCsvOut", errmsg)
+            Return False
+        End Try
+
+        Return True
+    End Function
+
+    Private Function paddingSpace(ByVal str As String, ByVal keta As Integer, ByVal isRight As Boolean) As String
+        If str Is Nothing Then
+            str = ""
+        End If
+        Const space As String = " "
+
+        '（文字数　=　桁　-　(対象文字列のバイト数 - 対象文字列の文字列数)）
+        Dim padLength As Integer = keta - (__encShiftJis.GetByteCount(str) - str.Length)
+        If padLength <= 0 Then
+            Return str
+        End If
+
+        If isRight Then
+            Return str.PadLeft(padLength, space.ToCharArray()(0)) '右寄せ
+        Else
+            Return str.PadRight(padLength, space.ToCharArray()(0)) '左寄せ
+        End If
+    End Function
+
+    Public Function GridTxtOut(ByVal dgv As System.Windows.Forms.DataGridView, ByVal filepath As String, ByRef errmsg As String) As Boolean
+        Dim fpath As String = IO.Path.GetFileNameWithoutExtension(filepath) & "_"
+        fpath = IO.Path.ChangeExtension(fpath, ".txt")
+        fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
+
+        Dim sb As New System.Text.StringBuilder
+
+        For Each col As DataGridViewColumn In dgv.Columns
+            If col.Visible Then
+                Dim str As String = col.HeaderText
+                Dim len As Integer = col.Width / 5
+                Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                sb.Append(paddingSpace(str, len, isRight)).Append(" ")
+            End If
+        Next
+        sb.AppendLine()
+
+        For Each row As DataGridViewRow In dgv.Rows
+            For Each col As DataGridViewColumn In dgv.Columns
+                If col.Visible Then
+                    Dim str As String = row.Cells(col.Index).Value.ToString
+                    Dim len As Integer = col.Width / 5
+                    If len < 2 Then
+                        len = 2
+                    End If
+                    Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                    sb.Append(paddingSpace(str, len, isRight)).Append(" ")
+                End If
+            Next
+            sb.AppendLine()
+        Next
+
+        Try
+            '上書き
+            Using sw As New System.IO.StreamWriter(fpath, False, __encShiftJis)
+                sw.Write(sb.ToString)
+                sw.Close()
+            End Using
+        Catch ex As Exception
+            '指定されたファイル'{0}'への保存ができませんでした。
+            errmsg = String.Format(My.Resources.WarningFileSaveError, fpath)
+            g_clsLog.LogException(ex, "mdlGrid.GridTxtOut", errmsg)
+            Return False
+        End Try
+
+        Try
+            Dim p As New Process
+            p.StartInfo.FileName = fpath
+            p.StartInfo.UseShellExecute = True
+            p.Start()
+        Catch ex As Exception
+            'ファイル'{0}'を起動できませんでした。
+            errmsg = String.Format(My.Resources.WarningFileStartError, fpath)
+            g_clsLog.LogException(ex, "mdlGrid.GridTxtOut", errmsg)
+            Return False
+        End Try
+
+        Return True
+    End Function
 
 
 End Module

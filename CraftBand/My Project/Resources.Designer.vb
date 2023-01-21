@@ -115,6 +115,60 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0} 本 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutCount() As String
+            Get
+                Return ResourceManager.GetString("CalcOutCount", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  カットリスト に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutCutList() As String
+            Get
+                Return ResourceManager.GetString("CalcOutCutList", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}幅 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutLane() As String
+            Get
+                Return ResourceManager.GetString("CalcOutLane", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  最長 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutLonguest() As String
+            Get
+                Return ResourceManager.GetString("CalcOutLonguest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  面積長 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutShortest() As String
+            Get
+                Return ResourceManager.GetString("CalcOutShortest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  集計値 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSum() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSum", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  レコードを追加できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrAddRecord() As String
@@ -228,6 +282,33 @@ Namespace My.Resources
         Friend ReadOnly Property LOG_FormEnd() As String
             Get
                 Return ResourceManager.GetString("LOG_FormEnd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  指定されたファイル&apos;{0}&apos;は読み取れませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property WarningBadWorkData() As String
+            Get
+                Return ResourceManager.GetString("WarningBadWorkData", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  指定されたファイル&apos;{0}&apos;への保存ができませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property WarningFileSaveError() As String
+            Get
+                Return ResourceManager.GetString("WarningFileSaveError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ファイル&apos;{0}&apos;を起動できませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property WarningFileStartError() As String
+            Get
+                Return ResourceManager.GetString("WarningFileStartError", resourceCulture)
             End Get
         End Property
     End Module

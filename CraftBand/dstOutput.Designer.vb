@@ -27,6 +27,8 @@ Namespace Tables
         
         Private tabletblOutput As tblOutputDataTable
         
+        Private tabletblCutList As tblCutListDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -59,6 +61,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblOutput")) Is Nothing) Then
                     MyBase.Tables.Add(New tblOutputDataTable(ds.Tables("tblOutput")))
                 End If
+                If (Not (ds.Tables("tblCutList")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblCutListDataTable(ds.Tables("tblCutList")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -83,6 +88,16 @@ Namespace Tables
         Public ReadOnly Property tblOutput() As tblOutputDataTable
             Get
                 Return Me.tabletblOutput
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblCutList() As tblCutListDataTable
+            Get
+                Return Me.tabletblCutList
             End Get
         End Property
         
@@ -156,6 +171,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblOutput")) Is Nothing) Then
                     MyBase.Tables.Add(New tblOutputDataTable(ds.Tables("tblOutput")))
                 End If
+                If (Not (ds.Tables("tblCutList")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblCutListDataTable(ds.Tables("tblCutList")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -194,6 +212,12 @@ Namespace Tables
                     Me.tabletblOutput.InitVars
                 End If
             End If
+            Me.tabletblCutList = CType(MyBase.Tables("tblCutList"),tblCutListDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblCutList) Is Nothing) Then
+                    Me.tabletblCutList.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -206,11 +230,19 @@ Namespace Tables
             Me.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
             Me.tabletblOutput = New tblOutputDataTable()
             MyBase.Tables.Add(Me.tabletblOutput)
+            Me.tabletblCutList = New tblCutListDataTable()
+            MyBase.Tables.Add(Me.tabletblCutList)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblOutput() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblCutList() As Boolean
             Return false
         End Function
         
@@ -275,6 +307,9 @@ Namespace Tables
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblOutputRowChangeEventHandler(ByVal sender As Object, ByVal e As tblOutputRowChangeEvent)
         
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblCutListRowChangeEventHandler(ByVal sender As Object, ByVal e As tblCutListRowChangeEvent)
+        
         '''<summary>
         '''Represents the strongly named DataTable class.
         '''</summary>
@@ -288,6 +323,8 @@ Namespace Tables
             Private columnf_b空行区分 As Global.System.Data.DataColumn
             
             Private columnf_sカテゴリー As Global.System.Data.DataColumn
+            
+            Private columnf_s記号 As Global.System.Data.DataColumn
             
             Private columnf_s番号 As Global.System.Data.DataColumn
             
@@ -371,6 +408,14 @@ Namespace Tables
             Public ReadOnly Property f_sカテゴリーColumn() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_sカテゴリー
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s記号Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s記号
                 End Get
             End Property
             
@@ -519,6 +564,7 @@ Namespace Tables
                         ByVal f_iNo As Integer,  _
                         ByVal f_b空行区分 As Boolean,  _
                         ByVal f_sカテゴリー As String,  _
+                        ByVal f_s記号 As String,  _
                         ByVal f_s番号 As String,  _
                         ByVal f_sタイプ As String,  _
                         ByVal f_s編みかた名 As String,  _
@@ -533,7 +579,7 @@ Namespace Tables
                         ByVal f_s色 As String,  _
                         ByVal f_sメモ As String) As tblOutputRow
                 Dim rowtblOutputRow As tblOutputRow = CType(Me.NewRow,tblOutputRow)
-                Dim columnValuesArray() As Object = New Object() {f_iNo, f_b空行区分, f_sカテゴリー, f_s番号, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_iNo, f_b空行区分, f_sカテゴリー, f_s記号, f_s番号, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sメモ}
                 rowtblOutputRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblOutputRow)
                 Return rowtblOutputRow
@@ -565,6 +611,7 @@ Namespace Tables
                 Me.columnf_iNo = MyBase.Columns("f_iNo")
                 Me.columnf_b空行区分 = MyBase.Columns("f_b空行区分")
                 Me.columnf_sカテゴリー = MyBase.Columns("f_sカテゴリー")
+                Me.columnf_s記号 = MyBase.Columns("f_s記号")
                 Me.columnf_s番号 = MyBase.Columns("f_s番号")
                 Me.columnf_sタイプ = MyBase.Columns("f_sタイプ")
                 Me.columnf_s編みかた名 = MyBase.Columns("f_s編みかた名")
@@ -589,6 +636,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_b空行区分)
                 Me.columnf_sカテゴリー = New Global.System.Data.DataColumn("f_sカテゴリー", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sカテゴリー)
+                Me.columnf_s記号 = New Global.System.Data.DataColumn("f_s記号", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s記号)
                 Me.columnf_s番号 = New Global.System.Data.DataColumn("f_s番号", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s番号)
                 Me.columnf_sタイプ = New Global.System.Data.DataColumn("f_sタイプ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -621,6 +670,7 @@ Namespace Tables
                 Me.columnf_iNo.DefaultValue = CType(1,Integer)
                 Me.columnf_b空行区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_sカテゴリー.DefaultValue = CType("",String)
+                Me.columnf_s記号.DefaultValue = CType("",String)
                 Me.columnf_s番号.DefaultValue = CType("",String)
                 Me.columnf_sタイプ.DefaultValue = CType("",String)
                 Me.columnf_s編みかた名.DefaultValue = CType("",String)
@@ -762,6 +812,357 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblCutListDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblCutListRow)
+            
+            Private columnf_iNo As Global.System.Data.DataColumn
+            
+            Private columnf_s記号 As Global.System.Data.DataColumn
+            
+            Private columnf_s記号範囲 As Global.System.Data.DataColumn
+            
+            Private columnf_i本幅 As Global.System.Data.DataColumn
+            
+            Private columnf_d長さ As Global.System.Data.DataColumn
+            
+            Private columnf_s長さ As Global.System.Data.DataColumn
+            
+            Private columnf_s色 As Global.System.Data.DataColumn
+            
+            Private columnf_i合計本数 As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblCutList"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iNoColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iNo
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s記号Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s記号
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s記号範囲Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s記号範囲
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i本幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i本幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_d長さColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_d長さ
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s長さColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s長さ
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s色Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s色
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i合計本数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i合計本数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblCutListRow
+                Get
+                    Return CType(Me.Rows(index),tblCutListRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCutListRowChanging As tblCutListRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCutListRowChanged As tblCutListRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCutListRowDeleting As tblCutListRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCutListRowDeleted As tblCutListRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblCutListRow(ByVal row As tblCutListRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblCutListRow(ByVal f_iNo As Integer, ByVal f_s記号 As String, ByVal f_s記号範囲 As String, ByVal f_i本幅 As Short, ByVal f_d長さ As Double, ByVal f_s長さ As String, ByVal f_s色 As String, ByVal f_i合計本数 As Integer) As tblCutListRow
+                Dim rowtblCutListRow As tblCutListRow = CType(Me.NewRow,tblCutListRow)
+                Dim columnValuesArray() As Object = New Object() {f_iNo, f_s記号, f_s記号範囲, f_i本幅, f_d長さ, f_s長さ, f_s色, f_i合計本数}
+                rowtblCutListRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblCutListRow)
+                Return rowtblCutListRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblCutListDataTable = CType(MyBase.Clone,tblCutListDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblCutListDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnf_iNo = MyBase.Columns("f_iNo")
+                Me.columnf_s記号 = MyBase.Columns("f_s記号")
+                Me.columnf_s記号範囲 = MyBase.Columns("f_s記号範囲")
+                Me.columnf_i本幅 = MyBase.Columns("f_i本幅")
+                Me.columnf_d長さ = MyBase.Columns("f_d長さ")
+                Me.columnf_s長さ = MyBase.Columns("f_s長さ")
+                Me.columnf_s色 = MyBase.Columns("f_s色")
+                Me.columnf_i合計本数 = MyBase.Columns("f_i合計本数")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnf_iNo = New Global.System.Data.DataColumn("f_iNo", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iNo)
+                Me.columnf_s記号 = New Global.System.Data.DataColumn("f_s記号", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s記号)
+                Me.columnf_s記号範囲 = New Global.System.Data.DataColumn("f_s記号範囲", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s記号範囲)
+                Me.columnf_i本幅 = New Global.System.Data.DataColumn("f_i本幅", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i本幅)
+                Me.columnf_d長さ = New Global.System.Data.DataColumn("f_d長さ", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_d長さ)
+                Me.columnf_s長さ = New Global.System.Data.DataColumn("f_s長さ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s長さ)
+                Me.columnf_s色 = New Global.System.Data.DataColumn("f_s色", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s色)
+                Me.columnf_i合計本数 = New Global.System.Data.DataColumn("f_i合計本数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i合計本数)
+                Me.columnf_iNo.DefaultValue = CType(0,Integer)
+                Me.columnf_s記号.DefaultValue = CType("",String)
+                Me.columnf_s記号範囲.DefaultValue = CType("",String)
+                Me.columnf_i本幅.DefaultValue = CType(0,Short)
+                Me.columnf_d長さ.DefaultValue = CType(0R,Double)
+                Me.columnf_s長さ.DefaultValue = CType("",String)
+                Me.columnf_s色.DefaultValue = CType("",String)
+                Me.columnf_i合計本数.DefaultValue = CType(0,Integer)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblCutListRow() As tblCutListRow
+                Return CType(Me.NewRow,tblCutListRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblCutListRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblCutListRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblCutListRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblCutListRowChanged(Me, New tblCutListRowChangeEvent(CType(e.Row,tblCutListRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblCutListRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblCutListRowChanging(Me, New tblCutListRowChangeEvent(CType(e.Row,tblCutListRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblCutListRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblCutListRowDeleted(Me, New tblCutListRowChangeEvent(CType(e.Row,tblCutListRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblCutListRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblCutListRowDeleting(Me, New tblCutListRowChangeEvent(CType(e.Row,tblCutListRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblCutListRow(ByVal row As tblCutListRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstOutput = New dstOutput()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblCutListDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblOutputRow
@@ -814,6 +1215,21 @@ Namespace Tables
                 End Get
                 Set
                     Me(Me.tabletblOutput.f_sカテゴリーColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s記号() As String
+                Get
+                    If Me.Isf_s記号Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOutput.f_s記号Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOutput.f_s記号Column) = value
                 End Set
             End Property
             
@@ -1038,6 +1454,18 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s記号Null() As Boolean
+                Return Me.IsNull(Me.tabletblOutput.f_s記号Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s記号Null()
+                Me(Me.tabletblOutput.f_s記号Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_s番号Null() As Boolean
                 Return Me.IsNull(Me.tabletblOutput.f_s番号Column)
             End Function
@@ -1194,6 +1622,238 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblCutListRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblCutList As tblCutListDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblCutList = CType(Me.Table,tblCutListDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iNo() As Integer
+                Get
+                    If Me.Isf_iNoNull Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_iNoColumn),Integer)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_iNoColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s記号() As String
+                Get
+                    If Me.Isf_s記号Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_s記号Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_s記号Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s記号範囲() As String
+                Get
+                    If Me.Isf_s記号範囲Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_s記号範囲Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_s記号範囲Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i本幅() As Short
+                Get
+                    If Me.Isf_i本幅Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_i本幅Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_i本幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_d長さ() As Double
+                Get
+                    If Me.Isf_d長さNull Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_d長さColumn),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_d長さColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s長さ() As String
+                Get
+                    If Me.Isf_s長さNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_s長さColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_s長さColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s色() As String
+                Get
+                    If Me.Isf_s色Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_s色Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_s色Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i合計本数() As Integer
+                Get
+                    If Me.Isf_i合計本数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblCutList.f_i合計本数Column),Integer)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCutList.f_i合計本数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iNoNull() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_iNoColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iNoNull()
+                Me(Me.tabletblCutList.f_iNoColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s記号Null() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_s記号Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s記号Null()
+                Me(Me.tabletblCutList.f_s記号Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s記号範囲Null() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_s記号範囲Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s記号範囲Null()
+                Me(Me.tabletblCutList.f_s記号範囲Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i本幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_i本幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i本幅Null()
+                Me(Me.tabletblCutList.f_i本幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_d長さNull() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_d長さColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_d長さNull()
+                Me(Me.tabletblCutList.f_d長さColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s長さNull() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_s長さColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s長さNull()
+                Me(Me.tabletblCutList.f_s長さColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s色Null() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_s色Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s色Null()
+                Me(Me.tabletblCutList.f_s色Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i合計本数Null() As Boolean
+                Return Me.IsNull(Me.tabletblCutList.f_i合計本数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i合計本数Null()
+                Me(Me.tabletblCutList.f_i合計本数Column) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -1215,6 +1875,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblOutputRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblCutListRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblCutListRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblCutListRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblCutListRow
                 Get
                     Return Me.eventRow
                 End Get
