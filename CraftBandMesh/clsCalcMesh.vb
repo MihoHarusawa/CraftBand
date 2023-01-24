@@ -2302,7 +2302,7 @@ Class clsCalcMesh
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 < r.f_d連続ひも長 Then
-                        output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                     Else
                         row.f_s本幅 = r.f_i何本幅
                         row.f_sひも本数 = output.outCountText(r.f_iひも本数)
@@ -2323,7 +2323,7 @@ Class clsCalcMesh
                 End If
                 row.f_s番号 = r.f_i番号.ToString
                 row.f_s編みひも名 = r.f_s編みひも名
-                output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                 row.f_sひも長 = output.outLengthText(r.f_d連続ひも長)
                 row.f_sメモ = r.f_sメモ
             Next
@@ -2351,6 +2351,7 @@ Class clsCalcMesh
                 Next
                 order = "f_i番号 DESC , f_iひも番号 DESC"
             End If
+            'リスト出力
             For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
                 row = output.NextNewRow
                 If r.f_i番号 = cHemNumber Then
@@ -2366,7 +2367,7 @@ Class clsCalcMesh
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 <= r.f_d連続ひも長 Then
-                        output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                     Else
                         row.f_s本幅 = r.f_i何本幅
                         row.f_sひも本数 = output.outCountText(r.f_iひも本数)
@@ -2397,7 +2398,7 @@ Class clsCalcMesh
                 row.f_i周数 = r.f_i点数
                 row.f_s長さ = output.outLengthText(r.f_d長さ)
                 If 0 < r.f_iひも本数 Then
-                    output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
                 End If
                 row.f_sメモ = r.f_sメモ
             Next

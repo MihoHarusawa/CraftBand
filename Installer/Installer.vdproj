@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_306A6B7613984E8B8D91ED3777B549C0"
+        "MsmKey" = "8:_CB643A1B11BF4C958DC8AFB8A80505CF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB643A1B11BF4C958DC8AFB8A80505CF"
+        "MsmKey" = "8:_F7937F32A3D6477798E7D08B86500931"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -250,15 +250,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CraftBandInstaller"
-        "ProductCode" = "8:{7E1565E4-F739-45DB-8D36-B5A1F0CE3B4D}"
-        "PackageCode" = "8:{705E9B89-AA2F-4AD0-9889-B266A3920EEB}"
+        "ProductCode" = "8:{C2DD9C0A-163C-4CEA-8D61-94A47E83A698}"
+        "PackageCode" = "8:{91766996-14E0-4DD1-ABFA-B5C4706560C6}"
         "UpgradeCode" = "8:{D3635BD8-65C1-4B9B-8056-CE5BCBA2A48B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.0"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:LaboHarusawa"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://labo.com/CraftBand/"
@@ -371,7 +371,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CA97A823E93E47E9A86499234A243B62"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1035796DE02A4ACABBA0CD326A75B97B"
             {
             "Name" = "8:CraftBandMesh"
             "Arguments" = "8:"
@@ -379,7 +379,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_306A6B7613984E8B8D91ED3777B549C0"
+            "Target" = "8:_F7937F32A3D6477798E7D08B86500931"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
             "Icon" = "8:_FB207A8E5FB0487EB5FE42984F9499C5"
@@ -784,9 +784,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_306A6B7613984E8B8D91ED3777B549C0"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F7937F32A3D6477798E7D08B86500931"
             {
-            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -806,7 +806,7 @@
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:PublishItems"
-            "OutputProjectGuid" = "8:{01CF72AF-E59B-449E-BAE4-3956128F6FFF}"
+            "OutputProjectGuid" = "8:{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
