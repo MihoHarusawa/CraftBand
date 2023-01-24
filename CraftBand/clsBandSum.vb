@@ -21,6 +21,8 @@
     Dim _ColorBandLength As New Dictionary(Of String, LaneLength)
     '色と本幅ごと最大長(設定単位)
     Dim _ColorBandMaxLength As New Dictionary(Of String, LaneLength)
+    '色と本幅ごと本数
+    Dim _ColorBandCount As New Dictionary(Of String, LaneLength)
 
     Sub New()
     End Sub
@@ -31,6 +33,9 @@
         Next
         For Each color As String In ref._ColorBandMaxLength.Keys
             _ColorBandMaxLength.Add(color, New LaneLength(ref._ColorBandMaxLength(color)))
+        Next
+        For Each color As String In ref._ColorBandCount.Keys
+            _ColorBandCount.Add(color, New LaneLength(ref._ColorBandCount(color)))
         Next
     End Sub
 
@@ -57,6 +62,14 @@
         End If
     End Function
 
+    '指定色の本数
+    Function BandCount(ByVal color As String) As LaneLength
+        If _ColorBandMaxLength.ContainsKey(color) Then
+            Return _ColorBandCount(color)
+        Else
+            Return Nothing
+        End If
+    End Function
 
     'ひもの集計にプラスする
     Function Add(ByVal count As Integer, ByVal lane As Integer, ByVal length As Double, ByVal color As String) As Boolean
@@ -70,23 +83,29 @@
         'ひもの集計(同一色同時登録)
         Dim bandLength As LaneLength
         Dim bandMaxLength As LaneLength
+        Dim bandCount As LaneLength
         If _ColorBandLength.ContainsKey(color) Then
             bandLength = _ColorBandLength(color)
             bandMaxLength = _ColorBandMaxLength(color)
+            bandCount = _ColorBandCount(color)
         Else
             bandLength = New LaneLength
             _ColorBandLength.Add(color, bandLength)
             bandMaxLength = New LaneLength
             _ColorBandMaxLength.Add(color, bandMaxLength)
+            bandCount = New LaneLength
+            _ColorBandCount.Add(color, bandCount)
         End If
         If bandLength.ContainsKey(lane) Then
             bandLength(lane) = bandLength(lane) + count * length
             If bandMaxLength(lane) < length Then
                 bandMaxLength(lane) = length
             End If
+            bandCount(lane) = bandCount(lane) + count
         Else
             bandLength.Add(lane, count * length)
             bandMaxLength.Add(lane, length)
+            bandCount.Add(lane, count)
         End If
         Return True
     End Function
@@ -96,6 +115,7 @@
     Public Sub Clear()
         _ColorBandLength.Clear()
         _ColorBandMaxLength.Clear()
+        _ColorBandCount.Clear()
     End Sub
 
 

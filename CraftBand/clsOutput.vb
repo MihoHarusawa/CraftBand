@@ -75,13 +75,22 @@ Public Class clsOutput
         Return _CurrentRow
     End Function
 
+    '現在行を空行にする
+    Function SetBlankLine()
+        If _CurrentRow IsNot Nothing Then
+            _CurrentRow.f_b空行区分 = True
+            Return True
+        End If
+        Return False
+    End Function
+
     '現在行にひも属性表示
     Function SetBandRow(ByVal count As Integer, ByVal lane As Integer, ByVal length As Double, ByVal color As String, Optional ByVal group As String = Nothing) As String
         'カットリスト記号生成
         Dim mark As String = AddMark(count, lane, length, color, group)
 
         '表示
-        If 0 < lane AndAlso 0 < count Then
+        If 0 < lane AndAlso 0 < count AndAlso _CurrentRow IsNot Nothing Then
             _CurrentRow.f_s本幅 = outLaneText(lane)
             _CurrentRow.f_sひも本数 = outCountText(count)
             _CurrentRow.f_sひも長 = outLengthText(length)
@@ -179,10 +188,12 @@ Public Class clsOutput
         _CurrentRow.f_sメモ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
         For Each color As String In _clsBandSum.Colors
-            Dim sum As Double = 0
+            Dim sumlength As Double = 0
             Dim maxmaxlen As Double = 0
+            Dim sumcount As Integer = 0
             Dim bandLength As LaneLength = _clsBandSum.BandLength(color)
             Dim bandMaxLength As LaneLength = _clsBandSum.BandMaxLength(color)
+            Dim bandCount As LaneLength = _clsBandSum.BandCount(color)
             For Each lane As Integer In bandLength.Keys
                 NextNewRow()
                 lines += 1
@@ -197,18 +208,24 @@ Public Class clsOutput
                 '最長
                 Dim maxlen As Double = bandMaxLength(lane)
                 _CurrentRow.f_s長さ = outLengthText(maxlen)
+                '本数
+                Dim count As Integer = bandCount(lane)
+                _CurrentRow.f_sひも本数 = outCountText(count)
 
-                sum += band
+                sumlength += band
                 If maxmaxlen < maxlen Then
                     maxmaxlen = maxlen
                 End If
+                sumcount += count
             Next
-            If 0 < sum Then
+            If 0 < sumlength Then
                 NextNewRow()
                 lines += 1
-                _CurrentRow.f_s高さ = outLengthText(sum)
+                _CurrentRow.f_sひも長 = "====="
+                _CurrentRow.f_s高さ = outLengthText(sumlength)
                 _CurrentRow.f_s長さ = outLengthText(maxmaxlen)
                 _CurrentRow.f_s色 = color
+                _CurrentRow.f_sひも本数 = outCountText(sumcount)
             End If
         Next
 

@@ -107,6 +107,18 @@ Class clsCalcMesh
         End Get
     End Property
 
+    '縦横部分
+    ReadOnly Property p_d縦横の横 As Double
+        Get
+            Return _d縦横の横
+        End Get
+    End Property
+    ReadOnly Property p_d縦横の縦 As Double
+        Get
+            Return _d縦横の縦
+        End Get
+    End Property
+
     '底のサイズ
     ReadOnly Property p_d内側_横 As Double
         Get
@@ -1805,6 +1817,218 @@ Class clsCalcMesh
 
 #Region "リスト出力"
 
+    '裏側の開始位置
+    Const cBackPosition As Integer = 1001
+
+    '底の縦横、横置きの展開
+    Function set横展開DataTable(Optional ByVal dVert As Double = -1) As tbl縦横展開DataTable
+        Dim d垂直ひも長 As Double = dVert
+        If dVert <= 0 Then
+            d垂直ひも長 = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
+        End If
+
+        Dim d短い横ひも長のばらつき As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d短い横ひも長のばらつき")
+
+        Dim tbl縦横展開 As New tbl縦横展開DataTable
+        Dim row As tbl縦横展開Row
+
+        'f_dひも長加算,f_s色は初期値
+        With _Data.p_row底_縦横
+            Dim posyoko As Integer = 1
+
+            '.Value("f_i長い横ひも") は1以上
+            If 0 < .Value("f_i長い横ひもの本数") Then
+
+                Dim n長い横ひもの数 As Integer = .Value("f_i長い横ひもの本数")
+                Dim n短い横ひもの数 As Integer = n長い横ひもの数 - 1
+                Dim n異なる幅の位置 As Integer = -1 '最上と最下
+                Dim n短い横ひもの開始位置 As Integer
+                If 0 < .Value("f_i短い横ひも") Then
+                    n短い横ひもの開始位置 = posyoko + 1 '長い横ひもの次
+                Else
+                    n短い横ひもの開始位置 = -1 '短い横ひもなし
+                End If
+
+                Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
+                If rad = enum最上と最下の短いひも.i_同じ幅 Then
+                    If 0 < n短い横ひもの開始位置 Then
+                        n短い横ひもの数 += 2
+                        n短い横ひもの開始位置 = posyoko '長い横ひもの前
+                        posyoko += 1 '空ける
+                    End If
+                ElseIf rad = enum最上と最下の短いひも.i_異なる幅 Then
+                    n異なる幅の位置 = posyoko
+                    posyoko += 1 '空ける
+                    n短い横ひもの開始位置 += 1 'ひとつずれる(-1→0)
+                End If
+
+                For idx As Integer = 1 To n長い横ひもの数
+                    row = tbl縦横展開.Newtbl縦横展開Row
+
+                    row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_長い
+                    row.f_i位置番号 = posyoko
+                    row.f_iひも番号 = idx
+                    row.f_sひも名 = text長い横ひも()
+                    row.f_i何本幅 = .Value("f_i長い横ひも")
+                    row.f_dひも長 = _d縦横の横 + 2 * (_d径の合計 + d垂直ひも長)
+                    row.f_d出力ひも長 = row.f_dひも長
+                    row.f_d長さ = _d縦横の横
+
+                    tbl縦横展開.Rows.Add(row)
+                    If 0 < n短い横ひもの開始位置 Then
+                        posyoko += 2
+                    Else
+                        posyoko += 1
+                    End If
+                Next
+
+                If 0 < n短い横ひもの開始位置 Then
+                    posyoko = n短い横ひもの開始位置
+                    For idx As Integer = 1 To n短い横ひもの数
+                        row = tbl縦横展開.Newtbl縦横展開Row
+
+                        row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_短い
+                        row.f_i位置番号 = posyoko
+                        row.f_iひも番号 = idx
+                        row.f_sひも名 = text短い横ひも()
+                        row.f_i何本幅 = .Value("f_i短い横ひも")
+                        row.f_dひも長 = _d縦横の横 - d短い横ひも長のばらつき
+                        row.f_d出力ひも長 = row.f_dひも長
+                        row.f_d長さ = _d縦横の横
+
+                        tbl縦横展開.Rows.Add(row)
+                        posyoko += 2
+                    Next
+                End If
+
+                If 0 < n異なる幅の位置 Then
+                    For idx As Integer = 1 To 2
+                        row = tbl縦横展開.Newtbl縦横展開Row
+
+                        row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_最上と最下
+                        If idx = 1 Then
+                            row.f_i位置番号 = n異なる幅の位置 '空けておいた番号
+                        Else
+                            row.f_i位置番号 = posyoko
+                            posyoko += 1
+                        End If
+                        row.f_iひも番号 = idx
+                        row.f_sひも名 = text最上と最下の短いひも()
+                        row.f_i何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                        row.f_dひも長 = _d縦横の横 - d短い横ひも長のばらつき
+                        row.f_d出力ひも長 = row.f_dひも長
+                        row.f_d長さ = _d縦横の横
+
+                        tbl縦横展開.Rows.Add(row)
+                    Next
+                End If
+            End If
+
+            '以降は裏側
+            posyoko = cBackPosition
+            If .Value("f_b補強ひも区分") Then
+                For idx As Integer = 1 To 2
+                    row = tbl縦横展開.Newtbl縦横展開Row
+
+                    row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_補強
+                    row.f_i位置番号 = posyoko
+                    row.f_iひも番号 = idx
+                    row.f_sひも名 = text補強ひも()
+                    row.f_dひも長 = _d縦横の横
+                    row.f_d出力ひも長 = row.f_dひも長
+
+                    Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
+                    If rad = enum最上と最下の短いひも.i_なし Then
+                        row.f_i何本幅 = .Value("f_i長い横ひも")
+                    ElseIf rad = enum最上と最下の短いひも.i_同じ幅 Then
+                        row.f_i何本幅 = .Value("f_i長い横ひも")
+                    Else
+                        row.f_i何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                    End If
+                    row.f_d長さ = _d縦横の横
+
+                    tbl縦横展開.Rows.Add(row)
+                    posyoko += 1
+                Next
+            End If
+        End With
+        Return tbl縦横展開
+    End Function
+
+    '底の縦横、縦置きの展開
+    Function set縦展開DataTable(Optional ByVal dVert As Double = -1) As tbl縦横展開DataTable
+        Dim d垂直ひも長 As Double = dVert
+        If dVert <= 0 Then
+            d垂直ひも長 = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
+        End If
+
+        Dim tbl縦横展開 As New tbl縦横展開DataTable
+        Dim row As tbl縦横展開Row
+
+        'f_dひも長加算,f_s色は初期値
+        With _Data.p_row底_縦横
+            Dim postate As Integer = 1
+            '.Value("f_i縦ひも") は1以上
+            If 0 < .Value("f_i縦ひもの本数") Then
+                For idx As Integer = 1 To .Value("f_i縦ひもの本数")
+                    row = tbl縦横展開.Newtbl縦横展開Row
+
+                    row.f_iひも種 = enumひも種.i_縦
+                    row.f_i位置番号 = postate
+                    row.f_iひも番号 = idx
+                    row.f_sひも名 = text縦ひも()
+                    row.f_i何本幅 = .Value("f_i縦ひも")
+                    row.f_d長さ = _d縦横の縦
+                    row.f_dひも長 = _d縦横の縦 + 2 * (_d径の合計 + d垂直ひも長)
+                    row.f_d出力ひも長 = row.f_dひも長
+
+                    tbl縦横展開.Rows.Add(row)
+                    postate += 1
+                Next
+            End If
+
+            '以降は裏側
+            postate = cBackPosition
+            If .Value("f_b始末ひも区分") Then
+                For idx As Integer = 1 To 2
+                    row = tbl縦横展開.Newtbl縦横展開Row
+                    row.f_iひも種 = enumひも種.i_縦 Or enumひも種.i_補強
+                    row.f_i位置番号 = postate
+                    row.f_iひも番号 = idx
+                    row.f_sひも名 = text始末ひも()
+                    row.f_i何本幅 = .Value("f_i縦ひも")
+                    row.f_d長さ = _d縦横の縦
+                    row.f_dひも長 = _d縦横の縦
+                    row.f_d出力ひも長 = row.f_dひも長
+
+                    tbl縦横展開.Rows.Add(row)
+                    postate += 1
+                Next
+            End If
+
+            If .Value("f_b斜めの補強ひも区分") Then
+                For idx As Integer = 1 To 2
+                    row = tbl縦横展開.Newtbl縦横展開Row
+
+                    row.f_iひも種 = enumひも種.i_斜め Or enumひも種.i_補強
+                    row.f_i位置番号 = postate
+                    row.f_iひも番号 = idx
+                    row.f_sひも名 = text斜めの補強ひも()
+                    row.f_i何本幅 = _I基本のひも幅
+                    row.f_dひも長 = Math.Sqrt(_d縦横の横 ^ 2 + _d縦横の縦 ^ 2)
+                    row.f_d出力ひも長 = row.f_dひも長
+                    row.f_d長さ = _d縦横の縦 + _d縦横の横
+
+                    tbl縦横展開.Rows.Add(row)
+                    postate += 1
+                Next
+            End If
+
+        End With
+
+        Return tbl縦横展開
+    End Function
+
     '底楕円の出力するひも長を「連続ひも長」フィールドにセットする
     Private Function set底楕円_連続ひも長(ByVal d垂直ひも長 As Double) As Boolean
         Dim res = (From row As tbl底_楕円Row In _Data.p_tbl底_楕円
@@ -1935,8 +2159,6 @@ Class clsCalcMesh
 
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput, ByVal name As String) As Boolean
-        Dim d短い横ひも長のばらつき As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d短い横ひも長のばらつき")
-
         If output Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -1960,84 +2182,104 @@ Class clsCalcMesh
         row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
         row.f_s編みかた名 = name '名前
 
-        With _Data.p_row底_縦横
-            If 0 < .Value("f_i長い横ひもの本数") Then
-                row = output.NextNewRow
+        '***底の縦横
+        'このカテゴリーは先に行をつくる
+        row = output.NextNewRow
+        '横置き,縦置き
+        For yokotate As Integer = 1 To 2
+            Dim tmpTable As tbl縦横展開DataTable
+            Dim sbMemo As New Text.StringBuilder
+
+            If yokotate = 1 Then
                 row.f_sタイプ = text横置き()
-                row.f_s編みかた名 = text長い横ひも()
-                output.SetBandRow(.Value("f_i長い横ひもの本数"), .Value("f_i長い横ひも"),
-                _d縦横の横 + 2 * (_d径の合計 + d垂直ひも長), "")
-                row.f_s長さ = output.outLengthText(_d縦横の横)
-                row.f_sメモ = .Value("f_s横ひものメモ")
-
-                Dim n短い横ひもの数 As Integer = .Value("f_i長い横ひもの本数") - 1
-                Dim n異なる幅の数 As Integer = 0
-
-                Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
-                If rad = enum最上と最下の短いひも.i_同じ幅 Then
-                    n短い横ひもの数 += 2
-                ElseIf rad = enum最上と最下の短いひも.i_異なる幅 Then
-                    n異なる幅の数 = 2
+                tmpTable = set横展開DataTable(d垂直ひも長)
+                If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                    _Data.ToTmpTable(enumひも種.i_横, tmpTable)
                 End If
-
-                If 0 < n短い横ひもの数 Then
-                    row = output.NextNewRow
-                    row.f_s編みかた名 = text短い横ひも()
-                    output.SetBandRow(n短い横ひもの数, .Value("f_i短い横ひも"),
-                            _d縦横の横 - d短い横ひも長のばらつき, "")
-                    row.f_s長さ = output.outLengthText(_d縦横の横)
-                End If
-
-                If 0 < n異なる幅の数 Then
-                    row = output.NextNewRow
-                    row.f_s編みかた名 = text最上と最下の短いひも()
-                    output.SetBandRow(n異なる幅の数, .Value("f_i最上と最下の短いひもの幅"),
-                    _d縦横の横 - d短い横ひも長のばらつき, "")
-                    row.f_s長さ = output.outLengthText(_d縦横の横)
-                End If
-            End If
-
-            If .Value("f_b補強ひも区分") Then
-                row = output.NextNewRow
-                row.f_s編みかた名 = text補強ひも()
-                row.f_sひも本数 = output.outCountText(2)
-
-                Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
-                If rad = enum最上と最下の短いひも.i_なし Then
-                    output.SetBandRow(2, .Value("f_i長い横ひも"), _d縦横の横, "")
-                ElseIf rad = enum最上と最下の短いひも.i_同じ幅 Then
-                    output.SetBandRow(2, .Value("f_i長い横ひも"), _d縦横の横, "")
-                Else
-                    output.SetBandRow(2, .Value("f_i最上と最下の短いひもの幅"), _d縦横の横, "")
-                End If
-                row.f_s長さ = output.outLengthText(_d縦横の横)
-            End If
-
-            If 0 < .Value("f_i縦ひもの本数") Then
-                row = output.NextNewRow
+                sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+            Else
                 row.f_sタイプ = text縦置き()
-                row.f_s編みかた名 = text縦ひも()
-                output.SetBandRow(.Value("f_i縦ひもの本数"), .Value("f_i縦ひも"),
-                    _d縦横の縦 + 2 * (_d径の合計 + d垂直ひも長), "")
-                row.f_s長さ = output.outLengthText(_d縦横の縦)
-                row.f_sメモ = .Value("f_s縦ひものメモ")
+                tmpTable = set縦展開DataTable(d垂直ひも長)
+                If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                    _Data.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tmpTable)
+                End If
+                sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
             End If
-
-            If .Value("f_b始末ひも区分") Then
-                row = output.NextNewRow
-                row.f_s編みかた名 = text始末ひも()
-                output.SetBandRow(2, .Value("f_i縦ひも"), _d縦横の縦, "")
-                row.f_s長さ = output.outLengthText(_d縦横の縦)
+            If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
+                Continue For
             End If
+            'レコードあり
 
-            If .Value("f_b斜めの補強ひも区分") Then
-                row = output.NextNewRow
-                row.f_s編みかた名 = text斜めの補強ひも()
-                output.SetBandRow(2, _I基本のひも幅, Math.Sqrt(_d縦横の横 ^ 2 + _d縦横の縦 ^ 2), "")
+            '長い順に記号を振る
+            Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
+            For Each tt As tbl縦横展開Row In tmps
+                tt.f_s記号 = output.SetBandRow(0, tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
+            Next
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tmpTable).ToString())
+
+            'リスト出力
+            tmps = tmpTable.Select(Nothing, "f_iひも種 ASC, f_iひも番号 ASC")
+            '0
+            Dim lasttmp As tbl縦横展開Row = tmps(0)
+            Dim contcount As Integer = 1
+            If Not String.IsNullOrWhiteSpace(lasttmp.f_sメモ) Then
+                If 0 < sbMemo.Length Then
+                    sbMemo.Append(" "c)
+                End If
+                sbMemo.Append(lasttmp.f_sメモ)
             End If
-        End With
+            '1～tmps.Length - 1, tmps.Lengthは出力のみ
+            For i As Integer = 1 To tmps.Length
+                Dim tmp As tbl縦横展開Row = Nothing
+                If i < tmps.Length Then
+                    tmp = tmps(i)
+                End If
+                If tmp IsNot Nothing AndAlso
+                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 Then
+                    '同じひも種・記号の継続
+                    contcount += 1
+                    If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
+                        If 0 < sbMemo.Length Then
+                            sbMemo.Append(" "c)
+                        End If
+                        sbMemo.Append(tmp.f_sメモ)
+                    End If
 
-        output.AddBlankLine()
+                Else
+                    '異なるので、まず先のレコードをまとめ出力
+                    row.f_s編みかた名 = lasttmp.f_sひも名
+                    output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
+                    row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
+                    If lasttmp.f_dひも長加算 <> 0 Then
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算)
+                    End If
+                    row.f_sメモ = sbMemo.ToString
+                    If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                        If contcount = 1 Then
+                            row.f_s編みひも名 = String.Format("{0}", lasttmp.f_iひも番号)
+                        Else
+                            row.f_s編みひも名 = String.Format("{0} - {1}", lasttmp.f_iひも番号, lasttmp.f_iひも番号 + contcount - 1)
+                        End If
+                        Select Case lasttmp.f_sひも名
+                            Case text長い横ひも()
+                                row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i長い横ひもの本数"), row.f_s編みひも名)
+                            Case text縦ひも()
+                                row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i縦ひもの本数"), row.f_s編みひも名)
+                        End Select
+                    End If
+                    row = output.NextNewRow
+
+                    '現レコードから開始
+                    If tmp IsNot Nothing Then
+                        lasttmp = tmp
+                        contcount = 1
+                        sbMemo.Clear()
+                        sbMemo.Append(tmp.f_sメモ)
+                    End If
+                End If
+            Next
+        Next
+        output.SetBlankLine() '先に行をつくっているので
 
         '***底楕円
         If 0 < _Data.p_tbl底_楕円.Rows.Count Then

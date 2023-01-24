@@ -10,8 +10,8 @@
     <Authors>MihoHarusawa</Authors>
     <Title>クラフトバンドのライブラリ</Title>
     <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
-    <FileVersion>1.1.1.0</FileVersion>
-    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.2.0</FileVersion>
+    <AssemblyVersion>1.1.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -38,14 +38,6 @@ Partial Class frmMain
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -61,6 +53,24 @@ Partial Class frmMain
         Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle37 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle38 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle39 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle40 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle41 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle42 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle43 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle44 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle45 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle46 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle47 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle48 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.nud基本のひも幅 = New System.Windows.Forms.NumericUpDown()
@@ -160,6 +170,7 @@ Partial Class frmMain
         Me.lbl目標寸法_単位 = New System.Windows.Forms.Label()
         Me.TabControl = New System.Windows.Forms.TabControl()
         Me.tpage底縦横 = New System.Windows.Forms.TabPage()
+        Me.chk縦横を展開する = New System.Windows.Forms.CheckBox()
         Me.lbl縦置きの計 = New System.Windows.Forms.Label()
         Me.lbl横置きの計 = New System.Windows.Forms.Label()
         Me.lbl垂直ひも長加算_単位 = New System.Windows.Forms.Label()
@@ -231,6 +242,28 @@ Partial Class frmMain
         Me.btn上へ_側面 = New System.Windows.Forms.Button()
         Me.cmb編みかた名_側面 = New System.Windows.Forms.ComboBox()
         Me.dgv側面 = New System.Windows.Forms.DataGridView()
+        Me.f_i番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s編みかた名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s編みひも名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i何本幅2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_i周数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_b周連続区分2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.f_b次周連続区分2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.f_i段数 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d高さ2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d高さ比率2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d垂直ひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d周長比率対底の周2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d周長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも本数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d連続ひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d厚さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sメモ2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_bError2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.BindingSource側面 = New System.Windows.Forms.BindingSource(Me.components)
         Me.tpage追加品 = New System.Windows.Forms.TabPage()
         Me.lbl長さ_単位 = New System.Windows.Forms.Label()
@@ -263,6 +296,40 @@ Partial Class frmMain
         Me.lbl楕円底周の加算_単位 = New System.Windows.Forms.Label()
         Me.lbl楕円底円弧の半径加算_単位 = New System.Windows.Forms.Label()
         Me.txtメモ = New System.Windows.Forms.TextBox()
+        Me.tpage底の横 = New System.Windows.Forms.TabPage()
+        Me.btnリセット_横 = New System.Windows.Forms.Button()
+        Me.lbl上から順に下へ = New System.Windows.Forms.Label()
+        Me.dgv底の横 = New System.Windows.Forms.DataGridView()
+        Me.f_iひも種4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i位置番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sひも名4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i何本幅4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d長さ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d出力ひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色4 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_sメモ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSource底の横 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.tpage底の縦 = New System.Windows.Forms.TabPage()
+        Me.btnリセット_縦 = New System.Windows.Forms.Button()
+        Me.lbl左から順に右へ = New System.Windows.Forms.Label()
+        Me.dgv底の縦 = New System.Windows.Forms.DataGridView()
+        Me.f_iひも種5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i位置番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sひも名5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i何本幅5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d長さ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d出力ひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_sメモ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSource底の縦 = New System.Windows.Forms.BindingSource(Me.components)
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl内側 = New System.Windows.Forms.Label()
         Me.lbl計算寸法 = New System.Windows.Forms.Label()
@@ -292,28 +359,6 @@ Partial Class frmMain
         Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
         Me.lbl底 = New System.Windows.Forms.Label()
         Me.lbl最大 = New System.Windows.Forms.Label()
-        Me.f_i番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s編みかた名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s編みひも名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i何本幅2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_i周数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s色2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_b周連続区分2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.f_b次周連続区分2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.f_i段数 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d高さ2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d高さ比率2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d垂直ひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d周長比率対底の周2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d周長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長加算2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも本数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d連続ひも長2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d厚さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_sメモ2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_bError2 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -349,6 +394,12 @@ Partial Class frmMain
         CType(Me.dgv追加品, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource追加品, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpageメモ他.SuspendLayout()
+        Me.tpage底の横.SuspendLayout()
+        CType(Me.dgv底の横, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BindingSource底の横, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpage底の縦.SuspendLayout()
+        CType(Me.dgv底の縦, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BindingSource底の縦, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -620,7 +671,7 @@ Partial Class frmMain
         'nud周数_側面
         '
         Me.nud周数_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud周数_側面.Location = New System.Drawing.Point(650, 333)
+        Me.nud周数_側面.Location = New System.Drawing.Point(650, 376)
         Me.nud周数_側面.Name = "nud周数_側面"
         Me.nud周数_側面.Size = New System.Drawing.Size(60, 27)
         Me.nud周数_側面.TabIndex = 10
@@ -630,7 +681,7 @@ Partial Class frmMain
         'nud点数
         '
         Me.nud点数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud点数.Location = New System.Drawing.Point(651, 333)
+        Me.nud点数.Location = New System.Drawing.Point(651, 375)
         Me.nud点数.Name = "nud点数"
         Me.nud点数.Size = New System.Drawing.Size(60, 27)
         Me.nud点数.TabIndex = 10
@@ -640,7 +691,7 @@ Partial Class frmMain
         'nud周数_底楕円
         '
         Me.nud周数_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud周数_底楕円.Location = New System.Drawing.Point(650, 333)
+        Me.nud周数_底楕円.Location = New System.Drawing.Point(650, 375)
         Me.nud周数_底楕円.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nud周数_底楕円.Name = "nud周数_底楕円"
         Me.nud周数_底楕円.Size = New System.Drawing.Size(60, 27)
@@ -653,7 +704,7 @@ Partial Class frmMain
         Me.nud長さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nud長さ.DecimalPlaces = 2
         Me.nud長さ.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nud長さ.Location = New System.Drawing.Point(559, 333)
+        Me.nud長さ.Location = New System.Drawing.Point(559, 375)
         Me.nud長さ.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         Me.nud長さ.Name = "nud長さ"
         Me.nud長さ.Size = New System.Drawing.Size(86, 27)
@@ -1281,6 +1332,8 @@ Partial Class frmMain
         Me.TabControl.Controls.Add(Me.tpage側面)
         Me.TabControl.Controls.Add(Me.tpage追加品)
         Me.TabControl.Controls.Add(Me.tpageメモ他)
+        Me.TabControl.Controls.Add(Me.tpage底の横)
+        Me.TabControl.Controls.Add(Me.tpage底の縦)
         Me.TabControl.Location = New System.Drawing.Point(19, 171)
         Me.TabControl.Name = "TabControl"
         Me.TabControl.SelectedIndex = 0
@@ -1289,6 +1342,7 @@ Partial Class frmMain
         '
         'tpage底縦横
         '
+        Me.tpage底縦横.Controls.Add(Me.chk縦横を展開する)
         Me.tpage底縦横.Controls.Add(Me.lbl縦置きの計)
         Me.tpage底縦横.Controls.Add(Me.lbl横置きの計)
         Me.tpage底縦横.Controls.Add(Me.nud垂直ひも長加算)
@@ -1304,6 +1358,17 @@ Partial Class frmMain
         Me.tpage底縦横.TabIndex = 0
         Me.tpage底縦横.Text = "底(縦横)"
         Me.tpage底縦横.UseVisualStyleBackColor = True
+        '
+        'chk縦横を展開する
+        '
+        Me.chk縦横を展開する.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chk縦横を展開する.AutoSize = True
+        Me.chk縦横を展開する.Location = New System.Drawing.Point(698, 21)
+        Me.chk縦横を展開する.Name = "chk縦横を展開する"
+        Me.chk縦横を展開する.Size = New System.Drawing.Size(125, 24)
+        Me.chk縦横を展開する.TabIndex = 5
+        Me.chk縦横を展開する.Text = "縦横を展開する"
+        Me.chk縦横を展開する.UseVisualStyleBackColor = True
         '
         'lbl縦置きの計
         '
@@ -1583,7 +1648,7 @@ Partial Class frmMain
         '
         Me.lbl周数_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl周数_底楕円.AutoSize = True
-        Me.lbl周数_底楕円.Location = New System.Drawing.Point(630, 304)
+        Me.lbl周数_底楕円.Location = New System.Drawing.Point(630, 346)
         Me.lbl周数_底楕円.Name = "lbl周数_底楕円"
         Me.lbl周数_底楕円.Size = New System.Drawing.Size(85, 20)
         Me.lbl周数_底楕円.TabIndex = 7
@@ -1593,7 +1658,7 @@ Partial Class frmMain
         '
         Me.lbl編みかた名_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl編みかた名_底楕円.AutoSize = True
-        Me.lbl編みかた名_底楕円.Location = New System.Drawing.Point(460, 304)
+        Me.lbl編みかた名_底楕円.Location = New System.Drawing.Point(460, 346)
         Me.lbl編みかた名_底楕円.Name = "lbl編みかた名_底楕円"
         Me.lbl編みかた名_底楕円.Size = New System.Drawing.Size(76, 20)
         Me.lbl編みかた名_底楕円.TabIndex = 5
@@ -1603,7 +1668,7 @@ Partial Class frmMain
         '
         Me.chk差しひも.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chk差しひも.AutoSize = True
-        Me.chk差しひも.Location = New System.Drawing.Point(366, 333)
+        Me.chk差しひも.Location = New System.Drawing.Point(366, 375)
         Me.chk差しひも.Name = "chk差しひも"
         Me.chk差しひも.Size = New System.Drawing.Size(79, 24)
         Me.chk差しひも.TabIndex = 4
@@ -1613,7 +1678,7 @@ Partial Class frmMain
         'btn削除_底楕円
         '
         Me.btn削除_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_底楕円.Location = New System.Drawing.Point(242, 314)
+        Me.btn削除_底楕円.Location = New System.Drawing.Point(242, 356)
         Me.btn削除_底楕円.Name = "btn削除_底楕円"
         Me.btn削除_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_底楕円.TabIndex = 3
@@ -1623,7 +1688,7 @@ Partial Class frmMain
         'btn追加_底楕円
         '
         Me.btn追加_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_底楕円.Location = New System.Drawing.Point(721, 314)
+        Me.btn追加_底楕円.Location = New System.Drawing.Point(721, 356)
         Me.btn追加_底楕円.Name = "btn追加_底楕円"
         Me.btn追加_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_底楕円.TabIndex = 9
@@ -1633,7 +1698,7 @@ Partial Class frmMain
         'btn下へ_底楕円
         '
         Me.btn下へ_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_底楕円.Location = New System.Drawing.Point(125, 314)
+        Me.btn下へ_底楕円.Location = New System.Drawing.Point(125, 356)
         Me.btn下へ_底楕円.Name = "btn下へ_底楕円"
         Me.btn下へ_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_底楕円.TabIndex = 2
@@ -1643,7 +1708,7 @@ Partial Class frmMain
         'btn上へ_底楕円
         '
         Me.btn上へ_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_底楕円.Location = New System.Drawing.Point(8, 314)
+        Me.btn上へ_底楕円.Location = New System.Drawing.Point(8, 356)
         Me.btn上へ_底楕円.Name = "btn上へ_底楕円"
         Me.btn上へ_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_底楕円.TabIndex = 1
@@ -1655,7 +1720,7 @@ Partial Class frmMain
         Me.cmb編みかた名_底楕円.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb編みかた名_底楕円.FormattingEnabled = True
-        Me.cmb編みかた名_底楕円.Location = New System.Drawing.Point(460, 332)
+        Me.cmb編みかた名_底楕円.Location = New System.Drawing.Point(460, 374)
         Me.cmb編みかた名_底楕円.Name = "cmb編みかた名_底楕円"
         Me.cmb編みかた名_底楕円.Size = New System.Drawing.Size(184, 28)
         Me.cmb編みかた名_底楕円.TabIndex = 6
@@ -1674,7 +1739,7 @@ Partial Class frmMain
         Me.dgv底楕円.Name = "dgv底楕円"
         Me.dgv底楕円.RowHeadersWidth = 51
         Me.dgv底楕円.RowTemplate.Height = 29
-        Me.dgv底楕円.Size = New System.Drawing.Size(828, 293)
+        Me.dgv底楕円.Size = New System.Drawing.Size(828, 337)
         Me.dgv底楕円.TabIndex = 0
         '
         'f_i番号1
@@ -1983,7 +2048,7 @@ Partial Class frmMain
         '
         Me.lbl周数_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl周数_側面.AutoSize = True
-        Me.lbl周数_側面.Location = New System.Drawing.Point(650, 304)
+        Me.lbl周数_側面.Location = New System.Drawing.Point(650, 347)
         Me.lbl周数_側面.Name = "lbl周数_側面"
         Me.lbl周数_側面.Size = New System.Drawing.Size(39, 20)
         Me.lbl周数_側面.TabIndex = 9
@@ -1993,7 +2058,7 @@ Partial Class frmMain
         '
         Me.lbl編みかた名_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl編みかた名_側面.AutoSize = True
-        Me.lbl編みかた名_側面.Location = New System.Drawing.Point(460, 304)
+        Me.lbl編みかた名_側面.Location = New System.Drawing.Point(460, 347)
         Me.lbl編みかた名_側面.Name = "lbl編みかた名_側面"
         Me.lbl編みかた名_側面.Size = New System.Drawing.Size(76, 20)
         Me.lbl編みかた名_側面.TabIndex = 7
@@ -2003,7 +2068,7 @@ Partial Class frmMain
         '
         Me.chk縁の始末.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chk縁の始末.AutoSize = True
-        Me.chk縁の始末.Location = New System.Drawing.Point(366, 333)
+        Me.chk縁の始末.Location = New System.Drawing.Point(366, 376)
         Me.chk縁の始末.Name = "chk縁の始末"
         Me.chk縁の始末.Size = New System.Drawing.Size(88, 24)
         Me.chk縁の始末.TabIndex = 6
@@ -2035,7 +2100,7 @@ Partial Class frmMain
         'btn削除_側面
         '
         Me.btn削除_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_側面.Location = New System.Drawing.Point(242, 314)
+        Me.btn削除_側面.Location = New System.Drawing.Point(242, 357)
         Me.btn削除_側面.Name = "btn削除_側面"
         Me.btn削除_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_側面.TabIndex = 5
@@ -2045,7 +2110,7 @@ Partial Class frmMain
         'btn追加_側面
         '
         Me.btn追加_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_側面.Location = New System.Drawing.Point(721, 314)
+        Me.btn追加_側面.Location = New System.Drawing.Point(721, 357)
         Me.btn追加_側面.Name = "btn追加_側面"
         Me.btn追加_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_側面.TabIndex = 11
@@ -2055,7 +2120,7 @@ Partial Class frmMain
         'btn下へ_側面
         '
         Me.btn下へ_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_側面.Location = New System.Drawing.Point(125, 314)
+        Me.btn下へ_側面.Location = New System.Drawing.Point(125, 357)
         Me.btn下へ_側面.Name = "btn下へ_側面"
         Me.btn下へ_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_側面.TabIndex = 4
@@ -2065,7 +2130,7 @@ Partial Class frmMain
         'btn上へ_側面
         '
         Me.btn上へ_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_側面.Location = New System.Drawing.Point(8, 314)
+        Me.btn上へ_側面.Location = New System.Drawing.Point(8, 357)
         Me.btn上へ_側面.Name = "btn上へ_側面"
         Me.btn上へ_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_側面.TabIndex = 3
@@ -2077,7 +2142,7 @@ Partial Class frmMain
         Me.cmb編みかた名_側面.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb編みかた名_側面.FormattingEnabled = True
-        Me.cmb編みかた名_側面.Location = New System.Drawing.Point(460, 332)
+        Me.cmb編みかた名_側面.Location = New System.Drawing.Point(460, 375)
         Me.cmb編みかた名_側面.Name = "cmb編みかた名_側面"
         Me.cmb編みかた名_側面.Size = New System.Drawing.Size(184, 28)
         Me.cmb編みかた名_側面.TabIndex = 8
@@ -2096,8 +2161,259 @@ Partial Class frmMain
         Me.dgv側面.Name = "dgv側面"
         Me.dgv側面.RowHeadersWidth = 51
         Me.dgv側面.RowTemplate.Height = 29
-        Me.dgv側面.Size = New System.Drawing.Size(828, 263)
+        Me.dgv側面.Size = New System.Drawing.Size(828, 308)
         Me.dgv側面.TabIndex = 2
+        '
+        'f_i番号2
+        '
+        Me.f_i番号2.DataPropertyName = "f_i番号"
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i番号2.DefaultCellStyle = DataGridViewCellStyle16
+        Me.f_i番号2.HeaderText = "番号"
+        Me.f_i番号2.MinimumWidth = 6
+        Me.f_i番号2.Name = "f_i番号2"
+        Me.f_i番号2.ReadOnly = True
+        Me.f_i番号2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i番号2.Width = 59
+        '
+        'f_s編みかた名2
+        '
+        Me.f_s編みかた名2.DataPropertyName = "f_s編みかた名"
+        Me.f_s編みかた名2.HeaderText = "編みかた名"
+        Me.f_s編みかた名2.MinimumWidth = 6
+        Me.f_s編みかた名2.Name = "f_s編みかた名2"
+        Me.f_s編みかた名2.ReadOnly = True
+        Me.f_s編みかた名2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s編みかた名2.Width = 125
+        '
+        'f_s編みひも名2
+        '
+        Me.f_s編みひも名2.DataPropertyName = "f_s編みひも名"
+        Me.f_s編みひも名2.HeaderText = "編みひも名"
+        Me.f_s編みひも名2.MinimumWidth = 6
+        Me.f_s編みひも名2.Name = "f_s編みひも名2"
+        Me.f_s編みひも名2.ReadOnly = True
+        Me.f_s編みひも名2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s編みひも名2.Width = 112
+        '
+        'f_iひも番号2
+        '
+        Me.f_iひも番号2.DataPropertyName = "f_iひも番号"
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle17
+        Me.f_iひも番号2.HeaderText = "ひも番号"
+        Me.f_iひも番号2.MinimumWidth = 6
+        Me.f_iひも番号2.Name = "f_iひも番号2"
+        Me.f_iひも番号2.ReadOnly = True
+        Me.f_iひも番号2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも番号2.Width = 81
+        '
+        'f_i何本幅2
+        '
+        Me.f_i何本幅2.DataPropertyName = "f_i何本幅"
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle18
+        Me.f_i何本幅2.HeaderText = "何本幅"
+        Me.f_i何本幅2.MinimumWidth = 6
+        Me.f_i何本幅2.Name = "f_i何本幅2"
+        Me.f_i何本幅2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.f_i何本幅2.Width = 77
+        '
+        'f_i周数2
+        '
+        Me.f_i周数2.DataPropertyName = "f_i周数"
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i周数2.DefaultCellStyle = DataGridViewCellStyle19
+        Me.f_i周数2.HeaderText = "周数"
+        Me.f_i周数2.MinimumWidth = 6
+        Me.f_i周数2.Name = "f_i周数2"
+        Me.f_i周数2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i周数2.Width = 60
+        '
+        'f_s色2
+        '
+        Me.f_s色2.DataPropertyName = "f_s色"
+        Me.f_s色2.HeaderText = "色"
+        Me.f_s色2.MinimumWidth = 6
+        Me.f_s色2.Name = "f_s色2"
+        Me.f_s色2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.f_s色2.Width = 80
+        '
+        'f_b周連続区分2
+        '
+        Me.f_b周連続区分2.DataPropertyName = "f_b周連続区分"
+        Me.f_b周連続区分2.HeaderText = "周連続"
+        Me.f_b周連続区分2.MinimumWidth = 6
+        Me.f_b周連続区分2.Name = "f_b周連続区分2"
+        Me.f_b周連続区分2.Width = 73
+        '
+        'f_b次周連続区分2
+        '
+        Me.f_b次周連続区分2.DataPropertyName = "f_b次周連続区分"
+        Me.f_b次周連続区分2.HeaderText = "次周連続"
+        Me.f_b次周連続区分2.MinimumWidth = 6
+        Me.f_b次周連続区分2.Name = "f_b次周連続区分2"
+        Me.f_b次周連続区分2.Width = 60
+        '
+        'f_i段数
+        '
+        Me.f_i段数.DataPropertyName = "f_i段数"
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i段数.DefaultCellStyle = DataGridViewCellStyle20
+        Me.f_i段数.HeaderText = "段数"
+        Me.f_i段数.MinimumWidth = 6
+        Me.f_i段数.Name = "f_i段数"
+        Me.f_i段数.ReadOnly = True
+        Me.f_i段数.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i段数.Width = 125
+        '
+        'f_d高さ2
+        '
+        Me.f_d高さ2.DataPropertyName = "f_d高さ"
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle21.Format = "N2"
+        DataGridViewCellStyle21.NullValue = Nothing
+        Me.f_d高さ2.DefaultCellStyle = DataGridViewCellStyle21
+        Me.f_d高さ2.HeaderText = "高さ"
+        Me.f_d高さ2.MinimumWidth = 6
+        Me.f_d高さ2.Name = "f_d高さ2"
+        Me.f_d高さ2.ReadOnly = True
+        Me.f_d高さ2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d高さ2.Width = 125
+        '
+        'f_d高さ比率2
+        '
+        Me.f_d高さ比率2.DataPropertyName = "f_d高さ比率"
+        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle22.Format = "N2"
+        DataGridViewCellStyle22.NullValue = Nothing
+        Me.f_d高さ比率2.DefaultCellStyle = DataGridViewCellStyle22
+        Me.f_d高さ比率2.HeaderText = "高さ比率"
+        Me.f_d高さ比率2.MinimumWidth = 6
+        Me.f_d高さ比率2.Name = "f_d高さ比率2"
+        Me.f_d高さ比率2.ReadOnly = True
+        Me.f_d高さ比率2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d高さ比率2.Width = 80
+        '
+        'f_d垂直ひも長2
+        '
+        Me.f_d垂直ひも長2.DataPropertyName = "f_d垂直ひも長"
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle23.Format = "N2"
+        DataGridViewCellStyle23.NullValue = Nothing
+        Me.f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle23
+        Me.f_d垂直ひも長2.HeaderText = "垂直ひも長"
+        Me.f_d垂直ひも長2.MinimumWidth = 6
+        Me.f_d垂直ひも長2.Name = "f_d垂直ひも長2"
+        Me.f_d垂直ひも長2.ReadOnly = True
+        Me.f_d垂直ひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d垂直ひも長2.Width = 125
+        '
+        'f_d周長比率対底の周2
+        '
+        Me.f_d周長比率対底の周2.DataPropertyName = "f_d周長比率対底の周"
+        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d周長比率対底の周2.DefaultCellStyle = DataGridViewCellStyle24
+        Me.f_d周長比率対底の周2.HeaderText = "周長比率対底の周"
+        Me.f_d周長比率対底の周2.MinimumWidth = 6
+        Me.f_d周長比率対底の周2.Name = "f_d周長比率対底の周2"
+        Me.f_d周長比率対底の周2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d周長比率対底の周2.Width = 125
+        '
+        'f_d周長2
+        '
+        Me.f_d周長2.DataPropertyName = "f_d周長"
+        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle25.Format = "N2"
+        DataGridViewCellStyle25.NullValue = Nothing
+        Me.f_d周長2.DefaultCellStyle = DataGridViewCellStyle25
+        Me.f_d周長2.HeaderText = "周長"
+        Me.f_d周長2.MinimumWidth = 6
+        Me.f_d周長2.Name = "f_d周長2"
+        Me.f_d周長2.ReadOnly = True
+        Me.f_d周長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d周長2.Width = 125
+        '
+        'f_dひも長2
+        '
+        Me.f_dひも長2.DataPropertyName = "f_dひも長"
+        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle26.Format = "N2"
+        DataGridViewCellStyle26.NullValue = Nothing
+        Me.f_dひも長2.DefaultCellStyle = DataGridViewCellStyle26
+        Me.f_dひも長2.HeaderText = "ひも長"
+        Me.f_dひも長2.MinimumWidth = 6
+        Me.f_dひも長2.Name = "f_dひも長2"
+        Me.f_dひも長2.ReadOnly = True
+        Me.f_dひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長2.Width = 125
+        '
+        'f_dひも長加算2
+        '
+        Me.f_dひも長加算2.DataPropertyName = "f_dひも長加算"
+        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle27
+        Me.f_dひも長加算2.HeaderText = "ひも長加算"
+        Me.f_dひも長加算2.MinimumWidth = 6
+        Me.f_dひも長加算2.Name = "f_dひも長加算2"
+        Me.f_dひも長加算2.ToolTipText = "出力時に加える余裕長"
+        Me.f_dひも長加算2.Width = 125
+        '
+        'f_iひも本数2
+        '
+        Me.f_iひも本数2.DataPropertyName = "f_iひも本数"
+        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle28
+        Me.f_iひも本数2.HeaderText = "ひも本数"
+        Me.f_iひも本数2.MinimumWidth = 6
+        Me.f_iひも本数2.Name = "f_iひも本数2"
+        Me.f_iひも本数2.ReadOnly = True
+        Me.f_iひも本数2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも本数2.Width = 125
+        '
+        'f_d連続ひも長2
+        '
+        Me.f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
+        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle29.Format = "N2"
+        DataGridViewCellStyle29.NullValue = Nothing
+        Me.f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle29
+        Me.f_d連続ひも長2.HeaderText = "連続ひも長"
+        Me.f_d連続ひも長2.MinimumWidth = 6
+        Me.f_d連続ひも長2.Name = "f_d連続ひも長2"
+        Me.f_d連続ひも長2.ReadOnly = True
+        Me.f_d連続ひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d連続ひも長2.Visible = False
+        Me.f_d連続ひも長2.Width = 125
+        '
+        'f_d厚さ
+        '
+        Me.f_d厚さ.DataPropertyName = "f_d厚さ"
+        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle30
+        Me.f_d厚さ.HeaderText = "厚さ"
+        Me.f_d厚さ.MinimumWidth = 6
+        Me.f_d厚さ.Name = "f_d厚さ"
+        Me.f_d厚さ.ReadOnly = True
+        Me.f_d厚さ.Width = 125
+        '
+        'f_sメモ2
+        '
+        Me.f_sメモ2.DataPropertyName = "f_sメモ"
+        Me.f_sメモ2.HeaderText = "メモ"
+        Me.f_sメモ2.MinimumWidth = 6
+        Me.f_sメモ2.Name = "f_sメモ2"
+        Me.f_sメモ2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_sメモ2.Width = 125
+        '
+        'f_bError2
+        '
+        Me.f_bError2.DataPropertyName = "f_bError"
+        Me.f_bError2.HeaderText = "Error"
+        Me.f_bError2.MinimumWidth = 6
+        Me.f_bError2.Name = "f_bError2"
+        Me.f_bError2.Visible = False
+        Me.f_bError2.Width = 125
         '
         'BindingSource側面
         '
@@ -2130,7 +2446,7 @@ Partial Class frmMain
         '
         Me.lbl長さ_単位.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl長さ_単位.AutoSize = True
-        Me.lbl長さ_単位.Location = New System.Drawing.Point(599, 304)
+        Me.lbl長さ_単位.Location = New System.Drawing.Point(599, 346)
         Me.lbl長さ_単位.Name = "lbl長さ_単位"
         Me.lbl長さ_単位.Size = New System.Drawing.Size(39, 20)
         Me.lbl長さ_単位.TabIndex = 8
@@ -2140,7 +2456,7 @@ Partial Class frmMain
         '
         Me.lbl長さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl長さ.AutoSize = True
-        Me.lbl長さ.Location = New System.Drawing.Point(559, 304)
+        Me.lbl長さ.Location = New System.Drawing.Point(559, 346)
         Me.lbl長さ.Name = "lbl長さ"
         Me.lbl長さ.Size = New System.Drawing.Size(34, 20)
         Me.lbl長さ.TabIndex = 6
@@ -2150,7 +2466,7 @@ Partial Class frmMain
         '
         Me.lbl点数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl点数.AutoSize = True
-        Me.lbl点数.Location = New System.Drawing.Point(651, 304)
+        Me.lbl点数.Location = New System.Drawing.Point(651, 346)
         Me.lbl点数.Name = "lbl点数"
         Me.lbl点数.Size = New System.Drawing.Size(39, 20)
         Me.lbl点数.TabIndex = 9
@@ -2160,7 +2476,7 @@ Partial Class frmMain
         '
         Me.lbl付属品名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl付属品名.AutoSize = True
-        Me.lbl付属品名.Location = New System.Drawing.Point(369, 304)
+        Me.lbl付属品名.Location = New System.Drawing.Point(369, 346)
         Me.lbl付属品名.Name = "lbl付属品名"
         Me.lbl付属品名.Size = New System.Drawing.Size(69, 20)
         Me.lbl付属品名.TabIndex = 4
@@ -2169,7 +2485,7 @@ Partial Class frmMain
         'btn削除_追加品
         '
         Me.btn削除_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_追加品.Location = New System.Drawing.Point(243, 314)
+        Me.btn削除_追加品.Location = New System.Drawing.Point(243, 356)
         Me.btn削除_追加品.Name = "btn削除_追加品"
         Me.btn削除_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_追加品.TabIndex = 3
@@ -2179,7 +2495,7 @@ Partial Class frmMain
         'btn追加_追加品
         '
         Me.btn追加_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_追加品.Location = New System.Drawing.Point(722, 314)
+        Me.btn追加_追加品.Location = New System.Drawing.Point(722, 356)
         Me.btn追加_追加品.Name = "btn追加_追加品"
         Me.btn追加_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_追加品.TabIndex = 11
@@ -2189,7 +2505,7 @@ Partial Class frmMain
         'btn下へ_追加品
         '
         Me.btn下へ_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_追加品.Location = New System.Drawing.Point(126, 314)
+        Me.btn下へ_追加品.Location = New System.Drawing.Point(126, 356)
         Me.btn下へ_追加品.Name = "btn下へ_追加品"
         Me.btn下へ_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_追加品.TabIndex = 2
@@ -2199,7 +2515,7 @@ Partial Class frmMain
         'btn上へ_追加品
         '
         Me.btn上へ_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_追加品.Location = New System.Drawing.Point(9, 314)
+        Me.btn上へ_追加品.Location = New System.Drawing.Point(9, 356)
         Me.btn上へ_追加品.Name = "btn上へ_追加品"
         Me.btn上へ_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_追加品.TabIndex = 1
@@ -2211,7 +2527,7 @@ Partial Class frmMain
         Me.cmb付属品名.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb付属品名.FormattingEnabled = True
-        Me.cmb付属品名.Location = New System.Drawing.Point(369, 332)
+        Me.cmb付属品名.Location = New System.Drawing.Point(369, 374)
         Me.cmb付属品名.Name = "cmb付属品名"
         Me.cmb付属品名.Size = New System.Drawing.Size(184, 28)
         Me.cmb付属品名.TabIndex = 5
@@ -2230,7 +2546,7 @@ Partial Class frmMain
         Me.dgv追加品.Name = "dgv追加品"
         Me.dgv追加品.RowHeadersWidth = 51
         Me.dgv追加品.RowTemplate.Height = 29
-        Me.dgv追加品.Size = New System.Drawing.Size(828, 293)
+        Me.dgv追加品.Size = New System.Drawing.Size(828, 337)
         Me.dgv追加品.TabIndex = 0
         '
         'f_i番号3
@@ -2443,8 +2759,380 @@ Partial Class frmMain
         Me.txtメモ.Location = New System.Drawing.Point(24, 166)
         Me.txtメモ.Multiline = True
         Me.txtメモ.Name = "txtメモ"
-        Me.txtメモ.Size = New System.Drawing.Size(794, 179)
+        Me.txtメモ.Size = New System.Drawing.Size(794, 227)
         Me.txtメモ.TabIndex = 0
+        '
+        'tpage底の横
+        '
+        Me.tpage底の横.Controls.Add(Me.btnリセット_横)
+        Me.tpage底の横.Controls.Add(Me.lbl上から順に下へ)
+        Me.tpage底の横.Controls.Add(Me.dgv底の横)
+        Me.tpage底の横.Location = New System.Drawing.Point(4, 29)
+        Me.tpage底の横.Name = "tpage底の横"
+        Me.tpage底の横.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpage底の横.Size = New System.Drawing.Size(840, 413)
+        Me.tpage底の横.TabIndex = 5
+        Me.tpage底の横.Text = "底の横"
+        Me.tpage底の横.UseVisualStyleBackColor = True
+        '
+        'btnリセット_横
+        '
+        Me.btnリセット_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnリセット_横.Location = New System.Drawing.Point(6, 360)
+        Me.btnリセット_横.Name = "btnリセット_横"
+        Me.btnリセット_横.Size = New System.Drawing.Size(111, 46)
+        Me.btnリセット_横.TabIndex = 2
+        Me.btnリセット_横.Text = "リセット(&R)"
+        Me.btnリセット_横.UseVisualStyleBackColor = True
+        '
+        'lbl上から順に下へ
+        '
+        Me.lbl上から順に下へ.AutoSize = True
+        Me.lbl上から順に下へ.Location = New System.Drawing.Point(6, 13)
+        Me.lbl上から順に下へ.Name = "lbl上から順に下へ"
+        Me.lbl上から順に下へ.Size = New System.Drawing.Size(101, 20)
+        Me.lbl上から順に下へ.TabIndex = 0
+        Me.lbl上から順に下へ.Text = "上から順に下へ"
+        '
+        'dgv底の横
+        '
+        Me.dgv底の横.AllowUserToAddRows = False
+        Me.dgv底の横.AllowUserToDeleteRows = False
+        Me.dgv底の横.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgv底の横.AutoGenerateColumns = False
+        Me.dgv底の横.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgv底の横.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iひも種4, Me.f_i位置番号4, Me.f_sひも名4, Me.f_iひも番号4, Me.f_i何本幅4, Me.f_d長さ4, Me.f_dひも長4, Me.f_dひも長加算4, Me.f_s記号4, Me.f_d出力ひも長4, Me.f_s色4, Me.f_sメモ4})
+        Me.dgv底の横.DataSource = Me.BindingSource底の横
+        Me.dgv底の横.Location = New System.Drawing.Point(6, 41)
+        Me.dgv底の横.Name = "dgv底の横"
+        Me.dgv底の横.RowHeadersWidth = 51
+        Me.dgv底の横.RowTemplate.Height = 29
+        Me.dgv底の横.Size = New System.Drawing.Size(828, 313)
+        Me.dgv底の横.TabIndex = 1
+        '
+        'f_iひも種4
+        '
+        Me.f_iひも種4.DataPropertyName = "f_iひも種"
+        Me.f_iひも種4.HeaderText = "f_iひも種"
+        Me.f_iひも種4.MinimumWidth = 6
+        Me.f_iひも種4.Name = "f_iひも種4"
+        Me.f_iひも種4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも種4.Visible = False
+        Me.f_iひも種4.Width = 125
+        '
+        'f_i位置番号4
+        '
+        Me.f_i位置番号4.DataPropertyName = "f_i位置番号"
+        DataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i位置番号4.DefaultCellStyle = DataGridViewCellStyle39
+        Me.f_i位置番号4.HeaderText = "位置"
+        Me.f_i位置番号4.MinimumWidth = 6
+        Me.f_i位置番号4.Name = "f_i位置番号4"
+        Me.f_i位置番号4.ReadOnly = True
+        Me.f_i位置番号4.ToolTipText = "上から順の番号"
+        Me.f_i位置番号4.Width = 80
+        '
+        'f_sひも名4
+        '
+        Me.f_sひも名4.DataPropertyName = "f_sひも名"
+        Me.f_sひも名4.HeaderText = "ひも名"
+        Me.f_sひも名4.MinimumWidth = 6
+        Me.f_sひも名4.Name = "f_sひも名4"
+        Me.f_sひも名4.ReadOnly = True
+        Me.f_sひも名4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_sひも名4.Width = 125
+        '
+        'f_iひも番号4
+        '
+        Me.f_iひも番号4.DataPropertyName = "f_iひも番号"
+        Me.f_iひも番号4.HeaderText = "ひも番号"
+        Me.f_iひも番号4.MinimumWidth = 6
+        Me.f_iひも番号4.Name = "f_iひも番号4"
+        Me.f_iひも番号4.ReadOnly = True
+        Me.f_iひも番号4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも番号4.Width = 125
+        '
+        'f_i何本幅4
+        '
+        Me.f_i何本幅4.DataPropertyName = "f_i何本幅"
+        DataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i何本幅4.DefaultCellStyle = DataGridViewCellStyle40
+        Me.f_i何本幅4.HeaderText = "何本幅"
+        Me.f_i何本幅4.MinimumWidth = 6
+        Me.f_i何本幅4.Name = "f_i何本幅4"
+        Me.f_i何本幅4.ReadOnly = True
+        Me.f_i何本幅4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i何本幅4.Width = 125
+        '
+        'f_d長さ4
+        '
+        Me.f_d長さ4.DataPropertyName = "f_d長さ"
+        DataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle41.Format = "N2"
+        DataGridViewCellStyle41.NullValue = Nothing
+        Me.f_d長さ4.DefaultCellStyle = DataGridViewCellStyle41
+        Me.f_d長さ4.HeaderText = "長さ"
+        Me.f_d長さ4.MinimumWidth = 6
+        Me.f_d長さ4.Name = "f_d長さ4"
+        Me.f_d長さ4.ReadOnly = True
+        Me.f_d長さ4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d長さ4.Width = 125
+        '
+        'f_dひも長4
+        '
+        Me.f_dひも長4.DataPropertyName = "f_dひも長"
+        DataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle42.Format = "N2"
+        DataGridViewCellStyle42.NullValue = Nothing
+        Me.f_dひも長4.DefaultCellStyle = DataGridViewCellStyle42
+        Me.f_dひも長4.HeaderText = "ひも長"
+        Me.f_dひも長4.MinimumWidth = 6
+        Me.f_dひも長4.Name = "f_dひも長4"
+        Me.f_dひも長4.ReadOnly = True
+        Me.f_dひも長4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長4.Width = 125
+        '
+        'f_dひも長加算4
+        '
+        Me.f_dひも長加算4.DataPropertyName = "f_dひも長加算"
+        DataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算4.DefaultCellStyle = DataGridViewCellStyle43
+        Me.f_dひも長加算4.HeaderText = "ひも長加算"
+        Me.f_dひも長加算4.MinimumWidth = 6
+        Me.f_dひも長加算4.Name = "f_dひも長加算4"
+        Me.f_dひも長加算4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長加算4.Width = 125
+        '
+        'f_s記号4
+        '
+        Me.f_s記号4.DataPropertyName = "f_s記号"
+        Me.f_s記号4.HeaderText = "f_s記号"
+        Me.f_s記号4.MinimumWidth = 6
+        Me.f_s記号4.Name = "f_s記号4"
+        Me.f_s記号4.ReadOnly = True
+        Me.f_s記号4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s記号4.Visible = False
+        Me.f_s記号4.Width = 125
+        '
+        'f_d出力ひも長4
+        '
+        Me.f_d出力ひも長4.DataPropertyName = "f_d出力ひも長"
+        Me.f_d出力ひも長4.HeaderText = "f_d出力ひも長"
+        Me.f_d出力ひも長4.MinimumWidth = 6
+        Me.f_d出力ひも長4.Name = "f_d出力ひも長4"
+        Me.f_d出力ひも長4.Visible = False
+        Me.f_d出力ひも長4.Width = 125
+        '
+        'f_s色4
+        '
+        Me.f_s色4.DataPropertyName = "f_s色"
+        Me.f_s色4.HeaderText = "色"
+        Me.f_s色4.MinimumWidth = 6
+        Me.f_s色4.Name = "f_s色4"
+        Me.f_s色4.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.f_s色4.Width = 125
+        '
+        'f_sメモ4
+        '
+        Me.f_sメモ4.DataPropertyName = "f_sメモ"
+        Me.f_sメモ4.HeaderText = "メモ"
+        Me.f_sメモ4.MinimumWidth = 6
+        Me.f_sメモ4.Name = "f_sメモ4"
+        Me.f_sメモ4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_sメモ4.Width = 125
+        '
+        'BindingSource底の横
+        '
+        Me.BindingSource底の横.DataMember = "tbl縦横展開"
+        Me.BindingSource底の横.DataSource = GetType(CraftBand.Tables.dstDataTables)
+        '
+        'tpage底の縦
+        '
+        Me.tpage底の縦.Controls.Add(Me.btnリセット_縦)
+        Me.tpage底の縦.Controls.Add(Me.lbl左から順に右へ)
+        Me.tpage底の縦.Controls.Add(Me.dgv底の縦)
+        Me.tpage底の縦.Location = New System.Drawing.Point(4, 29)
+        Me.tpage底の縦.Name = "tpage底の縦"
+        Me.tpage底の縦.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpage底の縦.Size = New System.Drawing.Size(840, 413)
+        Me.tpage底の縦.TabIndex = 6
+        Me.tpage底の縦.Text = "底の縦"
+        Me.tpage底の縦.UseVisualStyleBackColor = True
+        '
+        'btnリセット_縦
+        '
+        Me.btnリセット_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnリセット_縦.Location = New System.Drawing.Point(6, 360)
+        Me.btnリセット_縦.Name = "btnリセット_縦"
+        Me.btnリセット_縦.Size = New System.Drawing.Size(111, 46)
+        Me.btnリセット_縦.TabIndex = 2
+        Me.btnリセット_縦.Text = "リセット(&R)"
+        Me.btnリセット_縦.UseVisualStyleBackColor = True
+        '
+        'lbl左から順に右へ
+        '
+        Me.lbl左から順に右へ.AutoSize = True
+        Me.lbl左から順に右へ.Location = New System.Drawing.Point(6, 12)
+        Me.lbl左から順に右へ.Name = "lbl左から順に右へ"
+        Me.lbl左から順に右へ.Size = New System.Drawing.Size(101, 20)
+        Me.lbl左から順に右へ.TabIndex = 0
+        Me.lbl左から順に右へ.Text = "左から順に右へ"
+        '
+        'dgv底の縦
+        '
+        Me.dgv底の縦.AllowUserToAddRows = False
+        Me.dgv底の縦.AllowUserToDeleteRows = False
+        Me.dgv底の縦.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dgv底の縦.AutoGenerateColumns = False
+        Me.dgv底の縦.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgv底の縦.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iひも種5, Me.f_i位置番号5, Me.f_sひも名5, Me.f_iひも番号5, Me.f_i何本幅5, Me.f_d長さ5, Me.f_dひも長5, Me.f_dひも長加算5, Me.f_s記号5, Me.f_d出力ひも長5, Me.f_s色5, Me.f_sメモ5})
+        Me.dgv底の縦.DataSource = Me.BindingSource底の縦
+        Me.dgv底の縦.Location = New System.Drawing.Point(6, 40)
+        Me.dgv底の縦.Name = "dgv底の縦"
+        Me.dgv底の縦.RowHeadersWidth = 51
+        Me.dgv底の縦.RowTemplate.Height = 29
+        Me.dgv底の縦.Size = New System.Drawing.Size(828, 314)
+        Me.dgv底の縦.TabIndex = 1
+        '
+        'f_iひも種5
+        '
+        Me.f_iひも種5.DataPropertyName = "f_iひも種"
+        Me.f_iひも種5.HeaderText = "f_iひも種"
+        Me.f_iひも種5.MinimumWidth = 6
+        Me.f_iひも種5.Name = "f_iひも種5"
+        Me.f_iひも種5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも種5.Visible = False
+        Me.f_iひも種5.Width = 125
+        '
+        'f_i位置番号5
+        '
+        Me.f_i位置番号5.DataPropertyName = "f_i位置番号"
+        DataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i位置番号5.DefaultCellStyle = DataGridViewCellStyle44
+        Me.f_i位置番号5.HeaderText = "位置"
+        Me.f_i位置番号5.MinimumWidth = 6
+        Me.f_i位置番号5.Name = "f_i位置番号5"
+        Me.f_i位置番号5.ReadOnly = True
+        Me.f_i位置番号5.ToolTipText = "左から順の番号"
+        Me.f_i位置番号5.Width = 80
+        '
+        'f_sひも名5
+        '
+        Me.f_sひも名5.DataPropertyName = "f_sひも名"
+        Me.f_sひも名5.HeaderText = "ひも名"
+        Me.f_sひも名5.MinimumWidth = 6
+        Me.f_sひも名5.Name = "f_sひも名5"
+        Me.f_sひも名5.ReadOnly = True
+        Me.f_sひも名5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_sひも名5.Width = 125
+        '
+        'f_iひも番号5
+        '
+        Me.f_iひも番号5.DataPropertyName = "f_iひも番号"
+        Me.f_iひも番号5.HeaderText = "ひも番号"
+        Me.f_iひも番号5.MinimumWidth = 6
+        Me.f_iひも番号5.Name = "f_iひも番号5"
+        Me.f_iひも番号5.ReadOnly = True
+        Me.f_iひも番号5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも番号5.Width = 125
+        '
+        'f_i何本幅5
+        '
+        Me.f_i何本幅5.DataPropertyName = "f_i何本幅"
+        DataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i何本幅5.DefaultCellStyle = DataGridViewCellStyle45
+        Me.f_i何本幅5.HeaderText = "何本幅"
+        Me.f_i何本幅5.MinimumWidth = 6
+        Me.f_i何本幅5.Name = "f_i何本幅5"
+        Me.f_i何本幅5.ReadOnly = True
+        Me.f_i何本幅5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i何本幅5.Width = 125
+        '
+        'f_d長さ5
+        '
+        Me.f_d長さ5.DataPropertyName = "f_d長さ"
+        DataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle46.Format = "N2"
+        DataGridViewCellStyle46.NullValue = Nothing
+        Me.f_d長さ5.DefaultCellStyle = DataGridViewCellStyle46
+        Me.f_d長さ5.HeaderText = "長さ"
+        Me.f_d長さ5.MinimumWidth = 6
+        Me.f_d長さ5.Name = "f_d長さ5"
+        Me.f_d長さ5.ReadOnly = True
+        Me.f_d長さ5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d長さ5.Width = 125
+        '
+        'f_dひも長5
+        '
+        Me.f_dひも長5.DataPropertyName = "f_dひも長"
+        DataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle47.Format = "N2"
+        DataGridViewCellStyle47.NullValue = Nothing
+        Me.f_dひも長5.DefaultCellStyle = DataGridViewCellStyle47
+        Me.f_dひも長5.HeaderText = "ひも長"
+        Me.f_dひも長5.MinimumWidth = 6
+        Me.f_dひも長5.Name = "f_dひも長5"
+        Me.f_dひも長5.ReadOnly = True
+        Me.f_dひも長5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長5.Width = 125
+        '
+        'f_dひも長加算5
+        '
+        Me.f_dひも長加算5.DataPropertyName = "f_dひも長加算"
+        DataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算5.DefaultCellStyle = DataGridViewCellStyle48
+        Me.f_dひも長加算5.HeaderText = "ひも長加算"
+        Me.f_dひも長加算5.MinimumWidth = 6
+        Me.f_dひも長加算5.Name = "f_dひも長加算5"
+        Me.f_dひも長加算5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長加算5.Width = 125
+        '
+        'f_s記号5
+        '
+        Me.f_s記号5.DataPropertyName = "f_s記号"
+        Me.f_s記号5.HeaderText = "f_s記号"
+        Me.f_s記号5.MinimumWidth = 6
+        Me.f_s記号5.Name = "f_s記号5"
+        Me.f_s記号5.ReadOnly = True
+        Me.f_s記号5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s記号5.Visible = False
+        Me.f_s記号5.Width = 125
+        '
+        'f_d出力ひも長5
+        '
+        Me.f_d出力ひも長5.DataPropertyName = "f_d出力ひも長"
+        Me.f_d出力ひも長5.HeaderText = "f_d出力ひも長"
+        Me.f_d出力ひも長5.MinimumWidth = 6
+        Me.f_d出力ひも長5.Name = "f_d出力ひも長5"
+        Me.f_d出力ひも長5.Visible = False
+        Me.f_d出力ひも長5.Width = 125
+        '
+        'f_s色5
+        '
+        Me.f_s色5.DataPropertyName = "f_s色"
+        Me.f_s色5.HeaderText = "色"
+        Me.f_s色5.MinimumWidth = 6
+        Me.f_s色5.Name = "f_s色5"
+        Me.f_s色5.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.f_s色5.Width = 125
+        '
+        'f_sメモ5
+        '
+        Me.f_sメモ5.DataPropertyName = "f_sメモ"
+        Me.f_sメモ5.HeaderText = "メモ"
+        Me.f_sメモ5.MinimumWidth = 6
+        Me.f_sメモ5.Name = "f_sメモ5"
+        Me.f_sメモ5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_sメモ5.Width = 125
+        '
+        'BindingSource底の縦
+        '
+        Me.BindingSource底の縦.DataMember = "tbl縦横展開"
+        Me.BindingSource底の縦.DataSource = GetType(CraftBand.Tables.dstDataTables)
         '
         'f_i段数2
         '
@@ -2711,257 +3399,6 @@ Partial Class frmMain
         Me.lbl最大.TabIndex = 60
         Me.lbl最大.Text = "(最大)"
         '
-        'f_i番号2
-        '
-        Me.f_i番号2.DataPropertyName = "f_i番号"
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i番号2.DefaultCellStyle = DataGridViewCellStyle16
-        Me.f_i番号2.HeaderText = "番号"
-        Me.f_i番号2.MinimumWidth = 6
-        Me.f_i番号2.Name = "f_i番号2"
-        Me.f_i番号2.ReadOnly = True
-        Me.f_i番号2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_i番号2.Width = 59
-        '
-        'f_s編みかた名2
-        '
-        Me.f_s編みかた名2.DataPropertyName = "f_s編みかた名"
-        Me.f_s編みかた名2.HeaderText = "編みかた名"
-        Me.f_s編みかた名2.MinimumWidth = 6
-        Me.f_s編みかた名2.Name = "f_s編みかた名2"
-        Me.f_s編みかた名2.ReadOnly = True
-        Me.f_s編みかた名2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_s編みかた名2.Width = 125
-        '
-        'f_s編みひも名2
-        '
-        Me.f_s編みひも名2.DataPropertyName = "f_s編みひも名"
-        Me.f_s編みひも名2.HeaderText = "編みひも名"
-        Me.f_s編みひも名2.MinimumWidth = 6
-        Me.f_s編みひも名2.Name = "f_s編みひも名2"
-        Me.f_s編みひも名2.ReadOnly = True
-        Me.f_s編みひも名2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_s編みひも名2.Width = 112
-        '
-        'f_iひも番号2
-        '
-        Me.f_iひも番号2.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle17
-        Me.f_iひも番号2.HeaderText = "ひも番号"
-        Me.f_iひも番号2.MinimumWidth = 6
-        Me.f_iひも番号2.Name = "f_iひも番号2"
-        Me.f_iひも番号2.ReadOnly = True
-        Me.f_iひも番号2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_iひも番号2.Width = 81
-        '
-        'f_i何本幅2
-        '
-        Me.f_i何本幅2.DataPropertyName = "f_i何本幅"
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle18
-        Me.f_i何本幅2.HeaderText = "何本幅"
-        Me.f_i何本幅2.MinimumWidth = 6
-        Me.f_i何本幅2.Name = "f_i何本幅2"
-        Me.f_i何本幅2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.f_i何本幅2.Width = 77
-        '
-        'f_i周数2
-        '
-        Me.f_i周数2.DataPropertyName = "f_i周数"
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i周数2.DefaultCellStyle = DataGridViewCellStyle19
-        Me.f_i周数2.HeaderText = "周数"
-        Me.f_i周数2.MinimumWidth = 6
-        Me.f_i周数2.Name = "f_i周数2"
-        Me.f_i周数2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_i周数2.Width = 60
-        '
-        'f_s色2
-        '
-        Me.f_s色2.DataPropertyName = "f_s色"
-        Me.f_s色2.HeaderText = "色"
-        Me.f_s色2.MinimumWidth = 6
-        Me.f_s色2.Name = "f_s色2"
-        Me.f_s色2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.f_s色2.Width = 80
-        '
-        'f_b周連続区分2
-        '
-        Me.f_b周連続区分2.DataPropertyName = "f_b周連続区分"
-        Me.f_b周連続区分2.HeaderText = "周連続"
-        Me.f_b周連続区分2.MinimumWidth = 6
-        Me.f_b周連続区分2.Name = "f_b周連続区分2"
-        Me.f_b周連続区分2.Width = 73
-        '
-        'f_b次周連続区分2
-        '
-        Me.f_b次周連続区分2.DataPropertyName = "f_b次周連続区分"
-        Me.f_b次周連続区分2.HeaderText = "次周連続"
-        Me.f_b次周連続区分2.MinimumWidth = 6
-        Me.f_b次周連続区分2.Name = "f_b次周連続区分2"
-        Me.f_b次周連続区分2.Width = 60
-        '
-        'f_i段数
-        '
-        Me.f_i段数.DataPropertyName = "f_i段数"
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i段数.DefaultCellStyle = DataGridViewCellStyle20
-        Me.f_i段数.HeaderText = "段数"
-        Me.f_i段数.MinimumWidth = 6
-        Me.f_i段数.Name = "f_i段数"
-        Me.f_i段数.ReadOnly = True
-        Me.f_i段数.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_i段数.Width = 125
-        '
-        'f_d高さ2
-        '
-        Me.f_d高さ2.DataPropertyName = "f_d高さ"
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle21.Format = "N2"
-        DataGridViewCellStyle21.NullValue = Nothing
-        Me.f_d高さ2.DefaultCellStyle = DataGridViewCellStyle21
-        Me.f_d高さ2.HeaderText = "高さ"
-        Me.f_d高さ2.MinimumWidth = 6
-        Me.f_d高さ2.Name = "f_d高さ2"
-        Me.f_d高さ2.ReadOnly = True
-        Me.f_d高さ2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d高さ2.Width = 125
-        '
-        'f_d高さ比率2
-        '
-        Me.f_d高さ比率2.DataPropertyName = "f_d高さ比率"
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle22.Format = "N2"
-        DataGridViewCellStyle22.NullValue = Nothing
-        Me.f_d高さ比率2.DefaultCellStyle = DataGridViewCellStyle22
-        Me.f_d高さ比率2.HeaderText = "高さ比率"
-        Me.f_d高さ比率2.MinimumWidth = 6
-        Me.f_d高さ比率2.Name = "f_d高さ比率2"
-        Me.f_d高さ比率2.ReadOnly = True
-        Me.f_d高さ比率2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d高さ比率2.Width = 80
-        '
-        'f_d垂直ひも長2
-        '
-        Me.f_d垂直ひも長2.DataPropertyName = "f_d垂直ひも長"
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle23.Format = "N2"
-        DataGridViewCellStyle23.NullValue = Nothing
-        Me.f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle23
-        Me.f_d垂直ひも長2.HeaderText = "垂直ひも長"
-        Me.f_d垂直ひも長2.MinimumWidth = 6
-        Me.f_d垂直ひも長2.Name = "f_d垂直ひも長2"
-        Me.f_d垂直ひも長2.ReadOnly = True
-        Me.f_d垂直ひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d垂直ひも長2.Width = 125
-        '
-        'f_d周長比率対底の周2
-        '
-        Me.f_d周長比率対底の周2.DataPropertyName = "f_d周長比率対底の周"
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d周長比率対底の周2.DefaultCellStyle = DataGridViewCellStyle24
-        Me.f_d周長比率対底の周2.HeaderText = "周長比率対底の周"
-        Me.f_d周長比率対底の周2.MinimumWidth = 6
-        Me.f_d周長比率対底の周2.Name = "f_d周長比率対底の周2"
-        Me.f_d周長比率対底の周2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d周長比率対底の周2.Width = 125
-        '
-        'f_d周長2
-        '
-        Me.f_d周長2.DataPropertyName = "f_d周長"
-        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle25.Format = "N2"
-        DataGridViewCellStyle25.NullValue = Nothing
-        Me.f_d周長2.DefaultCellStyle = DataGridViewCellStyle25
-        Me.f_d周長2.HeaderText = "周長"
-        Me.f_d周長2.MinimumWidth = 6
-        Me.f_d周長2.Name = "f_d周長2"
-        Me.f_d周長2.ReadOnly = True
-        Me.f_d周長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d周長2.Width = 125
-        '
-        'f_dひも長2
-        '
-        Me.f_dひも長2.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle26.Format = "N2"
-        DataGridViewCellStyle26.NullValue = Nothing
-        Me.f_dひも長2.DefaultCellStyle = DataGridViewCellStyle26
-        Me.f_dひも長2.HeaderText = "ひも長"
-        Me.f_dひも長2.MinimumWidth = 6
-        Me.f_dひも長2.Name = "f_dひも長2"
-        Me.f_dひも長2.ReadOnly = True
-        Me.f_dひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_dひも長2.Width = 125
-        '
-        'f_dひも長加算2
-        '
-        Me.f_dひも長加算2.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle27
-        Me.f_dひも長加算2.HeaderText = "ひも長加算"
-        Me.f_dひも長加算2.MinimumWidth = 6
-        Me.f_dひも長加算2.Name = "f_dひも長加算2"
-        Me.f_dひも長加算2.ToolTipText = "出力時に加える余裕長"
-        Me.f_dひも長加算2.Width = 125
-        '
-        'f_iひも本数2
-        '
-        Me.f_iひも本数2.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle28
-        Me.f_iひも本数2.HeaderText = "ひも本数"
-        Me.f_iひも本数2.MinimumWidth = 6
-        Me.f_iひも本数2.Name = "f_iひも本数2"
-        Me.f_iひも本数2.ReadOnly = True
-        Me.f_iひも本数2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_iひも本数2.Width = 125
-        '
-        'f_d連続ひも長2
-        '
-        Me.f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
-        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle29.Format = "N2"
-        DataGridViewCellStyle29.NullValue = Nothing
-        Me.f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle29
-        Me.f_d連続ひも長2.HeaderText = "連続ひも長"
-        Me.f_d連続ひも長2.MinimumWidth = 6
-        Me.f_d連続ひも長2.Name = "f_d連続ひも長2"
-        Me.f_d連続ひも長2.ReadOnly = True
-        Me.f_d連続ひも長2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d連続ひも長2.Visible = False
-        Me.f_d連続ひも長2.Width = 125
-        '
-        'f_d厚さ
-        '
-        Me.f_d厚さ.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle30
-        Me.f_d厚さ.HeaderText = "厚さ"
-        Me.f_d厚さ.MinimumWidth = 6
-        Me.f_d厚さ.Name = "f_d厚さ"
-        Me.f_d厚さ.ReadOnly = True
-        Me.f_d厚さ.Width = 125
-        '
-        'f_sメモ2
-        '
-        Me.f_sメモ2.DataPropertyName = "f_sメモ"
-        Me.f_sメモ2.HeaderText = "メモ"
-        Me.f_sメモ2.MinimumWidth = 6
-        Me.f_sメモ2.Name = "f_sメモ2"
-        Me.f_sメモ2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_sメモ2.Width = 125
-        '
-        'f_bError2
-        '
-        Me.f_bError2.DataPropertyName = "f_bError"
-        Me.f_bError2.HeaderText = "Error"
-        Me.f_bError2.MinimumWidth = 6
-        Me.f_bError2.Name = "f_bError2"
-        Me.f_bError2.Visible = False
-        Me.f_bError2.Width = 125
-        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -3080,6 +3517,14 @@ Partial Class frmMain
         CType(Me.BindingSource追加品, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpageメモ他.ResumeLayout(False)
         Me.tpageメモ他.PerformLayout()
+        Me.tpage底の横.ResumeLayout(False)
+        Me.tpage底の横.PerformLayout()
+        CType(Me.dgv底の横, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BindingSource底の横, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpage底の縦.ResumeLayout(False)
+        Me.tpage底の縦.PerformLayout()
+        CType(Me.dgv底の縦, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BindingSource底の縦, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -3343,4 +3788,39 @@ Partial Class frmMain
     Friend WithEvents f_d厚さ As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError2 As DataGridViewCheckBoxColumn
+    Friend WithEvents tpage底の横 As TabPage
+    Friend WithEvents tpage底の縦 As TabPage
+    Friend WithEvents chk縦横を展開する As CheckBox
+    Friend WithEvents dgv底の横 As DataGridView
+    Friend WithEvents BindingSource底の横 As BindingSource
+    Friend WithEvents dgv底の縦 As DataGridView
+    Friend WithEvents BindingSource底の縦 As BindingSource
+    Friend WithEvents lbl上から順に下へ As Label
+    Friend WithEvents lbl左から順に右へ As Label
+    Friend WithEvents btnリセット_横 As Button
+    Friend WithEvents btnリセット_縦 As Button
+    Friend WithEvents f_iひも種4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i位置番号4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_sひも名4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_iひも番号4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i何本幅4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d長さ4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長加算4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s記号4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d出力ひも長4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s色4 As DataGridViewComboBoxColumn
+    Friend WithEvents f_sメモ4 As DataGridViewTextBoxColumn
+    Friend WithEvents f_iひも種5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i位置番号5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_sひも名5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_iひも番号5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i何本幅5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d長さ5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長加算5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s記号5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d出力ひも長5 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s色5 As DataGridViewComboBoxColumn
+    Friend WithEvents f_sメモ5 As DataGridViewTextBoxColumn
 End Class

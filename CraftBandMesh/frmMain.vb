@@ -70,6 +70,13 @@ Public Class frmMain
         f_s色3.DataSource = g_clsSelectBasics.p_tblColor
         f_s色3.DisplayMember = "Display"
         f_s色3.ValueMember = "Value"
+        '
+        f_s色4.DataSource = g_clsSelectBasics.p_tblColor
+        f_s色4.DisplayMember = "Display"
+        f_s色4.ValueMember = "Value"
+        f_s色5.DataSource = g_clsSelectBasics.p_tblColor
+        f_s色5.DisplayMember = "Display"
+        f_s色5.ValueMember = "Value"
 
         cmb基本色.DataSource = g_clsSelectBasics.p_tblColor
         cmb基本色.DisplayMember = "Display"
@@ -93,6 +100,10 @@ Public Class frmMain
             SetColumnWidthFromString(Me.dgv側面, colwid)
             colwid = My.Settings.frmMainGridOptions
             SetColumnWidthFromString(Me.dgv追加品, colwid)
+            colwid = My.Settings.frmMainGridYoko
+            SetColumnWidthFromString(Me.dgv底の横, colwid)
+            colwid = My.Settings.frmMainGridTate
+            SetColumnWidthFromString(Me.dgv底の縦, colwid)
         End If
 
         setStartEditing()
@@ -110,11 +121,15 @@ Public Class frmMain
         My.Settings.frmMainGridOval = GetColumnWidthString(Me.dgv底楕円)
         My.Settings.frmMainGridSide = GetColumnWidthString(Me.dgv側面)
         My.Settings.frmMainGridOptions = GetColumnWidthString(Me.dgv追加品)
+        My.Settings.frmMainGridYoko = GetColumnWidthString(Me.dgv底の横)
+        My.Settings.frmMainGridTate = GetColumnWidthString(Me.dgv底の縦)
         My.Settings.frmMainSize = Me.Size
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底楕円={0}", My.Settings.frmMainGridOval)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv側面={0}", My.Settings.frmMainGridSide)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv追加品={0}", My.Settings.frmMainGridOptions)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の横={0}", My.Settings.frmMainGridYoko)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の縦={0}", My.Settings.frmMainGridTate)
     End Sub
 
 
@@ -232,12 +247,7 @@ Public Class frmMain
 
 #Region "クラス値と表示"
 
-    Const TabControlIndex底縦横 As Integer = 0
-    Const TabControlIndex底楕円 As Integer = 1
-    Const TabControlIndex側面 As Integer = 2
-    Const TabControlIndex追加品 As Integer = 3
-
-    Dim _CurrentTabControlIndex As Integer = -1
+    Dim _CurrentTabControlName As String = ""
 
     Sub DispTables(ByVal works As clsDataTables)
         If works IsNot Nothing Then
@@ -259,43 +269,63 @@ Public Class frmMain
     End Sub
 
     Private Sub ShowGridSelected(ByVal works As clsDataTables)
-        Select Case TabControl.SelectedIndex
-            Case TabControlIndex底縦横
+        If TabControl.SelectedIndex < 0 OrElse TabControl.SelectedTab Is Nothing Then
+            Exit Sub
+        End If
+
+        'タブページ名
+        Select Case TabControl.SelectedTab.Name
+            Case "tpage底縦横"
                 '
-            Case TabControlIndex底楕円
+            Case "tpage底楕円"
                 Show底_楕円(works)
-            Case TabControlIndex側面
+            Case "tpage側面"
                 Show側面(works)
-            Case TabControlIndex追加品
+            Case "tpage追加品"
                 Show追加品(works)
-            Case Else
-                _CurrentTabControlIndex = -1
+            Case "tpageメモ他"
+                '
+            Case "tpage底の横"
+                Show底の横(works)
+            Case "tpage底の縦"
+                Show底の縦(works)
+            Case Else ' "tpageメモ他"
+
         End Select
-        _CurrentTabControlIndex = TabControl.SelectedIndex
+        _CurrentTabControlName = TabControl.SelectedTab.Name
     End Sub
 
     '底(縦横)のタブ表示(グリッドは非表示)
     Private Sub ShowDefaultTabControlPage()
-        TabControl.SelectedIndex = TabControlIndex底縦横
+        TabControl.SelectTab("tpage底縦横")
     End Sub
 
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl.SelectedIndexChanged
-        If TabControl.SelectedIndex < 0 OrElse _CurrentTabControlIndex = TabControl.SelectedIndex Then
+        If TabControl.SelectedTab IsNot Nothing AndAlso
+            _CurrentTabControlName = TabControl.SelectedTab.Name Then
             Exit Sub
         End If
 
-        Select Case _CurrentTabControlIndex
-            Case TabControlIndex底縦横
+        '先のページ名
+        Select Case _CurrentTabControlName
+            Case "tpage底縦横"
                 '
-            Case TabControlIndex底楕円
+            Case "tpage底楕円"
                 Hide底_楕円(_clsDataTables)
-            Case TabControlIndex側面
+            Case "tpage側面"
                 Hide側面(_clsDataTables)
-            Case TabControlIndex追加品
+            Case "tpage追加品"
                 Hide追加品(_clsDataTables)
-            Case Else
+            Case "tpageメモ他"
+                '
+            Case "tpage底の横"
+                Hide底の横(_clsDataTables)
+            Case "tpage底の縦"
+                Hide底の縦(_clsDataTables)
+            Case Else ' 
                 '
         End Select
+        _CurrentTabControlName = ""
 
         ShowGridSelected(_clsDataTables)
     End Sub
@@ -330,6 +360,9 @@ Public Class frmMain
     Sub Disp底_縦横(ByVal row底_縦横 As clsDataRow)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp底_縦横 {0}", row底_縦横.ToString)
         With row底_縦横
+            chk縦横を展開する.Checked = .Value("f_b展開区分")
+            set底の縦横展開(.Value("f_b展開区分"))
+
             nud長い横ひもの本数.Value = .Value("f_i長い横ひもの本数")
             dispAdjustLane(nud長い横ひも, .Value("f_i長い横ひも"))
             dispAdjustLane(nud短い横ひも, .Value("f_i短い横ひも"))
@@ -513,6 +546,13 @@ Public Class frmMain
         works.CheckPoint(works.p_tbl側面)
         works.CheckPoint(works.p_tbl追加品)
 
+        If _CurrentTabControlName = "tpage底の横" Then
+            works.FromTmpTable(enumひも種.i_横, BindingSource底の横.DataSource)
+        End If
+        If _CurrentTabControlName = "tpage底の縦" Then
+            works.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, BindingSource底の縦.DataSource)
+        End If
+
         Return True
     End Function
 
@@ -532,6 +572,8 @@ Public Class frmMain
 
     Function Save底_縦横(ByVal row底_縦横 As clsDataRow) As Boolean
         With row底_縦横
+            .Value("f_b展開区分") = chk縦横を展開する.Checked
+
             .Value("f_i長い横ひもの本数") = nud長い横ひもの本数.Value
             .Value("f_i長い横ひも") = nud長い横ひも.Value
             .Value("f_i短い横ひも") = nud短い横ひも.Value
@@ -953,6 +995,10 @@ Public Class frmMain
 #End Region
 
 #Region "底(縦横)のコントロール"
+    '縦横の展開チェックボックス　※チェックは最初のタブにある
+    Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
+        set底の縦横展開(chk縦横を展開する.Checked)
+    End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
         If nud基本のひも幅.Value = 0 Then
@@ -1174,7 +1220,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv底楕円.CellFormatting, dgv側面.CellFormatting, dgv追加品.CellFormatting
+    Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv底楕円.CellFormatting, dgv側面.CellFormatting, dgv追加品.CellFormatting, dgv底の横.CellFormatting, dgv底の縦.CellFormatting
         Dim dgv As DataGridView = CType(sender, DataGridView)
         If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
@@ -1544,6 +1590,112 @@ Public Class frmMain
 
 #End Region
 
+
+
+    'タブの表示・非表示(タブのインスタンスは保持)
+    Private Sub set底の縦横展開(ByVal isExband As Boolean)
+        If isExband Then
+            If Not TabControl.TabPages.Contains(tpage底の横) Then
+                TabControl.TabPages.Add(tpage底の横)
+            End If
+            If Not TabControl.TabPages.Contains(tpage底の縦) Then
+                TabControl.TabPages.Add(tpage底の縦)
+            End If
+        Else
+            If TabControl.TabPages.Contains(tpage底の横) Then
+                TabControl.TabPages.Remove(tpage底の横)
+            End If
+            If TabControl.TabPages.Contains(tpage底の縦) Then
+                TabControl.TabPages.Remove(tpage底の縦)
+            End If
+        End If
+    End Sub
+
+
+    Sub Show底の横(ByVal works As clsDataTables)
+        BindingSource底の横.Sort = Nothing
+        BindingSource底の横.DataSource = Nothing
+        If works Is Nothing Then
+            Exit Sub
+        End If
+
+        'タブ切り替えタイミングのため、表示は更新済
+        Save底_縦横(works.p_row底_縦横)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set横展開DataTable()
+        works.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tmptable)
+
+        BindingSource底の横.DataSource = tmptable
+        BindingSource底の横.Sort = "f_iひも種,f_iひも番号"
+
+        dgv底の横.Refresh()
+    End Sub
+
+    Function Hide底の横(ByVal works As clsDataTables) As Boolean
+        Dim change As Integer = works.FromTmpTable(enumひも種.i_横, BindingSource底の横.DataSource)
+        BindingSource底の横.Sort = Nothing
+        BindingSource底の横.DataSource = Nothing
+
+        dgv底の横.Refresh()
+        Return 0 < change
+    End Function
+
+    Sub Show底の縦(ByVal works As clsDataTables)
+        BindingSource底の縦.Sort = Nothing
+        BindingSource底の縦.DataSource = Nothing
+        If works Is Nothing Then
+            Exit Sub
+        End If
+
+        'タブ切り替えタイミングのため、表示は更新済
+        Save底_縦横(works.p_row底_縦横)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set縦展開DataTable()
+        works.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tmptable)
+
+        BindingSource底の縦.DataSource = tmptable
+        BindingSource底の縦.Sort = "f_iひも種,f_iひも番号"
+
+        dgv底の縦.Refresh()
+    End Sub
+
+    Function Hide底の縦(ByVal works As clsDataTables) As Boolean
+        Dim change As Integer = works.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, BindingSource底の縦.DataSource)
+        BindingSource底の縦.Sort = Nothing
+        BindingSource底の縦.DataSource = Nothing
+
+        dgv底の縦.Refresh()
+        Return 0 < change
+    End Function
+
+    Private Sub dgv底の横_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の横.DataError
+        dgv_DataErrorModify(sender, e)
+    End Sub
+
+    Private Sub dgv底の縦_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の縦.DataError
+        dgv_DataErrorModify(sender, e)
+    End Sub
+
+    Private Sub btnリセット_横_Click(sender As Object, e As EventArgs) Handles btnリセット_横.Click
+        'ひも長加算と色をすべてクリアします。よろしいですか？
+        Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetAddLengthColor, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+        If r <> DialogResult.OK Then
+            Exit Sub
+        End If
+        BindingSource底の横.DataSource = _clsCalcMesh.set横展開DataTable()
+        BindingSource底の横.Sort = "f_iひも種,f_iひも番号"
+        dgv底の横.Refresh()
+    End Sub
+
+    Private Sub btnリセット_縦_Click(sender As Object, e As EventArgs) Handles btnリセット_縦.Click
+        'ひも長加算と色をすべてクリアします。よろしいですか？
+        Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetAddLengthColor, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+        If r <> DialogResult.OK Then
+            Exit Sub
+        End If
+        BindingSource底の縦.DataSource = _clsCalcMesh.set縦展開DataTable()
+        BindingSource底の縦.Sort = "f_iひも種,f_iひも番号"
+        dgv底の縦.Refresh()
+    End Sub
+
 #Region "DEBUG"
     Dim bVisible As Boolean = False
     Private Sub btnDEBUG_Click(sender As Object, e As EventArgs) Handles btnDEBUG.Click
@@ -1551,12 +1703,19 @@ Public Class frmMain
             setDgvColumnsVisible(dgv底楕円)
             setDgvColumnsVisible(dgv側面)
             setDgvColumnsVisible(dgv追加品)
+            setDgvColumnsVisible(dgv底の横)
+            setDgvColumnsVisible(dgv底の縦)
             bVisible = True
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row目標寸法.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row底_縦横.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsCalcMesh.dump())
+        '
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl底_楕円).ToString())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl側面).ToString())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl追加品).ToString())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl縦横展開).ToString())
 
     End Sub
     Private Sub setDgvColumnsVisible(ByVal dgv As DataGridView)
@@ -1566,10 +1725,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
-
-
-
 #End Region
 
 End Class

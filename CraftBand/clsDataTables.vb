@@ -8,19 +8,19 @@ Public Class clsDataTables
     '縁のf_i番号値(1点のみ)
     Public Const cHemNumber As Integer = 999
 
-
     Dim _dstDataTables As dstDataTables
     Dim _ExeName As String
 
     Public Property LastError As String 'ファイルエラー文字列
 
+    '*画面コントロールに展開
     'tbl目標寸法は1レコードのみ
     Public Property p_row目標寸法 As clsDataRow 'tbl目標寸法Row
 
     'tbl底_縦横は1レコードのみ
     Public Property p_row底_縦横 As clsDataRow 'tbl底_縦横Row
 
-
+    '*テーブルそのままを表示・編集
     'tbl側面
     Public ReadOnly Property p_tbl側面 As tbl側面DataTable
         Get
@@ -42,6 +42,13 @@ Public Class clsDataTables
         End Get
     End Property
 
+    '*必要に応じてワークテーブルと転送
+    'tbl縦横展開
+    Public ReadOnly Property p_tbl縦横展開 As tbl縦横展開DataTable
+        Get
+            Return _dstDataTables.Tables("tbl縦横展開")
+        End Get
+    End Property
 
 
     Public Enum enum最上と最下の短いひも
@@ -50,6 +57,18 @@ Public Class clsDataTables
         i_異なる幅 = 2
     End Enum
 
+    'カテゴリー出力順
+    <Flags()>
+    Public Enum enumひも種
+        i_横 = &H100
+        i_縦 = &H200
+        i_斜め = &H400
+
+        i_長い = &H10
+        i_短い = &H20
+        i_最上と最下 = &H40
+        i_補強 = &H80
+    End Enum
 
 
     Sub New(ByVal exeName As String)
@@ -165,7 +184,7 @@ Public Class clsDataTables
     End Function
 
 
-
+    '参照値のチェックと更新(マスタやバンドの種類が変わった時用)
     Public Sub ModifySelected()
 
         For Each row As tbl底_楕円Row In p_tbl底_楕円
@@ -215,7 +234,11 @@ Public Class clsDataTables
                 row.f_s色 = ""
             End If
         Next
+
+        'tbl縦横展開は転送時に処理
     End Sub
+
+
 
 
 #Region "編集による更新状態"
@@ -228,6 +251,7 @@ Public Class clsDataTables
     Dim _b底_楕円Changed As Boolean = False
     Dim _b側面Changed As Boolean = False
     Dim _b追加品Changed As Boolean = False
+    Dim _b縦横展開Changed As Boolean = False
 
 
     Public Sub ResetStartPoint()
@@ -243,14 +267,16 @@ Public Class clsDataTables
         p_tbl底_楕円.AcceptChanges()
         p_tbl側面.AcceptChanges()
         p_tbl追加品.AcceptChanges()
+        p_tbl縦横展開.AcceptChanges()
 
         _b底_楕円Changed = False
         _b側面Changed = False
         _b追加品Changed = False
+        _b縦横展開Changed = False
     End Sub
 
     Public Function IsChangedFromStartPoint()
-        If _b側面Changed OrElse _b底_楕円Changed OrElse _b追加品Changed Then
+        If _b側面Changed OrElse _b底_楕円Changed OrElse _b追加品Changed OrElse _b縦横展開Changed Then
             Return True
         End If
         If Not p_row目標寸法.Equals(_row目標寸法Start) Then
@@ -266,6 +292,7 @@ Public Class clsDataTables
         Return False
     End Function
 
+    'そのまま編集するタイプのテーブルの更新チェック
     Public Function CheckPoint(ByVal table As DataTable) As Boolean
         If table Is Nothing OrElse table.GetChanges Is Nothing Then
             Return False
@@ -285,6 +312,78 @@ Public Class clsDataTables
         table.AcceptChanges()
         Return True
     End Function
+
+#Region "ワークテーブルとtbl縦横展開の転送"
+    'ワークテーブルの編集フィールドにデータベース値をセットする
+    Public Function ToTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
+        If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
+            Return 0
+        End If
+
+        Dim count As Integer = 0
+        For Each tmp As tbl縦横展開Row In tmptable
+            '同じキーレコードを検索
+            Dim cond As String = String.Format("f_iひも種={0} AND f_iひも番号={1}", tmp.f_iひも種, tmp.f_iひも番号)
+            Dim sels() As tbl縦横展開Row = p_tbl縦横展開.Select(cond)
+            If sels Is Nothing OrElse sels.Length = 0 Then
+                Continue For
+            End If
+            Dim i As Integer = 0
+            tmp.f_dひも長加算 = sels(i).f_dひも長加算
+            If tmp.f_dひも長加算 <> 0 Then
+                tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算
+            End If
+            If g_clsSelectBasics.IsExistColor(sels(i).f_s色) Then
+                tmp.f_s色 = sels(i).f_s色
+            Else
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_s色)
+            End If
+            tmp.f_sメモ = sels(i).f_sメモ
+            'キーなので1点しかないはず
+
+            count += 1
+        Next
+        tmptable.AcceptChanges()
+        Return count
+    End Function
+
+    'データベース値をワークテーブル値に置換 
+    Public Function FromTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
+        If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
+            Return 0
+        End If
+        If tmptable.GetChanges() Is Nothing Then
+            Return 0
+        End If
+
+        Dim count As Integer = 0
+        'ひも種で指定されたカテゴリーを削除
+        p_tbl縦横展開.AcceptChanges()
+        Dim query = From r In p_tbl縦横展開.AsEnumerable
+                    Where (r.f_iひも種 And iひも種) <> 0
+                    Select r
+
+        For Each r As tbl縦横展開Row In query
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Remove({0},{1})", r.f_sひも名, r.f_iひも番号)
+            r.Delete()
+            count -= 1
+        Next
+        p_tbl縦横展開.AcceptChanges()
+
+        'レコードを追加
+        For Each tmp As tbl縦横展開Row In tmptable
+            p_tbl縦横展開.ImportRow(tmp)
+            count += 1
+        Next
+        p_tbl縦横展開.AcceptChanges()
+        _b縦横展開Changed = True
+        tmptable.AcceptChanges()
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Add({0}) {1}点", iひも種, tmptable.Rows.Count)
+        Return count
+    End Function
+
+#End Region
 #End Region
 
 #Region "編集用Shared"

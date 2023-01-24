@@ -129,6 +129,10 @@
     <value>このままリスト出力を行いますか？</value>
     <comment>frmMain</comment>
   </data>
+  <data name="AskResetAddLengthColor" xml:space="preserve">
+    <value>ひも長加算と色をすべてクリアします。よろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="AskResetInput" xml:space="preserve">
     <value>目標寸法以外をリセットします。よろしいですか？</value>
     <comment>frmMain</comment>

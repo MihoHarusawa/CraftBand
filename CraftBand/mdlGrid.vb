@@ -166,7 +166,7 @@ Public Module mdlGrid
 
         For Each col As DataGridViewColumn In dgv.Columns
             If col.Visible Then
-                sb.Append("""").Append(col.HeaderText).Append(""",")
+                sb.Append(""""c).Append(col.HeaderText).Append(""",")
             End If
         Next
         sb.AppendLine()
@@ -175,15 +175,15 @@ Public Module mdlGrid
 
             For Each col As DataGridViewColumn In dgv.Columns
                 If col.Visible Then
-                    sb.Append("""").Append(row.Cells(col.Index).Value).Append(""",")
+                    sb.Append(""""c).Append(row.Cells(col.Index).Value).Append(""",")
                 End If
             Next
             sb.AppendLine()
         Next
 
         Try
-            '上書き
-            Using sw As New System.IO.StreamWriter(fpath, False, __encShiftJis)
+            'UTF8:エクセルはUNICODEはダメ, shift_jis は丸数字などが文字化けのため
+            Using sw As New System.IO.StreamWriter(fpath, False, System.Text.Encoding.UTF8) '上書き
                 sw.Write(sb.ToString)
                 sw.Close()
             End Using
@@ -254,15 +254,15 @@ Public Module mdlGrid
                         len = 2
                     End If
                     Dim isRight As Boolean = col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                    sb.Append(paddingSpace(str, len, isRight)).Append(" ")
+                    sb.Append(paddingSpace(str, len, isRight)).Append(" "c)
                 End If
             Next
             sb.AppendLine()
         Next
 
         Try
-            '上書き
-            Using sw As New System.IO.StreamWriter(fpath, False, __encShiftJis)
+            'csvと同じ文字コード
+            Using sw As New System.IO.StreamWriter(fpath, False, System.Text.Encoding.UTF8) '上書き
                 sw.Write(sb.ToString)
                 sw.Close()
             End Using

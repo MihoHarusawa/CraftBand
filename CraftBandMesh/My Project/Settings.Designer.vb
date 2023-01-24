@@ -78,16 +78,13 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("2")>  _
-        Public Property LogLevel() As Integer
+        Public ReadOnly Property LogLevel() As Integer
             Get
                 Return CType(Me("LogLevel"),Integer)
             End Get
-            Set
-                Me("LogLevel") = value
-            End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
@@ -207,6 +204,30 @@ Namespace My
             End Get
             Set
                 Me("DefaultFilePath") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property frmMainGridYoko() As String
+            Get
+                Return CType(Me("frmMainGridYoko"),String)
+            End Get
+            Set
+                Me("frmMainGridYoko") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property frmMainGridTate() As String
+            Get
+                Return CType(Me("frmMainGridTate"),String)
+            End Get
+            Set
+                Me("frmMainGridTate") = value
             End Set
         End Property
     End Class

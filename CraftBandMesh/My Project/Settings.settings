@@ -8,7 +8,7 @@
     <Setting Name="LastFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="LogLevel" Type="System.Int32" Scope="User">
+    <Setting Name="LogLevel" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="MasterTablesFilePath" Type="System.String" Scope="User">
@@ -39,6 +39,12 @@
       <Value Profile="(Default)">①</Value>
     </Setting>
     <Setting Name="DefaultFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="frmMainGridYoko" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="frmMainGridTate" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

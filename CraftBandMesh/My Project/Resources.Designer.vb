@@ -88,6 +88,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ひも長加算と色をすべてクリアします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskResetAddLengthColor() As String
+            Get
+                Return ResourceManager.GetString("AskResetAddLengthColor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  目標寸法以外をリセットします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskResetInput() As String
