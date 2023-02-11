@@ -178,11 +178,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  指定された&apos;{0}&apos;は{1}用のファイルではありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrBadFormat() As String
+            Get
+                Return ResourceManager.GetString("ErrBadFormat", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}行目{1}値のデータエラー{2}{3} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrGridData() As String
             Get
                 Return ResourceManager.GetString("ErrGridData", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}行目{1}値には{2}以下の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrGridMaximumValue() As String
+            Get
+                Return ResourceManager.GetString("ErrGridMaximumValue", resourceCulture)
             End Get
         End Property
         
@@ -196,11 +214,47 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  &apos;{0}&apos;ページを作成できませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrHtmlFile() As String
+            Get
+                Return ResourceManager.GetString("ErrHtmlFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  &apos;{0}&apos;ページを開くことができません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrHtmlProcessStart() As String
+            Get
+                Return ResourceManager.GetString("ErrHtmlProcessStart", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  gifファイル&apos;{0}&apos;生成エラー に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrImageGifCreate() As String
+            Get
+                Return ResourceManager.GetString("ErrImageGifCreate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  設定データを保存するファイルが指定されませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrMasterTableFileCancel() As String
             Get
                 Return ResourceManager.GetString("ErrMasterTableFileCancel", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  画像ファイルが作られていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrNoGifFile() As String
+            Get
+                Return ResourceManager.GetString("ErrNoGifFile", resourceCulture)
             End Get
         End Property
         
@@ -219,6 +273,15 @@ Namespace My.Resources
         Friend ReadOnly Property ErrNoName() As String
             Get
                 Return ResourceManager.GetString("ErrNoName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  指定されたファイル&apos;{0}&apos;は{1}用です。{2}では使えません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrOnotherFormat() As String
+            Get
+                Return ResourceManager.GetString("ErrOnotherFormat", resourceCulture)
             End Get
         End Property
         

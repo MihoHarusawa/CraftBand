@@ -7,11 +7,14 @@ Public Class clsDataTables
 
     '縁のf_i番号値(1点のみ)
     Public Const cHemNumber As Integer = 999
+    '裏側の開始位置(tbl縦横展開)
+    Public Const cBackPosition As Integer = 1001
+
 
     Dim _dstDataTables As dstDataTables
-    Dim _ExeName As String
 
-    Public Property LastError As String 'ファイルエラー文字列
+    'ファイルエラー文字列
+    Public ReadOnly Property LastError As String
 
     '*画面コントロールに展開
     'tbl目標寸法は1レコードのみ
@@ -63,6 +66,8 @@ Public Class clsDataTables
         i_横 = &H100
         i_縦 = &H200
         i_斜め = &H400
+        i_45度 = &H800
+        i_315度 = &H1000
 
         i_長い = &H10
         i_短い = &H20
@@ -71,14 +76,12 @@ Public Class clsDataTables
     End Enum
 
 
-    Sub New(ByVal exeName As String)
-        _ExeName = exeName
+    Sub New()
         _dstDataTables = New dstDataTables
         Clear()
     End Sub
 
     Sub New(ByVal ref As clsDataTables)
-        _ExeName = ref._ExeName
         _dstDataTables = ref._dstDataTables.Copy
         '各、1レコード
         p_row目標寸法 = New clsDataRow(_dstDataTables.Tables("tbl目標寸法").Rows(0))
@@ -109,16 +112,31 @@ Public Class clsDataTables
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "SetDefaultValue {0}", p_row目標寸法.ToString)
 
         p_row底_縦横.SetDefaultAll()
-        p_row底_縦横.Value("f_i長い横ひも") = g_clsSelectBasics.p_i本幅
-        p_row底_縦横.Value("f_i短い横ひも") = g_clsSelectBasics.p_i本幅
-        p_row底_縦横.Value("f_i縦ひも") = g_clsSelectBasics.p_i本幅
-        p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
 
-        p_row底_縦横.Value("f_b楕円底個別設定") = False
-        p_row底_縦横.Value("f_d楕円底円弧の半径加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
-        p_row底_縦横.Value("f_d楕円底周の加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "SetDefaultValue {0}", p_row底_縦横.ToString)
+        Select Case g_enumExeName
+            Case enumExeName.CraftBandMesh
+                p_row底_縦横.Value("f_i長い横ひも") = g_clsSelectBasics.p_i本幅
+                p_row底_縦横.Value("f_i短い横ひも") = g_clsSelectBasics.p_i本幅
+                p_row底_縦横.Value("f_i縦ひも") = g_clsSelectBasics.p_i本幅
+                p_row底_縦横.Value("f_b始末ひも区分") = True
+                p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
+                p_row底_縦横.Value("f_b楕円底個別設定") = False
+                p_row底_縦横.Value("f_d楕円底円弧の半径加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
+                p_row底_縦横.Value("f_d楕円底周の加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
 
+            Case enumExeName.CraftBandSquare45
+                p_row底_縦横.Value("f_b始末ひも区分") = False '縦の補強ひも
+                p_row底_縦横.Value("f_dひも間のすき間") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも間のすき間初期値")
+                p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
+                p_row底_縦横.Value("f_dひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
+
+            Case enumExeName.CraftBandKnot
+
+            Case enumExeName.CraftBandSquare
+
+        End Select
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "SetDefaultValue({0}) {1}", g_enumExeName, p_row底_縦横.ToString)
     End Sub
 
     '現DataSetのバージョン
@@ -129,39 +147,52 @@ Public Class clsDataTables
         End Get
     End Property
 
-    'ファイル読み取り、エラーはLastError
+    'ファイル読み取り、エラーはLastError・元データは不変
     Public Function Load(ByVal fpath As String) As Boolean
         If Not IO.File.Exists(fpath) Then
             Return False
         End If
 
-        _dstDataTables.Clear()
-        Try
-            Dim readmode As System.Data.XmlReadMode = _dstDataTables.ReadXml(fpath, System.Data.XmlReadMode.IgnoreSchema)
-        Catch ex As Exception
-            '指定されたファイル'{0}'は読み取れませんでした。
-            LastError = String.Format(My.Resources.WarningBadWorkData, fpath)
-            g_clsLog.LogException(ex, "clsDataTables.Load", fpath)
-            Return False
-        End Try
+        Using tmpDataTable As New dstDataTables
+            Try
+                Dim readmode As System.Data.XmlReadMode = tmpDataTable.ReadXml(fpath, System.Data.XmlReadMode.IgnoreSchema)
+            Catch ex As Exception
+                '指定されたファイル'{0}'は読み取れませんでした。
+                _LastError = String.Format(My.Resources.WarningBadWorkData, fpath)
+                g_clsLog.LogException(ex, "clsDataTables.Load", fpath)
+                Return False
+            End Try
 
-        '各、1レコード
-        If _dstDataTables.Tables("tbl目標寸法").Rows.Count = 0 Then
-            _dstDataTables.Tables("tbl目標寸法").Rows.Add(_dstDataTables.Tables("tbl目標寸法").NewRow)
-        End If
-        If _dstDataTables.Tables("tbl底_縦横").Rows.Count = 0 Then
-            _dstDataTables.Tables("tbl底_縦横").Rows.Add(_dstDataTables.Tables("tbl底_縦横").NewRow)
-        End If
+            '各、少なくとも1レコードがあること
+            If tmpDataTable.Tables("tbl目標寸法").Rows.Count = 0 OrElse
+                tmpDataTable.Tables("tbl底_縦横").Rows.Count = 0 Then
+                '指定された'{0}'は{1}用のファイルではありません。
+                _LastError = String.Format(My.Resources.ErrBadFormat, fpath, g_enumExeName.ToString)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) No Default Record", fpath)
+                Return False
+            End If
+
+            '2レコードはある
+            Dim rowTmp As clsDataRow = New clsDataRow(tmpDataTable.Tables("tbl目標寸法").Rows(0))
+            If 0 <> String.Compare(rowTmp.Value("f_sEXE名"), g_enumExeName.ToString, True) Then
+                '指定されたファイル'{0}'は{1}用です。{2}では使えません。
+                _LastError = String.Format(My.Resources.ErrOnotherFormat, fpath, rowTmp.Value("f_sEXE名"), g_enumExeName.ToString)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Exe in File'{1}' <> '{2}", fpath, rowTmp.Value("f_sEXE名"), g_enumExeName.ToString)
+                Return False
+            End If
+            If 0 <> String.Compare(rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str, True) Then
+                '単位はログのみ
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Unit in File'{1}' <> '{2}", fpath, rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str)
+            End If
+
+            '入れ替える
+            _dstDataTables.Clear()
+            _dstDataTables.Dispose()
+            _dstDataTables = tmpDataTable.Copy
+        End Using
 
         p_row目標寸法 = New clsDataRow(_dstDataTables.Tables("tbl目標寸法").Rows(0))
         p_row底_縦横 = New clsDataRow(_dstDataTables.Tables("tbl底_縦横").Rows(0))
-
-        If 0 <> String.Compare(p_row目標寸法.Value("f_sEXE名"), _ExeName, True) Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Exe in File'{1}' <> '{2}", fpath, p_row目標寸法.Value("f_sEXE名"), _ExeName)
-        End If
-        If 0 <> String.Compare(p_row目標寸法.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str, True) Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Unit in File'{1}' <> '{2}", fpath, p_row目標寸法.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str)
-        End If
 
         Return True
     End Function
@@ -170,7 +201,7 @@ Public Class clsDataTables
         Try
             'データ環境
             p_row目標寸法.Value("f_s単位") = g_clsSelectBasics.p_unit設定時の寸法単位.Str
-            p_row目標寸法.Value("f_sEXE名") = _ExeName
+            p_row目標寸法.Value("f_sEXE名") = g_enumExeName.ToString
             p_row目標寸法.Value("f_sバージョン") = FormatVersion
             '
             _dstDataTables.WriteXml(fpath, System.Data.XmlWriteMode.WriteSchema)
@@ -178,7 +209,7 @@ Public Class clsDataTables
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsDataTables.Save", fpath)
             '指定されたファイル'{0}'への保存ができませんでした。
-            LastError = String.Format(My.Resources.WarningFileSaveError, fpath)
+            _LastError = String.Format(My.Resources.WarningFileSaveError, fpath)
             Return False
         End Try
     End Function
@@ -328,6 +359,8 @@ Public Class clsDataTables
             If sels Is Nothing OrElse sels.Length = 0 Then
                 Continue For
             End If
+
+            'f_dひも長加算, f_s色, f_sメモを取得(今はf_i何本幅は読み取らない)
             Dim i As Integer = 0
             tmp.f_dひも長加算 = sels(i).f_dひも長加算
             If tmp.f_dひも長加算 <> 0 Then

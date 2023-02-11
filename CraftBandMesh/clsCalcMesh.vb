@@ -26,6 +26,7 @@ Class clsCalcMesh
         Oval '底の楕円 
         Side  '側面 
         Options  '追加品
+        Expand '縦横展開
     End Enum
 
     Public Property p_b有効 As Boolean
@@ -787,24 +788,24 @@ Class clsCalcMesh
         Return calc_Target()
     End Function
 
-    Private Function isCalcable() As Integer
+    Private Function isCalcable() As Boolean
         set_目標寸法()
         If Not isValid横_目標 OrElse Not isValid縦_目標 OrElse Not isValid高さ_目標 OrElse Not isValid基本のひも幅 Then
             '目標寸法もしくは基本のひも幅が正しくありません。
             p_sメッセージ = My.Resources.CalcNoTargetSet
-            Return -1
+            Return False
         End If
 
         If 0 < _d径の合計 Then
             If _d縦_目標 <= _d径の合計 * 2 Then
                 '底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。
                 p_sメッセージ = String.Format(My.Resources.CalcHeightOver, _d径の合計 * 2)
-                Return -1
+                Return False
             End If
             If _d横_目標 <= _d径の合計 * 2 Then
                 '底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。
                 p_sメッセージ = String.Format(My.Resources.CalcWidthOver, _d径の合計 * 2)
-                Return -1
+                Return False
             End If
         End If
 
@@ -1817,9 +1818,6 @@ Class clsCalcMesh
 
 #Region "リスト出力"
 
-    '裏側の開始位置
-    Const cBackPosition As Integer = 1001
-
     '底の縦横、横置きの展開
     Function set横展開DataTable(Optional ByVal dVert As Double = -1) As tbl縦横展開DataTable
         Dim d垂直ひも長 As Double = dVert
@@ -2158,7 +2156,7 @@ Class clsCalcMesh
     End Function
 
     'リスト生成
-    Public Function CalcOutput(ByVal output As clsOutput, ByVal name As String) As Boolean
+    Public Function CalcOutput(ByVal output As clsOutput) As Boolean
         If output Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -2180,7 +2178,7 @@ Class clsCalcMesh
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
-        row.f_s編みかた名 = name '名前
+        row.f_s編みかた名 = IO.Path.GetFileNameWithoutExtension(output.FilePath) '名前
 
         '***底の縦横
         'このカテゴリーは先に行をつくる

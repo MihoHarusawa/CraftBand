@@ -373,4 +373,27 @@ Public Module mdlUnit
     End Structure
 
 
+    Public Function Min(ByVal x1 As Double, ByVal x2 As Double) As Double
+        If x1 <= x2 Then
+            Return x1
+        Else
+            Return x2
+        End If
+    End Function
+    Public Function Min(ByVal x1 As Double, ByVal x2 As Double, ByVal x3 As Double, ByVal x4 As Double) As Double
+        Return Min(Min(x1, x2), Min(x3, x4))
+    End Function
+
+    Public Function Max(ByVal x1 As Double, ByVal x2 As Double) As Double
+        If x1 <= x2 Then
+            Return x2
+        Else
+            Return x1
+        End If
+    End Function
+    Public Function Max(ByVal x1 As Double, ByVal x2 As Double, ByVal x3 As Double, ByVal x4 As Double) As Double
+        Return Max(Max(x1, x2), Max(x3, x4))
+    End Function
+
+
 End Module

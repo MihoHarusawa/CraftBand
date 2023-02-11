@@ -7,7 +7,12 @@ Public Class clsOutput
     Dim _dstOutput As dstOutput 'DataSet
     Dim _ListOutMark As String  '出力記号
 
-    Public Property FilePath As String  'ファイル名
+    Dim _FilePath As String 'ファイル名
+    Public ReadOnly Property FilePath As String
+        Get
+            Return _FilePath
+        End Get
+    End Property
 
     'ひもの集計
     Dim _clsBandSum As clsBandSum
@@ -30,16 +35,18 @@ Public Class clsOutput
         End Get
     End Property
 
-    Sub New(ByVal mark As String)
+    Sub New(ByVal fpath As String)
         _dstOutput = New dstOutput
-        _ListOutMark = mark
         _clsBandSum = New clsBandSum
+        _FilePath = fpath
+
+        _ListOutMark = g_clsSelectBasics.p_sリスト出力記号
     End Sub
 
     Sub New(ByVal ref As clsOutput)
         _dstOutput = ref._dstOutput.Copy
         _ListOutMark = ref._ListOutMark
-        FilePath = ref.FilePath
+        _FilePath = ref.FilePath
         _clsBandSum = New clsBandSum(ref._clsBandSum)
         _LastNumber = ref._LastNumber
     End Sub
@@ -103,6 +110,13 @@ Public Class clsOutput
 
         Return mark
     End Function
+
+    'カットリスト記号を得る※既存がなければ呼び出し順
+    Function GetBandMark(ByVal lane As Integer, ByVal length As Double, ByVal color As String, Optional ByVal group As String = Nothing) As String
+        'カットリスト記号生成
+        Return AddMark(0, lane, length, color, group)
+    End Function
+
 
     '出力長(出力単位・桁数)
     Function outLengthText(ByVal d As Double) As String
@@ -251,6 +265,24 @@ Public Class clsOutput
         Next
 
         Return lines
+    End Function
+
+    Function OutCutListHtml() As String
+        Dim sb As New System.Text.StringBuilder
+
+        'sb.Append("<H2>").Append(My.Resources.CalcOutCutList).AppendLine("</H2>") 'カットリスト
+        sb.AppendLine("<TABLE>")
+        For Each rcut As tblCutListRow In CutListTable.Rows
+            sb.Append("<TR>")
+            sb.Append("<TD>").Append(rcut.f_s記号).Append("</TD>").AppendLine()
+            sb.Append("<TD>").Append(outLaneText(rcut.f_i本幅)).Append("</TD>").AppendLine()
+            sb.Append("<TD>").Append(outLengthText(rcut.f_d長さ)).Append(g_clsSelectBasics.p_unit出力時の寸法単位.Str).Append("</TD>").AppendLine()
+            sb.Append("<TD>").Append(outCountText(rcut.f_i合計本数)).Append("</TD>").AppendLine()
+            sb.Append("<TD>").Append(rcut.f_s色).Append("</TD>").AppendLine()
+            sb.AppendLine("</TR>")
+        Next
+        sb.AppendLine("</TABLE>")
+        Return sb.ToString
     End Function
 
 End Class

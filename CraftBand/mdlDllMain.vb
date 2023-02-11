@@ -12,6 +12,16 @@ Public Module mdlDllMain
     Public g_clsSelectBasics As clsSelectBasics
     Public g_clsLog As clsLog
 
+    '実行中のプログラム
+    Enum enumExeName
+        Nodef = 0
+        CraftBandMesh
+        CraftBandSquare45
+        CraftBandKnot
+        CraftBandSquare
+    End Enum
+    Public g_enumExeName As enumExeName = enumExeName.Nodef
+
 
     'DLL共通パラメータ
     Public Class DllParameters
@@ -131,8 +141,15 @@ Public Module mdlDllMain
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance)
         __encShiftJis = System.Text.Encoding.GetEncoding("shift_jis")
 
-        '*ログ
+        '*ログとEXE名
         g_clsLog = paras.Log
+        Dim exename As String = IO.Path.GetFileNameWithoutExtension(g_clsLog.ExePath)
+        For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
+            If [String].Compare(exename, enumExe.ToString, True) = 0 Then
+                g_enumExeName = enumExe
+                Exit For
+            End If
+        Next
 
         '*設定データ(マスターテーブル)
         g_clsMasterTables = New clsMasterTables
@@ -142,7 +159,7 @@ Public Module mdlDllMain
         If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
             '名前がない時(初回)
             Dim dlg As New frmBasics
-            Dim fname As String = IO.Path.ChangeExtension(IO.Path.GetFileName(g_clsLog.ExePath), clsMasterTables.MyExtention)
+            Dim fname As String = IO.Path.ChangeExtension(clsMasterTables.DefaultFileName, clsMasterTables.MyExtention)
             dlg.SaveFileDialogMasterTable.FileName = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), fname)
             If dlg.SaveFileDialogMasterTable.ShowDialog() <> DialogResult.OK Then
                 '設定データを保存するファイルが指定されませんでした。
@@ -162,13 +179,13 @@ Public Module mdlDllMain
             Else
                 '既存ファイルがない時の初期値
                 Dim default_exe As String = IO.Path.ChangeExtension(g_clsLog.ExePath, clsMasterTables.MyExtention)
-                Dim default_dll As String = IO.Path.ChangeExtension(g_clsLog.DllPath, clsMasterTables.MyExtention)
+                Dim default_master As String = IO.Path.ChangeExtension(IO.Path.Combine(IO.Path.GetDirectoryName(g_clsLog.ExePath), clsMasterTables.DefaultFileName), clsMasterTables.MyExtention)
                 If g_clsMasterTables.LoadFile(default_exe, False) Then
                     '読めた
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_exe)
-                ElseIf g_clsMasterTables.LoadFile(default_dll, False) Then
+                ElseIf g_clsMasterTables.LoadFile(default_master, False) Then
                     '読めた
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_dll)
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_master)
                 Else
                     '読めないので初期値から
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.New={0}", masterTablesFilePath)

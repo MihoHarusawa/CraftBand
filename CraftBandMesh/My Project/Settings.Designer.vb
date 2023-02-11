@@ -114,30 +114,6 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
-        Public Property frmOutputSize() As Global.System.Drawing.Size
-            Get
-                Return CType(Me("frmOutputSize"),Global.System.Drawing.Size)
-            End Get
-            Set
-                Me("frmOutputSize") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property frmOutputGrid() As String
-            Get
-                Return CType(Me("frmOutputGrid"),String)
-            End Get
-            Set
-                Me("frmOutputGrid") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0, 0")>  _
         Public Property frmMainSize() As Global.System.Drawing.Size
             Get
                 Return CType(Me("frmMainSize"),Global.System.Drawing.Size)

@@ -93,7 +93,7 @@ Public Module mdlGrid
 
         '処理対象チェックボックス列
         If (TypeOf dgv.Columns(e.ColumnIndex) IsNot DataGridViewCheckBoxColumn) OrElse
-              Not {"f_b非表示", "f_b縁専用区分", "f_b底使用区分"}.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+              Not {"f_b縁専用区分", "f_b底使用区分", "f_bCraftBandMesh", "f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare"}.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
             Exit Sub
         End If
 

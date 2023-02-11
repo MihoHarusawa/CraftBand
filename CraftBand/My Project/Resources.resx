@@ -163,17 +163,41 @@
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>
   </data>
+  <data name="ErrBadFormat" xml:space="preserve">
+    <value>指定された'{0}'は{1}用のファイルではありません。</value>
+    <comment>clsDataTables</comment>
+  </data>
   <data name="ErrGridData" xml:space="preserve">
     <value>{0}行目{1}値のデータエラー{2}{3}</value>
     <comment>mdlGrid</comment>
+  </data>
+  <data name="ErrGridMaximumValue" xml:space="preserve">
+    <value>{0}行目{1}値には{2}以下の数値を設定してください。</value>
+    <comment>frmColor</comment>
   </data>
   <data name="ErrGridMinimumValue" xml:space="preserve">
     <value>{0}行目{1}値には{2}以上の数値を設定してください。</value>
     <comment>mdlGrid</comment>
   </data>
+  <data name="ErrHtmlFile" xml:space="preserve">
+    <value>'{0}'ページを作成できませんでした。</value>
+    <comment>clsImageData</comment>
+  </data>
+  <data name="ErrHtmlProcessStart" xml:space="preserve">
+    <value>'{0}'ページを開くことができません。</value>
+    <comment>clsImageData</comment>
+  </data>
+  <data name="ErrImageGifCreate" xml:space="preserve">
+    <value>gifファイル'{0}'生成エラー</value>
+    <comment>clsImageData</comment>
+  </data>
   <data name="ErrMasterTableFileCancel" xml:space="preserve">
     <value>設定データを保存するファイルが指定されませんでした。</value>
     <comment>mdlDllMain</comment>
+  </data>
+  <data name="ErrNoGifFile" xml:space="preserve">
+    <value>画像ファイルが作られていません。</value>
+    <comment>clsImageData</comment>
   </data>
   <data name="ErrNoInitializeParameters" xml:space="preserve">
     <value>起動に必要なパラメータがありません。</value>
@@ -182,6 +206,10 @@
   <data name="ErrNoName" xml:space="preserve">
     <value>新しい/既存の{0}を指定してください。</value>
     <comment>frmPattern,frmOptions</comment>
+  </data>
+  <data name="ErrOnotherFormat" xml:space="preserve">
+    <value>指定されたファイル'{0}'は{1}用です。{2}では使えません。</value>
+    <comment>clsDataTables</comment>
   </data>
   <data name="ErrReadMasterTableFile" xml:space="preserve">
     <value>指定ファイル'{0}'から設定データを読み取ることができませんでした。</value>

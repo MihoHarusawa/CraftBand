@@ -1,4 +1,6 @@
-﻿Imports CraftBand.Tables
+﻿Imports System.Drawing
+Imports System.Threading.Channels
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstMasterTables
 
 ''' <summary>
@@ -6,8 +8,10 @@ Imports CraftBand.Tables.dstMasterTables
 ''' </summary>
 Public Class clsMasterTables
 
+    Public Const DefaultFileName As String = "CraftBandMesh" 'インストーラ同梱
     Public Const MyExtention As String = ".XML"
     Public Const MyBakExtention As String = ".BAK"
+    Public Const MaxRgbValue As Integer = 255
 
     Dim _dstMasterTables As dstMasterTables
 
@@ -57,7 +61,8 @@ Public Class clsMasterTables
         Return SetAvairableBasics() Or
         SetAvairableBandType() Or
         SetAvairablePattern() Or
-        SetAvairableOptions()
+        SetAvairableOptions() Or
+        SetAvairableColorType()
     End Function
 
 
@@ -74,6 +79,7 @@ Public Class clsMasterTables
             Return False
         End If
         If _copyDataSet IsNot Nothing Then
+            _copyDataSet.Dispose()
             _copyDataSet = Nothing
         End If
         _copyDataSet = _dstMasterTables.Copy
@@ -84,11 +90,13 @@ Public Class clsMasterTables
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "dstMasterTables.ReadXml={0} {1}", path, readmode)
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsMasterTables.LoadFile", path)
+            _dstMasterTables.Dispose()
             _dstMasterTables = _copyDataSet
             _copyDataSet = Nothing
             Return False
 
         End Try
+        _copyDataSet.Dispose()
         _copyDataSet = Nothing
 
         '_dstMasterTables.HasChanges = True
@@ -153,6 +161,7 @@ Public Class clsMasterTables
 
         If _copyDataSet IsNot Nothing Then
             _copyDataSet.Clear()
+            _copyDataSet.Dispose()
             _copyDataSet = Nothing
         End If
         _copyDataSet = _dstMasterTables.Copy
@@ -178,6 +187,7 @@ Public Class clsMasterTables
         IsDirty = True
 
         _dstMasterTables.Clear()
+        _dstMasterTables.Dispose()
         _dstMasterTables = Nothing
         _dstMasterTables = _copyDataSet
 
@@ -344,6 +354,7 @@ Public Class clsMasterTables
         Dim modified As Boolean = False
         For Each r As tbl編みかたRow In table.Rows
             Dim crow As New clsDataRow(r)
+            '※スキーマ上Null許容＆値の存在前提で使用
             If crow.SetDefaultForNull() Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairablePattern Modify {0}", crow.ToString)
                 modified = True
@@ -376,28 +387,29 @@ Public Class clsMasterTables
     Public Function GetPatternNames(ByVal is縁専用 As Boolean, ByVal is底使用 As Boolean,
                                     Optional ByVal is概算用 As Boolean = False) As String()
 
+        Dim fieldNameExe As String = "f_b" & g_enumExeName.ToString
         Dim table As tbl編みかたDataTable = _dstMasterTables.Tables("tbl編みかた")
         Dim res
         If is縁専用 Then
             res = (From row As tbl編みかたRow In table
-                   Where row.f_b縁専用区分 And Not row.f_b非表示
+                   Where row.f_b縁専用区分 And row(fieldNameExe)
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
         ElseIf is底使用 Then
             res = (From row As tbl編みかたRow In table
-                   Where row.f_b底使用区分 And Not row.f_b非表示
+                   Where row.f_b底使用区分 And row(fieldNameExe)
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
         ElseIf is概算用 Then
             '側面用、概算で使える(高さ比率対ひも幅が正、ひも長比率対周長が正)
             res = (From row As tbl編みかたRow In table
-                   Where Not row.f_b縁専用区分 And Not row.f_b非表示 And 0 < row.f_d高さ比率対ひも幅 And 0 < row.f_dひも長比率対周長
+                   Where Not row.f_b縁専用区分 And row(fieldNameExe) And 0 < row.f_d高さ比率対ひも幅 And 0 < row.f_dひも長比率対周長
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
         Else
             '側面用の全て
             res = (From row As tbl編みかたRow In table
-                   Where Not row.f_b縁専用区分 And Not row.f_b非表示
+                   Where Not row.f_b縁専用区分 And row(fieldNameExe)
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
         End If
@@ -491,15 +503,28 @@ Public Class clsMasterTables
         Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")
         Dim modified As Boolean = False
 
-#If 0 Then  '付属品にはNull値も登録しているのでそのままにする
-       For Each r As tbl付属品Row In table.Rows
-            Dim crow As New clsDataRow(r)
-            If crow.SetDefaultForNull() Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableOptions Modify {0}", crow.ToString)
-                modified = True
-            End If
+        'スキーマ変更対応 : ※スキーマ上Null許容＆値の存在前提で使用
+        For Each r As tbl付属品Row In table.Rows
+            For Each col As DataColumn In table.Columns
+                If Not {"f_d長さ比率対ひも1", "f_d長さ加減対ひも1", "f_d巻きの厚み", "f_d巻き回数比率"}.Contains(col.ColumnName) Then
+                    'Null値を許すフィールド以外
+                    If IsDBNull(r(col.ColumnName)) Then
+                        If Not IsDBNull(col.DefaultValue) Then
+                            'デフォルト値あり
+                            r(col.ColumnName) = col.DefaultValue
+                            modified = True
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableOptions Modify {0} ({1}:{2})", col.ColumnName, r("f_s付属品名"), r("f_s付属品ひも名"))
+                        Else
+                            'デフォルト値がNull
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableOptions Null {0} ({1}:{2})", col.ColumnName, r("f_s付属品名"), r("f_s付属品ひも名"))
+                        End If
+                    Else
+                        'Debug.Print("check {0}={1}", col.ColumnName, (r(col.ColumnName)))
+                    End If
+                End If
+            Next
         Next
-#End If
+
         Return modified
     End Function
 
@@ -524,9 +549,10 @@ Public Class clsMasterTables
     '付属品名の配列を返す f_s付属品名順 
     Public Function GetOptionNames() As String()
 
+        Dim fieldNameExe As String = "f_b" & g_enumExeName.ToString
         Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")
         Dim res = (From row As tbl付属品Row In table
-                   Where Not row.f_b非表示
+                   Where row(fieldNameExe)
                    Select OptionName = row.f_s付属品名
                    Order By OptionName).Distinct.ToList()
 
@@ -594,8 +620,90 @@ Public Class clsMasterTables
 
     End Class
 
-
-
 #End Region
+
+#Region "描画色/Color"
+    Private Function SetAvairableColorType() As Boolean
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+
+        Dim modified As Boolean = False
+        For Each r As tbl描画色Row In table.Rows
+            Dim crow As New clsDataRow(r)
+            If crow.SetDefaultForNull() Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableColorType Modify {0}", crow.ToString)
+                modified = True
+            End If
+        Next
+        Return modified
+    End Function
+
+    Shared Function RgbColor(ByVal ored As Object, ByVal ogreen As Object, ByVal oblue As Object, Optional alfa As Integer = 255) As Drawing.Color
+        Dim ired As Integer = 0
+        If Not IsDBNull(ored) Then
+            ired = Val(ored)
+            If ired < 0 Then
+                ired = 0
+            ElseIf MaxRgbValue < ired Then
+                ired = MaxRgbValue
+            End If
+        End If
+
+        Dim igreen As Integer = 0
+        If Not IsDBNull(ogreen) Then
+            igreen = Val(ogreen)
+            If igreen < 0 Then
+                igreen = 0
+            ElseIf MaxRgbValue < igreen Then
+                igreen = MaxRgbValue
+            End If
+        End If
+
+        Dim iblue As Integer = 0
+        If Not IsDBNull(oblue) Then
+            iblue = Val(oblue)
+            If iblue < 0 Then
+                iblue = 0
+            ElseIf MaxRgbValue < iblue Then
+                iblue = MaxRgbValue
+            End If
+        End If
+        Return Color.FromArgb(alfa, ired, igreen, iblue)
+    End Function
+
+    '指定名の描画色 なければDrawing.Color.Empty
+    Public Function GetColorRecordColor(ByVal color As String, Optional alfa As Integer = 255) As Drawing.Color
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+
+        If table.Rows.Count = 0 OrElse String.IsNullOrWhiteSpace(color) Then
+            Return Drawing.Color.Empty
+        End If
+
+        Dim cond As String = String.Format("f_s色 = '{0}'", color)
+        Dim rows() As tbl描画色Row = table.Select(cond)
+        If 0 < rows.Count Then
+            Return RgbColor(rows(0).f_i赤, rows(0).f_i緑, rows(0).f_i青, alfa) 'First only
+        End If
+        Return Drawing.Color.Empty
+    End Function
+
+    Public Function GetColorTableCopy() As tbl描画色DataTable
+        Return CType(getCopyDataSetTable("tbl描画色"), tbl描画色DataTable)
+    End Function
+
+    Public Function UpdateColorTable(ByVal table As tbl描画色DataTable) As Boolean
+        If table Is Nothing Then
+            Return False 'No Update
+        End If
+
+        Dim original As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+
+        If table.GetChanges IsNot Nothing Then
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "UpdateColorTable:{0}", New clsGroupDataRow(table).ToString)
+        End If
+
+        Return updateCopyTableIfModified(original, table)
+    End Function
+#End Region
+
 
 End Class

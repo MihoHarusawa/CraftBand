@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports System.Reflection
 Imports System.Windows.Forms
 Imports CraftBand.Tables.dstMasterTables
 
@@ -7,6 +6,7 @@ Imports CraftBand.Tables.dstMasterTables
 '''tbl付属品 
 '''ひも番号が2以上の時に使う項目: f_d長さ比率対ひも1,f_d長さ加減対ひも1
 '''巻きひも区分がTrueの時に使う項目:f_d巻きの厚み,f_d巻き回数比率
+'''Null値をセットする項目:f_d長さ比率対ひも1,f_d長さ加減対ひも1,f_d巻きの厚み,f_d巻き回数比率
 ''' </summary>
 Public Class frmOptions
 
@@ -205,7 +205,7 @@ Public Class frmOptions
                 End If
             Next
 
-        ElseIf dgv.Columns(e.ColumnIndex).DataPropertyName = "f_b非表示" Then
+        ElseIf {"f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare"}.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
             '名前・Idx順にソートされており、Idx=1が変更された前提!
             Dim setval As Boolean = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
             Dim name As String = dgv.Rows(e.RowIndex).Cells(_NameColumnIndex).Value

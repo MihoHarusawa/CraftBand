@@ -7,7 +7,7 @@ Imports CraftBandMesh.clsCalcMesh
 Public Class frmMain
 
     '画面編集用のワーク
-    Dim _clsDataTables As New clsDataTables(IO.Path.GetFileNameWithoutExtension(g_clsLog.ExePath))
+    Dim _clsDataTables As New clsDataTables
     '計算用のワーク
     Dim _clsCalcMesh As New clsCalcMesh(_clsDataTables, Me)
 
@@ -49,6 +49,10 @@ Public Class frmMain
             _clsDataTables.SetInitialValue()
 
         End If
+
+        'プレビューを先にするため一旦削除
+        TabControl.TabPages.Remove(tpage底の横)
+        TabControl.TabPages.Remove(tpage底の縦)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅1.DataSource = g_clsSelectBasics.p_tblLane
@@ -192,6 +196,12 @@ Public Class frmMain
 
             Me.f_dひも長3.DefaultCellStyle.Format = format
 
+            Me.f_d長さ4.DefaultCellStyle.Format = format
+            Me.f_dひも長4.DefaultCellStyle.Format = format
+
+            Me.f_d長さ5.DefaultCellStyle.Format = format
+            Me.f_dひも長5.DefaultCellStyle.Format = format
+
             If Not chk楕円底個別設定.Checked Then
                 nud楕円底円弧の半径加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
                 nud楕円底周の加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
@@ -245,7 +255,7 @@ Public Class frmMain
     End Function
 #End Region
 
-#Region "クラス値と表示"
+#Region "クラス値と表示・タブ"
 
     Dim _CurrentTabControlName As String = ""
 
@@ -295,9 +305,27 @@ Public Class frmMain
         _CurrentTabControlName = TabControl.SelectedTab.Name
     End Sub
 
-    '底(縦横)のタブ表示(グリッドは非表示)
-    Private Sub ShowDefaultTabControlPage()
-        TabControl.SelectTab("tpage底縦横")
+    'デフォルトタブ表示
+    <Flags()>
+    Enum enumReason
+        _GridDropdown = &H1
+        _Preview = &H2
+    End Enum
+    Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
+        Dim needreset As Boolean = False
+        If reason.HasFlag(enumReason._GridDropdown) Then
+            If {"tpage底楕円", "tpage側面", "tpage追加品", "tpage底の横", "tpage底の縦"}.Contains(_CurrentTabControlName) Then
+                needreset = True
+            End If
+        End If
+        'If reason.HasFlag(enumReason._Preview) Then
+        '    If {"tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+        '        needreset = True
+        '    End If
+        'End If
+        If needreset Then
+            TabControl.SelectTab("tpage底縦横")
+        End If
     End Sub
 
     Private Sub TabControl_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl.SelectedIndexChanged
@@ -613,7 +641,7 @@ Public Class frmMain
     'バンドの種類選択
     Private Sub ToolStripMenuItemEditSelectBand_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditSelectBand.Click
         Dim dlg As New frmSelectBand
-        ShowDefaultTabControlPage() '色と本幅数変更の可能性
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
             setBasics()
@@ -720,14 +748,14 @@ Public Class frmMain
             End If
         End If
 
-        Dim output As New clsOutput(g_clsSelectBasics.p_sリスト出力記号)
-        output.FilePath = _sFilePath
-        If Not _clsCalcMesh.CalcOutput(output, IO.Path.GetFileNameWithoutExtension(_sFilePath)) Then
+        Dim output As New clsOutput(_sFilePath)
+        If Not _clsCalcMesh.CalcOutput(output) Then
             MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
         Dim dlg As New frmOutput(output)
+        dlg.Icon = Me.Icon
         dlg.ShowDialog()
     End Sub
 
@@ -783,7 +811,7 @@ Public Class frmMain
     'バンドの種類
     Private Sub ToolStripMenuItemSettingBandType_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBandType.Click
         Dim dlg As New frmBandType
-        ShowDefaultTabControlPage() '色と本幅数変更の可能性
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
             setBasics()
@@ -814,7 +842,7 @@ Public Class frmMain
     '基本設定
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
-        ShowDefaultTabControlPage() '色と本幅数変更の可能性
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
             setBasics()
@@ -1590,8 +1618,7 @@ Public Class frmMain
 
 #End Region
 
-
-
+#Region "縦横展開"
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
@@ -1622,7 +1649,7 @@ Public Class frmMain
         'タブ切り替えタイミングのため、表示は更新済
         Save底_縦横(works.p_row底_縦横)
         Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set横展開DataTable()
-        works.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tmptable)
+        works.ToTmpTable(enumひも種.i_横, tmptable)
 
         BindingSource底の横.DataSource = tmptable
         BindingSource底の横.Sort = "f_iひも種,f_iひも番号"
@@ -1695,6 +1722,7 @@ Public Class frmMain
         BindingSource底の縦.Sort = "f_iひも種,f_iひも番号"
         dgv底の縦.Refresh()
     End Sub
+#End Region
 
 #Region "DEBUG"
     Dim bVisible As Boolean = False

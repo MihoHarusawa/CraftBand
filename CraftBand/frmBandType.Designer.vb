@@ -57,6 +57,9 @@ Partial Class frmBandType
         Me.f_d楕円底円弧の半径加算 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d楕円底周の加算 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d立ち上げ時の楕円底周の増分 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも間のすき間初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長係数初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s色リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -72,13 +75,13 @@ Partial Class frmBandType
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_s色リスト, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_s色リスト, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSourceバンドの種類
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
         Me.dgvData.RowHeadersWidth = 51
         Me.dgvData.RowTemplate.Height = 29
-        Me.dgvData.Size = New System.Drawing.Size(715, 138)
+        Me.dgvData.Size = New System.Drawing.Size(775, 169)
         Me.dgvData.TabIndex = 2
         '
         'BindingSourceバンドの種類
@@ -90,7 +93,7 @@ Partial Class frmBandType
         '
         Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(616, 193)
+        Me.btnキャンセル.Location = New System.Drawing.Point(676, 224)
         Me.btnキャンセル.Name = "btnキャンセル"
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 4
@@ -100,7 +103,7 @@ Partial Class frmBandType
         'btnOK
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(497, 193)
+        Me.btnOK.Location = New System.Drawing.Point(557, 224)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 3
@@ -265,6 +268,33 @@ Partial Class frmBandType
         Me.f_d立ち上げ時の楕円底周の増分.ToolTipText = "楕円底の時、底の周長にこの値を加えて側面の周長を得る"
         Me.f_d立ち上げ時の楕円底周の増分.Width = 125
         '
+        'f_dひも間のすき間初期値
+        '
+        Me.f_dひも間のすき間初期値.DataPropertyName = "f_dひも間のすき間初期値"
+        Me.f_dひも間のすき間初期値.HeaderText = "ひも間のすき間初期値"
+        Me.f_dひも間のすき間初期値.MinimumWidth = 6
+        Me.f_dひも間のすき間初期値.Name = "f_dひも間のすき間初期値"
+        Me.f_dひも間のすき間初期値.ToolTipText = "組み編みのすき間の初期値"
+        Me.f_dひも間のすき間初期値.Width = 125
+        '
+        'f_dひも長係数初期値
+        '
+        Me.f_dひも長係数初期値.DataPropertyName = "f_dひも長係数初期値"
+        Me.f_dひも長係数初期値.HeaderText = "ひも長係数初期値"
+        Me.f_dひも長係数初期値.MinimumWidth = 6
+        Me.f_dひも長係数初期値.Name = "f_dひも長係数初期値"
+        Me.f_dひも長係数初期値.ToolTipText = "組み編みのひも長に乗算する値"
+        Me.f_dひも長係数初期値.Width = 125
+        '
+        'f_dひも長加算初期値
+        '
+        Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
+        Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
+        Me.f_dひも長加算初期値.MinimumWidth = 6
+        Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
+        Me.f_dひも長加算初期値.ToolTipText = "組み編みのひも長加算初期値"
+        Me.f_dひも長加算初期値.Width = 125
+        '
         'f_s色リスト
         '
         Me.f_s色リスト.DataPropertyName = "f_s色リスト"
@@ -286,7 +316,7 @@ Partial Class frmBandType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(746, 250)
+        Me.ClientSize = New System.Drawing.Size(806, 281)
         Me.Controls.Add(Me.lbl設定時の寸法単位)
         Me.Controls.Add(Me.lbl単位)
         Me.Controls.Add(Me.btnキャンセル)
@@ -328,6 +358,9 @@ Partial Class frmBandType
     Friend WithEvents f_d楕円底円弧の半径加算 As DataGridViewTextBoxColumn
     Friend WithEvents f_d楕円底周の加算 As DataGridViewTextBoxColumn
     Friend WithEvents f_d立ち上げ時の楕円底周の増分 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも間のすき間初期値 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長係数初期値 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色リスト As DataGridViewTextBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
 End Class

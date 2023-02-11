@@ -33,7 +33,10 @@
               <xs:element name="f_dひも長加算ひもあたり" msprop:Generator_ColumnPropNameInTable="f_dひも長加算ひもあたりColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算ひもあたり" msprop:Generator_UserColumnName="f_dひも長加算ひもあたり" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算ひもあたり" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_dひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算初期値" msprop:Generator_UserColumnName="f_dひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d厚さ" msprop:Generator_ColumnPropNameInTable="f_d厚さColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d厚さ" msprop:Generator_UserColumnName="f_d厚さ" msprop:Generator_ColumnVarNameInTable="columnf_d厚さ" type="xs:double" default="0" minOccurs="0" />
-              <xs:element name="f_b非表示" msprop:Generator_ColumnPropNameInTable="f_b非表示Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b非表示" msprop:Generator_UserColumnName="f_b非表示" msprop:Generator_ColumnVarNameInTable="columnf_b非表示" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_bCraftBandMesh" msprop:Generator_ColumnPropNameInTable="f_bCraftBandMeshColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandMesh" msprop:Generator_UserColumnName="f_bCraftBandMesh" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandMesh" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandSquare45" msprop:Generator_ColumnPropNameInTable="f_bCraftBandSquare45Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandSquare45" msprop:Generator_UserColumnName="f_bCraftBandSquare45" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandSquare45" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandKnot" msprop:Generator_ColumnPropNameInTable="f_bCraftBandKnotColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandKnot" msprop:Generator_UserColumnName="f_bCraftBandKnot" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandKnot" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandSquare" msprop:Generator_ColumnPropNameInTable="f_bCraftBandSquareColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandSquare" msprop:Generator_UserColumnName="f_bCraftBandSquare" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandSquare" type="xs:boolean" default="true" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -54,6 +57,9 @@
               <xs:element name="f_d立ち上げ時の楕円底周の増分" msprop:Generator_ColumnPropNameInTable="f_d立ち上げ時の楕円底周の増分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d立ち上げ時の楕円底周の増分" msprop:Generator_UserColumnName="f_d立ち上げ時の楕円底周の増分" msprop:Generator_ColumnVarNameInTable="columnf_d立ち上げ時の楕円底周の増分" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d楕円底円弧の半径加算" msprop:Generator_ColumnPropNameInTable="f_d楕円底円弧の半径加算Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d楕円底円弧の半径加算" msprop:Generator_UserColumnName="f_d楕円底円弧の半径加算" msprop:Generator_ColumnVarNameInTable="columnf_d楕円底円弧の半径加算" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d楕円底周の加算" msprop:Generator_ColumnPropNameInTable="f_d楕円底周の加算Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d楕円底周の加算" msprop:Generator_UserColumnName="f_d楕円底周の加算" msprop:Generator_ColumnVarNameInTable="columnf_d楕円底周の加算" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dひも間のすき間初期値" msprop:Generator_ColumnPropNameInTable="f_dひも間のすき間初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも間のすき間初期値" msprop:Generator_UserColumnName="f_dひも間のすき間初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも間のすき間初期値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dひも長係数初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長係数初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長係数初期値" msprop:Generator_UserColumnName="f_dひも長係数初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長係数初期値" type="xs:double" default="1" minOccurs="0" />
+              <xs:element name="f_dひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算初期値" msprop:Generator_UserColumnName="f_dひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_s色リスト" msdata:Caption="色リスト" msprop:Generator_ColumnPropNameInTable="f_s色リストColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s色リスト" msprop:Generator_UserColumnName="f_s色リスト" msprop:Generator_ColumnVarNameInTable="columnf_s色リスト" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
@@ -75,7 +81,10 @@
               <xs:element name="f_d巻きの厚み" msprop:Generator_ColumnPropNameInTable="f_d巻きの厚みColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d巻きの厚み" msprop:Generator_UserColumnName="f_d巻きの厚み" msprop:Generator_ColumnVarNameInTable="columnf_d巻きの厚み" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d巻き回数比率" msprop:Generator_ColumnPropNameInTable="f_d巻き回数比率Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d巻き回数比率" msprop:Generator_UserColumnName="f_d巻き回数比率" msprop:Generator_ColumnVarNameInTable="columnf_d巻き回数比率" type="xs:double" default="1" minOccurs="0" />
               <xs:element name="f_dひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算初期値" msprop:Generator_UserColumnName="f_dひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
-              <xs:element name="f_b非表示" msprop:Generator_ColumnPropNameInTable="f_b非表示Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b非表示" msprop:Generator_UserColumnName="f_b非表示" msprop:Generator_ColumnVarNameInTable="columnf_b非表示" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_bCraftBandMesh" msprop:Generator_ColumnPropNameInTable="f_bCraftBandMeshColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandMesh" msprop:Generator_UserColumnName="f_bCraftBandMesh" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandMesh" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandSquare45" msprop:Generator_ColumnPropNameInTable="f_bCraftBandSquare45Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandSquare45" msprop:Generator_UserColumnName="f_bCraftBandSquare45" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandSquare45" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandKnot" msprop:Generator_ColumnPropNameInTable="f_bCraftBandKnotColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandKnot" msprop:Generator_UserColumnName="f_bCraftBandKnot" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandKnot" type="xs:boolean" default="true" minOccurs="0" />
+              <xs:element name="f_bCraftBandSquare" msprop:Generator_ColumnPropNameInTable="f_bCraftBandSquareColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bCraftBandSquare" msprop:Generator_UserColumnName="f_bCraftBandSquare" msprop:Generator_ColumnVarNameInTable="columnf_bCraftBandSquare" type="xs:boolean" default="true" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -84,7 +93,17 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_s単位" msprop:Generator_ColumnPropNameInTable="f_s単位Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s単位" msprop:Generator_UserColumnName="f_s単位" msprop:Generator_ColumnVarNameInTable="columnf_s単位" type="xs:string" default="mm" minOccurs="0" />
-              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.10" minOccurs="0" />
+              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.3.0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tbl描画色" msprop:Generator_RowEvHandlerName="tbl描画色RowChangeEventHandler" msprop:Generator_RowDeletedName="tbl描画色RowDeleted" msprop:Generator_RowDeletingName="tbl描画色RowDeleting" msprop:Generator_RowEvArgName="tbl描画色RowChangeEvent" msprop:Generator_TablePropName="tbl描画色" msprop:Generator_RowChangedName="tbl描画色RowChanged" msprop:Generator_UserTableName="tbl描画色" msprop:Generator_RowChangingName="tbl描画色RowChanging" msprop:Generator_RowClassName="tbl描画色Row" msprop:Generator_TableClassName="tbl描画色DataTable" msprop:Generator_TableVarName="tabletbl描画色">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_s色" msprop:Generator_ColumnPropNameInTable="f_s色Column" msprop:Generator_ColumnPropNameInRow="f_s色" msprop:Generator_UserColumnName="f_s色" msprop:Generator_ColumnVarNameInTable="columnf_s色" type="xs:string" />
+              <xs:element name="f_i赤" msprop:Generator_ColumnPropNameInTable="f_i赤Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i赤" msprop:Generator_UserColumnName="f_i赤" msprop:Generator_ColumnVarNameInTable="columnf_i赤" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_i緑" msprop:Generator_ColumnPropNameInTable="f_i緑Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i緑" msprop:Generator_UserColumnName="f_i緑" msprop:Generator_ColumnVarNameInTable="columnf_i緑" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_i青" msprop:Generator_ColumnPropNameInTable="f_i青Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i青" msprop:Generator_UserColumnName="f_i青" msprop:Generator_ColumnVarNameInTable="columnf_i青" type="xs:short" default="0" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -103,6 +122,10 @@
       <xs:selector xpath=".//mstns:tbl付属品" />
       <xs:field xpath="mstns:f_s付属品名" />
       <xs:field xpath="mstns:f_iひも番号" />
+    </xs:unique>
+    <xs:unique name="tbl描画色PKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tbl描画色" />
+      <xs:field xpath="mstns:f_s色" />
     </xs:unique>
   </xs:element>
 </xs:schema>

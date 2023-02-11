@@ -8,10 +8,11 @@
     <Product>CraftBand</Product>
     <Company>LaboHarusawa</Company>
     <Authors>MihoHarusawa</Authors>
-    <Title>クラフトバンドのライブラリ</Title>
+    <Title>クラフトバンド・共通ライブラリ</Title>
     <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
-    <FileVersion>1.2.0.0</FileVersion>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <Description>クラフトバンド・共通ライブラリ</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +35,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>dstDataTables.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="frmOutput.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="My Project\Resources.Designer.vb">
       <DesignTime>True</DesignTime>

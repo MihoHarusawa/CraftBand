@@ -1,6 +1,7 @@
 ﻿Public Class clsDataRow
     Implements IEquatable(Of clsDataRow)
     Implements IEquatable(Of DataRow)
+    Implements IEnumerable
 
     Dim _DataRow As DataRow
     Public ReadOnly Property DataRow() As DataRow
@@ -107,6 +108,16 @@
 
     End Property
 
+    Public ReadOnly Property ContainsName(ByVal name As String) As Boolean
+        Get
+            If Not IsValid Then
+                Return False
+            End If
+            Return _DataRow.Table.Columns.Contains(name)
+        End Get
+    End Property
+
+
     Public ReadOnly Property HasValue(ByVal name As String) As Boolean
         Get
             If String.IsNullOrWhiteSpace(name) OrElse Not IsValid Then
@@ -186,7 +197,7 @@
         End If
         Dim sb As New System.Text.StringBuilder
         sb.Append(_DataRow.Table.TableName).AppendLine()
-        For Each col As DataColumn In _DataRow.Table.Columns
+        For Each col As DataColumn In Me
             Try
                 sb.Append(col.ColumnName).Append(vbTab)
                 If IsDBNull(_DataRow(col)) Then
@@ -225,7 +236,7 @@
             Return Nothing
         End If
         Dim sb As New System.Text.StringBuilder
-        For Each col As DataColumn In _DataRow.Table.Columns
+        For Each col As DataColumn In Me
             Try
                 If IsDBNull(_DataRow(col)) Then
                     sb.Append("<DBNull>")
@@ -263,7 +274,7 @@
         End If
         Dim sb As New System.Text.StringBuilder
         sb.Append(_DataRow.Table.TableName).AppendLine()
-        For Each col As DataColumn In _DataRow.Table.Columns
+        For Each col As DataColumn In Me
             sb.Append(col.ColumnName).Append(",")
         Next
         sb.Append("RowState")
@@ -303,4 +314,45 @@
     Public Overloads Function Equals(other As DataRow) As Boolean Implements IEquatable(Of DataRow).Equals
         Return Equals(New clsDataRow(other))
     End Function
+
+    Public Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+        If Not IsValid Then
+            Return New CColumnEnumerator(Nothing)
+        End If
+        Return New CColumnEnumerator(_DataRow.Table.Columns)
+    End Function
+End Class
+
+
+Class CColumnEnumerator
+    Implements System.Collections.IEnumerator
+    Private Property columns As DataColumnCollection
+    Private Property cursor As Integer
+    Sub New(ByVal cols As DataColumnCollection)
+        columns = cols
+        Reset()
+    End Sub
+    Function MoveNext() As Boolean Implements IEnumerator.MoveNext
+        If columns Is Nothing Then
+            Return False
+        End If
+        If cursor < columns.Count - 1 Then
+            cursor += 1
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+    ReadOnly Property Current As Object Implements IEnumerator.Current
+        Get
+            If columns IsNot Nothing Then
+                Return columns(cursor)
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+    Sub Reset() Implements IEnumerator.Reset
+        cursor = -1  'Incして0
+    End Sub
 End Class
