@@ -711,7 +711,7 @@ Namespace Tables
                 Me.columnf_s基本色.DefaultValue = CType("",String)
                 Me.columnf_i基本のひも幅.DefaultValue = CType(0,Short)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.3.0",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.3.1",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -875,8 +875,6 @@ Namespace Tables
             
             Private columnf_i縦ひもの本数 As Global.System.Data.DataColumn
             
-            Private columnf_b横寸法優先区分 As Global.System.Data.DataColumn
-            
             Private columnf_dひとつのすき間の寸法 As Global.System.Data.DataColumn
             
             Private columnf_b始末ひも区分 As Global.System.Data.DataColumn
@@ -1036,14 +1034,6 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property f_b横寸法優先区分Column() As Global.System.Data.DataColumn
-                Get
-                    Return Me.columnf_b横寸法優先区分
-                End Get
-            End Property
-            
-            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_dひとつのすき間の寸法Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dひとつのすき間の寸法
@@ -1196,7 +1186,6 @@ Namespace Tables
                         ByVal f_d垂直ひも長加算 As Double,  _
                         ByVal f_i縦ひも As Short,  _
                         ByVal f_i縦ひもの本数 As Short,  _
-                        ByVal f_b横寸法優先区分 As Boolean,  _
                         ByVal f_dひとつのすき間の寸法 As Double,  _
                         ByVal f_b始末ひも区分 As Boolean,  _
                         ByVal f_s縦ひものメモ As String,  _
@@ -1211,7 +1200,7 @@ Namespace Tables
                         ByVal f_dひも長係数 As Double,  _
                         ByVal f_dひも長加算 As Double) As tbl底_縦横Row
                 Dim rowtbl底_縦横Row As tbl底_縦横Row = CType(Me.NewRow,tbl底_縦横Row)
-                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_b横寸法優先区分, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算}
+                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算}
                 rowtbl底_縦横Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl底_縦横Row)
                 Return rowtbl底_縦横Row
@@ -1246,7 +1235,6 @@ Namespace Tables
                 Me.columnf_d垂直ひも長加算 = MyBase.Columns("f_d垂直ひも長加算")
                 Me.columnf_i縦ひも = MyBase.Columns("f_i縦ひも")
                 Me.columnf_i縦ひもの本数 = MyBase.Columns("f_i縦ひもの本数")
-                Me.columnf_b横寸法優先区分 = MyBase.Columns("f_b横寸法優先区分")
                 Me.columnf_dひとつのすき間の寸法 = MyBase.Columns("f_dひとつのすき間の寸法")
                 Me.columnf_b始末ひも区分 = MyBase.Columns("f_b始末ひも区分")
                 Me.columnf_s縦ひものメモ = MyBase.Columns("f_s縦ひものメモ")
@@ -1289,8 +1277,6 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i縦ひも)
                 Me.columnf_i縦ひもの本数 = New Global.System.Data.DataColumn("f_i縦ひもの本数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i縦ひもの本数)
-                Me.columnf_b横寸法優先区分 = New Global.System.Data.DataColumn("f_b横寸法優先区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
-                MyBase.Columns.Add(Me.columnf_b横寸法優先区分)
                 Me.columnf_dひとつのすき間の寸法 = New Global.System.Data.DataColumn("f_dひとつのすき間の寸法", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひとつのすき間の寸法)
                 Me.columnf_b始末ひも区分 = New Global.System.Data.DataColumn("f_b始末ひも区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
@@ -1329,7 +1315,6 @@ Namespace Tables
                 Me.columnf_d垂直ひも長加算.DefaultValue = CType(0R,Double)
                 Me.columnf_i縦ひも.DefaultValue = CType(0,Short)
                 Me.columnf_i縦ひもの本数.DefaultValue = CType(0,Short)
-                Me.columnf_b横寸法優先区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_dひとつのすき間の寸法.DefaultValue = CType(-1R,Double)
                 Me.columnf_b始末ひも区分.DefaultValue = CType(true,Boolean)
                 Me.columnf_s縦ひものメモ.DefaultValue = CType("",String)
@@ -4044,21 +4029,6 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_b横寸法優先区分() As Boolean
-                Get
-                    If Me.Isf_b横寸法優先区分Null Then
-                        Return false
-                    Else
-                        Return CType(Me(Me.tabletbl底_縦横.f_b横寸法優先区分Column),Boolean)
-                    End If
-                End Get
-                Set
-                    Me(Me.tabletbl底_縦横.f_b横寸法優先区分Column) = value
-                End Set
-            End Property
-            
-            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_dひとつのすき間の寸法() As Double
                 Get
                     If Me.Isf_dひとつのすき間の寸法Null Then
@@ -4394,18 +4364,6 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i縦ひもの本数Null()
                 Me(Me.tabletbl底_縦横.f_i縦ひもの本数Column) = Global.System.Convert.DBNull
-            End Sub
-            
-            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function Isf_b横寸法優先区分Null() As Boolean
-                Return Me.IsNull(Me.tabletbl底_縦横.f_b横寸法優先区分Column)
-            End Function
-            
-            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub Setf_b横寸法優先区分Null()
-                Me(Me.tabletbl底_縦横.f_b横寸法優先区分Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

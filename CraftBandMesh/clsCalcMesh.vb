@@ -21,8 +21,9 @@ Class clsCalcMesh
         Target    '目標寸法
         Horizontal '横置き項目(底の縦横)
         Vertical '縦置き項目(底の縦横)
-        Gap     'すき間(NGでも継続)
-        GapCheck 'すき間(NGは停止)
+
+        GapFit  'すき間を横寸法に合わせる。画面値更新と再計算
+
         Oval '底の楕円 
         Side  '側面 
         Options  '追加品
@@ -446,11 +447,7 @@ Class clsCalcMesh
                 Clear()
                 set_目標寸法()
                 ret = ret And calc_縦寸法()
-                If _Data.p_row底_縦横.Value("f_b横寸法優先区分") Then
-                    ret = ret And calc_すき間の寸法(True) '強行
-                Else
-                    ret = ret And calc_横寸法()
-                End If
+                ret = ret And calc_横寸法()
 
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
@@ -469,15 +466,9 @@ Class clsCalcMesh
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
 
-            Case CalcCategory.Gap     'すき間
+            Case CalcCategory.GapFit     '横寸法に合わせる
                 set_目標寸法()
-                ret = ret And calc_すき間の寸法(True)
-                ret = ret And calc_底楕円(category, Nothing, Nothing)
-                ret = ret And calc_側面(category, Nothing, Nothing)
-
-            Case CalcCategory.GapCheck     'すき間がNGなら中止
-                set_目標寸法()
-                If Not calc_すき間の寸法(False) Then
+                If Not calc_すき間の寸法() Then
                     Return False
                 End If
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
@@ -486,11 +477,7 @@ Class clsCalcMesh
             Case CalcCategory.Oval '底の楕円
                 Dim row As tbl底_楕円Row = CType(ctr, tbl底_楕円Row)
                 ret = ret And calc_底楕円(category, row, key)
-                If _Data.p_row底_縦横.Value("f_b横寸法優先区分") Then
-                    ret = ret And calc_すき間の寸法(True)
-                Else
-                    ret = ret And calc_横寸法()
-                End If
+                ret = ret And calc_横寸法()
                 ret = ret And calc_縦寸法()
                 ret = ret And calc_底楕円(category, row, key)
                 ret = ret And calc_側面(category, Nothing, Nothing)
@@ -537,11 +524,11 @@ Class clsCalcMesh
 
 #Region "縦横"
 
-    '横寸法=(目標寸法-2径)として、間のすき間を算出
-    'isContinue=true(NG時は横寸法優先をOFFし、calc_横寸法()に切り替える) false(処理を中止・保持値は保証せず)
+    '横寸法=(目標寸法-2径)として、間のすき間を算出する
+    '　不可時はエラーメッセージで中断。OK時は、画面値を更新し関連再計算
     'IN:    _D横_目標  _d計算_径  縦ひもの本数  縦ひも(本幅)
     'OUT:   _D計算_横  nudひとつのすき間の寸法   setSaveValue縦横()
-    Function calc_すき間の寸法(ByVal isContinue As Boolean) As Boolean
+    Function calc_すき間の寸法() As Boolean
         Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
 
         Dim target As Double = _d横_目標 - 2 * _d径の合計
@@ -582,18 +569,7 @@ Class clsCalcMesh
 
         If Not ret Then
             'すき間が計算できない時
-            If isContinue Then
-                '強制的に続けるため、横寸法優先をオフする(recalc発生せず)
-                _frmMain.chk横寸法優先.Checked = False
-                _Data.p_row底_縦横.Value("f_b横寸法優先区分") = False
-                '現在の値に基づく横寸法を計算する
-                Return calc_横寸法()
-
-            Else
-                '内部値を放置して終える
-                Return False
-
-            End If
+            Return False
         End If
         'すき間が計算できた
 
@@ -951,7 +927,6 @@ Class clsCalcMesh
         '***結果をセット
         With _Data.p_row底_縦横
             '縦ひも
-            .Value("f_b横寸法優先区分") = False
             .Value("f_i縦ひも") = n縦ひもn本幅
             .Value("f_i縦ひもの本数") = n縦ひもの本数
             .Value("f_dひとつのすき間の寸法") = dひとつのすき間の寸法

@@ -240,10 +240,10 @@ Public Class frmMain
             Return True
         End If
 
-        If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.Gap, CalcCategory.GapCheck}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Target}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Gap, CalcCategory.GapCheck, CalcCategory.Oval}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Oval}.Contains(category) Then
             Save底_縦横(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -412,7 +412,6 @@ Public Class frmMain
 
             dispAdjustLane(nud縦ひも, .Value("f_i縦ひも"))
             nud縦ひもの本数.Value = .Value("f_i縦ひもの本数")
-            chk横寸法優先.Checked = .Value("f_b横寸法優先区分")
             dispValidValueNud(nudひとつのすき間の寸法, .Value("f_dひとつのすき間の寸法"))
             chk始末ひも.Checked = .Value("f_b始末ひも区分")
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
@@ -444,11 +443,6 @@ Public Class frmMain
 
     'clsCalcMeshからセット
     Public Function setひとつのすき間の寸法(ByVal value As Double) As Boolean
-        '念のため確認
-        If Not chk横寸法優先.Checked Then
-            Return False
-        End If
-
         _isChangingByCode = True
         dispValidValueNud(nudひとつのすき間の寸法, value)
         _isChangingByCode = False
@@ -622,7 +616,6 @@ Public Class frmMain
 
             .Value("f_i縦ひも") = nud縦ひも.Value
             .Value("f_i縦ひもの本数") = nud縦ひもの本数.Value
-            .Value("f_b横寸法優先区分") = chk横寸法優先.Checked
             .Value("f_dひとつのすき間の寸法") = nudひとつのすき間の寸法.Value
             .Value("f_b始末ひも区分") = chk始末ひも.Checked
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
@@ -922,6 +915,11 @@ Public Class frmMain
     '名前をつけて保存
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
+        If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
+            '四角底{0}-{1}-{2}
+            SaveFileDialog1.FileName = String.Format(My.Resources.SaveFileName,
+              _clsDataTables.p_row目標寸法.Value("f_i基本のひも幅"), _clsDataTables.p_row底_縦横.Value("f_i長い横ひもの本数"), _clsDataTables.p_row底_縦横.Value("f_i縦ひもの本数"))
+        End If
         If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
             Exit Sub
         End If
@@ -1044,11 +1042,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひも_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひも.ValueChanged
-        If chk横寸法優先.Checked Then
-            recalc(CalcCategory.Gap, sender)
-        Else
-            recalc(CalcCategory.Vertical, sender)
-        End If
+        recalc(CalcCategory.Vertical, sender)
     End Sub
 
     Private Sub rad目標寸法_CheckedChanged(sender As Object, e As EventArgs) Handles rad目標寸法_外側.CheckedChanged, rad目標寸法_内側.CheckedChanged
@@ -1056,11 +1050,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud横寸法.ValueChanged
-        If chk横寸法優先.Checked Then
-            recalc(CalcCategory.Gap, sender)
-        Else
-            recalc(CalcCategory.Target, sender)
-        End If
+        recalc(CalcCategory.Target, sender)
     End Sub
 
     Private Sub nud縦寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud縦寸法.ValueChanged
@@ -1128,28 +1118,7 @@ Public Class frmMain
             txtすき間の点数.Text = ""
         End If
 
-        If chk横寸法優先.Checked Then
-            recalc(CalcCategory.Gap, sender)
-        Else
-            recalc(CalcCategory.Vertical, sender)
-        End If
-    End Sub
-
-    Private Sub chk横寸法優先_CheckedChanged(sender As Object, e As EventArgs) Handles chk横寸法優先.CheckedChanged
-        If chk横寸法優先.Checked Then
-            nudひとつのすき間の寸法.Enabled = False
-            If Not recalc(CalcCategory.GapCheck, sender) Then
-                '横寸法優先の条件を満たしません。
-                Dim msg As String = _clsCalcMesh.p_sメッセージ
-                msg = msg + vbCrLf + My.Resources.WarningWidthPrime
-                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                chk横寸法優先.Checked = False
-            End If
-        Else
-            nudひとつのすき間の寸法.Enabled = True
-            '計算済値は変わりません
-        End If
-
+        recalc(CalcCategory.Vertical, sender)
     End Sub
 
     Private Sub nudひとつのすき間の寸法_ValueChanged(sender As Object, e As EventArgs) Handles nudひとつのすき間の寸法.ValueChanged
@@ -1164,7 +1133,15 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub btn横寸法に合わせる_Click(sender As Object, e As EventArgs) Handles btn横寸法に合わせる.Click
+        If Not recalc(CalcCategory.GapFit, sender) Then
+            'すき間を横寸法に合わせることができません。
+            Dim msg As String = _clsCalcMesh.p_sメッセージ
+            msg = msg + vbCrLf + My.Resources.WarningWidthPrime
+            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
 
+    End Sub
 #End Region
 
 #Region "グリッド編集共通"
@@ -1753,6 +1730,8 @@ Public Class frmMain
             End If
         Next
     End Sub
+
+
 #End Region
 
 End Class

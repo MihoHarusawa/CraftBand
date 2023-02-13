@@ -93,7 +93,7 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_s単位" msprop:Generator_ColumnPropNameInTable="f_s単位Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s単位" msprop:Generator_UserColumnName="f_s単位" msprop:Generator_ColumnVarNameInTable="columnf_s単位" type="xs:string" default="mm" minOccurs="0" />
-              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.3.0" minOccurs="0" />
+              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.3.1" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -104,6 +104,10 @@
               <xs:element name="f_i赤" msprop:Generator_ColumnPropNameInTable="f_i赤Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i赤" msprop:Generator_UserColumnName="f_i赤" msprop:Generator_ColumnVarNameInTable="columnf_i赤" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_i緑" msprop:Generator_ColumnPropNameInTable="f_i緑Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i緑" msprop:Generator_UserColumnName="f_i緑" msprop:Generator_ColumnVarNameInTable="columnf_i緑" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_i青" msprop:Generator_ColumnPropNameInTable="f_i青Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i青" msprop:Generator_UserColumnName="f_i青" msprop:Generator_ColumnVarNameInTable="columnf_i青" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_d線幅" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d線幅Column" msprop:Generator_ColumnVarNameInTable="columnf_d線幅" msprop:Generator_UserColumnName="f_d線幅" msprop:Generator_ColumnPropNameInRow="f_d線幅" type="xs:double" default="1" minOccurs="0" />
+              <xs:element name="f_d中線幅" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d中線幅Column" msprop:Generator_ColumnVarNameInTable="columnf_d中線幅" msprop:Generator_UserColumnName="f_d中線幅" msprop:Generator_ColumnPropNameInRow="f_d中線幅" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_i透明度" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_i透明度Column" msprop:Generator_ColumnVarNameInTable="columnf_i透明度" msprop:Generator_UserColumnName="f_i透明度" msprop:Generator_ColumnPropNameInRow="f_i透明度" type="xs:short" default="255" minOccurs="0" />
+              <xs:element name="f_s備考" msprop:nullValue="" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:Generator_ColumnVarNameInTable="columnf_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnPropNameInRow="f_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

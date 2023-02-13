@@ -213,4 +213,8 @@
     <value>編集中のデータを保存しますか？</value>
     <comment>frmMain</comment>
   </data>
+  <data name="SaveFileName" xml:space="preserve">
+    <value>斜め四角{0}-{1}-{2}</value>
+    <comment>frmMain</comment>
+  </data>
 </root>

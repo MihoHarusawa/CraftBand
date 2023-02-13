@@ -8,6 +8,9 @@ CraftBandMesh‚ÌPublish€–Ú
  CraftBandMesh.pdb	ƒVƒ“ƒ{ƒ‹
  CraftBandMesh.runtimeconfig.json	
  System.Configuration.ConfigurationManeger.dll	
+
+CraftBandSquare45‚ÌPublish€–Ú
+
 	
 CraftBand‚Ì‚İ‚Ì€–Ú	
  CraftBand.deps.json	

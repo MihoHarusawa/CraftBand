@@ -814,6 +814,11 @@ Public Class frmMain
     '名前をつけて保存
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
+        If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
+            '斜め四角{0}-{1}-{2}
+            SaveFileDialog1.FileName = String.Format(My.Resources.SaveFileName,
+              _clsDataTables.p_row底_縦横.Value("f_i横の四角数"), _clsDataTables.p_row底_縦横.Value("f_i縦の四角数"), _clsDataTables.p_row底_縦横.Value("f_d高さの四角数"))
+        End If
         If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
             Exit Sub
         End If

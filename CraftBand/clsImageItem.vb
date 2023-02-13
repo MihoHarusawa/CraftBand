@@ -1,9 +1,5 @@
-﻿Imports System.Runtime.ConstrainedExecution
-Imports System.Text
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports CraftBand
+﻿Imports System.Text
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsImageItem
@@ -34,16 +30,8 @@ Public Class clsImageItem
         End Operator
 
         '二項+演算子 
-        Shared Operator +(ByVal c1 As S実座標, ByVal c2 As S実座標) As S実座標
-            Return New S実座標(c1.X + c2.X, c1.Y + c2.Y)
-        End Operator
-        Shared Operator +(ByVal c1 As S実座標, ByVal dif As S差分) As S実座標
-            Return New S実座標(c1.X + dif.dX, c1.Y + dif.dY)
-        End Operator
-
-        '二項-演算子 
-        Shared Operator -(ByVal c1 As S実座標, ByVal c2 As S実座標) As S実座標
-            Return New S実座標(c1.X - c2.X, c1.Y - c2.Y)
+        Shared Operator +(ByVal c1 As S実座標, ByVal delta As S差分) As S実座標
+            Return New S実座標(c1.X + delta.dX, c1.Y + delta.dY)
         End Operator
 
         Public Overrides Function ToString() As String
@@ -51,6 +39,7 @@ Public Class clsImageItem
         End Function
     End Structure
 
+    'delta:差分
     Structure S差分
         Public dX As Double
         Public dY As Double
@@ -58,10 +47,18 @@ Public Class clsImageItem
             dX = xx
             dY = yy
         End Sub
+
         Sub New(ByVal base As S実座標, ByVal way As S実座標)
             dX = way.X - base.X
             dY = way.Y - base.Y
         End Sub
+
+        '単項-演算子(マイナス符号)
+        Shared Operator -(ByVal c As S差分) As S差分
+            Return New S差分(-c.dX, -c.dY)
+        End Operator
+
+        '二項*演算子 
         Shared Operator *(ByVal c1 As S差分, ByVal c2const As Double) As S差分
             Return New S差分(c1.dX * c2const, c1.dY * c2const)
         End Operator
@@ -71,6 +68,7 @@ Public Class clsImageItem
         End Function
     End Structure
 
+    'line:線分
     Structure S線分
         Public p開始 As S実座標
         Public p終了 As S実座標
@@ -78,6 +76,15 @@ Public Class clsImageItem
             p開始 = f
             p終了 = t
         End Sub
+        Sub New(ByVal line As S線分, delta As S差分)
+            p開始 = line.p開始 + delta
+            p終了 = line.p終了 + delta
+        End Sub
+
+        '二項+演算子 
+        Shared Operator +(ByVal c1 As S線分, ByVal delta As S差分) As S線分
+            Return New S線分(c1.p開始 + delta, c1.p終了 + delta)
+        End Operator
 
         ReadOnly Property r外接領域 As S領域
             Get
@@ -121,10 +128,44 @@ Public Class clsImageItem
 
     'area:四隅(左<=右,下<=上の4点)
     Structure S四隅
-        Public p左上 As S実座標
-        Public p左下 As S実座標
-        Public p右上 As S実座標
-        Public p右下 As S実座標
+        Public p左上 As S実座標 'B
+        Public p左下 As S実座標 'C
+        Public p右上 As S実座標 'A
+        Public p右下 As S実座標 'D
+
+        Property pA As S実座標
+            Get
+                Return p右上
+            End Get
+            Set(value As S実座標)
+                p右上 = value
+            End Set
+        End Property
+        Property pB As S実座標
+            Get
+                Return p左上
+            End Get
+            Set(value As S実座標)
+                p左上 = value
+            End Set
+        End Property
+        Property pC As S実座標
+            Get
+                Return p左下
+            End Get
+            Set(value As S実座標)
+                p左下 = value
+            End Set
+        End Property
+        Property pD As S実座標
+            Get
+                Return p右下
+            End Get
+            Set(value As S実座標)
+                p右下 = value
+            End Set
+        End Property
+
         ReadOnly Property x最左 As Double
             Get
                 Return mdlUnit.Min(p左上.X, p左下.X)
@@ -233,6 +274,17 @@ Public Class clsImageItem
             End Set
         End Property
 
+        ReadOnly Property p左上 As S実座標
+            Get
+                Return New S実座標(p左下.X, p右上.Y)
+            End Get
+        End Property
+        ReadOnly Property p右下 As S実座標
+            Get
+                Return New S実座標(p右上.X, p左下.Y)
+            End Get
+        End Property
+
         ReadOnly Property x幅 As Double
             Get
                 Return x最右 - x最左
@@ -281,10 +333,10 @@ Public Class clsImageItem
 #End Region
 
 
-
     Public Shared Unit45 As New S差分(1, 1) '／
-    Public Shared Unit315 As New S差分(1, -1) '＼
+    Public Shared Unit135 As New S差分(-1, 1) '＼
     Public Shared Unit225 As New S差分(-1, -1) '／
+    Public Shared Unit315 As New S差分(1, -1) '＼
 
 
     'レコード情報
@@ -300,17 +352,17 @@ Public Class clsImageItem
     '線分リスト
     Public m_lineList As New C線分リスト
 
-    '描画タイプ
+    '描画タイプ(描画順)
     Enum ImageTypeEnum
         _描画なし
 
-        _横バンド   'p_row縦横展開,p_a四隅,p_rひも位置
         _縦バンド   'p_row縦横展開,p_a四隅,p_rひも位置
+        _横バンド   'p_row縦横展開,p_a四隅,p_rひも位置
 
         _底枠     'p_a四隅
+        _横の側面   'p_a四隅,p_listLine
+        _縦の側面   'p_a四隅,p_listLine
         _全体枠    'p_a四隅
-        _横の側面   'p_a四隅
-        _縦の側面   'p_a四隅
 
         _底の中央線  'p_listLine
 
@@ -365,8 +417,12 @@ Public Class clsImageItem
                 r描画領域.y最下 = m_rひも位置.y最下
                 r描画領域.y最上 = m_rひも位置.y最上
 
-            Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠, ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面
+            Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠
                 r描画領域 = m_a四隅.r外接領域
+
+            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面
+                r描画領域 = m_a四隅.r外接領域
+                r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._底の中央線
                 r描画領域 = m_lineList.Get描画領域()

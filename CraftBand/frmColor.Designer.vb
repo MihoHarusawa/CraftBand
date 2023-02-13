@@ -23,16 +23,20 @@ Partial Class frmColor
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.BindingSource描画色 = New System.Windows.Forms.BindingSource(Me.components)
         Me.dgvData = New System.Windows.Forms.DataGridView()
         Me.Fs色DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi赤DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi緑DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi青DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.色表示 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.disp = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d線幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d中線幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i透明度 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnキャンセル = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         CType(Me.BindingSource描画色, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -51,7 +55,7 @@ Partial Class frmColor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs色DataGridViewTextBoxColumn, Me.Fi赤DataGridViewTextBoxColumn, Me.Fi緑DataGridViewTextBoxColumn, Me.Fi青DataGridViewTextBoxColumn, Me.色表示})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs色DataGridViewTextBoxColumn, Me.Fi赤DataGridViewTextBoxColumn, Me.Fi緑DataGridViewTextBoxColumn, Me.Fi青DataGridViewTextBoxColumn, Me.disp, Me.f_d線幅, Me.f_d中線幅, Me.f_i透明度, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSource描画色
         Me.dgvData.Location = New System.Drawing.Point(12, 12)
         Me.dgvData.Name = "dgvData"
@@ -72,10 +76,10 @@ Partial Class frmColor
         'Fi赤DataGridViewTextBoxColumn
         '
         Me.Fi赤DataGridViewTextBoxColumn.DataPropertyName = "f_i赤"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle4.Format = "N0"
-        DataGridViewCellStyle4.NullValue = "0"
-        Me.Fi赤DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle1.Format = "N0"
+        DataGridViewCellStyle1.NullValue = "0"
+        Me.Fi赤DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
         Me.Fi赤DataGridViewTextBoxColumn.HeaderText = "赤"
         Me.Fi赤DataGridViewTextBoxColumn.MinimumWidth = 6
         Me.Fi赤DataGridViewTextBoxColumn.Name = "Fi赤DataGridViewTextBoxColumn"
@@ -85,10 +89,10 @@ Partial Class frmColor
         'Fi緑DataGridViewTextBoxColumn
         '
         Me.Fi緑DataGridViewTextBoxColumn.DataPropertyName = "f_i緑"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle5.Format = "N0"
-        DataGridViewCellStyle5.NullValue = "0"
-        Me.Fi緑DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle2.Format = "N0"
+        DataGridViewCellStyle2.NullValue = "0"
+        Me.Fi緑DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle2
         Me.Fi緑DataGridViewTextBoxColumn.HeaderText = "緑"
         Me.Fi緑DataGridViewTextBoxColumn.MinimumWidth = 6
         Me.Fi緑DataGridViewTextBoxColumn.Name = "Fi緑DataGridViewTextBoxColumn"
@@ -98,23 +102,58 @@ Partial Class frmColor
         'Fi青DataGridViewTextBoxColumn
         '
         Me.Fi青DataGridViewTextBoxColumn.DataPropertyName = "f_i青"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.Format = "N0"
-        DataGridViewCellStyle6.NullValue = "0"
-        Me.Fi青DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle3.Format = "N0"
+        DataGridViewCellStyle3.NullValue = "0"
+        Me.Fi青DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle3
         Me.Fi青DataGridViewTextBoxColumn.HeaderText = "青"
         Me.Fi青DataGridViewTextBoxColumn.MinimumWidth = 6
         Me.Fi青DataGridViewTextBoxColumn.Name = "Fi青DataGridViewTextBoxColumn"
         Me.Fi青DataGridViewTextBoxColumn.ToolTipText = "0～255の値で指定"
         Me.Fi青DataGridViewTextBoxColumn.Width = 80
         '
-        '色表示
+        'disp
         '
-        Me.色表示.HeaderText = "色表示"
-        Me.色表示.MinimumWidth = 6
-        Me.色表示.Name = "色表示"
-        Me.色表示.ReadOnly = True
-        Me.色表示.Width = 125
+        Me.disp.HeaderText = ""
+        Me.disp.MinimumWidth = 6
+        Me.disp.Name = "disp"
+        Me.disp.ReadOnly = True
+        Me.disp.Width = 70
+        '
+        'f_d線幅
+        '
+        Me.f_d線幅.DataPropertyName = "f_d線幅"
+        Me.f_d線幅.HeaderText = "線幅"
+        Me.f_d線幅.MinimumWidth = 6
+        Me.f_d線幅.Name = "f_d線幅"
+        Me.f_d線幅.ToolTipText = "ひも描画のペン幅"
+        Me.f_d線幅.Width = 125
+        '
+        'f_d中線幅
+        '
+        Me.f_d中線幅.DataPropertyName = "f_d中線幅"
+        Me.f_d中線幅.HeaderText = "中線幅"
+        Me.f_d中線幅.MinimumWidth = 6
+        Me.f_d中線幅.Name = "f_d中線幅"
+        Me.f_d中線幅.ToolTipText = "ひもの線幅描画幅"
+        Me.f_d中線幅.Width = 125
+        '
+        'f_i透明度
+        '
+        Me.f_i透明度.DataPropertyName = "f_i透明度"
+        Me.f_i透明度.HeaderText = "透明度"
+        Me.f_i透明度.MinimumWidth = 6
+        Me.f_i透明度.Name = "f_i透明度"
+        Me.f_i透明度.ToolTipText = "塗りつぶし0が透明 255が不透明"
+        Me.f_i透明度.Width = 125
+        '
+        'f_s備考
+        '
+        Me.f_s備考.DataPropertyName = "f_s備考"
+        Me.f_s備考.HeaderText = "備考"
+        Me.f_s備考.MinimumWidth = 6
+        Me.f_s備考.Name = "f_s備考"
+        Me.f_s備考.Width = 125
         '
         'btnキャンセル
         '
@@ -159,9 +198,14 @@ Partial Class frmColor
     Friend WithEvents dgvData As Windows.Forms.DataGridView
     Friend WithEvents btnキャンセル As Windows.Forms.Button
     Friend WithEvents btnOK As Windows.Forms.Button
+    Friend WithEvents 表示 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fs色DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fi赤DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fi緑DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fi青DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents 色表示 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_d線幅 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_d中線幅 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i透明度 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_s備考 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents disp As Windows.Forms.DataGridViewTextBoxColumn
 End Class

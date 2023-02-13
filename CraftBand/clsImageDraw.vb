@@ -1,10 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Imaging
-Imports System.IO
-Imports System.Windows.Forms
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox
-Imports CraftBand
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsMasterTables
 
 ''' <summary>
 ''' 画像ファイル生成
@@ -30,11 +27,6 @@ Public Class CImageDraw
     '定数
     Private Const cThinPenWidth As Single = 0.1 '細い
     Private Const cThickPenWidth As Single = 3 '太い
-    Private Const cBandPenWidth As Single = 2   'ひも描画用
-
-    Private Const cBandBrushAlfa As Integer = 50 'ひも塗りつぶしの不透明度(～255)
-    Private Const cThinPenAlfa As Integer = 100 '細い線の不透明度(～255)
-
 
     '描画領域
     Dim Canvas As Bitmap = Nothing
@@ -93,24 +85,35 @@ Public Class CImageDraw
     Private Class CPenBrush
         Implements IDisposable
 
-        Friend Pen_Thin As Pen
-        Friend Pen_Thick As Pen
-        Friend Brush_Solid As SolidBrush
-        Friend Brush_Alfa As SolidBrush
+        Friend PenBand As Pen = Nothing 'ひもの外形
+        Friend PenLane As Pen = Nothing '本幅線
+        Friend BrushSolid As SolidBrush = Nothing '記号
+        Friend BrushAlfa As SolidBrush = Nothing '内部塗りつぶし
+        Friend PenWidth As Single = 0 'ペンの幅
 
-        Sub New(ByVal drcol As Drawing.Color)
-            If Not drcol.IsEmpty Then
-                Pen_Thin = New Pen(Color.FromArgb(cThinPenAlfa, drcol), cBandPenWidth)
-                Pen_Thick = New Pen(drcol, cBandPenWidth)
-                Brush_Solid = New SolidBrush(drcol)
-                Brush_Alfa = New SolidBrush(Color.FromArgb(cBandBrushAlfa, drcol))
+        Sub New(ByVal drcol As clsColorRecordSet)
+            If drcol IsNot Nothing Then
+                If Not drcol.PenColor.IsEmpty Then
+                    If 0 < drcol.PenWidth Then
+                        PenBand = New Pen(drcol.PenColor, drcol.PenWidth)
+                        PenWidth = drcol.PenWidth
+                    End If
+                    BrushSolid = New SolidBrush(drcol.PenColor)
+                End If
+                If 0 < drcol.LanePenWidth AndAlso Not drcol.LanePenColor.IsEmpty Then
+                    PenLane = New Pen(drcol.LanePenColor, drcol.LanePenWidth)
+                End If
+                If Not drcol.BrushAlfaColor.IsEmpty Then
+                    BrushAlfa = New SolidBrush(drcol.BrushAlfaColor)
+                End If
             Else
-                Pen_Thin = New Pen(Color.Gray, cThinPenWidth)
-                Pen_Thick = New Pen(Color.Black, cThickPenWidth)
-                Brush_Solid = New SolidBrush(Color.Black)
-                Brush_Alfa = New SolidBrush(Color.FromArgb(cBandBrushAlfa, Color.Gray))
+                'デフォルトの一式
+                PenBand = New Pen(Color.Black, cThickPenWidth)
+                PenWidth = cThickPenWidth
+                PenLane = New Pen(Color.Gray, cThinPenWidth)
+                BrushSolid = New SolidBrush(Color.Black)
+                'BrushAlfa = New SolidBrush(Color.FromArgb(50, Color.LightGray))
             End If
-
         End Sub
 
         Private disposedValue As Boolean
@@ -118,10 +121,10 @@ Public Class CImageDraw
             If Not disposedValue Then
                 If disposing Then
                     ' TODO: マネージド状態を破棄します (マネージド オブジェクト)
-                    Pen_Thin.Dispose()
-                    Pen_Thick.Dispose()
-                    Brush_Solid.Dispose()
-                    Brush_Alfa.Dispose()
+                    If PenLane IsNot Nothing Then PenLane.Dispose()
+                    If PenBand IsNot Nothing Then PenBand.Dispose()
+                    If BrushSolid IsNot Nothing Then BrushSolid.Dispose()
+                    If BrushAlfa IsNot Nothing Then BrushAlfa.Dispose()
                 End If
 
                 ' TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
@@ -159,8 +162,8 @@ Public Class CImageDraw
                 Return _BandPenBrushMap(sColor)
             End If
         Else
-            Dim drcol As Drawing.Color = g_clsMasterTables.GetColorRecordColor(sColor)
-            If drcol.IsEmpty Then
+            Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(sColor)
+            If drcol Is Nothing Then
                 '色はあるがマスターにない
                 _BandPenBrushMap.Add(sColor, Nothing)
             Else
@@ -182,48 +185,48 @@ Public Class CImageDraw
     Dim _pixcel_h As Double
     Dim _pixcel_v As Double
 
-    Function pixcel_X(x As Double) As Integer
+    Function pixcel_X(x As Double) As Single
         Return (x - _LeftX) * _pixcel_h * ImageScale
     End Function
 
-    Function pixcel_Y(y As Double) As Integer
+    Function pixcel_Y(y As Double) As Single
         Return -(y - _TopY) * _pixcel_v * ImageScale
     End Function
 
-    Function pixcel_width(width As Double) As Integer
+    Function pixcel_width(width As Double) As Single
         Return width * _pixcel_h * ImageScale
     End Function
 
-    Function pixcel_height(height As Double) As Integer
+    Function pixcel_height(height As Double) As Single
         Return height * _pixcel_v * ImageScale
     End Function
 
-    Function pixcel_point(p As S実座標) As Point
+    Function pixcel_point(p As S実座標) As PointF
         Return New Point(pixcel_X(p.X), pixcel_Y(p.Y))
     End Function
 
     '四隅の4点の配列
-    Function pixcel_lines(sqare As S四隅) As Point()
-        Dim point As Point
-        Dim lst As New List(Of Point)
+    Function pixcel_lines(sqare As S四隅) As PointF()
+        Dim point As PointF
+        Dim lst As New List(Of PointF)
 
-        point = New Point(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
+        point = New PointF(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
         lst.Add(point)
-        point = New Point(pixcel_X(sqare.p左上.X), pixcel_Y(sqare.p左上.Y))
+        point = New PointF(pixcel_X(sqare.p左上.X), pixcel_Y(sqare.p左上.Y))
         lst.Add(point)
-        point = New Point(pixcel_X(sqare.p左下.X), pixcel_Y(sqare.p左下.Y))
+        point = New PointF(pixcel_X(sqare.p左下.X), pixcel_Y(sqare.p左下.Y))
         lst.Add(point)
-        point = New Point(pixcel_X(sqare.p右下.X), pixcel_Y(sqare.p右下.Y))
+        point = New PointF(pixcel_X(sqare.p右下.X), pixcel_Y(sqare.p右下.Y))
         lst.Add(point)
-        point = New Point(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
+        point = New PointF(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
         lst.Add(point)
 
         Return lst.ToArray
     End Function
 
     '領域を長方形へ
-    Function pixcel_rectangle(rect As S領域) As Rectangle
-        Dim rectan As Rectangle
+    Function pixcel_rectangle(rect As S領域) As RectangleF
+        Dim rectan As RectangleF
         '左上X,Y
         rectan.X = pixcel_X(rect.p左下.X)
         rectan.Y = pixcel_Y(rect.p右上.Y)
@@ -276,7 +279,7 @@ Public Class CImageDraw
         _Pen_red = New Pen(Drawing.Color.Red, cThickPenWidth)
 
         'ひも描画用
-        Dim drcol As Drawing.Color = g_clsMasterTables.GetColorRecordColor(basiccolor)
+        Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(basiccolor)
         _BandDefaultPenBrush = New CPenBrush(drcol)
 
         'フォントオブジェクトの作成
@@ -330,22 +333,37 @@ Public Class CImageDraw
         If item.m_row縦横展開 Is Nothing Then
             Return False
         End If
-        Dim rect As Rectangle = pixcel_rectangle(item.m_rひも位置)
-        _Graphic.FillRectangle(GetBandPenBrush(item.m_row縦横展開.f_s色).Brush_Alfa, rect.X, rect.Y, rect.Width, rect.Height)
+        Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        If colset Is Nothing Then
+            Return False
+        End If
+        Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+        '塗りつぶし
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillRectangle(colset.BrushAlfa, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        End If
 
-        If 1 < item.m_row縦横展開.f_i何本幅 Then
-            Dim wid As Double = item.m_rひも位置.y高さ / item.m_row縦横展開.f_i何本幅
+        '本幅線
+        If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
+            Dim wid As Single = (pixcel_height(item.m_rひも位置.y高さ) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
             For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
-                Dim p左 As New S実座標(item.m_rひも位置.x最左, item.m_rひも位置.y最上 - wid * i)
-                Dim p右 As New S実座標(item.m_rひも位置.x最右, item.m_rひも位置.y最上 - wid * i)
-                _Graphic.DrawLine(GetBandPenBrush(item.m_row縦横展開.f_s色).Pen_Thin, pixcel_point(p左), pixcel_point(p右))
+                Dim p左 As New PointF(rect.X + colset.PenWidth / 2, rect.Y + wid * i + colset.PenWidth / 2)
+                Dim p右 As New PointF(rect.X + rect.Width - colset.PenWidth, rect.Y + wid * i + colset.PenWidth / 2)
+                _Graphic.DrawLine(colset.PenLane, p左, p右)
             Next
         End If
 
-        _Graphic.DrawRectangle(GetBandPenBrush(item.m_row縦横展開.f_s色).Pen_Thick, rect.X, rect.Y, rect.Width, rect.Height)
-        '左
-        Dim pMark As New Point(rect.X - _FontSize * 2.7, rect.Y + 3)
-        _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, GetBandPenBrush(item.m_row縦横展開.f_s色).Brush_Solid, pMark)
+        'バンド
+        If colset.PenBand IsNot Nothing Then
+            _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        End If
+
+        '記号を左に
+        If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim pMark As New Point(rect.X - _FontSize * 2.7, rect.Y + 3)
+            _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+        End If
+
         Return True
     End Function
 
@@ -353,40 +371,57 @@ Public Class CImageDraw
         If item.m_row縦横展開 Is Nothing Then
             Return False
         End If
+        Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        If colset Is Nothing Then
+            Return False
+        End If
         Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
-        _Graphic.FillRectangle(GetBandPenBrush(item.m_row縦横展開.f_s色).Brush_Alfa, rect.X, rect.Y, rect.Width, rect.Height)
+        '塗りつぶし
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillRectangle(colset.BrushAlfa, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        End If
 
-        If 1 < item.m_row縦横展開.f_i何本幅 Then
-            Dim wid As Double = item.m_rひも位置.x幅 / item.m_row縦横展開.f_i何本幅
+        '本幅線
+        If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
+            Dim wid As Single = (pixcel_width(item.m_rひも位置.x幅) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
             For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
-                Dim p上 As New S実座標(item.m_rひも位置.x最左 + wid * i, item.m_rひも位置.y最上)
-                Dim p下 As New S実座標(item.m_rひも位置.x最左 + wid * i, item.m_rひも位置.y最下)
-                _Graphic.DrawLine(GetBandPenBrush(item.m_row縦横展開.f_s色).Pen_Thin, pixcel_point(p上), pixcel_point(p下))
+                Dim p上 As New PointF(rect.X + wid * i + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
+                Dim p下 As New PointF(rect.X + wid * i + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth)
+                _Graphic.DrawLine(colset.PenLane, p上, p下)
             Next
         End If
 
-        _Graphic.DrawRectangle(GetBandPenBrush(item.m_row縦横展開.f_s色).Pen_Thick, rect.X, rect.Y, rect.Width, rect.Height)
-        '上
-        Dim pMark As New Point(rect.X + 2, rect.Y - _FontSize * 1.5)
-        _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, GetBandPenBrush(item.m_row縦横展開.f_s色).Brush_Solid, pMark)
+        'バンド
+        If colset.PenBand IsNot Nothing Then
+            _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        End If
+
+        '記号を上に
+        If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim pMark As New Point(rect.X + 2, rect.Y - _FontSize * 1.5)
+            _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+        End If
         Return True
     End Function
 
     Function draw底枠(ByVal item As clsImageItem) As Boolean
-        Dim points() As Point = pixcel_lines(item.m_a四隅)
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
         _Graphic.DrawLines(_Pen_black_thick, points)
         Return True
     End Function
 
     Function draw全体枠(ByVal item As clsImageItem) As Boolean
-        Dim points() As Point = pixcel_lines(item.m_a四隅)
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
         _Graphic.DrawLines(_Pen_black_thin, points)
         Return True
     End Function
 
     Function draw側面(ByVal item As clsImageItem) As Boolean
-        Dim points() As Point = pixcel_lines(item.m_a四隅)
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
         _Graphic.DrawLines(_Pen_black_thin, points)
+        For Each line As S線分 In item.m_lineList
+            _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        Next
         Return True
     End Function
 
@@ -409,20 +444,6 @@ Public Class CImageDraw
         Return True
     End Function
 
-
-    '領域を縦分割した線
-    Function pixcel_vert_lines(rect As S領域, lane As Integer) As C線分リスト
-        Dim lineList As New C線分リスト
-        If 1 < lane Then
-            Dim wid As Double = rect.x幅 / (lane - 1)
-            For i As Integer = 1 To lane - 1
-                Dim p上 As New S実座標(rect.x最左 + wid * i, rect.y最上)
-                Dim p下 As New S実座標(rect.x最左 + wid * i, rect.y最下)
-                lineList.Add(New S線分(p上, p下))
-            Next
-        End If
-        Return lineList
-    End Function
 
 
     'ファイル保存

@@ -114,42 +114,44 @@ Public Class clsImageData
 
     '軸線と目盛線生成
     Private Function setAxis(ByVal isVirtical As Boolean) As clsImageItem
-        Dim item As clsImageItem
-        Dim diff As S差分
-        Dim diffStep As S差分
-        Dim steps As Integer
 
-        Dim space As New Length(2, "mm")
-        Dim p座標開始点 As New S実座標(_rDrawingRect.x最左 + space.Value, _rDrawingRect.y最上 - space.Value)
+        Dim delta As S差分 '目盛の間隔
+        Dim scale As S差分 '目盛方向
+        Dim count As Integer '目盛の数
+        Dim len As New Length(2, "mm") '目盛の幅
+
+        Dim p座標開始点 As S実座標 = _rDrawingRect.p左上
+        Dim p座標終了点 As S実座標
 
         '座標の描画
-        Dim unit As Length
-        If g_clsSelectBasics.p_unit設定時の寸法単位.Is_inch Then
-            unit = New Length(1, "in")
-        Else
-            unit = New Length(1, "cm")
-        End If
-
+        Dim unit As Length = New Length(1, g_clsSelectBasics.p_unit出力時の寸法単位)
+        Dim item As clsImageItem
         If isVirtical Then
             item = New clsImageItem(ImageTypeEnum._縦軸線, 1)
-            diff = New S差分(0, -unit.Value)
-            diffStep = New S差分(unit.Value / 4, 0)
-            steps = Int((_rDrawingRect.x幅 - space.Value) / unit.Value)
+            p座標終了点 = _rDrawingRect.p左下
+            delta = New S差分(0, -unit.Value)
+            scale = New S差分(len.Value, 0) '─
+            count = Int((p座標開始点.Y - p座標終了点.Y) / unit.Value)
         Else
             item = New clsImageItem(ImageTypeEnum._横軸線, 1)
-            diff = New S差分(unit.Value, 0)
-            diffStep = New S差分(0, -unit.Value / 4)
-            steps = Int((_rDrawingRect.y高さ - space.Value) / unit.Value)
+            p座標終了点 = _rDrawingRect.p右上
+            delta = New S差分(unit.Value, 0)
+            scale = New S差分(0, -len.Value) '│
+            count = Int((p座標終了点.X - p座標開始点.X) / unit.Value)
         End If
 
-        Dim pFrom As S実座標 = p座標開始点
-        For i As Integer = 0 To steps
-            Dim pTo As S実座標 = pFrom + diff
-            Dim pToStep As S実座標 = pTo + diffStep
-            item.m_lineList.Add(New S線分(pTo, pToStep))
-            pFrom = pTo
+        Dim p As S実座標 = p座標開始点 '目盛点
+        Dim line As S線分
+        For i As Integer = 0 To count - 1
+            If i Mod 10 = 0 Then
+                line = New S線分(p, p + scale * 2)
+            Else
+                line = New S線分(p, p + scale)
+            End If
+            item.m_lineList.Add(line)
+            p += delta
         Next
-        item.m_lineList.Add(New S線分(p座標開始点, pFrom))
+        item.m_lineList.Add(New S線分(p座標開始点, p座標終了点))
 
         Return item
     End Function

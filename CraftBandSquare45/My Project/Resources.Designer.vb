@@ -295,6 +295,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  斜め四角{0}-{1}-{2} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property SaveFileName() As String
+            Get
+                Return ResourceManager.GetString("SaveFileName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String

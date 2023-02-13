@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports System.Threading.Channels
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstMasterTables
 
@@ -623,6 +622,37 @@ Public Class clsMasterTables
 #End Region
 
 #Region "描画色/Color"
+
+    Class clsColorRecordSet
+        Public PenColor As Drawing.Color = Color.Empty  '描画色・Solid塗りつぶし色
+        Public LanePenColor As Drawing.Color = Color.Empty '本幅描画色
+        Public BrushAlfaColor As Drawing.Color = Color.Empty 'Alfa塗りつぶし色
+
+        Public PenWidth As Single = 0  'ペンの幅
+        Public LanePenWidth As Single = 0  '本幅ペンの幅
+
+        Sub New(ByVal row As tbl描画色Row)
+            PenColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
+            If Not row.Isf_i透明度Null AndAlso 0 < row.f_i透明度 Then
+                BrushAlfaColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青, row.f_i透明度)
+            End If
+            If row.Isf_d線幅Null Then
+                PenWidth = 1 'デフォルト1
+            ElseIf row.f_d線幅 <= 0 Then
+                PenWidth = 0
+            Else
+                PenWidth = row.f_d線幅
+            End If
+            If Not row.Isf_d中線幅Null AndAlso 0 < row.f_d中線幅 Then
+                LanePenWidth = row.f_d中線幅
+            End If
+
+            '本幅描画色については、とりあえず、少し薄い色にしておく
+            LanePenColor = Color.FromArgb(100, PenColor)
+        End Sub
+    End Class
+
+
     Private Function SetAvairableColorType() As Boolean
         Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
 
@@ -637,9 +667,9 @@ Public Class clsMasterTables
         Return modified
     End Function
 
-    Shared Function RgbColor(ByVal ored As Object, ByVal ogreen As Object, ByVal oblue As Object, Optional alfa As Integer = 255) As Drawing.Color
+    Shared Function RgbColor(ByVal ored As Object, ByVal ogreen As Object, ByVal oblue As Object, Optional oalfa As Object = Nothing) As Drawing.Color
         Dim ired As Integer = 0
-        If Not IsDBNull(ored) Then
+        If ored IsNot Nothing AndAlso Not IsDBNull(ored) Then
             ired = Val(ored)
             If ired < 0 Then
                 ired = 0
@@ -649,7 +679,7 @@ Public Class clsMasterTables
         End If
 
         Dim igreen As Integer = 0
-        If Not IsDBNull(ogreen) Then
+        If ogreen IsNot Nothing AndAlso Not IsDBNull(ogreen) Then
             igreen = Val(ogreen)
             If igreen < 0 Then
                 igreen = 0
@@ -659,7 +689,7 @@ Public Class clsMasterTables
         End If
 
         Dim iblue As Integer = 0
-        If Not IsDBNull(oblue) Then
+        If oblue IsNot Nothing AndAlso Not IsDBNull(oblue) Then
             iblue = Val(oblue)
             If iblue < 0 Then
                 iblue = 0
@@ -667,23 +697,34 @@ Public Class clsMasterTables
                 iblue = MaxRgbValue
             End If
         End If
-        Return Color.FromArgb(alfa, ired, igreen, iblue)
+
+        Dim ialfa As Integer = 255
+        If oalfa IsNot Nothing AndAlso Not IsDBNull(oalfa) Then
+            ialfa = Val(oalfa)
+            If ialfa < 0 Then
+                ialfa = 0
+            ElseIf MaxRgbValue < ialfa Then
+                ialfa = MaxRgbValue
+            End If
+        End If
+
+        Return Color.FromArgb(ialfa, ired, igreen, iblue)
     End Function
 
-    '指定名の描画色 なければDrawing.Color.Empty
-    Public Function GetColorRecordColor(ByVal color As String, Optional alfa As Integer = 255) As Drawing.Color
+    '指定名の描画色 なければNothing
+    Public Function GetColorRecordSet(ByVal color As String) As clsColorRecordSet
         Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
 
         If table.Rows.Count = 0 OrElse String.IsNullOrWhiteSpace(color) Then
-            Return Drawing.Color.Empty
+            Return Nothing
         End If
 
         Dim cond As String = String.Format("f_s色 = '{0}'", color)
         Dim rows() As tbl描画色Row = table.Select(cond)
         If 0 < rows.Count Then
-            Return RgbColor(rows(0).f_i赤, rows(0).f_i緑, rows(0).f_i青, alfa) 'First only
+            Return New clsColorRecordSet(rows(0)) 'First only
         End If
-        Return Drawing.Color.Empty
+        Return Nothing
     End Function
 
     Public Function GetColorTableCopy() As tbl描画色DataTable

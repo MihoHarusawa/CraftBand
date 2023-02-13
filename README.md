@@ -1,9 +1,14 @@
-# CraftBand / CraftBand.dll
-xmlによるデータベース、編集用フォームなどのライブラリです
-
 # CraftBandMesh / CraftBandMesh.exe
-縦横(+楕円)の底、プラス側面を編む方式のサイズ計算を行うアプリです
-CraftBand.dll を参照します
+縦横(+楕円)の底、プラス側面を編む方式のサイズ計算を行うアプリです。
+クラフトバンドのオリジナルレシピが簡単に作成できます。
+
+# CraftBandSqare45 / CraftBandSqare45.exe
+北欧編みや斜め網代など、縦横に組んだ底を、交差方向に対して45度で立ち上げる方式のサイズ計算を行うアプリです。
+プレビュー機能もついていますので、配置が簡単に確認できます。
+
+# CraftBand / CraftBand.dll
+xmlによるデータベース、編集用フォームなどの共通ライブラリです
+
 
 # Features
 でき上がり寸法を見ながら、ひも幅やひも数を変えることで、自分の好きなサイズに作れます。
@@ -20,12 +25,13 @@ CraftBand.dll を参照します
 
 # Installation
 
-バイナリ一式があれば、どこに置いてもよいです
-CraftBandMexh.exeを開いて実行してください。
+バイナリ一式があれば、どこに置いてもよいです。
+各、実行ファイル(.exe)を開いて実行してください。
 
 # Usage
 
-アプリについて https://www.labo.com/CraftBand/craftbandmesh/
+CraftBandMesh:  https://www.labo.com/CraftBand/craftbandmesh/
+CraftBandSqare45: https://labo.com/CraftBand/CraftBandSquare45/
 サンプルなど http://www.labo.com/CraftBand/
 
 

@@ -403,6 +403,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  四角底{0}-{1}-{2} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property SaveFileName() As String
+            Get
+                Return ResourceManager.GetString("SaveFileName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String
@@ -421,7 +430,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  横寸法優先の条件を満たしません。 に類似しているローカライズされた文字列を検索します。
+        '''  すき間を横寸法に合わせることができません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property WarningWidthPrime() As String
             Get

@@ -116,7 +116,7 @@ Public Class clsSelectBasics
     'p_unit設定時の寸法単位の変更の影響あり(lenバンド幅)
     Public Sub SetTargetBandTypeName(ByVal bandtypename As String)
 
-        _row選択中バンドの種類 = g_clsMasterTables.GetBandTypeRecord(bandtypename, True)
+        _row選択中バンドの種類 = g_clsMasterTables.GetBandTypeRecord(bandtypename, True).Clone
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "SetTargetBandTypeName({0}) {1}", bandtypename, _row選択中バンドの種類.dump)
 
         Dim str As String

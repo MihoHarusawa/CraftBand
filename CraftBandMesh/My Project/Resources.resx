@@ -241,6 +241,10 @@
     <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
     <comment>frmMain</comment>
   </data>
+  <data name="SaveFileName" xml:space="preserve">
+    <value>四角底{0}-{1}-{2}</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="TitleDllError" xml:space="preserve">
     <value>DLLエラー</value>
     <comment>mdlMain</comment>
@@ -250,7 +254,7 @@
     <comment>mdlMain</comment>
   </data>
   <data name="WarningWidthPrime" xml:space="preserve">
-    <value>横寸法優先の条件を満たしません。</value>
+    <value>すき間を横寸法に合わせることができません。</value>
     <comment>frmMain</comment>
   </data>
 </root>

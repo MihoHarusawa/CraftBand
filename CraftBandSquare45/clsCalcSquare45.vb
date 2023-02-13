@@ -1186,71 +1186,82 @@ Class clsCalcSquare45
 
         Dim d差の半分 As Double = (_i横の四角数 - _i縦の四角数) / 2
         Dim d和の半分 As Double = (_i横の四角数 + _i縦の四角数) / 2
-        Dim p底のA As S実座標 = (toPoint(d差の半分, d和の半分)) '右上
-        Dim p底のC As S実座標 = -p底のA '左下
-        Dim p底のD As S実座標 = toPoint(d和の半分, d差の半分) '右下
-        Dim p底のB As S実座標 = -p底のD '左上
+
+        Dim a底 As S四隅
+        a底.pA = (toPoint(d差の半分, d和の半分)) '右上
+        a底.pC = -a底.pA '左下
+        a底.pD = toPoint(d和の半分, d差の半分) '右下
+        a底.pB = -a底.pD '左上
+
+        Dim d縁XY As Double = _d縁の高さ / ROOT2
+        Dim line As S線分
 
         '全体枠
         item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)
-        item.m_a四隅.p右上 = toPoint(d差の半分, (2 * _d高さの四角数 + d和の半分)) 'A
-        item.m_a四隅.p左下 = -item.m_a四隅.p右上  'C=-A
-
-        item.m_a四隅.p右下 = toPoint(2 * _d高さの四角数 + d和の半分, d差の半分) 'D
-        item.m_a四隅.p左上 = -item.m_a四隅.p右下  'B=-D
+        item.m_a四隅.pA = toPoint(d差の半分, (2 * _d高さの四角数 + d和の半分))
+        item.m_a四隅.pC = -item.m_a四隅.pA
+        item.m_a四隅.pD = toPoint(2 * _d高さの四角数 + d和の半分, d差の半分)
+        item.m_a四隅.pB = -item.m_a四隅.pD
         itemlist.AddItem(item)
 
         '底枠
         item = New clsImageItem(clsImageItem.ImageTypeEnum._底枠, 1)
-        item.m_a四隅.p右上 = p底のA
-        item.m_a四隅.p左下 = p底のC
-
-        item.m_a四隅.p右下 = p底のD
-        item.m_a四隅.p左上 = p底のB
+        item.m_a四隅 = a底
         itemlist.AddItem(item)
 
         '横の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
-        item.m_a四隅.p右上 = toPoint(-_d高さの四角数 + d差の半分, _d高さの四角数 + d和の半分) 'A
-        item.m_a四隅.p左下 = p底のB 'C=底のB
-
-        item.m_a四隅.p右下 = p底のA 'D=底のA
-        item.m_a四隅.p左上 = toPoint(-_d高さの四角数 - d和の半分, _d高さの四角数 - d差の半分) 'B
+        item.m_a四隅.pA = toPoint(-_d高さの四角数 + d差の半分, _d高さの四角数 + d和の半分)
+        item.m_a四隅.pB = toPoint(-_d高さの四角数 - d和の半分, _d高さの四角数 - d差の半分)
+        item.m_a四隅.pC = a底.pB
+        item.m_a四隅.pD = a底.pA
+        'ABを135度シフト
+        line = New S線分(item.m_a四隅.pA, item.m_a四隅.pB)
+        line += Unit135 * d縁XY
+        item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
-        item.m_a四隅.p右上 = p底のD 'A=底のD
-        item.m_a四隅.p左下 = toPoint(_d高さの四角数 - d差の半分, -_d高さの四角数 - d和の半分) 'C
-
-        item.m_a四隅.p右下 = toPoint(_d高さの四角数 + d和の半分, -_d高さの四角数 + d差の半分) 'D
-        item.m_a四隅.p左上 = p底のC 'B=底のC
+        item.m_a四隅.pA = a底.pD
+        item.m_a四隅.pB = a底.pC
+        item.m_a四隅.pC = toPoint(_d高さの四角数 - d差の半分, -_d高さの四角数 - d和の半分)
+        item.m_a四隅.pD = toPoint(_d高さの四角数 + d和の半分, -_d高さの四角数 + d差の半分)
+        'CDを315度シフト
+        line = New S線分(item.m_a四隅.pC, item.m_a四隅.pD)
+        line += Unit315 * d縁XY
+        item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
         '縦の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
-        item.m_a四隅.p右上 = toPoint(_d高さの四角数 + d差の半分, _d高さの四角数 + d和の半分) 'A
-        item.m_a四隅.p左下 = p底のD 'C=底のD
-
-        item.m_a四隅.p右下 = toPoint(_d高さの四角数 + d和の半分, _d高さの四角数 + d差の半分) 'D
-        item.m_a四隅.p左上 = p底のA 'B=底のA
+        item.m_a四隅.pA = toPoint(_d高さの四角数 + d差の半分, _d高さの四角数 + d和の半分)
+        item.m_a四隅.pB = a底.pA
+        item.m_a四隅.pC = a底.pD
+        item.m_a四隅.pD = toPoint(_d高さの四角数 + d和の半分, _d高さの四角数 + d差の半分)
+        'DAを45度シフト
+        line = New S線分(item.m_a四隅.pD, item.m_a四隅.pA)
+        line += Unit45 * d縁XY
+        item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
-        item.m_a四隅.p右上 = p底のB 'A=底のB
-        item.m_a四隅.p左下 = toPoint(-_d高さの四角数 - d差の半分, -_d高さの四角数 - d和の半分) 'C
-
-        item.m_a四隅.p右下 = p底のC 'D=底のC
-        item.m_a四隅.p左上 = toPoint(-_d高さの四角数 - d和の半分, -_d高さの四角数 - d差の半分) 'B
+        item.m_a四隅.pA = a底.pB
+        item.m_a四隅.pB = toPoint(-_d高さの四角数 - d和の半分, -_d高さの四角数 - d差の半分)
+        item.m_a四隅.pC = toPoint(-_d高さの四角数 - d差の半分, -_d高さの四角数 - d和の半分)
+        item.m_a四隅.pD = a底.pC
+        'BCを225度シフト
+        line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p左下)
+        line += Unit225 * d縁XY
+        item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
         '底の中央線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
-        Dim line As clsImageItem.S線分
         If _i横の四角数 = _i縦の四角数 Then
-            line = New clsImageItem.S線分(p底のC, p底のA) '底のC,底のA
+            line = New clsImageItem.S線分(a底.pC, a底.pA) '底のC,底のA
             item.m_lineList.Add(line)
 
-            line = New clsImageItem.S線分(p底のB, p底のD) '底のB,底のD
+            line = New clsImageItem.S線分(a底.pB, a底.pD) '底のB,底のD
             item.m_lineList.Add(line)
         Else
             Dim p上クロス点 As S実座標
@@ -1259,25 +1270,25 @@ Class clsCalcSquare45
                 p上クロス点 = toPoint(d差の半分, d差の半分)
                 p下クロス点 = toPoint(-d差の半分, -d差の半分)
 
-                line = New clsImageItem.S線分(p上クロス点, p底のD)
+                line = New clsImageItem.S線分(p上クロス点, a底.pD)
                 item.m_lineList.Add(line)
 
-                line = New clsImageItem.S線分(p下クロス点, p底のB)
+                line = New clsImageItem.S線分(p下クロス点, a底.pB)
                 item.m_lineList.Add(line)
             Else
                 p上クロス点 = toPoint(d差の半分, -d差の半分)
                 p下クロス点 = toPoint(-d差の半分, d差の半分)
 
-                line = New clsImageItem.S線分(p上クロス点, p底のB)
+                line = New clsImageItem.S線分(p上クロス点, a底.pB)
                 item.m_lineList.Add(line)
 
-                line = New clsImageItem.S線分(p下クロス点, p底のD)
+                line = New clsImageItem.S線分(p下クロス点, a底.pD)
                 item.m_lineList.Add(line)
             End If
-            line = New clsImageItem.S線分(p底のA, p上クロス点)
+            line = New clsImageItem.S線分(a底.pA, p上クロス点)
             item.m_lineList.Add(line)
 
-            line = New clsImageItem.S線分(p下クロス点, p底のC)
+            line = New clsImageItem.S線分(p下クロス点, a底.pC)
             item.m_lineList.Add(line)
 
             line = New clsImageItem.S線分(p下クロス点, p上クロス点)

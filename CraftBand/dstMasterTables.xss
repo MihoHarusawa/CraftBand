@@ -10,7 +10,7 @@
     <Shape ID="DesignTable:tblバンドの種類" ZOrder="3" X="265" Y="86" Height="494" Width="253" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="490" />
     <Shape ID="DesignTable:tbl付属品" ZOrder="4" X="974" Y="101" Height="517" Width="256" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="513" />
     <Shape ID="DesignTable:tbl基本値" ZOrder="2" X="40" Y="99" Height="79" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="75" />
-    <Shape ID="DesignTable:tbl描画色" ZOrder="1" X="974" Y="698" Height="125" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="121" />
+    <Shape ID="DesignTable:tbl描画色" ZOrder="1" X="971" Y="699" Height="217" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="213" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Security.Permissions
 Imports System.Windows.Forms
 Imports CraftBand.Tables.dstMasterTables
 ''' <summary>
@@ -6,17 +7,16 @@ Imports CraftBand.Tables.dstMasterTables
 ''' 各色の数値は255まで
 ''' </summary>
 Public Class frmColor
-
-    Dim _table As tbl描画色DataTable
     Shared _ColorFiledNames() As String = {"f_i赤", "f_i緑", "f_i青"}
 
+    Dim _table As tbl描画色DataTable
+    Dim cColDispColor As Integer = 4 '色を表示するカラム
+
     Private Sub frmColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        BindingSource描画色.Sort = Nothing
         BindingSource描画色.DataSource = Nothing
 
         _table = g_clsMasterTables.GetColorTableCopy()
         BindingSource描画色.DataSource = _table
-        'BindingSource描画色.Sort = "f_s色"
 
         dgvData.Refresh()
 
@@ -54,13 +54,15 @@ Public Class frmColor
             Exit Sub
         End If
 
-        If _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+        '色と透明度
+        If _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) OrElse
+            dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i透明度" Then
             Dim v As Integer
-            If Integer.TryParse(e.FormattedValue.ToString(), v) AndAlso 0 <= v AndAlso v <= 255 Then
+            If Integer.TryParse(e.FormattedValue.ToString(), v) AndAlso 0 <= v AndAlso v <= clsMasterTables.MaxRgbValue Then
                 Exit Sub 'OK
             End If
             '{0}行目{1}値には{2}以下の数値を設定してください。
-            Dim msg As String = String.Format(My.Resources.ErrGridMaximumValue, e.RowIndex + 1, dgv.Columns(e.ColumnIndex).HeaderText, 255)
+            Dim msg As String = String.Format(My.Resources.ErrGridMaximumValue, e.RowIndex + 1, dgv.Columns(e.ColumnIndex).HeaderText, clsMasterTables.MaxRgbValue)
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             dgv.CancelEdit()
             e.Cancel = True
@@ -83,7 +85,7 @@ Public Class frmColor
             Exit Sub
         End If
         '色表示のセル
-        If dgv.Columns(e.ColumnIndex).HeaderText <> "色表示" Then
+        If e.ColumnIndex <> cColDispColor Then
             Exit Sub
         End If
 
@@ -101,5 +103,34 @@ Public Class frmColor
             End If
         Next
         e.CellStyle.BackColor = clsMasterTables.RgbColor(r, g, b)
+    End Sub
+
+    Private Sub dgvData_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellValueChanged
+        Dim dgv As DataGridView = CType(sender, DataGridView)
+
+        '新しい行のセルは除外
+        If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty OrElse e.ColumnIndex < 0 Then
+            Exit Sub
+        End If
+
+        '色のセル
+        If Not _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+            Exit Sub
+        End If
+
+        'その行の各色値
+        Dim r As Object = 0
+        Dim g As Object = 0
+        Dim b As Object = 0
+        For Each col As DataGridViewColumn In dgv.Columns
+            If col.DataPropertyName = "f_i赤" Then
+                r = dgv.Rows(e.RowIndex).Cells(col.Index).Value
+            ElseIf col.DataPropertyName = "f_i緑" Then
+                g = dgv.Rows(e.RowIndex).Cells(col.Index).Value
+            ElseIf col.DataPropertyName = "f_i青" Then
+                b = dgv.Rows(e.RowIndex).Cells(col.Index).Value
+            End If
+        Next
+        dgv.Rows(e.RowIndex).Cells(cColDispColor).Style.BackColor = clsMasterTables.RgbColor(r, g, b)
     End Sub
 End Class
