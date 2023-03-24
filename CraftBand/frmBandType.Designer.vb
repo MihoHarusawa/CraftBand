@@ -60,6 +60,11 @@ Partial Class frmBandType
         Me.f_dひも間のすき間初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長係数初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dコマ寸法係数a = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dコマ寸法係数b = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dコマ要尺係数a = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dコマ要尺係数b = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d四つ畳みひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s色リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -75,7 +80,7 @@ Partial Class frmBandType
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_s色リスト, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_dコマ寸法係数a, Me.f_dコマ寸法係数b, Me.f_dコマ要尺係数a, Me.f_dコマ要尺係数b, Me.f_d四つ畳みひも長加算初期値, Me.f_s色リスト, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSourceバンドの種類
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
@@ -295,6 +300,51 @@ Partial Class frmBandType
         Me.f_dひも長加算初期値.ToolTipText = "組み編みのひも長加算初期値"
         Me.f_dひも長加算初期値.Width = 125
         '
+        'f_dコマ寸法係数a
+        '
+        Me.f_dコマ寸法係数a.DataPropertyName = "f_dコマ寸法係数a"
+        Me.f_dコマ寸法係数a.HeaderText = "マ寸法係数a"
+        Me.f_dコマ寸法係数a.MinimumWidth = 6
+        Me.f_dコマ寸法係数a.Name = "f_dコマ寸法係数a"
+        Me.f_dコマ寸法係数a.ToolTipText = "四つ畳み編みの1コマの寸法、ひも幅に対する係数、1が2D値"
+        Me.f_dコマ寸法係数a.Width = 125
+        '
+        'f_dコマ寸法係数b
+        '
+        Me.f_dコマ寸法係数b.DataPropertyName = "f_dコマ寸法係数b"
+        Me.f_dコマ寸法係数b.HeaderText = "コマ寸法係数b"
+        Me.f_dコマ寸法係数b.MinimumWidth = 6
+        Me.f_dコマ寸法係数b.Name = "f_dコマ寸法係数b"
+        Me.f_dコマ寸法係数b.ToolTipText = "四つ畳み編みの1コマの寸法、プラスする係数、0が2D値・1がひも幅"
+        Me.f_dコマ寸法係数b.Width = 125
+        '
+        'f_dコマ要尺係数a
+        '
+        Me.f_dコマ要尺係数a.DataPropertyName = "f_dコマ要尺係数a"
+        Me.f_dコマ要尺係数a.HeaderText = "コマ要尺係数a"
+        Me.f_dコマ要尺係数a.MinimumWidth = 6
+        Me.f_dコマ要尺係数a.Name = "f_dコマ要尺係数a"
+        Me.f_dコマ要尺係数a.ToolTipText = "四つ畳み編みの1コマに必要な長さ、ひも幅に対する係数、1が2D値"
+        Me.f_dコマ要尺係数a.Width = 125
+        '
+        'f_dコマ要尺係数b
+        '
+        Me.f_dコマ要尺係数b.DataPropertyName = "f_dコマ要尺係数b"
+        Me.f_dコマ要尺係数b.HeaderText = "コマ要尺係数b"
+        Me.f_dコマ要尺係数b.MinimumWidth = 6
+        Me.f_dコマ要尺係数b.Name = "f_dコマ要尺係数b"
+        Me.f_dコマ要尺係数b.ToolTipText = "四つ畳み編みの1コマに必要な長さ、プラスする係数、0が2D値・1がひも幅"
+        Me.f_dコマ要尺係数b.Width = 125
+        '
+        'f_d四つ畳みひも長加算初期値
+        '
+        Me.f_d四つ畳みひも長加算初期値.DataPropertyName = "f_d四つ畳みひも長加算初期値"
+        Me.f_d四つ畳みひも長加算初期値.HeaderText = "四つ畳みひも長加算初期値"
+        Me.f_d四つ畳みひも長加算初期値.MinimumWidth = 6
+        Me.f_d四つ畳みひも長加算初期値.Name = "f_d四つ畳みひも長加算初期値"
+        Me.f_d四つ畳みひも長加算初期値.ToolTipText = "四つ畳み編みの縦横と側面のひも長加算初期値"
+        Me.f_d四つ畳みひも長加算初期値.Width = 125
+        '
         'f_s色リスト
         '
         Me.f_s色リスト.DataPropertyName = "f_s色リスト"
@@ -361,6 +411,11 @@ Partial Class frmBandType
     Friend WithEvents f_dひも間のすき間初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長係数初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算初期値 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dコマ寸法係数a As DataGridViewTextBoxColumn
+    Friend WithEvents f_dコマ寸法係数b As DataGridViewTextBoxColumn
+    Friend WithEvents f_dコマ要尺係数a As DataGridViewTextBoxColumn
+    Friend WithEvents f_dコマ要尺係数b As DataGridViewTextBoxColumn
+    Friend WithEvents f_d四つ畳みひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色リスト As DataGridViewTextBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
 End Class

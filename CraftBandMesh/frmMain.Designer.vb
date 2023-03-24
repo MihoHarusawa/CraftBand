@@ -137,6 +137,7 @@ Partial Class frmMain
         Me.txt外側_最大横 = New System.Windows.Forms.TextBox()
         Me.txt内側_最小縦 = New System.Windows.Forms.TextBox()
         Me.txt内側_最小横 = New System.Windows.Forms.TextBox()
+        Me.btn横寸法に合わせる = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -360,7 +361,6 @@ Partial Class frmMain
         Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
         Me.lbl底 = New System.Windows.Forms.Label()
         Me.lbl最大 = New System.Windows.Forms.Label()
-        Me.btn横寸法に合わせる = New System.Windows.Forms.Button()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -662,7 +662,7 @@ Partial Class frmMain
         'nud周数_側面
         '
         Me.nud周数_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud周数_側面.Location = New System.Drawing.Point(650, 395)
+        Me.nud周数_側面.Location = New System.Drawing.Point(650, 376)
         Me.nud周数_側面.Name = "nud周数_側面"
         Me.nud周数_側面.Size = New System.Drawing.Size(60, 27)
         Me.nud周数_側面.TabIndex = 10
@@ -672,7 +672,7 @@ Partial Class frmMain
         'nud点数
         '
         Me.nud点数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud点数.Location = New System.Drawing.Point(651, 394)
+        Me.nud点数.Location = New System.Drawing.Point(651, 375)
         Me.nud点数.Name = "nud点数"
         Me.nud点数.Size = New System.Drawing.Size(60, 27)
         Me.nud点数.TabIndex = 10
@@ -682,7 +682,7 @@ Partial Class frmMain
         'nud周数_底楕円
         '
         Me.nud周数_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.nud周数_底楕円.Location = New System.Drawing.Point(650, 394)
+        Me.nud周数_底楕円.Location = New System.Drawing.Point(650, 375)
         Me.nud周数_底楕円.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nud周数_底楕円.Name = "nud周数_底楕円"
         Me.nud周数_底楕円.Size = New System.Drawing.Size(60, 27)
@@ -695,7 +695,7 @@ Partial Class frmMain
         Me.nud長さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nud長さ.DecimalPlaces = 2
         Me.nud長さ.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nud長さ.Location = New System.Drawing.Point(559, 394)
+        Me.nud長さ.Location = New System.Drawing.Point(559, 375)
         Me.nud長さ.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         Me.nud長さ.Name = "nud長さ"
         Me.nud長さ.Size = New System.Drawing.Size(86, 27)
@@ -1109,6 +1109,16 @@ Partial Class frmMain
         Me.txt内側_最小横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.ToolTip1.SetToolTip(Me.txt内側_最小横, "横(底)に「周長比率対底の周」の最小値を乗算し、厚さをマイナス")
         '
+        'btn横寸法に合わせる
+        '
+        Me.btn横寸法に合わせる.Location = New System.Drawing.Point(155, 154)
+        Me.btn横寸法に合わせる.Name = "btn横寸法に合わせる"
+        Me.btn横寸法に合わせる.Size = New System.Drawing.Size(136, 46)
+        Me.btn横寸法に合わせる.TabIndex = 13
+        Me.btn横寸法に合わせる.Text = "横寸法に合わせる"
+        Me.ToolTip1.SetToolTip(Me.btn横寸法に合わせる, "ひとつのすき間の寸法を目標の横寸法になるよう調整する")
+        Me.btn横寸法に合わせる.UseVisualStyleBackColor = True
+        '
         'MenuStrip1
         '
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
@@ -1393,7 +1403,6 @@ Partial Class frmMain
         '
         'grp縦置き
         '
-        Me.grp縦置き.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.grp縦置き.Controls.Add(Me.btn横寸法に合わせる)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.txt縦ひものメモ)
@@ -1620,7 +1629,7 @@ Partial Class frmMain
         Me.tpage底楕円.Location = New System.Drawing.Point(4, 29)
         Me.tpage底楕円.Name = "tpage底楕円"
         Me.tpage底楕円.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage底楕円.Size = New System.Drawing.Size(840, 432)
+        Me.tpage底楕円.Size = New System.Drawing.Size(840, 413)
         Me.tpage底楕円.TabIndex = 1
         Me.tpage底楕円.Text = "底(楕円)"
         Me.tpage底楕円.UseVisualStyleBackColor = True
@@ -1649,7 +1658,7 @@ Partial Class frmMain
         '
         Me.chk差しひも.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chk差しひも.AutoSize = True
-        Me.chk差しひも.Location = New System.Drawing.Point(366, 394)
+        Me.chk差しひも.Location = New System.Drawing.Point(366, 375)
         Me.chk差しひも.Name = "chk差しひも"
         Me.chk差しひも.Size = New System.Drawing.Size(79, 24)
         Me.chk差しひも.TabIndex = 4
@@ -1659,7 +1668,7 @@ Partial Class frmMain
         'btn削除_底楕円
         '
         Me.btn削除_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_底楕円.Location = New System.Drawing.Point(242, 375)
+        Me.btn削除_底楕円.Location = New System.Drawing.Point(242, 356)
         Me.btn削除_底楕円.Name = "btn削除_底楕円"
         Me.btn削除_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_底楕円.TabIndex = 3
@@ -1669,7 +1678,7 @@ Partial Class frmMain
         'btn追加_底楕円
         '
         Me.btn追加_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_底楕円.Location = New System.Drawing.Point(721, 375)
+        Me.btn追加_底楕円.Location = New System.Drawing.Point(721, 356)
         Me.btn追加_底楕円.Name = "btn追加_底楕円"
         Me.btn追加_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_底楕円.TabIndex = 9
@@ -1679,7 +1688,7 @@ Partial Class frmMain
         'btn下へ_底楕円
         '
         Me.btn下へ_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_底楕円.Location = New System.Drawing.Point(125, 375)
+        Me.btn下へ_底楕円.Location = New System.Drawing.Point(125, 356)
         Me.btn下へ_底楕円.Name = "btn下へ_底楕円"
         Me.btn下へ_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_底楕円.TabIndex = 2
@@ -1689,7 +1698,7 @@ Partial Class frmMain
         'btn上へ_底楕円
         '
         Me.btn上へ_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_底楕円.Location = New System.Drawing.Point(8, 375)
+        Me.btn上へ_底楕円.Location = New System.Drawing.Point(8, 356)
         Me.btn上へ_底楕円.Name = "btn上へ_底楕円"
         Me.btn上へ_底楕円.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_底楕円.TabIndex = 1
@@ -1701,7 +1710,7 @@ Partial Class frmMain
         Me.cmb編みかた名_底楕円.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb編みかた名_底楕円.FormattingEnabled = True
-        Me.cmb編みかた名_底楕円.Location = New System.Drawing.Point(460, 393)
+        Me.cmb編みかた名_底楕円.Location = New System.Drawing.Point(460, 374)
         Me.cmb編みかた名_底楕円.Name = "cmb編みかた名_底楕円"
         Me.cmb編みかた名_底楕円.Size = New System.Drawing.Size(184, 28)
         Me.cmb編みかた名_底楕円.TabIndex = 6
@@ -2029,7 +2038,7 @@ Partial Class frmMain
         Me.tpage側面.Location = New System.Drawing.Point(4, 29)
         Me.tpage側面.Name = "tpage側面"
         Me.tpage側面.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage側面.Size = New System.Drawing.Size(840, 432)
+        Me.tpage側面.Size = New System.Drawing.Size(840, 413)
         Me.tpage側面.TabIndex = 2
         Me.tpage側面.Text = "側面"
         Me.tpage側面.UseVisualStyleBackColor = True
@@ -2058,7 +2067,7 @@ Partial Class frmMain
         '
         Me.chk縁の始末.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chk縁の始末.AutoSize = True
-        Me.chk縁の始末.Location = New System.Drawing.Point(366, 395)
+        Me.chk縁の始末.Location = New System.Drawing.Point(366, 376)
         Me.chk縁の始末.Name = "chk縁の始末"
         Me.chk縁の始末.Size = New System.Drawing.Size(88, 24)
         Me.chk縁の始末.TabIndex = 6
@@ -2090,7 +2099,7 @@ Partial Class frmMain
         'btn削除_側面
         '
         Me.btn削除_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_側面.Location = New System.Drawing.Point(242, 376)
+        Me.btn削除_側面.Location = New System.Drawing.Point(242, 357)
         Me.btn削除_側面.Name = "btn削除_側面"
         Me.btn削除_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_側面.TabIndex = 5
@@ -2100,7 +2109,7 @@ Partial Class frmMain
         'btn追加_側面
         '
         Me.btn追加_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_側面.Location = New System.Drawing.Point(721, 376)
+        Me.btn追加_側面.Location = New System.Drawing.Point(721, 357)
         Me.btn追加_側面.Name = "btn追加_側面"
         Me.btn追加_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_側面.TabIndex = 11
@@ -2110,7 +2119,7 @@ Partial Class frmMain
         'btn下へ_側面
         '
         Me.btn下へ_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_側面.Location = New System.Drawing.Point(125, 376)
+        Me.btn下へ_側面.Location = New System.Drawing.Point(125, 357)
         Me.btn下へ_側面.Name = "btn下へ_側面"
         Me.btn下へ_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_側面.TabIndex = 4
@@ -2120,7 +2129,7 @@ Partial Class frmMain
         'btn上へ_側面
         '
         Me.btn上へ_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_側面.Location = New System.Drawing.Point(8, 376)
+        Me.btn上へ_側面.Location = New System.Drawing.Point(8, 357)
         Me.btn上へ_側面.Name = "btn上へ_側面"
         Me.btn上へ_側面.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_側面.TabIndex = 3
@@ -2132,7 +2141,7 @@ Partial Class frmMain
         Me.cmb編みかた名_側面.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb編みかた名_側面.FormattingEnabled = True
-        Me.cmb編みかた名_側面.Location = New System.Drawing.Point(460, 394)
+        Me.cmb編みかた名_側面.Location = New System.Drawing.Point(460, 375)
         Me.cmb編みかた名_側面.Name = "cmb編みかた名_側面"
         Me.cmb編みかた名_側面.Size = New System.Drawing.Size(184, 28)
         Me.cmb編みかた名_側面.TabIndex = 8
@@ -2436,7 +2445,7 @@ Partial Class frmMain
         Me.tpage追加品.Location = New System.Drawing.Point(4, 29)
         Me.tpage追加品.Name = "tpage追加品"
         Me.tpage追加品.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage追加品.Size = New System.Drawing.Size(840, 432)
+        Me.tpage追加品.Size = New System.Drawing.Size(840, 413)
         Me.tpage追加品.TabIndex = 3
         Me.tpage追加品.Text = "追加品"
         Me.tpage追加品.UseVisualStyleBackColor = True
@@ -2484,7 +2493,7 @@ Partial Class frmMain
         'btn削除_追加品
         '
         Me.btn削除_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除_追加品.Location = New System.Drawing.Point(243, 375)
+        Me.btn削除_追加品.Location = New System.Drawing.Point(243, 356)
         Me.btn削除_追加品.Name = "btn削除_追加品"
         Me.btn削除_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn削除_追加品.TabIndex = 3
@@ -2494,7 +2503,7 @@ Partial Class frmMain
         'btn追加_追加品
         '
         Me.btn追加_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加_追加品.Location = New System.Drawing.Point(722, 375)
+        Me.btn追加_追加品.Location = New System.Drawing.Point(722, 356)
         Me.btn追加_追加品.Name = "btn追加_追加品"
         Me.btn追加_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn追加_追加品.TabIndex = 11
@@ -2504,7 +2513,7 @@ Partial Class frmMain
         'btn下へ_追加品
         '
         Me.btn下へ_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn下へ_追加品.Location = New System.Drawing.Point(126, 375)
+        Me.btn下へ_追加品.Location = New System.Drawing.Point(126, 356)
         Me.btn下へ_追加品.Name = "btn下へ_追加品"
         Me.btn下へ_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn下へ_追加品.TabIndex = 2
@@ -2514,7 +2523,7 @@ Partial Class frmMain
         'btn上へ_追加品
         '
         Me.btn上へ_追加品.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn上へ_追加品.Location = New System.Drawing.Point(9, 375)
+        Me.btn上へ_追加品.Location = New System.Drawing.Point(9, 356)
         Me.btn上へ_追加品.Name = "btn上へ_追加品"
         Me.btn上へ_追加品.Size = New System.Drawing.Size(111, 46)
         Me.btn上へ_追加品.TabIndex = 1
@@ -2526,7 +2535,7 @@ Partial Class frmMain
         Me.cmb付属品名.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb付属品名.FormattingEnabled = True
-        Me.cmb付属品名.Location = New System.Drawing.Point(369, 393)
+        Me.cmb付属品名.Location = New System.Drawing.Point(369, 374)
         Me.cmb付属品名.Name = "cmb付属品名"
         Me.cmb付属品名.Size = New System.Drawing.Size(184, 28)
         Me.cmb付属品名.TabIndex = 5
@@ -2727,7 +2736,7 @@ Partial Class frmMain
         Me.tpageメモ他.Location = New System.Drawing.Point(4, 29)
         Me.tpageメモ他.Name = "tpageメモ他"
         Me.tpageメモ他.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpageメモ他.Size = New System.Drawing.Size(840, 432)
+        Me.tpageメモ他.Size = New System.Drawing.Size(840, 413)
         Me.tpageメモ他.TabIndex = 4
         Me.tpageメモ他.Text = "メモ他"
         Me.tpageメモ他.UseVisualStyleBackColor = True
@@ -2767,7 +2776,7 @@ Partial Class frmMain
         Me.txtメモ.Location = New System.Drawing.Point(24, 166)
         Me.txtメモ.Multiline = True
         Me.txtメモ.Name = "txtメモ"
-        Me.txtメモ.Size = New System.Drawing.Size(794, 246)
+        Me.txtメモ.Size = New System.Drawing.Size(794, 227)
         Me.txtメモ.TabIndex = 0
         '
         'tpage底の横
@@ -2778,7 +2787,7 @@ Partial Class frmMain
         Me.tpage底の横.Location = New System.Drawing.Point(4, 29)
         Me.tpage底の横.Name = "tpage底の横"
         Me.tpage底の横.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage底の横.Size = New System.Drawing.Size(840, 432)
+        Me.tpage底の横.Size = New System.Drawing.Size(840, 413)
         Me.tpage底の横.TabIndex = 5
         Me.tpage底の横.Text = "底の横"
         Me.tpage底の横.UseVisualStyleBackColor = True
@@ -2786,7 +2795,7 @@ Partial Class frmMain
         'btnリセット_横
         '
         Me.btnリセット_横.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnリセット_横.Location = New System.Drawing.Point(6, 379)
+        Me.btnリセット_横.Location = New System.Drawing.Point(6, 360)
         Me.btnリセット_横.Name = "btnリセット_横"
         Me.btnリセット_横.Size = New System.Drawing.Size(111, 46)
         Me.btnリセット_横.TabIndex = 2
@@ -2964,7 +2973,7 @@ Partial Class frmMain
         Me.tpage底の縦.Location = New System.Drawing.Point(4, 29)
         Me.tpage底の縦.Name = "tpage底の縦"
         Me.tpage底の縦.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpage底の縦.Size = New System.Drawing.Size(840, 432)
+        Me.tpage底の縦.Size = New System.Drawing.Size(840, 413)
         Me.tpage底の縦.TabIndex = 6
         Me.tpage底の縦.Text = "底の縦"
         Me.tpage底の縦.UseVisualStyleBackColor = True
@@ -2972,7 +2981,7 @@ Partial Class frmMain
         'btnリセット_縦
         '
         Me.btnリセット_縦.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnリセット_縦.Location = New System.Drawing.Point(6, 379)
+        Me.btnリセット_縦.Location = New System.Drawing.Point(6, 360)
         Me.btnリセット_縦.Name = "btnリセット_縦"
         Me.btnリセット_縦.Size = New System.Drawing.Size(111, 46)
         Me.btnリセット_縦.TabIndex = 2
@@ -3406,16 +3415,6 @@ Partial Class frmMain
         Me.lbl最大.Size = New System.Drawing.Size(49, 20)
         Me.lbl最大.TabIndex = 60
         Me.lbl最大.Text = "(最大)"
-        '
-        'btn横寸法に合わせる
-        '
-        Me.btn横寸法に合わせる.Location = New System.Drawing.Point(155, 154)
-        Me.btn横寸法に合わせる.Name = "btn横寸法に合わせる"
-        Me.btn横寸法に合わせる.Size = New System.Drawing.Size(136, 46)
-        Me.btn横寸法に合わせる.TabIndex = 13
-        Me.btn横寸法に合わせる.Text = "横寸法に合わせる"
-        Me.ToolTip1.SetToolTip(Me.btn横寸法に合わせる, "ひとつのすき間の寸法を目標の横寸法になるよう調整する")
-        Me.btn横寸法に合わせる.UseVisualStyleBackColor = True
         '
         'frmMain
         '

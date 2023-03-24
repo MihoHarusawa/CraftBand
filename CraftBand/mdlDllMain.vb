@@ -22,6 +22,11 @@ Public Module mdlDllMain
     End Enum
     Public g_enumExeName As enumExeName = enumExeName.Nodef
 
+    '省略名
+    Dim _ShortNames() As String = {"", "Mesh", "Square45", "Knot", "Square"}
+    Public Function GetShortExeName(ByVal exename As enumExeName) As String
+        Return _ShortNames(exename)
+    End Function
 
     'DLL共通パラメータ
     Public Class DllParameters

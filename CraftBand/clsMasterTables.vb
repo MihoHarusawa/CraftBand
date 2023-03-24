@@ -1,5 +1,7 @@
 ﻿Imports System.Drawing
+Imports System.Threading.Channels
 Imports CraftBand.Tables
+Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
 
 ''' <summary>
@@ -61,9 +63,9 @@ Public Class clsMasterTables
         SetAvairableBandType() Or
         SetAvairablePattern() Or
         SetAvairableOptions() Or
-        SetAvairableColorType()
+        SetAvairableColorType() Or
+        SetAvairableGauge()
     End Function
-
 
     'DataSet.HasChanges←False
     Private Sub acceptChangesAll()
@@ -345,7 +347,6 @@ Public Class clsMasterTables
         Return updateCopyTableIfModified(original, table)
     End Function
 #End Region
-
 
 #Region "編みかた/Pattern"
     Private Function SetAvairablePattern() As Boolean
@@ -746,5 +747,63 @@ Public Class clsMasterTables
     End Function
 #End Region
 
+#Region "ゲージ/Gauge"
 
+    Private Function SetAvairableGauge() As Boolean
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+
+        Dim modified As Boolean = False
+        For Each r As tblゲージRow In table.Rows
+            Dim crow As New clsDataRow(r)
+            If crow.SetDefaultForNull() Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableGauge Modify {0}", crow.ToString)
+                modified = True
+            End If
+        Next
+        Return modified
+    End Function
+
+    Public Function GetBandTypeGauges(ByVal bandtypename As String) As tblゲージRow()
+        If String.IsNullOrWhiteSpace(bandtypename) Then
+            Return Nothing
+        End If
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+        Dim cond As String = String.Format("f_sバンドの種類名 = '{0}'", bandtypename)
+        Return table.Select(cond)
+    End Function
+
+    Public Function UpdateBandTypeGauges(ByVal bandtypename As String, ByVal subtable As tblゲージDataTable) As Boolean
+        Dim changed As Boolean = False
+
+        '該当バンドの種類を削除
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+        table.AcceptChanges()
+
+        Dim query = From r In table.AsEnumerable
+                    Where r.f_sバンドの種類名 = bandtypename
+                    Select r
+        For Each r As tblゲージRow In query
+            r.Delete()
+            changed = True
+        Next
+        table.AcceptChanges()
+
+        '該当バンドの種類を追加
+        If subtable IsNot Nothing AndAlso 0 < subtable.Rows.Count Then
+            For Each gage As tblゲージRow In subtable
+                If gage.f_sバンドの種類名 = bandtypename Then
+                    table.ImportRow(gage)
+                    changed = True
+                End If
+            Next
+            table.AcceptChanges()
+        End If
+
+        If changed Then
+            _IsDirty = True
+        End If
+        Return changed
+    End Function
+
+#End Region
 End Class

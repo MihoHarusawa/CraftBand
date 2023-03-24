@@ -115,6 +115,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  実測値を全てクリアし規定値に戻します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskResetAll() As String
+            Get
+                Return ResourceManager.GetString("AskResetAll", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  先の&apos;{0}&apos;の変更を保存します。よろしいですか？(保存しない場合は[いいえ]) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskSaveChange() As String
+            Get
+                Return ResourceManager.GetString("AskSaveChange", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0} 本 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutCount() As String
@@ -187,6 +205,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  実測値の不足もしくは値のエラーのため計算できなかった係数があります。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrGridCoeff() As String
+            Get
+                Return ResourceManager.GetString("ErrGridCoeff", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}行目{1}値のデータエラー{2}{3} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrGridData() As String
@@ -237,6 +264,33 @@ Namespace My.Resources
         Friend ReadOnly Property ErrImageGifCreate() As String
             Get
                 Return ResourceManager.GetString("ErrImageGifCreate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  バンドの種類が正しく設定されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrKnotBandType() As String
+            Get
+                Return ResourceManager.GetString("ErrKnotBandType", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}本幅の要尺寸法値が不正です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrKnotPieceLength() As String
+            Get
+                Return ResourceManager.GetString("ErrKnotPieceLength", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}本幅のコマ寸法値が不正です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrKnotPieceSize() As String
+            Get
+                Return ResourceManager.GetString("ErrKnotPieceSize", resourceCulture)
             End Get
         End Property
         
@@ -300,6 +354,24 @@ Namespace My.Resources
         Friend ReadOnly Property ErrSaveMasterTableFile() As String
             Get
                 Return ResourceManager.GetString("ErrSaveMasterTableFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ＭＳ ゴシック に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property FontNameMark() As String
+            Get
+                Return ResourceManager.GetString("FontNameMark", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ＭＳ Ｐ明朝 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property FontNameString() As String
+            Get
+                Return ResourceManager.GetString("FontNameString", resourceCulture)
             End Get
         End Property
         

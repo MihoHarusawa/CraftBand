@@ -2,14 +2,14 @@
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandSquare45.clsCalcSquare45
+Imports CraftBandKnot.clsCalcKnot
 
 Public Class frmMain
 
     '画面編集用のワーク
     Dim _clsDataTables As New clsDataTables
     '計算用のワーク
-    Dim _clsCalcSquare45 As New clsCalcSquare45(_clsDataTables, Me)
+    Dim _clsCalcKnot As New clsCalcKnot(_clsDataTables, Me)
 
     '編集中のファイルパス
     Friend _sFilePath As String = Nothing '起動時引数があればセット(issue#8)
@@ -22,7 +22,7 @@ Public Class frmMain
 #Region "基本的な画面処理"
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        dgv縁の始末.RowTemplate.Height = cRowHeightIdxOne
+        dgv側面と縁.RowTemplate.Height = cRowHeightIdxOne
         dgv追加品.RowTemplate.Height = cRowHeightIdxOne
 
 #If DEBUG Then
@@ -92,7 +92,7 @@ Public Class frmMain
             Me.Size = siz
             Dim colwid As String
             colwid = My.Settings.frmMainGridSide
-            SetColumnWidthFromString(Me.dgv縁の始末, colwid)
+            SetColumnWidthFromString(Me.dgv側面と縁, colwid)
             colwid = My.Settings.frmMainGridOptions
             SetColumnWidthFromString(Me.dgv追加品, colwid)
             colwid = My.Settings.frmMainGridYoko
@@ -113,7 +113,7 @@ Public Class frmMain
             End If
         End If
 
-        My.Settings.frmMainGridSide = GetColumnWidthString(Me.dgv縁の始末)
+        My.Settings.frmMainGridSide = GetColumnWidthString(Me.dgv側面と縁)
         My.Settings.frmMainGridOptions = GetColumnWidthString(Me.dgv追加品)
         My.Settings.frmMainGridYoko = GetColumnWidthString(Me.dgv横ひも)
         My.Settings.frmMainGridTate = GetColumnWidthString(Me.dgv縦ひも)
@@ -136,17 +136,18 @@ Public Class frmMain
             lbl目標寸法_単位.Text = unitstr
             lbl長さ_単位.Text = unitstr '付属品
             lbl計算寸法_単位.Text = unitstr
-            lblひも間のすき間_単位.Text = unitstr
-            lblひも長加算_単位.Text = unitstr
-
+            lblコマ間のすき間_単位.Text = unitstr
+            lblひも長加算_縦横_単位.Text = unitstr
+            lblひも長加算_側面_単位.Text = unitstr
 
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud長さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
-            nudひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nudひも長加算_縦横.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nudひも長加算_側面.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
-            nudひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
+            nudコマ間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             Dim maxLane As Integer = .p_i本幅
             nud基本のひも幅.Maximum = maxLane '表示中のValueは追随
 
@@ -170,6 +171,9 @@ Public Class frmMain
 
             Me.f_d長さ5.DefaultCellStyle.Format = format
             Me.f_dひも長5.DefaultCellStyle.Format = format
+
+            'コマ寸法と要尺(ここではセットするだけ)
+            _clsCalcKnot.SetBandName(.p_s対象バンドの種類名)
         End With
 
         '現データ
@@ -198,13 +202,13 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.BandWidth}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Square, CalcCategory.BandWidth}.Contains(category) Then
-            Save四角数(_clsDataTables.p_row底_縦横)
+        If {CalcCategory.NewData, CalcCategory.Knot, CalcCategory.BandWidth}.Contains(category) Then
+            Saveコマ数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
 
-        Dim ret = _clsCalcSquare45.CalcSize(category, ctr, key)
-        Disp計算結果(_clsCalcSquare45) 'NGはToolStripに表示
+        Dim ret = _clsCalcKnot.CalcSize(category, ctr, key)
+        Disp計算結果(_clsCalcKnot) 'NGはToolStripに表示
 
         Return ret
     End Function
@@ -220,7 +224,7 @@ Public Class frmMain
 
             If works IsNot Nothing Then
                 Disp目標寸法(works.p_row目標寸法)
-                Disp四角数(works.p_row底_縦横)
+                Dispコマ数(works.p_row底_縦横)
             End If
 
             ShowGridSelected(works)
@@ -240,9 +244,9 @@ Public Class frmMain
 
         'タブページ名
         Select Case TabControl.SelectedTab.Name
-            Case "tpage四角数"
+            Case "tpageコマ数"
                 '
-            Case "tpage縁の始末"
+            Case "tpage側面と縁"
                 Show側面(works)
             Case "tpage追加品"
                 Show追加品(works)
@@ -265,11 +269,12 @@ Public Class frmMain
     Enum enumReason
         _GridDropdown = &H1
         _Preview = &H2
+        _Gauge = &H4
     End Enum
     Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
         Dim needreset As Boolean = False
         If reason.HasFlag(enumReason._GridDropdown) Then
-            If {"tpage縁の始末", "tpage追加品", "tpage横ひも", "tpage縦ひも"}.Contains(_CurrentTabControlName) Then
+            If {"tpage側面と縁", "tpage追加品", "tpage横ひも", "tpage縦ひも"}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -278,8 +283,13 @@ Public Class frmMain
                 needreset = True
             End If
         End If
+        If reason.HasFlag(enumReason._Gauge) Then
+            If {"tpage側面と縁", "tpage横ひも", "tpage縦ひも", "tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+                needreset = True
+            End If
+        End If
         If needreset Then
-            TabControl.SelectTab("tpage四角数")
+            TabControl.SelectTab("tpageコマ数")
         End If
     End Sub
 
@@ -291,9 +301,9 @@ Public Class frmMain
 
         '先のページ名
         Select Case _CurrentTabControlName
-            Case "tpage四角数"
+            Case "tpageコマ数"
                 '
-            Case "tpage縁の始末"
+            Case "tpage側面と縁"
                 Hide側面(_clsDataTables)
             Case "tpage追加品"
                 Hide追加品(_clsDataTables)
@@ -339,25 +349,35 @@ Public Class frmMain
     End Sub
 
 
-    Sub Disp四角数(ByVal row底_縦横 As clsDataRow)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp四角 {0}", row底_縦横.ToString)
+    Sub Dispコマ数(ByVal row底_縦横 As clsDataRow)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Dispコマ数 {0}", row底_縦横.ToString)
         With row底_縦横
-            chk縦横を展開する.Checked = .Value("f_b展開区分")
+            chk縦横側面を展開する.Checked = .Value("f_b展開区分")
             set底の縦横展開(.Value("f_b展開区分"))
 
-            dispValidValueNud(nudひも間のすき間, .Value("f_dひも間のすき間")) 'マイナス不可
-            dispValidValueNud(nudひも長係数, .Value("f_dひも長係数")) 'マイナス不可
-            nudひも長加算.Value = .Value("f_dひも長加算") 'マイナス可
+            Select Case .Value("f_iコマ上側の縦ひも")
+                Case enumコマ上側の縦ひも.i_どちらでも
+                    radどちらでも.Checked = True
+                Case enumコマ上側の縦ひも.i_左側
+                    rad左側.Checked = True
+                Case enumコマ上側の縦ひも.i_右側
+                    rad右側.Checked = True
+            End Select
 
-            nud横の四角数.Value = .Value("f_i横の四角数")
-            chk横の補強ひも.Checked = .Value("f_b補強ひも区分")
+            dispValidValueNud(nudコマ間のすき間, .Value("f_dひも間のすき間")) 'マイナス不可
+            nudひも長加算_縦横.Value = .Value("f_dひも長加算") 'マイナス可
+
+            nud横のコマ数.Value = .Value("f_i横の四角数")
+            nud左から何番目のコマ.Value = .Value("f_i左から何番目")
             txt横ひものメモ.Text = .Value("f_s横ひものメモ")
 
-            nud縦の四角数.Value = .Value("f_i縦の四角数")
-            chk縦の補強ひも.Checked = .Value("f_b始末ひも区分")
+            nud縦のコマ数.Value = .Value("f_i縦の四角数")
+            nud上から何番目のコマ.Value = .Value("f_i上から何番目")
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
-            nud高さの四角数.Value = .Value("f_d高さの四角数")
+            nud高さのコマ数.Value = .Value("f_i高さのコマ数")
+            nud折り返しコマ数.Value = .Value("f_i折り返しコマ数")
+            nudひも長加算_側面.Value = .Value("f_dひも長加算_側面")  'マイナス可
         End With
     End Sub
 
@@ -382,7 +402,7 @@ Public Class frmMain
 
 
 
-    Private Sub Disp計算結果(ByVal calc As clsCalcSquare45)
+    Private Sub Disp計算結果(ByVal calc As clsCalcKnot)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
         With calc
             '
@@ -390,18 +410,18 @@ Public Class frmMain
             txt縦ひもの本数.Text = .p_i縦ひもの本数
             txt垂直ひも数.Text = .p_i垂直ひも数
 
-            txt1つの辺_ひも幅.Text = .p_sひも幅の辺
-            txt対角線_ひも幅.Text = .p_sひも幅の対角線
-            txt1つの辺_四角.Text = .p_s四角の辺
-            txt対角線_四角.Text = .p_s四角の対角線
+            txt1コマ_寸法.Text = .p_sコマの寸法
+            txt1コマ_要尺.Text = .p_sコマの要尺
+            txtコマベース_寸法.Text = .p_sコマベース寸法
+            txtコマベース_要尺.Text = .p_sコマベース要尺
 
-            txt四角ベース_横.Text = .p_s四角ベース_横
+            txtコマベース_横.Text = .p_sコマベース_横
             txt縁厚さプラス_横.Text = .p_s縁厚さプラス_横
-            txt四角ベース_縦.Text = .p_s四角ベース_縦
+            txtコマベース_縦.Text = .p_sコマベース_縦
             txt縁厚さプラス_縦.Text = .p_s縁厚さプラス_縦
-            txt四角ベース_高さ.Text = .p_s四角ベース_高さ
+            txtコマベース_高さ.Text = .p_sコマベース_高さ
             txt縁厚さプラス_高さ.Text = .p_s縁厚さプラス_高さ
-            txt四角ベース_周.Text = .p_s四角ベース_周
+            txtコマベース_周.Text = .p_sコマベース_周
             txt縁厚さプラス_周.Text = .p_s縁厚さプラス_周
 
             txt垂直ひも数.Text = .p_i垂直ひも数
@@ -424,16 +444,22 @@ Public Class frmMain
 
 
     Sub Show側面(ByVal works As clsDataTables)
-        BindingSource縁の始末.Sort = Nothing
-        BindingSource縁の始末.DataSource = Nothing
+        BindingSource側面と縁.Sort = Nothing
+        BindingSource側面と縁.DataSource = Nothing
         If works Is Nothing Then
             Exit Sub
         End If
 
-        BindingSource縁の始末.DataSource = works.p_tbl側面
-        BindingSource縁の始末.Sort = "f_i番号 , f_iひも番号"
+        Saveコマ数(works.p_row底_縦横) '縦横側面展開値
+        If Not _clsCalcKnot.adjust_側面() Then
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
 
-        dgv縁の始末.Refresh()
+        BindingSource側面と縁.DataSource = works.p_tbl側面
+        BindingSource側面と縁.Sort = "f_i番号 , f_iひも番号"
+
+        dgv側面と縁.Refresh()
     End Sub
 
     Sub Show追加品(ByVal works As clsDataTables)
@@ -450,10 +476,10 @@ Public Class frmMain
     End Sub
 
     Function Hide側面(ByVal works As clsDataTables) As Boolean
-        Dim ret As Boolean = works.CheckPoint(BindingSource縁の始末.DataSource)
+        Dim ret As Boolean = works.CheckPoint(BindingSource側面と縁.DataSource)
 
-        BindingSource縁の始末.Sort = Nothing
-        BindingSource縁の始末.DataSource = Nothing
+        BindingSource側面と縁.Sort = Nothing
+        BindingSource側面と縁.DataSource = Nothing
 
         Return ret
     End Function
@@ -470,16 +496,16 @@ Public Class frmMain
 
     Function SaveTables(ByVal works As clsDataTables) As Boolean
         Save目標寸法(works.p_row目標寸法)
-        Save四角数(works.p_row底_縦横)
+        Saveコマ数(works.p_row底_縦横)
 
         works.CheckPoint(works.p_tbl側面)
         works.CheckPoint(works.p_tbl追加品)
 
         If _CurrentTabControlName = "tpage横ひも" Then
-            works.FromTmpTable(enumひも種.i_横 Or enumひも種.i_45度, BindingSource横ひも.DataSource)
+            works.FromTmpTable(enumひも種.i_横, BindingSource横ひも.DataSource)
         End If
         If _CurrentTabControlName = "tpage縦ひも" Then
-            works.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_315度, BindingSource縦ひも.DataSource)
+            works.FromTmpTable(enumひも種.i_縦, BindingSource縦ひも.DataSource)
         End If
 
         Return True
@@ -499,23 +525,32 @@ Public Class frmMain
         Return True
     End Function
 
-    Function Save四角数(ByVal row底_縦横 As clsDataRow) As Boolean
+    Function Saveコマ数(ByVal row底_縦横 As clsDataRow) As Boolean
         With row底_縦横
-            .Value("f_b展開区分") = chk縦横を展開する.Checked
+            .Value("f_b展開区分") = chk縦横側面を展開する.Checked
 
-            .Value("f_dひも間のすき間") = nudひも間のすき間.Value   'マイナス不可
-            .Value("f_dひも長係数") = nudひも長係数.Value  'マイナス不可
-            .Value("f_dひも長加算") = nudひも長加算.Value  'マイナス可
+            Dim iコマ上側の縦ひも As Integer = enumコマ上側の縦ひも.i_どちらでも
+            If rad左側.Checked Then
+                iコマ上側の縦ひも = enumコマ上側の縦ひも.i_左側
+            ElseIf rad右側.Checked Then
+                iコマ上側の縦ひも = enumコマ上側の縦ひも.i_右側
+            End If
+            .Value("f_iコマ上側の縦ひも") = iコマ上側の縦ひも
 
-            .Value("f_i横の四角数") = nud横の四角数.Value
-            .Value("f_b補強ひも区分") = chk横の補強ひも.Checked
+            .Value("f_dひも間のすき間") = nudコマ間のすき間.Value   'マイナス不可
+            .Value("f_dひも長加算") = nudひも長加算_縦横.Value  'マイナス可
+
+            .Value("f_i横の四角数") = nud横のコマ数.Value
+            .Value("f_i左から何番目") = nud左から何番目のコマ.Value
             .Value("f_s横ひものメモ") = txt横ひものメモ.Text
 
-            .Value("f_i縦の四角数") = nud縦の四角数.Value
-            .Value("f_b始末ひも区分") = chk縦の補強ひも.Checked
+            .Value("f_i縦の四角数") = nud縦のコマ数.Value
+            .Value("f_i上から何番目") = nud上から何番目のコマ.Value
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
-            .Value("f_d高さの四角数") = nud高さの四角数.Text
+            .Value("f_i高さのコマ数") = nud高さのコマ数.Value
+            .Value("f_i折り返しコマ数") = nud折り返しコマ数.Value
+            .Value("f_dひも長加算_側面") = nudひも長加算_側面.Value  'マイナス可
         End With
         Return True
     End Function
@@ -528,7 +563,13 @@ Public Class frmMain
     Private Sub ToolStripMenuItemEditSelectBand_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditSelectBand.Click
         Dim dlg As New frmSelectBand
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
+
+        dlg.p_bIsKnotLeft = My.Settings.IsKnotLeft
+        dlg.p_dMySafetyFactor = My.Settings.MySafetyFactor
         If dlg.ShowDialog() = DialogResult.OK Then
+            My.Settings.IsKnotLeft = dlg.p_bIsKnotLeft
+            My.Settings.MySafetyFactor = dlg.p_dMySafetyFactor
+
             SaveTables(_clsDataTables)
             setBasics()
             recalc(CalcCategory.BsMaster)
@@ -537,7 +578,7 @@ Public Class frmMain
 
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
-        If _clsCalcSquare45.IsValidInput() Then
+        If _clsCalcKnot.IsValidInput() Then
             '目標寸法以外をリセットします。よろしいですか？
             Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetInput, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If r <> DialogResult.OK Then
@@ -566,7 +607,7 @@ Public Class frmMain
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-        If _clsCalcSquare45.IsValidInput() Then
+        If _clsCalcKnot.IsValidInput() Then
             '規定値をロードします。よろしいですか？
             Dim r As DialogResult = MessageBox.Show(My.Resources.AskLoadDefault, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If r <> DialogResult.OK Then
@@ -585,7 +626,7 @@ Public Class frmMain
         SaveTables(_clsDataTables)
         '実行前のチェック
         Dim message As String = Nothing
-        If _clsCalcSquare45.CheckTarget(message) Then
+        If _clsCalcKnot.CheckTarget(message) Then
             If String.IsNullOrWhiteSpace(message) Then
                 'そのまま進めてOK
             Else
@@ -597,20 +638,20 @@ Public Class frmMain
             End If
         Else
             '実行不可
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
 
         '実行する
-        If _clsCalcSquare45.CalcTarget() Then
+        If _clsCalcKnot.CalcTarget() Then
             _isLoadingData = True
             '計算結果の縦横値
-            Disp四角数(_clsDataTables.p_row底_縦横)
+            Dispコマ数(_clsDataTables.p_row底_縦横)
             '(側面のテーブルも変更されている)
             _isLoadingData = False
         Else
             'エラーあり
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
         recalc(CalcCategory.NewData)
@@ -619,10 +660,10 @@ Public Class frmMain
     'ひもリスト
     Private Sub ToolStripMenuItemEditList_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditList.Click
         SaveTables(_clsDataTables)
-        _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        _clsCalcKnot.CalcSize(CalcCategory.NewData, Nothing, Nothing)
 
-        If Not _clsCalcSquare45.p_b有効 Then
-            Dim msg As String = _clsCalcSquare45.p_sメッセージ & vbCrLf
+        If Not _clsCalcKnot.p_b有効 Then
+            Dim msg As String = _clsCalcKnot.p_sメッセージ & vbCrLf
             'このままリスト出力を行いますか？
             msg += My.Resources.AskOutput
             Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
@@ -632,8 +673,8 @@ Public Class frmMain
         End If
 
         Dim output As New clsOutput(_sFilePath)
-        If Not _clsCalcSquare45.CalcOutput(output) Then
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        If Not _clsCalcKnot.CalcOutput(output) Then
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
@@ -731,6 +772,18 @@ Public Class frmMain
         End If
     End Sub
 
+    'ゲージ
+    Private Sub ToolStripMenuItemSettingGauge_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingGauge.Click
+        Dim dlg As New frmGauge
+        ShowDefaultTabControlPage(enumReason._Gauge Or enumReason._Preview)
+        If dlg.ShowDialog() = DialogResult.OK Then
+            'ゲージ再計算
+            SaveTables(_clsDataTables)
+            _clsCalcKnot.SetBandName(g_clsSelectBasics.p_s対象バンドの種類名)
+            recalc(CalcCategory.BsMaster)
+        End If
+    End Sub
+
     '基本設定
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
@@ -772,7 +825,7 @@ Public Class frmMain
     Private Sub setStartEditing()
         '表示後の編集開始
         Save目標寸法(_clsDataTables.p_row目標寸法)
-        Save四角数(_clsDataTables.p_row底_縦横)
+        Saveコマ数(_clsDataTables.p_row底_縦横)
 
         _clsDataTables.ResetStartPoint()
 
@@ -815,7 +868,7 @@ Public Class frmMain
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
         If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
-            'Square45(本幅)横-縦-高さ
+            'Knot(本幅)横-縦-高さ
             Dim defname As String
             Save目標寸法(_clsDataTables.p_row目標寸法)
             With _clsDataTables.p_row目標寸法
@@ -927,8 +980,8 @@ Public Class frmMain
 
 #Region "コントロール変更イベント"
     '縦横の展開チェックボックス　※チェックは最初のタブにある
-    Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
-        set底の縦横展開(chk縦横を展開する.Checked)
+    Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横側面を展開する.CheckedChanged
+        set底の縦横展開(chk縦横側面を展開する.Checked)
     End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
@@ -936,7 +989,7 @@ Public Class frmMain
             nud基本のひも幅.Value = g_clsSelectBasics.p_i本幅
         End If
         lbl基本のひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
-        ShowDefaultTabControlPage(enumReason._Preview) '色と本幅数変更の可能性
+        ShowDefaultTabControlPage(enumReason._Preview Or enumReason._Gauge) '色と本幅数変更の可能性
 
         recalc(CalcCategory.BandWidth, sender)
     End Sub
@@ -953,20 +1006,60 @@ Public Class frmMain
         recalc(CalcCategory.Target, sender)
     End Sub
 
-    Private Sub nud横の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+    Private Sub nud横のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud横のコマ数.ValueChanged
+        If Not _isLoadingData Then
+            nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
+        End If
+        recalc(CalcCategory.Knot, sender)
     End Sub
 
-    Private Sub nudひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nudひも間のすき間.ValueChanged
-        recalc(CalcCategory.BandWidth, sender)
+    Private Sub nudコマ間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nudコマ間のすき間.ValueChanged
+        recalc(CalcCategory.Knot, sender)
     End Sub
 
-    Private Sub nud縦の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+    Private Sub nudひも長加算_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_縦横.ValueChanged
+        recalc(CalcCategory.Knot, sender)
     End Sub
 
-    Private Sub nud高さの四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+    Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
+        recalc(CalcCategory.Knot, sender)
+    End Sub
+
+    Private Sub nud縦のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦のコマ数.ValueChanged
+        If Not _isLoadingData Then
+            nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
+        End If
+        recalc(CalcCategory.Knot, sender)
+    End Sub
+
+    Private Sub nud左から何番目のコマ_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何番目のコマ.ValueChanged
+        If nud横のコマ数.Value <= 0 Then
+            Exit Sub
+        End If
+        If nud横のコマ数.Value < nud左から何番目のコマ.Value Then
+            nud左から何番目のコマ.Value = nud横のコマ数.Value
+            'ElseIf nud左から何番目のコマ.Value <= 0 Then
+            '    nud左から何番目のコマ.Value = 1
+        End If
+    End Sub
+
+    Private Sub nud上から何番目のコマ_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何番目のコマ.ValueChanged
+        If nud縦のコマ数.Value <= 0 Then
+            Exit Sub
+        End If
+        If nud縦のコマ数.Value < nud上から何番目のコマ.Value Then
+            nud上から何番目のコマ.Value = nud縦のコマ数.Value
+            'ElseIf nud上から何番目のコマ.Value <= 0 Then
+            '    nud上から何番目のコマ.Value = 1
+        End If
+    End Sub
+
+    Private Sub nud高さのコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さのコマ数.ValueChanged
+        recalc(CalcCategory.Knot, sender)
+    End Sub
+
+    Private Sub nud折り返しコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud折り返しコマ数.ValueChanged
+        recalc(CalcCategory.Knot, sender)
     End Sub
 
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
@@ -1055,7 +1148,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv縁の始末.CellFormatting, dgv追加品.CellFormatting, dgv横ひも.CellFormatting, dgv縦ひも.CellFormatting
+    Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv追加品.CellFormatting, dgv横ひも.CellFormatting, dgv縦ひも.CellFormatting
         Dim dgv As DataGridView = CType(sender, DataGridView)
         If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
@@ -1081,34 +1174,51 @@ Public Class frmMain
 #End Region
 
 #Region "側面"
-    Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
-        Dim table As tbl側面DataTable = Nothing
-        Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource縁の始末, table, number) Then
+
+    Private Sub dgv_CellFormatting側面と縁(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv側面と縁.CellFormatting
+        Dim dgv As DataGridView = CType(sender, DataGridView)
+        If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
         End If
+        If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" Then
+            For Each col As DataGridViewColumn In dgv.Columns
+                If col.DataPropertyName = "f_i番号" Then
+                    If dgv.Rows(e.RowIndex).Cells(col.Index).Value = clsDataTables.cHemNumber Then
+                        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly = False
+                    Else
+                        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly = True
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        dgv_CellFormatting(sender, e)
+    End Sub
+
+    Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
+        Dim table As tbl側面DataTable = Nothing
 
         Dim row As tbl側面Row = Nothing
-        If _clsCalcSquare45.add_側面(cmb編みかた名_側面.Text, True,
-                     nud基本のひも幅.Value, 1,
+        If _clsCalcKnot.add_側面_縁(cmb編みかた名_側面.Text,
+                     nud基本のひも幅.Value,
                       row) Then
 
-            numberPositionsSelect(BindingSource縁の始末, row.f_i番号, dgv縁の始末)
+            numberPositionsSelect(BindingSource側面と縁, row.f_i番号, dgv側面と縁)
             recalc(CalcCategory.Edge, row, "f_i周数")
         Else
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
     End Sub
 
-    Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv縁の始末.DataError
+    Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv側面と縁.DataError
         dgv_DataErrorModify(sender, e)
     End Sub
 
     Private Sub btn削除_側面_Click(sender As Object, e As EventArgs) Handles btn削除_側面.Click
         Dim table As tbl側面DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource縁の始末, table, number) Then
+        If Not getTableAndNumber(BindingSource側面と縁, table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1119,10 +1229,10 @@ Public Class frmMain
         recalc(CalcCategory.Edge, Nothing, Nothing)
     End Sub
 
-
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv縁の始末.CellValueChanged
+    'セル変更の再計算は縁に対してのみ
+    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv側面と縁.CellValueChanged
         Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource縁の始末.Current
+        Dim current As System.Data.DataRowView = BindingSource側面と縁.Current
         If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
             OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
             Exit Sub
@@ -1146,7 +1256,7 @@ Public Class frmMain
         End If
 
         Dim row As tbl追加品Row = Nothing
-        If _clsCalcSquare45.add_追加品(
+        If _clsCalcKnot.add_追加品(
             cmb付属品名.Text, nud基本のひも幅.Value, nud長さ.Value, nud点数.Value,
             row) Then
 
@@ -1154,7 +1264,7 @@ Public Class frmMain
             recalc(CalcCategory.Options, row, "f_i点数")
 
         Else
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -1262,8 +1372,8 @@ Public Class frmMain
         End If
 
         'タブ切り替えタイミングのため、表示は更新済
-        Save四角数(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcSquare45.set横展開DataTable(True)
+        Saveコマ数(works.p_row底_縦横)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcKnot.set横展開DataTable(True)
 
         BindingSource横ひも.DataSource = tmptable
         BindingSource横ひも.Sort = "f_iひも種,f_iひも番号"
@@ -1272,7 +1382,7 @@ Public Class frmMain
     End Sub
 
     Function Hide底の横(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = works.FromTmpTable(enumひも種.i_横 Or enumひも種.i_45度, BindingSource横ひも.DataSource)
+        Dim change As Integer = works.FromTmpTable(enumひも種.i_横, BindingSource横ひも.DataSource)
         BindingSource横ひも.Sort = Nothing
         BindingSource横ひも.DataSource = Nothing
 
@@ -1288,8 +1398,8 @@ Public Class frmMain
         End If
 
         'タブ切り替えタイミングのため、表示は更新済
-        Save四角数(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcSquare45.set縦展開DataTable(True)
+        Saveコマ数(works.p_row底_縦横)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcKnot.set縦展開DataTable(True)
 
         BindingSource縦ひも.DataSource = tmptable
         BindingSource縦ひも.Sort = "f_iひも種,f_iひも番号"
@@ -1298,7 +1408,7 @@ Public Class frmMain
     End Sub
 
     Function Hide底の縦(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = works.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_315度, BindingSource縦ひも.DataSource)
+        Dim change As Integer = works.FromTmpTable(enumひも種.i_縦, BindingSource縦ひも.DataSource)
         BindingSource縦ひも.Sort = Nothing
         BindingSource縦ひも.DataSource = Nothing
 
@@ -1320,7 +1430,7 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource横ひも.DataSource = _clsCalcSquare45.set横展開DataTable(False)
+        BindingSource横ひも.DataSource = _clsCalcKnot.set横展開DataTable(False)
         BindingSource横ひも.Sort = "f_iひも種,f_iひも番号"
         dgv横ひも.Refresh()
     End Sub
@@ -1331,7 +1441,7 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource縦ひも.DataSource = _clsCalcSquare45.set縦展開DataTable(False)
+        BindingSource縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(False)
         BindingSource縦ひも.Sort = "f_iひも種,f_iひも番号"
         dgv縦ひも.Refresh()
     End Sub
@@ -1344,15 +1454,16 @@ Public Class frmMain
         _clsImageData = Nothing
 
         SaveTables(_clsDataTables)
-        Dim ret As Boolean = _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing)
-        Disp計算結果(_clsCalcSquare45) 'NGはToolStripに表示
+        Dim ret As Boolean = _clsCalcKnot.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        Disp計算結果(_clsCalcKnot) 'NGはToolStripに表示
         If Not ret Then
             Return
         End If
 
         _clsImageData = New clsImageData(_sFilePath)
-        If Not _clsCalcSquare45.CalcImage(_clsImageData) Then
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        ret = _clsCalcKnot.CalcImage(_clsImageData)
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
+            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
@@ -1390,7 +1501,7 @@ Public Class frmMain
     Dim bVisible As Boolean = False
     Private Sub btnDEBUG_Click(sender As Object, e As EventArgs) Handles btnDEBUG.Click
         If Not bVisible Then
-            setDgvColumnsVisible(dgv縁の始末)
+            setDgvColumnsVisible(dgv側面と縁)
             setDgvColumnsVisible(dgv追加品)
             setDgvColumnsVisible(dgv横ひも)
             setDgvColumnsVisible(dgv縦ひも)
@@ -1399,7 +1510,7 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row目標寸法.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row底_縦横.dump())
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsCalcSquare45.dump())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsCalcKnot.dump())
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl側面).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl追加品).ToString())

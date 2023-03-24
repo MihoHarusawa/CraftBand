@@ -398,7 +398,6 @@ Partial Class frmPattern
         Me.f_bCraftBandKnot.MinimumWidth = 6
         Me.f_bCraftBandKnot.Name = "f_bCraftBandKnot"
         Me.f_bCraftBandKnot.ToolTipText = "CraftBandKnotで使用する"
-        Me.f_bCraftBandKnot.Visible = False
         Me.f_bCraftBandKnot.Width = 125
         '
         'f_bCraftBandSquare

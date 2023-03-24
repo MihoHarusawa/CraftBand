@@ -565,7 +565,7 @@ Class clsCalcSquare45
 
     '横寸法から横の四角数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = _d横_目標 / _d四角の対角線
+        Dim i横の四角数 As Integer = Int(_d横_目標 / _d四角の対角線)
         If Not _b内側区分 Then
             Do While i横の四角数 * _d四角の対角線 < _d横_目標
                 i横の四角数 += 1
@@ -582,7 +582,7 @@ Class clsCalcSquare45
 
     '縦寸法から縦の四角数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = _d縦_目標 / _d四角の対角線
+        Dim i縦の四角数 As Integer = Int(_d縦_目標 / _d四角の対角線)
         If Not _b内側区分 Then
             Do While i縦の四角数 * _d四角の対角線 < _d縦_目標
                 i縦の四角数 += 1
@@ -599,7 +599,7 @@ Class clsCalcSquare45
 
     '高さ寸法から高さの四角数(0.5単位)
     Private Function calc_Target_高さ()
-        Dim i高さの四角数の2倍 As Integer = (_d高さ_目標 * 2) / _d四角の対角線
+        Dim i高さの四角数の2倍 As Integer = Int((_d高さ_目標 * 2) / _d四角の対角線)
         If Not _b内側区分 Then
             Do While i高さの四角数の2倍 * _d四角の対角線 < (_d高さ_目標 * 2)
                 i高さの四角数の2倍 += 1
@@ -1132,7 +1132,7 @@ Class clsCalcSquare45
         Dim idx As Integer = 1
         For i As Integer = 0 To updowncount - 1
             Dim band As clsImageItem = _縦ひもリスト.GetRowItem(enumひも種.i_縦, idx)
-            band.m_row縦横展開.f_i位置番号 = updowncount + i
+            band.m_row縦横展開.f_i位置番号 = -updowncount + i
             band.m_row縦横展開.f_d長さ = _d四角の一辺 * (i * 2 + 1)
 
             band.m_a四隅.p左上 = _左上

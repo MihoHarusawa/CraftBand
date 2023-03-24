@@ -901,6 +901,18 @@ Namespace Tables
             
             Private columnf_dひも長加算 As Global.System.Data.DataColumn
             
+            Private columnf_iコマ上側の縦ひも As Global.System.Data.DataColumn
+            
+            Private columnf_i左から何番目 As Global.System.Data.DataColumn
+            
+            Private columnf_i上から何番目 As Global.System.Data.DataColumn
+            
+            Private columnf_i高さのコマ数 As Global.System.Data.DataColumn
+            
+            Private columnf_i折り返しコマ数 As Global.System.Data.DataColumn
+            
+            Private columnf_dひも長加算_側面 As Global.System.Data.DataColumn
+            
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub New()
@@ -1137,6 +1149,54 @@ Namespace Tables
             End Property
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iコマ上側の縦ひもColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iコマ上側の縦ひも
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i左から何番目Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i左から何番目
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i上から何番目Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i上から何番目
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i高さのコマ数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i高さのコマ数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i折り返しコマ数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i折り返しコマ数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも長加算_側面Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも長加算_側面
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
              Global.System.ComponentModel.Browsable(false)>  _
             Public ReadOnly Property Count() As Integer
@@ -1198,9 +1258,15 @@ Namespace Tables
                         ByVal f_d高さの四角数 As Double,  _
                         ByVal f_dひも間のすき間 As Double,  _
                         ByVal f_dひも長係数 As Double,  _
-                        ByVal f_dひも長加算 As Double) As tbl底_縦横Row
+                        ByVal f_dひも長加算 As Double,  _
+                        ByVal f_iコマ上側の縦ひも As Short,  _
+                        ByVal f_i左から何番目 As Short,  _
+                        ByVal f_i上から何番目 As Short,  _
+                        ByVal f_i高さのコマ数 As Integer,  _
+                        ByVal f_i折り返しコマ数 As Short,  _
+                        ByVal f_dひも長加算_側面 As Double) As tbl底_縦横Row
                 Dim rowtbl底_縦横Row As tbl底_縦横Row = CType(Me.NewRow,tbl底_縦横Row)
-                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算}
+                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算, f_iコマ上側の縦ひも, f_i左から何番目, f_i上から何番目, f_i高さのコマ数, f_i折り返しコマ数, f_dひも長加算_側面}
                 rowtbl底_縦横Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl底_縦横Row)
                 Return rowtbl底_縦横Row
@@ -1248,6 +1314,12 @@ Namespace Tables
                 Me.columnf_dひも間のすき間 = MyBase.Columns("f_dひも間のすき間")
                 Me.columnf_dひも長係数 = MyBase.Columns("f_dひも長係数")
                 Me.columnf_dひも長加算 = MyBase.Columns("f_dひも長加算")
+                Me.columnf_iコマ上側の縦ひも = MyBase.Columns("f_iコマ上側の縦ひも")
+                Me.columnf_i左から何番目 = MyBase.Columns("f_i左から何番目")
+                Me.columnf_i上から何番目 = MyBase.Columns("f_i上から何番目")
+                Me.columnf_i高さのコマ数 = MyBase.Columns("f_i高さのコマ数")
+                Me.columnf_i折り返しコマ数 = MyBase.Columns("f_i折り返しコマ数")
+                Me.columnf_dひも長加算_側面 = MyBase.Columns("f_dひも長加算_側面")
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1303,6 +1375,18 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_dひも長係数)
                 Me.columnf_dひも長加算 = New Global.System.Data.DataColumn("f_dひも長加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算)
+                Me.columnf_iコマ上側の縦ひも = New Global.System.Data.DataColumn("f_iコマ上側の縦ひも", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iコマ上側の縦ひも)
+                Me.columnf_i左から何番目 = New Global.System.Data.DataColumn("f_i左から何番目", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i左から何番目)
+                Me.columnf_i上から何番目 = New Global.System.Data.DataColumn("f_i上から何番目", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i上から何番目)
+                Me.columnf_i高さのコマ数 = New Global.System.Data.DataColumn("f_i高さのコマ数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i高さのコマ数)
+                Me.columnf_i折り返しコマ数 = New Global.System.Data.DataColumn("f_i折り返しコマ数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i折り返しコマ数)
+                Me.columnf_dひも長加算_側面 = New Global.System.Data.DataColumn("f_dひも長加算_側面", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも長加算_側面)
                 Me.columnf_i長い横ひもの本数.DefaultValue = CType(0,Short)
                 Me.columnf_i長い横ひも.DefaultValue = CType(0,Short)
                 Me.columnf_i短い横ひも.DefaultValue = CType(0,Short)
@@ -1328,6 +1412,12 @@ Namespace Tables
                 Me.columnf_dひも間のすき間.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長係数.DefaultValue = CType(1R,Double)
                 Me.columnf_dひも長加算.DefaultValue = CType(0R,Double)
+                Me.columnf_iコマ上側の縦ひも.DefaultValue = CType(0,Short)
+                Me.columnf_i左から何番目.DefaultValue = CType(0,Short)
+                Me.columnf_i上から何番目.DefaultValue = CType(0,Short)
+                Me.columnf_i高さのコマ数.DefaultValue = CType(0,Integer)
+                Me.columnf_i折り返しコマ数.DefaultValue = CType(0,Short)
+                Me.columnf_dひも長加算_側面.DefaultValue = CType(0R,Double)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -3139,6 +3229,8 @@ Namespace Tables
             
             Private columnf_dひも長加算 As Global.System.Data.DataColumn
             
+            Private columnf_dひも長加算2 As Global.System.Data.DataColumn
+            
             Private columnf_d出力ひも長 As Global.System.Data.DataColumn
             
             Private columnf_sメモ As Global.System.Data.DataColumn
@@ -3260,6 +3352,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも長加算2Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも長加算2
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_d出力ひも長Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_d出力ひも長
@@ -3311,9 +3411,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl縦横展開Row(ByVal f_iひも種 As Short, ByVal f_i位置番号 As Integer, ByVal f_sひも名 As String, ByVal f_iひも番号 As Integer, ByVal f_d長さ As Double, ByVal f_dひも長 As Double, ByVal f_s記号 As String, ByVal f_i何本幅 As Short, ByVal f_s色 As String, ByVal f_dひも長加算 As Double, ByVal f_d出力ひも長 As Double, ByVal f_sメモ As String) As tbl縦横展開Row
+            Public Overloads Function Addtbl縦横展開Row(ByVal f_iひも種 As Short, ByVal f_i位置番号 As Integer, ByVal f_sひも名 As String, ByVal f_iひも番号 As Integer, ByVal f_d長さ As Double, ByVal f_dひも長 As Double, ByVal f_s記号 As String, ByVal f_i何本幅 As Short, ByVal f_s色 As String, ByVal f_dひも長加算 As Double, ByVal f_dひも長加算2 As Double, ByVal f_d出力ひも長 As Double, ByVal f_sメモ As String) As tbl縦横展開Row
                 Dim rowtbl縦横展開Row As tbl縦横展開Row = CType(Me.NewRow,tbl縦横展開Row)
-                Dim columnValuesArray() As Object = New Object() {f_iひも種, f_i位置番号, f_sひも名, f_iひも番号, f_d長さ, f_dひも長, f_s記号, f_i何本幅, f_s色, f_dひも長加算, f_d出力ひも長, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_iひも種, f_i位置番号, f_sひも名, f_iひも番号, f_d長さ, f_dひも長, f_s記号, f_i何本幅, f_s色, f_dひも長加算, f_dひも長加算2, f_d出力ひも長, f_sメモ}
                 rowtbl縦横展開Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl縦横展開Row)
                 Return rowtbl縦横展開Row
@@ -3346,6 +3446,7 @@ Namespace Tables
                 Me.columnf_i何本幅 = MyBase.Columns("f_i何本幅")
                 Me.columnf_s色 = MyBase.Columns("f_s色")
                 Me.columnf_dひも長加算 = MyBase.Columns("f_dひも長加算")
+                Me.columnf_dひも長加算2 = MyBase.Columns("f_dひも長加算2")
                 Me.columnf_d出力ひも長 = MyBase.Columns("f_d出力ひも長")
                 Me.columnf_sメモ = MyBase.Columns("f_sメモ")
             End Sub
@@ -3373,6 +3474,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s色)
                 Me.columnf_dひも長加算 = New Global.System.Data.DataColumn("f_dひも長加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算)
+                Me.columnf_dひも長加算2 = New Global.System.Data.DataColumn("f_dひも長加算2", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも長加算2)
                 Me.columnf_d出力ひも長 = New Global.System.Data.DataColumn("f_d出力ひも長", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d出力ひも長)
                 Me.columnf_sメモ = New Global.System.Data.DataColumn("f_sメモ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -3388,6 +3491,7 @@ Namespace Tables
                 Me.columnf_i何本幅.DefaultValue = CType(0,Short)
                 Me.columnf_s色.DefaultValue = CType("",String)
                 Me.columnf_dひも長加算.DefaultValue = CType(0R,Double)
+                Me.columnf_dひも長加算2.DefaultValue = CType(0R,Double)
                 Me.columnf_d出力ひも長.DefaultValue = CType(0R,Double)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
             End Sub
@@ -4224,6 +4328,96 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iコマ上側の縦ひも() As Short
+                Get
+                    If Me.Isf_iコマ上側の縦ひもNull Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_iコマ上側の縦ひもColumn),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_iコマ上側の縦ひもColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i左から何番目() As Short
+                Get
+                    If Me.Isf_i左から何番目Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i左から何番目Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i左から何番目Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i上から何番目() As Short
+                Get
+                    If Me.Isf_i上から何番目Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i上から何番目Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i上から何番目Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i高さのコマ数() As Integer
+                Get
+                    If Me.Isf_i高さのコマ数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i高さのコマ数Column),Integer)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i高さのコマ数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i折り返しコマ数() As Short
+                Get
+                    If Me.Isf_i折り返しコマ数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i折り返しコマ数Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i折り返しコマ数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも長加算_側面() As Double
+                Get
+                    If Me.Isf_dひも長加算_側面Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_dひも長加算_側面Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_dひも長加算_側面Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_i長い横ひもの本数Null() As Boolean
                 Return Me.IsNull(Me.tabletbl底_縦横.f_i長い横ひもの本数Column)
             End Function
@@ -4520,6 +4714,78 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dひも長加算Null()
                 Me(Me.tabletbl底_縦横.f_dひも長加算Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iコマ上側の縦ひもNull() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_iコマ上側の縦ひもColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iコマ上側の縦ひもNull()
+                Me(Me.tabletbl底_縦横.f_iコマ上側の縦ひもColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i左から何番目Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i左から何番目Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i左から何番目Null()
+                Me(Me.tabletbl底_縦横.f_i左から何番目Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i上から何番目Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i上から何番目Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i上から何番目Null()
+                Me(Me.tabletbl底_縦横.f_i上から何番目Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i高さのコマ数Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i高さのコマ数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i高さのコマ数Null()
+                Me(Me.tabletbl底_縦横.f_i高さのコマ数Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i折り返しコマ数Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i折り返しコマ数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i折り返しコマ数Null()
+                Me(Me.tabletbl底_縦横.f_i折り返しコマ数Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも長加算_側面Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_dひも長加算_側面Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも長加算_側面Null()
+                Me(Me.tabletbl底_縦横.f_dひも長加算_側面Column) = Global.System.Convert.DBNull
             End Sub
         End Class
         
@@ -6359,6 +6625,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも長加算2() As Double
+                Get
+                    If Me.Isf_dひも長加算2Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletbl縦横展開.f_dひも長加算2Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl縦横展開.f_dひも長加算2Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d出力ひも長() As Double
                 Get
                     If Me.Isf_d出力ひも長Null Then
@@ -6505,6 +6786,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dひも長加算Null()
                 Me(Me.tabletbl縦横展開.f_dひも長加算Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも長加算2Null() As Boolean
+                Return Me.IsNull(Me.tabletbl縦横展開.f_dひも長加算2Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも長加算2Null()
+                Me(Me.tabletbl縦横展開.f_dひも長加算2Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

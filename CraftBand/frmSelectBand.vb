@@ -6,7 +6,27 @@ Public Class frmSelectBand
 
     Dim _loaded As Boolean = False
 
+    '四つ畳み編み専用値
+    Public Property p_bIsKnotLeft As Boolean
+    Public Property p_dMySafetyFactor As Double
+
     Private Sub frmTargetBand_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        '四つ畳み編み専用
+        If g_enumExeName <> enumExeName.CraftBandKnot Then
+            grp四つ畳み編みの上の縦ひも位置.Visible = False
+        Else
+            grp四つ畳み編みの上の縦ひも位置.Visible = True
+            If p_bIsKnotLeft Then
+                rad左側.Checked = True
+            Else
+                rad右側.Checked = True
+            End If
+            If 0 < p_dMySafetyFactor Then
+                nudマイひも長係数.Value = p_dMySafetyFactor
+            Else
+                nudマイひも長係数.Value = 1
+            End If
+        End If
 
         '単位
         lblバンド幅の寸法単位.Text = g_clsSelectBasics.p_unit設定時の寸法単位.Str
@@ -75,6 +95,18 @@ Public Class frmSelectBand
         Else
             'g_clsSelectBasics.UpdateTargetBandType()
             '変更なし
+        End If
+
+        '四つ畳み編みのみ
+        If g_enumExeName = enumExeName.CraftBandKnot Then
+            If p_bIsKnotLeft <> rad左側.Checked Then
+                p_bIsKnotLeft = rad左側.Checked
+                Me.DialogResult = DialogResult.OK
+            End If
+            If p_dMySafetyFactor <> nudマイひも長係数.Value Then
+                p_dMySafetyFactor = nudマイひも長係数.Value
+                Me.DialogResult = DialogResult.OK
+            End If
         End If
 
         Me.Close()

@@ -28,6 +28,22 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="tblGauge" msprop:Generator_RowEvHandlerName="tblGaugeRowChangeEventHandler" msprop:Generator_RowDeletedName="tblGaugeRowDeleted" msprop:Generator_RowDeletingName="tblGaugeRowDeleting" msprop:Generator_RowEvArgName="tblGaugeRowChangeEvent" msprop:Generator_TablePropName="tblGauge" msprop:Generator_RowChangedName="tblGaugeRowChanged" msprop:Generator_UserTableName="tblGauge" msprop:Generator_RowChangingName="tblGaugeRowChanging" msprop:Generator_RowClassName="tblGaugeRow" msprop:Generator_TableClassName="tblGaugeDataTable" msprop:Generator_TableVarName="tabletblGauge">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_sバンドの種類名" msprop:Generator_ColumnPropNameInTable="f_sバンドの種類名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバンドの種類名" msprop:Generator_UserColumnName="f_sバンドの種類名" msprop:Generator_ColumnVarNameInTable="columnf_sバンドの種類名" type="xs:string" default="" />
+              <xs:element name="f_i本幅" msprop:Generator_ColumnPropNameInTable="f_i本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i本幅" msprop:Generator_UserColumnName="f_i本幅" msprop:Generator_ColumnVarNameInTable="columnf_i本幅" type="xs:short" default="0" />
+              <xs:element name="f_dひも幅" msprop:Generator_ColumnPropNameInTable="f_dひも幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも幅" msprop:Generator_UserColumnName="f_dひも幅" msprop:Generator_ColumnVarNameInTable="columnf_dひも幅" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dコマ寸法計算値" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法計算値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法計算値" msprop:Generator_UserColumnName="f_dコマ寸法計算値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法計算値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dコマ要尺計算値" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺計算値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺計算値" msprop:Generator_UserColumnName="f_dコマ要尺計算値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺計算値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_b実測値使用区分" msprop:Generator_ColumnPropNameInTable="f_b実測値使用区分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b実測値使用区分" msprop:Generator_UserColumnName="f_b実測値使用区分" msprop:Generator_ColumnVarNameInTable="columnf_b実測値使用区分" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_b係数取得区分" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_b係数取得区分Column" msprop:Generator_ColumnVarNameInTable="columnf_b係数取得区分" msprop:Generator_UserColumnName="f_b係数取得区分" msprop:Generator_ColumnPropNameInRow="f_b係数取得区分" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_dコマ寸法実測値" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法実測値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法実測値" msprop:Generator_UserColumnName="f_dコマ寸法実測値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法実測値" type="xs:double" minOccurs="0" />
+              <xs:element name="f_dコマ要尺実測値" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺実測値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺実測値" msprop:Generator_UserColumnName="f_dコマ要尺実測値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺実測値" type="xs:double" minOccurs="0" />
+              <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
@@ -37,6 +53,11 @@
     <xs:unique name="tblLane_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:tblLane" />
       <xs:field xpath="mstns:Value" />
+    </xs:unique>
+    <xs:unique name="tblGaugePKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblGauge" />
+      <xs:field xpath="mstns:f_sバンドの種類名" />
+      <xs:field xpath="mstns:f_i本幅" />
     </xs:unique>
   </xs:element>
 </xs:schema>

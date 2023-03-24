@@ -916,9 +916,15 @@ Public Class frmMain
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
         If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
-            '四角底{0}-{1}-{2}
-            SaveFileDialog1.FileName = String.Format(My.Resources.SaveFileName,
-              _clsDataTables.p_row目標寸法.Value("f_i基本のひも幅"), _clsDataTables.p_row底_縦横.Value("f_i長い横ひもの本数"), _clsDataTables.p_row底_縦横.Value("f_i縦ひもの本数"))
+            'Mesh(本幅)横-縦-高さ
+            Dim defname As String
+            Save目標寸法(_clsDataTables.p_row目標寸法)
+            With _clsDataTables.p_row目標寸法
+                defname = String.Format("{0}({1}){2}-{3}-{4}",
+                GetShortExeName(g_enumExeName), .Value("f_i基本のひも幅"),
+                Int(.Value("f_d横寸法")), Int(.Value("f_d縦寸法")), Int(.Value("f_d高さ寸法")))
+            End With
+            SaveFileDialog1.FileName = defname
         End If
         If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
             Exit Sub

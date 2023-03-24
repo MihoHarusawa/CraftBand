@@ -395,5 +395,12 @@ Public Module mdlUnit
         Return Max(Max(x1, x2), Max(x3, x4))
     End Function
 
+    Public Function Abs(ByVal x As Double) As Double
+        If x < 0 Then
+            Return -x
+        Else
+            Return x
+        End If
+    End Function
 
 End Module

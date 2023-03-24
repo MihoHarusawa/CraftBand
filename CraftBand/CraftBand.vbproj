@@ -36,6 +36,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>dstDataTables.xsd</DependentUpon>
     </Compile>
+    <Compile Update="frmGauge.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="frmOutput.vb">
       <SubType>Form</SubType>
     </Compile>

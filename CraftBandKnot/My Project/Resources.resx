@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AskAbandanCurrentWork" xml:space="preserve">
+    <value>編集中のデータを破棄してよろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="AskLoadDefault" xml:space="preserve">
+    <value>規定値をロードします。よろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="AskOutput" xml:space="preserve">
     <value>このままリスト出力を行いますか？</value>
     <comment>frmMain</comment>
@@ -125,92 +133,93 @@
     <value>ひも長加算と色をすべてクリアします。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="CalcNoMasterPattern" xml:space="preserve">
-    <value>{0}の番号{1}で設定にない編みかた名'{2}'(ひも番号{3})が参照されています。</value>
+  <data name="AskResetInput" xml:space="preserve">
+    <value>目標寸法以外をリセットします。よろしいですか？</value>
+    <comment>frmMain</comment>
   </data>
-  <data name="CalcNoDefCategory" xml:space="preserve">
-    <value>未定義のカテゴリー'{0}'が参照されました。</value>
+  <data name="AskSaveCurrentWork" xml:space="preserve">
+    <value>編集中のデータを保存しますか？</value>
+    <comment>frmMain</comment>
   </data>
   <data name="AskSaveDefault" xml:space="preserve">
     <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="LOG_LaneModified" xml:space="preserve">
-    <value>本幅数の修正</value>
+  <data name="CalcBandLength1" xml:space="preserve">
+    <value>コマの数({0})要尺:{1}</value>
   </data>
-  <data name="AskLoadDefault" xml:space="preserve">
-    <value>規定値をロードします。よろしいですか？</value>
-    <comment>frmMain</comment>
+  <data name="CalcBandLength2" xml:space="preserve">
+    <value>余裕長:{0} (縁の始末:{1} ひも長加算:{2} 加算:{3})</value>
   </data>
-  <data name="CalcNoMaster" xml:space="preserve">
-    <value>'{0}'{1}'は登録されていません。</value>
-  </data>
-  <data name="CalcNoInformation" xml:space="preserve">
-    <value>処理に必要な情報がありません。</value>
+  <data name="CalcBandLength3" xml:space="preserve">
+    <value>ひもの長さ:{0}[{1}] 差:{2}[{3}]</value>
   </data>
   <data name="CalcConfirmRecalc" xml:space="preserve">
-    <value>目標に基づき横・縦・高さの四角数を再計算します。よろしいですか？</value>
-  </data>
-  <data name="TitleException" xml:space="preserve">
-    <value>例外発生</value>
-    <comment>mdlMain</comment>
-  </data>
-  <data name="CalcNoBaseBandSet" xml:space="preserve">
-    <value>基本のひも幅を設定してください。</value>
-  </data>
-  <data name="AskAbandanCurrentWork" xml:space="preserve">
-    <value>編集中のデータを破棄してよろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="TitleDllError" xml:space="preserve">
-    <value>DLLエラー</value>
-    <comment>mdlMain</comment>
+    <value>目標に基づき横・縦・高さのコマ数を再計算します。よろしいですか？</value>
   </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
     <value>{0}追加用の番号がとれません。</value>
   </data>
-  <data name="CalcNoSquareCountSet" xml:space="preserve">
-    <value>横の四角数・縦の四角数・高さの四角数をセットしてください。</value>
+  <data name="CalcNoBaseBandSet" xml:space="preserve">
+    <value>基本のひも幅を設定してください。</value>
   </data>
-  <data name="MessageNotExistDefaultFile" xml:space="preserve">
-    <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
-    <comment>frmMain</comment>
+  <data name="CalcNoDefCategory" xml:space="preserve">
+    <value>未定義のカテゴリー'{0}'が参照されました。</value>
+  </data>
+  <data name="CalcNoInformation" xml:space="preserve">
+    <value>処理に必要な情報がありません。</value>
+  </data>
+  <data name="CalcNoMaster" xml:space="preserve">
+    <value>{0}'{1}'は登録されていません。</value>
+  </data>
+  <data name="CalcNoMasterOption" xml:space="preserve">
+    <value>{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。</value>
+  </data>
+  <data name="CalcNoMasterPattern" xml:space="preserve">
+    <value>{0}の番号{1}で設定にない編みかた名'{2}'(ひも番号{3})が参照されています。</value>
+  </data>
+  <data name="CalcNoMoreChange" xml:space="preserve">
+    <value>ほぼ目標のサイズになっています。やり直す場合はリセットしてください。</value>
+  </data>
+  <data name="CalcNoPieceCountSet" xml:space="preserve">
+    <value>横のコマ数・縦のコマ数・高さのコマ数をセットしてください。</value>
+  </data>
+  <data name="CalcNoSelect" xml:space="preserve">
+    <value>{0}を指定してください。</value>
   </data>
   <data name="CalcNoTargetSet" xml:space="preserve">
     <value>目標とする縦寸法・横寸法・高さ寸法を設定してください。</value>
   </data>
-  <data name="CalcNoSelect" xml:space="preserve">
-    <value>{0}を指定してください。</value>
+  <data name="DefaultFileName" xml:space="preserve">
+    <value>規定値.xml</value>
+  </data>
+  <data name="FormCaption" xml:space="preserve">
+    <value>四つ畳み編み {0}</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="LOG_ColorModified" xml:space="preserve">
+    <value>色の修正</value>
+  </data>
+  <data name="LOG_LaneModified" xml:space="preserve">
+    <value>本幅数の修正</value>
   </data>
   <data name="MessageNoDefaultFile" xml:space="preserve">
     <value>規定値が保存されていません。先に規定値保存を行ってください。</value>
     <comment>frmMain</comment>
   </data>
-  <data name="DefaultFileName" xml:space="preserve">
-    <value>規定値.xml</value>
-  </data>
-  <data name="AskResetInput" xml:space="preserve">
-    <value>目標寸法以外をリセットします。よろしいですか？</value>
+  <data name="MessageNotExistDefaultFile" xml:space="preserve">
+    <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
     <comment>frmMain</comment>
   </data>
-  <data name="FormCaption" xml:space="preserve">
-    <value>斜め四角45度 {0}</value>
-    <comment>frmMain</comment>
+  <data name="OutputTextBottom" xml:space="preserve">
+    <value>底</value>
   </data>
-  <data name="CalcNoMoreChange" xml:space="preserve">
-    <value>ほぼ目標のサイズになっています。やり直す場合はリセットしてください。</value>
+  <data name="TitleDllError" xml:space="preserve">
+    <value>DLLエラー</value>
+    <comment>mdlMain</comment>
   </data>
-  <data name="CalcBadSetValue" xml:space="preserve">
-    <value>{0}の指定が正しくありません。</value>
-  </data>
-  <data name="LOG_ColorModified" xml:space="preserve">
-    <value>色の修正</value>
-  </data>
-  <data name="CalcNoMasterOption" xml:space="preserve">
-    <value>{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。</value>
-  </data>
-  <data name="AskSaveCurrentWork" xml:space="preserve">
-    <value>編集中のデータを保存しますか？</value>
-    <comment>frmMain</comment>
+  <data name="TitleException" xml:space="preserve">
+    <value>例外発生</value>
+    <comment>mdlMain</comment>
   </data>
 </root>

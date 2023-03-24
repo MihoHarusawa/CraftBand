@@ -29,6 +29,8 @@ Namespace Tables
         
         Private tabletblLane As tblLaneDataTable
         
+        Private tabletblGauge As tblGaugeDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -64,6 +66,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblLane")) Is Nothing) Then
                     MyBase.Tables.Add(New tblLaneDataTable(ds.Tables("tblLane")))
                 End If
+                If (Not (ds.Tables("tblGauge")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblGaugeDataTable(ds.Tables("tblGauge")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -98,6 +103,16 @@ Namespace Tables
         Public ReadOnly Property tblLane() As tblLaneDataTable
             Get
                 Return Me.tabletblLane
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblGauge() As tblGaugeDataTable
+            Get
+                Return Me.tabletblGauge
             End Get
         End Property
         
@@ -174,6 +189,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblLane")) Is Nothing) Then
                     MyBase.Tables.Add(New tblLaneDataTable(ds.Tables("tblLane")))
                 End If
+                If (Not (ds.Tables("tblGauge")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblGaugeDataTable(ds.Tables("tblGauge")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -218,6 +236,12 @@ Namespace Tables
                     Me.tabletblLane.InitVars
                 End If
             End If
+            Me.tabletblGauge = CType(MyBase.Tables("tblGauge"),tblGaugeDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblGauge) Is Nothing) Then
+                    Me.tabletblGauge.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -232,6 +256,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblColor)
             Me.tabletblLane = New tblLaneDataTable()
             MyBase.Tables.Add(Me.tabletblLane)
+            Me.tabletblGauge = New tblGaugeDataTable()
+            MyBase.Tables.Add(Me.tabletblGauge)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -243,6 +269,12 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblLane() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblGauge() As Boolean
             Return false
         End Function
         
@@ -309,6 +341,9 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblLaneRowChangeEventHandler(ByVal sender As Object, ByVal e As tblLaneRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblGaugeRowChangeEventHandler(ByVal sender As Object, ByVal e As tblGaugeRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -863,6 +898,392 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblGaugeDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblGaugeRow)
+            
+            Private columnf_sバンドの種類名 As Global.System.Data.DataColumn
+            
+            Private columnf_i本幅 As Global.System.Data.DataColumn
+            
+            Private columnf_dひも幅 As Global.System.Data.DataColumn
+            
+            Private columnf_dコマ寸法計算値 As Global.System.Data.DataColumn
+            
+            Private columnf_dコマ要尺計算値 As Global.System.Data.DataColumn
+            
+            Private columnf_b実測値使用区分 As Global.System.Data.DataColumn
+            
+            Private columnf_b係数取得区分 As Global.System.Data.DataColumn
+            
+            Private columnf_dコマ寸法実測値 As Global.System.Data.DataColumn
+            
+            Private columnf_dコマ要尺実測値 As Global.System.Data.DataColumn
+            
+            Private columnf_s備考 As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblGauge"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sバンドの種類名Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sバンドの種類名
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i本幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i本幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dコマ寸法計算値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dコマ寸法計算値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dコマ要尺計算値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dコマ要尺計算値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b実測値使用区分Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b実測値使用区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b係数取得区分Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b係数取得区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dコマ寸法実測値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dコマ寸法実測値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dコマ要尺実測値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dコマ要尺実測値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s備考Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s備考
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblGaugeRow
+                Get
+                    Return CType(Me.Rows(index),tblGaugeRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblGaugeRowChanging As tblGaugeRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblGaugeRowChanged As tblGaugeRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblGaugeRowDeleting As tblGaugeRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblGaugeRowDeleted As tblGaugeRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblGaugeRow(ByVal row As tblGaugeRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblGaugeRow(ByVal f_sバンドの種類名 As String, ByVal f_i本幅 As Short, ByVal f_dひも幅 As Double, ByVal f_dコマ寸法計算値 As Double, ByVal f_dコマ要尺計算値 As Double, ByVal f_b実測値使用区分 As Boolean, ByVal f_b係数取得区分 As Boolean, ByVal f_dコマ寸法実測値 As Double, ByVal f_dコマ要尺実測値 As Double, ByVal f_s備考 As String) As tblGaugeRow
+                Dim rowtblGaugeRow As tblGaugeRow = CType(Me.NewRow,tblGaugeRow)
+                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dひも幅, f_dコマ寸法計算値, f_dコマ要尺計算値, f_b実測値使用区分, f_b係数取得区分, f_dコマ寸法実測値, f_dコマ要尺実測値, f_s備考}
+                rowtblGaugeRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblGaugeRow)
+                Return rowtblGaugeRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function FindByf_sバンドの種類名f_i本幅(ByVal f_sバンドの種類名 As String, ByVal f_i本幅 As Short) As tblGaugeRow
+                Return CType(Me.Rows.Find(New Object() {f_sバンドの種類名, f_i本幅}),tblGaugeRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblGaugeDataTable = CType(MyBase.Clone,tblGaugeDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblGaugeDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnf_sバンドの種類名 = MyBase.Columns("f_sバンドの種類名")
+                Me.columnf_i本幅 = MyBase.Columns("f_i本幅")
+                Me.columnf_dひも幅 = MyBase.Columns("f_dひも幅")
+                Me.columnf_dコマ寸法計算値 = MyBase.Columns("f_dコマ寸法計算値")
+                Me.columnf_dコマ要尺計算値 = MyBase.Columns("f_dコマ要尺計算値")
+                Me.columnf_b実測値使用区分 = MyBase.Columns("f_b実測値使用区分")
+                Me.columnf_b係数取得区分 = MyBase.Columns("f_b係数取得区分")
+                Me.columnf_dコマ寸法実測値 = MyBase.Columns("f_dコマ寸法実測値")
+                Me.columnf_dコマ要尺実測値 = MyBase.Columns("f_dコマ要尺実測値")
+                Me.columnf_s備考 = MyBase.Columns("f_s備考")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnf_sバンドの種類名 = New Global.System.Data.DataColumn("f_sバンドの種類名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sバンドの種類名)
+                Me.columnf_i本幅 = New Global.System.Data.DataColumn("f_i本幅", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i本幅)
+                Me.columnf_dひも幅 = New Global.System.Data.DataColumn("f_dひも幅", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも幅)
+                Me.columnf_dコマ寸法計算値 = New Global.System.Data.DataColumn("f_dコマ寸法計算値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dコマ寸法計算値)
+                Me.columnf_dコマ要尺計算値 = New Global.System.Data.DataColumn("f_dコマ要尺計算値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dコマ要尺計算値)
+                Me.columnf_b実測値使用区分 = New Global.System.Data.DataColumn("f_b実測値使用区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b実測値使用区分)
+                Me.columnf_b係数取得区分 = New Global.System.Data.DataColumn("f_b係数取得区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b係数取得区分)
+                Me.columnf_dコマ寸法実測値 = New Global.System.Data.DataColumn("f_dコマ寸法実測値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dコマ寸法実測値)
+                Me.columnf_dコマ要尺実測値 = New Global.System.Data.DataColumn("f_dコマ要尺実測値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dコマ要尺実測値)
+                Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s備考)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tblGaugePKey", New Global.System.Data.DataColumn() {Me.columnf_sバンドの種類名, Me.columnf_i本幅}, true))
+                Me.columnf_sバンドの種類名.AllowDBNull = false
+                Me.columnf_sバンドの種類名.DefaultValue = CType("",String)
+                Me.columnf_i本幅.AllowDBNull = false
+                Me.columnf_i本幅.DefaultValue = CType(0,Short)
+                Me.columnf_dひも幅.DefaultValue = CType(0R,Double)
+                Me.columnf_dコマ寸法計算値.DefaultValue = CType(0R,Double)
+                Me.columnf_dコマ要尺計算値.DefaultValue = CType(0R,Double)
+                Me.columnf_b実測値使用区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_b係数取得区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_s備考.DefaultValue = CType("",String)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblGaugeRow() As tblGaugeRow
+                Return CType(Me.NewRow,tblGaugeRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblGaugeRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblGaugeRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblGaugeRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblGaugeRowChanged(Me, New tblGaugeRowChangeEvent(CType(e.Row,tblGaugeRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblGaugeRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblGaugeRowChanging(Me, New tblGaugeRowChangeEvent(CType(e.Row,tblGaugeRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblGaugeRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblGaugeRowDeleted(Me, New tblGaugeRowChangeEvent(CType(e.Row,tblGaugeRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblGaugeRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblGaugeRowDeleting(Me, New tblGaugeRowChangeEvent(CType(e.Row,tblGaugeRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblGaugeRow(ByVal row As tblGaugeRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblGaugeDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -971,6 +1392,260 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblGaugeRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblGauge As tblGaugeDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblGauge = CType(Me.Table,tblGaugeDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sバンドの種類名() As String
+                Get
+                    Return CType(Me(Me.tabletblGauge.f_sバンドの種類名Column),String)
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_sバンドの種類名Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i本幅() As Short
+                Get
+                    Return CType(Me(Me.tabletblGauge.f_i本幅Column),Short)
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_i本幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも幅() As Double
+                Get
+                    If Me.Isf_dひも幅Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_dひも幅Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_dひも幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dコマ寸法計算値() As Double
+                Get
+                    If Me.Isf_dコマ寸法計算値Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_dコマ寸法計算値Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_dコマ寸法計算値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dコマ要尺計算値() As Double
+                Get
+                    If Me.Isf_dコマ要尺計算値Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_dコマ要尺計算値Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_dコマ要尺計算値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b実測値使用区分() As Boolean
+                Get
+                    If Me.Isf_b実測値使用区分Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_b実測値使用区分Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_b実測値使用区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b係数取得区分() As Boolean
+                Get
+                    If Me.Isf_b係数取得区分Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_b係数取得区分Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_b係数取得区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dコマ寸法実測値() As Double
+                Get
+                    If Me.Isf_dコマ寸法実測値Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_dコマ寸法実測値Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_dコマ寸法実測値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dコマ要尺実測値() As Double
+                Get
+                    If Me.Isf_dコマ要尺実測値Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_dコマ要尺実測値Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_dコマ要尺実測値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s備考() As String
+                Get
+                    If Me.Isf_s備考Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblGauge.f_s備考Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblGauge.f_s備考Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_dひも幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも幅Null()
+                Me(Me.tabletblGauge.f_dひも幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dコマ寸法計算値Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_dコマ寸法計算値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dコマ寸法計算値Null()
+                Me(Me.tabletblGauge.f_dコマ寸法計算値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dコマ要尺計算値Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_dコマ要尺計算値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dコマ要尺計算値Null()
+                Me(Me.tabletblGauge.f_dコマ要尺計算値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b実測値使用区分Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_b実測値使用区分Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b実測値使用区分Null()
+                Me(Me.tabletblGauge.f_b実測値使用区分Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b係数取得区分Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_b係数取得区分Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b係数取得区分Null()
+                Me(Me.tabletblGauge.f_b係数取得区分Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dコマ寸法実測値Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_dコマ寸法実測値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dコマ寸法実測値Null()
+                Me(Me.tabletblGauge.f_dコマ寸法実測値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dコマ要尺実測値Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_dコマ要尺実測値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dコマ要尺実測値Null()
+                Me(Me.tabletblGauge.f_dコマ要尺実測値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s備考Null() As Boolean
+                Return Me.IsNull(Me.tabletblGauge.f_s備考Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s備考Null()
+                Me(Me.tabletblGauge.f_s備考Column) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -1028,6 +1703,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblLaneRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblGaugeRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblGaugeRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblGaugeRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblGaugeRow
                 Get
                     Return Me.eventRow
                 End Get

@@ -60,6 +60,14 @@ Public Class clsDataTables
         i_異なる幅 = 2
     End Enum
 
+    Public Enum enumコマ上側の縦ひも
+        i_どちらでも = 0
+        i_左側 = 1
+        i_右側 = 2
+    End Enum
+
+
+
     'カテゴリー出力順
     <Flags()>
     Public Enum enumひも種
@@ -68,6 +76,7 @@ Public Class clsDataTables
         i_斜め = &H400
         i_45度 = &H800
         i_315度 = &H1000
+        i_側面 = &H2000
 
         i_長い = &H10
         i_短い = &H20
@@ -131,6 +140,9 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_dひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
 
             Case enumExeName.CraftBandKnot
+                p_row底_縦横.Value("f_b始末ひも区分") = False '使わない
+                p_row底_縦横.Value("f_dひも長加算_側面") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d四つ畳みひも長加算初期値")
+                p_row底_縦横.Value("f_dひも長加算") = p_row底_縦横.Value("f_dひも長加算_側面") / 2
 
             Case enumExeName.CraftBandSquare
 
@@ -344,6 +356,7 @@ Public Class clsDataTables
         Return True
     End Function
 
+
 #Region "ワークテーブルとtbl縦横展開の転送"
     'ワークテーブルの編集フィールドにデータベース値をセットする
     Public Function ToTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
@@ -363,8 +376,9 @@ Public Class clsDataTables
             'f_dひも長加算, f_s色, f_sメモを取得(今はf_i何本幅は読み取らない)
             Dim i As Integer = 0
             tmp.f_dひも長加算 = sels(i).f_dひも長加算
-            If tmp.f_dひも長加算 <> 0 Then
-                tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算
+            tmp.f_dひも長加算2 = sels(i).f_dひも長加算2
+            If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
+                tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算 + tmp.f_dひも長加算2
             End If
             If g_clsSelectBasics.IsExistColor(sels(i).f_s色) Then
                 tmp.f_s色 = sels(i).f_s色
@@ -531,6 +545,7 @@ Public Class clsDataTables
         End Try
     End Function
 
+    'numberの最初のレコード
     Shared Function NumberFirstRecord(ByVal table As DataTable, ByVal number As Integer) As DataRow
         Try
             Dim cond As String = String.Format("f_i番号 = {0}", number)
@@ -542,6 +557,38 @@ Public Class clsDataTables
 
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsDataTables.NumberFirstRecord")
+            Return Nothing
+        End Try
+    End Function
+
+    'numberのsubnumber最大値　なければ-1
+    Shared Function NumberSubMax(ByVal table As DataTable, ByVal number As Integer) As Integer
+        Try
+            Dim obj As Object = table.Compute("MAX(f_iひも番号)",
+                                              String.Format("f_i番号 = {0}", number))
+            If IsDBNull(obj) OrElse obj < 1 Then
+                Return -1
+            End If
+            Return obj
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "clsDataTables.NumberSubMax")
+            Return -1
+        End Try
+    End Function
+
+    'number,subnumberのレコード
+    Shared Function NumberSubRecord(ByVal table As DataTable, ByVal number As Integer, ByVal subnumber As Integer) As DataRow
+        Try
+            Dim cond As String = String.Format("f_i番号 = {0} AND f_iひも番号 = {1}", number, subnumber)
+            Dim rows() As DataRow = table.Select(cond, "f_iひも番号 ASC")
+            If rows Is Nothing OrElse rows.Count = 0 Then
+                Return Nothing
+            End If
+            Return rows(0)
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "clsDataTables.NumberSubRecord")
             Return Nothing
         End Try
     End Function

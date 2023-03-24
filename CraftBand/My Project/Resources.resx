@@ -141,6 +141,14 @@
     <value>{0}が変更されました。選択されたファイルを読み直しますか？</value>
     <comment>frmBasic</comment>
   </data>
+  <data name="AskResetAll" xml:space="preserve">
+    <value>実測値を全てクリアし規定値に戻します。よろしいですか？</value>
+    <comment>frmGauge</comment>
+  </data>
+  <data name="AskSaveChange" xml:space="preserve">
+    <value>先の'{0}'の変更を保存します。よろしいですか？(保存しない場合は[いいえ])</value>
+    <comment>frmGauge</comment>
+  </data>
   <data name="CalcOutCount" xml:space="preserve">
     <value>{0} 本</value>
   </data>
@@ -167,6 +175,10 @@
     <value>指定された'{0}'は{1}用のファイルではありません。</value>
     <comment>clsDataTables</comment>
   </data>
+  <data name="ErrGridCoeff" xml:space="preserve">
+    <value>実測値の不足もしくは値のエラーのため計算できなかった係数があります。</value>
+    <comment>frmGauge</comment>
+  </data>
   <data name="ErrGridData" xml:space="preserve">
     <value>{0}行目{1}値のデータエラー{2}{3}</value>
     <comment>mdlGrid</comment>
@@ -190,6 +202,18 @@
   <data name="ErrImageGifCreate" xml:space="preserve">
     <value>gifファイル'{0}'生成エラー</value>
     <comment>clsImageData</comment>
+  </data>
+  <data name="ErrKnotBandType" xml:space="preserve">
+    <value>バンドの種類が正しく設定されていません。</value>
+    <comment>clsBandTypeGauge</comment>
+  </data>
+  <data name="ErrKnotPieceLength" xml:space="preserve">
+    <value>{0}本幅の要尺寸法値が不正です。</value>
+    <comment>clsBandTypeGauge</comment>
+  </data>
+  <data name="ErrKnotPieceSize" xml:space="preserve">
+    <value>{0}本幅のコマ寸法値が不正です。</value>
+    <comment>clsBandTypeGauge</comment>
   </data>
   <data name="ErrMasterTableFileCancel" xml:space="preserve">
     <value>設定データを保存するファイルが指定されませんでした。</value>
@@ -218,6 +242,14 @@
   <data name="ErrSaveMasterTableFile" xml:space="preserve">
     <value>設定データのファイル'{0}への保存に失敗しました。</value>
     <comment>mdlDllMain</comment>
+  </data>
+  <data name="FontNameMark" xml:space="preserve">
+    <value>ＭＳ ゴシック</value>
+    <comment>clsImageDraw</comment>
+  </data>
+  <data name="FontNameString" xml:space="preserve">
+    <value>ＭＳ Ｐ明朝</value>
+    <comment>clsImageDraw</comment>
   </data>
   <data name="LOG_DataType" xml:space="preserve">
     <value>未定義のDataType</value>

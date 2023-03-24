@@ -46,7 +46,9 @@ Public Class clsImageData
     End Sub
 
     Sub MoveList(ByVal lst As clsImageItemList)
-        _ImageList.MoveList(lst)
+        If lst IsNot Nothing Then
+            _ImageList.MoveList(lst)
+        End If
     End Sub
 
     Sub Clear()
@@ -78,9 +80,18 @@ Public Class clsImageData
         _rDrawingRect.enLarge(mdlUnit.Max(New Length(1, "cm").Value, BasicBandWidth * 2))
 
         '縦軸追加
-        _ImageList.AddItem(setAxis(False))
+        Dim axvert As clsImageItem = setAxis(False)
+        If axvert Is Nothing Then
+            Return False
+        End If
+        _ImageList.AddItem(axvert)
+
         '横軸追加
-        _ImageList.AddItem(setAxis(True))
+        Dim axhorz As clsImageItem = setAxis(True)
+        If axhorz Is Nothing Then
+            Return False
+        End If
+        _ImageList.AddItem(axhorz)
 
         '描画
         Dim ret As Boolean = False
@@ -125,35 +136,42 @@ Public Class clsImageData
 
         '座標の描画
         Dim unit As Length = New Length(1, g_clsSelectBasics.p_unit出力時の寸法単位)
-        Dim item As clsImageItem
-        If isVirtical Then
-            item = New clsImageItem(ImageTypeEnum._縦軸線, 1)
-            p座標終了点 = _rDrawingRect.p左下
-            delta = New S差分(0, -unit.Value)
-            scale = New S差分(len.Value, 0) '─
-            count = Int((p座標開始点.Y - p座標終了点.Y) / unit.Value)
-        Else
-            item = New clsImageItem(ImageTypeEnum._横軸線, 1)
-            p座標終了点 = _rDrawingRect.p右上
-            delta = New S差分(unit.Value, 0)
-            scale = New S差分(0, -len.Value) '│
-            count = Int((p座標終了点.X - p座標開始点.X) / unit.Value)
-        End If
-
-        Dim p As S実座標 = p座標開始点 '目盛点
-        Dim line As S線分
-        For i As Integer = 0 To count - 1
-            If i Mod 10 = 0 Then
-                line = New S線分(p, p + scale * 2)
+        Try
+            Dim item As clsImageItem
+            If isVirtical Then
+                item = New clsImageItem(ImageTypeEnum._縦軸線, 1)
+                p座標終了点 = _rDrawingRect.p左下
+                delta = New S差分(0, -unit.Value)
+                scale = New S差分(len.Value, 0) '─
+                count = Int((p座標開始点.Y - p座標終了点.Y) / unit.Value)
             Else
-                line = New S線分(p, p + scale)
+                item = New clsImageItem(ImageTypeEnum._横軸線, 1)
+                p座標終了点 = _rDrawingRect.p右上
+                delta = New S差分(unit.Value, 0)
+                scale = New S差分(0, -len.Value) '│
+                count = Int((p座標終了点.X - p座標開始点.X) / unit.Value)
             End If
-            item.m_lineList.Add(line)
-            p += delta
-        Next
-        item.m_lineList.Add(New S線分(p座標開始点, p座標終了点))
 
-        Return item
+            Dim p As S実座標 = p座標開始点 '目盛点
+            Dim line As S線分
+            For i As Integer = 0 To count - 1
+                If i Mod 10 = 0 Then
+                    line = New S線分(p, p + scale * 2)
+                Else
+                    line = New S線分(p, p + scale)
+                End If
+                item.m_lineList.Add(line)
+                p += delta
+            Next
+            item.m_lineList.Add(New S線分(p座標開始点, p座標終了点))
+            Return item
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "setAxis", isVirtical)
+            _LastError = ex.Message
+        End Try
+        Return Nothing
+
     End Function
 
 

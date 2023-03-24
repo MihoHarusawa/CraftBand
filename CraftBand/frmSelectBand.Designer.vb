@@ -24,7 +24,7 @@ Partial Class frmSelectBand
     Private Sub InitializeComponent()
         Me.lblバンド幅の寸法単位 = New System.Windows.Forms.Label()
         Me.txt本幅 = New System.Windows.Forms.TextBox()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.grp出力時の寸法単位 = New System.Windows.Forms.GroupBox()
         Me.nud小数点以下桁数 = New System.Windows.Forms.NumericUpDown()
         Me.lbl小数点以下桁数 = New System.Windows.Forms.Label()
         Me.rad出力時の寸法単位_in = New System.Windows.Forms.RadioButton()
@@ -39,8 +39,15 @@ Partial Class frmSelectBand
         Me.btnOK = New System.Windows.Forms.Button()
         Me.lblリスト出力記号 = New System.Windows.Forms.Label()
         Me.txtリスト出力記号 = New System.Windows.Forms.TextBox()
-        Me.GroupBox1.SuspendLayout()
+        Me.grp四つ畳み編みの上の縦ひも位置 = New System.Windows.Forms.GroupBox()
+        Me.nudマイひも長係数 = New System.Windows.Forms.NumericUpDown()
+        Me.lblマイひも長係数 = New System.Windows.Forms.Label()
+        Me.rad右側 = New System.Windows.Forms.RadioButton()
+        Me.rad左側 = New System.Windows.Forms.RadioButton()
+        Me.grp出力時の寸法単位.SuspendLayout()
         CType(Me.nud小数点以下桁数, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.grp四つ畳み編みの上の縦ひも位置.SuspendLayout()
+        CType(Me.nudマイひも長係数, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblバンド幅の寸法単位
@@ -62,19 +69,19 @@ Partial Class frmSelectBand
         Me.txt本幅.Size = New System.Drawing.Size(50, 27)
         Me.txt本幅.TabIndex = 2
         '
-        'GroupBox1
+        'grp出力時の寸法単位
         '
-        Me.GroupBox1.Controls.Add(Me.nud小数点以下桁数)
-        Me.GroupBox1.Controls.Add(Me.lbl小数点以下桁数)
-        Me.GroupBox1.Controls.Add(Me.rad出力時の寸法単位_in)
-        Me.GroupBox1.Controls.Add(Me.rad出力時の寸法単位_cm)
-        Me.GroupBox1.Controls.Add(Me.rad出力時の寸法単位_mm)
-        Me.GroupBox1.Location = New System.Drawing.Point(16, 62)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(415, 102)
-        Me.GroupBox1.TabIndex = 7
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "出力時の寸法単位"
+        Me.grp出力時の寸法単位.Controls.Add(Me.nud小数点以下桁数)
+        Me.grp出力時の寸法単位.Controls.Add(Me.lbl小数点以下桁数)
+        Me.grp出力時の寸法単位.Controls.Add(Me.rad出力時の寸法単位_in)
+        Me.grp出力時の寸法単位.Controls.Add(Me.rad出力時の寸法単位_cm)
+        Me.grp出力時の寸法単位.Controls.Add(Me.rad出力時の寸法単位_mm)
+        Me.grp出力時の寸法単位.Location = New System.Drawing.Point(16, 62)
+        Me.grp出力時の寸法単位.Name = "grp出力時の寸法単位"
+        Me.grp出力時の寸法単位.Size = New System.Drawing.Size(368, 102)
+        Me.grp出力時の寸法単位.TabIndex = 7
+        Me.grp出力時の寸法単位.TabStop = False
+        Me.grp出力時の寸法単位.Text = "出力時の寸法単位"
         '
         'nud小数点以下桁数
         '
@@ -97,7 +104,7 @@ Partial Class frmSelectBand
         'rad出力時の寸法単位_in
         '
         Me.rad出力時の寸法単位_in.AutoSize = True
-        Me.rad出力時の寸法単位_in.Location = New System.Drawing.Point(291, 19)
+        Me.rad出力時の寸法単位_in.Location = New System.Drawing.Point(291, 23)
         Me.rad出力時の寸法単位_in.Name = "rad出力時の寸法単位_in"
         Me.rad出力時の寸法単位_in.Size = New System.Drawing.Size(42, 24)
         Me.rad出力時の寸法単位_in.TabIndex = 2
@@ -107,7 +114,7 @@ Partial Class frmSelectBand
         'rad出力時の寸法単位_cm
         '
         Me.rad出力時の寸法単位_cm.AutoSize = True
-        Me.rad出力時の寸法単位_cm.Location = New System.Drawing.Point(215, 20)
+        Me.rad出力時の寸法単位_cm.Location = New System.Drawing.Point(215, 23)
         Me.rad出力時の寸法単位_cm.Name = "rad出力時の寸法単位_cm"
         Me.rad出力時の寸法単位_cm.Size = New System.Drawing.Size(50, 24)
         Me.rad出力時の寸法単位_cm.TabIndex = 1
@@ -118,7 +125,7 @@ Partial Class frmSelectBand
         '
         Me.rad出力時の寸法単位_mm.AutoSize = True
         Me.rad出力時の寸法単位_mm.Checked = True
-        Me.rad出力時の寸法単位_mm.Location = New System.Drawing.Point(133, 20)
+        Me.rad出力時の寸法単位_mm.Location = New System.Drawing.Point(133, 23)
         Me.rad出力時の寸法単位_mm.Name = "rad出力時の寸法単位_mm"
         Me.rad出力時の寸法単位_mm.Size = New System.Drawing.Size(56, 24)
         Me.rad出力時の寸法単位_mm.TabIndex = 0
@@ -162,7 +169,7 @@ Partial Class frmSelectBand
         Me.lbl本幅.AutoSize = True
         Me.lbl本幅.Location = New System.Drawing.Point(410, 16)
         Me.lbl本幅.Name = "lbl本幅"
-        Me.lbl本幅.Size = New System.Drawing.Size(45, 20)
+        Me.lbl本幅.Size = New System.Drawing.Size(39, 20)
         Me.lbl本幅.TabIndex = 3
         Me.lbl本幅.Text = "本幅"
         '
@@ -182,7 +189,7 @@ Partial Class frmSelectBand
         Me.btnキャンセル.Location = New System.Drawing.Point(517, 180)
         Me.btnキャンセル.Name = "btnキャンセル"
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        Me.btnキャンセル.TabIndex = 11
+        Me.btnキャンセル.TabIndex = 12
         Me.btnキャンセル.Text = "キャンセル(&C)"
         Me.btnキャンセル.UseVisualStyleBackColor = True
         '
@@ -192,7 +199,7 @@ Partial Class frmSelectBand
         Me.btnOK.Location = New System.Drawing.Point(398, 180)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 10
+        Me.btnOK.TabIndex = 11
         Me.btnOK.Text = "OK(&O)"
         Me.btnOK.UseVisualStyleBackColor = True
         '
@@ -202,7 +209,7 @@ Partial Class frmSelectBand
         Me.lblリスト出力記号.Location = New System.Drawing.Point(27, 183)
         Me.lblリスト出力記号.Name = "lblリスト出力記号"
         Me.lblリスト出力記号.Size = New System.Drawing.Size(101, 20)
-        Me.lblリスト出力記号.TabIndex = 8
+        Me.lblリスト出力記号.TabIndex = 9
         Me.lblリスト出力記号.Text = "リスト出力記号"
         '
         'txtリスト出力記号
@@ -210,20 +217,79 @@ Partial Class frmSelectBand
         Me.txtリスト出力記号.Location = New System.Drawing.Point(152, 180)
         Me.txtリスト出力記号.Name = "txtリスト出力記号"
         Me.txtリスト出力記号.Size = New System.Drawing.Size(83, 27)
-        Me.txtリスト出力記号.TabIndex = 9
+        Me.txtリスト出力記号.TabIndex = 10
+        '
+        'grp四つ畳み編みの上の縦ひも位置
+        '
+        Me.grp四つ畳み編みの上の縦ひも位置.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grp四つ畳み編みの上の縦ひも位置.Controls.Add(Me.nudマイひも長係数)
+        Me.grp四つ畳み編みの上の縦ひも位置.Controls.Add(Me.lblマイひも長係数)
+        Me.grp四つ畳み編みの上の縦ひも位置.Controls.Add(Me.rad右側)
+        Me.grp四つ畳み編みの上の縦ひも位置.Controls.Add(Me.rad左側)
+        Me.grp四つ畳み編みの上の縦ひも位置.Location = New System.Drawing.Point(398, 62)
+        Me.grp四つ畳み編みの上の縦ひも位置.Name = "grp四つ畳み編みの上の縦ひも位置"
+        Me.grp四つ畳み編みの上の縦ひも位置.Size = New System.Drawing.Size(232, 102)
+        Me.grp四つ畳み編みの上の縦ひも位置.TabIndex = 8
+        Me.grp四つ畳み編みの上の縦ひも位置.TabStop = False
+        Me.grp四つ畳み編みの上の縦ひも位置.Text = "四つ畳み編みの上の縦ひも位置"
+        Me.grp四つ畳み編みの上の縦ひも位置.Visible = False
+        '
+        'nudマイひも長係数
+        '
+        Me.nudマイひも長係数.DecimalPlaces = 2
+        Me.nudマイひも長係数.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        Me.nudマイひも長係数.Location = New System.Drawing.Point(129, 61)
+        Me.nudマイひも長係数.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
+        Me.nudマイひも長係数.Name = "nudマイひも長係数"
+        Me.nudマイひも長係数.Size = New System.Drawing.Size(68, 27)
+        Me.nudマイひも長係数.TabIndex = 9
+        Me.nudマイひも長係数.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.nudマイひも長係数.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'lblマイひも長係数
+        '
+        Me.lblマイひも長係数.AutoSize = True
+        Me.lblマイひも長係数.Location = New System.Drawing.Point(24, 64)
+        Me.lblマイひも長係数.Name = "lblマイひも長係数"
+        Me.lblマイひも長係数.Size = New System.Drawing.Size(99, 20)
+        Me.lblマイひも長係数.TabIndex = 2
+        Me.lblマイひも長係数.Text = "マイひも長係数"
+        '
+        'rad右側
+        '
+        Me.rad右側.AutoSize = True
+        Me.rad右側.Checked = True
+        Me.rad右側.Location = New System.Drawing.Point(127, 30)
+        Me.rad右側.Name = "rad右側"
+        Me.rad右側.Size = New System.Drawing.Size(60, 24)
+        Me.rad右側.TabIndex = 1
+        Me.rad右側.TabStop = True
+        Me.rad右側.Text = "右側"
+        Me.rad右側.UseVisualStyleBackColor = True
+        '
+        'rad左側
+        '
+        Me.rad左側.AutoSize = True
+        Me.rad左側.Location = New System.Drawing.Point(52, 30)
+        Me.rad左側.Name = "rad左側"
+        Me.rad左側.Size = New System.Drawing.Size(60, 24)
+        Me.rad左側.TabIndex = 0
+        Me.rad左側.Text = "左側"
+        Me.rad左側.UseVisualStyleBackColor = True
         '
         'frmSelectBand
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(644, 233)
+        Me.Controls.Add(Me.grp四つ畳み編みの上の縦ひも位置)
         Me.Controls.Add(Me.txtリスト出力記号)
         Me.Controls.Add(Me.lblリスト出力記号)
         Me.Controls.Add(Me.btnキャンセル)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.lblバンド幅の寸法単位)
         Me.Controls.Add(Me.txt本幅)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.grp出力時の寸法単位)
         Me.Controls.Add(Me.cmb対象バンドの種類名)
         Me.Controls.Add(Me.txtバンド幅)
         Me.Controls.Add(Me.lblバンド幅)
@@ -235,9 +301,12 @@ Partial Class frmSelectBand
         Me.Name = "frmSelectBand"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "バンドの種類選択"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
+        Me.grp出力時の寸法単位.ResumeLayout(False)
+        Me.grp出力時の寸法単位.PerformLayout()
         CType(Me.nud小数点以下桁数, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.grp四つ畳み編みの上の縦ひも位置.ResumeLayout(False)
+        Me.grp四つ畳み編みの上の縦ひも位置.PerformLayout()
+        CType(Me.nudマイひも長係数, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -245,7 +314,7 @@ Partial Class frmSelectBand
 
     Friend WithEvents lblバンド幅の寸法単位 As Windows.Forms.Label
     Friend WithEvents txt本幅 As Windows.Forms.TextBox
-    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
+    Friend WithEvents grp出力時の寸法単位 As Windows.Forms.GroupBox
     Friend WithEvents rad出力時の寸法単位_in As Windows.Forms.RadioButton
     Friend WithEvents rad出力時の寸法単位_cm As Windows.Forms.RadioButton
     Friend WithEvents rad出力時の寸法単位_mm As Windows.Forms.RadioButton
@@ -260,4 +329,9 @@ Partial Class frmSelectBand
     Friend WithEvents txtリスト出力記号 As Windows.Forms.TextBox
     Friend WithEvents lbl小数点以下桁数 As Windows.Forms.Label
     Friend WithEvents nud小数点以下桁数 As Windows.Forms.NumericUpDown
+    Friend WithEvents grp四つ畳み編みの上の縦ひも位置 As Windows.Forms.GroupBox
+    Friend WithEvents rad右側 As Windows.Forms.RadioButton
+    Friend WithEvents rad左側 As Windows.Forms.RadioButton
+    Friend WithEvents nudマイひも長係数 As Windows.Forms.NumericUpDown
+    Public WithEvents lblマイひも長係数 As Windows.Forms.Label
 End Class

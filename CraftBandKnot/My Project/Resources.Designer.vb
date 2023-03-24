@@ -39,7 +39,7 @@ Namespace My.Resources
         Friend ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
-                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("CraftBandSquare45.Resources", GetType(Resources).Assembly)
+                    Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("CraftBandKnot.Resources", GetType(Resources).Assembly)
                     resourceMan = temp
                 End If
                 Return resourceMan
@@ -124,16 +124,34 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}の指定が正しくありません。 に類似しているローカライズされた文字列を検索します。
+        '''  コマの数({0})要尺:{1} に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property CalcBadSetValue() As String
+        Friend ReadOnly Property CalcBandLength1() As String
             Get
-                Return ResourceManager.GetString("CalcBadSetValue", resourceCulture)
+                Return ResourceManager.GetString("CalcBandLength1", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  目標に基づき横・縦・高さの四角数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  余裕長:{0} (縁の始末:{1} ひも長加算:{2} 加算:{3}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcBandLength2() As String
+            Get
+                Return ResourceManager.GetString("CalcBandLength2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ひもの長さ:{0}[{1}] 差:{2}[{3}] に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcBandLength3() As String
+            Get
+                Return ResourceManager.GetString("CalcBandLength3", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  目標に基づき横・縦・高さのコマ数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcConfirmRecalc() As String
             Get
@@ -178,7 +196,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  &apos;{0}&apos;{1}&apos;は登録されていません。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}&apos;{1}&apos;は登録されていません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoMaster() As String
             Get
@@ -214,20 +232,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  横のコマ数・縦のコマ数・高さのコマ数をセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPieceCountSet() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPieceCountSet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}を指定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoSelect() As String
             Get
                 Return ResourceManager.GetString("CalcNoSelect", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  横の四角数・縦の四角数・高さの四角数をセットしてください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcNoSquareCountSet() As String
-            Get
-                Return ResourceManager.GetString("CalcNoSquareCountSet", resourceCulture)
             End Get
         End Property
         
@@ -250,7 +268,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  斜め四角45度 {0} に類似しているローカライズされた文字列を検索します。
+        '''  四つ畳み編み {0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property FormCaption() As String
             Get
@@ -291,6 +309,15 @@ Namespace My.Resources
         Friend ReadOnly Property MessageNotExistDefaultFile() As String
             Get
                 Return ResourceManager.GetString("MessageNotExistDefaultFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  底 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property OutputTextBottom() As String
+            Get
+                Return ResourceManager.GetString("OutputTextBottom", resourceCulture)
             End Get
         End Property
         

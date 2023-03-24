@@ -61,6 +61,11 @@
               <xs:element name="f_dひも長係数初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長係数初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長係数初期値" msprop:Generator_UserColumnName="f_dひも長係数初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長係数初期値" type="xs:double" default="1" minOccurs="0" />
               <xs:element name="f_dひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_dひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算初期値" msprop:Generator_UserColumnName="f_dひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_s色リスト" msdata:Caption="色リスト" msprop:Generator_ColumnPropNameInTable="f_s色リストColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s色リスト" msprop:Generator_UserColumnName="f_s色リスト" msprop:Generator_ColumnVarNameInTable="columnf_s色リスト" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_dコマ寸法係数a" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法係数aColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法係数a" msprop:Generator_UserColumnName="f_dコマ寸法係数a" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法係数a" type="xs:double" default="0.95" minOccurs="0" />
+              <xs:element name="f_dコマ寸法係数b" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法係数bColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法係数b" msprop:Generator_UserColumnName="f_dコマ寸法係数b" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法係数b" type="xs:double" default="0.2" minOccurs="0" />
+              <xs:element name="f_dコマ要尺係数a" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数aColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数a" msprop:Generator_UserColumnName="f_dコマ要尺係数a" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数a" type="xs:double" default="0.98" minOccurs="0" />
+              <xs:element name="f_dコマ要尺係数b" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数bColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数b" msprop:Generator_UserColumnName="f_dコマ要尺係数b" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
+              <xs:element name="f_d四つ畳みひも長加算初期値" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d四つ畳みひも長加算初期値Column" msprop:Generator_ColumnVarNameInTable="columnf_d四つ畳みひも長加算初期値" msprop:Generator_UserColumnName="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnPropNameInRow="f_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -104,10 +109,22 @@
               <xs:element name="f_i赤" msprop:Generator_ColumnPropNameInTable="f_i赤Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i赤" msprop:Generator_UserColumnName="f_i赤" msprop:Generator_ColumnVarNameInTable="columnf_i赤" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_i緑" msprop:Generator_ColumnPropNameInTable="f_i緑Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i緑" msprop:Generator_UserColumnName="f_i緑" msprop:Generator_ColumnVarNameInTable="columnf_i緑" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_i青" msprop:Generator_ColumnPropNameInTable="f_i青Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i青" msprop:Generator_UserColumnName="f_i青" msprop:Generator_ColumnVarNameInTable="columnf_i青" type="xs:short" default="0" minOccurs="0" />
-              <xs:element name="f_d線幅" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d線幅Column" msprop:Generator_ColumnVarNameInTable="columnf_d線幅" msprop:Generator_UserColumnName="f_d線幅" msprop:Generator_ColumnPropNameInRow="f_d線幅" type="xs:double" default="1" minOccurs="0" />
-              <xs:element name="f_d中線幅" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d中線幅Column" msprop:Generator_ColumnVarNameInTable="columnf_d中線幅" msprop:Generator_UserColumnName="f_d中線幅" msprop:Generator_ColumnPropNameInRow="f_d中線幅" type="xs:double" default="0" minOccurs="0" />
-              <xs:element name="f_i透明度" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_i透明度Column" msprop:Generator_ColumnVarNameInTable="columnf_i透明度" msprop:Generator_UserColumnName="f_i透明度" msprop:Generator_ColumnPropNameInRow="f_i透明度" type="xs:short" default="255" minOccurs="0" />
-              <xs:element name="f_s備考" msprop:nullValue="" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:Generator_ColumnVarNameInTable="columnf_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnPropNameInRow="f_s備考" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_d線幅" msprop:Generator_ColumnPropNameInTable="f_d線幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d線幅" msprop:Generator_UserColumnName="f_d線幅" msprop:Generator_ColumnVarNameInTable="columnf_d線幅" type="xs:double" default="1" minOccurs="0" />
+              <xs:element name="f_d中線幅" msprop:Generator_ColumnPropNameInTable="f_d中線幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d中線幅" msprop:Generator_UserColumnName="f_d中線幅" msprop:Generator_ColumnVarNameInTable="columnf_d中線幅" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_i透明度" msprop:Generator_ColumnPropNameInTable="f_i透明度Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i透明度" msprop:Generator_UserColumnName="f_i透明度" msprop:Generator_ColumnVarNameInTable="columnf_i透明度" type="xs:short" default="255" minOccurs="0" />
+              <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblゲージ" msprop:Generator_RowEvHandlerName="tblゲージRowChangeEventHandler" msprop:Generator_RowDeletedName="tblゲージRowDeleted" msprop:Generator_RowDeletingName="tblゲージRowDeleting" msprop:Generator_RowEvArgName="tblゲージRowChangeEvent" msprop:Generator_TablePropName="tblゲージ" msprop:Generator_RowChangedName="tblゲージRowChanged" msprop:Generator_UserTableName="tblゲージ" msprop:Generator_RowChangingName="tblゲージRowChanging" msprop:Generator_RowClassName="tblゲージRow" msprop:Generator_TableClassName="tblゲージDataTable" msprop:Generator_TableVarName="tabletblゲージ">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_sバンドの種類名" msprop:Generator_ColumnPropNameInTable="f_sバンドの種類名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバンドの種類名" msprop:Generator_UserColumnName="f_sバンドの種類名" msprop:Generator_ColumnVarNameInTable="columnf_sバンドの種類名" type="xs:string" default="" />
+              <xs:element name="f_i本幅" msprop:Generator_ColumnPropNameInTable="f_i本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i本幅" msprop:Generator_UserColumnName="f_i本幅" msprop:Generator_ColumnVarNameInTable="columnf_i本幅" type="xs:short" default="1" />
+              <xs:element name="f_b実測値使用区分" msprop:Generator_ColumnPropNameInTable="f_b実測値使用区分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b実測値使用区分" msprop:Generator_UserColumnName="f_b実測値使用区分" msprop:Generator_ColumnVarNameInTable="columnf_b実測値使用区分" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_dコマ寸法実測値" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法実測値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法実測値" msprop:Generator_UserColumnName="f_dコマ寸法実測値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法実測値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dコマ要尺実測値" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺実測値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺実測値" msprop:Generator_UserColumnName="f_dコマ要尺実測値" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺実測値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -130,6 +147,11 @@
     <xs:unique name="tbl描画色PKey" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:tbl描画色" />
       <xs:field xpath="mstns:f_s色" />
+    </xs:unique>
+    <xs:unique name="tblゲージPKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblゲージ" />
+      <xs:field xpath="mstns:f_sバンドの種類名" />
+      <xs:field xpath="mstns:f_i本幅" />
     </xs:unique>
   </xs:element>
 </xs:schema>
