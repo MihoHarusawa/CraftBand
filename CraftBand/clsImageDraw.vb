@@ -439,7 +439,9 @@ Public Class CImageDraw
         End If
 
         '線
-        _Graphic.DrawLine(colset.PenLane, pixcel_point(l.p開始), pixcel_point(l.p終了))
+        If colset.PenLane IsNot Nothing Then
+            _Graphic.DrawLine(colset.PenLane, pixcel_point(l.p開始), pixcel_point(l.p終了))
+        End If
     End Sub
 
     Function drawコマ(ByVal item As clsImageItem) As Boolean

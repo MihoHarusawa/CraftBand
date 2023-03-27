@@ -36,15 +36,6 @@ Partial Class frmOptions
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvData = New System.Windows.Forms.DataGridView()
-        Me.BindingSource付属品 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
-        Me.lbl単位 = New System.Windows.Forms.Label()
-        Me.btnキャンセル = New System.Windows.Forms.Button()
-        Me.btnOK = New System.Windows.Forms.Button()
-        Me.btnひも追加 = New System.Windows.Forms.Button()
-        Me.lbl付属品名 = New System.Windows.Forms.Label()
-        Me.txt付属品名 = New System.Windows.Forms.TextBox()
-        Me.btn削除 = New System.Windows.Forms.Button()
         Me.f_s付属品名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_iひも番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品ひも名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -63,6 +54,15 @@ Partial Class frmOptions
         Me.f_bCraftBandKnot = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_bCraftBandSquare = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSource付属品 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
+        Me.lbl単位 = New System.Windows.Forms.Label()
+        Me.btnキャンセル = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
+        Me.btnひも追加 = New System.Windows.Forms.Button()
+        Me.lbl付属品名 = New System.Windows.Forms.Label()
+        Me.txt付属品名 = New System.Windows.Forms.TextBox()
+        Me.btn削除 = New System.Windows.Forms.Button()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource付属品, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -84,88 +84,6 @@ Partial Class frmOptions
         Me.dgvData.RowTemplate.Height = 29
         Me.dgvData.Size = New System.Drawing.Size(731, 166)
         Me.dgvData.TabIndex = 2
-        '
-        'BindingSource付属品
-        '
-        Me.BindingSource付属品.DataMember = "tbl付属品"
-        Me.BindingSource付属品.DataSource = GetType(CraftBand.Tables.dstMasterTables)
-        '
-        'lbl設定時の寸法単位
-        '
-        Me.lbl設定時の寸法単位.AutoSize = True
-        Me.lbl設定時の寸法単位.Location = New System.Drawing.Point(62, -2)
-        Me.lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
-        Me.lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
-        Me.lbl設定時の寸法単位.TabIndex = 1
-        '
-        'lbl単位
-        '
-        Me.lbl単位.AutoSize = True
-        Me.lbl単位.Location = New System.Drawing.Point(14, -2)
-        Me.lbl単位.Name = "lbl単位"
-        Me.lbl単位.Size = New System.Drawing.Size(42, 20)
-        Me.lbl単位.TabIndex = 0
-        Me.lbl単位.Text = "単位:"
-        '
-        'btnキャンセル
-        '
-        Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(632, 211)
-        Me.btnキャンセル.Name = "btnキャンセル"
-        Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        Me.btnキャンセル.TabIndex = 8
-        Me.btnキャンセル.Text = "キャンセル(&C)"
-        Me.btnキャンセル.UseVisualStyleBackColor = True
-        '
-        'btnOK
-        '
-        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(513, 211)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 7
-        Me.btnOK.Text = "OK(&O)"
-        Me.btnOK.UseVisualStyleBackColor = True
-        '
-        'btnひも追加
-        '
-        Me.btnひも追加.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnひも追加.Location = New System.Drawing.Point(333, 211)
-        Me.btnひも追加.Name = "btnひも追加"
-        Me.btnひも追加.Size = New System.Drawing.Size(111, 46)
-        Me.btnひも追加.TabIndex = 6
-        Me.btnひも追加.Text = "ひも追加(&A)"
-        Me.btnひも追加.UseVisualStyleBackColor = True
-        '
-        'lbl付属品名
-        '
-        Me.lbl付属品名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lbl付属品名.AutoSize = True
-        Me.lbl付属品名.Location = New System.Drawing.Point(134, 225)
-        Me.lbl付属品名.Name = "lbl付属品名"
-        Me.lbl付属品名.Size = New System.Drawing.Size(69, 20)
-        Me.lbl付属品名.TabIndex = 4
-        Me.lbl付属品名.Text = "付属品名"
-        '
-        'txt付属品名
-        '
-        Me.txt付属品名.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt付属品名.Location = New System.Drawing.Point(216, 222)
-        Me.txt付属品名.Name = "txt付属品名"
-        Me.txt付属品名.Size = New System.Drawing.Size(101, 27)
-        Me.txt付属品名.TabIndex = 5
-        '
-        'btn削除
-        '
-        Me.btn削除.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除.Location = New System.Drawing.Point(14, 211)
-        Me.btn削除.Name = "btn削除"
-        Me.btn削除.Size = New System.Drawing.Size(111, 46)
-        Me.btn削除.TabIndex = 3
-        Me.btn削除.Text = "削除(&D)"
-        Me.btn削除.UseVisualStyleBackColor = True
         '
         'f_s付属品名
         '
@@ -337,7 +255,6 @@ Partial Class frmOptions
         Me.f_bCraftBandKnot.MinimumWidth = 6
         Me.f_bCraftBandKnot.Name = "f_bCraftBandKnot"
         Me.f_bCraftBandKnot.ToolTipText = "CraftBandKnotで使用する"
-        Me.f_bCraftBandKnot.Visible = False
         Me.f_bCraftBandKnot.Width = 125
         '
         'f_bCraftBandSquare
@@ -359,6 +276,88 @@ Partial Class frmOptions
         Me.f_s備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.f_s備考.Width = 200
         '
+        'BindingSource付属品
+        '
+        Me.BindingSource付属品.DataMember = "tbl付属品"
+        Me.BindingSource付属品.DataSource = GetType(CraftBand.Tables.dstMasterTables)
+        '
+        'lbl設定時の寸法単位
+        '
+        Me.lbl設定時の寸法単位.AutoSize = True
+        Me.lbl設定時の寸法単位.Location = New System.Drawing.Point(62, -2)
+        Me.lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
+        Me.lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
+        Me.lbl設定時の寸法単位.TabIndex = 1
+        '
+        'lbl単位
+        '
+        Me.lbl単位.AutoSize = True
+        Me.lbl単位.Location = New System.Drawing.Point(14, -2)
+        Me.lbl単位.Name = "lbl単位"
+        Me.lbl単位.Size = New System.Drawing.Size(42, 20)
+        Me.lbl単位.TabIndex = 0
+        Me.lbl単位.Text = "単位:"
+        '
+        'btnキャンセル
+        '
+        Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnキャンセル.Location = New System.Drawing.Point(632, 211)
+        Me.btnキャンセル.Name = "btnキャンセル"
+        Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
+        Me.btnキャンセル.TabIndex = 8
+        Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.btnキャンセル.UseVisualStyleBackColor = True
+        '
+        'btnOK
+        '
+        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnOK.Location = New System.Drawing.Point(513, 211)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(111, 46)
+        Me.btnOK.TabIndex = 7
+        Me.btnOK.Text = "OK(&O)"
+        Me.btnOK.UseVisualStyleBackColor = True
+        '
+        'btnひも追加
+        '
+        Me.btnひも追加.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnひも追加.Location = New System.Drawing.Point(333, 211)
+        Me.btnひも追加.Name = "btnひも追加"
+        Me.btnひも追加.Size = New System.Drawing.Size(111, 46)
+        Me.btnひも追加.TabIndex = 6
+        Me.btnひも追加.Text = "ひも追加(&A)"
+        Me.btnひも追加.UseVisualStyleBackColor = True
+        '
+        'lbl付属品名
+        '
+        Me.lbl付属品名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl付属品名.AutoSize = True
+        Me.lbl付属品名.Location = New System.Drawing.Point(134, 225)
+        Me.lbl付属品名.Name = "lbl付属品名"
+        Me.lbl付属品名.Size = New System.Drawing.Size(69, 20)
+        Me.lbl付属品名.TabIndex = 4
+        Me.lbl付属品名.Text = "付属品名"
+        '
+        'txt付属品名
+        '
+        Me.txt付属品名.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt付属品名.Location = New System.Drawing.Point(216, 222)
+        Me.txt付属品名.Name = "txt付属品名"
+        Me.txt付属品名.Size = New System.Drawing.Size(101, 27)
+        Me.txt付属品名.TabIndex = 5
+        '
+        'btn削除
+        '
+        Me.btn削除.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btn削除.Location = New System.Drawing.Point(14, 211)
+        Me.btn削除.Name = "btn削除"
+        Me.btn削除.Size = New System.Drawing.Size(111, 46)
+        Me.btn削除.TabIndex = 3
+        Me.btn削除.Text = "削除(&D)"
+        Me.btn削除.UseVisualStyleBackColor = True
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
@@ -373,8 +372,6 @@ Partial Class frmOptions
         Me.Controls.Add(Me.lbl設定時の寸法単位)
         Me.Controls.Add(Me.lbl単位)
         Me.Controls.Add(Me.dgvData)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(773, 313)
         Me.Name = "frmOptions"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent

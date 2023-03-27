@@ -1573,8 +1573,11 @@ Class clsCalcMesh
             Dim ret As Boolean = True
             Dim nひも1何本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
             For Each drow As clsDataRow In groupRow
-                Dim mst As New clsPatternDataRow(grpMst.IndexDataRow(drow))
-                If mst.IsValid Then
+                Dim mst As clsPatternDataRow = Nothing
+                If grpMst.IsExistIndexDataRow(drow) Then
+                    mst = New clsPatternDataRow(grpMst.IndexDataRow(drow))
+                End If
+                If mst IsNot Nothing AndAlso mst.IsValid Then
 
                     drow.Value("f_d高さ") = i周数 * mst.GetHeight(drow.Value("f_i何本幅"))
                     drow.Value("f_d垂直ひも長") = i周数 * mst.GetBandLength(drow.Value("f_i何本幅"))

@@ -65,7 +65,7 @@
               <xs:element name="f_dコマ寸法係数b" msprop:Generator_ColumnPropNameInTable="f_dコマ寸法係数bColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ寸法係数b" msprop:Generator_UserColumnName="f_dコマ寸法係数b" msprop:Generator_ColumnVarNameInTable="columnf_dコマ寸法係数b" type="xs:double" default="0.2" minOccurs="0" />
               <xs:element name="f_dコマ要尺係数a" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数aColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数a" msprop:Generator_UserColumnName="f_dコマ要尺係数a" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数a" type="xs:double" default="0.98" minOccurs="0" />
               <xs:element name="f_dコマ要尺係数b" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数bColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数b" msprop:Generator_UserColumnName="f_dコマ要尺係数b" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
-              <xs:element name="f_d四つ畳みひも長加算初期値" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d四つ畳みひも長加算初期値Column" msprop:Generator_ColumnVarNameInTable="columnf_d四つ畳みひも長加算初期値" msprop:Generator_UserColumnName="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnPropNameInRow="f_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_d四つ畳みひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d四つ畳みひも長加算初期値" msprop:Generator_UserColumnName="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -98,7 +98,7 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_s単位" msprop:Generator_ColumnPropNameInTable="f_s単位Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s単位" msprop:Generator_UserColumnName="f_s単位" msprop:Generator_ColumnVarNameInTable="columnf_s単位" type="xs:string" default="mm" minOccurs="0" />
-              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.3.1" minOccurs="0" />
+              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.4.0" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

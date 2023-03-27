@@ -12,6 +12,7 @@
     <Product>CraftBand</Product>
     <Description>クラフトバンド・四つ畳み編みの計算</Description>
     <Copyright>Copyright © LaboHarusawa 2023</Copyright>
+    <PackageIcon>IconKnot.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -51,6 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="IconKnot.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

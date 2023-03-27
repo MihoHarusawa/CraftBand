@@ -39,11 +39,6 @@ Partial Class frmBandType
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvData = New System.Windows.Forms.DataGridView()
-        Me.BindingSourceバンドの種類 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.btnキャンセル = New System.Windows.Forms.Button()
-        Me.btnOK = New System.Windows.Forms.Button()
-        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
-        Me.lbl単位 = New System.Windows.Forms.Label()
         Me.f_sバンドの種類名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i本幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dバンド幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -67,6 +62,11 @@ Partial Class frmBandType
         Me.f_d四つ畳みひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s色リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSourceバンドの種類 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.btnキャンセル = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
+        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
+        Me.lbl単位 = New System.Windows.Forms.Label()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceバンドの種類, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -88,49 +88,6 @@ Partial Class frmBandType
         Me.dgvData.RowTemplate.Height = 29
         Me.dgvData.Size = New System.Drawing.Size(775, 169)
         Me.dgvData.TabIndex = 2
-        '
-        'BindingSourceバンドの種類
-        '
-        Me.BindingSourceバンドの種類.DataMember = "tblバンドの種類"
-        Me.BindingSourceバンドの種類.DataSource = GetType(CraftBand.Tables.dstMasterTables)
-        '
-        'btnキャンセル
-        '
-        Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(676, 224)
-        Me.btnキャンセル.Name = "btnキャンセル"
-        Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        Me.btnキャンセル.TabIndex = 4
-        Me.btnキャンセル.Text = "キャンセル(&C)"
-        Me.btnキャンセル.UseVisualStyleBackColor = True
-        '
-        'btnOK
-        '
-        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(557, 224)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 3
-        Me.btnOK.Text = "OK(&O)"
-        Me.btnOK.UseVisualStyleBackColor = True
-        '
-        'lbl設定時の寸法単位
-        '
-        Me.lbl設定時の寸法単位.AutoSize = True
-        Me.lbl設定時の寸法単位.Location = New System.Drawing.Point(60, -2)
-        Me.lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
-        Me.lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
-        Me.lbl設定時の寸法単位.TabIndex = 1
-        '
-        'lbl単位
-        '
-        Me.lbl単位.AutoSize = True
-        Me.lbl単位.Location = New System.Drawing.Point(12, -2)
-        Me.lbl単位.Name = "lbl単位"
-        Me.lbl単位.Size = New System.Drawing.Size(42, 20)
-        Me.lbl単位.TabIndex = 0
-        Me.lbl単位.Text = "単位:"
         '
         'f_sバンドの種類名
         '
@@ -362,6 +319,49 @@ Partial Class frmBandType
         Me.f_s備考.Name = "f_s備考"
         Me.f_s備考.Width = 125
         '
+        'BindingSourceバンドの種類
+        '
+        Me.BindingSourceバンドの種類.DataMember = "tblバンドの種類"
+        Me.BindingSourceバンドの種類.DataSource = GetType(CraftBand.Tables.dstMasterTables)
+        '
+        'btnキャンセル
+        '
+        Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnキャンセル.Location = New System.Drawing.Point(676, 224)
+        Me.btnキャンセル.Name = "btnキャンセル"
+        Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
+        Me.btnキャンセル.TabIndex = 4
+        Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.btnキャンセル.UseVisualStyleBackColor = True
+        '
+        'btnOK
+        '
+        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnOK.Location = New System.Drawing.Point(557, 224)
+        Me.btnOK.Name = "btnOK"
+        Me.btnOK.Size = New System.Drawing.Size(111, 46)
+        Me.btnOK.TabIndex = 3
+        Me.btnOK.Text = "OK(&O)"
+        Me.btnOK.UseVisualStyleBackColor = True
+        '
+        'lbl設定時の寸法単位
+        '
+        Me.lbl設定時の寸法単位.AutoSize = True
+        Me.lbl設定時の寸法単位.Location = New System.Drawing.Point(60, -2)
+        Me.lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
+        Me.lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
+        Me.lbl設定時の寸法単位.TabIndex = 1
+        '
+        'lbl単位
+        '
+        Me.lbl単位.AutoSize = True
+        Me.lbl単位.Location = New System.Drawing.Point(12, -2)
+        Me.lbl単位.Name = "lbl単位"
+        Me.lbl単位.Size = New System.Drawing.Size(42, 20)
+        Me.lbl単位.TabIndex = 0
+        Me.lbl単位.Text = "単位:"
+        '
         'frmBandType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
@@ -372,8 +372,6 @@ Partial Class frmBandType
         Me.Controls.Add(Me.btnキャンセル)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.dgvData)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(764, 297)
         Me.Name = "frmBandType"
         Me.Text = "バンドの種類"

@@ -145,15 +145,6 @@
     <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="CalcBandLength1" xml:space="preserve">
-    <value>コマの数({0})要尺:{1}</value>
-  </data>
-  <data name="CalcBandLength2" xml:space="preserve">
-    <value>余裕長:{0} (縁の始末:{1} ひも長加算:{2} 加算:{3})</value>
-  </data>
-  <data name="CalcBandLength3" xml:space="preserve">
-    <value>ひもの長さ:{0}[{1}] 差:{2}[{3}]</value>
-  </data>
   <data name="CalcConfirmRecalc" xml:space="preserve">
     <value>目標に基づき横・縦・高さのコマ数を再計算します。よろしいですか？</value>
   </data>
@@ -189,6 +180,48 @@
   </data>
   <data name="CalcNoTargetSet" xml:space="preserve">
     <value>目標とする縦寸法・横寸法・高さ寸法を設定してください。</value>
+  </data>
+  <data name="CalcOutAddLen" xml:space="preserve">
+    <value>加算計 {0} (縁の始末:{1} ひも長加算:{2} {3}加算:{4})</value>
+  </data>
+  <data name="CalcOutDiffFrom" xml:space="preserve">
+    <value>コマの{0}より</value>
+  </data>
+  <data name="CalcOutFoldingSame" xml:space="preserve">
+    <value>手前({0})と奥は同じ、真ん中で折る</value>
+  </data>
+  <data name="CalcOutFromFolding" xml:space="preserve">
+    <value>折り位置から</value>
+  </data>
+  <data name="CalcOutFromKnot" xml:space="preserve">
+    <value>コマから</value>
+  </data>
+  <data name="CalcOutFront" xml:space="preserve">
+    <value>手前({0})が奥より</value>
+  </data>
+  <data name="CalcOutKnotOf" xml:space="preserve">
+    <value>&lt;コマの{0}&gt;</value>
+  </data>
+  <data name="CalcOutKnotSame" xml:space="preserve">
+    <value>コマの{0}と同じ長さ</value>
+  </data>
+  <data name="CalcOutLong" xml:space="preserve">
+    <value>長い</value>
+  </data>
+  <data name="CalcOutShort" xml:space="preserve">
+    <value>短い</value>
+  </data>
+  <data name="CalcOutSideLeft" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="CalcOutSideLower" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="CalcOutSideRight" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="CalcOutSideUpper" xml:space="preserve">
+    <value>上</value>
   </data>
   <data name="DefaultFileName" xml:space="preserve">
     <value>規定値.xml</value>

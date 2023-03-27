@@ -86,6 +86,11 @@ Public Class clsGroupDataRow
         End Get
     End Property
 
+    '指定インデックスを持つか
+    Function IsExistIndex(ByVal idx As Int16) As Boolean
+        Return _map.ContainsKey(idx)
+    End Function
+
     '指定インデックス値のレコード取得
     Function IndexDataRow(ByVal idx As Int16) As clsDataRow
         If _map.ContainsKey(idx) Then
@@ -99,6 +104,12 @@ Public Class clsGroupDataRow
     Function IndexDataRow(ByVal row As clsDataRow) As clsDataRow
         Dim idx As Int16 = row.Value(_fieldNameKey)
         Return IndexDataRow(idx)
+    End Function
+
+    '指定レコードと同じインデックス値があるか
+    Function IsExistIndexDataRow(ByVal row As clsDataRow) As Boolean
+        Dim idx As Int16 = row.Value(_fieldNameKey)
+        Return IsExistIndex(idx)
     End Function
 
     '指定インデックス値・名前のフィールド値を返す

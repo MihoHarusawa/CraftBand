@@ -2294,7 +2294,7 @@ Namespace Tables
                 Me.columnf_sバージョン = New Global.System.Data.DataColumn("f_sバージョン", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sバージョン)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.3.1",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.4.0",String)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

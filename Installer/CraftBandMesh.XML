@@ -53,6 +53,11 @@
                 <xs:element name="f_dひも長係数初期値" type="xs:double" default="1" minOccurs="0" />
                 <xs:element name="f_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_s色リスト" msdata:Caption="色リスト" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_dコマ寸法係数a" type="xs:double" default="0.95" minOccurs="0" />
+                <xs:element name="f_dコマ寸法係数b" type="xs:double" default="0.2" minOccurs="0" />
+                <xs:element name="f_dコマ要尺係数a" type="xs:double" default="0.98" minOccurs="0" />
+                <xs:element name="f_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
+                <xs:element name="f_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
@@ -85,7 +90,7 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element name="f_s単位" type="xs:string" default="mm" minOccurs="0" />
-                <xs:element name="f_sバージョン" type="xs:string" default="1.3.1" minOccurs="0" />
+                <xs:element name="f_sバージョン" type="xs:string" default="1.4.0" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -99,6 +104,18 @@
                 <xs:element name="f_d線幅" type="xs:double" default="1" minOccurs="0" />
                 <xs:element name="f_d中線幅" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_i透明度" type="xs:short" default="255" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tblゲージ">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_sバンドの種類名" type="xs:string" default="" />
+                <xs:element name="f_i本幅" type="xs:short" default="1" />
+                <xs:element name="f_b実測値使用区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_dコマ寸法実測値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dコマ要尺実測値" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
@@ -123,6 +140,11 @@
         <xs:selector xpath=".//mstns:tbl描画色" />
         <xs:field xpath="mstns:f_s色" />
       </xs:unique>
+      <xs:unique name="tblゲージPKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tblゲージ" />
+        <xs:field xpath="mstns:f_sバンドの種類名" />
+        <xs:field xpath="mstns:f_i本幅" />
+      </xs:unique>
     </xs:element>
   </xs:schema>
   <tbl編みかた>
@@ -146,7 +168,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -171,7 +193,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -221,7 +243,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -246,7 +268,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -271,7 +293,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -296,7 +318,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -321,7 +343,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -346,7 +368,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -371,7 +393,7 @@
     <f_d厚さ>7</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -396,7 +418,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -421,7 +443,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -446,7 +468,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -471,7 +493,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -521,7 +543,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -546,7 +568,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -571,7 +593,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -596,7 +618,7 @@
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -621,7 +643,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -646,7 +668,7 @@
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>1目前の上を通す</f_s備考>
   </tbl編みかた>
@@ -671,7 +693,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -696,7 +718,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>上下に置いてクロス</f_s備考>
   </tbl編みかた>
@@ -721,7 +743,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>二重に巻いて内側に置き垂直ひもでくるむ</f_s備考>
   </tbl編みかた>
@@ -746,7 +768,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -771,14 +793,14 @@
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>5目進んで4目戻る</f_s備考>
   </tbl編みかた>
   <tbl編みかた>
     <f_s編みかた名>内外に折って差し込むだけ</f_s編みかた名>
     <f_iひも番号>1</f_iひも番号>
-    <f_s編みひも名>編みひも名</f_s編みひも名>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
     <f_b縁専用区分>true</f_b縁専用区分>
     <f_b底使用区分>false</f_b底使用区分>
     <f_i周あたり段数>0</f_i周あたり段数>
@@ -796,7 +818,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>折り返しとなるひも幅を指定</f_s備考>
   </tbl編みかた>
@@ -821,7 +843,7 @@
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -846,7 +868,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -871,7 +893,7 @@
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -896,7 +918,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>幅より狭く詰められる場合</f_s備考>
   </tbl編みかた>
@@ -946,7 +968,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>半分を外側に折り差しこむ</f_s備考>
   </tbl編みかた>
@@ -971,7 +993,7 @@
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>残り半分を外側に折り差し込む</f_s備考>
   </tbl編みかた>
@@ -996,7 +1018,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -1021,7 +1043,7 @@
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>4目進んで3目戻る</f_s備考>
   </tbl編みかた>
@@ -1046,7 +1068,7 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>周に10センチプラス</f_s備考>
   </tbl編みかた>
@@ -1071,7 +1093,7 @@
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -1096,7 +1118,7 @@
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考 />
   </tbl編みかた>
@@ -1121,14 +1143,14 @@
     <f_d厚さ>1</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>周に10センチプラス</f_s備考>
   </tbl編みかた>
   <tbl編みかた>
     <f_s編みかた名>対角線に折って差し込む</f_s編みかた名>
     <f_iひも番号>1</f_iひも番号>
-    <f_s編みひも名>編みひも名</f_s編みひも名>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
     <f_b縁専用区分>true</f_b縁専用区分>
     <f_b底使用区分>false</f_b底使用区分>
     <f_i周あたり段数>0</f_i周あたり段数>
@@ -1146,14 +1168,14 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>縁が横にまっすぐになるよう</f_s備考>
   </tbl編みかた>
   <tbl編みかた>
     <f_s編みかた名>ノコギリ状に折って差し込む</f_s編みかた名>
     <f_iひも番号>1</f_iひも番号>
-    <f_s編みひも名>編みひも名</f_s編みひも名>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
     <f_b縁専用区分>true</f_b縁専用区分>
     <f_b底使用区分>false</f_b底使用区分>
     <f_i周あたり段数>0</f_i周あたり段数>
@@ -1171,9 +1193,234 @@
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>ひも方向に直角に折る</f_s備考>
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>カットして縁ひもを貼り細いひもでかがる</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>外側に貼るひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>1</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>1</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>1</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>3.5</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>カットして縁ひもを貼り細いひもでかがる</f_s編みかた名>
+    <f_iひも番号>2</f_iひも番号>
+    <f_s編みひも名>厚さ調整ひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>2</f_i本幅初期値>
+    <f_iひも数>2</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>0</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>カットして縁ひもを貼り細いひもでかがる</f_s編みかた名>
+    <f_iひも番号>3</f_iひも番号>
+    <f_s編みひも名>内側に貼るひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>0</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>10</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>カットして縁ひもを貼り細いひもでかがる</f_s編みかた名>
+    <f_iひも番号>4</f_iひも番号>
+    <f_s編みひも名>かがりひも5</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>1</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>0</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1.3</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>4.5</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの縁でカットする</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>1</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの裏に折って巻き付ける</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0.3</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>6</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_d厚さ>5</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの上に芯ひもを置いて巻き付ける</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>芯ひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>1</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>2</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>1.2</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>5</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_d厚さ>5</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの裏の下側に折り込む</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0.2</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>6</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_d厚さ>4</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考>3コマ分</f_s備考>
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの裏の隣のコマに折り込む</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0.2</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>4</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_d厚さ>5</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
   </tbl編みかた>
   <tblバンドの種類>
     <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
@@ -1190,9 +1437,14 @@
     <f_d楕円底円弧の半径加算>-3.5</f_d楕円底円弧の半径加算>
     <f_d楕円底周の加算>-5</f_d楕円底周の加算>
     <f_dひも間のすき間初期値>1</f_dひも間のすき間初期値>
-    <f_dひも長係数初期値>1</f_dひも長係数初期値>
+    <f_dひも長係数初期値>1.02</f_dひも長係数初期値>
     <f_dひも長加算初期値>40</f_dひも長加算初期値>
-    <f_s色リスト>ナチュラル,茶,グレー,赤,緑,青,黒</f_s色リスト>
+    <f_s色リスト>ナチュラル,茶,グレー,赤,緑,青,黒,シアン,オレンジ,線のみ</f_s色リスト>
+    <f_dコマ寸法係数a>0.9565708028994139</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.1794745281855184</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>0.9890651877944318</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>0.6709633649932143</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_s備考 />
   </tblバンドの種類>
   <tblバンドの種類>
@@ -1210,9 +1462,14 @@
     <f_d楕円底円弧の半径加算>-3.5</f_d楕円底円弧の半径加算>
     <f_d楕円底周の加算>-5</f_d楕円底周の加算>
     <f_dひも間のすき間初期値>2</f_dひも間のすき間初期値>
-    <f_dひも長係数初期値>1</f_dひも長係数初期値>
+    <f_dひも長係数初期値>1.02</f_dひも長係数初期値>
     <f_dひも長加算初期値>40</f_dひも長加算初期値>
-    <f_s色リスト>茶,白</f_s色リスト>
+    <f_s色リスト>茶,白,線のみ,線のみ(中線あり)</f_s色リスト>
+    <f_dコマ寸法係数a>0.3970998632010947</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.20571709986319675</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>0.13827690381271718</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>-0.009452853031807207</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_s備考 />
   </tblバンドの種類>
   <tblバンドの種類>
@@ -1232,8 +1489,38 @@
     <f_dひも間のすき間初期値>0</f_dひも間のすき間初期値>
     <f_dひも長係数初期値>1</f_dひも長係数初期値>
     <f_dひも長加算初期値>30</f_dひも長加算初期値>
-    <f_s色リスト>深緑,ブラウン,こげ茶</f_s色リスト>
+    <f_s色リスト>深緑,ブラウン,こげ茶,線のみ,線のみ(中線あり)</f_s色リスト>
+    <f_dコマ寸法係数a>0.95</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.2</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>0</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>0</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_s備考 />
+  </tblバンドの種類>
+  <tblバンドの種類>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>12</f_i本幅>
+    <f_dバンド幅>15</f_dバンド幅>
+    <f_d短い横ひも長のばらつき>0</f_d短い横ひも長のばらつき>
+    <f_d縦ひも間の最小間隔>0</f_d縦ひも間の最小間隔>
+    <f_d差しひもの径>0</f_d差しひもの径>
+    <f_d差しひも長加算初期値>0</f_d差しひも長加算初期値>
+    <f_d垂直ひも加算初期値>0</f_d垂直ひも加算初期値>
+    <f_d底の厚さ>3</f_d底の厚さ>
+    <f_d立ち上げ時の四角底周の増分>0</f_d立ち上げ時の四角底周の増分>
+    <f_d立ち上げ時の楕円底周の増分>0</f_d立ち上げ時の楕円底周の増分>
+    <f_d楕円底円弧の半径加算>0</f_d楕円底円弧の半径加算>
+    <f_d楕円底周の加算>0</f_d楕円底周の加算>
+    <f_dひも間のすき間初期値>0</f_dひも間のすき間初期値>
+    <f_dひも長係数初期値>1</f_dひも長係数初期値>
+    <f_dひも長加算初期値>40</f_dひも長加算初期値>
+    <f_s色リスト>茶,グレー,ライトグレー,黒,線のみ(中線あり)</f_s色リスト>
+    <f_dコマ寸法係数a>0.95</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.2</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>1.0066449879824686</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>0.7212121212121213</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
+    <f_s備考>書籍記載値</f_s備考>
   </tblバンドの種類>
   <tbl付属品>
     <f_s付属品名>３重巻きリング</f_s付属品名>
@@ -1592,7 +1879,7 @@
     <f_s備考>長さは巻く部分</f_s備考>
   </tbl付属品>
   <tbl付属品>
-    <f_s付属品名>丸編みの持ち手(6本・PPバンド)</f_s付属品名>
+    <f_s付属品名>丸編みの持ち手(6本・3色)</f_s付属品名>
     <f_iひも番号>1</f_iひも番号>
     <f_s付属品ひも名>3色の1番目</f_s付属品ひも名>
     <f_b巻きひも区分>false</f_b巻きひも区分>
@@ -1608,7 +1895,7 @@
     <f_s備考>端は取り付け用20cm</f_s備考>
   </tbl付属品>
   <tbl付属品>
-    <f_s付属品名>丸編みの持ち手(6本・PPバンド)</f_s付属品名>
+    <f_s付属品名>丸編みの持ち手(6本・3色)</f_s付属品名>
     <f_iひも番号>2</f_iひも番号>
     <f_s付属品ひも名>3色の2番目</f_s付属品ひも名>
     <f_b巻きひも区分>false</f_b巻きひも区分>
@@ -1626,7 +1913,7 @@
     <f_s備考 />
   </tbl付属品>
   <tbl付属品>
-    <f_s付属品名>丸編みの持ち手(6本・PPバンド)</f_s付属品名>
+    <f_s付属品名>丸編みの持ち手(6本・3色)</f_s付属品名>
     <f_iひも番号>3</f_iひも番号>
     <f_s付属品ひも名>3色の3番目</f_s付属品ひも名>
     <f_b巻きひも区分>false</f_b巻きひも区分>
@@ -1655,13 +1942,79 @@
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
-    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>true</f_bCraftBandSquare>
     <f_s備考>織る部分の長さ指定</f_s備考>
   </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>丸編みの持ち手(4本・2色)</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>2色の1番目</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>2</f_iひも数>
+    <f_dひも長比率対長さ>1.5</f_dひも長比率対長さ>
+    <f_dひも長加算>400</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考>端は取り付け用20cm</f_s備考>
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>丸編みの持ち手(4本・2色)</f_s付属品名>
+    <f_iひも番号>2</f_iひも番号>
+    <f_s付属品ひも名>2色の2番目</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>2</f_iひも数>
+    <f_d長さ比率対ひも1>1</f_d長さ比率対ひも1>
+    <f_d長さ加減対ひも1>0</f_d長さ加減対ひも1>
+    <f_dひも長比率対長さ>1.5</f_dひも長比率対長さ>
+    <f_dひも長加算>400</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>三つ編み</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>編みひも</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>3</f_iひも数>
+    <f_dひも長比率対長さ>1.5</f_dひも長比率対長さ>
+    <f_dひも長加算>200</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考>端に10cm</f_s備考>
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>四つ編み</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>編みひも</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>4</f_iひも数>
+    <f_dひも長比率対長さ>1.6</f_dひも長比率対長さ>
+    <f_dひも長加算>200</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_s備考>端に10cm</f_s備考>
+  </tbl付属品>
   <tbl基本値>
     <f_s単位>mm</f_s単位>
-    <f_sバージョン>1.3.1</f_sバージョン>
+    <f_sバージョン>1.4.0</f_sバージョン>
   </tbl基本値>
   <tbl描画色>
     <f_s色>赤</f_s色>
@@ -1763,4 +2116,258 @@
     <f_i透明度>0</f_i透明度>
     <f_s備考>塗りつぶしなし</f_s備考>
   </tbl描画色>
+  <tbl描画色>
+    <f_s色>線のみ</f_s色>
+    <f_i赤>0</f_i赤>
+    <f_i緑>0</f_i緑>
+    <f_i青>0</f_i青>
+    <f_d線幅>3</f_d線幅>
+    <f_d中線幅>0</f_d中線幅>
+    <f_i透明度>0</f_i透明度>
+    <f_s備考>中線なし,塗りつぶしなし</f_s備考>
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>線のみ(中線あり)</f_s色>
+    <f_i赤>0</f_i赤>
+    <f_i緑>0</f_i緑>
+    <f_i青>0</f_i青>
+    <f_d線幅>3</f_d線幅>
+    <f_d中線幅>2</f_d中線幅>
+    <f_i透明度>0</f_i透明度>
+    <f_s備考>塗りつぶしなし</f_s備考>
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>シアン</f_s色>
+    <f_i赤>0</f_i赤>
+    <f_i緑>255</f_i緑>
+    <f_i青>255</f_i青>
+    <f_d線幅>2</f_d線幅>
+    <f_d中線幅>1</f_d中線幅>
+    <f_i透明度>50</f_i透明度>
+    <f_s備考 />
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>マゼンタ</f_s色>
+    <f_i赤>255</f_i赤>
+    <f_i緑>0</f_i緑>
+    <f_i青>255</f_i青>
+    <f_d線幅>2</f_d線幅>
+    <f_d中線幅>1</f_d中線幅>
+    <f_i透明度>50</f_i透明度>
+    <f_s備考 />
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>イエロー</f_s色>
+    <f_i赤>255</f_i赤>
+    <f_i緑>255</f_i緑>
+    <f_i青>0</f_i青>
+    <f_d線幅>2</f_d線幅>
+    <f_d中線幅>1</f_d中線幅>
+    <f_i透明度>50</f_i透明度>
+    <f_s備考 />
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>ライトグレー</f_s色>
+    <f_i赤>220</f_i赤>
+    <f_i緑>220</f_i緑>
+    <f_i青>220</f_i青>
+    <f_d線幅>2</f_d線幅>
+    <f_d中線幅>1</f_d中線幅>
+    <f_i透明度>100</f_i透明度>
+    <f_s備考 />
+  </tbl描画色>
+  <tbl描画色>
+    <f_s色>オレンジ</f_s色>
+    <f_i赤>255</f_i赤>
+    <f_i緑>165</f_i緑>
+    <f_i青>0</f_i青>
+    <f_d線幅>2</f_d線幅>
+    <f_d中線幅>1</f_d中線幅>
+    <f_i透明度>50</f_i透明度>
+    <f_s備考 />
+  </tbl描画色>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド13</f_sバンドの種類名>
+    <f_i本幅>9</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>0</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド13</f_sバンドの種類名>
+    <f_i本幅>12</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>0</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>2</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>7.9</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>25.6</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>3</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>10.3</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>33.4</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>4</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>13.4</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>40.9</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>5</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>16.1</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>49</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>6</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>18.5</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>56.8</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>7</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>20.7</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>64.3</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>8</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>24</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>72.8</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>9</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>24.8</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>79</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>10</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>29.6</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>88.3</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>11</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>32.3</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>98.3</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
+    <f_i本幅>12</f_i本幅>
+    <f_b実測値使用区分>false</f_b実測値使用区分>
+    <f_dコマ寸法実測値>33.8</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>101.9</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>3</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>35</f_dコマ要尺実測値>
+    <f_s備考>『エコクラフトで作る石畳み編みのかごとバッグ』記載値</f_s備考>
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>4</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>40</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>5</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>50</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>6</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>60</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>7</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>70</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>8</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>80</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>9</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>85</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>10</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>90</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>11</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>100</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
+    <f_i本幅>12</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>0</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>105</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
 </dstMasterTables>

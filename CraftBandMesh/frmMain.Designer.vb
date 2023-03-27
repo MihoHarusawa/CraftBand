@@ -3485,8 +3485,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(904, 830)
         Me.Name = "frmMain"
         Me.Text = "四角底と楕円底"

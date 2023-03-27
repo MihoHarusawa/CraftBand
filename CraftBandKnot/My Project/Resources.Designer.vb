@@ -124,33 +124,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  コマの数({0})要尺:{1} に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcBandLength1() As String
-            Get
-                Return ResourceManager.GetString("CalcBandLength1", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  余裕長:{0} (縁の始末:{1} ひも長加算:{2} 加算:{3}) に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcBandLength2() As String
-            Get
-                Return ResourceManager.GetString("CalcBandLength2", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  ひもの長さ:{0}[{1}] 差:{2}[{3}] に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcBandLength3() As String
-            Get
-                Return ResourceManager.GetString("CalcBandLength3", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  目標に基づき横・縦・高さのコマ数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcConfirmRecalc() As String
@@ -255,6 +228,132 @@ Namespace My.Resources
         Friend ReadOnly Property CalcNoTargetSet() As String
             Get
                 Return ResourceManager.GetString("CalcNoTargetSet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  加算計 {0} (縁の始末:{1} ひも長加算:{2} {3}加算:{4}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutAddLen() As String
+            Get
+                Return ResourceManager.GetString("CalcOutAddLen", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  コマの{0}より に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutDiffFrom() As String
+            Get
+                Return ResourceManager.GetString("CalcOutDiffFrom", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  手前({0})と奥は同じ、真ん中で折る に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutFoldingSame() As String
+            Get
+                Return ResourceManager.GetString("CalcOutFoldingSame", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  折り位置から に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutFromFolding() As String
+            Get
+                Return ResourceManager.GetString("CalcOutFromFolding", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  コマから に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutFromKnot() As String
+            Get
+                Return ResourceManager.GetString("CalcOutFromKnot", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  手前({0})が奥より に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutFront() As String
+            Get
+                Return ResourceManager.GetString("CalcOutFront", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  &lt;コマの{0}&gt; に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutKnotOf() As String
+            Get
+                Return ResourceManager.GetString("CalcOutKnotOf", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  コマの{0}と同じ長さ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutKnotSame() As String
+            Get
+                Return ResourceManager.GetString("CalcOutKnotSame", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  長い に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutLong() As String
+            Get
+                Return ResourceManager.GetString("CalcOutLong", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  短い に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutShort() As String
+            Get
+                Return ResourceManager.GetString("CalcOutShort", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  左 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSideLeft() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSideLeft", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  下 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSideLower() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSideLower", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  右 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSideRight() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSideRight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  上 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutSideUpper() As String
+            Get
+                Return ResourceManager.GetString("CalcOutSideUpper", resourceCulture)
             End Get
         End Property
         

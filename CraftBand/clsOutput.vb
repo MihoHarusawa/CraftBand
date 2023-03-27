@@ -123,6 +123,11 @@ Public Class clsOutput
         Return g_clsSelectBasics.p_sリスト出力長(d)
     End Function
 
+    '出力長(出力単位・桁数)単位付き
+    Function outLengthTextWithUnit(ByVal d As Double) As String
+        Return g_clsSelectBasics.p_sリスト出力長(d) & g_clsSelectBasics.p_unit出力時の寸法単位.Str
+    End Function
+
     'ひも本数
     Function outCountText(ByVal count As Integer) As String
         '{0} 本

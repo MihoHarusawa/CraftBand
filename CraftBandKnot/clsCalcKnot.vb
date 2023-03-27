@@ -1,14 +1,11 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Runtime
-Imports System.Runtime.ConstrainedExecution
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
-Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -184,7 +181,7 @@ Class clsCalcKnot
 
     ReadOnly Property p_d四つ畳み編みの厚さ As Double
         Get
-            Return 2 * g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
         End Get
     End Property
 
@@ -215,7 +212,7 @@ Class clsCalcKnot
             If p_dコマベース_横 <= 0 Then
                 Return 0
             End If
-            Return p_dコマベース_横 + (p_d厚さ * 2)
+            Return p_dコマベース_横 + p_d厚さ '外側には1/2,その2倍
         End Get
     End Property
 
@@ -224,7 +221,7 @@ Class clsCalcKnot
             If p_dコマベース_縦 <= 0 Then
                 Return 0
             End If
-            Return p_dコマベース_縦 + (p_d厚さ * 2)
+            Return p_dコマベース_縦 + p_d厚さ '外側には1/2,その2倍
         End Get
     End Property
 
@@ -961,8 +958,11 @@ Class clsCalcKnot
             Dim ret As Boolean = True
             Dim nひも1何本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
             For Each drow As clsDataRow In groupRow
-                Dim mst As New clsPatternDataRow(grpMst.IndexDataRow(drow))
-                If mst.IsValid Then
+                Dim mst As clsPatternDataRow = Nothing
+                If grpMst.IsExistIndexDataRow(drow) Then
+                    mst = New clsPatternDataRow(grpMst.IndexDataRow(drow))
+                End If
+                If mst IsNot Nothing AndAlso mst.IsValid Then
 
                     drow.Value("f_d高さ") = i周数 * mst.GetHeight(drow.Value("f_i何本幅"))
                     drow.Value("f_d垂直ひも長") = i周数 * mst.GetBandLength(drow.Value("f_i何本幅"))
@@ -1148,10 +1148,15 @@ Class clsCalcKnot
 #End Region
 
 #Region "プレビュー描画"
+    'CAD測定値
+    Const c_foldingRatio As Double = 2 / 6.43   '要尺の折り位置までの比
+    Const c_tiltRatio As Double = 0.216   '折りの傾き(幅に対する差の比)
 
+    'リスト出力時に生成
     Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
     Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
-    '
+
+    'プレビュー時に生成
     Dim _imageList側面ひも As clsImageItemList    '側面の展開レコードを含む
     Dim _ImageListコマ As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底や側面の展開図
@@ -1515,323 +1520,234 @@ Class clsCalcKnot
     End Function
 
     Function imageList開始位置(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean, ByVal outp As clsOutput) As clsImageItemList
-        Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
-        Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
 
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
         Dim line As clsImageItem.S線分
 
+        '要尺の折り位置
+        Dim foldingLen As Double = c_foldingRatio * _dコマの要尺
+
         '要尺
-        Dim p要尺位置 As S実座標 = toPoint(-(_i横のコマ数 / 2) - (_i高さのコマ数 + _i折り返しコマ数), (_i縦のコマ数 / 2) + (_i高さのコマ数 + _i折り返しコマ数))
-        If _i高さのコマ数 + _i折り返しコマ数 = 0 Then
-            p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
-        End If
-        If (_i高さのコマ数 + _i折り返しコマ数 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
-            p要尺位置.X = -(1 + _i横のコマ数 / 2) * _dコマベース寸法 - (_dコマベース要尺 / 2)
-        Else
-            p要尺位置.X = p要尺位置.X + (_dコマベース要尺 / 2)
-        End If
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 9)
-        Dim delta As S差分 = Unit270 * dひも幅
-        item.m_a四隅.p左上 = p要尺位置 + Unit180 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
-        item.m_a四隅.p右上 = p要尺位置 + Unit0 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
-        item.m_a四隅.p左下 = item.m_a四隅.p左上 + delta
-        item.m_a四隅.p右下 = item.m_a四隅.p右上 + delta
-        Dim p As S実座標 = p要尺位置
-        If 0 < _dコマ間のすき間 Then
-            p = item.m_a四隅.p左上 + Unit0 * (_dコマ間のすき間 / 2)
-            line = New S線分(p, p + delta)
+        If True Then
+            Dim p要尺位置 As S実座標 = toPoint(-(_i横のコマ数 / 2) - (_i高さのコマ数 + _i折り返しコマ数), (_i縦のコマ数 / 2) + (_i高さのコマ数 + _i折り返しコマ数))
+            If _i高さのコマ数 + _i折り返しコマ数 = 0 Then
+                p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
+            End If
+            If (_i高さのコマ数 + _i折り返しコマ数 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
+                p要尺位置.X = -(1 + _i横のコマ数 / 2) * _dコマベース寸法 - (_dコマベース要尺 / 2)
+            Else
+                p要尺位置.X = p要尺位置.X + (_dコマベース要尺 / 2)
+            End If
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 9)
+            Dim delta As S差分 = Unit270 * dひも幅
+            item.m_a四隅.p左上 = p要尺位置 + Unit180 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
+            item.m_a四隅.p右上 = p要尺位置 + Unit0 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
+            item.m_a四隅.p左下 = item.m_a四隅.p左上 + delta
+            item.m_a四隅.p右下 = item.m_a四隅.p右上 + delta
+            Dim p As S実座標 = p要尺位置
+            If 0 < _dコマ間のすき間 Then
+                p = item.m_a四隅.p左上 + Unit0 * (_dコマ間のすき間 / 2)
+                line = New S線分(p, p + delta)
+                item.m_lineList.Add(line)
+                p = item.m_a四隅.p右上 + Unit180 * (_dコマ間のすき間 / 2)
+                line = New S線分(p, p + delta)
+                item.m_lineList.Add(line)
+            End If
+            '中心から各折り位置まで
+            Dim len_1 As Double = (_dコマの要尺 - foldingLen * 2) / 2 - (c_tiltRatio * dひも幅 / 2)
+            Dim len_2 As Double = (_dコマの要尺 - foldingLen * 2) / 2 + (c_tiltRatio * dひも幅 / 2)
+            If isKnotLeft Then
+                Dim tmp As Double = len_1
+                len_1 = len_2
+                len_2 = tmp
+            End If
+            line = New S線分(New S実座標(p要尺位置.X + len_1, p要尺位置.Y + dひも幅 / 2), New S実座標(p要尺位置.X + len_2, p要尺位置.Y - dひも幅 / 2))
             item.m_lineList.Add(line)
-            p = item.m_a四隅.p右上 + Unit180 * (_dコマ間のすき間 / 2)
-            line = New S線分(p, p + delta)
+            line = New S線分(New S実座標(p要尺位置.X - len_1, p要尺位置.Y - dひも幅 / 2), New S実座標(p要尺位置.X - len_2, p要尺位置.Y + dひも幅 / 2))
             item.m_lineList.Add(line)
-        End If
-        Dim len_1 As Double = _dコマの要尺 * (2.43 / 6.43) / 2 - (0.216 * dひも幅 / 2)
-        Dim len_2 As Double = _dコマの要尺 * (2.43 / 6.43) / 2 + (0.216 * dひも幅 / 2)
-        If isKnotLeft Then
-            Dim tmp As Double = len_1
-            len_1 = len_2
-            len_2 = tmp
-        End If
-        line = New S線分(New S実座標(p要尺位置.X + len_1, p要尺位置.Y + dひも幅 / 2), New S実座標(p要尺位置.X + len_2, p要尺位置.Y - dひも幅 / 2))
-        item.m_lineList.Add(line)
-        line = New S線分(New S実座標(p要尺位置.X - len_1, p要尺位置.Y - dひも幅 / 2), New S実座標(p要尺位置.X - len_2, p要尺位置.Y + dひも幅 / 2))
-        item.m_lineList.Add(line)
-        itemlist.AddItem(item)
-
-        If _i左から何番目 <= 0 OrElse _i横のコマ数 < _i左から何番目 OrElse
-            _i上から何番目 <= 0 OrElse _i縦のコマ数 < _i上から何番目 Then
-            Return itemlist
+            itemlist.AddItem(item)
         End If
 
+        '開始位置の情報をセット
+        Dim startInfo As CStartInfo = setStartInfo()
+        If startInfo Is Nothing Then
+            '設定されていなければ
+            Return itemlist 'ここまでの結果
+        End If
 
-        '開始位置のマーク
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
-        Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (_i左から何番目 - 1), (_i縦のコマ数 / 2) - (_i上から何番目 - 1))
-        Dim pコマ右下 As S実座標 = pコマ左上 + Unit315 * _dコマベース寸法
+        '底の開始位置のマーク
+        If True Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
+            Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (startInfo.i左から何番目 - 1), (_i縦のコマ数 / 2) - (startInfo.i上から何番目 - 1))
+            Dim pコマ右下 As S実座標 = pコマ左上 + Unit315 * _dコマベース寸法
 
-        line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit0 * _dコマベース寸法)
-        item.m_lineList.Add(line)
-        line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit270 * _dコマベース寸法)
-        item.m_lineList.Add(line)
-        line = New clsImageItem.S線分(pコマ右下, pコマ右下 + Unit90 * _dコマベース寸法)
-        item.m_lineList.Add(line)
-        line = New clsImageItem.S線分(pコマ右下, pコマ右下 + Unit180 * _dコマベース寸法)
-        item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit0 * _dコマベース寸法)
+            item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit270 * _dコマベース寸法)
+            item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(pコマ右下, pコマ右下 + Unit90 * _dコマベース寸法)
+            item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(pコマ右下, pコマ右下 + Unit180 * _dコマベース寸法)
+            item.m_lineList.Add(line)
 
-        itemlist.AddItem(item)
+            itemlist.AddItem(item)
+        End If
 
 
-        '開始位置のコマの転記とバンド
-        Dim band_len As Double = _dコマベース要尺
-        Dim pコマ位置 As S実座標 = toPoint(0, -_i縦のコマ数 / 2 - (_i高さのコマ数 + _i折り返しコマ数) - 1) + Unit270 * band_len
-
-        Dim yband As tbl縦横展開Row = getBand(enumひも種.i_横, _i左から何番目)
-        Dim tband As tbl縦横展開Row = getBand(enumひも種.i_縦, _i上から何番目)
-        item = New clsImageItem(pコマ位置, yband, tband,
+        '開始位置のコマの転記
+        Dim dバンド長 As Double = _dコマベース要尺
+        Dim pコマ位置 As S実座標 = toPoint(0, -_i縦のコマ数 / 2 - (_i高さのコマ数 + _i折り返しコマ数) - 1) + Unit270 * dバンド長
+        item = New clsImageItem(pコマ位置, startInfo.row横展開, startInfo.row縦展開,
             dひも幅, _dコマの寸法, _dコマ間のすき間, isKnotLeft, True)
         itemlist.AddItem(item)
 
         'コマに続くバンド
-        Dim item1 As New clsImageItem(yband, True) '右
-        Dim item2 As New clsImageItem(yband, True) '左
-        item1.m_dひも幅 = dひも幅
-        item2.m_dひも幅 = dひも幅
-        If isKnotLeft Then
-            item1.m_rひも位置.p左下 = pコマ位置 + Unit0 * dひも幅
-            item2.m_rひも位置.p右上 = pコマ位置 + Unit180 * dひも幅
-        Else
-            item1.m_rひも位置.p左下 = pコマ位置 + Unit315 * dひも幅
-            item2.m_rひも位置.p右上 = pコマ位置 + Unit135 * dひも幅
-        End If
-        item1.m_rひも位置.p右上 = New S実座標(item1.m_rひも位置.p左下.X + band_len, item1.m_rひも位置.p左下.Y + dひも幅)
-        item2.m_rひも位置.p左下 = New S実座標(item2.m_rひも位置.p右上.X - band_len, item2.m_rひも位置.p右上.Y - dひも幅)
-        itemlist.AddItem(item1)
-        itemlist.AddItem(item2)
+        If True Then
+            Dim item1 As New clsImageItem(startInfo.row横展開, True) '右
+            Dim item2 As New clsImageItem(startInfo.row横展開, True) '左
+            item1.m_dひも幅 = dひも幅
+            item2.m_dひも幅 = dひも幅
+            If isKnotLeft Then
+                item1.m_rひも位置.p左下 = pコマ位置 + Unit0 * dひも幅
+                item2.m_rひも位置.p右上 = pコマ位置 + Unit180 * dひも幅
+            Else
+                item1.m_rひも位置.p左下 = pコマ位置 + Unit315 * dひも幅
+                item2.m_rひも位置.p右上 = pコマ位置 + Unit135 * dひも幅
+            End If
+            item1.m_rひも位置.p右上 = New S実座標(item1.m_rひも位置.p左下.X + dバンド長, item1.m_rひも位置.p左下.Y + dひも幅)
+            item2.m_rひも位置.p左下 = New S実座標(item2.m_rひも位置.p右上.X - dバンド長, item2.m_rひも位置.p右上.Y - dひも幅)
+            itemlist.AddItem(item1)
+            itemlist.AddItem(item2)
 
-        Dim item3 As New clsImageItem(tband, True) '上
-        Dim item4 As New clsImageItem(tband, True) '下
-        item3.m_dひも幅 = dひも幅
-        item4.m_dひも幅 = dひも幅
-        If isKnotLeft Then
-            item3.m_rひも位置.p左下 = pコマ位置 + Unit135 * dひも幅
-            item4.m_rひも位置.p右上 = pコマ位置 + Unit315 * dひも幅
-        Else
-            item3.m_rひも位置.p左下 = pコマ位置 + Unit90 * dひも幅
-            item4.m_rひも位置.p右上 = pコマ位置 + Unit270 * dひも幅
+            Dim item3 As New clsImageItem(startInfo.row縦展開, True) '上
+            Dim item4 As New clsImageItem(startInfo.row縦展開, True) '下
+            item3.m_dひも幅 = dひも幅
+            item4.m_dひも幅 = dひも幅
+            If isKnotLeft Then
+                item3.m_rひも位置.p左下 = pコマ位置 + Unit135 * dひも幅
+                item4.m_rひも位置.p右上 = pコマ位置 + Unit315 * dひも幅
+            Else
+                item3.m_rひも位置.p左下 = pコマ位置 + Unit90 * dひも幅
+                item4.m_rひも位置.p右上 = pコマ位置 + Unit270 * dひも幅
+            End If
+            item3.m_rひも位置.p右上 = New S実座標(item3.m_rひも位置.p左下.X + dひも幅, item3.m_rひも位置.p左下.Y + dバンド長)
+            item4.m_rひも位置.p左下 = New S実座標(item4.m_rひも位置.p右上.X - dひも幅, item4.m_rひも位置.p右上.Y - dバンド長)
+            itemlist.AddItem(item3)
+            itemlist.AddItem(item4)
         End If
-        item3.m_rひも位置.p右上 = New S実座標(item3.m_rひも位置.p左下.X + dひも幅, item3.m_rひも位置.p左下.Y + band_len)
-        item4.m_rひも位置.p左下 = New S実座標(item4.m_rひも位置.p右上.X - dひも幅, item4.m_rひも位置.p右上.Y - band_len)
-        itemlist.AddItem(item3)
-        itemlist.AddItem(item4)
 
 
         '「開始位置」
-        item = New clsImageItem(pコマ位置 + Unit135 * (band_len) + Unit180 * (band_len), {text開始位置()}, dひも幅, 1)
+        Dim p開始位置 As S実座標 = pコマ位置 + Unit135 * (dバンド長) + Unit180 * (dバンド長)
+        item = New clsImageItem(p開始位置, {text開始位置()}, dひも幅, 1)
+        itemlist.AddItem(item)
+
+        '左から×番目,上から×番目
+        Dim pos1 As String = text左から() & startInfo.i左から何番目.ToString & text番目のコマ()
+        Dim pos2 As String = text上から() & startInfo.i上から何番目.ToString & text番目のコマ()
+        item = New clsImageItem(p開始位置 + Unit315 * (dひも幅 * 2), {pos1, pos2}, dひも幅 * 2 / 3, 2)
         itemlist.AddItem(item)
 
 
-        '文字列
-        Dim p文字(3) As S実座標
-        Dim knots(3) As Integer
-        Dim addsum(3) As Double
-        Dim addeach(3) As Double
-        Dim bandlen(3) As Double 'ゲージコマのすき間を含まない
-        Dim diff(3) As Double
+        '各方向の説明文字列 
+        If True Then
+            Dim p文字(3) As S実座標
+            '上のひも
+            p文字(0).X = pコマ位置.X + dひも幅 * 2
+            p文字(0).Y = pコマ位置.Y + dバンド長
+            '下のひも
+            p文字(1).X = pコマ位置.X + dひも幅 * 2
+            p文字(1).Y = pコマ位置.Y - 2 * dバンド長 / 3
+            '左のひも
+            p文字(2).X = pコマ位置.X - dバンド長 - dひも幅 * 15 '想定文字数分
+            p文字(2).Y = pコマ位置.Y - dひも幅 * 1.5
+            '右のひも
+            p文字(3).X = pコマ位置.X + dバンド長 + _dコマの寸法
+            p文字(3).Y = pコマ位置.Y + dひも幅
 
-        '上のひも
-        p文字(0).X = pコマ位置.X + dひも幅 * 2
-        p文字(0).Y = pコマ位置.Y + band_len
-        knots(0) = _i高さのコマ数 + _i折り返しコマ数 + (_i上から何番目 - 1)
-        addeach(0) = tband.f_dひも長加算
-        addsum(0) = _d縁の垂直ひも長 + _dひも長加算_縦横端 + addeach(0)
-        bandlen(0) = knots(0) * _dコマベース要尺 + addsum(0)
+            startInfo.setMyValue(True) 'マイひも長係数を乗算する
+            For i As Integer = 0 To 3
+                With startInfo
+                    '<コマの{0}>
+                    Dim str1 As String = String.Format(My.Resources.CalcOutKnotOf, .getSideString(i))
+                    str1 += outp.outLengthTextWithUnit(.getBandLength(i))
+                    str1 += "  "
+                    str1 += .getDiffString(i, outp)
 
-        '下のひも
-        p文字(1).X = pコマ位置.X + dひも幅 * 2
-        p文字(1).Y = pコマ位置.Y - band_len / 2
-        knots(1) = _i高さのコマ数 + _i折り返しコマ数 + (_i縦のコマ数 - _i上から何番目)
-        addeach(1) = tband.f_dひも長加算2
-        addsum(1) = _d縁の垂直ひも長 + _dひも長加算_縦横端 + addeach(1)
-        bandlen(1) = knots(1) * _dコマベース要尺 + addsum(1)
-        diff(0) = bandlen(0) - bandlen(1)
-        diff(1) = -diff(0)
+                    '加算計 {0} (縁の始末:{1} ひも長加算:{2} {3}加算:{4})
+                    Dim str2 As String = String.Format(My.Resources.CalcOutAddLen,
+                        outp.outLengthTextWithUnit(.getAddSum(i)), outp.outLengthText(.getAddHem()), outp.outLengthText(.getAddVert()), .getSideString(i), outp.outLengthText(.getAddEach(i)))
 
-        '左のひも
-        p文字(2).X = pコマ位置.X - band_len - dひも幅 * 15
-        p文字(2).Y = pコマ位置.Y
-        knots(2) = _i高さのコマ数 + _i折り返しコマ数 + (_i左から何番目 - 1)
-        addeach(2) = yband.f_dひも長加算
-        addsum(2) = _d縁の垂直ひも長 + _dひも長加算_縦横端 + addeach(2)
-        bandlen(2) = knots(2) * _dコマベース要尺 + addsum(2)
-
-        '右のひも
-        p文字(3).X = pコマ位置.X + band_len + _dコマの寸法
-        p文字(3).Y = pコマ位置.Y + dひも幅
-        knots(3) = _i高さのコマ数 + _i折り返しコマ数 + (_i横のコマ数 - _i左から何番目)
-        addeach(3) = yband.f_dひも長加算2
-        addsum(3) = _d縁の垂直ひも長 + _dひも長加算_縦横端 + addeach(3)
-        bandlen(3) = knots(3) * _dコマベース要尺 + addsum(3)
-        diff(2) = bandlen(2) - bandlen(3)
-        diff(3) = -diff(2)
-#If 1 Then
-        For i As Integer = 0 To 3
-            'コマの数({0})要尺:{1}
-            Dim str1 As String = String.Format(My.Resources.CalcBandLength1, knots(i), outp.outLengthText(knots(i) * _dコマベース要尺))
-            '余裕長:{0} (縁の始末:{1} ひも長加算:{2} 加算:{3})
-            Dim str2 As String = String.Format(My.Resources.CalcBandLength2, outp.outLengthText(addsum(i)), outp.outLengthText(_d縁の垂直ひも長), outp.outLengthText(_dひも長加算_縦横端), outp.outLengthText(addeach(i)))
-            'ひもの長さ:{0}[{1}] 差:{2}[{3}]
-            Dim str3 As String = String.Format(My.Resources.CalcBandLength3, outp.outLengthText(bandlen(i)), outp.outLengthText(p_dマイひも長係数 * bandlen(i)), outp.outLengthText(diff(i)), outp.outLengthText(p_dマイひも長係数 * diff(i)))
-            item = New clsImageItem(p文字(i), {str1, str2, str3}, dひも幅 * 2 / 3, i + 2)
-            itemlist.AddItem(item)
-        Next
-#End If
+                    '折り位置から
+                    Dim str3 As String = String.Format(My.Resources.CalcOutFromFolding)
+                    str3 += outp.outLengthTextWithUnit(.getFoldingLength(i))
+                    str3 += "  "
+                    str3 += .getDiffFoldingString(i, outp)
+                    '
+                    item = New clsImageItem(p文字(i), {str1, str2, str3}, dひも幅 * 2 / 3, i + 3)
+                    itemlist.AddItem(item)
+                End With
+            Next
+        End If
 
         'コマ位置の中央線
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 2)
-        Dim d1本幅 As Double = dひも幅 / _I基本のひも幅
-        If Abs(diff(0)) < band_len + _dコマベース要尺 Then
-            '上下中央の横線
-            Dim pp As New S実座標(pコマ位置.X - dひも幅 * 1.5, pコマ位置.Y)
-            line = New S線分(pp, pp + Unit0 * dひも幅 * 3)
-            If Abs(diff(0)) < d1本幅 Then
-                '1本幅以下
-                item.m_lineList.Add(line)
-            ElseIf (_dコマの要尺 / 2 - d1本幅) <= diff(0) Then
-                '要尺以上、上が長いので中央点は上にある
-                Dim distance_from_knot_area As Double = (diff(0) - _dコマベース要尺) / 2
-                line = line + Unit90 * (_dコマベース寸法 / 2 + distance_from_knot_area)
-                item.m_lineList.Add(line)
-            ElseIf diff(0) <= -(_dコマの要尺 / 2 - d1本幅) Then
-                '要尺以上、下が長いので中央点は下にある
-                Dim distance_from_knot_area As Double = (diff(1) - _dコマベース要尺) / 2
-                line = line + Unit270 * (_dコマベース寸法 / 2 + distance_from_knot_area)
-                item.m_lineList.Add(line)
-            Else
-                '描けません
+        startInfo.setMyValue(False) 'マイひも長係数を乗算しない
+        If True Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 2)
+            Dim d1本幅 As Double = dひも幅 / _I基本のひも幅
+            If Abs(startInfo.getDiff(0)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
+                '上下中央の横線
+                Dim pp As New S実座標(pコマ位置.X - dひも幅 * 1.5, pコマ位置.Y)
+                line = New S線分(pp, pp + Unit0 * dひも幅 * 3)
+                If Abs(startInfo.getDiff(0)) < d1本幅 Then
+                    '1本幅以下
+                    item.m_lineList.Add(line)
+                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(0) Then
+                    '要尺以上、上が長いので中央点は上にある
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(0) - _dコマベース要尺) / 2
+                    line = line + Unit90 * (_dコマベース寸法 / 2 + distance_from_knot_area)
+                    item.m_lineList.Add(line)
+                ElseIf startInfo.getDiff(0) <= -(_dコマの要尺 / 2 - d1本幅) Then
+                    '要尺以上、下が長いので中央点は下にある
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(1) - _dコマベース要尺) / 2
+                    line = line + Unit270 * (_dコマベース寸法 / 2 + distance_from_knot_area)
+                    item.m_lineList.Add(line)
+                Else
+                    '描けません
+                End If
             End If
-        End If
-        If Abs(diff(2)) < band_len + _dコマベース要尺 Then
-            '左右中央の縦線
-            Dim pp As New S実座標(pコマ位置.X, pコマ位置.Y - dひも幅 * 1.5)
-            line = New S線分(pp, pp + Unit90 * dひも幅 * 3)
-            If Abs(diff(2)) < d1本幅 Then
-                '1本幅以下
-                item.m_lineList.Add(line)
-            ElseIf (_dコマの要尺 / 2 - d1本幅) <= diff(2) Then
-                '要尺以上、左が長いので中央点は左にある
-                Dim distance_from_knot_area As Double = (diff(2) - _dコマベース要尺) / 2
-                line = line + Unit180 * (_dコマベース寸法 / 2 + distance_from_knot_area)
-                item.m_lineList.Add(line)
-            ElseIf diff(2) <= -(_dコマの要尺 / 2 - d1本幅) Then
-                '要尺以上、右が長いので中央点は右にある
-                Dim distance_from_knot_area As Double = (diff(3) - _dコマベース要尺) / 2
-                line = line + Unit0 * (_dコマベース寸法 / 2 + distance_from_knot_area)
-                item.m_lineList.Add(line)
-            Else
-                '描けません
+            If Abs(startInfo.getDiff(2)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
+                '左右中央の縦線
+                Dim pp As New S実座標(pコマ位置.X, pコマ位置.Y - dひも幅 * 1.5)
+                line = New S線分(pp, pp + Unit90 * dひも幅 * 3)
+                If Abs(startInfo.getDiff(2)) < d1本幅 Then
+                    '1本幅以下
+                    item.m_lineList.Add(line)
+                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(2) Then
+                    '要尺以上、左が長いので中央点は左にある
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(2) - _dコマベース要尺) / 2
+                    line = line + Unit180 * (_dコマベース寸法 / 2 + distance_from_knot_area)
+                    item.m_lineList.Add(line)
+                ElseIf startInfo.getDiff(2) <= -(_dコマの要尺 / 2 - d1本幅) Then
+                    '要尺以上、右が長いので中央点は右にある
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(3) - _dコマベース要尺) / 2
+                    line = line + Unit0 * (_dコマベース寸法 / 2 + distance_from_knot_area)
+                    item.m_lineList.Add(line)
+                Else
+                    '描けません
+                End If
             End If
-        End If
-        If 0 < item.m_lineList.Count Then
-            itemlist.AddItem(item)
+            If 0 < item.m_lineList.Count Then
+                itemlist.AddItem(item)
+            End If
         End If
 
 
         Return itemlist
     End Function
-#End Region
 
-
-    '横ひもの展開テーブル作成 ※マイ係数未セット
-    'OUT:   _ImageList横ひも
-    Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
-
-        Dim tmptable As New tbl縦横展開DataTable
-        Dim row As tbl縦横展開Row
-
-        Dim pos As Integer = -(p_i横ひもの本数 \ 2)
-        Dim zero As Integer = p_i横ひもの本数 Mod 2
-
-        '横置き数分のレコード作成 (色,記号,メモは初期値)
-        For idx As Integer = 1 To p_i横ひもの本数
-            row = tmptable.Newtbl縦横展開Row
-
-            row.f_iひも種 = enumひも種.i_横
-            row.f_i位置番号 = pos
-            row.f_sひも名 = text横ひも()
-            row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i横のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
-            row.f_d長さ = iコマ数 * _dコマベース寸法
-            row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
-            row.f_i何本幅 = _I基本のひも幅
-            row.f_dひも長加算 = 0
-            row.f_dひも長加算2 = 0
-            row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
-
-            tmptable.Rows.Add(row)
-            pos += 1
-            If pos = 0 AndAlso zero = 0 Then
-                pos = 1
-            End If
-        Next
-
-        '指定があれば既存情報反映
-        If isRefSaved Then
-            _Data.ToTmpTable(enumひも種.i_横, tmptable) '出力ひも長も加算
-        End If
-        _ImageList横ひも = Nothing
-        _ImageList横ひも = New clsImageItemList(tmptable)
-
-        'image計算結果は不要
-        Return tmptable
-    End Function
-
-    '縦ひもの展開テーブル作成 ※マイ係数未セット
-    'OUT:   _ImageList縦ひも
-    Function set縦展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
-
-        Dim tmptable As New tbl縦横展開DataTable
-        Dim row As tbl縦横展開Row
-
-        Dim pos As Integer = (p_i縦ひもの本数 \ 2)
-        Dim zero As Integer = p_i縦ひもの本数 Mod 2
-
-        '縦置き数分のレコード作成 (色,記号,メモは初期値)
-        For idx As Integer = 1 To p_i縦ひもの本数
-            row = tmptable.Newtbl縦横展開Row
-
-            row.f_iひも種 = enumひも種.i_縦
-            row.f_i位置番号 = pos
-            row.f_sひも名 = text縦ひも()
-            row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i縦のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
-            row.f_d長さ = iコマ数 * _dコマベース寸法
-            row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
-            row.f_i何本幅 = _I基本のひも幅
-            row.f_dひも長加算 = 0
-            row.f_dひも長加算2 = 0
-            row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
-
-            tmptable.Rows.Add(row)
-            pos -= 1
-            If pos = 0 AndAlso zero = 0 Then
-                pos = -1
-            End If
-        Next
-
-        '指定があれば既存情報反映
-        If isRefSaved Then
-            _Data.ToTmpTable(enumひも種.i_縦, tmptable) '出力ひも長も加算
-        End If
-        _ImageList縦ひも = Nothing
-        _ImageList縦ひも = New clsImageItemList(tmptable)
-
-        'image計算結果は不要
-        Return tmptable
-    End Function
-
-
+    'プレビュー画像生成
     Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
@@ -1916,6 +1832,362 @@ Class clsCalcKnot
 
         Return True
     End Function
+#End Region
+
+#Region "縦横展開と開始位置"
+    '横ひもの展開テーブル作成 ※入力値ベース
+    'OUT:   _ImageList横ひも
+    Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
+
+        Dim tmptable As New tbl縦横展開DataTable
+        Dim row As tbl縦横展開Row
+
+        Dim pos As Integer = -(p_i横ひもの本数 \ 2)
+        Dim zero As Integer = p_i横ひもの本数 Mod 2
+
+        '横置き数分のレコード作成 (色,記号,メモは初期値)
+        For idx As Integer = 1 To p_i横ひもの本数
+            row = tmptable.Newtbl縦横展開Row
+
+            row.f_iひも種 = enumひも種.i_横
+            row.f_i位置番号 = pos
+            row.f_sひも名 = text横ひも()
+            row.f_iひも番号 = idx
+            Dim iコマ数 As Integer = _i横のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+            row.f_d長さ = iコマ数 * _dコマベース寸法
+            row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
+            row.f_i何本幅 = _I基本のひも幅
+            row.f_dひも長加算 = 0
+            row.f_dひも長加算2 = 0
+            row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
+
+            tmptable.Rows.Add(row)
+            pos += 1
+            If pos = 0 AndAlso zero = 0 Then
+                pos = 1
+            End If
+        Next
+
+        '指定があれば既存情報反映
+        If isRefSaved Then
+            _Data.ToTmpTable(enumひも種.i_横, tmptable) '出力ひも長も加算
+        End If
+        _ImageList横ひも = Nothing
+        _ImageList横ひも = New clsImageItemList(tmptable)
+
+        'image計算結果は不要
+        Return tmptable
+    End Function
+
+    '縦ひもの展開テーブル作成 ※入力値ベース
+    'OUT:   _ImageList縦ひも
+    Function set縦展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
+
+        Dim tmptable As New tbl縦横展開DataTable
+        Dim row As tbl縦横展開Row
+
+        Dim pos As Integer = (p_i縦ひもの本数 \ 2)
+        Dim zero As Integer = p_i縦ひもの本数 Mod 2
+
+        '縦置き数分のレコード作成 (色,記号,メモは初期値)
+        For idx As Integer = 1 To p_i縦ひもの本数
+            row = tmptable.Newtbl縦横展開Row
+
+            row.f_iひも種 = enumひも種.i_縦
+            row.f_i位置番号 = pos
+            row.f_sひも名 = text縦ひも()
+            row.f_iひも番号 = idx
+            Dim iコマ数 As Integer = _i縦のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+            row.f_d長さ = iコマ数 * _dコマベース寸法
+            row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
+            row.f_i何本幅 = _I基本のひも幅
+            row.f_dひも長加算 = 0
+            row.f_dひも長加算2 = 0
+            row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
+
+            tmptable.Rows.Add(row)
+            pos -= 1
+            If pos = 0 AndAlso zero = 0 Then
+                pos = -1
+            End If
+        Next
+
+        '指定があれば既存情報反映
+        If isRefSaved Then
+            _Data.ToTmpTable(enumひも種.i_縦, tmptable) '出力ひも長も加算
+        End If
+        _ImageList縦ひも = Nothing
+        _ImageList縦ひも = New clsImageItemList(tmptable)
+
+        'image計算結果は不要
+        Return tmptable
+    End Function
+
+
+    '開始位置情報
+    Private Class CStartInfo
+        Dim _parent As clsCalcKnot  '親クラス
+
+        '各方向の計算値　上,下,左,右の順
+        Dim _knots(3) As Integer 'コマ数
+        Dim _addeach(3) As Double '個別の加算長
+        Dim _addsum(3) As Double '加算合計
+        Dim _bandlen(3) As Double 'ひもの長さ ※開始位置コマのすき間を含まない
+        Dim _diff(3) As Double '差,中央線で参照
+        Dim _foldinglen(3) As Double '折り位置からのひも長
+        Dim _foldingdiff(3) As Double '折り位置前後の差
+
+        Dim _isMyValue As Boolean = False
+        Dim _SideString() As String
+
+        Friend i左から何番目 As Integer
+        Friend i上から何番目 As Integer
+
+        Friend row横展開 As tbl縦横展開Row '横バンド
+        Friend row縦展開 As tbl縦横展開Row '縦バンド
+
+        ReadOnly Property IsValid As Boolean = False
+
+        Sub New(ByVal parent As clsCalcKnot, ByVal i左 As Integer, ByVal i上 As Integer)
+            _parent = parent
+
+            i左から何番目 = i左
+            i上から何番目 = i上
+            row横展開 = _parent.getBand(enumひも種.i_横, i上から何番目)
+            row縦展開 = _parent.getBand(enumひも種.i_縦, i左から何番目)
+
+            If row横展開 Is Nothing Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "getBand({0},{1})", enumひも種.i_横, i上から何番目)
+                Return
+            End If
+            If row縦展開 Is Nothing Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "getBand({0},{1})", enumひも種.i_縦, i左から何番目)
+                Return
+            End If
+            _IsValid = True
+
+
+            ReDim _SideString(3)
+            _SideString(0) = My.Resources.CalcOutSideUpper '下
+            _SideString(1) = My.Resources.CalcOutSideLower '上
+            _SideString(2) = My.Resources.CalcOutSideLeft '右
+            _SideString(3) = My.Resources.CalcOutSideRight '左
+
+            With _parent
+                '上のひも
+                _knots(0) = ._i高さのコマ数 + ._i折り返しコマ数 + (i上から何番目 - 1)
+                _addeach(0) = row縦展開.f_dひも長加算
+                '下のひも
+                _knots(1) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i縦のコマ数 - i上から何番目)
+                _addeach(1) = row縦展開.f_dひも長加算2
+                '左のひも
+                _knots(2) = ._i高さのコマ数 + ._i折り返しコマ数 + (i左から何番目 - 1)
+                _addeach(2) = row横展開.f_dひも長加算
+                '右のひも
+                _knots(3) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i横のコマ数 - i左から何番目)
+                _addeach(3) = row横展開.f_dひも長加算2
+
+                For i As Integer = 0 To 3
+                    _addsum(i) = ._d縁の垂直ひも長 + ._dひも長加算_縦横端 + _addeach(i)
+                    _bandlen(i) = _knots(i) * ._dコマベース要尺 + _addsum(i)
+                Next
+
+                _diff(0) = _bandlen(0) - _bandlen(1)
+                _diff(1) = -_diff(0)
+
+                _diff(2) = _bandlen(2) - _bandlen(3)
+                _diff(3) = -_diff(2)
+
+                For i As Integer = 0 To 3
+                    Dim foldingLen As Double = c_foldingRatio * _parent._dコマの要尺
+                    '折り位置からのひも長
+                    _foldinglen(i) = _bandlen(i) + foldingLen + (_parent._dコマ間のすき間 / 2)
+                    '折り位置前後の差
+                    _foldingdiff(i) = _diff(i) - (_parent._dコマの要尺 - 2 * foldingLen)
+                Next
+            End With
+
+        End Sub
+
+        'マイひも長係数を掛けた値を返すときTrue
+        Sub setMyValue(ByVal ismyvalue As Boolean)
+            _isMyValue = ismyvalue AndAlso
+                    (0 < _parent.p_dマイひも長係数) AndAlso
+                    (_parent.p_dマイひも長係数 <> 1)
+        End Sub
+
+        '方向の文字列
+        Function getSideString(ByVal i As Integer) As String
+            Return _SideString(i)
+        End Function
+
+        '反対方向の文字列
+        Function getPairSideString(ByVal i As Integer) As String
+            If i = 0 Or i = 2 Then
+                Return _SideString(i + 1)
+            End If
+            If i = 1 Or i = 3 Then
+                Return _SideString(i - 1)
+            End If
+            Return Nothing
+        End Function
+
+        'コマの数
+        Function knots(ByVal i As Integer) As Integer
+            Return _knots(i)
+        End Function
+
+        'コマ数分の長さ
+        Function getKnotLength(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return knots(i) * _parent._dコマベース要尺 * _parent.p_dマイひも長係数
+            Else
+                Return knots(i) * _parent._dコマベース要尺
+            End If
+        End Function
+
+        '個別の加算長
+        Function getAddEach(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _addeach(i) * _parent.p_dマイひも長係数
+            Else
+                Return _addeach(i)
+            End If
+        End Function
+
+        '縁の始末分
+        Function getAddHem() As Double
+            If _isMyValue Then
+                Return _parent._d縁の垂直ひも長 * _parent.p_dマイひも長係数
+            Else
+                Return _parent._d縁の垂直ひも長
+            End If
+        End Function
+
+        'ひも長加算(縦横端)
+        Function getAddVert() As Double
+            If _isMyValue Then
+                Return _parent._dひも長加算_縦横端 * _parent.p_dマイひも長係数
+            Else
+                Return _parent._dひも長加算_縦横端
+            End If
+        End Function
+
+        '加算長合計
+        Function getAddSum(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _addsum(i) * _parent.p_dマイひも長係数
+            Else
+                Return _addsum(i)
+            End If
+        End Function
+
+        'コマからのひも長
+        Function getBandLength(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _bandlen(i) * _parent.p_dマイひも長係数
+            Else
+                Return _bandlen(i)
+            End If
+        End Function
+
+        '反対方向との差
+        Function getDiff(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _diff(i) * _parent.p_dマイひも長係数
+            Else
+                Return _diff(i)
+            End If
+        End Function
+
+        'コマからのひも長の差の文字列
+        Function getDiffString(ByVal i As Integer, ByVal outp As clsOutput) As String
+            'コマの{0}より
+            Dim str As String = String.Format(My.Resources.CalcOutDiffFrom, getPairSideString(i))
+            Dim diff As Double = getDiff(i)
+            If mdlUnit.Abs(diff) < g_clsSelectBasics.p_d指定本幅(1) Then
+                'コマの{0}と同じ長さ
+                Return String.Format(My.Resources.CalcOutKnotSame, getPairSideString(i))
+
+            ElseIf 0 < diff Then
+                str += outp.outLengthTextWithUnit(diff)
+                '長い
+                str += My.Resources.CalcOutLong
+
+            Else 'diff<0 Then
+                str += outp.outLengthTextWithUnit(-diff)
+                '短い
+                str += My.Resources.CalcOutShort
+
+            End If
+            Return str
+
+        End Function
+
+        '折り位置からのひも長
+        Function getFoldingLength(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _foldinglen(i) * _parent.p_dマイひも長係数
+            Else
+                Return _foldinglen(i)
+            End If
+        End Function
+
+        '折り位置前後の差
+        Function getDiffFolding(ByVal i As Integer) As Double
+            If _isMyValue Then
+                Return _foldingdiff(i) * _parent.p_dマイひも長係数
+            Else
+                Return _foldingdiff(i)
+            End If
+        End Function
+
+        '折り位置前後の差の文字列
+        Function getDiffFoldingString(ByVal i As Integer, ByVal outp As clsOutput) As String
+            '手前({0})が奥より
+            Dim str As String = String.Format(My.Resources.CalcOutFront, _SideString(i))
+            Dim diff As Double = getDiffFolding(i)
+            If mdlUnit.Abs(diff) < g_clsSelectBasics.p_d指定本幅(1) Then
+                '手前({0})と奥は同じ、真ん中で折る
+                Return String.Format(My.Resources.CalcOutFoldingSame, _SideString(i))
+
+            ElseIf 0 < diff Then
+                str += outp.outLengthTextWithUnit(diff)
+                '長い
+                str += My.Resources.CalcOutLong
+
+            Else 'diff<0 Then
+                str += outp.outLengthTextWithUnit(-diff)
+                '短い
+                str += My.Resources.CalcOutShort
+
+            End If
+            Return str
+        End Function
+
+    End Class
+
+    '開始位置の情報のセット
+    Private Function setStartInfo() As CStartInfo
+        Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
+        Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
+
+        If _i左から何番目 <= 0 OrElse _i横のコマ数 < _i左から何番目 OrElse
+            _i上から何番目 <= 0 OrElse _i縦のコマ数 < _i上から何番目 Then
+            Return Nothing '開始位置の対象外
+        End If
+
+        Dim startInfo As CStartInfo
+        startInfo = New CStartInfo(Me, _i左から何番目, _i上から何番目)
+        If startInfo.IsValid Then
+            Return startInfo
+        Else
+            startInfo = Nothing
+            Return Nothing
+        End If
+    End Function
+#End Region
+
 
 #Region "リスト出力"
     '「連続ひも長」フィールドに入力値を加算し係数倍した値をセットする(縁は除外)
@@ -2170,6 +2442,71 @@ Class clsCalcKnot
 
         output.AddBlankLine()
 
+
+        '開始位置の情報をセット
+        Dim startInfo As CStartInfo = setStartInfo()
+        If startInfo IsNot Nothing Then
+            '設定されていれば
+            startInfo.setMyValue(True)
+
+            '***開始位置
+            row = output.NextNewRow
+            row.f_sカテゴリー = text開始位置()
+
+            '横ひも
+            row = output.NextNewRow
+            row.f_s記号 = startInfo.row横展開.f_s記号
+            row.f_s色 = startInfo.row横展開.f_s色
+            row.f_s本幅 = output.outLaneText(startInfo.row横展開.f_i何本幅)
+            row.f_sひも長 = output.outLengthText(startInfo.row横展開.f_d出力ひも長)
+            row.f_sタイプ = startInfo.row横展開.f_sひも名
+            row.f_s編みかた名 = text左から() & startInfo.i左から何番目.ToString & text番目のコマ()
+            row.f_s高さ = My.Resources.CalcOutFromFolding '折り位置から
+            row.f_s長さ = My.Resources.CalcOutFromKnot 'コマから
+
+            '左
+            row = output.NextNewRow
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(2)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(2, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(2))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(2))
+
+            '右
+            row = output.NextNewRow
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(3)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(3, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(3))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(3))
+
+            '縦ひも
+            row = output.NextNewRow
+            row.f_s記号 = startInfo.row縦展開.f_s記号
+            row.f_s色 = startInfo.row縦展開.f_s色
+            row.f_s本幅 = output.outLaneText(startInfo.row縦展開.f_i何本幅)
+            row.f_sひも長 = output.outLengthText(startInfo.row縦展開.f_d出力ひも長)
+            row.f_sタイプ = startInfo.row縦展開.f_sひも名
+            row.f_s編みかた名 = text上から() & startInfo.i上から何番目.ToString & text番目のコマ()
+            row.f_s高さ = My.Resources.CalcOutFromFolding '折り位置から
+            row.f_s長さ = My.Resources.CalcOutFromKnot 'コマから
+
+            '上
+            row = output.NextNewRow
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(0)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(0, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(0))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(0))
+
+            '下
+            row = output.NextNewRow
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(1)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(1, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(1))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(1))
+
+            output.AddBlankLine()
+        End If
+
+
         '集計値
         output.OutSumList()
         output.OutCutList()
@@ -2285,6 +2622,14 @@ Class clsCalcKnot
         Return _frmMain.lbl番目のコマ_l.Text
     End Function
 
+    Private Function text左から() As String
+        Return _frmMain.lbl左から.Text
+    End Function
+
+    Private Function text上から() As String
+        Return _frmMain.lbl上から.Text
+    End Function
+
     Private Function text四つ畳み編み() As String
         Return String.Format(My.Resources.FormCaption, "")
     End Function
@@ -2295,6 +2640,10 @@ Class clsCalcKnot
 
     Private Function text折り返しのコマ() As String
         Return _frmMain.lbl折り返しのコマ.Text
+    End Function
+
+    Private Function textコマ() As String
+        Return _frmMain.lblコマ.Text
     End Function
 
     Private Function textひも長加算_縦横端() As String

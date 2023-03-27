@@ -711,7 +711,7 @@ Namespace Tables
                 Me.columnf_s基本色.DefaultValue = CType("",String)
                 Me.columnf_i基本のひも幅.DefaultValue = CType(0,Short)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.3.1",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.4.0",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub

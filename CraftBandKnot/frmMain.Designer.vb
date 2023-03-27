@@ -91,7 +91,7 @@ Partial Class frmMain
         Me.nud高さのコマ数 = New System.Windows.Forms.NumericUpDown()
         Me.lbl高さのコマ = New System.Windows.Forms.Label()
         Me.lbl寸法 = New System.Windows.Forms.Label()
-        Me.lb1コマ = New System.Windows.Forms.Label()
+        Me.lblコマ = New System.Windows.Forms.Label()
         Me.lblコマベース = New System.Windows.Forms.Label()
         Me.lbl厚さ = New System.Windows.Forms.Label()
         Me.txt厚さ = New System.Windows.Forms.TextBox()
@@ -115,7 +115,7 @@ Partial Class frmMain
         Me.lbl開始位置 = New System.Windows.Forms.Label()
         Me.nud左から何番目のコマ = New System.Windows.Forms.NumericUpDown()
         Me.nud上から何番目のコマ = New System.Windows.Forms.NumericUpDown()
-        Me.lbl開始位置_上から = New System.Windows.Forms.Label()
+        Me.lbl開始位置_u = New System.Windows.Forms.Label()
         Me.txt横ひもの本数 = New System.Windows.Forms.TextBox()
         Me.lbl横ひも = New System.Windows.Forms.Label()
         Me.txt縦ひもの本数 = New System.Windows.Forms.TextBox()
@@ -127,6 +127,7 @@ Partial Class frmMain
         Me.nudひも長加算_側面 = New System.Windows.Forms.NumericUpDown()
         Me.lblひも長加算_側面 = New System.Windows.Forms.Label()
         Me.lbl左から = New System.Windows.Forms.Label()
+        Me.lbl上から = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -562,7 +563,7 @@ Partial Class frmMain
         Me.txtコマベース_横.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_横.TabIndex = 41
         Me.txtコマベース_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_横, "四角(ひも幅+すき間)部分の横の長さ")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_横, "(コマ寸法+すき間)部分の横の長さ")
         '
         'txtコマベース_縦
         '
@@ -573,7 +574,7 @@ Partial Class frmMain
         Me.txtコマベース_縦.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_縦.TabIndex = 44
         Me.txtコマベース_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_縦, "四角(ひも幅+すき間)部分の縦の長さ")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_縦, "(コマ寸法+すき間)部分の縦の長さ")
         '
         'txtコマベース_高さ
         '
@@ -584,7 +585,7 @@ Partial Class frmMain
         Me.txtコマベース_高さ.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_高さ.TabIndex = 47
         Me.txtコマベース_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_高さ, "四角(ひも幅+すき間)部分の高さ")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_高さ, "(コマ寸法+すき間)部分の高さ、折り返しのコマはは含まれない")
         '
         'txt縁厚さプラス_横
         '
@@ -595,7 +596,7 @@ Partial Class frmMain
         Me.txt縁厚さプラス_横.Size = New System.Drawing.Size(80, 27)
         Me.txt縁厚さプラス_横.TabIndex = 42
         Me.txt縁厚さプラス_横.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_横, "四角ベースの長さに厚さを加えた横長")
+        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_横, "コマ寸法ベースの長さに厚さを加えた横長")
         '
         'txt縁厚さプラス_縦
         '
@@ -606,7 +607,7 @@ Partial Class frmMain
         Me.txt縁厚さプラス_縦.Size = New System.Drawing.Size(80, 27)
         Me.txt縁厚さプラス_縦.TabIndex = 45
         Me.txt縁厚さプラス_縦.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_縦, "四角ベースの長さに厚さを加えた縦長")
+        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_縦, "コマ寸法ベースの長さに厚さを加えた縦長")
         '
         'txt縁厚さプラス_高さ
         '
@@ -617,7 +618,7 @@ Partial Class frmMain
         Me.txt縁厚さプラス_高さ.Size = New System.Drawing.Size(80, 27)
         Me.txt縁厚さプラス_高さ.TabIndex = 48
         Me.txt縁厚さプラス_高さ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_高さ, "四角ベースの高さに底厚さと縁を加えた高さ")
+        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_高さ, "コマ寸法ベースの高さに底厚さと縁を加えた高さ")
         '
         'txtコマベース_周
         '
@@ -628,7 +629,7 @@ Partial Class frmMain
         Me.txtコマベース_周.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_周.TabIndex = 50
         Me.txtコマベース_周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_周, "四角(ひも幅+すき間)部分の周の長さ")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_周, "(コマ寸法+すき間)部分の周の長さ")
         '
         'txt縁厚さプラス_周
         '
@@ -639,7 +640,7 @@ Partial Class frmMain
         Me.txt縁厚さプラス_周.Size = New System.Drawing.Size(80, 27)
         Me.txt縁厚さプラス_周.TabIndex = 51
         Me.txt縁厚さプラス_周.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_周, "四角ベースの周に厚さを加えた外周")
+        Me.ToolTip1.SetToolTip(Me.txt縁厚さプラス_周, "コマ寸法ベースの周に厚さを加えた外周")
         '
         'nud高さのコマ数
         '
@@ -671,18 +672,18 @@ Partial Class frmMain
         Me.lbl寸法.Size = New System.Drawing.Size(39, 20)
         Me.lbl寸法.TabIndex = 30
         Me.lbl寸法.Text = "寸法"
-        Me.ToolTip1.SetToolTip(Me.lbl寸法, "ひとつの四角の1辺")
+        Me.ToolTip1.SetToolTip(Me.lbl寸法, "1コマの長さ")
         '
-        'lb1コマ
+        'lblコマ
         '
-        Me.lb1コマ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lb1コマ.AutoSize = True
-        Me.lb1コマ.Location = New System.Drawing.Point(101, 660)
-        Me.lb1コマ.Name = "lb1コマ"
-        Me.lb1コマ.Size = New System.Drawing.Size(38, 20)
-        Me.lb1コマ.TabIndex = 32
-        Me.lb1コマ.Text = "1コマ"
-        Me.ToolTip1.SetToolTip(Me.lb1コマ, "基本のひも幅の寸法")
+        Me.lblコマ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblコマ.AutoSize = True
+        Me.lblコマ.Location = New System.Drawing.Point(101, 660)
+        Me.lblコマ.Name = "lblコマ"
+        Me.lblコマ.Size = New System.Drawing.Size(30, 20)
+        Me.lblコマ.TabIndex = 32
+        Me.lblコマ.Text = "コマ"
+        Me.ToolTip1.SetToolTip(Me.lblコマ, "1コマ分")
         '
         'lblコマベース
         '
@@ -690,10 +691,10 @@ Partial Class frmMain
         Me.lblコマベース.AutoSize = True
         Me.lblコマベース.Location = New System.Drawing.Point(169, 660)
         Me.lblコマベース.Name = "lblコマベース"
-        Me.lblコマベース.Size = New System.Drawing.Size(86, 20)
+        Me.lblコマベース.Size = New System.Drawing.Size(78, 20)
         Me.lblコマベース.TabIndex = 35
-        Me.lblコマベース.Text = "1コマ+すき間"
-        Me.ToolTip1.SetToolTip(Me.lblコマベース, "基本のひも幅にすき間をプラスした、四角の寸法")
+        Me.lblコマベース.Text = "コマ+すき間"
+        Me.ToolTip1.SetToolTip(Me.lblコマベース, "1コマにすき間を加えた、単位のベース値")
         '
         'lbl厚さ
         '
@@ -838,7 +839,7 @@ Partial Class frmMain
         Me.txt1コマ_要尺.ReadOnly = True
         Me.txt1コマ_要尺.Size = New System.Drawing.Size(80, 27)
         Me.txt1コマ_要尺.TabIndex = 34
-        Me.ToolTip1.SetToolTip(Me.txt1コマ_要尺, "ひも幅の四角の対角線")
+        Me.ToolTip1.SetToolTip(Me.txt1コマ_要尺, "1コマ編むのに必要な長さ")
         '
         'txt1コマ_寸法
         '
@@ -848,7 +849,7 @@ Partial Class frmMain
         Me.txt1コマ_寸法.ReadOnly = True
         Me.txt1コマ_寸法.Size = New System.Drawing.Size(80, 27)
         Me.txt1コマ_寸法.TabIndex = 33
-        Me.ToolTip1.SetToolTip(Me.txt1コマ_寸法, "ひも幅の四角の一辺")
+        Me.ToolTip1.SetToolTip(Me.txt1コマ_寸法, "1コマの寸法")
         '
         'lbl要尺
         '
@@ -859,7 +860,7 @@ Partial Class frmMain
         Me.lbl要尺.Size = New System.Drawing.Size(39, 20)
         Me.lbl要尺.TabIndex = 31
         Me.lbl要尺.Text = "要尺"
-        Me.ToolTip1.SetToolTip(Me.lbl要尺, "ひとつの四角の対角線")
+        Me.ToolTip1.SetToolTip(Me.lbl要尺, "1コマ編むのに必要な長さ")
         '
         'txtコマベース_要尺
         '
@@ -869,7 +870,7 @@ Partial Class frmMain
         Me.txtコマベース_要尺.ReadOnly = True
         Me.txtコマベース_要尺.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_要尺.TabIndex = 37
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_要尺, "ひも幅にすき間を加えた、単位となるの四角の対角線")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_要尺, "1コマ編むのに必要な長さにすき間を加えた、単位となる長さ")
         '
         'txtコマベース_寸法
         '
@@ -879,7 +880,7 @@ Partial Class frmMain
         Me.txtコマベース_寸法.ReadOnly = True
         Me.txtコマベース_寸法.Size = New System.Drawing.Size(80, 27)
         Me.txtコマベース_寸法.TabIndex = 36
-        Me.ToolTip1.SetToolTip(Me.txtコマベース_寸法, "ひも幅にすき間を加えた、単位となるの四角の一辺")
+        Me.ToolTip1.SetToolTip(Me.txtコマベース_寸法, "コマ寸法にすき間を加えた、単位となるサイズ")
         '
         'nud折り返しコマ数
         '
@@ -929,20 +930,20 @@ Partial Class frmMain
         Me.nud上から何番目のコマ.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.nud上から何番目のコマ.Name = "nud上から何番目のコマ"
         Me.nud上から何番目のコマ.Size = New System.Drawing.Size(68, 27)
-        Me.nud上から何番目のコマ.TabIndex = 4
+        Me.nud上から何番目のコマ.TabIndex = 5
         Me.nud上から何番目のコマ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.ToolTip1.SetToolTip(Me.nud上から何番目のコマ, "縦のコマの開始位置")
         Me.nud上から何番目のコマ.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
-        'lbl開始位置_上から
+        'lbl開始位置_u
         '
-        Me.lbl開始位置_上から.AutoSize = True
-        Me.lbl開始位置_上から.Location = New System.Drawing.Point(30, 91)
-        Me.lbl開始位置_上から.Name = "lbl開始位置_上から"
-        Me.lbl開始位置_上から.Size = New System.Drawing.Size(122, 20)
-        Me.lbl開始位置_上から.TabIndex = 3
-        Me.lbl開始位置_上から.Text = "開始位置　上から"
-        Me.ToolTip1.SetToolTip(Me.lbl開始位置_上から, "縦のコマの開始位置")
+        Me.lbl開始位置_u.AutoSize = True
+        Me.lbl開始位置_u.Location = New System.Drawing.Point(30, 91)
+        Me.lbl開始位置_u.Name = "lbl開始位置_u"
+        Me.lbl開始位置_u.Size = New System.Drawing.Size(69, 20)
+        Me.lbl開始位置_u.TabIndex = 3
+        Me.lbl開始位置_u.Text = "開始位置"
+        Me.ToolTip1.SetToolTip(Me.lbl開始位置_u, "縦のコマの開始位置")
         '
         'txt横ひもの本数
         '
@@ -969,7 +970,7 @@ Partial Class frmMain
         Me.txt縦ひもの本数.Name = "txt縦ひもの本数"
         Me.txt縦ひもの本数.ReadOnly = True
         Me.txt縦ひもの本数.Size = New System.Drawing.Size(68, 27)
-        Me.txt縦ひもの本数.TabIndex = 7
+        Me.txt縦ひもの本数.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.txt縦ひもの本数, "縦に置かれるひもの本数")
         '
         'lbl縦ひも
@@ -978,7 +979,7 @@ Partial Class frmMain
         Me.lbl縦ひも.Location = New System.Drawing.Point(30, 138)
         Me.lbl縦ひも.Name = "lbl縦ひも"
         Me.lbl縦ひも.Size = New System.Drawing.Size(47, 20)
-        Me.lbl縦ひも.TabIndex = 6
+        Me.lbl縦ひも.TabIndex = 7
         Me.lbl縦ひも.Text = "縦ひも"
         Me.ToolTip1.SetToolTip(Me.lbl縦ひも, "縦に置かれるひもの本数")
         '
@@ -1059,6 +1060,16 @@ Partial Class frmMain
         Me.lbl左から.TabIndex = 4
         Me.lbl左から.Text = "左から"
         Me.ToolTip1.SetToolTip(Me.lbl左から, "横のコマの開始位置")
+        '
+        'lbl上から
+        '
+        Me.lbl上から.AutoSize = True
+        Me.lbl上から.Location = New System.Drawing.Point(105, 91)
+        Me.lbl上から.Name = "lbl上から"
+        Me.lbl上から.Size = New System.Drawing.Size(47, 20)
+        Me.lbl上から.TabIndex = 4
+        Me.lbl上から.Text = "上から"
+        Me.ToolTip1.SetToolTip(Me.lbl上から, "縦のコマの開始位置")
         '
         'MenuStrip1
         '
@@ -1340,12 +1351,13 @@ Partial Class frmMain
         '
         'grp縦置き
         '
+        Me.grp縦置き.Controls.Add(Me.lbl上から)
         Me.grp縦置き.Controls.Add(Me.txt縦ひもの本数)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひもの本数_単位)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひも)
         Me.grp縦置き.Controls.Add(Me.lbl番目のコマ_u)
         Me.grp縦置き.Controls.Add(Me.nud上から何番目のコマ)
-        Me.grp縦置き.Controls.Add(Me.lbl開始位置_上から)
+        Me.grp縦置き.Controls.Add(Me.lbl開始位置_u)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.txt縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.lbl縦のコマ数_単位)
@@ -1354,7 +1366,7 @@ Partial Class frmMain
         Me.grp縦置き.Location = New System.Drawing.Point(415, 178)
         Me.grp縦置き.Name = "grp縦置き"
         Me.grp縦置き.Size = New System.Drawing.Size(381, 229)
-        Me.grp縦置き.TabIndex = 1
+        Me.grp縦置き.TabIndex = 0
         Me.grp縦置き.TabStop = False
         Me.grp縦置き.Text = "縦置き"
         '
@@ -1364,7 +1376,7 @@ Partial Class frmMain
         Me.lbl縦ひもの本数_単位.Location = New System.Drawing.Point(243, 138)
         Me.lbl縦ひもの本数_単位.Name = "lbl縦ひもの本数_単位"
         Me.lbl縦ひもの本数_単位.Size = New System.Drawing.Size(24, 20)
-        Me.lbl縦ひもの本数_単位.TabIndex = 8
+        Me.lbl縦ひもの本数_単位.TabIndex = 9
         Me.lbl縦ひもの本数_単位.Text = "本"
         '
         'lbl番目のコマ_u
@@ -1373,7 +1385,7 @@ Partial Class frmMain
         Me.lbl番目のコマ_u.Location = New System.Drawing.Point(243, 91)
         Me.lbl番目のコマ_u.Name = "lbl番目のコマ_u"
         Me.lbl番目のコマ_u.Size = New System.Drawing.Size(72, 20)
-        Me.lbl番目のコマ_u.TabIndex = 5
+        Me.lbl番目のコマ_u.TabIndex = 6
         Me.lbl番目のコマ_u.Text = "番目のコマ"
         '
         'lbl縦ひものメモ
@@ -1382,7 +1394,7 @@ Partial Class frmMain
         Me.lbl縦ひものメモ.Location = New System.Drawing.Point(30, 185)
         Me.lbl縦ひものメモ.Name = "lbl縦ひものメモ"
         Me.lbl縦ひものメモ.Size = New System.Drawing.Size(81, 20)
-        Me.lbl縦ひものメモ.TabIndex = 9
+        Me.lbl縦ひものメモ.TabIndex = 10
         Me.lbl縦ひものメモ.Text = "縦ひものメモ"
         '
         'txt縦ひものメモ
@@ -1390,7 +1402,7 @@ Partial Class frmMain
         Me.txt縦ひものメモ.Location = New System.Drawing.Point(163, 183)
         Me.txt縦ひものメモ.Name = "txt縦ひものメモ"
         Me.txt縦ひものメモ.Size = New System.Drawing.Size(201, 27)
-        Me.txt縦ひものメモ.TabIndex = 10
+        Me.txt縦ひものメモ.TabIndex = 11
         '
         'lbl縦のコマ数_単位
         '
@@ -2780,7 +2792,7 @@ Partial Class frmMain
         Me.Controls.Add(Me.lblコマベース)
         Me.Controls.Add(Me.txtコマベース_要尺)
         Me.Controls.Add(Me.txtコマベース_寸法)
-        Me.Controls.Add(Me.lb1コマ)
+        Me.Controls.Add(Me.lblコマ)
         Me.Controls.Add(Me.lbl寸法)
         Me.Controls.Add(Me.txt1コマ_要尺)
         Me.Controls.Add(Me.txt1コマ_寸法)
@@ -2833,8 +2845,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(904, 830)
         Me.Name = "frmMain"
         Me.Text = "四つ畳み編み"
@@ -3049,7 +3059,7 @@ Partial Class frmMain
     Friend WithEvents txt1コマ_要尺 As TextBox
     Friend WithEvents txt1コマ_寸法 As TextBox
     Friend WithEvents lbl要尺 As Label
-    Friend WithEvents lb1コマ As Label
+    Friend WithEvents lblコマ As Label
     Friend WithEvents tpageプレビュー As TabPage
     Friend WithEvents txtコマベース_要尺 As TextBox
     Friend WithEvents txtコマベース_寸法 As TextBox
@@ -3066,7 +3076,7 @@ Partial Class frmMain
     Friend WithEvents ToolStripMenuItemSettingGauge As ToolStripMenuItem
     Friend WithEvents lbl番目のコマ_u As Label
     Friend WithEvents nud上から何番目のコマ As NumericUpDown
-    Friend WithEvents lbl開始位置_上から As Label
+    Friend WithEvents lbl開始位置_u As Label
     Friend WithEvents lbl番目のコマ_l As Label
     Friend WithEvents nud左から何番目のコマ As NumericUpDown
     Friend WithEvents lbl開始位置 As Label
@@ -3133,4 +3143,5 @@ Partial Class frmMain
     Friend WithEvents f_d出力ひも長5 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色5 As DataGridViewComboBoxColumn
     Friend WithEvents f_sメモ5 As DataGridViewTextBoxColumn
+    Friend WithEvents lbl上から As Label
 End Class
