@@ -314,15 +314,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CraftBandInstaller"
-        "ProductCode" = "8:{80A66486-9C92-4B70-BE70-D389972FA6F0}"
-        "PackageCode" = "8:{3BD4D6E7-B9F5-4E22-8F2F-48AA735F0209}"
+        "ProductCode" = "8:{07C677C5-23EC-4202-B3D2-756C8001A3AE}"
+        "PackageCode" = "8:{997E62F0-BEE1-40AC-8FC6-B48404B7E413}"
         "UpgradeCode" = "8:{D3635BD8-65C1-4B9B-8056-CE5BCBA2A48B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.0"
+        "ProductVersion" = "8:1.4.1"
         "Manufacturer" = "8:LaboHarusawa"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://labo.com/CraftBand/"
@@ -878,7 +878,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_403F852751254890BC072DE7DB5128FD"
             {
-            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -906,7 +906,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4B741ECA695744F5BE973279EC08DB9D"
             {
-            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -934,7 +934,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FA177F7FA5744281AC98209C890D42B5"
             {
-            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"

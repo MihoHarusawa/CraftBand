@@ -171,10 +171,9 @@ Partial Class frmMain
         Me.TabControl = New System.Windows.Forms.TabControl()
         Me.tpage底縦横 = New System.Windows.Forms.TabPage()
         Me.chk縦横を展開する = New System.Windows.Forms.CheckBox()
-        Me.lbl縦置きの計 = New System.Windows.Forms.Label()
-        Me.lbl横置きの計 = New System.Windows.Forms.Label()
         Me.lbl垂直ひも長加算_単位 = New System.Windows.Forms.Label()
         Me.grp縦置き = New System.Windows.Forms.GroupBox()
+        Me.lbl縦置きの計 = New System.Windows.Forms.Label()
         Me.lbl縦ひものメモ = New System.Windows.Forms.Label()
         Me.txt縦ひものメモ = New System.Windows.Forms.TextBox()
         Me.lbl縦ひも_単位 = New System.Windows.Forms.Label()
@@ -186,6 +185,7 @@ Partial Class frmMain
         Me.lbl縦ひもの本数_単位 = New System.Windows.Forms.Label()
         Me.grp横置き = New System.Windows.Forms.GroupBox()
         Me.lbl横ひものメモ = New System.Windows.Forms.Label()
+        Me.lbl横置きの計 = New System.Windows.Forms.Label()
         Me.txt横ひものメモ = New System.Windows.Forms.TextBox()
         Me.lbl横ひも間のすき間_単位 = New System.Windows.Forms.Label()
         Me.lbl短い横ひもlength = New System.Windows.Forms.Label()
@@ -1344,8 +1344,6 @@ Partial Class frmMain
         'tpage底縦横
         '
         Me.tpage底縦横.Controls.Add(Me.chk縦横を展開する)
-        Me.tpage底縦横.Controls.Add(Me.lbl縦置きの計)
-        Me.tpage底縦横.Controls.Add(Me.lbl横置きの計)
         Me.tpage底縦横.Controls.Add(Me.nud垂直ひも長加算)
         Me.tpage底縦横.Controls.Add(Me.lbl垂直ひも長加算_単位)
         Me.tpage底縦横.Controls.Add(Me.lbl垂直ひも長加算)
@@ -1371,27 +1369,6 @@ Partial Class frmMain
         Me.chk縦横を展開する.Text = "縦横を展開する"
         Me.chk縦横を展開する.UseVisualStyleBackColor = True
         '
-        'lbl縦置きの計
-        '
-        Me.lbl縦置きの計.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lbl縦置きの計.AutoSize = True
-        Me.lbl縦置きの計.Location = New System.Drawing.Point(332, 383)
-        Me.lbl縦置きの計.Name = "lbl縦置きの計"
-        Me.lbl縦置きの計.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.lbl縦置きの計.Size = New System.Drawing.Size(77, 20)
-        Me.lbl縦置きの計.TabIndex = 0
-        Me.lbl縦置きの計.Text = "縦置きの計"
-        Me.lbl縦置きの計.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
-        'lbl横置きの計
-        '
-        Me.lbl横置きの計.AutoSize = True
-        Me.lbl横置きの計.Location = New System.Drawing.Point(412, 31)
-        Me.lbl横置きの計.Name = "lbl横置きの計"
-        Me.lbl横置きの計.Size = New System.Drawing.Size(77, 20)
-        Me.lbl横置きの計.TabIndex = 1
-        Me.lbl横置きの計.Text = "横置きの計"
-        '
         'lbl垂直ひも長加算_単位
         '
         Me.lbl垂直ひも長加算_単位.AutoSize = True
@@ -1404,6 +1381,7 @@ Partial Class frmMain
         'grp縦置き
         '
         Me.grp縦置き.Controls.Add(Me.btn横寸法に合わせる)
+        Me.grp縦置き.Controls.Add(Me.lbl縦置きの計)
         Me.grp縦置き.Controls.Add(Me.lbl縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.txt縦ひものメモ)
         Me.grp縦置き.Controls.Add(Me.chk始末ひも)
@@ -1426,6 +1404,18 @@ Partial Class frmMain
         Me.grp縦置き.TabIndex = 4
         Me.grp縦置き.TabStop = False
         Me.grp縦置き.Text = "縦置き"
+        '
+        'lbl縦置きの計
+        '
+        Me.lbl縦置きの計.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lbl縦置きの計.AutoSize = True
+        Me.lbl縦置きの計.Location = New System.Drawing.Point(325, 13)
+        Me.lbl縦置きの計.Name = "lbl縦置きの計"
+        Me.lbl縦置きの計.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.lbl縦置きの計.Size = New System.Drawing.Size(77, 20)
+        Me.lbl縦置きの計.TabIndex = 0
+        Me.lbl縦置きの計.Text = "縦置きの計"
+        Me.lbl縦置きの計.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl縦ひものメモ
         '
@@ -1507,6 +1497,7 @@ Partial Class frmMain
         'grp横置き
         '
         Me.grp横置き.Controls.Add(Me.lbl横ひものメモ)
+        Me.grp横置き.Controls.Add(Me.lbl横置きの計)
         Me.grp横置き.Controls.Add(Me.txt横ひものメモ)
         Me.grp横置き.Controls.Add(Me.nud横ひも間のすき間)
         Me.grp横置き.Controls.Add(Me.lbl横ひも間のすき間_単位)
@@ -1543,6 +1534,15 @@ Partial Class frmMain
         Me.lbl横ひものメモ.Size = New System.Drawing.Size(81, 20)
         Me.lbl横ひものメモ.TabIndex = 20
         Me.lbl横ひものメモ.Text = "横ひものメモ"
+        '
+        'lbl横置きの計
+        '
+        Me.lbl横置きの計.AutoSize = True
+        Me.lbl横置きの計.Location = New System.Drawing.Point(298, 13)
+        Me.lbl横置きの計.Name = "lbl横置きの計"
+        Me.lbl横置きの計.Size = New System.Drawing.Size(77, 20)
+        Me.lbl横置きの計.TabIndex = 1
+        Me.lbl横置きの計.Text = "横置きの計"
         '
         'txt横ひものメモ
         '
@@ -1638,7 +1638,7 @@ Partial Class frmMain
         '
         Me.lbl周数_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl周数_底楕円.AutoSize = True
-        Me.lbl周数_底楕円.Location = New System.Drawing.Point(630, 365)
+        Me.lbl周数_底楕円.Location = New System.Drawing.Point(630, 344)
         Me.lbl周数_底楕円.Name = "lbl周数_底楕円"
         Me.lbl周数_底楕円.Size = New System.Drawing.Size(85, 20)
         Me.lbl周数_底楕円.TabIndex = 7
@@ -1648,7 +1648,7 @@ Partial Class frmMain
         '
         Me.lbl編みかた名_底楕円.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl編みかた名_底楕円.AutoSize = True
-        Me.lbl編みかた名_底楕円.Location = New System.Drawing.Point(460, 365)
+        Me.lbl編みかた名_底楕円.Location = New System.Drawing.Point(460, 344)
         Me.lbl編みかた名_底楕円.Name = "lbl編みかた名_底楕円"
         Me.lbl編みかた名_底楕円.Size = New System.Drawing.Size(76, 20)
         Me.lbl編みかた名_底楕円.TabIndex = 5
@@ -1729,7 +1729,7 @@ Partial Class frmMain
         Me.dgv底楕円.Name = "dgv底楕円"
         Me.dgv底楕円.RowHeadersWidth = 51
         Me.dgv底楕円.RowTemplate.Height = 29
-        Me.dgv底楕円.Size = New System.Drawing.Size(828, 356)
+        Me.dgv底楕円.Size = New System.Drawing.Size(828, 328)
         Me.dgv底楕円.TabIndex = 0
         '
         'f_i番号1
@@ -2047,7 +2047,7 @@ Partial Class frmMain
         '
         Me.lbl周数_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl周数_側面.AutoSize = True
-        Me.lbl周数_側面.Location = New System.Drawing.Point(650, 366)
+        Me.lbl周数_側面.Location = New System.Drawing.Point(650, 345)
         Me.lbl周数_側面.Name = "lbl周数_側面"
         Me.lbl周数_側面.Size = New System.Drawing.Size(39, 20)
         Me.lbl周数_側面.TabIndex = 9
@@ -2057,7 +2057,7 @@ Partial Class frmMain
         '
         Me.lbl編みかた名_側面.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl編みかた名_側面.AutoSize = True
-        Me.lbl編みかた名_側面.Location = New System.Drawing.Point(460, 366)
+        Me.lbl編みかた名_側面.Location = New System.Drawing.Point(460, 345)
         Me.lbl編みかた名_側面.Name = "lbl編みかた名_側面"
         Me.lbl編みかた名_側面.Size = New System.Drawing.Size(76, 20)
         Me.lbl編みかた名_側面.TabIndex = 7
@@ -2156,11 +2156,11 @@ Partial Class frmMain
         Me.dgv側面.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv側面.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_i番号2, Me.f_s編みかた名2, Me.f_s編みひも名2, Me.f_iひも番号2, Me.f_i何本幅2, Me.f_i周数2, Me.f_s色2, Me.f_b周連続区分2, Me.f_b次周連続区分2, Me.f_i段数, Me.f_d高さ2, Me.f_d高さ比率2, Me.f_d垂直ひも長2, Me.f_d周長比率対底の周2, Me.f_d周長2, Me.f_dひも長2, Me.f_dひも長加算2, Me.f_iひも本数2, Me.f_d連続ひも長2, Me.f_d厚さ2, Me.f_s記号2, Me.f_sメモ2, Me.f_bError2})
         Me.dgv側面.DataSource = Me.BindingSource側面
-        Me.dgv側面.Location = New System.Drawing.Point(6, 36)
+        Me.dgv側面.Location = New System.Drawing.Point(12, 36)
         Me.dgv側面.Name = "dgv側面"
         Me.dgv側面.RowHeadersWidth = 51
         Me.dgv側面.RowTemplate.Height = 29
-        Me.dgv側面.Size = New System.Drawing.Size(828, 327)
+        Me.dgv側面.Size = New System.Drawing.Size(822, 298)
         Me.dgv側面.TabIndex = 2
         '
         'f_i番号2
@@ -2454,7 +2454,7 @@ Partial Class frmMain
         '
         Me.lbl長さ_単位.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl長さ_単位.AutoSize = True
-        Me.lbl長さ_単位.Location = New System.Drawing.Point(599, 365)
+        Me.lbl長さ_単位.Location = New System.Drawing.Point(599, 344)
         Me.lbl長さ_単位.Name = "lbl長さ_単位"
         Me.lbl長さ_単位.Size = New System.Drawing.Size(39, 20)
         Me.lbl長さ_単位.TabIndex = 8
@@ -2464,7 +2464,7 @@ Partial Class frmMain
         '
         Me.lbl長さ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl長さ.AutoSize = True
-        Me.lbl長さ.Location = New System.Drawing.Point(559, 365)
+        Me.lbl長さ.Location = New System.Drawing.Point(559, 344)
         Me.lbl長さ.Name = "lbl長さ"
         Me.lbl長さ.Size = New System.Drawing.Size(34, 20)
         Me.lbl長さ.TabIndex = 6
@@ -2474,7 +2474,7 @@ Partial Class frmMain
         '
         Me.lbl点数.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl点数.AutoSize = True
-        Me.lbl点数.Location = New System.Drawing.Point(651, 365)
+        Me.lbl点数.Location = New System.Drawing.Point(651, 344)
         Me.lbl点数.Name = "lbl点数"
         Me.lbl点数.Size = New System.Drawing.Size(39, 20)
         Me.lbl点数.TabIndex = 9
@@ -2484,7 +2484,7 @@ Partial Class frmMain
         '
         Me.lbl付属品名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbl付属品名.AutoSize = True
-        Me.lbl付属品名.Location = New System.Drawing.Point(369, 365)
+        Me.lbl付属品名.Location = New System.Drawing.Point(369, 344)
         Me.lbl付属品名.Name = "lbl付属品名"
         Me.lbl付属品名.Size = New System.Drawing.Size(69, 20)
         Me.lbl付属品名.TabIndex = 4
@@ -2554,7 +2554,7 @@ Partial Class frmMain
         Me.dgv追加品.Name = "dgv追加品"
         Me.dgv追加品.RowHeadersWidth = 51
         Me.dgv追加品.RowTemplate.Height = 29
-        Me.dgv追加品.Size = New System.Drawing.Size(828, 356)
+        Me.dgv追加品.Size = New System.Drawing.Size(828, 327)
         Me.dgv追加品.TabIndex = 0
         '
         'f_i番号3
@@ -2826,7 +2826,7 @@ Partial Class frmMain
         Me.dgv底の横.Name = "dgv底の横"
         Me.dgv底の横.RowHeadersWidth = 51
         Me.dgv底の横.RowTemplate.Height = 29
-        Me.dgv底の横.Size = New System.Drawing.Size(828, 332)
+        Me.dgv底の横.Size = New System.Drawing.Size(828, 313)
         Me.dgv底の横.TabIndex = 1
         '
         'f_iひも種4
@@ -3012,7 +3012,7 @@ Partial Class frmMain
         Me.dgv底の縦.Name = "dgv底の縦"
         Me.dgv底の縦.RowHeadersWidth = 51
         Me.dgv底の縦.RowTemplate.Height = 29
-        Me.dgv底の縦.Size = New System.Drawing.Size(828, 333)
+        Me.dgv底の縦.Size = New System.Drawing.Size(828, 314)
         Me.dgv底の縦.TabIndex = 1
         '
         'f_iひも種5
