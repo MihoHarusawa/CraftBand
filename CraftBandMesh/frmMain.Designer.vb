@@ -365,6 +365,7 @@ Partial Class frmMain
         Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
         Me.lbl底 = New System.Windows.Forms.Label()
         Me.lbl最大 = New System.Windows.Forms.Label()
+        Me.ToolStripMenuItemSettingColor = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1260,7 +1261,7 @@ Partial Class frmMain
         '
         'ToolStripMenuItemSetting
         '
-        Me.ToolStripMenuItemSetting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemSettingBandType, Me.ToolStripMenuItemSettingPattern, Me.ToolStripMenuItemSettingOptions, Me.ToolStripSeparator3, Me.ToolStripMenuItemSettingBasics})
+        Me.ToolStripMenuItemSetting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemSettingBandType, Me.ToolStripMenuItemSettingPattern, Me.ToolStripMenuItemSettingOptions, Me.ToolStripMenuItemSettingColor, Me.ToolStripSeparator3, Me.ToolStripMenuItemSettingBasics})
         Me.ToolStripMenuItemSetting.Name = "ToolStripMenuItemSetting"
         Me.ToolStripMenuItemSetting.Size = New System.Drawing.Size(71, 24)
         Me.ToolStripMenuItemSetting.Text = "設定(&S)"
@@ -1268,30 +1269,30 @@ Partial Class frmMain
         'ToolStripMenuItemSettingBandType
         '
         Me.ToolStripMenuItemSettingBandType.Name = "ToolStripMenuItemSettingBandType"
-        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingBandType.Text = "バンドの種類(&T)"
         '
         'ToolStripMenuItemSettingPattern
         '
         Me.ToolStripMenuItemSettingPattern.Name = "ToolStripMenuItemSettingPattern"
-        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingPattern.Text = "編みかた(&P)"
         '
         'ToolStripMenuItemSettingOptions
         '
         Me.ToolStripMenuItemSettingOptions.Name = "ToolStripMenuItemSettingOptions"
-        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingOptions.Text = "付属品(&O)"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(221, 6)
         '
         'ToolStripMenuItemSettingBasics
         '
         Me.ToolStripMenuItemSettingBasics.Name = "ToolStripMenuItemSettingBasics"
-        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingBasics.Text = "基本設定(&B)"
         '
         'ToolStripMenuItemHelp
@@ -3472,6 +3473,12 @@ Partial Class frmMain
         Me.lbl最大.TabIndex = 60
         Me.lbl最大.Text = "(最大)"
         '
+        'ToolStripMenuItemSettingColor
+        '
+        Me.ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
+        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingColor.Text = "描画色(&C)"
+        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -3902,4 +3909,5 @@ Partial Class frmMain
     Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError1 As DataGridViewCheckBoxColumn
+    Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
 End Class

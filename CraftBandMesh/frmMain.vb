@@ -836,6 +836,15 @@ Public Class frmMain
         End If
     End Sub
 
+    '描画色
+    Private Sub ToolStripMenuItemSettingColor_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingColor.Click
+        Dim dlg As New frmColor
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色にかかわるため
+        If dlg.ShowDialog() = DialogResult.OK Then
+            'プレビュー以外は関係なし
+        End If
+    End Sub
+
     '基本設定
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
@@ -1796,7 +1805,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 
 #End Region
 
