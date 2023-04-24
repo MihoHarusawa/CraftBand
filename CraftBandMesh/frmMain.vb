@@ -299,6 +299,8 @@ Public Class frmMain
                 Show底の横(works)
             Case "tpage底の縦"
                 Show底の縦(works)
+            Case "tpageプレビュー"
+                Showプレビュー(works)
             Case Else ' "tpageメモ他"
 
         End Select
@@ -318,11 +320,11 @@ Public Class frmMain
                 needreset = True
             End If
         End If
-        'If reason.HasFlag(enumReason._Preview) Then
-        '    If {"tpageプレビュー"}.Contains(_CurrentTabControlName) Then
-        '        needreset = True
-        '    End If
-        'End If
+        If reason.HasFlag(enumReason._Preview) Then
+            If {"tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+                needreset = True
+            End If
+        End If
         If needreset Then
             TabControl.SelectTab("tpage底縦横")
         End If
@@ -350,6 +352,8 @@ Public Class frmMain
                 Hide底の横(_clsDataTables)
             Case "tpage底の縦"
                 Hide底の縦(_clsDataTables)
+            Case "tpageプレビュー"
+                Hideプレビュー(_clsDataTables)
             Case Else ' 
                 '
         End Select
@@ -1041,6 +1045,7 @@ Public Class frmMain
         nud長い横ひも.Value = nud基本のひも幅.Value
         nud縦ひも.Value = nud基本のひも幅.Value
         'イベントは長い横ひも・縦ひも側
+        ShowDefaultTabControlPage(enumReason._Preview)
     End Sub
 
     Private Sub nud長い横ひも_ValueChanged(sender As Object, e As EventArgs) Handles nud長い横ひも.ValueChanged
@@ -1147,6 +1152,10 @@ Public Class frmMain
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
+    End Sub
+
+    Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
+        ShowDefaultTabControlPage(enumReason._Preview)
     End Sub
 #End Region
 
@@ -1331,6 +1340,7 @@ Public Class frmMain
         End If
 
         clsDataTables.RemoveNumberFromTable(table, number)
+        clsDataTables.FillNumber(table) '#16
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 
@@ -1420,6 +1430,7 @@ Public Class frmMain
         End If
 
         clsDataTables.RemoveNumberFromTable(table, number)
+        clsDataTables.FillNumber(table) '#16
         recalc(CalcCategory.Side, Nothing, Nothing)
     End Sub
 
@@ -1577,6 +1588,7 @@ Public Class frmMain
         End If
 
         clsDataTables.RemoveNumberFromTable(table, number)
+        clsDataTables.FillNumber(table) '#16
         recalc(CalcCategory.Options, Nothing, Nothing)
     End Sub
 
@@ -1631,8 +1643,7 @@ Public Class frmMain
 
         'タブ切り替えタイミングのため、表示は更新済
         Save底_縦横(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set横展開DataTable()
-        works.ToTmpTable(enumひも種.i_横, tmptable)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set横展開DataTable(True)
 
         BindingSource底の横.DataSource = tmptable
         BindingSource底の横.Sort = "f_iひも種,f_iひも番号"
@@ -1658,8 +1669,7 @@ Public Class frmMain
 
         'タブ切り替えタイミングのため、表示は更新済
         Save底_縦横(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set縦展開DataTable()
-        works.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tmptable)
+        Dim tmptable As tbl縦横展開DataTable = _clsCalcMesh.set縦展開DataTable(True)
 
         BindingSource底の縦.DataSource = tmptable
         BindingSource底の縦.Sort = "f_iひも種,f_iひも番号"
@@ -1690,7 +1700,7 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource底の横.DataSource = _clsCalcMesh.set横展開DataTable()
+        BindingSource底の横.DataSource = _clsCalcMesh.set横展開DataTable(False)
         BindingSource底の横.Sort = "f_iひも種,f_iひも番号"
         dgv底の横.Refresh()
     End Sub
@@ -1701,11 +1711,61 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource底の縦.DataSource = _clsCalcMesh.set縦展開DataTable()
+        BindingSource底の縦.DataSource = _clsCalcMesh.set縦展開DataTable(False)
         BindingSource底の縦.Sort = "f_iひも種,f_iひも番号"
         dgv底の縦.Refresh()
     End Sub
 #End Region
+
+#Region "プレビュー"
+    Dim _clsImageData As clsImageData
+    Private Sub Showプレビュー(works As clsDataTables)
+        picプレビュー.Image = Nothing
+        _clsImageData = Nothing
+
+        SaveTables(_clsDataTables)
+        Dim ret As Boolean = _clsCalcMesh.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        Disp計算結果(_clsCalcMesh) 'NGはToolStripに表示
+        If Not ret Then
+            Return
+        End If
+
+        _clsImageData = New clsImageData(_sFilePath)
+        ret = _clsCalcMesh.CalcImage(_clsImageData)
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcMesh.p_sメッセージ) Then
+            MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+    End Sub
+
+    Private Sub Hideプレビュー(clsDataTables As clsDataTables)
+        picプレビュー.Image = Nothing
+        If _clsImageData IsNot Nothing Then
+            _clsImageData.Clear()
+            _clsImageData = Nothing
+        End If
+    End Sub
+
+    Private Sub btnブラウザ_Click(sender As Object, e As EventArgs) Handles btnブラウザ.Click
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsImageData.ImgBrowserOpen() Then
+            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs) Handles btn画像ファイル.Click
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsImageData.ImgFileOpen() Then
+            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+#End Region
+
 
 #Region "DEBUG"
     Dim bVisible As Boolean = False

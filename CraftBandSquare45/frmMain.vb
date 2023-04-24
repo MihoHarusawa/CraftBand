@@ -515,7 +515,7 @@ Public Class frmMain
             .Value("f_b始末ひも区分") = chk縦の補強ひも.Checked
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
-            .Value("f_d高さの四角数") = nud高さの四角数.Text
+            .Value("f_d高さの四角数") = nud高さの四角数.Value
         End With
         Return True
     End Function
@@ -815,6 +815,14 @@ Public Class frmMain
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
         If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
+            '目標寸法が空ならセット(#19)
+            If nud横寸法.Value = 0 AndAlso nud縦寸法.Value = 0 AndAlso nud高さ寸法.Value = 0 AndAlso
+                0 < _clsCalcSquare45.p_d四角ベース_横 AndAlso 0 < _clsCalcSquare45.p_d四角ベース_縦 Then
+                nud横寸法.Value = _clsCalcSquare45.p_d四角ベース_横
+                nud縦寸法.Value = _clsCalcSquare45.p_d四角ベース_縦
+                nud高さ寸法.Value = 1 '空の解除
+                nud高さ寸法.Value = _clsCalcSquare45.p_d四角ベース_高さ
+            End If
             'Square45(本幅)横-縦-高さ
             Dim defname As String
             Save目標寸法(_clsDataTables.p_row目標寸法)
@@ -1208,6 +1216,7 @@ Public Class frmMain
         End If
 
         clsDataTables.RemoveNumberFromTable(table, number)
+        clsDataTables.FillNumber(table) '#16
         recalc(CalcCategory.Options, Nothing, Nothing)
     End Sub
 

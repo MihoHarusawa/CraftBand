@@ -423,18 +423,18 @@ Class clsCalcKnot
             Case CalcCategory.NewData, CalcCategory.BsMaster
                 'データ変更/基本値/マスター/バンド選択
                 Clear()
-                ret = ret And set_目標寸法()
+                ret = ret And set_目標寸法(False)
                 ret = ret And set_コマ数()
                 ret = ret And set_寸法と要尺()
                 ret = ret And calc_側面(category, Nothing, Nothing)
                 ret = ret And calc_追加品(category, Nothing, Nothing)
 
             Case CalcCategory.Target    '目標寸法
-                ret = set_目標寸法()
+                ret = set_目標寸法(False)
                 ret = ret And set_寸法と要尺()
 
             Case CalcCategory.BandWidth    '基本のひも幅
-                ret = set_目標寸法()
+                ret = set_目標寸法(False)
                 ret = ret And set_コマ数()
                 ret = ret And set_寸法と要尺()
 
@@ -466,7 +466,7 @@ Class clsCalcKnot
 #Region "コマ"
 
     '目標寸法の取得
-    Private Function set_目標寸法() As Boolean
+    Private Function set_目標寸法(ByVal needTarget As Boolean) As Boolean
 
         With _Data.p_row目標寸法
             _b内側区分 = .Value("f_b内側区分")
@@ -478,7 +478,7 @@ Class clsCalcKnot
             _I基本のひも幅 = .Value("f_i基本のひも幅")
         End With
 
-        If Not isValidTarget() Then
+        If Not isValidTarget(needTarget) Then
             Return False
         End If
 
@@ -537,12 +537,15 @@ Class clsCalcKnot
     End Function
 
     '有効な目標寸法がある
-    Public Function isValidTarget() As Boolean
-        If _d横_目標 <= 0 AndAlso _d縦_目標 <= 0 AndAlso _d高さ_目標 <= 0 Then
-            '目標とする縦寸法・横寸法・高さ寸法を設定してください。
-            p_sメッセージ = My.Resources.CalcNoTargetSet
-            Return False
+    Public Function isValidTarget(ByVal needTarget As Boolean) As Boolean
+        If needTarget Then
+            If _d横_目標 <= 0 AndAlso _d縦_目標 <= 0 AndAlso _d高さ_目標 <= 0 Then
+                '目標とする縦寸法・横寸法・高さ寸法を設定してください。
+                p_sメッセージ = My.Resources.CalcNoTargetSet
+                Return False
+            End If
         End If
+        '常に必要
         If _I基本のひも幅 <= 0 Then
             '基本のひも幅を設定してください。
             p_sメッセージ = My.Resources.CalcNoBaseBandSet
@@ -615,7 +618,7 @@ Class clsCalcKnot
     End Function
 
     Private Function isCalcable() As Boolean
-        If Not set_目標寸法() Then
+        If Not set_目標寸法(True) Then
             Return False
         End If
 
@@ -1786,8 +1789,9 @@ Class clsCalcKnot
         End Select
         Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
 
-        'ひもの記号
-        '_imageList側面ひも生成
+        '基本のひも幅と基本色
+        imgData.setBasics(_dコマの寸法, _Data.p_row目標寸法.Value("f_s基本色"))
+
 #If 1 Then
         '通常描画
         imageList側面記号(dひも幅, isKnotLeft, False)
@@ -1803,10 +1807,6 @@ Class clsCalcKnot
         _ImageList開始位置 = imageList開始位置(dひも幅, isKnotLeft)
         _ImageList描画要素 = imageList描画要素(True, True)
 #End If
-
-        '
-        '基本のひも幅と基本色
-        imgData.setBasics(_dコマの寸法, _Data.p_row目標寸法.Value("f_s基本色"))
 
         '中身を移動
         imgData.MoveList(_ImageList横ひも)

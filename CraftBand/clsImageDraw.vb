@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Imaging
+Imports System.Windows.Forms.AxHost
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
@@ -153,7 +154,7 @@ Public Class CImageDraw
     End Class
 
     Private Function GetBandPenBrush(ByVal obj As Object) As CPenBrush
-        If IsDBNull(obj) Then
+        If obj Is Nothing OrElse IsDBNull(obj) Then
             Return _BandDefaultPenBrush
         End If
         Dim sColor As String = obj.ToString
@@ -291,7 +292,6 @@ Public Class CImageDraw
         _FontSize = pixcel_width(basicbandwidth / 2)
         _Font = New Font(My.Resources.FontNameMark, _FontSize)
 
-
         'サイズ枠描画
         '_Graphic.DrawRectangle(_Pen_black_thin, 0, 0, width - 1, height - 1)
     End Sub
@@ -316,10 +316,7 @@ Public Class CImageDraw
                 Case ImageTypeEnum._全体枠
                     'ret = ret And draw全体枠(item)
 
-                Case ImageTypeEnum._横の側面
-                    ret = ret And draw側面(item)
-
-                Case ImageTypeEnum._縦の側面
+                Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
                     ret = ret And draw側面(item)
 
                 Case ImageTypeEnum._底の中央線
@@ -330,6 +327,18 @@ Public Class CImageDraw
 
                 Case ImageTypeEnum._文字列
                     ret = ret And draw文字列(item)
+
+                Case ImageTypeEnum._編みかた
+                    ret = ret And draw編みかた(item)
+
+                Case ImageTypeEnum._底楕円
+                    ret = ret And draw底楕円(item)
+
+                Case ImageTypeEnum._差しひも
+                    ret = ret And draw差しひも(item)
+
+                Case ImageTypeEnum._付属品
+                    ret = ret And draw付属品(item)
 
                 Case ImageTypeEnum._横軸線
                     ret = ret And draw軸線(item)
@@ -370,7 +379,20 @@ Public Class CImageDraw
 
             'バンド
             If colset.PenBand IsNot Nothing Then
-                _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+                If item.m_bPortion Then
+                    '左側の線を省略
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
+                Else
+                    _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+                End If
             End If
         End If
 
@@ -412,7 +434,20 @@ Public Class CImageDraw
 
             'バンド
             If colset.PenBand IsNot Nothing Then
-                _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+                If item.m_bPortion Then
+                    '下側の線を省略
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
+                                      rect.X + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
+                    _Graphic.DrawLine(colset.PenBand,
+                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
+                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
+                Else
+                    _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+                End If
             End If
         End If
 
@@ -510,12 +545,140 @@ Public Class CImageDraw
         'フォントオブジェクトの作成
         Dim fontsize As Single = pixcel_width(item.m_sizeFont)
         Dim font = New Font(My.Resources.FontNameString, fontsize)
-        Dim p As PointF = pixcel_point(item.m_p位置)
+        Dim p As PointF = pixcel_point(item.p_p文字位置)
         For Each str As String In item.m_aryString
             _Graphic.DrawString(str, font, _Brush_black, p)
             p.Y += fontsize * 2
         Next
         font.Dispose()
+        Return True
+    End Function
+
+    Function draw編みかた(ByVal item As clsImageItem) As Boolean
+        If item.m_groupRow Is Nothing Then
+            Return False
+        End If
+        'ひも番号1の色
+        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        Dim colset As CPenBrush = GetBandPenBrush(color)
+        If colset Is Nothing Then
+            Return False
+        End If
+        '同じ編みかたの領域
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillPolygon(colset.BrushAlfa, points)
+        End If
+        _Graphic.DrawLines(colset.PenBand, points)
+        '周の線
+        If colset.PenLane IsNot Nothing Then
+            For Each line As S線分 In item.m_lineList
+                _Graphic.DrawLine(colset.PenLane, pixcel_point(line.p開始), pixcel_point(line.p終了))
+            Next
+        End If
+        '編みかた名
+        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
+            str += item.m_groupRow.GetNameValue("f_s編みかた名")
+            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+        End If
+
+        Return True
+    End Function
+
+    Function draw底楕円(ByVal item As clsImageItem) As Boolean
+        If item.m_groupRow Is Nothing Then
+            Return False
+        End If
+        'ひも番号1の色
+        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        Dim colset As CPenBrush = GetBandPenBrush(color)
+        If colset Is Nothing Then
+            Return False
+        End If
+        '周の線
+        If colset.PenLane IsNot Nothing Then
+            For Each line As S線分 In item.m_lineList
+                _Graphic.DrawLine(colset.PenBand, pixcel_point(line.p開始), pixcel_point(line.p終了))
+            Next
+        End If
+        '楕円弧
+        Dim centers() As PointF = pixcel_lines(item.m_a四隅)
+        Dim rx As Single = pixcel_width(item.m_lineList(3).p終了.X - item.m_a四隅.p右上.X)
+        Dim ry As Single = pixcel_height(item.m_lineList(0).p開始.Y - item.m_a四隅.p右上.Y)
+        '右上
+        _Graphic.DrawArc(colset.PenBand, centers(0).X - rx, centers(0).Y - ry, rx * 2, ry * 2, 270, 90)
+        '左上
+        _Graphic.DrawArc(colset.PenBand, centers(1).X - rx, centers(1).Y - ry, rx * 2, ry * 2, 180, 90)
+        '左下
+        _Graphic.DrawArc(colset.PenBand, centers(2).X - rx, centers(2).Y - ry, rx * 2, ry * 2, 90, 90)
+        '右下
+        _Graphic.DrawArc(colset.PenBand, centers(3).X - rx, centers(3).Y - ry, rx * 2, ry * 2, 0, 90)
+
+        '編みかた名
+        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
+            str += item.m_groupRow.GetNameValue("f_s編みかた名")
+            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+        End If
+
+        Return True
+    End Function
+
+    Function draw差しひも(ByVal item As clsImageItem) As Boolean
+        If item.m_groupRow Is Nothing Then
+            Return False
+        End If
+        'ひも番号1の色
+        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        Dim colset As CPenBrush = GetBandPenBrush(color)
+        If colset Is Nothing Then
+            Return False
+        End If
+        'ひもの領域
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillPolygon(colset.BrushAlfa, points)
+        End If
+        _Graphic.DrawLines(colset.PenBand, points)
+
+        '編みかた名
+        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
+            str += item.m_groupRow.GetNameValue("f_s編みかた名")
+            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+        End If
+
+        Return True
+    End Function
+
+    Function draw付属品(ByVal item As clsImageItem) As Boolean
+        If item.m_groupRow Is Nothing Then
+            Return False
+        End If
+        'ひも番号1の色
+        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        Dim colset As CPenBrush = GetBandPenBrush(color)
+        If colset Is Nothing Then
+            Return False
+        End If
+        '付属品の領域
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillPolygon(colset.BrushAlfa, points)
+        End If
+        _Graphic.DrawLines(colset.PenBand, points)
+        '付属品名
+        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
+            str += item.m_groupRow.GetNameValue("f_s付属品名")
+            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+        End If
+
         Return True
     End Function
 

@@ -43,6 +43,9 @@ Public Class clsImageData
     Sub setBasics(ByVal bandWidth As Double, ByVal basicColor As String)
         _BasicBandWidth = bandWidth
         _BasicColor = basicColor
+
+        '文字列領域計算用
+        clsImageItem.s_BasicFontSize = BasicBandWidth / 2 'CImageDraw._Fontのサイズ
     End Sub
 
     Sub MoveList(ByVal lst As clsImageItemList)

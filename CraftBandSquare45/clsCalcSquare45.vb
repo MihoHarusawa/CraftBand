@@ -384,16 +384,16 @@ Class clsCalcSquare45
             Case CalcCategory.NewData, CalcCategory.BsMaster
                 'データ変更/基本値/マスター/バンド選択
                 Clear()
-                ret = ret And set_目標寸法()
+                ret = ret And set_目標寸法(False)
                 ret = ret And set_四角数()
                 ret = ret And calc_側面(category, Nothing, Nothing)
                 ret = ret And calc_追加品(category, Nothing, Nothing)
 
             Case CalcCategory.Target    '目標寸法
-                ret = set_目標寸法()
+                ret = set_目標寸法(False)
 
             Case CalcCategory.BandWidth    '基本のひも幅
-                ret = set_目標寸法()
+                ret = set_目標寸法(False)
                 ret = ret And set_四角数()
 
             Case CalcCategory.Square '四角数・ひも間のすき間
@@ -424,7 +424,7 @@ Class clsCalcSquare45
 #Region "四角"
 
     '目標寸法の取得
-    Private Function set_目標寸法() As Boolean
+    Private Function set_目標寸法(ByVal needtarget As Boolean) As Boolean
 
         With _Data.p_row目標寸法
             _b内側区分 = .Value("f_b内側区分")
@@ -438,7 +438,7 @@ Class clsCalcSquare45
             _dひも幅の対角線 = _dひも幅の一辺 * ROOT2
         End With
 
-        Return isValidTarget()
+        Return isValidTarget(needtarget)
     End Function
 
     '四角数の取得
@@ -465,12 +465,15 @@ Class clsCalcSquare45
 #Region "概算"
 
     '有効な目標寸法がある
-    Public Function isValidTarget() As Boolean
-        If _d横_目標 <= 0 AndAlso _d縦_目標 <= 0 AndAlso _d高さ_目標 <= 0 Then
-            '目標とする縦寸法・横寸法・高さ寸法を設定してください。
-            p_sメッセージ = My.Resources.CalcNoTargetSet
-            Return False
+    Public Function isValidTarget(ByVal needtarget As Boolean) As Boolean
+        If needtarget Then
+            If _d横_目標 <= 0 AndAlso _d縦_目標 <= 0 AndAlso _d高さ_目標 <= 0 Then
+                '目標とする縦寸法・横寸法・高さ寸法を設定してください。
+                p_sメッセージ = My.Resources.CalcNoTargetSet
+                Return False
+            End If
         End If
+        '必須
         If _I基本のひも幅 <= 0 Then
             '基本のひも幅を設定してください。
             p_sメッセージ = My.Resources.CalcNoBaseBandSet
@@ -481,7 +484,12 @@ Class clsCalcSquare45
 
     '有効な入力がある
     Public Function IsValidInput() As Boolean
-        If _i横の四角数 <= 0 AndAlso _i縦の四角数 <= 0 AndAlso _d高さの四角数 <= 0 Then
+        If _i横の四角数 < 0 OrElse _i縦の四角数 < 0 OrElse _d高さの四角数 < 0 Then
+            '横の四角数・縦の四角数・高さの四角数をセットしてください。
+            p_sメッセージ = My.Resources.CalcNoSquareCountSet
+            Return False
+        End If
+        If _i横の四角数 = 0 OrElse _i縦の四角数 = 0 Then
             '横の四角数・縦の四角数・高さの四角数をセットしてください。
             p_sメッセージ = My.Resources.CalcNoSquareCountSet
             Return False
@@ -535,7 +543,7 @@ Class clsCalcSquare45
     End Function
 
     Private Function isCalcable() As Boolean
-        If Not set_目標寸法() Then
+        If Not set_目標寸法(True) Then
             Return False
         End If
 

@@ -492,7 +492,7 @@ Public Class clsDataTables
     Shared Function AddNumber(ByVal table As DataTable) As Integer
         Dim lastnum As Integer = LastNumber(table)
         If lastnum < 1 Then
-            Return 1
+            Return 1 '開始番号
         End If
         Return lastnum + 1
     End Function
@@ -591,6 +591,43 @@ Public Class clsDataTables
             g_clsLog.LogException(ex, "clsDataTables.NumberSubRecord")
             Return Nothing
         End Try
+    End Function
+
+    '空き番があれば詰める(#16)
+    Shared Function FillNumber(ByVal table As DataTable) As Boolean
+        Dim idxseq As Integer = 1 '開始番号
+        Try
+            Dim res = (From row As DataRow In table
+                       Select Idx = row("f_i番号")
+                       Order By Idx).Distinct
+
+            'レコード番号順
+            For Each idx As Integer In res
+                If idx = cHemNumber Then
+                    Return True
+                End If
+                If idx < idxseq Then
+                    'ないはず。詰められません
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.FillNumber BadNumber={0}", idx)
+                    Return False
+                ElseIf idxseq < idx Then
+                    '全サブレコード
+                    For Each row As DataRow In table.Select(String.Format("f_i番号 = {0}", idx))
+                        row("f_i番号") = idxseq
+                    Next row
+                Else
+                    '一致はOK
+                End If
+                '
+                idxseq += 1
+            Next idx
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "clsDataTables.FillNumber")
+            Return False
+        End Try
+
     End Function
 
 #End Region

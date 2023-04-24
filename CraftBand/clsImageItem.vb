@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Drawing
+Imports System.Text
 Imports CraftBand.clsDataTables
 Imports CraftBand.Tables.dstDataTables
 
@@ -24,9 +25,24 @@ Public Class clsImageItem
             Y = yy
         End Sub
 
+        ReadOnly Property IsZero() As Boolean
+            Get
+                Return X = 0 AndAlso Y = 0
+            End Get
+        End Property
+
         '左右反転
         Function VertLeft() As S実座標
             Return New S実座標(-X, Y)
+        End Function
+
+        '回転位置
+        Function Rotate(ByVal center As S実座標, ByVal angle As Double) As S実座標
+            Dim delta As New S差分(center, Me)
+            Return center + delta.Rotate(angle)
+        End Function
+        Function Rotate(ByVal angle As Double) As S実座標
+            Return Rotate(pOrigin, angle)
         End Function
 
         '単項-演算子(マイナス符号)
@@ -42,6 +58,16 @@ Public Class clsImageItem
         '二項*演算子 
         Shared Operator *(ByVal c1 As S実座標, ByVal c2const As Double) As S実座標
             Return New S実座標(c1.X * c2const, c1.Y * c2const)
+        End Operator
+
+        '比較演算子=
+        Shared Operator =(ByVal c1 As S実座標, ByVal c2 As S実座標) As Boolean
+            Return (c1.X = c2.X) AndAlso (c1.Y = c2.Y)
+        End Operator
+
+        '比較演算子<>
+        Shared Operator <>(ByVal c1 As S実座標, ByVal c2 As S実座標) As Boolean
+            Return Not (c1 = c2)
         End Operator
 
         Public Overrides Function ToString() As String
@@ -62,6 +88,14 @@ Public Class clsImageItem
             dX = way.X - base.X
             dY = way.Y - base.Y
         End Sub
+
+        '回転
+        Function Rotate(ByVal angle As Double) As S差分
+            Dim rad As Double = angle * System.Math.PI / 180
+            Dim x As Double = dX * System.Math.Cos(rad) - dY * System.Math.Sin(rad)
+            Dim y As Double = dX * System.Math.Sin(rad) + dY * System.Math.Cos(rad)
+            Return New S差分(x, y)
+        End Function
 
         '単項-演算子(マイナス符号)
         Shared Operator -(ByVal c As S差分) As S差分
@@ -90,6 +124,20 @@ Public Class clsImageItem
             p開始 = line.p開始 + delta
             p終了 = line.p終了 + delta
         End Sub
+
+        ReadOnly Property IsEmpty() As Boolean
+            Get
+                Return p開始.IsZero AndAlso p終了.IsZero
+            End Get
+        End Property
+
+        '回転
+        Function Rotate(ByVal center As S実座標, ByVal angle As Double) As S線分
+            Return New S線分(Me.p開始.Rotate(center, angle), Me.p終了.Rotate(center, angle))
+        End Function
+        Function Rotate(ByVal angle As Double) As S線分
+            Return Rotate(pOrigin, angle)
+        End Function
 
         '二項+演算子 
         Shared Operator +(ByVal c1 As S線分, ByVal delta As S差分) As S線分
@@ -160,6 +208,20 @@ Public Class clsImageItem
             pD = d
         End Sub
 
+        ReadOnly Property IsEmpty() As Boolean
+            Get
+                Return p左上.IsZero AndAlso p左下.IsZero AndAlso p右上.IsZero AndAlso p右下.IsZero
+            End Get
+        End Property
+
+        '回転
+        Function Rotate(ByVal center As S実座標, ByVal angle As Double) As S四隅
+            Return New S四隅(Me.pA.Rotate(center, angle), Me.pB.Rotate(center, angle), Me.pC.Rotate(center, angle), Me.pD.Rotate(center, angle))
+        End Function
+        Function Rotate(ByVal angle As Double) As S四隅
+            Return Rotate(pOrigin, angle)
+        End Function
+
         '二項*演算子 
         Shared Operator *(ByVal c1 As S四隅, ByVal c2const As Double) As S四隅
             Return New S四隅(c1.pA * c2const, c1.pB * c2const, c1.pC * c2const, c1.pD * c2const)
@@ -209,22 +271,22 @@ Public Class clsImageItem
 
         ReadOnly Property x最左 As Double
             Get
-                Return mdlUnit.Min(p左上.X, p左下.X)
+                Return mdlUnit.Min(p左上.X, p左下.X, p右上.X, p右下.X)
             End Get
         End Property
         ReadOnly Property x最右 As Double
             Get
-                Return mdlUnit.Max(p右上.X, p右下.X)
+                Return mdlUnit.Max(p右上.X, p右下.X, p左上.X, p左下.X)
             End Get
         End Property
         ReadOnly Property y最上 As Double
             Get
-                Return mdlUnit.Max(p左上.Y, p右上.Y)
+                Return mdlUnit.Max(p左上.Y, p右上.Y, p左下.Y, p右下.Y)
             End Get
         End Property
         ReadOnly Property y最下 As Double
             Get
-                Return mdlUnit.Min(p左下.Y, p右下.Y)
+                Return mdlUnit.Min(p左下.Y, p右下.Y, p左上.Y, p右上.Y)
             End Get
         End Property
         ReadOnly Property p中央 As S実座標
@@ -265,6 +327,12 @@ Public Class clsImageItem
             y最上 = mdlUnit.Max(p1.Y, p2.Y)
             y最下 = mdlUnit.Min(p1.Y, p2.Y)
         End Sub
+
+        ReadOnly Property IsEmpty() As Boolean
+            Get
+                Return p右上.IsZero AndAlso p左下.IsZero
+            End Get
+        End Property
 
         '原点の四方に描画の想定
         Sub Clear()
@@ -437,10 +505,10 @@ Public Class clsImageItem
                     l左上線 = c_l左上線 * dひも幅
                 Else
                     Dim rad As Double = -c_angle * System.Math.PI / 180
-                    a右上四角 = rotateArea(c_a右上四角, rad) * dひも幅
-                    a左上四角 = rotateArea(c_a左上四角, rad) * dひも幅
-                    l右上線 = rotateLine(c_l右上線, rad) * dひも幅
-                    l左上線 = rotateLine(c_l左上線, rad) * dひも幅
+                    a右上四角 = c_a右上四角.Rotate(-c_angle) * dひも幅
+                    a左上四角 = c_a左上四角.Rotate(-c_angle) * dひも幅
+                    l右上線 = c_l右上線.Rotate(-c_angle) * dひも幅
+                    l左上線 = c_l左上線.Rotate(-c_angle) * dひも幅
                 End If
             Else
                 If Not isgauge Then
@@ -450,10 +518,10 @@ Public Class clsImageItem
                     l左上線 = c_l左上線.VertLeft * dひも幅
                 Else
                     Dim rad As Double = c_angle * System.Math.PI / 180
-                    a右上四角 = rotateArea(c_a右上四角.VertLeft, rad) * dひも幅
-                    a左上四角 = rotateArea(c_a左上四角.VertLeft, rad) * dひも幅
-                    l右上線 = rotateLine(c_l右上線.VertLeft, rad) * dひも幅
-                    l左上線 = rotateLine(c_l左上線.VertLeft, rad) * dひも幅
+                    a右上四角 = c_a右上四角.VertLeft.Rotate(c_angle) * dひも幅
+                    a左上四角 = c_a左上四角.VertLeft.Rotate(c_angle) * dひも幅
+                    l右上線 = c_l右上線.VertLeft.Rotate(c_angle) * dひも幅
+                    l左上線 = c_l左上線.VertLeft.Rotate(c_angle) * dひも幅
                 End If
             End If
 
@@ -476,26 +544,6 @@ Public Class clsImageItem
             l右下線 = l右下線 + delta
         End Sub
 
-        Private Function rotatePoint(ByVal p As S実座標, ByVal rad As Double) As S実座標
-            Dim x As Double = p.X * System.Math.Cos(rad) - p.Y * System.Math.Sin(rad)
-            Dim y As Double = p.X * System.Math.Sin(rad) + p.Y * System.Math.Cos(rad)
-            Return New S実座標(x, y)
-        End Function
-
-        Private Function rotateLine(ByVal l As S線分, ByVal rad As Double) As S線分
-            Dim p開始 As S実座標 = rotatePoint(l.p開始, rad)
-            Dim p終了 As S実座標 = rotatePoint(l.p終了, rad)
-            Return New S線分(p開始, p終了)
-        End Function
-
-        Private Function rotateArea(ByVal p As S四隅, ByVal rad As Double) As S四隅
-            Dim pA As S実座標 = rotatePoint(p.pA, rad)
-            Dim pB As S実座標 = rotatePoint(p.pB, rad)
-            Dim pC As S実座標 = rotatePoint(p.pC, rad)
-            Dim pD As S実座標 = rotatePoint(p.pD, rad)
-            Return New S四隅(pA, pB, pC, pD)
-        End Function
-
     End Class
 
 
@@ -514,6 +562,7 @@ Public Class clsImageItem
     'レコード情報
     Public m_row縦横展開 As tbl縦横展開Row = Nothing 'バンド指定の時・コマの横
     Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
+    Public m_groupRow As clsGroupDataRow = Nothing 'Meshの側面,付属品
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
@@ -521,15 +570,16 @@ Public Class clsImageItem
     'ひもの配置
     Public m_dひも幅 As Double
     Public m_rひも位置 As S領域
-    Public m_bNoMark As Boolean = False
+    Public m_bNoMark As Boolean = False '記号なし
+    Public m_bPortion As Boolean = False '一部
 
     '線分リスト
     Public m_lineList As New C線分リスト
 
     '文字列配列
     Public m_aryString() As String
-    Public m_p位置 As S実座標
     Public m_sizeFont As Double
+    Dim _p文字位置 As S実座標
 
     '四つ畳み編みのコマ
     Public m_knot As CKnot = Nothing
@@ -539,29 +589,38 @@ Public Class clsImageItem
     Enum ImageTypeEnum
         _描画なし
 
-        _縦バンド   'p_row縦横展開,p_a四隅,p_rひも位置
-        _横バンド   'p_row縦横展開,p_a四隅,p_rひも位置
+        _縦バンド   'm_row縦横展開,m_a四隅,m_rひも位置
+        _横バンド   'm_row縦横展開,m_a四隅,m_rひも位置
 
-        _コマ     'p_row縦横展開,p_row縦横展開2,m_p中心,m_rひも位置,m_knot
+        _コマ     'm_row縦横展開,m_row縦横展開2,m_p中心,m_rひも位置,m_knot
+        _編みかた   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
+        _付属品   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
 
-        _底枠     'p_a四隅,p_listLine
-        _横の側面   'p_a四隅,p_listLine
-        _縦の側面   'p_a四隅,p_listLine
-        _全体枠    'p_a四隅
+        _底枠     'm_a四隅,m_lineList
+        _横の側面   'm_a四隅,m_lineList
+        _縦の側面   'm_a四隅,m_lineList
+        _四隅領域 'm_a四隅,m_lineList
+        _全体枠    'm_a四隅
 
-        _底の中央線  'p_listLine
+        _底楕円    'm_a四隅,m_lineList,m_p位置,m_rひも位置
+        _差しひも    'm_a四隅,m_p位置,m_rひも位置
+
+        _底の中央線  'm_listLine
 
         _折り返し線 'm_rひも位置
 
-        _文字列 'p_listLine
+        _文字列 'm_p位置,m_rひも位置
 
-        _横軸線 'p_listLine
-        _縦軸線 'p_listLine
+        _横軸線 'm_listLine
+        _縦軸線 'm_listLine
     End Enum
     '
     Public m_ImageType As ImageTypeEnum = ImageTypeEnum._描画なし
     Public m_Index As Integer = 0
     Public m_Index2 As Integer = 0
+
+    '基本のフォントサイズ(実サイズベースの計算用)
+    Friend Shared s_BasicFontSize As Double
 
 
     Sub New(ByVal imageType As ImageTypeEnum, ByVal idx As Integer, Optional ByVal idx2 As Integer = 0)
@@ -585,8 +644,11 @@ Public Class clsImageItem
                 m_ImageType = ImageTypeEnum._縦バンド
             ElseIf m_row縦横展開.f_iひも種 = enumひも種.i_側面 Then
                 m_ImageType = ImageTypeEnum._横バンド '横向きに描く
+            ElseIf (m_row縦横展開.f_iひも種 And enumひも種.i_横) Then
+                'Meshの場合
+                m_ImageType = ImageTypeEnum._横バンド
             Else
-                '斜めは描画対象外
+                '他は描画対象外
             End If
             Return True
         Else
@@ -622,27 +684,82 @@ Public Class clsImageItem
 
     End Sub
 
+    '編みかた・付属品・差しひも・底楕円
+    Sub New(ByVal imageType As ImageTypeEnum, ByVal rows As clsGroupDataRow, ByVal idx2 As Integer)
+        m_ImageType = imageType
+        m_groupRow = rows
+        m_Index2 = idx2
+        If m_groupRow IsNot Nothing Then
+            m_Index = m_groupRow.GetNameValue("f_i番号") '一致項目
+        End If
+    End Sub
+
     '文字列
-    Sub New(ByVal p As S実座標, ByVal arystr() As String, ByVal size As Double, ByVal idx As Integer)
+    Sub New(ByVal p As S実座標, ByVal arystr() As String, ByVal siz As Double, ByVal idx As Integer)
         m_ImageType = ImageTypeEnum._文字列
         m_Index = idx
-        m_p位置 = p
-        m_sizeFont = size
+        m_sizeFont = siz
         m_aryString = arystr
         If arystr Is Nothing Then
             Return
         End If
 
         'm_rひも位置におおよその領域をセット
-        Dim chars As Integer = 0
-        Dim line As Integer = 0
-        For Each Str As String In arystr
-            chars = mdlUnit.Max(chars, Len(Str))
-            line += 1
-        Next
-        Dim delta As New S差分(chars * size, line * size * 2)
-        m_rひも位置 = New S領域(m_p位置, m_p位置 + delta)
+        p_p文字位置 = p
+
     End Sub
+
+    '文字位置
+    Public Property p_p文字位置 As S実座標
+        Get
+            Return _p文字位置
+        End Get
+        Set(value As S実座標)
+            _p文字位置 = value
+
+            'm_rひも位置におおよその領域をセット
+            Dim chars As Integer = 0
+            Dim line As Integer = 0
+            Dim siz As Double = s_BasicFontSize
+            If Not p_p文字位置.IsZero Then
+                Select Case m_ImageType
+                    Case ImageTypeEnum._編みかた
+                        If m_groupRow IsNot Nothing Then
+                            chars = Len(m_groupRow.GetIndexNameValue(1, "f_s編みかた名"))
+                            chars += m_groupRow.Count '記号数
+                            line = 1
+                        End If
+                    Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも
+                        If m_groupRow IsNot Nothing Then
+                            chars = Len(m_groupRow.GetNameValue("f_s編みかた名")) '差しひもは0
+                            chars += 1 '記号1点
+                            line = 1
+                        End If
+                    Case ImageTypeEnum._付属品
+                        If m_groupRow IsNot Nothing Then
+                            chars = Len(m_groupRow.GetIndexNameValue(1, "f_s付属品名"))
+                            chars += m_groupRow.Count '記号数
+                            line = 1
+                        End If
+                    Case ImageTypeEnum._文字列
+                        If m_aryString IsNot Nothing Then
+                            For Each Str As String In m_aryString
+                                chars = mdlUnit.Max(chars, Len(Str))
+                                line += 1
+                            Next
+                            If 0 < m_sizeFont Then
+                                siz = m_sizeFont
+                            End If
+                        End If
+                End Select
+
+                If 0 < line AndAlso 0 < chars Then
+                    Dim delta As New S差分(chars * siz, line * siz * 2)
+                    m_rひも位置 = New S領域(p_p文字位置, p_p文字位置 + delta)
+                End If
+            End If
+        End Set
+    End Property
 
 
     Public Function Get描画領域() As S領域
@@ -666,13 +783,23 @@ Public Class clsImageItem
                 r描画領域 = m_rひも位置
                 '他は領域内
 
+            Case ImageTypeEnum._編みかた, ImageTypeEnum._付属品
+                r描画領域 = m_a四隅.r外接領域
+                r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
+                r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
+
             Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠
                 r描画領域 = m_a四隅.r外接領域
-                r描画領域.get拡大領域(m_lineList.Get描画領域())
+                r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面
+            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
                 r描画領域 = m_a四隅.r外接領域
-                r描画領域.get拡大領域(m_lineList.Get描画領域())
+                r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
+
+            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも
+                r描画領域 = m_a四隅.r外接領域
+                r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
+                r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._底の中央線
                 r描画領域 = m_lineList.Get描画領域()
@@ -702,6 +829,34 @@ Public Class clsImageItem
         End If
         Return m_Index2.CompareTo(other.m_Index2)
     End Function
+
+    '位置番号順: 描画タイプ > row.f_i位置番号
+    Public Shared Function CompareByPosition(left As clsImageItem, right As clsImageItem) As Integer
+        If left.m_ImageType.CompareTo(right.m_ImageType) <> 0 Then
+            Return left.m_ImageType.CompareTo(right.m_ImageType)
+        End If
+        If left.m_row縦横展開 Is Nothing Then
+            If right.m_row縦横展開 Is Nothing Then
+                'ともになければIndex順
+                If left.m_Index.CompareTo(right.m_Index) <> 0 Then
+                    Return left.m_Index.CompareTo(right.m_Index)
+                End If
+                Return left.m_Index2.CompareTo(right.m_Index2)
+            Else
+                Return 1
+            End If
+
+        Else
+            If right.m_row縦横展開 Is Nothing Then
+                Return 0
+            Else
+                'ともにある
+                Return left.m_row縦横展開.f_i位置番号.CompareTo(right.m_row縦横展開.f_i位置番号)
+            End If
+
+        End If
+    End Function
+
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
@@ -786,6 +941,11 @@ Public Class clsImageItemList
             Return Nothing
         End If
     End Function
+
+    '位置順にソート
+    Sub SortByPosition()
+        Me.Sort(AddressOf clsImageItem.CompareByPosition)
+    End Sub
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder

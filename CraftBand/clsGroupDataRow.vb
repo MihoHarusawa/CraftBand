@@ -130,6 +130,40 @@ Public Class clsGroupDataRow
         Return kv.Value.Value(name)
     End Function
 
+    '指定名のフィールドの最大値を返す
+    Function GetNameValueMax(ByVal name As String) As Object
+        If Me.Count = 0 Then
+            Return Nothing
+        End If
+        Dim val As Object = Nothing
+        For Each drow As clsDataRow In _map.Values
+            If val Is Nothing Then
+                val = drow.Value(name)
+            Else
+                If val < drow.Value(name) Then
+                    val = drow.Value(name)
+                End If
+            End If
+        Next
+        Return val
+    End Function
+
+    '指定名のフィールドの合計値を返す
+    Function GetNameValueSum(ByVal name As String) As Object
+        If Me.Count = 0 Then
+            Return Nothing
+        End If
+        Dim sum As Object = Nothing
+        For Each drow As clsDataRow In _map.Values
+            If sum Is Nothing Then
+                sum = drow.Value(name)
+            Else
+                sum += drow.Value(name)
+            End If
+        Next
+        Return sum
+    End Function
+
     '指定名のフィールド値をセットする(全レコード同じ)
     Function SetNameValue(ByVal name As String, ByVal value As Object) As Boolean
         For Each drow As clsDataRow In _map.Values

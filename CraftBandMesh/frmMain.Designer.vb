@@ -138,6 +138,8 @@ Partial Class frmMain
         Me.txt内側_最小縦 = New System.Windows.Forms.TextBox()
         Me.txt内側_最小横 = New System.Windows.Forms.TextBox()
         Me.btn横寸法に合わせる = New System.Windows.Forms.Button()
+        Me.btn画像ファイル = New System.Windows.Forms.Button()
+        Me.btnブラウザ = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -332,6 +334,8 @@ Partial Class frmMain
         Me.f_s色5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.f_sメモ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.BindingSource底の縦 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.tpageプレビュー = New System.Windows.Forms.TabPage()
+        Me.picプレビュー = New System.Windows.Forms.PictureBox()
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl内側 = New System.Windows.Forms.Label()
         Me.lbl計算寸法 = New System.Windows.Forms.Label()
@@ -402,6 +406,8 @@ Partial Class frmMain
         Me.tpage底の縦.SuspendLayout()
         CType(Me.dgv底の縦, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource底の縦, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpageプレビュー.SuspendLayout()
+        CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -1119,6 +1125,28 @@ Partial Class frmMain
         Me.ToolTip1.SetToolTip(Me.btn横寸法に合わせる, "ひとつのすき間の寸法を目標の横寸法になるよう調整する")
         Me.btn横寸法に合わせる.UseVisualStyleBackColor = True
         '
+        'btn画像ファイル
+        '
+        Me.btn画像ファイル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn画像ファイル.Location = New System.Drawing.Point(607, 361)
+        Me.btn画像ファイル.Name = "btn画像ファイル"
+        Me.btn画像ファイル.Size = New System.Drawing.Size(111, 46)
+        Me.btn画像ファイル.TabIndex = 2
+        Me.btn画像ファイル.Text = "画像ファイル(&I)"
+        Me.ToolTip1.SetToolTip(Me.btn画像ファイル, "生成した画像ファイルを開きます")
+        Me.btn画像ファイル.UseVisualStyleBackColor = True
+        '
+        'btnブラウザ
+        '
+        Me.btnブラウザ.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnブラウザ.Location = New System.Drawing.Point(724, 361)
+        Me.btnブラウザ.Name = "btnブラウザ"
+        Me.btnブラウザ.Size = New System.Drawing.Size(111, 46)
+        Me.btnブラウザ.TabIndex = 3
+        Me.btnブラウザ.Text = "ブラウザ(&B)"
+        Me.ToolTip1.SetToolTip(Me.btnブラウザ, "生成した画像ファイルをブラウザで開きます")
+        Me.btnブラウザ.UseVisualStyleBackColor = True
+        '
         'MenuStrip1
         '
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
@@ -1335,6 +1363,7 @@ Partial Class frmMain
         Me.TabControl.Controls.Add(Me.tpageメモ他)
         Me.TabControl.Controls.Add(Me.tpage底の横)
         Me.TabControl.Controls.Add(Me.tpage底の縦)
+        Me.TabControl.Controls.Add(Me.tpageプレビュー)
         Me.TabControl.Location = New System.Drawing.Point(19, 171)
         Me.TabControl.Name = "TabControl"
         Me.TabControl.SelectedIndex = 0
@@ -1851,6 +1880,7 @@ Partial Class frmMain
         Me.f_b次周連続区分1.HeaderText = "次周連続"
         Me.f_b次周連続区分1.MinimumWidth = 6
         Me.f_b次周連続区分1.Name = "f_b次周連続区分1"
+        Me.f_b次周連続区分1.ToolTipText = "次の編みかたにひもをつなげる場合True"
         Me.f_b次周連続区分1.Width = 70
         '
         'f_d円弧部分長1
@@ -1865,7 +1895,7 @@ Partial Class frmMain
         Me.f_d円弧部分長1.Name = "f_d円弧部分長1"
         Me.f_d円弧部分長1.ReadOnly = True
         Me.f_d円弧部分長1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d円弧部分長1.Visible = False
+        Me.f_d円弧部分長1.ToolTipText = "4隅の角、円弧部分の長さ"
         Me.f_d円弧部分長1.Width = 107
         '
         'f_d径の累計1
@@ -1892,8 +1922,9 @@ Partial Class frmMain
         Me.f_d差しひも間のすき間1.HeaderText = "差しひも間のすき間"
         Me.f_d差しひも間のすき間1.MinimumWidth = 6
         Me.f_d差しひも間のすき間1.Name = "f_d差しひも間のすき間1"
+        Me.f_d差しひも間のすき間1.ReadOnly = True
         Me.f_d差しひも間のすき間1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d差しひも間のすき間1.Visible = False
+        Me.f_d差しひも間のすき間1.ToolTipText = "円弧部分長から差しひもの幅をマイナスした値"
         Me.f_d差しひも間のすき間1.Width = 125
         '
         'f_d径1
@@ -3151,6 +3182,31 @@ Partial Class frmMain
         Me.BindingSource底の縦.DataMember = "tbl縦横展開"
         Me.BindingSource底の縦.DataSource = GetType(CraftBand.Tables.dstDataTables)
         '
+        'tpageプレビュー
+        '
+        Me.tpageプレビュー.Controls.Add(Me.btn画像ファイル)
+        Me.tpageプレビュー.Controls.Add(Me.btnブラウザ)
+        Me.tpageプレビュー.Controls.Add(Me.picプレビュー)
+        Me.tpageプレビュー.Location = New System.Drawing.Point(4, 29)
+        Me.tpageプレビュー.Name = "tpageプレビュー"
+        Me.tpageプレビュー.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpageプレビュー.Size = New System.Drawing.Size(840, 413)
+        Me.tpageプレビュー.TabIndex = 7
+        Me.tpageプレビュー.Text = "プレビュー"
+        Me.tpageプレビュー.UseVisualStyleBackColor = True
+        '
+        'picプレビュー
+        '
+        Me.picプレビュー.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.picプレビュー.Location = New System.Drawing.Point(6, 6)
+        Me.picプレビュー.Name = "picプレビュー"
+        Me.picプレビュー.Size = New System.Drawing.Size(828, 349)
+        Me.picプレビュー.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picプレビュー.TabIndex = 1
+        Me.picプレビュー.TabStop = False
+        '
         'f_i段数2
         '
         Me.f_i段数2.DataPropertyName = "f_i段数"
@@ -3540,6 +3596,8 @@ Partial Class frmMain
         Me.tpage底の縦.PerformLayout()
         CType(Me.dgv底の縦, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.BindingSource底の縦, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpageプレビュー.ResumeLayout(False)
+        CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -3776,31 +3834,6 @@ Partial Class frmMain
     Friend WithEvents f_d出力ひも長5 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色5 As DataGridViewComboBoxColumn
     Friend WithEvents f_sメモ5 As DataGridViewTextBoxColumn
-    Friend WithEvents f_i番号1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_b差しひも区分1 As DataGridViewCheckBoxColumn
-    Friend WithEvents f_i差しひも本数1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_s編みかた名1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_s編みひも名1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_iひも番号1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_i何本幅1 As DataGridViewComboBoxColumn
-    Friend WithEvents f_i周数1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_s色1 As DataGridViewComboBoxColumn
-    Friend WithEvents f_i段数1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_b周連続区分1 As DataGridViewCheckBoxColumn
-    Friend WithEvents f_b次周連続区分1 As DataGridViewCheckBoxColumn
-    Friend WithEvents f_d円弧部分長1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_d径の累計1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_d差しひも間のすき間1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_d径1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_d周長1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_dひも長1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_dひも長加算1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_d連続ひも長1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_iひも本数1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_i差しひも累計1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
-    Friend WithEvents f_bError1 As DataGridViewCheckBoxColumn
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
@@ -3840,4 +3873,33 @@ Partial Class frmMain
     Friend WithEvents f_sメモ3 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError3 As DataGridViewCheckBoxColumn
     Friend WithEvents btn横寸法に合わせる As Button
+    Friend WithEvents tpageプレビュー As TabPage
+    Friend WithEvents picプレビュー As PictureBox
+    Friend WithEvents btn画像ファイル As Button
+    Friend WithEvents btnブラウザ As Button
+    Friend WithEvents f_i番号1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b差しひも区分1 As DataGridViewCheckBoxColumn
+    Friend WithEvents f_i差しひも本数1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s編みかた名1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s編みひも名1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_iひも番号1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i何本幅1 As DataGridViewComboBoxColumn
+    Friend WithEvents f_i周数1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s色1 As DataGridViewComboBoxColumn
+    Friend WithEvents f_i段数1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b周連続区分1 As DataGridViewCheckBoxColumn
+    Friend WithEvents f_b次周連続区分1 As DataGridViewCheckBoxColumn
+    Friend WithEvents f_d円弧部分長1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d径の累計1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d差しひも間のすき間1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d径1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d周長1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_dひも長加算1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_d連続ひも長1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_iひも本数1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i差しひも累計1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_bError1 As DataGridViewCheckBoxColumn
 End Class
