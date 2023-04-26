@@ -38,7 +38,7 @@ Partial Class frmBandType
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.dgvData = New System.Windows.Forms.DataGridView()
+        Me.dgvData = New ctrDataGridView()
         Me.f_sバンドの種類名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i本幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dバンド幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -382,7 +382,7 @@ Partial Class frmBandType
 
     End Sub
 
-    Friend WithEvents dgvData As DataGridView
+    Friend WithEvents dgvData As ctrDataGridView
     Friend WithEvents Fsバンドの種類名DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Fi本幅DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Fdバンド幅DataGridViewTextBoxColumn As DataGridViewTextBoxColumn

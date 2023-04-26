@@ -1,4 +1,7 @@
-﻿Public Class clsDataRow
+﻿''' <summary>
+''' DataRowのラッパー, 使用する型を限定
+''' </summary>
+Public Class clsDataRow
     Implements IEquatable(Of clsDataRow)
     Implements IEquatable(Of DataRow)
     Implements IEnumerable
@@ -117,7 +120,6 @@
         End Get
     End Property
 
-
     Public ReadOnly Property HasValue(ByVal name As String) As Boolean
         Get
             If String.IsNullOrWhiteSpace(name) OrElse Not IsValid Then
@@ -148,6 +150,73 @@
             End If
         End Get
     End Property
+
+    'デフォルト値を返す
+    Public ReadOnly Property DefaultValue(ByVal name As String) As Object
+        Get
+            If Not IsValid Then
+                Return Nothing 'Never
+            End If
+            If Not String.IsNullOrWhiteSpace(name) AndAlso _DataRow.Table.Columns.Contains(name) Then
+                Dim col As DataColumn = _DataRow.Table.Columns(name)
+                Return col.DefaultValue
+            Else
+                'DBフィールドではない
+                Return Nothing
+            End If
+        End Get
+    End Property
+
+    '文字列を有効な値にして返す
+    Public Function ValidValue(ByVal name As String, ByVal value As String) As Object
+        If Not IsValid Then
+            Return Nothing 'Never
+        End If
+        If Not String.IsNullOrWhiteSpace(name) AndAlso _DataRow.Table.Columns.Contains(name) Then
+            Dim col As DataColumn = _DataRow.Table.Columns(name)
+            Select Case col.DataType.ToString
+                Case "System.String"
+                    Return value
+                Case "System.Int16"
+                    Dim obj As Int16
+                    If Int16.TryParse(value, obj) Then
+                        Return obj
+                    Else
+                        Return col.DefaultValue
+                    End If
+                Case "System.Int32"
+                    Dim obj As Int32
+                    If Int32.TryParse(value, obj) Then
+                        Return obj
+                    Else
+                        Return col.DefaultValue
+                    End If
+                Case "System.Double"
+                    Dim obj As Double
+                    If Double.TryParse(value, obj) Then
+                        Return obj
+                    Else
+                        Return col.DefaultValue
+                    End If
+                Case "System.Boolean"
+                    Dim obj As Boolean
+                    If Boolean.TryParse(value, obj) Then
+                        Return obj
+                    Else
+                        Return col.DefaultValue
+                    End If
+                Case Else
+                    '未定義のDataType
+                    g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_DataType", _DataRow.Table.TableName, name, col.DataType)
+                    Return DBNull.Value
+            End Select
+
+        Else
+            'DBフィールドではない
+            Return Nothing
+        End If
+
+    End Function
 
     '初期値に戻す
     Public Sub SetDefaultAll()

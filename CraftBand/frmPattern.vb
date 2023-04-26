@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Windows.Forms
+Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstMasterTables
 
 ''' <summary>
@@ -11,8 +12,17 @@ Public Class frmPattern
     Dim _NameColumnIndex As Integer = -1
     Dim _SubNameHeaderText As String = Nothing
 
+    Dim _MyProfile As New CDataGridViewProfile(
+            (New tbl編みかたDataTable),
+            Nothing,
+            enumAction._RowHeight_iひも番号_BackColor Or enumAction._CheckBoxGray_iひも番号
+            )
+
     Private Sub frmPattern_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        dgvData.RowTemplate.Height = cRowHeightIdxOne
+        _MyProfile.FormCaption = Me.Text
+        dgvData.SetProfile(_MyProfile)
+
+        'dgvData.RowTemplate.Height = cRowHeightIdxOne
         If g_clsLog.Level = clsLog.LogLevel.Debug Then
             Me.f_s編みかた名.ReadOnly = False
             Me.f_iひも番号.ReadOnly = False
@@ -48,7 +58,7 @@ Public Class frmPattern
         End If
         Dim colwid As String = Nothing
         If __paras.GetLastData("frmPatternGrid", colwid) Then
-            SetColumnWidthFromString(Me.dgvData, colwid)
+            Me.dgvData.SetColumnWidthFromString(colwid)
         End If
     End Sub
 
@@ -63,21 +73,21 @@ Public Class frmPattern
     End Sub
 
     Private Sub frmPattern_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        __paras.SetLastData("frmPatternGrid", GetColumnWidthString(Me.dgvData))
+        __paras.SetLastData("frmPatternGrid", Me.dgvData.GetColumnWidthString())
         __paras.SetLastData("frmPatternSize", Me.Size)
     End Sub
 
-    Private Sub dgvData_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvData.DataError
-        dgv_DataErrorCancel(sender, e, Me.Text)
-    End Sub
+    'Private Sub dgvData_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvData.DataError
+    '    dgv_DataErrorCancel(sender, e, Me.Text)
+    'End Sub
 
-    Private Sub dgvData_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
-        dgv_CellValidating(sender, e, Me.Text)
-    End Sub
+    'Private Sub dgvData_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
+    '    dgv_CellValidating(sender, e, Me.Text)
+    'End Sub
 
-    Private Sub dgvData_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
-        dgv_CellFormatting(sender, e)
-    End Sub
+    'Private Sub dgvData_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
+    '    dgv_CellFormatting(sender, e)
+    'End Sub
 
     Private Sub dgvData_CurrentCellChanged(sender As Object, e As EventArgs) Handles dgvData.CurrentCellChanged
         If dgvData.CurrentRow IsNot Nothing AndAlso 0 <= dgvData.CurrentRow.Index Then
@@ -85,9 +95,9 @@ Public Class frmPattern
         End If
     End Sub
 
-    Private Sub dgvData_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvData.CellPainting
-        dgvData_CellPaintingCheckBox(sender, e)
-    End Sub
+    'Private Sub dgvData_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvData.CellPainting
+    '    dgvData_CellPaintingCheckBox(sender, e)
+    'End Sub
 
     Private Sub btnひも追加_Click(sender As Object, e As EventArgs) Handles btnひも追加.Click
         If String.IsNullOrWhiteSpace(txt編みかた名.Text) Then

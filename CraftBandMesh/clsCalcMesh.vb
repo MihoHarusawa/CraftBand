@@ -1808,7 +1808,7 @@ Class clsCalcMesh
     Dim _dPortionOver As Double = New Length(1, "cm").Value '省略部分の長さ
 
 
-    '横ひもリストの出力情報
+    '横ひもリストの描画情報
     Private Function imageList横ひも() As Boolean
         If _ImageList横ひも Is Nothing Then
             Return False
@@ -1842,6 +1842,8 @@ Class clsCalcMesh
 
                 Case Else
                     '補強ひもは描画しない
+                    band.m_bNoMark = True
+                    Continue For
             End Select
             '
             p縦横の左上 = p縦横の左上 + bandwidth + Unit270 * d横ひも間のすき間
@@ -1851,7 +1853,7 @@ Class clsCalcMesh
         Return True
     End Function
 
-    '縦ひもリストの出力情報
+    '縦ひもリストの描画情報
     Private Function imageList縦ひも() As Boolean
         If _ImageList縦ひも Is Nothing Then
             Return False

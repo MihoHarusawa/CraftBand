@@ -27,7 +27,7 @@ Partial Class frmColor
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.BindingSource描画色 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.dgvData = New System.Windows.Forms.DataGridView()
+        Me.dgvData = New ctrDataGridView()
         Me.Fs色DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi赤DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi緑DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -195,7 +195,7 @@ Partial Class frmColor
     End Sub
 
     Friend WithEvents BindingSource描画色 As Windows.Forms.BindingSource
-    Friend WithEvents dgvData As Windows.Forms.DataGridView
+    Friend WithEvents dgvData As ctrDataGridView
     Friend WithEvents btnキャンセル As Windows.Forms.Button
     Friend WithEvents btnOK As Windows.Forms.Button
     Friend WithEvents 表示 As Windows.Forms.DataGridViewTextBoxColumn

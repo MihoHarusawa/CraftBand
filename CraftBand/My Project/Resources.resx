@@ -180,16 +180,16 @@
     <comment>frmGauge</comment>
   </data>
   <data name="ErrGridData" xml:space="preserve">
-    <value>{0}行目{1}値のデータエラー{2}{3}</value>
-    <comment>mdlGrid</comment>
+    <value>{0}行目&lt;{1}&gt; データエラー{2}{3}</value>
+    <comment>ctrDataGridView</comment>
   </data>
-  <data name="ErrGridMaximumValue" xml:space="preserve">
-    <value>{0}行目{1}値には{2}以下の数値を設定してください。</value>
-    <comment>frmColor</comment>
+  <data name="ErrGridLine" xml:space="preserve">
+    <value>{0}行目&lt;{1}&gt; {2}</value>
+    <comment>ctrDataGridView</comment>
   </data>
-  <data name="ErrGridMinimumValue" xml:space="preserve">
-    <value>{0}行目{1}値には{2}以上の数値を設定してください。</value>
-    <comment>mdlGrid</comment>
+  <data name="ErrGridTitle" xml:space="preserve">
+    <value>グリッドの警告</value>
+    <comment>ctrDataGridView</comment>
   </data>
   <data name="ErrHtmlFile" xml:space="preserve">
     <value>'{0}'ページを作成できませんでした。</value>
@@ -218,6 +218,14 @@
   <data name="ErrMasterTableFileCancel" xml:space="preserve">
     <value>設定データを保存するファイルが指定されませんでした。</value>
     <comment>mdlDllMain</comment>
+  </data>
+  <data name="ErrMsgTooLarge" xml:space="preserve">
+    <value>{0}以下の数値を設定してください。</value>
+    <comment>frmColor</comment>
+  </data>
+  <data name="ErrMsgTooSmall" xml:space="preserve">
+    <value>{0}以上の数値を設定してください。</value>
+    <comment>frmBandType</comment>
   </data>
   <data name="ErrNoGifFile" xml:space="preserve">
     <value>画像ファイルが作られていません。</value>

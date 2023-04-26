@@ -38,7 +38,7 @@ Partial Class frmPattern
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.dgvData = New System.Windows.Forms.DataGridView()
+        Me.dgvData = New ctrDataGridView()
         Me.f_s編みかた名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_iひも番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みひも名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -444,7 +444,7 @@ Partial Class frmPattern
 
     End Sub
 
-    Friend WithEvents dgvData As DataGridView
+    Friend WithEvents dgvData As ctrDataGridView
     Friend WithEvents lbl設定時の寸法単位 As Label
     Friend WithEvents lbl単位 As Label
     Friend WithEvents btnキャンセル As Button

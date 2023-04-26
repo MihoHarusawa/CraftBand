@@ -205,7 +205,7 @@ Partial Class frmMain
         Me.btn下へ_底楕円 = New System.Windows.Forms.Button()
         Me.btn上へ_底楕円 = New System.Windows.Forms.Button()
         Me.cmb編みかた名_底楕円 = New System.Windows.Forms.ComboBox()
-        Me.dgv底楕円 = New System.Windows.Forms.DataGridView()
+        Me.dgv底楕円 = New CraftBand.ctrDataGridView()
         Me.f_i番号1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_b差しひも区分1 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_i差しひも本数1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -243,7 +243,7 @@ Partial Class frmMain
         Me.btn下へ_側面 = New System.Windows.Forms.Button()
         Me.btn上へ_側面 = New System.Windows.Forms.Button()
         Me.cmb編みかた名_側面 = New System.Windows.Forms.ComboBox()
-        Me.dgv側面 = New System.Windows.Forms.DataGridView()
+        Me.dgv側面 = New CraftBand.ctrDataGridView()
         Me.f_i番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みかた名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みひも名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -278,7 +278,7 @@ Partial Class frmMain
         Me.btn下へ_追加品 = New System.Windows.Forms.Button()
         Me.btn上へ_追加品 = New System.Windows.Forms.Button()
         Me.cmb付属品名 = New System.Windows.Forms.ComboBox()
-        Me.dgv追加品 = New System.Windows.Forms.DataGridView()
+        Me.dgv追加品 = New CraftBand.ctrDataGridView()
         Me.f_i番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品ひも名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -303,7 +303,7 @@ Partial Class frmMain
         Me.tpage底の横 = New System.Windows.Forms.TabPage()
         Me.btnリセット_横 = New System.Windows.Forms.Button()
         Me.lbl上から順に下へ = New System.Windows.Forms.Label()
-        Me.dgv底の横 = New System.Windows.Forms.DataGridView()
+        Me.dgv底の横 = New CraftBand.ctrDataGridView()
         Me.f_iひも種4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i位置番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも名4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -320,7 +320,7 @@ Partial Class frmMain
         Me.tpage底の縦 = New System.Windows.Forms.TabPage()
         Me.btnリセット_縦 = New System.Windows.Forms.Button()
         Me.lbl左から順に右へ = New System.Windows.Forms.Label()
-        Me.dgv底の縦 = New System.Windows.Forms.DataGridView()
+        Me.dgv底の縦 = New CraftBand.ctrDataGridView()
         Me.f_iひも種5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i位置番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも名5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -3664,9 +3664,9 @@ Partial Class frmMain
     Friend WithEvents lbl長い横ひもの本数 As Label
     Friend WithEvents nud長い横ひもの本数 As NumericUpDown
     Friend WithEvents tpage底楕円 As TabPage
-    Friend WithEvents dgv底楕円 As DataGridView
+    Friend WithEvents dgv底楕円 As CraftBand.ctrDataGridView
     Friend WithEvents tpage側面 As TabPage
-    Friend WithEvents dgv側面 As DataGridView
+    Friend WithEvents dgv側面 As CraftBand.ctrDataGridView
     Friend WithEvents lbl内側 As Label
     Friend WithEvents txt内側_横 As TextBox
     Friend WithEvents lbl計算寸法 As Label
@@ -3726,7 +3726,7 @@ Partial Class frmMain
     Friend WithEvents Fd対底周囲比率DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents rad上から下へ As RadioButton
     Friend WithEvents rad下から上へ As RadioButton
-    Friend WithEvents dgv追加品 As DataGridView
+    Friend WithEvents dgv追加品 As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource底_楕円 As BindingSource
     Friend WithEvents BindingSource追加品 As BindingSource
     Friend WithEvents lbl周数_側面 As Label
@@ -3809,9 +3809,9 @@ Partial Class frmMain
     Friend WithEvents tpage底の横 As TabPage
     Friend WithEvents tpage底の縦 As TabPage
     Friend WithEvents chk縦横を展開する As CheckBox
-    Friend WithEvents dgv底の横 As DataGridView
+    Friend WithEvents dgv底の横 As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource底の横 As BindingSource
-    Friend WithEvents dgv底の縦 As DataGridView
+    Friend WithEvents dgv底の縦 As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource底の縦 As BindingSource
     Friend WithEvents lbl上から順に下へ As Label
     Friend WithEvents lbl左から順に右へ As Label

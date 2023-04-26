@@ -164,7 +164,7 @@ Partial Class frmMain
         Me.btn削除_側面 = New System.Windows.Forms.Button()
         Me.btn追加_側面 = New System.Windows.Forms.Button()
         Me.cmb編みかた名_側面 = New System.Windows.Forms.ComboBox()
-        Me.dgv縁の始末 = New System.Windows.Forms.DataGridView()
+        Me.dgv縁の始末 = New CraftBand.ctrDataGridView()
         Me.f_i番号2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みかた名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みひも名2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -199,7 +199,7 @@ Partial Class frmMain
         Me.btn下へ_追加品 = New System.Windows.Forms.Button()
         Me.btn上へ_追加品 = New System.Windows.Forms.Button()
         Me.cmb付属品名 = New System.Windows.Forms.ComboBox()
-        Me.dgv追加品 = New System.Windows.Forms.DataGridView()
+        Me.dgv追加品 = New CraftBand.ctrDataGridView()
         Me.f_i番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品ひも名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -222,7 +222,7 @@ Partial Class frmMain
         Me.tpage横ひも = New System.Windows.Forms.TabPage()
         Me.btnリセット_横 = New System.Windows.Forms.Button()
         Me.lbl上から順に下へ = New System.Windows.Forms.Label()
-        Me.dgv横ひも = New System.Windows.Forms.DataGridView()
+        Me.dgv横ひも = New CraftBand.ctrDataGridView()
         Me.f_iひも種4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i位置番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも名4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -239,7 +239,7 @@ Partial Class frmMain
         Me.tpage縦ひも = New System.Windows.Forms.TabPage()
         Me.btnリセット_縦 = New System.Windows.Forms.Button()
         Me.lbl左から順に右へ = New System.Windows.Forms.Label()
-        Me.dgv縦ひも = New System.Windows.Forms.DataGridView()
+        Me.dgv縦ひも = New CraftBand.ctrDataGridView()
         Me.f_iひも種5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i位置番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sひも名5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -2731,7 +2731,7 @@ Partial Class frmMain
     Friend WithEvents lbl横の四角数 As Label
     Friend WithEvents nud横の四角数 As NumericUpDown
     Friend WithEvents tpage縁の始末 As TabPage
-    Friend WithEvents dgv縁の始末 As DataGridView
+    Friend WithEvents dgv縁の始末 As CraftBand.ctrDataGridView
     Friend WithEvents lbl四角ベース As Label
     Friend WithEvents txt四角ベース_横 As TextBox
     Friend WithEvents lbl計算寸法 As Label
@@ -2774,7 +2774,7 @@ Partial Class frmMain
     Friend WithEvents Fd全周の高さDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Fd周囲の寸法DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents Fd対底周囲比率DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents dgv追加品 As DataGridView
+    Friend WithEvents dgv追加品 As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource追加品 As BindingSource
     Friend WithEvents lbl編みかた名_側面 As Label
     Friend WithEvents lbl点数 As Label
@@ -2823,9 +2823,9 @@ Partial Class frmMain
     Friend WithEvents tpage横ひも As TabPage
     Friend WithEvents tpage縦ひも As TabPage
     Friend WithEvents chk縦横を展開する As CheckBox
-    Friend WithEvents dgv横ひも As DataGridView
+    Friend WithEvents dgv横ひも As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource横ひも As BindingSource
-    Friend WithEvents dgv縦ひも As DataGridView
+    Friend WithEvents dgv縦ひも As CraftBand.ctrDataGridView
     Friend WithEvents BindingSource縦ひも As BindingSource
     Friend WithEvents lbl上から順に下へ As Label
     Friend WithEvents lbl左から順に右へ As Label

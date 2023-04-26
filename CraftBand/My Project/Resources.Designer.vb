@@ -214,7 +214,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}行目{1}値のデータエラー{2}{3} に類似しているローカライズされた文字列を検索します。
+        '''  {0}行目&lt;{1}&gt; データエラー{2}{3} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrGridData() As String
             Get
@@ -223,20 +223,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}行目{1}値には{2}以下の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}行目&lt;{1}&gt; {2} に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property ErrGridMaximumValue() As String
+        Friend ReadOnly Property ErrGridLine() As String
             Get
-                Return ResourceManager.GetString("ErrGridMaximumValue", resourceCulture)
+                Return ResourceManager.GetString("ErrGridLine", resourceCulture)
             End Get
         End Property
         
         '''<summary>
-        '''  {0}行目{1}値には{2}以上の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''  グリッドの警告 に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property ErrGridMinimumValue() As String
+        Friend ReadOnly Property ErrGridTitle() As String
             Get
-                Return ResourceManager.GetString("ErrGridMinimumValue", resourceCulture)
+                Return ResourceManager.GetString("ErrGridTitle", resourceCulture)
             End Get
         End Property
         
@@ -300,6 +300,24 @@ Namespace My.Resources
         Friend ReadOnly Property ErrMasterTableFileCancel() As String
             Get
                 Return ResourceManager.GetString("ErrMasterTableFileCancel", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}以下の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgTooLarge() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgTooLarge", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}以上の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgTooSmall() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgTooSmall", resourceCulture)
             End Get
         End Property
         

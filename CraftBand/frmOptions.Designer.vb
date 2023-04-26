@@ -35,7 +35,7 @@ Partial Class frmOptions
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.dgvData = New System.Windows.Forms.DataGridView()
+        Me.dgvData = New ctrDataGridView()
         Me.f_s付属品名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_iひも番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品ひも名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -383,7 +383,7 @@ Partial Class frmOptions
 
     End Sub
 
-    Friend WithEvents dgvData As DataGridView
+    Friend WithEvents dgvData As ctrDataGridView
     Friend WithEvents Fs縁かがり名DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn

@@ -1,6 +1,7 @@
 ﻿
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandMesh.clsCalcMesh
 
@@ -21,10 +22,46 @@ Public Class frmMain
 
 #Region "基本的な画面処理"
 
+    Dim _Profile_dgv底楕円 As New CDataGridViewProfile(
+            (New tbl底_楕円DataTable),
+            Nothing,
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
+            )
+    Dim _Profile_dgv側面 As New CDataGridViewProfile(
+            (New tbl側面DataTable),
+            Nothing,
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
+            )
+    Dim _Profile_追加品 As New CDataGridViewProfile(
+            (New tbl追加品DataTable),
+            Nothing,
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
+            )
+    Dim _Profile_dgv底の縦横 As New CDataGridViewProfile(
+            (New tbl縦横展開DataTable),
+            Nothing,
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow
+            )
+
+
+
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        dgv底楕円.RowTemplate.Height = cRowHeightIdxOne
-        dgv側面.RowTemplate.Height = cRowHeightIdxOne
-        dgv追加品.RowTemplate.Height = cRowHeightIdxOne
+        'dgv底楕円.RowTemplate.Height = cRowHeightIdxOne
+        'dgv側面.RowTemplate.Height = cRowHeightIdxOne
+        'dgv追加品.RowTemplate.Height = cRowHeightIdxOne
+
+        _Profile_dgv底楕円.FormCaption = Me.Text
+        dgv底楕円.SetProfile(_Profile_dgv底楕円)
+
+        _Profile_dgv側面.FormCaption = Me.Text
+        dgv側面.SetProfile(_Profile_dgv側面)
+
+        _Profile_追加品.FormCaption = Me.Text
+        dgv追加品.SetProfile(_Profile_追加品)
+
+        _Profile_dgv底の縦横.FormCaption = Me.Text
+        dgv底の横.SetProfile(_Profile_dgv底の縦横)
+        dgv底の縦.SetProfile(_Profile_dgv底の縦横)
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -99,15 +136,15 @@ Public Class frmMain
             Me.Size = siz
             Dim colwid As String
             colwid = My.Settings.frmMainGridOval
-            SetColumnWidthFromString(Me.dgv底楕円, colwid)
+            Me.dgv底楕円.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridSide
-            SetColumnWidthFromString(Me.dgv側面, colwid)
+            Me.dgv側面.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridOptions
-            SetColumnWidthFromString(Me.dgv追加品, colwid)
+            Me.dgv追加品.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridYoko
-            SetColumnWidthFromString(Me.dgv底の横, colwid)
+            Me.dgv底の横.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridTate
-            SetColumnWidthFromString(Me.dgv底の縦, colwid)
+            Me.dgv底の縦.SetColumnWidthFromString(colwid)
         End If
 
         setStartEditing()
@@ -122,11 +159,11 @@ Public Class frmMain
             End If
         End If
 
-        My.Settings.frmMainGridOval = GetColumnWidthString(Me.dgv底楕円)
-        My.Settings.frmMainGridSide = GetColumnWidthString(Me.dgv側面)
-        My.Settings.frmMainGridOptions = GetColumnWidthString(Me.dgv追加品)
-        My.Settings.frmMainGridYoko = GetColumnWidthString(Me.dgv底の横)
-        My.Settings.frmMainGridTate = GetColumnWidthString(Me.dgv底の縦)
+        My.Settings.frmMainGridOval = Me.dgv底楕円.GetColumnWidthString()
+        My.Settings.frmMainGridSide = Me.dgv側面.GetColumnWidthString()
+        My.Settings.frmMainGridOptions = Me.dgv追加品.GetColumnWidthString()
+        My.Settings.frmMainGridYoko = Me.dgv底の横.GetColumnWidthString()
+        My.Settings.frmMainGridTate = Me.dgv底の縦.GetColumnWidthString()
         My.Settings.frmMainSize = Me.Size
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底楕円={0}", My.Settings.frmMainGridOval)
@@ -1170,107 +1207,107 @@ Public Class frmMain
 
 #Region "グリッド編集共通"
 
-    Private Function numberPositionsSelect(ByVal bs As BindingSource, ByVal number As Integer, ByVal dgv As DataGridView) As Boolean
-        dgv.ClearSelection()
+    'Private Function numberPositionsSelect(ByVal bs As BindingSource, ByVal number As Integer, ByVal dgv As DataGridView) As Boolean
+    '    dgv.ClearSelection()
 
-        Dim positions As New List(Of Integer)
-        For pos As Integer = 0 To bs.Count - 1
-            Dim r As DataRow = bs.Item(pos).row
-            If r("f_i番号") = number Then
-                positions.Add(pos)
-            End If
-        Next
-        If positions.Count = 0 Then
-            Return False
-        End If
+    '    Dim positions As New List(Of Integer)
+    '    For pos As Integer = 0 To bs.Count - 1
+    '        Dim r As DataRow = bs.Item(pos).row
+    '        If r("f_i番号") = number Then
+    '            positions.Add(pos)
+    '        End If
+    '    Next
+    '    If positions.Count = 0 Then
+    '        Return False
+    '    End If
 
-        bs.Position = positions(0)
+    '    bs.Position = positions(0)
 
-        For Each pos As Integer In positions
-            dgv.Rows(pos).Selected = True
-        Next
-        Return True
-    End Function
+    '    For Each pos As Integer In positions
+    '        dgv.Rows(pos).Selected = True
+    '    Next
+    '    Return True
+    'End Function
 
-    Private Function getTableAndNumber(ByVal bs As BindingSource, ByRef table As DataTable, ByRef number As Integer) As Boolean
-        Try
-            table = bs.DataSource
-            If table Is Nothing Then
-                Return False
-            End If
+    'Private Function getTableAndNumber(ByVal bs As BindingSource, ByRef table As DataTable, ByRef number As Integer) As Boolean
+    '    Try
+    '        table = bs.DataSource
+    '        If table Is Nothing Then
+    '            Return False
+    '        End If
 
-            Dim current As System.Data.DataRowView = bs.Current
-            If current Is Nothing OrElse current.Row Is Nothing Then
-                number = -1
-                Return True
-            End If
+    '        Dim current As System.Data.DataRowView = bs.Current
+    '        If current Is Nothing OrElse current.Row Is Nothing Then
+    '            number = -1
+    '            Return True
+    '        End If
 
-            number = current.Row("f_i番号")
-            Return True
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "frmMain.getTableAndNumber")
-            Return False
+    '        number = current.Row("f_i番号")
+    '        Return True
+    '    Catch ex As Exception
+    '        g_clsLog.LogException(ex, "frmMain.getTableAndNumber")
+    '        Return False
 
-        End Try
-    End Function
+    '    End Try
+    'End Function
 
-    Private Sub dgv_DataErrorModify(sender As Object, e As DataGridViewDataErrorEventArgs)
-        If e.Exception Is Nothing Then
-            Exit Sub
-        End If
-        Dim dgv As DataGridView = CType(sender, DataGridView)
+    'Private Sub dgv_DataErrorModify(sender As Object, e As DataGridViewDataErrorEventArgs)
+    '    If e.Exception Is Nothing Then
+    '        Exit Sub
+    '    End If
+    '    Dim dgv As DataGridView = CType(sender, DataGridView)
 
-        If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" Then
-            '現バンドの本幅数以上の値がセットされているレコードを修正(対象バンドの変更？)
+    '    If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" Then
+    '        '現バンドの本幅数以上の値がセットされているレコードを修正(対象バンドの変更？)
 
-            Dim lane As Integer = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
-            If lane < 1 Then
-                dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = 1
-                '本幅数の修正
-                g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, 1)
-            ElseIf g_clsSelectBasics.p_i本幅 < lane Then
-                dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = g_clsSelectBasics.p_i本幅
-                '本幅数の修正
-                g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, g_clsSelectBasics.p_i本幅)
-            End If
-            e.ThrowException = False
+    '        Dim lane As Integer = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+    '        If lane < 1 Then
+    '            dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = 1
+    '            '本幅数の修正
+    '            g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, 1)
+    '        ElseIf g_clsSelectBasics.p_i本幅 < lane Then
+    '            dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = g_clsSelectBasics.p_i本幅
+    '            '本幅数の修正
+    '            g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, g_clsSelectBasics.p_i本幅)
+    '        End If
+    '        e.ThrowException = False
 
-        ElseIf dgv.Columns(e.ColumnIndex).DataPropertyName = "f_s色" Then
-            '現バンドにない色がセットされているレコードを修正(対象バンドの変更？)
+    '    ElseIf dgv.Columns(e.ColumnIndex).DataPropertyName = "f_s色" Then
+    '        '現バンドにない色がセットされているレコードを修正(対象バンドの変更？)
 
-            '色の修正
-            g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_ColorModified", dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-            dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = ""
-            e.ThrowException = False
+    '        '色の修正
+    '        g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_ColorModified", dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
+    '        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = ""
+    '        e.ThrowException = False
 
-        Else
-            dgv_DataErrorCancel(sender, e, Me.Text)
+    '    Else
+    '        dgv_DataErrorCancel(sender, e, Me.Text)
 
-        End If
-    End Sub
+    '    End If
+    'End Sub
 
-    Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv底楕円.CellFormatting, dgv側面.CellFormatting, dgv追加品.CellFormatting, dgv底の横.CellFormatting, dgv底の縦.CellFormatting
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
-            Exit Sub
-        End If
-        If dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly Then
-            e.CellStyle.BackColor = Color.LightYellow
-        End If
-        For Each col As DataGridViewColumn In dgv.Columns
-            If col.DataPropertyName = "f_iひも番号" Then
-                If dgv.Rows(e.RowIndex).Cells(col.Index).Value = 1 Or
-                    dgv.Rows(e.RowIndex).Cells(col.Index).Value = 0 Then
-                    If e.ColumnIndex = col.Index Then
-                        dgv.Rows(e.RowIndex).HeaderCell.Value = "+"
-                    End If
-                Else
-                    dgv.Rows(e.RowIndex).Height = cRowHeightIdxSub
-                End If
-                Exit For
-            End If
-        Next
-    End Sub
+    'Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv底楕円.CellFormatting, dgv側面.CellFormatting, dgv追加品.CellFormatting, dgv底の横.CellFormatting, dgv底の縦.CellFormatting
+    '    Dim dgv As DataGridView = CType(sender, DataGridView)
+    '    If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
+    '        Exit Sub
+    '    End If
+    '    If dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly Then
+    '        e.CellStyle.BackColor = Color.LightYellow
+    '    End If
+    '    For Each col As DataGridViewColumn In dgv.Columns
+    '        If col.DataPropertyName = "f_iひも番号" Then
+    '            If dgv.Rows(e.RowIndex).Cells(col.Index).Value = 1 Or
+    '                dgv.Rows(e.RowIndex).Cells(col.Index).Value = 0 Then
+    '                If e.ColumnIndex = col.Index Then
+    '                    dgv.Rows(e.RowIndex).HeaderCell.Value = "+"
+    '                End If
+    '            Else
+    '                dgv.Rows(e.RowIndex).Height = cRowHeightIdxSub
+    '            End If
+    '            Exit For
+    '        End If
+    '    Next
+    'End Sub
 
 #End Region
 
@@ -1279,7 +1316,8 @@ Public Class frmMain
     Private Sub btn追加_底楕円_Click(sender As Object, e As EventArgs) Handles btn追加_底楕円.Click
         Dim table As tbl底_楕円DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource底_楕円, table, number) Then
+        'If Not getTableAndNumber(BindingSource底_楕円, table, number) Then
+        If Not dgv底楕円.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
 
@@ -1289,7 +1327,8 @@ Public Class frmMain
                      nud基本のひも幅.Value, nud周数_底楕円.Value,
                       row) Then
 
-            numberPositionsSelect(BindingSource底_楕円, row.f_i番号, dgv底楕円)
+            'numberPositionsSelect(BindingSource底_楕円, row.f_i番号, dgv底楕円)
+            dgv底楕円.NumberPositionsSelect(row.f_i番号)
             recalc(CalcCategory.Oval, row, "f_i周数")
         Else
             MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -1300,7 +1339,8 @@ Public Class frmMain
     Private Sub btn上へ_底楕円_Click(sender As Object, e As EventArgs) Handles btn上へ_底楕円.Click
         Dim table As tbl底_楕円DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource底_楕円, table, number) Then
+        'If Not GetTableAndNumber(BindingSource底_楕円, table, number) Then
+        If Not dgv底楕円.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1314,13 +1354,15 @@ Public Class frmMain
         clsDataTables.SwapNumber(table, number, nextup)
         recalc(CalcCategory.Oval, Nothing, Nothing)
 
-        numberPositionsSelect(BindingSource底_楕円, nextup, dgv底楕円)
+        'numberPositionsSelect(BindingSource底_楕円, nextup, dgv底楕円)
+        dgv底楕円.NumberPositionsSelect(nextup)
     End Sub
 
     Private Sub btn下へ_底楕円_Click(sender As Object, e As EventArgs) Handles btn下へ_底楕円.Click
         Dim table As tbl底_楕円DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource底_楕円, table, number) Then
+        'If Not GetTableAndNumber(BindingSource底_楕円, table, number) Then
+        If Not dgv底楕円.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1335,13 +1377,15 @@ Public Class frmMain
         clsDataTables.SwapNumber(table, number, nextdown)
         recalc(CalcCategory.Oval, Nothing, Nothing)
 
-        numberPositionsSelect(BindingSource底_楕円, nextdown, dgv底楕円)
+        'numberPositionsSelect(BindingSource底_楕円, nextdown, dgv底楕円)
+        dgv底楕円.NumberPositionsSelect(nextdown)
     End Sub
 
     Private Sub btn削除_底楕円_Click(sender As Object, e As EventArgs) Handles btn削除_底楕円.Click
         Dim table As tbl底_楕円DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource底_楕円, table, number) Then
+        'If Not GetTableAndNumber(BindingSource底_楕円, table, number) Then
+        If Not dgv底楕円.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1384,9 +1428,9 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv底楕円_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底楕円.DataError
-        dgv_DataErrorModify(sender, e)
-    End Sub
+    'Private Sub dgv底楕円_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底楕円.DataError
+    '    dgv_DataErrorModify(sender, e)
+    'End Sub
 
     Private Sub chk楕円底個別設定_CheckedChanged(sender As Object, e As EventArgs) Handles chk楕円底個別設定.CheckedChanged
         nud楕円底円弧の半径加算.Enabled = chk楕円底個別設定.Checked
@@ -1407,7 +1451,8 @@ Public Class frmMain
     Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
         Dim table As tbl側面DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource側面, table, number) Then
+        'If Not getTableAndNumber(BindingSource側面, table, number) Then
+        If Not dgv側面.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
 
@@ -1416,7 +1461,8 @@ Public Class frmMain
                      nud基本のひも幅.Value, nud周数_側面.Value,
                       row) Then
 
-            numberPositionsSelect(BindingSource側面, row.f_i番号, dgv側面)
+            'numberPositionsSelect(BindingSource側面, row.f_i番号, dgv側面)
+            dgv側面.NumberPositionsSelect(row.f_i番号)
             recalc(CalcCategory.Side, row, "f_i周数")
         Else
             MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -1424,14 +1470,15 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv側面.DataError
-        dgv_DataErrorModify(sender, e)
-    End Sub
+    'Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv側面.DataError
+    '    dgv_DataErrorModify(sender, e)
+    'End Sub
 
     Private Sub btn削除_側面_Click(sender As Object, e As EventArgs) Handles btn削除_側面.Click
         Dim table As tbl側面DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource側面, table, number) Then
+        'If Not GetTableAndNumber(BindingSource側面, table, number) Then
+        If Not dgv側面.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1446,7 +1493,8 @@ Public Class frmMain
     Private Sub btn上へ_側面_Click(sender As Object, e As EventArgs) Handles btn上へ_側面.Click
         Dim table As tbl側面DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource側面, table, number) Then
+        'If Not GetTableAndNumber(BindingSource側面, table, number) Then
+        If Not dgv側面.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 OrElse number = clsDataTables.cHemNumber Then
@@ -1464,13 +1512,15 @@ Public Class frmMain
         End If
         clsDataTables.SwapNumber(table, number, nextup)
 
-        numberPositionsSelect(BindingSource側面, nextup, dgv側面)
+        'numberPositionsSelect(BindingSource側面, nextup, dgv側面)
+        dgv側面.NumberPositionsSelect(nextup)
     End Sub
 
     Private Sub btn下へ_側面_Click(sender As Object, e As EventArgs) Handles btn下へ_側面.Click
         Dim table As tbl側面DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource側面, table, number) Then
+        'If Not GetTableAndNumber(BindingSource側面, table, number) Then
+        If Not dgv側面.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 OrElse number = clsDataTables.cHemNumber Then
@@ -1488,7 +1538,8 @@ Public Class frmMain
         End If
         clsDataTables.SwapNumber(table, number, nextdown)
 
-        numberPositionsSelect(BindingSource側面, nextdown, dgv側面)
+        'numberPositionsSelect(BindingSource側面, nextdown, dgv側面)
+        dgv側面.NumberPositionsSelect(nextdown)
     End Sub
 
     Private Sub rad下から上へ_CheckedChanged(sender As Object, e As EventArgs) Handles rad下から上へ.CheckedChanged, rad上から下へ.CheckedChanged
@@ -1530,7 +1581,8 @@ Public Class frmMain
     Private Sub btn追加_追加品_Click(sender As Object, e As EventArgs) Handles btn追加_追加品.Click
         Dim table As tbl追加品DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource追加品, table, number) Then
+        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
+        If Not dgv追加品.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
 
@@ -1539,7 +1591,8 @@ Public Class frmMain
             cmb付属品名.Text, nud基本のひも幅.Value, nud長さ.Value, nud点数.Value,
             row) Then
 
-            numberPositionsSelect(BindingSource追加品, row.f_i番号, dgv追加品)
+            'numberPositionsSelect(BindingSource追加品, row.f_i番号, dgv追加品)
+            dgv追加品.NumberPositionsSelect(row.f_i番号)
             recalc(CalcCategory.Options, row, "f_i点数")
 
         Else
@@ -1550,7 +1603,8 @@ Public Class frmMain
     Private Sub btn上へ_追加品_Click(sender As Object, e As EventArgs) Handles btn上へ_追加品.Click
         Dim table As tbl追加品DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource追加品, table, number) Then
+        'If Not getTableAndNumber(BindingSource追加品, table, number) Then
+        If Not dgv追加品.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1563,13 +1617,15 @@ Public Class frmMain
         End If
         clsDataTables.SwapNumber(table, number, nextup)
 
-        numberPositionsSelect(BindingSource追加品, nextup, dgv追加品)
+        'numberPositionsSelect(BindingSource追加品, nextup, dgv追加品)
+        dgv追加品.NumberPositionsSelect(nextup)
     End Sub
 
     Private Sub btn下へ_追加品_Click(sender As Object, e As EventArgs) Handles btn下へ_追加品.Click
         Dim table As tbl追加品DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource追加品, table, number) Then
+        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
+        If Not dgv追加品.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1583,13 +1639,15 @@ Public Class frmMain
         End If
         clsDataTables.SwapNumber(table, number, nextdown)
 
-        numberPositionsSelect(BindingSource追加品, nextdown, dgv追加品)
+        'numberPositionsSelect(BindingSource追加品, nextdown, dgv追加品)
+        dgv追加品.NumberPositionsSelect(nextdown)
     End Sub
 
     Private Sub btn削除_追加品_Click(sender As Object, e As EventArgs) Handles btn削除_追加品.Click
         Dim table As tbl追加品DataTable = Nothing
         Dim number As Integer = -1
-        If Not getTableAndNumber(BindingSource追加品, table, number) Then
+        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
+        If Not dgv追加品.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
         If number < 0 Then
@@ -1601,9 +1659,9 @@ Public Class frmMain
         recalc(CalcCategory.Options, Nothing, Nothing)
     End Sub
 
-    Private Sub dgv追加品_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv追加品.DataError
-        dgv_DataErrorModify(sender, e)
-    End Sub
+    'Private Sub dgv追加品_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv追加品.DataError
+    '    dgv_DataErrorModify(sender, e)
+    'End Sub
 
     Private Sub dgv追加品_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv追加品.CellValueChanged
         Dim dgv As DataGridView = CType(sender, DataGridView)
@@ -1695,13 +1753,13 @@ Public Class frmMain
         Return 0 < change
     End Function
 
-    Private Sub dgv底の横_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の横.DataError
-        dgv_DataErrorModify(sender, e)
-    End Sub
+    'Private Sub dgv底の横_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の横.DataError
+    '    dgv_DataErrorModify(sender, e)
+    'End Sub
 
-    Private Sub dgv底の縦_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の縦.DataError
-        dgv_DataErrorModify(sender, e)
-    End Sub
+    'Private Sub dgv底の縦_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の縦.DataError
+    '    dgv_DataErrorModify(sender, e)
+    'End Sub
 
     Private Sub btnリセット_横_Click(sender As Object, e As EventArgs) Handles btnリセット_横.Click
         'ひも長加算と色をすべてクリアします。よろしいですか？

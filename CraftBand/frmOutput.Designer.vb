@@ -35,7 +35,7 @@ Partial Class frmOutput
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOutput))
-        Me.dgvOutput = New System.Windows.Forms.DataGridView()
+        Me.dgvOutput = New ctrDataGridView()
         Me.BindingSourceOutput = New System.Windows.Forms.BindingSource(Me.components)
         Me.btn閉じる = New System.Windows.Forms.Button()
         Me.btnCSV出力 = New System.Windows.Forms.Button()
@@ -322,7 +322,7 @@ Partial Class frmOutput
 
     End Sub
 
-    Friend WithEvents dgvOutput As DataGridView
+    Friend WithEvents dgvOutput As ctrDataGridView
     Friend WithEvents btn閉じる As Button
     Friend WithEvents btnCSV出力 As Button
     Friend WithEvents BindingSourceOutput As BindingSource

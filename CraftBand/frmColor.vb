@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Security.Permissions
 Imports System.Windows.Forms
+Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstMasterTables
 ''' <summary>
 ''' tbl描画色
@@ -9,12 +10,20 @@ Imports CraftBand.Tables.dstMasterTables
 Public Class frmColor
     Shared _ColorFiledNames() As String = {"f_i赤", "f_i緑", "f_i青"}
 
+    Dim _MyProfile As New CDataGridViewProfile(
+            (New tbl描画色DataTable),
+            AddressOf CheckCell,
+            enumAction._None
+            )
+
     Dim _table As tbl描画色DataTable
     Dim cColDispColor As Integer = 4 '色を表示するカラム
 
     Private Sub frmColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        BindingSource描画色.DataSource = Nothing
+        _MyProfile.FormCaption = Me.Text
+        dgvData.SetProfile(_MyProfile)
 
+        BindingSource描画色.DataSource = Nothing
         _table = g_clsMasterTables.GetColorTableCopy()
         BindingSource描画色.DataSource = _table
 
@@ -27,13 +36,13 @@ Public Class frmColor
         End If
         Dim colwid As String = Nothing
         If __paras.GetLastData("frmColorGrid", colwid) Then
-            SetColumnWidthFromString(Me.dgvData, colwid)
+            Me.dgvData.SetColumnWidthFromString(colwid)
         End If
 
     End Sub
 
     Private Sub frmColor_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-        __paras.SetLastData("frmColorGrid", GetColumnWidthString(Me.dgvData))
+        __paras.SetLastData("frmColorGrid", Me.dgvData.GetColumnWidthString())
         __paras.SetLastData("frmColorSize", Me.Size)
     End Sub
 
@@ -46,33 +55,52 @@ Public Class frmColor
         Me.Close()
     End Sub
 
-    Private Sub dgvData_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
-        Dim dgv As DataGridView = CType(sender, DataGridView)
 
-        '新しい行のセルは除外
-        If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty OrElse e.ColumnIndex < 0 Then
-            Exit Sub
-        End If
+    'セル値のチェック
+    Function CheckCell(ByVal DataPropertyName As String, ByVal value As Object) As String
 
         '色と透明度
-        If _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) OrElse
-            dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i透明度" Then
+        If _ColorFiledNames.Contains(DataPropertyName) OrElse
+            DataPropertyName = "f_i透明度" Then
             Dim v As Integer
-            If Integer.TryParse(e.FormattedValue.ToString(), v) AndAlso 0 <= v AndAlso v <= clsMasterTables.MaxRgbValue Then
-                Exit Sub 'OK
+            If Integer.TryParse(value, v) AndAlso 0 <= v AndAlso v <= clsMasterTables.MaxRgbValue Then
+                Return Nothing 'OK
             End If
-            '{0}行目{1}値には{2}以下の数値を設定してください。
-            Dim msg As String = String.Format(My.Resources.ErrGridMaximumValue, e.RowIndex + 1, dgv.Columns(e.ColumnIndex).HeaderText, clsMasterTables.MaxRgbValue)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            dgv.CancelEdit()
-            e.Cancel = True
+            '{0}以下の数値を設定してください。
+            Dim msg As String = String.Format(My.Resources.ErrMsgTooLarge, clsMasterTables.MaxRgbValue)
+            Return msg
         End If
 
-    End Sub
+        Return Nothing
+    End Function
 
-    Private Sub dgvData_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvData.DataError
-        dgv_DataErrorCancel(sender, e, Me.Text)
-    End Sub
+    'Private Sub dgvData_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
+    '    Dim dgv As DataGridView = CType(sender, DataGridView)
+
+    '    '新しい行のセルは除外
+    '    If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty OrElse e.ColumnIndex < 0 Then
+    '        Exit Sub
+    '    End If
+
+    '    '色と透明度
+    '    If _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) OrElse
+    '        dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i透明度" Then
+    '        Dim v As Integer
+    '        If Integer.TryParse(e.FormattedValue.ToString(), v) AndAlso 0 <= v AndAlso v <= clsMasterTables.MaxRgbValue Then
+    '            Exit Sub 'OK
+    '        End If
+    '        '{0}行目{1}値には{2}以下の数値を設定してください。
+    '        Dim msg As String = String.Format(My.Resources.ErrGridMaximumValue, e.RowIndex + 1, dgv.Columns(e.ColumnIndex).HeaderText, clsMasterTables.MaxRgbValue)
+    '        MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '        dgv.CancelEdit()
+    '        e.Cancel = True
+    '    End If
+
+    'End Sub
+
+    'Private Sub dgvData_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvData.DataError
+    '    dgv_DataErrorCancel(sender, e, Me.Text)
+    'End Sub
 
     Private Sub dgvData_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
         Dim dgv As DataGridView = CType(sender, DataGridView)

@@ -1,5 +1,8 @@
 ﻿Imports System.Drawing
 Imports System.Windows.Forms
+Imports CraftBand.ctrDataGridView
+Imports CraftBand.Tables
+Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmGauge
     Const coeff_format As String = "0.00"
@@ -8,7 +11,16 @@ Public Class frmGauge
     Dim _clsBandTypeGauge As clsBandTypeGauge = Nothing
     Dim _bSaved As Boolean = False
 
+    Dim _MyProfile As New CDataGridViewProfile(
+            (New dstWork.tblGaugeDataTable),
+            Nothing,
+            enumAction._None
+            )
+
     Private Sub frmGauge_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        _MyProfile.FormCaption = Me.Text
+        dgvData.SetProfile(_MyProfile)
+
         lbl設定時の寸法単位.Text = g_clsSelectBasics.p_unit設定時の寸法単位.ToString
 
         '選択肢
@@ -24,7 +36,7 @@ Public Class frmGauge
         End If
         Dim colwid As String = Nothing
         If __paras.GetLastData("frmGaugeGrid", colwid) Then
-            SetColumnWidthFromString(Me.dgvData, colwid)
+            Me.dgvData.SetColumnWidthFromString(colwid)
         End If
 
         'Grid
@@ -170,21 +182,21 @@ Public Class frmGauge
     End Sub
 
     Private Sub frmGauge_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
-        __paras.SetLastData("frmGaugeGrid", GetColumnWidthString(Me.dgvData))
+        __paras.SetLastData("frmGaugeGrid", Me.dgvData.GetColumnWidthString())
         __paras.SetLastData("frmGauge", Me.Size)
     End Sub
 
-    Private Sub dgvData_DataError(sender As Object, e As Windows.Forms.DataGridViewDataErrorEventArgs) Handles dgvData.DataError
-        dgv_DataErrorCancel(sender, e, Me.Text)
-    End Sub
+    'Private Sub dgvData_DataError(sender As Object, e As Windows.Forms.DataGridViewDataErrorEventArgs) Handles dgvData.DataError
+    '    dgv_DataErrorCancel(sender, e, Me.Text)
+    'End Sub
 
-    Private Sub dgvData_CellValidating(sender As Object, e As Windows.Forms.DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
-        dgv_CellValidating(sender, e, Me.Text)
-    End Sub
+    'Private Sub dgvData_CellValidating(sender As Object, e As Windows.Forms.DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
+    '    dgv_CellValidating(sender, e, Me.Text)
+    'End Sub
 
-    Private Sub dgvData_CellFormatting(sender As Object, e As Windows.Forms.DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
-        dgv_CellFormatting(sender, e)
-    End Sub
+    'Private Sub dgvData_CellFormatting(sender As Object, e As Windows.Forms.DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
+    '    dgv_CellFormatting(sender, e)
+    'End Sub
 
 
 End Class
