@@ -446,7 +446,7 @@
             "Target" = "8:_99546C54B24E4E6A92AEB9C9381E4901"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:"
+            "Icon" = "8:_7AAF414DFB3E402D8A7761317F8A4346"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B377E84CE9214E6DB9B41A794D428EE8"
@@ -460,7 +460,7 @@
             "Target" = "8:_8BAB3DAC060344E88358674915A9C06E"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:"
+            "Icon" = "8:_FB207A8E5FB0487EB5FE42984F9499C5"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D0F516DDFCBB4914B9EECBFECA254E72"
@@ -474,7 +474,7 @@
             "Target" = "8:_E8C9A81B2EC84AFEAB7B868C353EFC18"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:"
+            "Icon" = "8:_09D55A26D05A40A2A91FD46E2A42F22E"
             "Feature" = "8:"
             }
         }
@@ -878,7 +878,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8BAB3DAC060344E88358674915A9C06E"
             {
-            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -906,7 +906,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_99546C54B24E4E6A92AEB9C9381E4901"
             {
-            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -934,7 +934,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E8C9A81B2EC84AFEAB7B868C353EFC18"
             {
-            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
