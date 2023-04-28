@@ -21,19 +21,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_403F852751254890BC072DE7DB5128FD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4B741ECA695744F5BE973279EC08DB9D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7AAF414DFB3E402D8A7761317F8A4346"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8BAB3DAC060344E88358674915A9C06E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_99546C54B24E4E6A92AEB9C9381E4901"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,7 +45,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA177F7FA5744281AC98209C890D42B5"
+        "MsmKey" = "8:_E8C9A81B2EC84AFEAB7B868C353EFC18"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -314,15 +314,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CraftBandInstaller"
-        "ProductCode" = "8:{07C677C5-23EC-4202-B3D2-756C8001A3AE}"
-        "PackageCode" = "8:{997E62F0-BEE1-40AC-8FC6-B48404B7E413}"
+        "ProductCode" = "8:{A4943CFD-F7AC-4EA6-9D83-8A3FDCDDAFE0}"
+        "PackageCode" = "8:{8FB72F5E-8370-4259-86C1-E277DA843D5F}"
         "UpgradeCode" = "8:{D3635BD8-65C1-4B9B-8056-CE5BCBA2A48B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.1"
+        "ProductVersion" = "8:1.5.0"
         "Manufacturer" = "8:LaboHarusawa"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://labo.com/CraftBand/"
@@ -435,7 +435,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2B6A1055AB8F44C794D0B35B68A88373"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AE074F5936664FA795BD98A2F0023823"
             {
             "Name" = "8:CraftBandSquare45"
             "Arguments" = "8:"
@@ -443,27 +443,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_FA177F7FA5744281AC98209C890D42B5"
+            "Target" = "8:_99546C54B24E4E6A92AEB9C9381E4901"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:_7AAF414DFB3E402D8A7761317F8A4346"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2D80C618A7AB42489342A904A2C48CC2"
-            {
-            "Name" = "8:CraftBandKnot"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_403F852751254890BC072DE7DB5128FD"
-            "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
-            "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:_09D55A26D05A40A2A91FD46E2A42F22E"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CE4D5A7378A64C4F9C297BA5B233A836"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B377E84CE9214E6DB9B41A794D428EE8"
             {
             "Name" = "8:CraftBandMesh"
             "Arguments" = "8:"
@@ -471,10 +457,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_4B741ECA695744F5BE973279EC08DB9D"
+            "Target" = "8:_8BAB3DAC060344E88358674915A9C06E"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:_FB207A8E5FB0487EB5FE42984F9499C5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D0F516DDFCBB4914B9EECBFECA254E72"
+            {
+            "Name" = "8:CraftBandKnot"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_E8C9A81B2EC84AFEAB7B868C353EFC18"
+            "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
+            "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -876,37 +876,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_403F852751254890BC072DE7DB5128FD"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8BAB3DAC060344E88358674915A9C06E"
             {
-            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Release\\net6.0-windows\\apphost.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:PublishItems"
-            "OutputProjectGuid" = "8:{D6F261D7-5215-4C31-A09A-2C634AFFE262}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4B741ECA695744F5BE973279EC08DB9D"
-            {
-            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -932,9 +904,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FA177F7FA5744281AC98209C890D42B5"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_99546C54B24E4E6A92AEB9C9381E4901"
             {
-            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -955,6 +927,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{0C67BCFD-EA11-4850-B989-6B3339A306EA}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E8C9A81B2EC84AFEAB7B868C353EFC18"
+            {
+            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{D6F261D7-5215-4C31-A09A-2C634AFFE262}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

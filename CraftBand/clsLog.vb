@@ -55,6 +55,9 @@ Public Class clsLog
         _LogLevel = level
         _ExePath = path
 
+#If DEBUG Then
+        _LogLevel = LogLevel.Debug
+#End If
         _DllPath = System.Reflection.Assembly.GetExecutingAssembly.Location
 
         Dim filename As String = IO.Path.ChangeExtension(IO.Path.GetFileName(ExePath), MyExtention)

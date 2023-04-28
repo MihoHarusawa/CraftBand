@@ -1,5 +1,6 @@
 ﻿Imports System.Data.Common
 Imports System.Drawing
+Imports System.IO
 Imports System.Windows.Forms
 
 'セルチェック時のコールバック
@@ -285,22 +286,21 @@ Public Class ctrDataGridView
     '基本、行単位の個別レコードなので、貼り付け対象は選択された行・セルのみとする
 
     Private Sub ContextMenuStrip_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStripDgv.Opening
-        Me.MenuItemCopy.Enabled = True
-        Me.MenuItemCut.Enabled = True
+        Me.MenuItemCopy.Enabled = RowOrCellSelected()
+        Me.MenuItemCut.Enabled = RowOrCellSelected()
         Me.MenuItemPaste.Enabled = IsPastable()
         Me.MenuItemDelete.Enabled = HasWritableCell()
         Me.MenuItemCancel.Enabled = True
     End Sub
 
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
-        'SendKeys.Send("^C")
-        Clipboard.SetDataObject(Me.GetClipboardContent())
+        SetToClipBoard()
+        MyBase.ClearSelection()
     End Sub
 
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
-        Dim dataobj As DataObject = Me.GetClipboardContent()
+        SetToClipBoard()
         SetDefaultWritableCell()
-        Clipboard.SetDataObject(dataobj)
     End Sub
 
     Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
@@ -311,15 +311,59 @@ Public Class ctrDataGridView
     End Sub
 
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
-        SetDefaultWritableCell()
+        If Not DeleteLines() Then
+            SetDefaultWritableCell()
+        End If
     End Sub
 
     Private Sub MenuItemCancel_Click(sender As Object, e As EventArgs) Handles MenuItemCancel.Click
         SendKeys.Send("{Esc}")
     End Sub
 
+    '行もしくはセルが選択されている
+    Private Function RowOrCellSelected() As Boolean
+        Return 0 < Me.SelectedRows.Count Or 0 < Me.SelectedCells.Count
+    End Function
+
+    'クリップボードにコピーする
+    Private Function SetToClipBoard() As Boolean
+        'SendKeys.Send("^C")
+
+        '元のDataObjectを取得する
+        Dim oldData As DataObject = MyBase.GetClipboardContent()
+
+        '新しいDataObjectを作成する
+        Dim newData As New DataObject()
+
+        'テキスト形式,UnicodeText
+        newData.SetData(DataFormats.Text, oldData.GetData(DataFormats.Text))
+
+        'HTML形式のデータ
+        Dim htmlObj As Object = oldData.GetData(DataFormats.Html)
+        newData.SetData(DataFormats.Html, htmlObj)
+
+        'CSV形式
+        Dim csvObj As Object = oldData.GetData(DataFormats.CommaSeparatedValue)
+        Dim csvStrm As MemoryStream = Nothing
+        If TypeOf csvObj Is String Then
+            'ANSI
+            csvStrm = New MemoryStream(System.Text.Encoding.Default.GetBytes(DirectCast(csvObj, String)))
+        Else
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ClipBoard CSV Type={0}", csvObj.GetType().Name)
+        End If
+        If csvStrm IsNot Nothing Then
+            newData.SetData(DataFormats.CommaSeparatedValue, csvStrm)
+        End If
+
+        Clipboard.SetDataObject(newData)
+        Return Clipboard.GetDataObject().GetDataPresent(DataFormats.Text)
+    End Function
+
     '貼り付け可能か？
     Private Function IsPastable() As Boolean
+        If Not RowOrCellSelected() Then
+            Return False
+        End If
         'クリップボードにテキストがある
         Dim clipdata As IDataObject = Clipboard.GetDataObject()
         If Not clipdata.GetDataPresent(DataFormats.Text) Then
@@ -331,7 +375,7 @@ Public Class ctrDataGridView
             '行のセル以外が選択されるのはNG
             For Each c As DataGridViewCell In Me.SelectedCells
                 If Not Me.SelectedRows.Contains(Me.Rows(c.RowIndex)) Then
-                    'Debug.Print("選択行以外のセル行 {0}", c.RowIndex)
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Not Pastable 選択行以外のセル({0},{1})", c.ColumnIndex, c.RowIndex)
                     Return False
                 End If
             Next
@@ -342,10 +386,10 @@ Public Class ctrDataGridView
                     ColumnCountVisible += 1
                 End If
             Next
-            '全行の項目数一致
+            '全行表示分がある
             For Each line As String In CType(clipdata.GetData(DataFormats.Text), String).Split(vbCrLf)
-                If line.Split(vbTab).Count <> ColumnCountVisible Then
-                    'Debug.Print("項目数={0} line=<{1}>", ColumnCountVisible, line.Replace(vbTab, ","))
+                If line.Split(vbTab).Count < ColumnCountVisible Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Not Pastable({0}) <{1}>", ColumnCountVisible, line.Replace(vbTab, ","))
                     Return False
                 End If
             Next
@@ -365,6 +409,28 @@ Public Class ctrDataGridView
         Next
         Return False
     End Function
+
+    Private Function DeleteLines() As Boolean
+        If Not Me.AllowUserToDeleteRows OrElse Me.SelectedRows.Count = 0 Then
+            Return False
+        End If
+        '行のみ選択
+        For Each c As DataGridViewCell In Me.SelectedCells
+            If Not Me.SelectedRows.Contains(Me.Rows(c.RowIndex)) Then
+                Return False
+            End If
+        Next
+
+        Dim del As Boolean = False
+        For Each r In Me.SelectedRows
+            If Not r.IsNewRow Then
+                Me.Rows.Remove(r)
+                del = True
+            End If
+        Next r
+        Return del
+    End Function
+
 
     '入力可能なセルをデフォルト値にする
     Private Sub SetDefaultWritableCell()

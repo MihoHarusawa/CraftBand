@@ -13,7 +13,14 @@
     <Description>クラフトバンド・四つ畳み編みの計算</Description>
     <Copyright>Copyright © LaboHarusawa 2023</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
+    <ApplicationIcon>IconKnot.ico</ApplicationIcon>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="IconKnot.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Import Include="System.Data" />

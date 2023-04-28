@@ -14,8 +14,8 @@
     <Description>クラフトバンド・斜め45度に配置する四角ベースの計算</Description>
     <Copyright>Copyright © LaboHarusawa 2023</Copyright>
     <PackageIcon>IconSquare45.ico</PackageIcon>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

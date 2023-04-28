@@ -162,6 +162,7 @@ Partial Class frmMain
         Me.ToolStripMenuItemSettingBandType = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemSettingPattern = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemSettingOptions = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItemSettingColor = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemSettingBasics = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemHelp = New System.Windows.Forms.ToolStripMenuItem()
@@ -365,7 +366,6 @@ Partial Class frmMain
         Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
         Me.lbl底 = New System.Windows.Forms.Label()
         Me.lbl最大 = New System.Windows.Forms.Label()
-        Me.ToolStripMenuItemSettingColor = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1269,30 +1269,36 @@ Partial Class frmMain
         'ToolStripMenuItemSettingBandType
         '
         Me.ToolStripMenuItemSettingBandType.Name = "ToolStripMenuItemSettingBandType"
-        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingBandType.Text = "バンドの種類(&T)"
         '
         'ToolStripMenuItemSettingPattern
         '
         Me.ToolStripMenuItemSettingPattern.Name = "ToolStripMenuItemSettingPattern"
-        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingPattern.Text = "編みかた(&P)"
         '
         'ToolStripMenuItemSettingOptions
         '
         Me.ToolStripMenuItemSettingOptions.Name = "ToolStripMenuItemSettingOptions"
-        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingOptions.Text = "付属品(&O)"
+        '
+        'ToolStripMenuItemSettingColor
+        '
+        Me.ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
+        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingColor.Text = "描画色(&C)"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(183, 6)
         '
         'ToolStripMenuItemSettingBasics
         '
         Me.ToolStripMenuItemSettingBasics.Name = "ToolStripMenuItemSettingBasics"
-        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingBasics.Text = "基本設定(&B)"
         '
         'ToolStripMenuItemHelp
@@ -1752,6 +1758,7 @@ Partial Class frmMain
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgv底楕円.AutoGenerateColumns = False
+        Me.dgv底楕円.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgv底楕円.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv底楕円.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_i番号1, Me.f_b差しひも区分1, Me.f_i差しひも本数1, Me.f_s編みかた名1, Me.f_s編みひも名1, Me.f_iひも番号1, Me.f_i何本幅1, Me.f_i周数1, Me.f_s色1, Me.f_i段数1, Me.f_b周連続区分1, Me.f_b次周連続区分1, Me.f_d円弧部分長1, Me.f_d径の累計1, Me.f_d差しひも間のすき間1, Me.f_d径1, Me.f_d周長1, Me.f_dひも長1, Me.f_dひも長加算1, Me.f_d連続ひも長1, Me.f_iひも本数1, Me.f_i差しひも累計1, Me.f_s記号1, Me.f_sメモ1, Me.f_bError1})
         Me.dgv底楕円.DataSource = Me.BindingSource底_楕円
@@ -2185,6 +2192,7 @@ Partial Class frmMain
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgv側面.AutoGenerateColumns = False
+        Me.dgv側面.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgv側面.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv側面.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_i番号2, Me.f_s編みかた名2, Me.f_s編みひも名2, Me.f_iひも番号2, Me.f_i何本幅2, Me.f_i周数2, Me.f_s色2, Me.f_b周連続区分2, Me.f_b次周連続区分2, Me.f_i段数, Me.f_d高さ2, Me.f_d高さ比率2, Me.f_d垂直ひも長2, Me.f_d周長比率対底の周2, Me.f_d周長2, Me.f_dひも長2, Me.f_dひも長加算2, Me.f_iひも本数2, Me.f_d連続ひも長2, Me.f_d厚さ2, Me.f_s記号2, Me.f_sメモ2, Me.f_bError2})
         Me.dgv側面.DataSource = Me.BindingSource側面
@@ -2579,6 +2587,7 @@ Partial Class frmMain
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgv追加品.AutoGenerateColumns = False
+        Me.dgv追加品.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgv追加品.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv追加品.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_i番号3, Me.f_s付属品名3, Me.f_s付属品ひも名3, Me.f_iひも番号3, Me.f_b巻きひも区分3, Me.f_i何本幅3, Me.f_d長さ3, Me.f_i点数3, Me.f_s色3, Me.f_dひも長3, Me.f_dひも長加算3, Me.f_iひも本数3, Me.f_s記号3, Me.f_sメモ3, Me.f_bError3})
         Me.dgv追加品.DataSource = Me.BindingSource追加品
@@ -2851,6 +2860,7 @@ Partial Class frmMain
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgv底の横.AutoGenerateColumns = False
+        Me.dgv底の横.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgv底の横.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv底の横.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iひも種4, Me.f_i位置番号4, Me.f_sひも名4, Me.f_iひも番号4, Me.f_i何本幅4, Me.f_d長さ4, Me.f_dひも長4, Me.f_dひも長加算4, Me.f_s記号4, Me.f_d出力ひも長4, Me.f_s色4, Me.f_sメモ4})
         Me.dgv底の横.DataSource = Me.BindingSource底の横
@@ -3037,6 +3047,7 @@ Partial Class frmMain
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgv底の縦.AutoGenerateColumns = False
+        Me.dgv底の縦.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgv底の縦.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgv底の縦.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iひも種5, Me.f_i位置番号5, Me.f_sひも名5, Me.f_iひも番号5, Me.f_i何本幅5, Me.f_d長さ5, Me.f_dひも長5, Me.f_dひも長加算5, Me.f_s記号5, Me.f_d出力ひも長5, Me.f_s色5, Me.f_sメモ5})
         Me.dgv底の縦.DataSource = Me.BindingSource底の縦
@@ -3472,12 +3483,6 @@ Partial Class frmMain
         Me.lbl最大.Size = New System.Drawing.Size(49, 20)
         Me.lbl最大.TabIndex = 60
         Me.lbl最大.Text = "(最大)"
-        '
-        'ToolStripMenuItemSettingColor
-        '
-        Me.ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
-        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(224, 26)
-        Me.ToolStripMenuItemSettingColor.Text = "描画色(&C)"
         '
         'frmMain
         '

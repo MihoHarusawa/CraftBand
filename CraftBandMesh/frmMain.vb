@@ -966,6 +966,14 @@ Public Class frmMain
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
         SaveFileDialog1.FileName = _sFilePath
         If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
+            '目標寸法が空ならセット(#19)
+            If nud横寸法.Value = 0 AndAlso nud縦寸法.Value = 0 AndAlso nud高さ寸法.Value = 0 AndAlso
+                0 < _clsCalcMesh.p_d内側_横 AndAlso 0 < _clsCalcMesh.p_d内側_縦 Then
+                nud横寸法.Value = _clsCalcMesh.p_d内側_横
+                nud縦寸法.Value = _clsCalcMesh.p_d内側_縦
+                nud高さ寸法.Value = 1 '空の解除
+                nud高さ寸法.Value = _clsCalcMesh.p_d内側_高さ
+            End If
             'Mesh(本幅)横-縦-高さ
             Dim defname As String
             Save目標寸法(_clsDataTables.p_row目標寸法)
@@ -1111,6 +1119,10 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud縦寸法.ValueChanged
+        recalc(CalcCategory.Target, sender)
+    End Sub
+
+    Private Sub nud高さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud高さ寸法.ValueChanged
         recalc(CalcCategory.Target, sender)
     End Sub
 

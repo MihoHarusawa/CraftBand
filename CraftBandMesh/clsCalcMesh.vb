@@ -355,7 +355,7 @@ Class clsCalcMesh
     End Property
     Private ReadOnly Property isValid高さ_目標 As Boolean
         Get
-            Return 0 < _d高さ_目標
+            Return 0 <= _d高さ_目標
         End Get
     End Property
     Private ReadOnly Property isValid基本のひも幅 As Boolean
@@ -516,7 +516,9 @@ Class clsCalcMesh
             If Not .Value("f_b内側区分") Then
                 _d横_目標 -= (g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ") * 2)
                 _d縦_目標 -= (g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ") * 2)
-                _d高さ_目標 -= g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+                If 0 < _d高さ_目標 Then
+                    _d高さ_目標 -= g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+                End If
             End If
         End With
 
@@ -1622,7 +1624,7 @@ Class clsCalcMesh
     'issue#9 高さ比率をセット 
     'IN:    _d高さの合計    
     Private Function recalc_側面_高さ比率() As Boolean
-        If _d高さの合計 <= 0 Then
+        If _d高さの合計 < 0 Then
             Return False
         End If
 

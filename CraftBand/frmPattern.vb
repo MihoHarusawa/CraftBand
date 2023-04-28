@@ -23,10 +23,6 @@ Public Class frmPattern
         dgvData.SetProfile(_MyProfile)
 
         'dgvData.RowTemplate.Height = cRowHeightIdxOne
-        If g_clsLog.Level = clsLog.LogLevel.Debug Then
-            Me.f_s編みかた名.ReadOnly = False
-            Me.f_iひも番号.ReadOnly = False
-        End If
 
         For Each col As DataGridViewColumn In dgvData.Columns
             If col.DataPropertyName = "f_s編みかた名" Then
