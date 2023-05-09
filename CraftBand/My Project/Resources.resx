@@ -167,6 +167,10 @@
   <data name="CalcOutSum" xml:space="preserve">
     <value>集計値</value>
   </data>
+  <data name="CaptionBandTypeWeight" xml:space="preserve">
+    <value>長さと重さの換算 &lt;{0}&gt;</value>
+    <comment>frmBandTypeWeight</comment>
+  </data>
   <data name="ErrAddRecord" xml:space="preserve">
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>
@@ -174,6 +178,10 @@
   <data name="ErrBadFormat" xml:space="preserve">
     <value>指定された'{0}'は{1}用のファイルではありません。</value>
     <comment>clsDataTables</comment>
+  </data>
+  <data name="ErrBadValue" xml:space="preserve">
+    <value>{0}の値をセットしてください。</value>
+    <comment>frmBandTypeWeight</comment>
   </data>
   <data name="ErrGridCoeff" xml:space="preserve">
     <value>実測値の不足もしくは値のエラーのため計算できなかった係数があります。</value>
@@ -215,6 +223,14 @@
     <value>{0}本幅のコマ寸法値が不正です。</value>
     <comment>clsBandTypeGauge</comment>
   </data>
+  <data name="ErrLengthWeight" xml:space="preserve">
+    <value>『長さと重さ』値を正しくセットしてください。</value>
+    <comment>frmBandTypeWeight</comment>
+  </data>
+  <data name="ErrLengthWeightValue" xml:space="preserve">
+    <value>&lt;数値&gt; &lt;長さの単位&gt; = &lt;数値&gt; &lt;重さの単位&gt; のように入力</value>
+    <comment>frmBandTypeWeight</comment>
+  </data>
   <data name="ErrMasterTableFileCancel" xml:space="preserve">
     <value>設定データを保存するファイルが指定されませんでした。</value>
     <comment>mdlDllMain</comment>
@@ -225,6 +241,10 @@
   </data>
   <data name="ErrMsgTooSmall" xml:space="preserve">
     <value>{0}以上の数値を設定してください。</value>
+    <comment>frmBandType</comment>
+  </data>
+  <data name="ErrNewName" xml:space="preserve">
+    <value>{0}を指定してください。</value>
     <comment>frmBandType</comment>
   </data>
   <data name="ErrNoGifFile" xml:space="preserve">
@@ -247,6 +267,10 @@
     <value>指定ファイル'{0}'から設定データを読み取ることができませんでした。</value>
     <comment>mdlDllMain,frmBasics</comment>
   </data>
+  <data name="ErrSameName" xml:space="preserve">
+    <value>既存の{0}&lt;{1}&gt;と同じにはできません。</value>
+    <comment>frmBandType</comment>
+  </data>
   <data name="ErrSaveMasterTableFile" xml:space="preserve">
     <value>設定データのファイル'{0}への保存に失敗しました。</value>
     <comment>mdlDllMain</comment>
@@ -258,6 +282,10 @@
   <data name="FontNameString" xml:space="preserve">
     <value>ＭＳ Ｐ明朝</value>
     <comment>clsImageDraw</comment>
+  </data>
+  <data name="GuideLengthWeigt" xml:space="preserve">
+    <value>長さを入力して[→] / 重さを入力して[←]</value>
+    <comment>frmBandTypeWeight</comment>
   </data>
   <data name="LOG_DataType" xml:space="preserve">
     <value>未定義のDataType</value>

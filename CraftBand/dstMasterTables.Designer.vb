@@ -1059,6 +1059,8 @@ Namespace Tables
             
             Private columnf_dバンド幅 As Global.System.Data.DataColumn
             
+            Private columnf_s長さと重さ As Global.System.Data.DataColumn
+            
             Private columnf_d短い横ひも長のばらつき As Global.System.Data.DataColumn
             
             Private columnf_d縦ひも間の最小間隔 As Global.System.Data.DataColumn
@@ -1155,6 +1157,14 @@ Namespace Tables
             Public ReadOnly Property f_dバンド幅Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dバンド幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s長さと重さColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s長さと重さ
                 End Get
             End Property
             
@@ -1359,6 +1369,7 @@ Namespace Tables
                         ByVal f_sバンドの種類名 As String,  _
                         ByVal f_i本幅 As Short,  _
                         ByVal f_dバンド幅 As Double,  _
+                        ByVal f_s長さと重さ As String,  _
                         ByVal f_d短い横ひも長のばらつき As Double,  _
                         ByVal f_d縦ひも間の最小間隔 As Double,  _
                         ByVal f_d差しひもの径 As Double,  _
@@ -1380,7 +1391,7 @@ Namespace Tables
                         ByVal f_d四つ畳みひも長加算初期値 As Double,  _
                         ByVal f_s備考 As String) As tblバンドの種類Row
                 Dim rowtblバンドの種類Row As tblバンドの種類Row = CType(Me.NewRow,tblバンドの種類Row)
-                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_s長さと重さ, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_s備考}
                 rowtblバンドの種類Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblバンドの種類Row)
                 Return rowtblバンドの種類Row
@@ -1412,6 +1423,7 @@ Namespace Tables
                 Me.columnf_sバンドの種類名 = MyBase.Columns("f_sバンドの種類名")
                 Me.columnf_i本幅 = MyBase.Columns("f_i本幅")
                 Me.columnf_dバンド幅 = MyBase.Columns("f_dバンド幅")
+                Me.columnf_s長さと重さ = MyBase.Columns("f_s長さと重さ")
                 Me.columnf_d短い横ひも長のばらつき = MyBase.Columns("f_d短い横ひも長のばらつき")
                 Me.columnf_d縦ひも間の最小間隔 = MyBase.Columns("f_d縦ひも間の最小間隔")
                 Me.columnf_d差しひもの径 = MyBase.Columns("f_d差しひもの径")
@@ -1443,6 +1455,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i本幅)
                 Me.columnf_dバンド幅 = New Global.System.Data.DataColumn("f_dバンド幅", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dバンド幅)
+                Me.columnf_s長さと重さ = New Global.System.Data.DataColumn("f_s長さと重さ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s長さと重さ)
                 Me.columnf_d短い横ひも長のばらつき = New Global.System.Data.DataColumn("f_d短い横ひも長のばらつき", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d短い横ひも長のばらつき)
                 Me.columnf_d縦ひも間の最小間隔 = New Global.System.Data.DataColumn("f_d縦ひも間の最小間隔", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -1488,6 +1502,7 @@ Namespace Tables
                 Me.columnf_sバンドの種類名.Unique = true
                 Me.columnf_i本幅.DefaultValue = CType(1,Short)
                 Me.columnf_dバンド幅.DefaultValue = CType(1R,Double)
+                Me.columnf_s長さと重さ.DefaultValue = CType("",String)
                 Me.columnf_d短い横ひも長のばらつき.DefaultValue = CType(0R,Double)
                 Me.columnf_d縦ひも間の最小間隔.DefaultValue = CType(0R,Double)
                 Me.columnf_d差しひもの径.DefaultValue = CType(0R,Double)
@@ -2294,7 +2309,7 @@ Namespace Tables
                 Me.columnf_sバージョン = New Global.System.Data.DataColumn("f_sバージョン", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sバージョン)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.4.0",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.4.1",String)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -3762,6 +3777,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s長さと重さ() As String
+                Get
+                    If Me.Isf_s長さと重さNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblバンドの種類.f_s長さと重さColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblバンドの種類.f_s長さと重さColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d短い横ひも長のばらつき() As Double
                 Get
                     If Me.Isf_d短い横ひも長のばらつきNull Then
@@ -4082,6 +4112,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dバンド幅Null()
                 Me(Me.tabletblバンドの種類.f_dバンド幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s長さと重さNull() As Boolean
+                Return Me.IsNull(Me.tabletblバンドの種類.f_s長さと重さColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s長さと重さNull()
+                Me(Me.tabletblバンドの種類.f_s長さと重さColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

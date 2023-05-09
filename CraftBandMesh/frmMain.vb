@@ -1217,112 +1217,6 @@ Public Class frmMain
     End Sub
 #End Region
 
-#Region "グリッド編集共通"
-
-    'Private Function numberPositionsSelect(ByVal bs As BindingSource, ByVal number As Integer, ByVal dgv As DataGridView) As Boolean
-    '    dgv.ClearSelection()
-
-    '    Dim positions As New List(Of Integer)
-    '    For pos As Integer = 0 To bs.Count - 1
-    '        Dim r As DataRow = bs.Item(pos).row
-    '        If r("f_i番号") = number Then
-    '            positions.Add(pos)
-    '        End If
-    '    Next
-    '    If positions.Count = 0 Then
-    '        Return False
-    '    End If
-
-    '    bs.Position = positions(0)
-
-    '    For Each pos As Integer In positions
-    '        dgv.Rows(pos).Selected = True
-    '    Next
-    '    Return True
-    'End Function
-
-    'Private Function getTableAndNumber(ByVal bs As BindingSource, ByRef table As DataTable, ByRef number As Integer) As Boolean
-    '    Try
-    '        table = bs.DataSource
-    '        If table Is Nothing Then
-    '            Return False
-    '        End If
-
-    '        Dim current As System.Data.DataRowView = bs.Current
-    '        If current Is Nothing OrElse current.Row Is Nothing Then
-    '            number = -1
-    '            Return True
-    '        End If
-
-    '        number = current.Row("f_i番号")
-    '        Return True
-    '    Catch ex As Exception
-    '        g_clsLog.LogException(ex, "frmMain.getTableAndNumber")
-    '        Return False
-
-    '    End Try
-    'End Function
-
-    'Private Sub dgv_DataErrorModify(sender As Object, e As DataGridViewDataErrorEventArgs)
-    '    If e.Exception Is Nothing Then
-    '        Exit Sub
-    '    End If
-    '    Dim dgv As DataGridView = CType(sender, DataGridView)
-
-    '    If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" Then
-    '        '現バンドの本幅数以上の値がセットされているレコードを修正(対象バンドの変更？)
-
-    '        Dim lane As Integer = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
-    '        If lane < 1 Then
-    '            dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = 1
-    '            '本幅数の修正
-    '            g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, 1)
-    '        ElseIf g_clsSelectBasics.p_i本幅 < lane Then
-    '            dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = g_clsSelectBasics.p_i本幅
-    '            '本幅数の修正
-    '            g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_LaneModified", lane, g_clsSelectBasics.p_i本幅)
-    '        End If
-    '        e.ThrowException = False
-
-    '    ElseIf dgv.Columns(e.ColumnIndex).DataPropertyName = "f_s色" Then
-    '        '現バンドにない色がセットされているレコードを修正(対象バンドの変更？)
-
-    '        '色の修正
-    '        g_clsLog.LogResourceMessage(clsLog.LogLevel.Trouble, "LOG_ColorModified", dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-    '        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = ""
-    '        e.ThrowException = False
-
-    '    Else
-    '        dgv_DataErrorCancel(sender, e, Me.Text)
-
-    '    End If
-    'End Sub
-
-    'Private Sub dgv_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv底楕円.CellFormatting, dgv側面.CellFormatting, dgv追加品.CellFormatting, dgv底の横.CellFormatting, dgv底の縦.CellFormatting
-    '    Dim dgv As DataGridView = CType(sender, DataGridView)
-    '    If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
-    '        Exit Sub
-    '    End If
-    '    If dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly Then
-    '        e.CellStyle.BackColor = Color.LightYellow
-    '    End If
-    '    For Each col As DataGridViewColumn In dgv.Columns
-    '        If col.DataPropertyName = "f_iひも番号" Then
-    '            If dgv.Rows(e.RowIndex).Cells(col.Index).Value = 1 Or
-    '                dgv.Rows(e.RowIndex).Cells(col.Index).Value = 0 Then
-    '                If e.ColumnIndex = col.Index Then
-    '                    dgv.Rows(e.RowIndex).HeaderCell.Value = "+"
-    '                End If
-    '            Else
-    '                dgv.Rows(e.RowIndex).Height = cRowHeightIdxSub
-    '            End If
-    '            Exit For
-    '        End If
-    '    Next
-    'End Sub
-
-#End Region
-
 #Region "底楕円"
 
     Private Sub btn追加_底楕円_Click(sender As Object, e As EventArgs) Handles btn追加_底楕円.Click
@@ -1440,10 +1334,6 @@ Public Class frmMain
         End If
     End Sub
 
-    'Private Sub dgv底楕円_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底楕円.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
-
     Private Sub chk楕円底個別設定_CheckedChanged(sender As Object, e As EventArgs) Handles chk楕円底個別設定.CheckedChanged
         nud楕円底円弧の半径加算.Enabled = chk楕円底個別設定.Checked
         nud楕円底周の加算.Enabled = chk楕円底個別設定.Checked
@@ -1481,10 +1371,6 @@ Public Class frmMain
         End If
 
     End Sub
-
-    'Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv側面.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
 
     Private Sub btn削除_側面_Click(sender As Object, e As EventArgs) Handles btn削除_側面.Click
         Dim table As tbl側面DataTable = Nothing
@@ -1671,10 +1557,6 @@ Public Class frmMain
         recalc(CalcCategory.Options, Nothing, Nothing)
     End Sub
 
-    'Private Sub dgv追加品_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv追加品.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
-
     Private Sub dgv追加品_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv追加品.CellValueChanged
         Dim dgv As DataGridView = CType(sender, DataGridView)
         Dim current As System.Data.DataRowView = BindingSource追加品.Current
@@ -1764,14 +1646,6 @@ Public Class frmMain
         dgv底の縦.Refresh()
         Return 0 < change
     End Function
-
-    'Private Sub dgv底の横_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の横.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
-
-    'Private Sub dgv底の縦_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv底の縦.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
 
     Private Sub btnリセット_横_Click(sender As Object, e As EventArgs) Handles btnリセット_横.Click
         'ひも長加算と色をすべてクリアします。よろしいですか？

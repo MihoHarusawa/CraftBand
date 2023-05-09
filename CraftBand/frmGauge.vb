@@ -186,17 +186,5 @@ Public Class frmGauge
         __paras.SetLastData("frmGauge", Me.Size)
     End Sub
 
-    'Private Sub dgvData_DataError(sender As Object, e As Windows.Forms.DataGridViewDataErrorEventArgs) Handles dgvData.DataError
-    '    dgv_DataErrorCancel(sender, e, Me.Text)
-    'End Sub
-
-    'Private Sub dgvData_CellValidating(sender As Object, e As Windows.Forms.DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
-    '    dgv_CellValidating(sender, e, Me.Text)
-    'End Sub
-
-    'Private Sub dgvData_CellFormatting(sender As Object, e As Windows.Forms.DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
-    '    dgv_CellFormatting(sender, e)
-    'End Sub
-
 
 End Class

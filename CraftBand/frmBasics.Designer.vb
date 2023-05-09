@@ -24,6 +24,7 @@ Partial Class frmBasics
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btnキャンセル = New System.Windows.Forms.Button()
         Me.grp設定時の寸法単位 = New System.Windows.Forms.GroupBox()
@@ -34,6 +35,7 @@ Partial Class frmBasics
         Me.txt設定データの保存先 = New System.Windows.Forms.TextBox()
         Me.btn設定データの保存先 = New System.Windows.Forms.Button()
         Me.SaveFileDialogMasterTable = New System.Windows.Forms.SaveFileDialog()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.grp設定時の寸法単位.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -45,6 +47,7 @@ Partial Class frmBasics
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 4
         Me.btnOK.Text = "OK(&O)"
+        Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
         Me.btnOK.UseVisualStyleBackColor = True
         '
         'btnキャンセル
@@ -56,6 +59,7 @@ Partial Class frmBasics
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 5
         Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
         Me.btnキャンセル.UseVisualStyleBackColor = True
         '
         'grp設定時の寸法単位
@@ -69,6 +73,7 @@ Partial Class frmBasics
         Me.grp設定時の寸法単位.TabIndex = 0
         Me.grp設定時の寸法単位.TabStop = False
         Me.grp設定時の寸法単位.Text = "設定時の寸法単位"
+        Me.ToolTip1.SetToolTip(Me.grp設定時の寸法単位, "長さを設定するときの単位")
         '
         'rad設定時の寸法単位_in
         '
@@ -78,6 +83,7 @@ Partial Class frmBasics
         Me.rad設定時の寸法単位_in.Size = New System.Drawing.Size(42, 24)
         Me.rad設定時の寸法単位_in.TabIndex = 2
         Me.rad設定時の寸法単位_in.Text = "in"
+        Me.ToolTip1.SetToolTip(Me.rad設定時の寸法単位_in, "インチ単位")
         Me.rad設定時の寸法単位_in.UseVisualStyleBackColor = True
         '
         'rad設定時の寸法単位_cm
@@ -88,6 +94,7 @@ Partial Class frmBasics
         Me.rad設定時の寸法単位_cm.Size = New System.Drawing.Size(50, 24)
         Me.rad設定時の寸法単位_cm.TabIndex = 1
         Me.rad設定時の寸法単位_cm.Text = "cm"
+        Me.ToolTip1.SetToolTip(Me.rad設定時の寸法単位_cm, "センチメートル単位")
         Me.rad設定時の寸法単位_cm.UseVisualStyleBackColor = True
         '
         'rad設定時の寸法単位_mm
@@ -100,6 +107,7 @@ Partial Class frmBasics
         Me.rad設定時の寸法単位_mm.TabIndex = 0
         Me.rad設定時の寸法単位_mm.TabStop = True
         Me.rad設定時の寸法単位_mm.Text = "mm"
+        Me.ToolTip1.SetToolTip(Me.rad設定時の寸法単位_mm, "ミリメートル単位")
         Me.rad設定時の寸法単位_mm.UseVisualStyleBackColor = True
         '
         'lbl設定データの保存先
@@ -119,6 +127,7 @@ Partial Class frmBasics
         Me.txt設定データの保存先.Name = "txt設定データの保存先"
         Me.txt設定データの保存先.Size = New System.Drawing.Size(291, 27)
         Me.txt設定データの保存先.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.txt設定データの保存先, "設定データの保存先ファイル名")
         '
         'btn設定データの保存先
         '
@@ -128,6 +137,7 @@ Partial Class frmBasics
         Me.btn設定データの保存先.Size = New System.Drawing.Size(30, 30)
         Me.btn設定データの保存先.TabIndex = 3
         Me.btn設定データの保存先.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.btn設定データの保存先, "ファイルダイアログを開きます")
         Me.btn設定データの保存先.UseVisualStyleBackColor = True
         '
         'SaveFileDialogMasterTable
@@ -169,4 +179,5 @@ Partial Class frmBasics
     Friend WithEvents txt設定データの保存先 As TextBox
     Friend WithEvents btn設定データの保存先 As Button
     Friend WithEvents SaveFileDialogMasterTable As SaveFileDialog
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

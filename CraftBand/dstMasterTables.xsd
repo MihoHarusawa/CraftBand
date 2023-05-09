@@ -47,6 +47,7 @@
               <xs:element name="f_sバンドの種類名" msprop:Generator_ColumnPropNameInTable="f_sバンドの種類名Column" msprop:Generator_ColumnPropNameInRow="f_sバンドの種類名" msprop:Generator_UserColumnName="f_sバンドの種類名" msprop:Generator_ColumnVarNameInTable="columnf_sバンドの種類名" type="xs:string" />
               <xs:element name="f_i本幅" msprop:Generator_ColumnPropNameInTable="f_i本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i本幅" msprop:Generator_UserColumnName="f_i本幅" msprop:Generator_ColumnVarNameInTable="columnf_i本幅" type="xs:short" default="1" minOccurs="0" />
               <xs:element name="f_dバンド幅" msprop:Generator_ColumnPropNameInTable="f_dバンド幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dバンド幅" msprop:Generator_UserColumnName="f_dバンド幅" msprop:Generator_ColumnVarNameInTable="columnf_dバンド幅" type="xs:double" default="1" minOccurs="0" />
+              <xs:element name="f_s長さと重さ" msprop:Generator_ColumnPropNameInTable="f_s長さと重さColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s長さと重さ" msprop:Generator_UserColumnName="f_s長さと重さ" msprop:Generator_ColumnVarNameInTable="columnf_s長さと重さ" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_d短い横ひも長のばらつき" msprop:Generator_ColumnPropNameInTable="f_d短い横ひも長のばらつきColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d短い横ひも長のばらつき" msprop:Generator_UserColumnName="f_d短い横ひも長のばらつき" msprop:Generator_ColumnVarNameInTable="columnf_d短い横ひも長のばらつき" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d縦ひも間の最小間隔" msprop:Generator_ColumnPropNameInTable="f_d縦ひも間の最小間隔Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d縦ひも間の最小間隔" msprop:Generator_UserColumnName="f_d縦ひも間の最小間隔" msprop:Generator_ColumnVarNameInTable="columnf_d縦ひも間の最小間隔" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d差しひもの径" msprop:Generator_ColumnPropNameInTable="f_d差しひもの径Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d差しひもの径" msprop:Generator_UserColumnName="f_d差しひもの径" msprop:Generator_ColumnVarNameInTable="columnf_d差しひもの径" type="xs:double" default="0" minOccurs="0" />
@@ -98,7 +99,7 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_s単位" msprop:Generator_ColumnPropNameInTable="f_s単位Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s単位" msprop:Generator_UserColumnName="f_s単位" msprop:Generator_ColumnVarNameInTable="columnf_s単位" type="xs:string" default="mm" minOccurs="0" />
-              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.4.0" minOccurs="0" />
+              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.4.1" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

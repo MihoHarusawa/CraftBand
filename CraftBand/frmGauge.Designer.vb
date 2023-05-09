@@ -25,12 +25,12 @@ Partial Class frmGauge
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.txtコマ寸法係数a = New System.Windows.Forms.TextBox()
         Me.txtコマ寸法係数b = New System.Windows.Forms.TextBox()
         Me.txtコマ要尺係数a = New System.Windows.Forms.TextBox()
@@ -39,7 +39,7 @@ Partial Class frmGauge
         Me.lblコマ寸法係数b = New System.Windows.Forms.Label()
         Me.lblコマ要尺係数a = New System.Windows.Forms.Label()
         Me.lblコマ要尺係数b = New System.Windows.Forms.Label()
-        Me.dgvData = New ctrDataGridView()
+        Me.dgvData = New CraftBand.ctrDataGridView()
         Me.f_sバンドの種類名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_i本幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_dひも幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -157,6 +157,7 @@ Partial Class frmGauge
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
+        Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dひも幅, Me.f_dコマ寸法計算値, Me.f_dコマ要尺計算値, Me.f_b係数取得区分, Me.f_dコマ寸法実測値, Me.f_dコマ要尺実測値, Me.f_b実測値使用区分, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSourceゲージ
@@ -179,8 +180,8 @@ Partial Class frmGauge
         'f_i本幅
         '
         Me.f_i本幅.DataPropertyName = "f_i本幅"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.f_i本幅.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i本幅.DefaultCellStyle = DataGridViewCellStyle19
         Me.f_i本幅.HeaderText = "本幅"
         Me.f_i本幅.MinimumWidth = 6
         Me.f_i本幅.Name = "f_i本幅"
@@ -191,10 +192,10 @@ Partial Class frmGauge
         'f_dひも幅
         '
         Me.f_dひも幅.DataPropertyName = "f_dひも幅"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle2.Format = "N2"
-        DataGridViewCellStyle2.NullValue = Nothing
-        Me.f_dひも幅.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle20.Format = "N2"
+        DataGridViewCellStyle20.NullValue = Nothing
+        Me.f_dひも幅.DefaultCellStyle = DataGridViewCellStyle20
         Me.f_dひも幅.HeaderText = "ひも幅"
         Me.f_dひも幅.MinimumWidth = 6
         Me.f_dひも幅.Name = "f_dひも幅"
@@ -205,10 +206,10 @@ Partial Class frmGauge
         'f_dコマ寸法計算値
         '
         Me.f_dコマ寸法計算値.DataPropertyName = "f_dコマ寸法計算値"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle3.Format = "N2"
-        DataGridViewCellStyle3.NullValue = Nothing
-        Me.f_dコマ寸法計算値.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle21.Format = "N2"
+        DataGridViewCellStyle21.NullValue = Nothing
+        Me.f_dコマ寸法計算値.DefaultCellStyle = DataGridViewCellStyle21
         Me.f_dコマ寸法計算値.HeaderText = "コマ寸法計算値"
         Me.f_dコマ寸法計算値.MinimumWidth = 6
         Me.f_dコマ寸法計算値.Name = "f_dコマ寸法計算値"
@@ -219,10 +220,10 @@ Partial Class frmGauge
         'f_dコマ要尺計算値
         '
         Me.f_dコマ要尺計算値.DataPropertyName = "f_dコマ要尺計算値"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle4.Format = "N2"
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.f_dコマ要尺計算値.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle22.Format = "N2"
+        DataGridViewCellStyle22.NullValue = Nothing
+        Me.f_dコマ要尺計算値.DefaultCellStyle = DataGridViewCellStyle22
         Me.f_dコマ要尺計算値.HeaderText = "コマ要尺計算値"
         Me.f_dコマ要尺計算値.MinimumWidth = 6
         Me.f_dコマ要尺計算値.Name = "f_dコマ要尺計算値"
@@ -242,8 +243,8 @@ Partial Class frmGauge
         'f_dコマ寸法実測値
         '
         Me.f_dコマ寸法実測値.DataPropertyName = "f_dコマ寸法実測値"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dコマ寸法実測値.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dコマ寸法実測値.DefaultCellStyle = DataGridViewCellStyle23
         Me.f_dコマ寸法実測値.HeaderText = "コマ寸法実測値"
         Me.f_dコマ寸法実測値.MinimumWidth = 6
         Me.f_dコマ寸法実測値.Name = "f_dコマ寸法実測値"
@@ -253,8 +254,8 @@ Partial Class frmGauge
         'f_dコマ要尺実測値
         '
         Me.f_dコマ要尺実測値.DataPropertyName = "f_dコマ要尺実測値"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dコマ要尺実測値.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dコマ要尺実測値.DefaultCellStyle = DataGridViewCellStyle24
         Me.f_dコマ要尺実測値.HeaderText = "コマ要尺実測値"
         Me.f_dコマ要尺実測値.MinimumWidth = 6
         Me.f_dコマ要尺実測値.Name = "f_dコマ要尺実測値"
@@ -299,6 +300,7 @@ Partial Class frmGauge
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 16
         Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
         Me.btnキャンセル.UseVisualStyleBackColor = True
         '
         'btnOK
@@ -309,6 +311,7 @@ Partial Class frmGauge
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 15
         Me.btnOK.Text = "OK(&O)"
+        Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
         Me.btnOK.UseVisualStyleBackColor = True
         '
         'cmb対象バンドの種類名
@@ -321,11 +324,12 @@ Partial Class frmGauge
         Me.cmb対象バンドの種類名.Name = "cmb対象バンドの種類名"
         Me.cmb対象バンドの種類名.Size = New System.Drawing.Size(147, 28)
         Me.cmb対象バンドの種類名.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.cmb対象バンドの種類名, "対象のバンドの種類名を選択")
         '
         'lbl対象バンドの種類名
         '
         Me.lbl対象バンドの種類名.AutoSize = True
-        Me.lbl対象バンドの種類名.Location = New System.Drawing.Point(22, 9)
+        Me.lbl対象バンドの種類名.Location = New System.Drawing.Point(12, 9)
         Me.lbl対象バンドの種類名.Name = "lbl対象バンドの種類名"
         Me.lbl対象バンドの種類名.Size = New System.Drawing.Size(130, 20)
         Me.lbl対象バンドの種類名.TabIndex = 0

@@ -26,7 +26,6 @@ Public Class frmOptions
         _MyProfile.FormCaption = Me.Text
         dgvData.SetProfile(_MyProfile)
 
-        'dgvData.RowTemplate.Height = cRowHeightIdxOne
 
         For Each col As DataGridViewColumn In dgvData.Columns
             If col.DataPropertyName = "f_s付属品名" Then
@@ -76,27 +75,11 @@ Public Class frmOptions
         __paras.SetLastData("frmOptionsSize", Me.Size)
     End Sub
 
-    'Private Sub dgvData_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvData.DataError
-    '    dgv_DataErrorCancel(sender, e, Me.Text)
-    'End Sub
-
-    'Private Sub dgvData_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles dgvData.CellValidating
-    '    dgv_CellValidating(sender, e, Me.Text)
-    'End Sub
-
-    'Private Sub dgvData_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvData.CellFormatting
-    '    dgv_CellFormatting(sender, e)
-    'End Sub
-
     Private Sub dgvData_CurrentCellChanged(sender As Object, e As EventArgs) Handles dgvData.CurrentCellChanged
         If dgvData.CurrentRow IsNot Nothing AndAlso 0 <= dgvData.CurrentRow.Index Then
             txt付属品名.Text = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_NameColumnIndex).Value
         End If
     End Sub
-
-    'Private Sub dgvData_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvData.CellPainting
-    '    dgvData_CellPaintingCheckBox(sender, e)
-    'End Sub
 
     Private Sub btnひも追加_Click(sender As Object, e As EventArgs) Handles btnひも追加.Click
         If String.IsNullOrWhiteSpace(txt付属品名.Text) Then

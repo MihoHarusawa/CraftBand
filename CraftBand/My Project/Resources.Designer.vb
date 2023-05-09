@@ -187,6 +187,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  長さと重さの換算 &lt;{0}&gt; に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionBandTypeWeight() As String
+            Get
+                Return ResourceManager.GetString("CaptionBandTypeWeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  レコードを追加できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrAddRecord() As String
@@ -201,6 +210,15 @@ Namespace My.Resources
         Friend ReadOnly Property ErrBadFormat() As String
             Get
                 Return ResourceManager.GetString("ErrBadFormat", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}の値をセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrBadValue() As String
+            Get
+                Return ResourceManager.GetString("ErrBadValue", resourceCulture)
             End Get
         End Property
         
@@ -295,6 +313,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  『長さと重さ』値を正しくセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrLengthWeight() As String
+            Get
+                Return ResourceManager.GetString("ErrLengthWeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  &lt;数値&gt; &lt;長さの単位&gt; = &lt;数値&gt; &lt;重さの単位&gt; のように入力 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrLengthWeightValue() As String
+            Get
+                Return ResourceManager.GetString("ErrLengthWeightValue", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  設定データを保存するファイルが指定されませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrMasterTableFileCancel() As String
@@ -318,6 +354,15 @@ Namespace My.Resources
         Friend ReadOnly Property ErrMsgTooSmall() As String
             Get
                 Return ResourceManager.GetString("ErrMsgTooSmall", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrNewName() As String
+            Get
+                Return ResourceManager.GetString("ErrNewName", resourceCulture)
             End Get
         End Property
         
@@ -367,6 +412,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  既存の{0}&lt;{1}&gt;と同じにはできません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrSameName() As String
+            Get
+                Return ResourceManager.GetString("ErrSameName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  設定データのファイル&apos;{0}への保存に失敗しました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrSaveMasterTableFile() As String
@@ -390,6 +444,15 @@ Namespace My.Resources
         Friend ReadOnly Property FontNameString() As String
             Get
                 Return ResourceManager.GetString("FontNameString", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  長さを入力して[→] / 重さを入力して[←] に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property GuideLengthWeigt() As String
+            Get
+                Return ResourceManager.GetString("GuideLengthWeigt", resourceCulture)
             End Get
         End Property
         

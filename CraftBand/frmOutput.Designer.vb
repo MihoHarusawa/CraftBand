@@ -35,11 +35,7 @@ Partial Class frmOutput
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOutput))
-        Me.dgvOutput = New ctrDataGridView()
-        Me.BindingSourceOutput = New System.Windows.Forms.BindingSource(Me.components)
-        Me.btn閉じる = New System.Windows.Forms.Button()
-        Me.btnCSV出力 = New System.Windows.Forms.Button()
-        Me.btnTXT出力 = New System.Windows.Forms.Button()
+        Me.dgvOutput = New CraftBand.ctrDataGridView()
         Me.f_iNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_b空行区分 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_sカテゴリー = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -57,6 +53,11 @@ Partial Class frmOutput
         Me.f_s高さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s長さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_sメモ = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSourceOutput = New System.Windows.Forms.BindingSource(Me.components)
+        Me.btn閉じる = New System.Windows.Forms.Button()
+        Me.btnCSV出力 = New System.Windows.Forms.Button()
+        Me.btnTXT出力 = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvOutput, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceOutput, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -69,6 +70,7 @@ Partial Class frmOutput
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvOutput.AutoGenerateColumns = False
+        Me.dgvOutput.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvOutput.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_iNo, Me.f_b空行区分, Me.f_sカテゴリー, Me.f_s番号, Me.f_s記号, Me.f_s本幅, Me.f_sひも本数, Me.f_sひも長, Me.f_s色, Me.f_sタイプ, Me.f_s編みかた名, Me.f_s編みひも名, Me.f_i周数, Me.f_i段数, Me.f_s高さ, Me.f_s長さ, Me.f_sメモ})
         Me.dgvOutput.DataSource = Me.BindingSourceOutput
@@ -79,42 +81,6 @@ Partial Class frmOutput
         Me.dgvOutput.RowTemplate.Height = 29
         Me.dgvOutput.Size = New System.Drawing.Size(552, 175)
         Me.dgvOutput.TabIndex = 0
-        '
-        'BindingSourceOutput
-        '
-        Me.BindingSourceOutput.DataMember = "tblOutput"
-        Me.BindingSourceOutput.DataSource = GetType(CraftBand.Tables.dstOutput)
-        '
-        'btn閉じる
-        '
-        Me.btn閉じる.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn閉じる.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn閉じる.Location = New System.Drawing.Point(453, 193)
-        Me.btn閉じる.Name = "btn閉じる"
-        Me.btn閉じる.Size = New System.Drawing.Size(111, 46)
-        Me.btn閉じる.TabIndex = 28
-        Me.btn閉じる.Text = "閉じる(&C)"
-        Me.btn閉じる.UseVisualStyleBackColor = True
-        '
-        'btnCSV出力
-        '
-        Me.btnCSV出力.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCSV出力.Location = New System.Drawing.Point(335, 193)
-        Me.btnCSV出力.Name = "btnCSV出力"
-        Me.btnCSV出力.Size = New System.Drawing.Size(111, 46)
-        Me.btnCSV出力.TabIndex = 27
-        Me.btnCSV出力.Text = "CSV出力(&O)"
-        Me.btnCSV出力.UseVisualStyleBackColor = True
-        '
-        'btnTXT出力
-        '
-        Me.btnTXT出力.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnTXT出力.Location = New System.Drawing.Point(217, 193)
-        Me.btnTXT出力.Name = "btnTXT出力"
-        Me.btnTXT出力.Size = New System.Drawing.Size(111, 46)
-        Me.btnTXT出力.TabIndex = 29
-        Me.btnTXT出力.Text = "TXT出力(&T)"
-        Me.btnTXT出力.UseVisualStyleBackColor = True
         '
         'f_iNo
         '
@@ -303,6 +269,45 @@ Partial Class frmOutput
         Me.f_sメモ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.f_sメモ.Width = 125
         '
+        'BindingSourceOutput
+        '
+        Me.BindingSourceOutput.DataMember = "tblOutput"
+        Me.BindingSourceOutput.DataSource = GetType(CraftBand.Tables.dstOutput)
+        '
+        'btn閉じる
+        '
+        Me.btn閉じる.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn閉じる.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn閉じる.Location = New System.Drawing.Point(453, 193)
+        Me.btn閉じる.Name = "btn閉じる"
+        Me.btn閉じる.Size = New System.Drawing.Size(111, 46)
+        Me.btn閉じる.TabIndex = 28
+        Me.btn閉じる.Text = "閉じる(&C)"
+        Me.ToolTip1.SetToolTip(Me.btn閉じる, "この画面を閉じます")
+        Me.btn閉じる.UseVisualStyleBackColor = True
+        '
+        'btnCSV出力
+        '
+        Me.btnCSV出力.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCSV出力.Location = New System.Drawing.Point(335, 193)
+        Me.btnCSV出力.Name = "btnCSV出力"
+        Me.btnCSV出力.Size = New System.Drawing.Size(111, 46)
+        Me.btnCSV出力.TabIndex = 27
+        Me.btnCSV出力.Text = "CSV出力(&O)"
+        Me.ToolTip1.SetToolTip(Me.btnCSV出力, "CSVファイルとして開きます")
+        Me.btnCSV出力.UseVisualStyleBackColor = True
+        '
+        'btnTXT出力
+        '
+        Me.btnTXT出力.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnTXT出力.Location = New System.Drawing.Point(217, 193)
+        Me.btnTXT出力.Name = "btnTXT出力"
+        Me.btnTXT出力.Size = New System.Drawing.Size(111, 46)
+        Me.btnTXT出力.TabIndex = 29
+        Me.btnTXT出力.Text = "TXT出力(&T)"
+        Me.ToolTip1.SetToolTip(Me.btnTXT出力, "テキストファイルとして開きます")
+        Me.btnTXT出力.UseVisualStyleBackColor = True
+        '
         'frmOutput
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
@@ -344,4 +349,5 @@ Partial Class frmOutput
     Friend WithEvents f_s高さ As DataGridViewTextBoxColumn
     Friend WithEvents f_s長さ As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ As DataGridViewTextBoxColumn
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

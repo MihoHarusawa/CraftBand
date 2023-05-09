@@ -39,6 +39,7 @@
                 <xs:element name="f_sバンドの種類名" type="xs:string" />
                 <xs:element name="f_i本幅" type="xs:short" default="1" minOccurs="0" />
                 <xs:element name="f_dバンド幅" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_s長さと重さ" type="xs:string" default="" minOccurs="0" />
                 <xs:element name="f_d短い横ひも長のばらつき" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_d縦ひも間の最小間隔" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_d差しひもの径" type="xs:double" default="0" minOccurs="0" />
@@ -90,7 +91,7 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element name="f_s単位" type="xs:string" default="mm" minOccurs="0" />
-                <xs:element name="f_sバージョン" type="xs:string" default="1.4.0" minOccurs="0" />
+                <xs:element name="f_sバージョン" type="xs:string" default="1.4.1" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1476,6 +1477,7 @@
     <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
     <f_i本幅>12</f_i本幅>
     <f_dバンド幅>14.74</f_dバンド幅>
+    <f_s長さと重さ>6m=59g</f_s長さと重さ>
     <f_d短い横ひも長のばらつき>1</f_d短い横ひも長のばらつき>
     <f_d縦ひも間の最小間隔>3</f_d縦ひも間の最小間隔>
     <f_d差しひもの径>0</f_d差しひもの径>
@@ -1501,6 +1503,7 @@
     <f_sバンドの種類名>クラフトバンド13</f_sバンドの種類名>
     <f_i本幅>13</f_i本幅>
     <f_dバンド幅>15.34</f_dバンド幅>
+    <f_s長さと重さ />
     <f_d短い横ひも長のばらつき>1</f_d短い横ひも長のばらつき>
     <f_d縦ひも間の最小間隔>3</f_d縦ひも間の最小間隔>
     <f_d差しひもの径>0</f_d差しひもの径>
@@ -1526,6 +1529,7 @@
     <f_sバンドの種類名>PPバンド</f_sバンドの種類名>
     <f_i本幅>2</f_i本幅>
     <f_dバンド幅>15</f_dバンド幅>
+    <f_s長さと重さ>100m=340g</f_s長さと重さ>
     <f_d短い横ひも長のばらつき>0</f_d短い横ひも長のばらつき>
     <f_d縦ひも間の最小間隔>0</f_d縦ひも間の最小間隔>
     <f_d差しひもの径>0</f_d差しひもの径>
@@ -1551,6 +1555,7 @@
     <f_sバンドの種類名>エコクラフト</f_sバンドの種類名>
     <f_i本幅>12</f_i本幅>
     <f_dバンド幅>15</f_dバンド幅>
+    <f_s長さと重さ />
     <f_d短い横ひも長のばらつき>0</f_d短い横ひも長のばらつき>
     <f_d縦ひも間の最小間隔>0</f_d縦ひも間の最小間隔>
     <f_d差しひもの径>0</f_d差しひもの径>
@@ -2064,7 +2069,7 @@
   </tbl付属品>
   <tbl基本値>
     <f_s単位>mm</f_s単位>
-    <f_sバージョン>1.4.0</f_sバージョン>
+    <f_sバージョン>1.4.1</f_sバージョン>
   </tbl基本値>
   <tbl描画色>
     <f_s色>赤</f_s色>

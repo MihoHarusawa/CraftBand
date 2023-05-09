@@ -25,20 +25,20 @@ Partial Class frmPattern
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.dgvData = New ctrDataGridView()
+        Dim DataGridViewCellStyle66 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle67 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle68 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle69 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle70 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle71 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle72 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle73 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle74 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle75 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle76 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle77 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle78 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Me.dgvData = New CraftBand.ctrDataGridView()
         Me.f_s編みかた名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_iひも番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s編みひも名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -71,6 +71,7 @@ Partial Class frmPattern
         Me.txt編みかた名 = New System.Windows.Forms.TextBox()
         Me.lbl編みかた名 = New System.Windows.Forms.Label()
         Me.btn削除 = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource編みかた, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -83,6 +84,7 @@ Partial Class frmPattern
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgvData.AutoGenerateColumns = False
+        Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_s編みかた名, Me.f_iひも番号, Me.f_s編みひも名, Me.f_b縁専用区分, Me.f_b底使用区分, Me.f_i周あたり段数, Me.f_iひも数, Me.f_i本幅初期値, Me.f_b周連続区分, Me.f_d高さ比率対ひも幅, Me.f_d垂直ひも長比率対ひも幅, Me.f_dひも長比率対周長, Me.f_dひも長加算1目あたり, Me.f_dひも長加算1周あたり, Me.f_dひも1幅係数1目あたり, Me.f_dひも長加算ひもあたり, Me.f_dひも長加算初期値, Me.f_d厚さ, Me.f_bCraftBandMesh, Me.f_bCraftBandSquare45, Me.f_bCraftBandKnot, Me.f_bCraftBandSquare, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSource編みかた
@@ -106,8 +108,8 @@ Partial Class frmPattern
         'f_iひも番号
         '
         Me.f_iひも番号.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも番号.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle66.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも番号.DefaultCellStyle = DataGridViewCellStyle66
         Me.f_iひも番号.HeaderText = "ひも番号"
         Me.f_iひも番号.MinimumWidth = 6
         Me.f_iひも番号.Name = "f_iひも番号"
@@ -145,8 +147,8 @@ Partial Class frmPattern
         'f_i周あたり段数
         '
         Me.f_i周あたり段数.DataPropertyName = "f_i周あたり段数"
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_i周あたり段数.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle67.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_i周あたり段数.DefaultCellStyle = DataGridViewCellStyle67
         Me.f_i周あたり段数.HeaderText = "周あたり段数"
         Me.f_i周あたり段数.MinimumWidth = 6
         Me.f_i周あたり段数.Name = "f_i周あたり段数"
@@ -156,8 +158,8 @@ Partial Class frmPattern
         'f_iひも数
         '
         Me.f_iひも数.DataPropertyName = "f_iひも数"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも数.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle68.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも数.DefaultCellStyle = DataGridViewCellStyle68
         Me.f_iひも数.HeaderText = "ひも数"
         Me.f_iひも数.MinimumWidth = 6
         Me.f_iひも数.Name = "f_iひも数"
@@ -167,8 +169,8 @@ Partial Class frmPattern
         'f_i本幅初期値
         '
         Me.f_i本幅初期値.DataPropertyName = "f_i本幅初期値"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.f_i本幅初期値.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle69.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i本幅初期値.DefaultCellStyle = DataGridViewCellStyle69
         Me.f_i本幅初期値.HeaderText = "本幅初期値"
         Me.f_i本幅初期値.MinimumWidth = 6
         Me.f_i本幅初期値.Name = "f_i本幅初期値"
@@ -189,8 +191,8 @@ Partial Class frmPattern
         'f_d高さ比率対ひも幅
         '
         Me.f_d高さ比率対ひも幅.DataPropertyName = "f_d高さ比率対ひも幅"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d高さ比率対ひも幅.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle70.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d高さ比率対ひも幅.DefaultCellStyle = DataGridViewCellStyle70
         Me.f_d高さ比率対ひも幅.HeaderText = "高さ比率対ひも幅"
         Me.f_d高さ比率対ひも幅.MinimumWidth = 6
         Me.f_d高さ比率対ひも幅.Name = "f_d高さ比率対ひも幅"
@@ -201,8 +203,8 @@ Partial Class frmPattern
         'f_d垂直ひも長比率対ひも幅
         '
         Me.f_d垂直ひも長比率対ひも幅.DataPropertyName = "f_d垂直ひも長比率対ひも幅"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d垂直ひも長比率対ひも幅.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle71.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d垂直ひも長比率対ひも幅.DefaultCellStyle = DataGridViewCellStyle71
         Me.f_d垂直ひも長比率対ひも幅.HeaderText = "垂直ひも長比率対ひも幅"
         Me.f_d垂直ひも長比率対ひも幅.MinimumWidth = 6
         Me.f_d垂直ひも長比率対ひも幅.Name = "f_d垂直ひも長比率対ひも幅"
@@ -213,8 +215,8 @@ Partial Class frmPattern
         'f_dひも長比率対周長
         '
         Me.f_dひも長比率対周長.DataPropertyName = "f_dひも長比率対周長"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長比率対周長.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle72.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長比率対周長.DefaultCellStyle = DataGridViewCellStyle72
         Me.f_dひも長比率対周長.HeaderText = "ひも長比率対周長"
         Me.f_dひも長比率対周長.MinimumWidth = 6
         Me.f_dひも長比率対周長.Name = "f_dひも長比率対周長"
@@ -225,8 +227,8 @@ Partial Class frmPattern
         'f_dひも長加算1目あたり
         '
         Me.f_dひも長加算1目あたり.DataPropertyName = "f_dひも長加算1目あたり"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算1目あたり.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle73.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算1目あたり.DefaultCellStyle = DataGridViewCellStyle73
         Me.f_dひも長加算1目あたり.HeaderText = "ひも長加算1目あたり"
         Me.f_dひも長加算1目あたり.MinimumWidth = 6
         Me.f_dひも長加算1目あたり.Name = "f_dひも長加算1目あたり"
@@ -237,8 +239,8 @@ Partial Class frmPattern
         'f_dひも長加算1周あたり
         '
         Me.f_dひも長加算1周あたり.DataPropertyName = "f_dひも長加算1周あたり"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算1周あたり.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle74.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算1周あたり.DefaultCellStyle = DataGridViewCellStyle74
         Me.f_dひも長加算1周あたり.HeaderText = "ひも長加算1周あたり"
         Me.f_dひも長加算1周あたり.MinimumWidth = 6
         Me.f_dひも長加算1周あたり.Name = "f_dひも長加算1周あたり"
@@ -249,8 +251,8 @@ Partial Class frmPattern
         'f_dひも1幅係数1目あたり
         '
         Me.f_dひも1幅係数1目あたり.DataPropertyName = "f_dひも1幅係数1目あたり"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも1幅係数1目あたり.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle75.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも1幅係数1目あたり.DefaultCellStyle = DataGridViewCellStyle75
         Me.f_dひも1幅係数1目あたり.HeaderText = "ひも1幅係数1目あたり"
         Me.f_dひも1幅係数1目あたり.MinimumWidth = 6
         Me.f_dひも1幅係数1目あたり.Name = "f_dひも1幅係数1目あたり"
@@ -261,8 +263,8 @@ Partial Class frmPattern
         'f_dひも長加算ひもあたり
         '
         Me.f_dひも長加算ひもあたり.DataPropertyName = "f_dひも長加算ひもあたり"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算ひもあたり.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle76.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算ひもあたり.DefaultCellStyle = DataGridViewCellStyle76
         Me.f_dひも長加算ひもあたり.HeaderText = "ひも長加算ひもあたり"
         Me.f_dひも長加算ひもあたり.MinimumWidth = 6
         Me.f_dひも長加算ひもあたり.Name = "f_dひも長加算ひもあたり"
@@ -272,8 +274,8 @@ Partial Class frmPattern
         'f_dひも長加算初期値
         '
         Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle77.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle77
         Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
         Me.f_dひも長加算初期値.MinimumWidth = 6
         Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
@@ -284,8 +286,8 @@ Partial Class frmPattern
         'f_d厚さ
         '
         Me.f_d厚さ.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle78.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d厚さ.DefaultCellStyle = DataGridViewCellStyle78
         Me.f_d厚さ.HeaderText = "厚さ"
         Me.f_d厚さ.MinimumWidth = 6
         Me.f_d厚さ.Name = "f_d厚さ"
@@ -368,6 +370,7 @@ Partial Class frmPattern
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 8
         Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
         Me.btnキャンセル.UseVisualStyleBackColor = True
         '
         'btnOK
@@ -378,6 +381,7 @@ Partial Class frmPattern
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 7
         Me.btnOK.Text = "OK(&O)"
+        Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
         Me.btnOK.UseVisualStyleBackColor = True
         '
         'btnひも追加
@@ -388,6 +392,7 @@ Partial Class frmPattern
         Me.btnひも追加.Size = New System.Drawing.Size(111, 46)
         Me.btnひも追加.TabIndex = 6
         Me.btnひも追加.Text = "ひも追加(&B)"
+        Me.ToolTip1.SetToolTip(Me.btnひも追加, "新たな編みかた名を追加、" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "もしくは既存の編みかた名に編みひもを追加")
         Me.btnひも追加.UseVisualStyleBackColor = True
         '
         'txt編みかた名
@@ -398,6 +403,7 @@ Partial Class frmPattern
         Me.txt編みかた名.Name = "txt編みかた名"
         Me.txt編みかた名.Size = New System.Drawing.Size(101, 27)
         Me.txt編みかた名.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.txt編みかた名, "編みかたの名前")
         '
         'lbl編みかた名
         '
@@ -417,6 +423,7 @@ Partial Class frmPattern
         Me.btn削除.Size = New System.Drawing.Size(111, 46)
         Me.btn削除.TabIndex = 3
         Me.btn削除.Text = "削除(&D)"
+        Me.ToolTip1.SetToolTip(Me.btn削除, "選択している編みかたを削除します")
         Me.btn削除.UseVisualStyleBackColor = True
         '
         'frmPattern
@@ -477,4 +484,5 @@ Partial Class frmPattern
     Friend WithEvents f_bCraftBandKnot As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandSquare As DataGridViewCheckBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

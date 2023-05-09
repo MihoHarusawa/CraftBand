@@ -22,6 +22,7 @@ Partial Class frmSelectBand
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.lblバンド幅の寸法単位 = New System.Windows.Forms.Label()
         Me.txt本幅 = New System.Windows.Forms.TextBox()
         Me.grp出力時の寸法単位 = New System.Windows.Forms.GroupBox()
@@ -44,6 +45,7 @@ Partial Class frmSelectBand
         Me.lblマイひも長係数 = New System.Windows.Forms.Label()
         Me.rad右側 = New System.Windows.Forms.RadioButton()
         Me.rad左側 = New System.Windows.Forms.RadioButton()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.grp出力時の寸法単位.SuspendLayout()
         CType(Me.nud小数点以下桁数, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grp四つ畳み編みの上の縦ひも位置.SuspendLayout()
@@ -68,6 +70,7 @@ Partial Class frmSelectBand
         Me.txt本幅.ReadOnly = True
         Me.txt本幅.Size = New System.Drawing.Size(50, 27)
         Me.txt本幅.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.txt本幅, "選んだバンドが何本幅か")
         '
         'grp出力時の寸法単位
         '
@@ -82,6 +85,7 @@ Partial Class frmSelectBand
         Me.grp出力時の寸法単位.TabIndex = 7
         Me.grp出力時の寸法単位.TabStop = False
         Me.grp出力時の寸法単位.Text = "出力時の寸法単位"
+        Me.ToolTip1.SetToolTip(Me.grp出力時の寸法単位, "ひもリスト出力時の長さの単位")
         '
         'nud小数点以下桁数
         '
@@ -91,6 +95,7 @@ Partial Class frmSelectBand
         Me.nud小数点以下桁数.Name = "nud小数点以下桁数"
         Me.nud小数点以下桁数.Size = New System.Drawing.Size(61, 27)
         Me.nud小数点以下桁数.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.nud小数点以下桁数, "何桁で丸めて表示するか")
         '
         'lbl小数点以下桁数
         '
@@ -109,6 +114,7 @@ Partial Class frmSelectBand
         Me.rad出力時の寸法単位_in.Size = New System.Drawing.Size(42, 24)
         Me.rad出力時の寸法単位_in.TabIndex = 2
         Me.rad出力時の寸法単位_in.Text = "in"
+        Me.ToolTip1.SetToolTip(Me.rad出力時の寸法単位_in, "インチ")
         Me.rad出力時の寸法単位_in.UseVisualStyleBackColor = True
         '
         'rad出力時の寸法単位_cm
@@ -119,6 +125,7 @@ Partial Class frmSelectBand
         Me.rad出力時の寸法単位_cm.Size = New System.Drawing.Size(50, 24)
         Me.rad出力時の寸法単位_cm.TabIndex = 1
         Me.rad出力時の寸法単位_cm.Text = "cm"
+        Me.ToolTip1.SetToolTip(Me.rad出力時の寸法単位_cm, "センチメートル")
         Me.rad出力時の寸法単位_cm.UseVisualStyleBackColor = True
         '
         'rad出力時の寸法単位_mm
@@ -131,6 +138,7 @@ Partial Class frmSelectBand
         Me.rad出力時の寸法単位_mm.TabIndex = 0
         Me.rad出力時の寸法単位_mm.TabStop = True
         Me.rad出力時の寸法単位_mm.Text = "mm"
+        Me.ToolTip1.SetToolTip(Me.rad出力時の寸法単位_mm, "ミリメートル")
         Me.rad出力時の寸法単位_mm.UseVisualStyleBackColor = True
         '
         'cmb対象バンドの種類名
@@ -143,6 +151,7 @@ Partial Class frmSelectBand
         Me.cmb対象バンドの種類名.Name = "cmb対象バンドの種類名"
         Me.cmb対象バンドの種類名.Size = New System.Drawing.Size(193, 28)
         Me.cmb対象バンドの種類名.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.cmb対象バンドの種類名, "使いたいバンドの種類名を選びます")
         '
         'txtバンド幅
         '
@@ -152,6 +161,7 @@ Partial Class frmSelectBand
         Me.txtバンド幅.ReadOnly = True
         Me.txtバンド幅.Size = New System.Drawing.Size(60, 27)
         Me.txtバンド幅.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.txtバンド幅, "選んだバンドの幅")
         '
         'lblバンド幅
         '
@@ -191,6 +201,7 @@ Partial Class frmSelectBand
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 12
         Me.btnキャンセル.Text = "キャンセル(&C)"
+        Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
         Me.btnキャンセル.UseVisualStyleBackColor = True
         '
         'btnOK
@@ -201,6 +212,7 @@ Partial Class frmSelectBand
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 11
         Me.btnOK.Text = "OK(&O)"
+        Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
         Me.btnOK.UseVisualStyleBackColor = True
         '
         'lblリスト出力記号
@@ -218,6 +230,7 @@ Partial Class frmSelectBand
         Me.txtリスト出力記号.Name = "txtリスト出力記号"
         Me.txtリスト出力記号.Size = New System.Drawing.Size(83, 27)
         Me.txtリスト出力記号.TabIndex = 10
+        Me.ToolTip1.SetToolTip(Me.txtリスト出力記号, "リストに付加する記号の最初の文字")
         '
         'grp四つ畳み編みの上の縦ひも位置
         '
@@ -244,6 +257,7 @@ Partial Class frmSelectBand
         Me.nudマイひも長係数.Size = New System.Drawing.Size(68, 27)
         Me.nudマイひも長係数.TabIndex = 9
         Me.nudマイひも長係数.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.ToolTip1.SetToolTip(Me.nudマイひも長係数, "出力する長さを一律で変えたい時")
         Me.nudマイひも長係数.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'lblマイひも長係数
@@ -265,6 +279,7 @@ Partial Class frmSelectBand
         Me.rad右側.TabIndex = 1
         Me.rad右側.TabStop = True
         Me.rad右側.Text = "右側"
+        Me.ToolTip1.SetToolTip(Me.rad右側, "縦ひもが右上に伸びるタイプ")
         Me.rad右側.UseVisualStyleBackColor = True
         '
         'rad左側
@@ -275,6 +290,7 @@ Partial Class frmSelectBand
         Me.rad左側.Size = New System.Drawing.Size(60, 24)
         Me.rad左側.TabIndex = 0
         Me.rad左側.Text = "左側"
+        Me.ToolTip1.SetToolTip(Me.rad左側, "縦ひもが左上に伸びるタイプ")
         Me.rad左側.UseVisualStyleBackColor = True
         '
         'frmSelectBand
@@ -334,4 +350,5 @@ Partial Class frmSelectBand
     Friend WithEvents rad左側 As Windows.Forms.RadioButton
     Friend WithEvents nudマイひも長係数 As Windows.Forms.NumericUpDown
     Public WithEvents lblマイひも長係数 As Windows.Forms.Label
+    Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
 End Class
