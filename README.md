@@ -42,10 +42,10 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 
 # Usage
 
-* CraftBandMesh:  https://www.labo.com/CraftBand/craftbandmesh/
+* CraftBandMesh:    https://labo.com/CraftBand/craftbandmesh/
 * CraftBandSqare45: https://labo.com/CraftBand/CraftBandSquare45/
-* CraftBandKnot : https://labo.com/CraftBand/CraftBandKnot/
-* サンプルなど http://www.labo.com/CraftBand/
+* CraftBandKnot :   https://labo.com/CraftBand/CraftBandKnot/
+* サンプルなど      https://labo.com/CraftBand/
 
 
 # Author

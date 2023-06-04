@@ -25,17 +25,27 @@ Partial Class frmOptions
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle51 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle52 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle53 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle54 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle55 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle56 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle57 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle58 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle59 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle60 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvData = New CraftBand.ctrDataGridView()
+        Me.BindingSource付属品 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
+        Me.lbl単位 = New System.Windows.Forms.Label()
+        Me.btnキャンセル = New System.Windows.Forms.Button()
+        Me.btnOK = New System.Windows.Forms.Button()
+        Me.btnひも追加 = New System.Windows.Forms.Button()
+        Me.lbl付属品名 = New System.Windows.Forms.Label()
+        Me.txt付属品名 = New System.Windows.Forms.TextBox()
+        Me.btn削除 = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.f_s付属品名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_iひも番号 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s付属品ひも名 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -54,16 +64,6 @@ Partial Class frmOptions
         Me.f_bCraftBandKnot = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_bCraftBandSquare = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BindingSource付属品 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.lbl設定時の寸法単位 = New System.Windows.Forms.Label()
-        Me.lbl単位 = New System.Windows.Forms.Label()
-        Me.btnキャンセル = New System.Windows.Forms.Button()
-        Me.btnOK = New System.Windows.Forms.Button()
-        Me.btnひも追加 = New System.Windows.Forms.Button()
-        Me.lbl付属品名 = New System.Windows.Forms.Label()
-        Me.txt付属品名 = New System.Windows.Forms.TextBox()
-        Me.btn削除 = New System.Windows.Forms.Button()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource付属品, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -86,197 +86,6 @@ Partial Class frmOptions
         Me.dgvData.RowTemplate.Height = 29
         Me.dgvData.Size = New System.Drawing.Size(731, 166)
         Me.dgvData.TabIndex = 2
-        '
-        'f_s付属品名
-        '
-        Me.f_s付属品名.DataPropertyName = "f_s付属品名"
-        Me.f_s付属品名.HeaderText = "付属品名"
-        Me.f_s付属品名.MinimumWidth = 6
-        Me.f_s付属品名.Name = "f_s付属品名"
-        Me.f_s付属品名.ReadOnly = True
-        Me.f_s付属品名.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_s付属品名.Width = 155
-        '
-        'f_iひも番号
-        '
-        Me.f_iひも番号.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle51.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも番号.DefaultCellStyle = DataGridViewCellStyle51
-        Me.f_iひも番号.HeaderText = "ひも番号"
-        Me.f_iひも番号.MinimumWidth = 6
-        Me.f_iひも番号.Name = "f_iひも番号"
-        Me.f_iひも番号.ReadOnly = True
-        Me.f_iひも番号.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_iひも番号.Width = 59
-        '
-        'f_s付属品ひも名
-        '
-        Me.f_s付属品ひも名.DataPropertyName = "f_s付属品ひも名"
-        Me.f_s付属品ひも名.HeaderText = "付属品ひも名"
-        Me.f_s付属品ひも名.MinimumWidth = 6
-        Me.f_s付属品ひも名.Name = "f_s付属品ひも名"
-        Me.f_s付属品ひも名.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_s付属品ひも名.Width = 119
-        '
-        'f_b巻きひも区分
-        '
-        Me.f_b巻きひも区分.DataPropertyName = "f_b巻きひも区分"
-        Me.f_b巻きひも区分.HeaderText = "巻きひも"
-        Me.f_b巻きひも区分.MinimumWidth = 6
-        Me.f_b巻きひも区分.Name = "f_b巻きひも区分"
-        Me.f_b巻きひも区分.Width = 68
-        '
-        'f_i本幅初期値
-        '
-        Me.f_i本幅初期値.DataPropertyName = "f_i本幅初期値"
-        DataGridViewCellStyle52.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.f_i本幅初期値.DefaultCellStyle = DataGridViewCellStyle52
-        Me.f_i本幅初期値.HeaderText = "本幅初期値"
-        Me.f_i本幅初期値.MinimumWidth = 6
-        Me.f_i本幅初期値.Name = "f_i本幅初期値"
-        Me.f_i本幅初期値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_i本幅初期値.ToolTipText = "指定しない場合はゼロ"
-        Me.f_i本幅初期値.Width = 69
-        '
-        'f_iひも数
-        '
-        Me.f_iひも数.DataPropertyName = "f_iひも数"
-        DataGridViewCellStyle53.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_iひも数.DefaultCellStyle = DataGridViewCellStyle53
-        Me.f_iひも数.HeaderText = "ひも数"
-        Me.f_iひも数.MinimumWidth = 6
-        Me.f_iひも数.Name = "f_iひも数"
-        Me.f_iひも数.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_iひも数.Width = 63
-        '
-        'f_d長さ比率対ひも1
-        '
-        Me.f_d長さ比率対ひも1.DataPropertyName = "f_d長さ比率対ひも1"
-        DataGridViewCellStyle54.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d長さ比率対ひも1.DefaultCellStyle = DataGridViewCellStyle54
-        Me.f_d長さ比率対ひも1.HeaderText = "長さ比率対ひも1"
-        Me.f_d長さ比率対ひも1.MinimumWidth = 6
-        Me.f_d長さ比率対ひも1.Name = "f_d長さ比率対ひも1"
-        Me.f_d長さ比率対ひも1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d長さ比率対ひも1.ToolTipText = "ひも番号2以降であれば、ひも番号1の長さにこの値を乗算して長さに加える"
-        Me.f_d長さ比率対ひも1.Width = 66
-        '
-        'f_d長さ加減対ひも1
-        '
-        Me.f_d長さ加減対ひも1.DataPropertyName = "f_d長さ加減対ひも1"
-        DataGridViewCellStyle55.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d長さ加減対ひも1.DefaultCellStyle = DataGridViewCellStyle55
-        Me.f_d長さ加減対ひも1.HeaderText = "長さ加減対ひも1"
-        Me.f_d長さ加減対ひも1.MinimumWidth = 6
-        Me.f_d長さ加減対ひも1.Name = "f_d長さ加減対ひも1"
-        Me.f_d長さ加減対ひも1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d長さ加減対ひも1.ToolTipText = "ひも番号2以降であれば、ひも番号1の長さにこの値を加える"
-        Me.f_d長さ加減対ひも1.Width = 66
-        '
-        'f_dひも長比率対長さ
-        '
-        Me.f_dひも長比率対長さ.DataPropertyName = "f_dひも長比率対長さ"
-        DataGridViewCellStyle56.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長比率対長さ.DefaultCellStyle = DataGridViewCellStyle56
-        Me.f_dひも長比率対長さ.HeaderText = "ひも長比率対長さ"
-        Me.f_dひも長比率対長さ.MinimumWidth = 6
-        Me.f_dひも長比率対長さ.Name = "f_dひも長比率対長さ"
-        Me.f_dひも長比率対長さ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_dひも長比率対長さ.ToolTipText = "巻きひもでない時、ひも長にこの値を乗算してひも長に加える"
-        Me.f_dひも長比率対長さ.Width = 83
-        '
-        'f_dひも長加算
-        '
-        Me.f_dひも長加算.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle57.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算.DefaultCellStyle = DataGridViewCellStyle57
-        Me.f_dひも長加算.HeaderText = "ひも長加算"
-        Me.f_dひも長加算.MinimumWidth = 6
-        Me.f_dひも長加算.Name = "f_dひも長加算"
-        Me.f_dひも長加算.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_dひも長加算.ToolTipText = "巻きひもでない時、ひも長にこの値を加える"
-        Me.f_dひも長加算.Width = 69
-        '
-        'f_d巻きの厚み
-        '
-        Me.f_d巻きの厚み.DataPropertyName = "f_d巻きの厚み"
-        DataGridViewCellStyle58.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d巻きの厚み.DefaultCellStyle = DataGridViewCellStyle58
-        Me.f_d巻きの厚み.HeaderText = "巻きの厚み"
-        Me.f_d巻きの厚み.MinimumWidth = 6
-        Me.f_d巻きの厚み.Name = "f_d巻きの厚み"
-        Me.f_d巻きの厚み.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d巻きの厚み.ToolTipText = "巻きひもの時、1回巻くのにひもの厚みとして計算する値"
-        Me.f_d巻きの厚み.Width = 65
-        '
-        'f_d巻き回数比率
-        '
-        Me.f_d巻き回数比率.DataPropertyName = "f_d巻き回数比率"
-        DataGridViewCellStyle59.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d巻き回数比率.DefaultCellStyle = DataGridViewCellStyle59
-        Me.f_d巻き回数比率.HeaderText = "巻き回数比率"
-        Me.f_d巻き回数比率.MinimumWidth = 6
-        Me.f_d巻き回数比率.Name = "f_d巻き回数比率"
-        Me.f_d巻き回数比率.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_d巻き回数比率.ToolTipText = "巻きひもの時、長さをひも幅で除算した回数にこの値を乗算する"
-        Me.f_d巻き回数比率.Width = 70
-        '
-        'f_dひも長加算初期値
-        '
-        Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
-        DataGridViewCellStyle60.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle60
-        Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
-        Me.f_dひも長加算初期値.MinimumWidth = 6
-        Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
-        Me.f_dひも長加算初期値.ToolTipText = "ひも長に手動で加える値の初期値"
-        Me.f_dひも長加算初期値.Width = 125
-        '
-        'f_bCraftBandMesh
-        '
-        Me.f_bCraftBandMesh.DataPropertyName = "f_bCraftBandMesh"
-        Me.f_bCraftBandMesh.HeaderText = "Mesh"
-        Me.f_bCraftBandMesh.MinimumWidth = 6
-        Me.f_bCraftBandMesh.Name = "f_bCraftBandMesh"
-        Me.f_bCraftBandMesh.ToolTipText = "CraftBandMeshで使用する"
-        Me.f_bCraftBandMesh.Width = 125
-        '
-        'f_bCraftBandSquare45
-        '
-        Me.f_bCraftBandSquare45.DataPropertyName = "f_bCraftBandSquare45"
-        Me.f_bCraftBandSquare45.HeaderText = "Square45"
-        Me.f_bCraftBandSquare45.MinimumWidth = 6
-        Me.f_bCraftBandSquare45.Name = "f_bCraftBandSquare45"
-        Me.f_bCraftBandSquare45.ToolTipText = "CraftBandSquare45で使用する"
-        Me.f_bCraftBandSquare45.Width = 125
-        '
-        'f_bCraftBandKnot
-        '
-        Me.f_bCraftBandKnot.DataPropertyName = "f_bCraftBandKnot"
-        Me.f_bCraftBandKnot.HeaderText = "Knot"
-        Me.f_bCraftBandKnot.MinimumWidth = 6
-        Me.f_bCraftBandKnot.Name = "f_bCraftBandKnot"
-        Me.f_bCraftBandKnot.ToolTipText = "CraftBandKnotで使用する"
-        Me.f_bCraftBandKnot.Width = 125
-        '
-        'f_bCraftBandSquare
-        '
-        Me.f_bCraftBandSquare.DataPropertyName = "f_bCraftBandSquare"
-        Me.f_bCraftBandSquare.HeaderText = "Square"
-        Me.f_bCraftBandSquare.MinimumWidth = 6
-        Me.f_bCraftBandSquare.Name = "f_bCraftBandSquare"
-        Me.f_bCraftBandSquare.ToolTipText = "CraftBandSquareで使用する"
-        Me.f_bCraftBandSquare.Visible = False
-        Me.f_bCraftBandSquare.Width = 125
-        '
-        'f_s備考
-        '
-        Me.f_s備考.DataPropertyName = "f_s備考"
-        Me.f_s備考.HeaderText = "備考"
-        Me.f_s備考.MinimumWidth = 6
-        Me.f_s備考.Name = "f_s備考"
-        Me.f_s備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.f_s備考.Width = 200
         '
         'BindingSource付属品
         '
@@ -365,6 +174,196 @@ Partial Class frmOptions
         Me.ToolTip1.SetToolTip(Me.btn削除, "選択している付属品を削除します")
         Me.btn削除.UseVisualStyleBackColor = True
         '
+        'f_s付属品名
+        '
+        Me.f_s付属品名.DataPropertyName = "f_s付属品名"
+        Me.f_s付属品名.HeaderText = "付属品名"
+        Me.f_s付属品名.MinimumWidth = 6
+        Me.f_s付属品名.Name = "f_s付属品名"
+        Me.f_s付属品名.ReadOnly = True
+        Me.f_s付属品名.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s付属品名.Width = 155
+        '
+        'f_iひも番号
+        '
+        Me.f_iひも番号.DataPropertyName = "f_iひも番号"
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも番号.DefaultCellStyle = DataGridViewCellStyle1
+        Me.f_iひも番号.HeaderText = "ひも番号"
+        Me.f_iひも番号.MinimumWidth = 6
+        Me.f_iひも番号.Name = "f_iひも番号"
+        Me.f_iひも番号.ReadOnly = True
+        Me.f_iひも番号.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも番号.Width = 59
+        '
+        'f_s付属品ひも名
+        '
+        Me.f_s付属品ひも名.DataPropertyName = "f_s付属品ひも名"
+        Me.f_s付属品ひも名.HeaderText = "付属品ひも名"
+        Me.f_s付属品ひも名.MinimumWidth = 6
+        Me.f_s付属品ひも名.Name = "f_s付属品ひも名"
+        Me.f_s付属品ひも名.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s付属品ひも名.Width = 119
+        '
+        'f_b巻きひも区分
+        '
+        Me.f_b巻きひも区分.DataPropertyName = "f_b巻きひも区分"
+        Me.f_b巻きひも区分.HeaderText = "巻きひも"
+        Me.f_b巻きひも区分.MinimumWidth = 6
+        Me.f_b巻きひも区分.Name = "f_b巻きひも区分"
+        Me.f_b巻きひも区分.Width = 68
+        '
+        'f_i本幅初期値
+        '
+        Me.f_i本幅初期値.DataPropertyName = "f_i本幅初期値"
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.f_i本幅初期値.DefaultCellStyle = DataGridViewCellStyle2
+        Me.f_i本幅初期値.HeaderText = "本幅初期値"
+        Me.f_i本幅初期値.MinimumWidth = 6
+        Me.f_i本幅初期値.Name = "f_i本幅初期値"
+        Me.f_i本幅初期値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_i本幅初期値.ToolTipText = "指定しない場合はゼロ"
+        Me.f_i本幅初期値.Width = 69
+        '
+        'f_iひも数
+        '
+        Me.f_iひも数.DataPropertyName = "f_iひも数"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_iひも数.DefaultCellStyle = DataGridViewCellStyle3
+        Me.f_iひも数.HeaderText = "ひも数"
+        Me.f_iひも数.MinimumWidth = 6
+        Me.f_iひも数.Name = "f_iひも数"
+        Me.f_iひも数.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_iひも数.Width = 63
+        '
+        'f_d長さ比率対ひも1
+        '
+        Me.f_d長さ比率対ひも1.DataPropertyName = "f_d長さ比率対ひも1"
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d長さ比率対ひも1.DefaultCellStyle = DataGridViewCellStyle4
+        Me.f_d長さ比率対ひも1.HeaderText = "長さ比率対ひも1"
+        Me.f_d長さ比率対ひも1.MinimumWidth = 6
+        Me.f_d長さ比率対ひも1.Name = "f_d長さ比率対ひも1"
+        Me.f_d長さ比率対ひも1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d長さ比率対ひも1.ToolTipText = "ひも番号2以降であれば、ひも番号1の長さにこの値を乗算して長さに加える"
+        Me.f_d長さ比率対ひも1.Width = 66
+        '
+        'f_d長さ加減対ひも1
+        '
+        Me.f_d長さ加減対ひも1.DataPropertyName = "f_d長さ加減対ひも1"
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d長さ加減対ひも1.DefaultCellStyle = DataGridViewCellStyle5
+        Me.f_d長さ加減対ひも1.HeaderText = "長さ加減対ひも1"
+        Me.f_d長さ加減対ひも1.MinimumWidth = 6
+        Me.f_d長さ加減対ひも1.Name = "f_d長さ加減対ひも1"
+        Me.f_d長さ加減対ひも1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d長さ加減対ひも1.ToolTipText = "ひも番号2以降であれば、ひも番号1の長さにこの値を加える"
+        Me.f_d長さ加減対ひも1.Width = 66
+        '
+        'f_dひも長比率対長さ
+        '
+        Me.f_dひも長比率対長さ.DataPropertyName = "f_dひも長比率対長さ"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長比率対長さ.DefaultCellStyle = DataGridViewCellStyle6
+        Me.f_dひも長比率対長さ.HeaderText = "ひも長比率対長さ"
+        Me.f_dひも長比率対長さ.MinimumWidth = 6
+        Me.f_dひも長比率対長さ.Name = "f_dひも長比率対長さ"
+        Me.f_dひも長比率対長さ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長比率対長さ.ToolTipText = "巻きひもでない時、ひも長にこの値を乗算してひも長に加える"
+        Me.f_dひも長比率対長さ.Width = 83
+        '
+        'f_dひも長加算
+        '
+        Me.f_dひも長加算.DataPropertyName = "f_dひも長加算"
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算.DefaultCellStyle = DataGridViewCellStyle7
+        Me.f_dひも長加算.HeaderText = "ひも長加算"
+        Me.f_dひも長加算.MinimumWidth = 6
+        Me.f_dひも長加算.Name = "f_dひも長加算"
+        Me.f_dひも長加算.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_dひも長加算.ToolTipText = "巻きひもでない時、ひも長にこの値を加える"
+        Me.f_dひも長加算.Width = 69
+        '
+        'f_d巻きの厚み
+        '
+        Me.f_d巻きの厚み.DataPropertyName = "f_d巻きの厚み"
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d巻きの厚み.DefaultCellStyle = DataGridViewCellStyle8
+        Me.f_d巻きの厚み.HeaderText = "巻きの厚み"
+        Me.f_d巻きの厚み.MinimumWidth = 6
+        Me.f_d巻きの厚み.Name = "f_d巻きの厚み"
+        Me.f_d巻きの厚み.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d巻きの厚み.ToolTipText = "巻きひもの時、1回巻くのにひもの厚みとして計算する値"
+        Me.f_d巻きの厚み.Width = 65
+        '
+        'f_d巻き回数比率
+        '
+        Me.f_d巻き回数比率.DataPropertyName = "f_d巻き回数比率"
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d巻き回数比率.DefaultCellStyle = DataGridViewCellStyle9
+        Me.f_d巻き回数比率.HeaderText = "巻き回数比率"
+        Me.f_d巻き回数比率.MinimumWidth = 6
+        Me.f_d巻き回数比率.Name = "f_d巻き回数比率"
+        Me.f_d巻き回数比率.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_d巻き回数比率.ToolTipText = "巻きひもの時、長さをひも幅で除算した回数にこの値を乗算する"
+        Me.f_d巻き回数比率.Width = 70
+        '
+        'f_dひも長加算初期値
+        '
+        Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle10
+        Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
+        Me.f_dひも長加算初期値.MinimumWidth = 6
+        Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
+        Me.f_dひも長加算初期値.ToolTipText = "ひも長に手動で加える値の初期値"
+        Me.f_dひも長加算初期値.Width = 125
+        '
+        'f_bCraftBandMesh
+        '
+        Me.f_bCraftBandMesh.DataPropertyName = "f_bCraftBandMesh"
+        Me.f_bCraftBandMesh.HeaderText = "Mesh"
+        Me.f_bCraftBandMesh.MinimumWidth = 6
+        Me.f_bCraftBandMesh.Name = "f_bCraftBandMesh"
+        Me.f_bCraftBandMesh.ToolTipText = "CraftBandMeshで使用する"
+        Me.f_bCraftBandMesh.Width = 125
+        '
+        'f_bCraftBandSquare45
+        '
+        Me.f_bCraftBandSquare45.DataPropertyName = "f_bCraftBandSquare45"
+        Me.f_bCraftBandSquare45.HeaderText = "Square45"
+        Me.f_bCraftBandSquare45.MinimumWidth = 6
+        Me.f_bCraftBandSquare45.Name = "f_bCraftBandSquare45"
+        Me.f_bCraftBandSquare45.ToolTipText = "CraftBandSquare45で使用する"
+        Me.f_bCraftBandSquare45.Width = 125
+        '
+        'f_bCraftBandKnot
+        '
+        Me.f_bCraftBandKnot.DataPropertyName = "f_bCraftBandKnot"
+        Me.f_bCraftBandKnot.HeaderText = "Knot"
+        Me.f_bCraftBandKnot.MinimumWidth = 6
+        Me.f_bCraftBandKnot.Name = "f_bCraftBandKnot"
+        Me.f_bCraftBandKnot.ToolTipText = "CraftBandKnotで使用する"
+        Me.f_bCraftBandKnot.Width = 125
+        '
+        'f_bCraftBandSquare
+        '
+        Me.f_bCraftBandSquare.DataPropertyName = "f_bCraftBandSquare"
+        Me.f_bCraftBandSquare.HeaderText = "Square"
+        Me.f_bCraftBandSquare.MinimumWidth = 6
+        Me.f_bCraftBandSquare.Name = "f_bCraftBandSquare"
+        Me.f_bCraftBandSquare.ToolTipText = "CraftBandSquareで使用する"
+        Me.f_bCraftBandSquare.Width = 125
+        '
+        'f_s備考
+        '
+        Me.f_s備考.DataPropertyName = "f_s備考"
+        Me.f_s備考.HeaderText = "備考"
+        Me.f_s備考.MinimumWidth = 6
+        Me.f_s備考.Name = "f_s備考"
+        Me.f_s備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.f_s備考.Width = 200
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
@@ -412,6 +411,7 @@ Partial Class frmOptions
     Friend WithEvents lbl付属品名 As Label
     Friend WithEvents txt付属品名 As TextBox
     Friend WithEvents btn削除 As Button
+    Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents f_s付属品名 As DataGridViewTextBoxColumn
     Friend WithEvents f_iひも番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s付属品ひも名 As DataGridViewTextBoxColumn
@@ -430,5 +430,4 @@ Partial Class frmOptions
     Friend WithEvents f_bCraftBandKnot As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandSquare As DataGridViewCheckBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
-    Friend WithEvents ToolTip1 As ToolTip
 End Class

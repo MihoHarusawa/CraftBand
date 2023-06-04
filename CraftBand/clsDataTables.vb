@@ -45,6 +45,13 @@ Public Class clsDataTables
         End Get
     End Property
 
+    'tbl差しひも
+    Public ReadOnly Property p_tbl差しひも As tbl差しひもDataTable
+        Get
+            Return _dstDataTables.Tables("tbl差しひも")
+        End Get
+    End Property
+
     '*必要に応じてワークテーブルと転送
     'tbl縦横展開
     Public ReadOnly Property p_tbl縦横展開 As tbl縦横展開DataTable
@@ -53,7 +60,16 @@ Public Class clsDataTables
         End Get
     End Property
 
+    'tblひも上下
+    Public ReadOnly Property p_tblひも上下 As tblひも上下DataTable
+        Get
+            Return _dstDataTables.Tables("tblひも上下")
+        End Get
+    End Property
 
+
+    '*フィールド値
+    'tbl底_縦横
     Public Enum enum最上と最下の短いひも
         i_なし = 0
         i_同じ幅 = 1
@@ -66,8 +82,7 @@ Public Class clsDataTables
         i_右側 = 2
     End Enum
 
-
-
+    'tbl縦横展開
     'カテゴリー出力順
     <Flags()>
     Public Enum enumひも種
@@ -82,6 +97,27 @@ Public Class clsDataTables
         i_短い = &H20
         i_最上と最下 = &H40
         i_補強 = &H80
+        i_すき間 = &H1
+    End Enum
+
+    'tbl差しひも
+    Public Enum enum配置面
+        i_なし = 0
+        i_側面 = 1
+        i_底面 = 2
+        i_全面 = 3
+    End Enum
+
+    Public Enum enum角度
+        i_0度 = 0
+        i_45度 = 1
+        i_90度 = 2
+        i_135度 = 3
+    End Enum
+
+    Public Enum enum中心点
+        i_目の中央 = 0
+        i_ひも中央 = 1
     End Enum
 
 
@@ -145,6 +181,10 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_dひも長加算") = p_row底_縦横.Value("f_dひも長加算_側面") / 2
 
             Case enumExeName.CraftBandSquare
+                p_row底_縦横.Value("f_b始末ひも区分") = False '縦の補強ひも
+                p_row底_縦横.Value("f_dひも間のすき間") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも間のすき間初期値")
+                p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
+                p_row底_縦横.Value("f_dひも長加算_側面") = p_row底_縦横.Value("f_d垂直ひも長加算")
 
         End Select
 
@@ -295,6 +335,8 @@ Public Class clsDataTables
     Dim _b側面Changed As Boolean = False
     Dim _b追加品Changed As Boolean = False
     Dim _b縦横展開Changed As Boolean = False
+    Dim _b差しひもChanged As Boolean = False
+    Dim _bひも上下Changed As Boolean = False
 
 
     Public Sub ResetStartPoint()
@@ -311,15 +353,19 @@ Public Class clsDataTables
         p_tbl側面.AcceptChanges()
         p_tbl追加品.AcceptChanges()
         p_tbl縦横展開.AcceptChanges()
+        p_tbl差しひも.AcceptChanges()
+        p_tblひも上下.AcceptChanges()
 
         _b底_楕円Changed = False
         _b側面Changed = False
         _b追加品Changed = False
         _b縦横展開Changed = False
+        _b差しひもChanged = False
+        _bひも上下Changed = False
     End Sub
 
     Public Function IsChangedFromStartPoint()
-        If _b側面Changed OrElse _b底_楕円Changed OrElse _b追加品Changed OrElse _b縦横展開Changed Then
+        If _b側面Changed OrElse _b底_楕円Changed OrElse _b追加品Changed OrElse _b縦横展開Changed OrElse _b差しひもChanged OrElse _bひも上下Changed Then
             Return True
         End If
         If Not p_row目標寸法.Equals(_row目標寸法Start) Then
@@ -349,6 +395,9 @@ Public Class clsDataTables
         ElseIf table.TableName = "tbl追加品" Then
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl追加品 Changes={0}", table.GetChanges.Rows.Count)
             _b追加品Changed = True
+        ElseIf table.TableName = "tbl差しひも" Then
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl差しひも Changes={0}", table.GetChanges.Rows.Count)
+            _b差しひもChanged = True
         Else
             Return False
         End If
@@ -359,6 +408,7 @@ Public Class clsDataTables
 
 #Region "ワークテーブルとtbl縦横展開の転送"
     'ワークテーブルの編集フィールドにデータベース値をセットする
+    '※iひも種はレコード参照には使わない
     Public Function ToTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
         If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
             Return 0
@@ -373,7 +423,7 @@ Public Class clsDataTables
                 Continue For
             End If
 
-            'f_dひも長加算, f_s色, f_sメモを取得(今はf_i何本幅は読み取らない)
+            'f_dひも長加算, f_s色, f_sメモを取得
             Dim i As Integer = 0
             tmp.f_dひも長加算 = sels(i).f_dひも長加算
             tmp.f_dひも長加算2 = sels(i).f_dひも長加算2
@@ -386,6 +436,20 @@ Public Class clsDataTables
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_s色)
             End If
             tmp.f_sメモ = sels(i).f_sメモ
+
+            'f_i何本幅は対応Exeのみ
+            If g_enumExeName = enumExeName.CraftBandSquare Then
+                If sels(i).f_i何本幅 < 0 Then
+                    tmp.f_i何本幅 = 1
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_i何本幅)
+                ElseIf g_clsSelectBasics.p_i本幅 < sels(i).f_i何本幅 Then
+                    tmp.f_i何本幅 = g_clsSelectBasics.p_i本幅
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_i何本幅, g_clsSelectBasics.p_i本幅)
+                Else
+                    tmp.f_i何本幅 = sels(i).f_i何本幅
+                End If
+            End If
+
             'キーなので1点しかないはず
 
             count += 1
@@ -395,6 +459,7 @@ Public Class clsDataTables
     End Function
 
     'データベース値をワークテーブル値に置換 
+    '※iひも種のいずれかビットを持つレコードを削除してから追加する
     Public Function FromTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
         If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
             Return 0
@@ -428,6 +493,41 @@ Public Class clsDataTables
 
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Add({0}) {1}点", iひも種, tmptable.Rows.Count)
         Return count
+    End Function
+
+#End Region
+
+#Region "p_tblひも上下とclsUpDownの転送"
+
+    '指定番号のレコード内容をupdownにセット
+    Public Function ToClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
+        If num < 0 Then
+            Return False
+        End If
+        If num < p_tblひも上下.Rows.Count Then
+            updown.FromRecord(p_tblひも上下.Rows(num))
+            Return updown.IsValid
+        Else
+            Return False
+        End If
+    End Function
+
+    'updown内容を指定番号のレコードにセット、空き番は空レコード
+    Public Function FromClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
+        Dim row As tblひも上下Row
+        Do While p_tblひも上下.Rows.Count <= num
+            row = p_tblひも上下.Newtblひも上下Row
+            p_tblひも上下.Rows.Add(row)
+        Loop
+        row = p_tblひも上下.Rows(num)
+
+        'レコードにセットする
+        Dim ret As Boolean = updown.ToRecord(row)
+
+        p_tblひも上下.AcceptChanges()
+        _bひも上下Changed = True
+
+        Return ret
     End Function
 
 #End Region

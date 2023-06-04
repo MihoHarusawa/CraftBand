@@ -31,6 +31,10 @@ Namespace Tables
         
         Private tabletblGauge As tblGaugeDataTable
         
+        Private tabletblCheckBox As tblCheckBoxDataTable
+        
+        Private tabletblEnum As tblEnumDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -68,6 +72,12 @@ Namespace Tables
                 End If
                 If (Not (ds.Tables("tblGauge")) Is Nothing) Then
                     MyBase.Tables.Add(New tblGaugeDataTable(ds.Tables("tblGauge")))
+                End If
+                If (Not (ds.Tables("tblCheckBox")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblCheckBoxDataTable(ds.Tables("tblCheckBox")))
+                End If
+                If (Not (ds.Tables("tblEnum")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblEnumDataTable(ds.Tables("tblEnum")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -113,6 +123,26 @@ Namespace Tables
         Public ReadOnly Property tblGauge() As tblGaugeDataTable
             Get
                 Return Me.tabletblGauge
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblCheckBox() As tblCheckBoxDataTable
+            Get
+                Return Me.tabletblCheckBox
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblEnum() As tblEnumDataTable
+            Get
+                Return Me.tabletblEnum
             End Get
         End Property
         
@@ -192,6 +222,12 @@ Namespace Tables
                 If (Not (ds.Tables("tblGauge")) Is Nothing) Then
                     MyBase.Tables.Add(New tblGaugeDataTable(ds.Tables("tblGauge")))
                 End If
+                If (Not (ds.Tables("tblCheckBox")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblCheckBoxDataTable(ds.Tables("tblCheckBox")))
+                End If
+                If (Not (ds.Tables("tblEnum")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblEnumDataTable(ds.Tables("tblEnum")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -242,6 +278,18 @@ Namespace Tables
                     Me.tabletblGauge.InitVars
                 End If
             End If
+            Me.tabletblCheckBox = CType(MyBase.Tables("tblCheckBox"),tblCheckBoxDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblCheckBox) Is Nothing) Then
+                    Me.tabletblCheckBox.InitVars
+                End If
+            End If
+            Me.tabletblEnum = CType(MyBase.Tables("tblEnum"),tblEnumDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblEnum) Is Nothing) Then
+                    Me.tabletblEnum.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -258,6 +306,10 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblLane)
             Me.tabletblGauge = New tblGaugeDataTable()
             MyBase.Tables.Add(Me.tabletblGauge)
+            Me.tabletblCheckBox = New tblCheckBoxDataTable()
+            MyBase.Tables.Add(Me.tabletblCheckBox)
+            Me.tabletblEnum = New tblEnumDataTable()
+            MyBase.Tables.Add(Me.tabletblEnum)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -275,6 +327,18 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblGauge() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblCheckBox() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblEnum() As Boolean
             Return false
         End Function
         
@@ -344,6 +408,12 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblGaugeRowChangeEventHandler(ByVal sender As Object, ByVal e As tblGaugeRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblCheckBoxRowChangeEventHandler(ByVal sender As Object, ByVal e As tblCheckBoxRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblEnumRowChangeEventHandler(ByVal sender As Object, ByVal e As tblEnumRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -1284,6 +1354,1295 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblCheckBoxDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblCheckBoxRow)
+            
+            Private columnIndex As Global.System.Data.DataColumn
+            
+            Private columnCheckBox01 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox02 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox03 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox04 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox05 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox06 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox07 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox08 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox09 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox10 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox11 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox12 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox13 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox14 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox15 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox16 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox17 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox18 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox19 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox20 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox21 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox22 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox23 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox24 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox25 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox26 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox27 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox28 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox29 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox30 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox31 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox32 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox33 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox34 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox35 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox36 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox37 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox38 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox39 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox40 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox41 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox42 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox43 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox44 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox45 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox46 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox47 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox48 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox49 As Global.System.Data.DataColumn
+            
+            Private columnCheckBox50 As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblCheckBox"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property IndexColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnIndex
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox01Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox01
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox02Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox02
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox03Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox03
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox04Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox04
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox05Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox05
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox06Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox06
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox07Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox07
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox08Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox08
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox09Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox09
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox10Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox10
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox11Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox11
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox12Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox12
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox13Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox13
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox14Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox14
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox15Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox15
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox16Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox16
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox17Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox17
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox18Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox18
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox19Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox19
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox20Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox20
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox21Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox21
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox22Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox22
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox23Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox23
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox24Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox24
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox25Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox25
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox26Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox26
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox27Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox27
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox28Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox28
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox29Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox29
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox30Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox30
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox31Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox31
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox32Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox32
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox33Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox33
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox34Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox34
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox35Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox35
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox36Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox36
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox37Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox37
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox38Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox38
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox39Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox39
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox40Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox40
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox41Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox41
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox42Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox42
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox43Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox43
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox44Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox44
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox46Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox46
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox47Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox47
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox48Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox48
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox49Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox49
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CheckBox50Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCheckBox50
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblCheckBoxRow
+                Get
+                    Return CType(Me.Rows(index),tblCheckBoxRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCheckBoxRowChanging As tblCheckBoxRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCheckBoxRowChanged As tblCheckBoxRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCheckBoxRowDeleting As tblCheckBoxRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblCheckBoxRowDeleted As tblCheckBoxRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblCheckBoxRow(ByVal row As tblCheckBoxRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblCheckBoxRow( _
+                        ByVal Index As Short,  _
+                        ByVal CheckBox01 As Boolean,  _
+                        ByVal CheckBox02 As Boolean,  _
+                        ByVal CheckBox03 As Boolean,  _
+                        ByVal CheckBox04 As Boolean,  _
+                        ByVal CheckBox05 As Boolean,  _
+                        ByVal CheckBox06 As Boolean,  _
+                        ByVal CheckBox07 As Boolean,  _
+                        ByVal CheckBox08 As Boolean,  _
+                        ByVal CheckBox09 As Boolean,  _
+                        ByVal CheckBox10 As Boolean,  _
+                        ByVal CheckBox11 As Boolean,  _
+                        ByVal CheckBox12 As Boolean,  _
+                        ByVal CheckBox13 As Boolean,  _
+                        ByVal CheckBox14 As Boolean,  _
+                        ByVal CheckBox15 As Boolean,  _
+                        ByVal CheckBox16 As Boolean,  _
+                        ByVal CheckBox17 As Boolean,  _
+                        ByVal CheckBox18 As Boolean,  _
+                        ByVal CheckBox19 As Boolean,  _
+                        ByVal CheckBox20 As Boolean,  _
+                        ByVal CheckBox21 As Boolean,  _
+                        ByVal CheckBox22 As Boolean,  _
+                        ByVal CheckBox23 As Boolean,  _
+                        ByVal CheckBox24 As Boolean,  _
+                        ByVal CheckBox25 As Boolean,  _
+                        ByVal CheckBox26 As Boolean,  _
+                        ByVal CheckBox27 As Boolean,  _
+                        ByVal CheckBox28 As Boolean,  _
+                        ByVal CheckBox29 As Boolean,  _
+                        ByVal CheckBox30 As Boolean,  _
+                        ByVal CheckBox31 As Boolean,  _
+                        ByVal CheckBox32 As Boolean,  _
+                        ByVal CheckBox33 As Boolean,  _
+                        ByVal CheckBox34 As Boolean,  _
+                        ByVal CheckBox35 As Boolean,  _
+                        ByVal CheckBox36 As Boolean,  _
+                        ByVal CheckBox37 As Boolean,  _
+                        ByVal CheckBox38 As Boolean,  _
+                        ByVal CheckBox39 As Boolean,  _
+                        ByVal CheckBox40 As Boolean,  _
+                        ByVal CheckBox41 As Boolean,  _
+                        ByVal CheckBox42 As Boolean,  _
+                        ByVal CheckBox43 As Boolean,  _
+                        ByVal CheckBox44 As Boolean,  _
+                        ByVal CheckBox45 As Boolean,  _
+                        ByVal CheckBox46 As Boolean,  _
+                        ByVal CheckBox47 As Boolean,  _
+                        ByVal CheckBox48 As Boolean,  _
+                        ByVal CheckBox49 As Boolean,  _
+                        ByVal CheckBox50 As Boolean) As tblCheckBoxRow
+                Dim rowtblCheckBoxRow As tblCheckBoxRow = CType(Me.NewRow,tblCheckBoxRow)
+                Dim columnValuesArray() As Object = New Object() {Index, CheckBox01, CheckBox02, CheckBox03, CheckBox04, CheckBox05, CheckBox06, CheckBox07, CheckBox08, CheckBox09, CheckBox10, CheckBox11, CheckBox12, CheckBox13, CheckBox14, CheckBox15, CheckBox16, CheckBox17, CheckBox18, CheckBox19, CheckBox20, CheckBox21, CheckBox22, CheckBox23, CheckBox24, CheckBox25, CheckBox26, CheckBox27, CheckBox28, CheckBox29, CheckBox30, CheckBox31, CheckBox32, CheckBox33, CheckBox34, CheckBox35, CheckBox36, CheckBox37, CheckBox38, CheckBox39, CheckBox40, CheckBox41, CheckBox42, CheckBox43, CheckBox44, CheckBox45, CheckBox46, CheckBox47, CheckBox48, CheckBox49, CheckBox50}
+                rowtblCheckBoxRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblCheckBoxRow)
+                Return rowtblCheckBoxRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function FindByIndex(ByVal Index As Short) As tblCheckBoxRow
+                Return CType(Me.Rows.Find(New Object() {Index}),tblCheckBoxRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblCheckBoxDataTable = CType(MyBase.Clone,tblCheckBoxDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblCheckBoxDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnIndex = MyBase.Columns("Index")
+                Me.columnCheckBox01 = MyBase.Columns("CheckBox01")
+                Me.columnCheckBox02 = MyBase.Columns("CheckBox02")
+                Me.columnCheckBox03 = MyBase.Columns("CheckBox03")
+                Me.columnCheckBox04 = MyBase.Columns("CheckBox04")
+                Me.columnCheckBox05 = MyBase.Columns("CheckBox05")
+                Me.columnCheckBox06 = MyBase.Columns("CheckBox06")
+                Me.columnCheckBox07 = MyBase.Columns("CheckBox07")
+                Me.columnCheckBox08 = MyBase.Columns("CheckBox08")
+                Me.columnCheckBox09 = MyBase.Columns("CheckBox09")
+                Me.columnCheckBox10 = MyBase.Columns("CheckBox10")
+                Me.columnCheckBox11 = MyBase.Columns("CheckBox11")
+                Me.columnCheckBox12 = MyBase.Columns("CheckBox12")
+                Me.columnCheckBox13 = MyBase.Columns("CheckBox13")
+                Me.columnCheckBox14 = MyBase.Columns("CheckBox14")
+                Me.columnCheckBox15 = MyBase.Columns("CheckBox15")
+                Me.columnCheckBox16 = MyBase.Columns("CheckBox16")
+                Me.columnCheckBox17 = MyBase.Columns("CheckBox17")
+                Me.columnCheckBox18 = MyBase.Columns("CheckBox18")
+                Me.columnCheckBox19 = MyBase.Columns("CheckBox19")
+                Me.columnCheckBox20 = MyBase.Columns("CheckBox20")
+                Me.columnCheckBox21 = MyBase.Columns("CheckBox21")
+                Me.columnCheckBox22 = MyBase.Columns("CheckBox22")
+                Me.columnCheckBox23 = MyBase.Columns("CheckBox23")
+                Me.columnCheckBox24 = MyBase.Columns("CheckBox24")
+                Me.columnCheckBox25 = MyBase.Columns("CheckBox25")
+                Me.columnCheckBox26 = MyBase.Columns("CheckBox26")
+                Me.columnCheckBox27 = MyBase.Columns("CheckBox27")
+                Me.columnCheckBox28 = MyBase.Columns("CheckBox28")
+                Me.columnCheckBox29 = MyBase.Columns("CheckBox29")
+                Me.columnCheckBox30 = MyBase.Columns("CheckBox30")
+                Me.columnCheckBox31 = MyBase.Columns("CheckBox31")
+                Me.columnCheckBox32 = MyBase.Columns("CheckBox32")
+                Me.columnCheckBox33 = MyBase.Columns("CheckBox33")
+                Me.columnCheckBox34 = MyBase.Columns("CheckBox34")
+                Me.columnCheckBox35 = MyBase.Columns("CheckBox35")
+                Me.columnCheckBox36 = MyBase.Columns("CheckBox36")
+                Me.columnCheckBox37 = MyBase.Columns("CheckBox37")
+                Me.columnCheckBox38 = MyBase.Columns("CheckBox38")
+                Me.columnCheckBox39 = MyBase.Columns("CheckBox39")
+                Me.columnCheckBox40 = MyBase.Columns("CheckBox40")
+                Me.columnCheckBox41 = MyBase.Columns("CheckBox41")
+                Me.columnCheckBox42 = MyBase.Columns("CheckBox42")
+                Me.columnCheckBox43 = MyBase.Columns("CheckBox43")
+                Me.columnCheckBox44 = MyBase.Columns("CheckBox44")
+                Me.columnCheckBox45 = MyBase.Columns("CheckBox45")
+                Me.columnCheckBox46 = MyBase.Columns("CheckBox46")
+                Me.columnCheckBox47 = MyBase.Columns("CheckBox47")
+                Me.columnCheckBox48 = MyBase.Columns("CheckBox48")
+                Me.columnCheckBox49 = MyBase.Columns("CheckBox49")
+                Me.columnCheckBox50 = MyBase.Columns("CheckBox50")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnIndex = New Global.System.Data.DataColumn("Index", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnIndex)
+                Me.columnCheckBox01 = New Global.System.Data.DataColumn("CheckBox01", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox01)
+                Me.columnCheckBox02 = New Global.System.Data.DataColumn("CheckBox02", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox02)
+                Me.columnCheckBox03 = New Global.System.Data.DataColumn("CheckBox03", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox03)
+                Me.columnCheckBox04 = New Global.System.Data.DataColumn("CheckBox04", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox04)
+                Me.columnCheckBox05 = New Global.System.Data.DataColumn("CheckBox05", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox05)
+                Me.columnCheckBox06 = New Global.System.Data.DataColumn("CheckBox06", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox06)
+                Me.columnCheckBox07 = New Global.System.Data.DataColumn("CheckBox07", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox07)
+                Me.columnCheckBox08 = New Global.System.Data.DataColumn("CheckBox08", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox08)
+                Me.columnCheckBox09 = New Global.System.Data.DataColumn("CheckBox09", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox09)
+                Me.columnCheckBox10 = New Global.System.Data.DataColumn("CheckBox10", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox10)
+                Me.columnCheckBox11 = New Global.System.Data.DataColumn("CheckBox11", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox11)
+                Me.columnCheckBox12 = New Global.System.Data.DataColumn("CheckBox12", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox12)
+                Me.columnCheckBox13 = New Global.System.Data.DataColumn("CheckBox13", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox13)
+                Me.columnCheckBox14 = New Global.System.Data.DataColumn("CheckBox14", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox14)
+                Me.columnCheckBox15 = New Global.System.Data.DataColumn("CheckBox15", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox15)
+                Me.columnCheckBox16 = New Global.System.Data.DataColumn("CheckBox16", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox16)
+                Me.columnCheckBox17 = New Global.System.Data.DataColumn("CheckBox17", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox17)
+                Me.columnCheckBox18 = New Global.System.Data.DataColumn("CheckBox18", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox18)
+                Me.columnCheckBox19 = New Global.System.Data.DataColumn("CheckBox19", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox19)
+                Me.columnCheckBox20 = New Global.System.Data.DataColumn("CheckBox20", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox20)
+                Me.columnCheckBox21 = New Global.System.Data.DataColumn("CheckBox21", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox21)
+                Me.columnCheckBox22 = New Global.System.Data.DataColumn("CheckBox22", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox22)
+                Me.columnCheckBox23 = New Global.System.Data.DataColumn("CheckBox23", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox23)
+                Me.columnCheckBox24 = New Global.System.Data.DataColumn("CheckBox24", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox24)
+                Me.columnCheckBox25 = New Global.System.Data.DataColumn("CheckBox25", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox25)
+                Me.columnCheckBox26 = New Global.System.Data.DataColumn("CheckBox26", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox26)
+                Me.columnCheckBox27 = New Global.System.Data.DataColumn("CheckBox27", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox27)
+                Me.columnCheckBox28 = New Global.System.Data.DataColumn("CheckBox28", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox28)
+                Me.columnCheckBox29 = New Global.System.Data.DataColumn("CheckBox29", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox29)
+                Me.columnCheckBox30 = New Global.System.Data.DataColumn("CheckBox30", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox30)
+                Me.columnCheckBox31 = New Global.System.Data.DataColumn("CheckBox31", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox31)
+                Me.columnCheckBox32 = New Global.System.Data.DataColumn("CheckBox32", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox32)
+                Me.columnCheckBox33 = New Global.System.Data.DataColumn("CheckBox33", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox33)
+                Me.columnCheckBox34 = New Global.System.Data.DataColumn("CheckBox34", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox34)
+                Me.columnCheckBox35 = New Global.System.Data.DataColumn("CheckBox35", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox35)
+                Me.columnCheckBox36 = New Global.System.Data.DataColumn("CheckBox36", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox36)
+                Me.columnCheckBox37 = New Global.System.Data.DataColumn("CheckBox37", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox37)
+                Me.columnCheckBox38 = New Global.System.Data.DataColumn("CheckBox38", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox38)
+                Me.columnCheckBox39 = New Global.System.Data.DataColumn("CheckBox39", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox39)
+                Me.columnCheckBox40 = New Global.System.Data.DataColumn("CheckBox40", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox40)
+                Me.columnCheckBox41 = New Global.System.Data.DataColumn("CheckBox41", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox41)
+                Me.columnCheckBox42 = New Global.System.Data.DataColumn("CheckBox42", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox42)
+                Me.columnCheckBox43 = New Global.System.Data.DataColumn("CheckBox43", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox43)
+                Me.columnCheckBox44 = New Global.System.Data.DataColumn("CheckBox44", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox44)
+                Me.columnCheckBox45 = New Global.System.Data.DataColumn("CheckBox45", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox45)
+                Me.columnCheckBox46 = New Global.System.Data.DataColumn("CheckBox46", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox46)
+                Me.columnCheckBox47 = New Global.System.Data.DataColumn("CheckBox47", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox47)
+                Me.columnCheckBox48 = New Global.System.Data.DataColumn("CheckBox48", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox48)
+                Me.columnCheckBox49 = New Global.System.Data.DataColumn("CheckBox49", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox49)
+                Me.columnCheckBox50 = New Global.System.Data.DataColumn("CheckBox50", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCheckBox50)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tblCheckBoxPKey", New Global.System.Data.DataColumn() {Me.columnIndex}, true))
+                Me.columnIndex.AllowDBNull = false
+                Me.columnIndex.Unique = true
+                Me.columnIndex.DefaultValue = CType(0,Short)
+                Me.columnCheckBox01.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox02.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox03.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox04.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox05.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox06.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox07.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox08.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox09.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox10.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox11.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox12.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox13.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox14.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox15.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox16.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox17.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox18.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox19.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox20.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox21.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox22.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox23.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox24.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox25.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox26.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox27.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox28.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox29.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox30.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox31.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox32.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox33.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox34.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox35.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox36.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox37.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox38.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox39.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox40.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox41.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox42.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox43.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox44.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox45.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox46.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox47.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox48.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox49.DefaultValue = CType(false,Boolean)
+                Me.columnCheckBox50.DefaultValue = CType(false,Boolean)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblCheckBoxRow() As tblCheckBoxRow
+                Return CType(Me.NewRow,tblCheckBoxRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblCheckBoxRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblCheckBoxRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblCheckBoxRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblCheckBoxRowChanged(Me, New tblCheckBoxRowChangeEvent(CType(e.Row,tblCheckBoxRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblCheckBoxRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblCheckBoxRowChanging(Me, New tblCheckBoxRowChangeEvent(CType(e.Row,tblCheckBoxRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblCheckBoxRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblCheckBoxRowDeleted(Me, New tblCheckBoxRowChangeEvent(CType(e.Row,tblCheckBoxRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblCheckBoxRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblCheckBoxRowDeleting(Me, New tblCheckBoxRowChangeEvent(CType(e.Row,tblCheckBoxRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblCheckBoxRow(ByVal row As tblCheckBoxRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblCheckBoxDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblEnumDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblEnumRow)
+            
+            Private columnDisplay As Global.System.Data.DataColumn
+            
+            Private columnValue As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblEnum"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property DisplayColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnDisplay
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property ValueColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnValue
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblEnumRow
+                Get
+                    Return CType(Me.Rows(index),tblEnumRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblEnumRowChanging As tblEnumRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblEnumRowChanged As tblEnumRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblEnumRowDeleting As tblEnumRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblEnumRowDeleted As tblEnumRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblEnumRow(ByVal row As tblEnumRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblEnumRow(ByVal Display As String, ByVal Value As Short) As tblEnumRow
+                Dim rowtblEnumRow As tblEnumRow = CType(Me.NewRow,tblEnumRow)
+                Dim columnValuesArray() As Object = New Object() {Display, Value}
+                rowtblEnumRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblEnumRow)
+                Return rowtblEnumRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function FindByValue(ByVal Value As Short) As tblEnumRow
+                Return CType(Me.Rows.Find(New Object() {Value}),tblEnumRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblEnumDataTable = CType(MyBase.Clone,tblEnumDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblEnumDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnDisplay = MyBase.Columns("Display")
+                Me.columnValue = MyBase.Columns("Value")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnDisplay = New Global.System.Data.DataColumn("Display", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnDisplay)
+                Me.columnValue = New Global.System.Data.DataColumn("Value", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnValue)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tblEnumPKey", New Global.System.Data.DataColumn() {Me.columnValue}, true))
+                Me.columnDisplay.DefaultValue = CType("",String)
+                Me.columnValue.AllowDBNull = false
+                Me.columnValue.Unique = true
+                Me.columnValue.DefaultValue = CType(0,Short)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblEnumRow() As tblEnumRow
+                Return CType(Me.NewRow,tblEnumRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblEnumRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblEnumRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblEnumRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblEnumRowChanged(Me, New tblEnumRowChangeEvent(CType(e.Row,tblEnumRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblEnumRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblEnumRowChanging(Me, New tblEnumRowChangeEvent(CType(e.Row,tblEnumRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblEnumRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblEnumRowDeleted(Me, New tblEnumRowChangeEvent(CType(e.Row,tblEnumRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblEnumRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblEnumRowDeleting(Me, New tblEnumRowChangeEvent(CType(e.Row,tblEnumRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblEnumRow(ByVal row As tblEnumRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblEnumDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -1646,6 +3005,1437 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblCheckBoxRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblCheckBox As tblCheckBoxDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblCheckBox = CType(Me.Table,tblCheckBoxDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Index() As Short
+                Get
+                    Return CType(Me(Me.tabletblCheckBox.IndexColumn),Short)
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.IndexColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox01() As Boolean
+                Get
+                    If Me.IsCheckBox01Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox01Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox01Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox02() As Boolean
+                Get
+                    If Me.IsCheckBox02Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox02Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox02Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox03() As Boolean
+                Get
+                    If Me.IsCheckBox03Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox03Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox03Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox04() As Boolean
+                Get
+                    If Me.IsCheckBox04Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox04Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox04Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox05() As Boolean
+                Get
+                    If Me.IsCheckBox05Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox05Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox05Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox06() As Boolean
+                Get
+                    If Me.IsCheckBox06Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox06Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox06Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox07() As Boolean
+                Get
+                    If Me.IsCheckBox07Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox07Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox07Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox08() As Boolean
+                Get
+                    If Me.IsCheckBox08Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox08Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox08Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox09() As Boolean
+                Get
+                    If Me.IsCheckBox09Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox09Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox09Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox10() As Boolean
+                Get
+                    If Me.IsCheckBox10Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox10Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox10Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox11() As Boolean
+                Get
+                    If Me.IsCheckBox11Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox11Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox11Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox12() As Boolean
+                Get
+                    If Me.IsCheckBox12Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox12Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox12Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox13() As Boolean
+                Get
+                    If Me.IsCheckBox13Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox13Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox13Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox14() As Boolean
+                Get
+                    If Me.IsCheckBox14Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox14Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox14Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox15() As Boolean
+                Get
+                    If Me.IsCheckBox15Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox15Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox15Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox16() As Boolean
+                Get
+                    If Me.IsCheckBox16Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox16Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox16Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox17() As Boolean
+                Get
+                    If Me.IsCheckBox17Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox17Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox17Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox18() As Boolean
+                Get
+                    If Me.IsCheckBox18Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox18Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox18Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox19() As Boolean
+                Get
+                    If Me.IsCheckBox19Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox19Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox19Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox20() As Boolean
+                Get
+                    If Me.IsCheckBox20Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox20Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox20Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox21() As Boolean
+                Get
+                    If Me.IsCheckBox21Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox21Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox21Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox22() As Boolean
+                Get
+                    If Me.IsCheckBox22Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox22Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox22Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox23() As Boolean
+                Get
+                    If Me.IsCheckBox23Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox23Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox23Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox24() As Boolean
+                Get
+                    If Me.IsCheckBox24Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox24Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox24Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox25() As Boolean
+                Get
+                    If Me.IsCheckBox25Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox25Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox25Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox26() As Boolean
+                Get
+                    If Me.IsCheckBox26Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox26Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox26Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox27() As Boolean
+                Get
+                    If Me.IsCheckBox27Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox27Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox27Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox28() As Boolean
+                Get
+                    If Me.IsCheckBox28Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox28Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox28Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox29() As Boolean
+                Get
+                    If Me.IsCheckBox29Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox29Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox29Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox30() As Boolean
+                Get
+                    If Me.IsCheckBox30Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox30Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox30Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox31() As Boolean
+                Get
+                    If Me.IsCheckBox31Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox31Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox31Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox32() As Boolean
+                Get
+                    If Me.IsCheckBox32Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox32Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox32Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox33() As Boolean
+                Get
+                    If Me.IsCheckBox33Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox33Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox33Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox34() As Boolean
+                Get
+                    If Me.IsCheckBox34Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox34Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox34Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox35() As Boolean
+                Get
+                    If Me.IsCheckBox35Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox35Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox35Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox36() As Boolean
+                Get
+                    If Me.IsCheckBox36Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox36Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox36Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox37() As Boolean
+                Get
+                    If Me.IsCheckBox37Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox37Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox37Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox38() As Boolean
+                Get
+                    If Me.IsCheckBox38Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox38Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox38Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox39() As Boolean
+                Get
+                    If Me.IsCheckBox39Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox39Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox39Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox40() As Boolean
+                Get
+                    If Me.IsCheckBox40Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox40Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox40Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox41() As Boolean
+                Get
+                    If Me.IsCheckBox41Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox41Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox41Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox42() As Boolean
+                Get
+                    If Me.IsCheckBox42Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox42Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox42Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox43() As Boolean
+                Get
+                    If Me.IsCheckBox43Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox43Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox43Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox44() As Boolean
+                Get
+                    If Me.IsCheckBox44Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox44Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox44Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox45() As Boolean
+                Get
+                    If Me.IsCheckBox45Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox45Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox46() As Boolean
+                Get
+                    If Me.IsCheckBox46Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox46Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox46Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox47() As Boolean
+                Get
+                    If Me.IsCheckBox47Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox47Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox47Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox48() As Boolean
+                Get
+                    If Me.IsCheckBox48Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox48Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox48Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox49() As Boolean
+                Get
+                    If Me.IsCheckBox49Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox49Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox49Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property CheckBox50() As Boolean
+                Get
+                    If Me.IsCheckBox50Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblCheckBox.CheckBox50Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblCheckBox.CheckBox50Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox01Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox01Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox01Null()
+                Me(Me.tabletblCheckBox.CheckBox01Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox02Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox02Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox02Null()
+                Me(Me.tabletblCheckBox.CheckBox02Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox03Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox03Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox03Null()
+                Me(Me.tabletblCheckBox.CheckBox03Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox04Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox04Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox04Null()
+                Me(Me.tabletblCheckBox.CheckBox04Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox05Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox05Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox05Null()
+                Me(Me.tabletblCheckBox.CheckBox05Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox06Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox06Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox06Null()
+                Me(Me.tabletblCheckBox.CheckBox06Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox07Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox07Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox07Null()
+                Me(Me.tabletblCheckBox.CheckBox07Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox08Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox08Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox08Null()
+                Me(Me.tabletblCheckBox.CheckBox08Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox09Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox09Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox09Null()
+                Me(Me.tabletblCheckBox.CheckBox09Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox10Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox10Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox10Null()
+                Me(Me.tabletblCheckBox.CheckBox10Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox11Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox11Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox11Null()
+                Me(Me.tabletblCheckBox.CheckBox11Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox12Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox12Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox12Null()
+                Me(Me.tabletblCheckBox.CheckBox12Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox13Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox13Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox13Null()
+                Me(Me.tabletblCheckBox.CheckBox13Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox14Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox14Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox14Null()
+                Me(Me.tabletblCheckBox.CheckBox14Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox15Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox15Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox15Null()
+                Me(Me.tabletblCheckBox.CheckBox15Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox16Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox16Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox16Null()
+                Me(Me.tabletblCheckBox.CheckBox16Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox17Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox17Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox17Null()
+                Me(Me.tabletblCheckBox.CheckBox17Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox18Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox18Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox18Null()
+                Me(Me.tabletblCheckBox.CheckBox18Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox19Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox19Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox19Null()
+                Me(Me.tabletblCheckBox.CheckBox19Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox20Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox20Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox20Null()
+                Me(Me.tabletblCheckBox.CheckBox20Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox21Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox21Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox21Null()
+                Me(Me.tabletblCheckBox.CheckBox21Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox22Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox22Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox22Null()
+                Me(Me.tabletblCheckBox.CheckBox22Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox23Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox23Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox23Null()
+                Me(Me.tabletblCheckBox.CheckBox23Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox24Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox24Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox24Null()
+                Me(Me.tabletblCheckBox.CheckBox24Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox25Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox25Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox25Null()
+                Me(Me.tabletblCheckBox.CheckBox25Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox26Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox26Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox26Null()
+                Me(Me.tabletblCheckBox.CheckBox26Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox27Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox27Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox27Null()
+                Me(Me.tabletblCheckBox.CheckBox27Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox28Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox28Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox28Null()
+                Me(Me.tabletblCheckBox.CheckBox28Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox29Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox29Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox29Null()
+                Me(Me.tabletblCheckBox.CheckBox29Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox30Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox30Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox30Null()
+                Me(Me.tabletblCheckBox.CheckBox30Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox31Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox31Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox31Null()
+                Me(Me.tabletblCheckBox.CheckBox31Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox32Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox32Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox32Null()
+                Me(Me.tabletblCheckBox.CheckBox32Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox33Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox33Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox33Null()
+                Me(Me.tabletblCheckBox.CheckBox33Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox34Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox34Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox34Null()
+                Me(Me.tabletblCheckBox.CheckBox34Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox35Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox35Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox35Null()
+                Me(Me.tabletblCheckBox.CheckBox35Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox36Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox36Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox36Null()
+                Me(Me.tabletblCheckBox.CheckBox36Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox37Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox37Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox37Null()
+                Me(Me.tabletblCheckBox.CheckBox37Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox38Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox38Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox38Null()
+                Me(Me.tabletblCheckBox.CheckBox38Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox39Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox39Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox39Null()
+                Me(Me.tabletblCheckBox.CheckBox39Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox40Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox40Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox40Null()
+                Me(Me.tabletblCheckBox.CheckBox40Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox41Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox41Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox41Null()
+                Me(Me.tabletblCheckBox.CheckBox41Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox42Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox42Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox42Null()
+                Me(Me.tabletblCheckBox.CheckBox42Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox43Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox43Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox43Null()
+                Me(Me.tabletblCheckBox.CheckBox43Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox44Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox44Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox44Null()
+                Me(Me.tabletblCheckBox.CheckBox44Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox45Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox45Null()
+                Me(Me.tabletblCheckBox.CheckBox45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox46Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox46Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox46Null()
+                Me(Me.tabletblCheckBox.CheckBox46Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox47Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox47Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox47Null()
+                Me(Me.tabletblCheckBox.CheckBox47Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox48Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox48Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox48Null()
+                Me(Me.tabletblCheckBox.CheckBox48Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox49Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox49Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox49Null()
+                Me(Me.tabletblCheckBox.CheckBox49Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCheckBox50Null() As Boolean
+                Return Me.IsNull(Me.tabletblCheckBox.CheckBox50Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCheckBox50Null()
+                Me(Me.tabletblCheckBox.CheckBox50Column) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblEnumRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblEnum As tblEnumDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblEnum = CType(Me.Table,tblEnumDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Display() As String
+                Get
+                    If Me.IsDisplayNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblEnum.DisplayColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblEnum.DisplayColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Value() As Short
+                Get
+                    Return CType(Me(Me.tabletblEnum.ValueColumn),Short)
+                End Get
+                Set
+                    Me(Me.tabletblEnum.ValueColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsDisplayNull() As Boolean
+                Return Me.IsNull(Me.tabletblEnum.DisplayColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetDisplayNull()
+                Me(Me.tabletblEnum.DisplayColumn) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -1739,6 +4529,78 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblGaugeRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblCheckBoxRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblCheckBoxRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblCheckBoxRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblCheckBoxRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblEnumRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblEnumRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblEnumRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblEnumRow
                 Get
                     Return Me.eventRow
                 End Get

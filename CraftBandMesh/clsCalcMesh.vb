@@ -1836,7 +1836,7 @@ Class clsCalcMesh
                 Case enumひも種.i_横 Or enumひも種.i_長い
                     band.m_rひも位置.p左上 = p長いひも左上
                     band.m_rひも位置.p右下 = p長いひも左上 + bandwidth + Unit0 * (band.m_row縦横展開.f_d出力ひも長 / 2 + d左半分の長さ)
-                    band.m_bPortion = True
+                    band.m_borderひも = band.m_borderひも And Not DirectionEnum._左
 
                 Case (enumひも種.i_横 Or enumひも種.i_短い), (enumひも種.i_横 Or enumひも種.i_最上と最下)
                     band.m_rひも位置.p左上 = New S実座標(-band.m_row縦横展開.f_d出力ひも長 / 2, p縦横の左上.Y)
@@ -1879,7 +1879,7 @@ Class clsCalcMesh
             Dim bandwidth As S差分 = Unit0 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
             band.m_rひも位置.p左下 = p左下部分
             band.m_rひも位置.p右上 = p左下部分 + bandwidth + Unit90 * (band.m_row縦横展開.f_d出力ひも長 / 2 + d下半分の長さ)
-            band.m_bPortion = True
+            band.m_borderひも = band.m_borderひも And Not DirectionEnum._下
             '
             p左下部分 = p左下部分 + bandwidth + Unit0 * dひとつのすき間の寸法
         Next

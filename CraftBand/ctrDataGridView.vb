@@ -331,6 +331,9 @@ Public Class ctrDataGridView
 
         '元のDataObjectを取得する
         Dim oldData As DataObject = MyBase.GetClipboardContent()
+        If oldData Is Nothing Then
+            Return False
+        End If
 
         '新しいDataObjectを作成する
         Dim newData As New DataObject()

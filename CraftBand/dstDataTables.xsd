@@ -23,7 +23,7 @@
               <xs:element name="f_s基本色" msprop:Generator_ColumnPropNameInTable="f_s基本色Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s基本色" msprop:Generator_UserColumnName="f_s基本色" msprop:Generator_ColumnVarNameInTable="columnf_s基本色" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_i基本のひも幅" msprop:Generator_ColumnPropNameInTable="f_i基本のひも幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i基本のひも幅" msprop:Generator_UserColumnName="f_i基本のひも幅" msprop:Generator_ColumnVarNameInTable="columnf_i基本のひも幅" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_sメモ" msprop:Generator_ColumnPropNameInTable="f_sメモColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sメモ" msprop:Generator_UserColumnName="f_sメモ" msprop:Generator_ColumnVarNameInTable="columnf_sメモ" type="xs:string" default="" minOccurs="0" />
-              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.4.0" minOccurs="0" />
+              <xs:element name="f_sバージョン" msprop:Generator_ColumnPropNameInTable="f_sバージョンColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sバージョン" msprop:Generator_UserColumnName="f_sバージョン" msprop:Generator_ColumnVarNameInTable="columnf_sバージョン" type="xs:string" default="1.5.0" minOccurs="0" />
               <xs:element name="f_s単位" msprop:Generator_ColumnPropNameInTable="f_s単位Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s単位" msprop:Generator_UserColumnName="f_s単位" msprop:Generator_ColumnVarNameInTable="columnf_s単位" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_sEXE名" msprop:Generator_ColumnPropNameInTable="f_sEXE名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sEXE名" msprop:Generator_UserColumnName="f_sEXE名" msprop:Generator_ColumnVarNameInTable="columnf_sEXE名" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
@@ -63,6 +63,9 @@
               <xs:element name="f_i高さのコマ数" msprop:Generator_ColumnPropNameInTable="f_i高さのコマ数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i高さのコマ数" msprop:Generator_UserColumnName="f_i高さのコマ数" msprop:Generator_ColumnVarNameInTable="columnf_i高さのコマ数" type="xs:int" default="0" minOccurs="0" />
               <xs:element name="f_i折り返しコマ数" msprop:Generator_ColumnPropNameInTable="f_i折り返しコマ数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i折り返しコマ数" msprop:Generator_UserColumnName="f_i折り返しコマ数" msprop:Generator_ColumnVarNameInTable="columnf_i折り返しコマ数" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_dひも長加算_側面" msprop:Generator_ColumnPropNameInTable="f_dひも長加算_側面Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算_側面" msprop:Generator_UserColumnName="f_dひも長加算_側面" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算_側面" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d左端右端の目" msprop:Generator_ColumnPropNameInTable="f_d左端右端の目Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d左端右端の目" msprop:Generator_UserColumnName="f_d左端右端の目" msprop:Generator_ColumnVarNameInTable="columnf_d左端右端の目" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d上端下端の目" msprop:Generator_ColumnPropNameInTable="f_d上端下端の目Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d上端下端の目" msprop:Generator_UserColumnName="f_d上端下端の目" msprop:Generator_ColumnVarNameInTable="columnf_d上端下端の目" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d最下段の目" msprop:Generator_ColumnPropNameInTable="f_d最下段の目Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d最下段の目" msprop:Generator_UserColumnName="f_d最下段の目" msprop:Generator_ColumnVarNameInTable="columnf_d最下段の目" type="xs:double" default="1" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -132,7 +135,7 @@
               <xs:element name="f_i番号" msprop:Generator_ColumnPropNameInTable="f_i番号Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i番号" msprop:Generator_UserColumnName="f_i番号" msprop:Generator_ColumnVarNameInTable="columnf_i番号" type="xs:int" default="1" />
               <xs:element name="f_s付属品名" msprop:Generator_ColumnPropNameInTable="f_s付属品名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s付属品名" msprop:Generator_UserColumnName="f_s付属品名" msprop:Generator_ColumnVarNameInTable="columnf_s付属品名" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_s付属品ひも名" msprop:Generator_ColumnPropNameInTable="f_s付属品ひも名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s付属品ひも名" msprop:Generator_UserColumnName="f_s付属品ひも名" msprop:Generator_ColumnVarNameInTable="columnf_s付属品ひも名" type="xs:string" default="" minOccurs="0" />
-              <xs:element name="f_iひも番号" msprop:Generator_ColumnPropNameInTable="f_iひも番号Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_iひも番号" msprop:Generator_UserColumnName="f_iひも番号" msprop:Generator_ColumnVarNameInTable="columnf_iひも番号" type="xs:short" default="1" minOccurs="0" />
+              <xs:element name="f_iひも番号" msprop:Generator_ColumnPropNameInTable="f_iひも番号Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_iひも番号" msprop:Generator_UserColumnName="f_iひも番号" msprop:Generator_ColumnVarNameInTable="columnf_iひも番号" type="xs:short" default="1" />
               <xs:element name="f_bError" msprop:Generator_ColumnPropNameInTable="f_bErrorColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_bError" msprop:Generator_UserColumnName="f_bError" msprop:Generator_ColumnVarNameInTable="columnf_bError" type="xs:boolean" default="false" minOccurs="0" />
               <xs:element name="f_b巻きひも区分" msprop:Generator_ColumnPropNameInTable="f_b巻きひも区分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b巻きひも区分" msprop:Generator_UserColumnName="f_b巻きひも区分" msprop:Generator_ColumnVarNameInTable="columnf_b巻きひも区分" type="xs:boolean" default="false" minOccurs="0" />
               <xs:element name="f_i何本幅" msprop:Generator_ColumnPropNameInTable="f_i何本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i何本幅" msprop:Generator_UserColumnName="f_i何本幅" msprop:Generator_ColumnVarNameInTable="columnf_i何本幅" type="xs:short" default="1" minOccurs="0" />
@@ -159,9 +162,40 @@
               <xs:element name="f_s記号" msprop:Generator_ColumnPropNameInTable="f_s記号Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s記号" msprop:Generator_UserColumnName="f_s記号" msprop:Generator_ColumnVarNameInTable="columnf_s記号" type="xs:string" default="" minOccurs="0" />
               <xs:element name="f_i何本幅" msprop:Generator_ColumnPropNameInTable="f_i何本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i何本幅" msprop:Generator_UserColumnName="f_i何本幅" msprop:Generator_ColumnVarNameInTable="columnf_i何本幅" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="f_s色" msprop:Generator_ColumnPropNameInTable="f_s色Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s色" msprop:Generator_UserColumnName="f_s色" msprop:Generator_ColumnVarNameInTable="columnf_s色" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_d幅" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d幅Column" msprop:Generator_ColumnVarNameInTable="columnf_d幅" msprop:Generator_UserColumnName="f_d幅" msprop:Generator_ColumnPropNameInRow="f_d幅" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_dひも長加算" msprop:Generator_ColumnPropNameInTable="f_dひも長加算Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算" msprop:Generator_UserColumnName="f_dひも長加算" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_dひも長加算2" msprop:Generator_ColumnPropNameInTable="f_dひも長加算2Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算2" msprop:Generator_UserColumnName="f_dひも長加算2" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算2" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d出力ひも長" msprop:Generator_ColumnPropNameInTable="f_d出力ひも長Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d出力ひも長" msprop:Generator_UserColumnName="f_d出力ひも長" msprop:Generator_ColumnVarNameInTable="columnf_d出力ひも長" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_sメモ" msprop:Generator_ColumnPropNameInTable="f_sメモColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sメモ" msprop:Generator_UserColumnName="f_sメモ" msprop:Generator_ColumnVarNameInTable="columnf_sメモ" type="xs:string" default="" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblひも上下" msprop:Generator_RowEvHandlerName="tblひも上下RowChangeEventHandler" msprop:Generator_RowDeletedName="tblひも上下RowDeleted" msprop:Generator_RowDeletingName="tblひも上下RowDeleting" msprop:Generator_RowEvArgName="tblひも上下RowChangeEvent" msprop:Generator_TablePropName="tblひも上下" msprop:Generator_RowChangedName="tblひも上下RowChanged" msprop:Generator_UserTableName="tblひも上下" msprop:Generator_RowChangingName="tblひも上下RowChanging" msprop:Generator_RowClassName="tblひも上下Row" msprop:Generator_TableClassName="tblひも上下DataTable" msprop:Generator_TableVarName="tabletblひも上下">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_i番号" msprop:Generator_ColumnPropNameInTable="f_i番号Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i番号" msprop:Generator_UserColumnName="f_i番号" msprop:Generator_ColumnVarNameInTable="columnf_i番号" type="xs:int" default="0" minOccurs="0" />
+              <xs:element name="f_i水平本数" msprop:Generator_ColumnPropNameInTable="f_i水平本数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i水平本数" msprop:Generator_UserColumnName="f_i水平本数" msprop:Generator_ColumnVarNameInTable="columnf_i水平本数" type="xs:int" default="0" minOccurs="0" />
+              <xs:element name="f_i垂直本数" msprop:Generator_ColumnPropNameInTable="f_i垂直本数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i垂直本数" msprop:Generator_UserColumnName="f_i垂直本数" msprop:Generator_ColumnVarNameInTable="columnf_i垂直本数" type="xs:int" default="0" minOccurs="0" />
+              <xs:element name="f_s上下" msprop:Generator_ColumnPropNameInTable="f_s上下Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s上下" msprop:Generator_UserColumnName="f_s上下" msprop:Generator_ColumnVarNameInTable="columnf_s上下" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_sメモ" msprop:Generator_ColumnPropNameInTable="f_sメモColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sメモ" msprop:Generator_UserColumnName="f_sメモ" msprop:Generator_ColumnVarNameInTable="columnf_sメモ" type="xs:string" default="" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tbl差しひも" msprop:Generator_RowEvHandlerName="tbl差しひもRowChangeEventHandler" msprop:Generator_RowDeletedName="tbl差しひもRowDeleted" msprop:Generator_RowDeletingName="tbl差しひもRowDeleting" msprop:Generator_RowEvArgName="tbl差しひもRowChangeEvent" msprop:Generator_TablePropName="tbl差しひも" msprop:Generator_RowChangedName="tbl差しひもRowChanged" msprop:Generator_UserTableName="tbl差しひも" msprop:Generator_RowChangingName="tbl差しひもRowChanging" msprop:Generator_RowClassName="tbl差しひもRow" msprop:Generator_TableClassName="tbl差しひもDataTable" msprop:Generator_TableVarName="tabletbl差しひも">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_i番号" msprop:Generator_ColumnPropNameInTable="f_i番号Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i番号" msprop:Generator_UserColumnName="f_i番号" msprop:Generator_ColumnVarNameInTable="columnf_i番号" type="xs:int" default="0" />
+              <xs:element name="f_b有効区分" msprop:Generator_ColumnPropNameInTable="f_b有効区分Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_b有効区分" msprop:Generator_UserColumnName="f_b有効区分" msprop:Generator_ColumnVarNameInTable="columnf_b有効区分" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="f_i配置面" msprop:Generator_ColumnPropNameInTable="f_i配置面Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i配置面" msprop:Generator_UserColumnName="f_i配置面" msprop:Generator_ColumnVarNameInTable="columnf_i配置面" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_i角度" msprop:Generator_ColumnPropNameInTable="f_i角度Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i角度" msprop:Generator_UserColumnName="f_i角度" msprop:Generator_ColumnVarNameInTable="columnf_i角度" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_i中心点" msprop:Generator_ColumnPropNameInTable="f_i中心点Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i中心点" msprop:Generator_UserColumnName="f_i中心点" msprop:Generator_ColumnVarNameInTable="columnf_i中心点" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="f_i何本幅" msprop:Generator_ColumnPropNameInTable="f_i何本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i何本幅" msprop:Generator_UserColumnName="f_i何本幅" msprop:Generator_ColumnVarNameInTable="columnf_i何本幅" type="xs:short" default="1" minOccurs="0" />
+              <xs:element name="f_s色" msprop:Generator_ColumnPropNameInTable="f_s色Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s色" msprop:Generator_UserColumnName="f_s色" msprop:Generator_ColumnVarNameInTable="columnf_s色" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="f_i開始位置" msprop:Generator_ColumnPropNameInTable="f_i開始位置Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i開始位置" msprop:Generator_UserColumnName="f_i開始位置" msprop:Generator_ColumnVarNameInTable="columnf_i開始位置" type="xs:int" default="1" minOccurs="0" />
+              <xs:element name="f_i何本ごと" msprop:Generator_ColumnPropNameInTable="f_i何本ごとColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i何本ごと" msprop:Generator_UserColumnName="f_i何本ごと" msprop:Generator_ColumnVarNameInTable="columnf_i何本ごと" type="xs:int" default="1" minOccurs="0" />
+              <xs:element name="f_dひも長" msprop:Generator_ColumnPropNameInTable="f_dひも長Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長" msprop:Generator_UserColumnName="f_dひも長" msprop:Generator_ColumnVarNameInTable="columnf_dひも長" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_dひも長加算" msprop:Generator_ColumnPropNameInTable="f_dひも長加算Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dひも長加算" msprop:Generator_UserColumnName="f_dひも長加算" msprop:Generator_ColumnVarNameInTable="columnf_dひも長加算" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_iひも本数" msprop:Generator_ColumnPropNameInTable="f_iひも本数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_iひも本数" msprop:Generator_UserColumnName="f_iひも本数" msprop:Generator_ColumnVarNameInTable="columnf_iひも本数" type="xs:int" default="0" minOccurs="0" />
               <xs:element name="f_sメモ" msprop:Generator_ColumnPropNameInTable="f_sメモColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_sメモ" msprop:Generator_UserColumnName="f_sメモ" msprop:Generator_ColumnVarNameInTable="columnf_sメモ" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -178,10 +212,19 @@
       <xs:field xpath="mstns:f_i番号" />
       <xs:field xpath="mstns:f_iひも番号" />
     </xs:unique>
+    <xs:unique name="tbl追加品PKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tbl追加品" />
+      <xs:field xpath="mstns:f_i番号" />
+      <xs:field xpath="mstns:f_iひも番号" />
+    </xs:unique>
     <xs:unique name="tbl縦横展開Key1">
       <xs:selector xpath=".//mstns:tbl縦横展開" />
       <xs:field xpath="mstns:f_iひも種" />
       <xs:field xpath="mstns:f_iひも番号" />
+    </xs:unique>
+    <xs:unique name="tbl差しひもPKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tbl差しひも" />
+      <xs:field xpath="mstns:f_i番号" />
     </xs:unique>
   </xs:element>
 </xs:schema>

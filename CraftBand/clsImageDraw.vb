@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Imaging
+Imports System.Reflection
 Imports System.Windows.Forms.AxHost
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
 Imports CraftBand.clsImageItem
@@ -246,22 +247,26 @@ Public Class CImageDraw
 
     '描画の基本情報取得
     Sub New(ByVal imgdata As clsImageData)
+        Try
+            '現単位あたりのピクセル数
+            Dim one_inch As New Length(1, "in")
+            _pixcel_h = HorizontalDpi / (one_inch.Value)
+            _pixcel_v = VerticalDpi / (one_inch.Value)
 
-        '現単位あたりのピクセル数
-        Dim one_inch As New Length(1, "in")
-        _pixcel_h = HorizontalDpi / (one_inch.Value)
-        _pixcel_v = VerticalDpi / (one_inch.Value)
+            '計算済の描画領域情報に対応したピクセル数を得る
+            Dim width As Integer = Math.Ceiling(imgdata.DrawingRect.x幅 * ImageScale * _pixcel_h) + 1
+            Dim height As Integer = Math.Ceiling(imgdata.DrawingRect.y高さ * ImageScale * _pixcel_v) + 1
 
-        '計算済の描画領域情報に対応したピクセル数を得る
-        Dim width As Integer = Math.Ceiling(imgdata.DrawingRect.x幅 * ImageScale * _pixcel_h) + 1
-        Dim height As Integer = Math.Ceiling(imgdata.DrawingRect.y高さ * ImageScale * _pixcel_v) + 1
+            '座標変換の起点
+            _TopY = imgdata.DrawingRect.y最上
+            _LeftX = imgdata.DrawingRect.x最左
 
-        '座標変換の起点
-        _TopY = imgdata.DrawingRect.y最上
-        _LeftX = imgdata.DrawingRect.x最左
-
-        'ピクセルを指定して描画領域の準備
-        newCanvas(width, height, imgdata.BasicColor, imgdata.BasicBandWidth)
+            'ピクセルを指定して描画領域の準備
+            newCanvas(width, height, imgdata.BasicColor, imgdata.BasicBandWidth)
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "CImageDraw.New")
+            Canvas = Nothing
+        End Try
     End Sub
 
     '描画用オブジェクト生成
@@ -298,6 +303,9 @@ Public Class CImageDraw
 
     '描画
     Function Draw(ByVal imglist As clsImageItemList) As Boolean
+        If Canvas Is Nothing Then
+            Return False
+        End If
         Dim ret As Boolean = True
         For Each item As clsImageItem In imglist
             Select Case item.m_ImageType
@@ -353,61 +361,147 @@ Public Class CImageDraw
 
 
     Function draw横バンド(ByVal item As clsImageItem) As Boolean
-        If item.m_row縦横展開 Is Nothing Then
-            Return False
-        End If
-        Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
-        If colset Is Nothing Then
-            Return False
-        End If
-        Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
-        If 0 < rect.Width Then
-            '塗りつぶし
-            If colset.BrushAlfa IsNot Nothing Then
-                _Graphic.FillRectangle(colset.BrushAlfa, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
-            End If
+        Return subバンド(item, False)
 
-            '本幅線
-            If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
-                Dim wid As Single = (pixcel_height(item.m_rひも位置.y高さ) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
-                For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
-                    Dim p左 As New PointF(rect.X + colset.PenWidth / 2, rect.Y + wid * i + colset.PenWidth / 2)
-                    Dim p右 As New PointF(rect.X + rect.Width - colset.PenWidth, rect.Y + wid * i + colset.PenWidth / 2)
-                    _Graphic.DrawLine(colset.PenLane, p左, p右)
-                Next
-            End If
+        'If item.m_row縦横展開 Is Nothing Then
+        '    Return False
+        'End If
+        'Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        'If colset Is Nothing Then
+        '    Return False
+        'End If
+        'Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+        'If 0 < rect.Width Then
+        '    Dim widHalf As Single = colset.PenWidth / 2
+        '    ''白でぬりつぶし
+        '    '_Graphic.FillRectangle(Brushes.White, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
 
-            'バンド
-            If colset.PenBand IsNot Nothing Then
-                If item.m_bPortion Then
-                    '左側の線を省略
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
-                Else
-                    _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
-                End If
-            End If
-        End If
+        '    '塗りつぶし
+        '    If colset.BrushAlfa IsNot Nothing Then
+        '        _Graphic.FillRectangle(colset.BrushAlfa, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        '    End If
 
-        If Not item.m_bNoMark Then
-            '記号を左に
-            If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
-                Dim pMark As New PointF(rect.X - _FontSize * 2.7, rect.Y + 3)
-                _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
-            End If
-        End If
+        '    '本幅線
+        '    If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
+        '        Dim wid As Single = (pixcel_height(item.m_rひも位置.y高さ) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
+        '        For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
+        '            Dim p左 As New PointF(rect.X + widHalf, rect.Y + wid * i + widHalf)
+        '            Dim p右 As New PointF(rect.X + rect.Width - colset.PenWidth, rect.Y + wid * i + widHalf)
+        '            _Graphic.DrawLine(colset.PenLane, p左, p右)
+        '        Next
+        '    End If
 
-        Return True
+        '    'バンド
+        '    If colset.PenBand IsNot Nothing Then
+        '        If item.m_borderひも = cDirectionEnumAll Then
+        '            _Graphic.DrawRectangle(colset.PenBand, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        '        Else
+        '            If item.m_borderひも.HasFlag(DirectionEnum._上) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                          rect.X + widHalf, rect.Y + widHalf,
+        '                          rect.X + rect.Width - widHalf, rect.Y + widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._左) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                          rect.X + widHalf, rect.Y + widHalf,
+        '                          rect.X + widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._下) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                          rect.X + widHalf, rect.Y + rect.Height - widHalf,
+        '                          rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._右) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                          rect.X + rect.Width - widHalf, rect.Y + widHalf,
+        '                          rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '        End If
+        '    End If
+        'End If
+
+
+        'If Not item.m_bNoMark Then
+        '    '記号を左に
+        '    If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+        '        Dim pMark As New PointF(rect.X - _FontSize * 2.7, rect.Y + 3)
+        '        _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+        '    End If
+        'End If
+
+        'Return True
     End Function
 
     Function draw縦バンド(ByVal item As clsImageItem) As Boolean
+        Return subバンド(item, True)
+
+        'If item.m_row縦横展開 Is Nothing Then
+        '    Return False
+        'End If
+        'Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        'If colset Is Nothing Then
+        '    Return False
+        'End If
+        'Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+        'If 0 < rect.Height Then
+        '    Dim widHalf As Single = colset.PenWidth / 2
+
+        '    '塗りつぶし
+        '    If colset.BrushAlfa IsNot Nothing Then
+        '        _Graphic.FillRectangle(colset.BrushAlfa, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        '    End If
+
+        '    '本幅線
+        '    If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
+        '        Dim wid As Single = (pixcel_width(item.m_rひも位置.x幅) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
+        '        For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
+        '            Dim p上 As New PointF(rect.X + wid * i + widHalf, rect.Y + widHalf)
+        '            Dim p下 As New PointF(rect.X + wid * i + widHalf, rect.Y + rect.Height - colset.PenWidth)
+        '            _Graphic.DrawLine(colset.PenLane, p上, p下)
+        '        Next
+        '    End If
+
+        '    'バンド
+        '    If colset.PenBand IsNot Nothing Then
+        '        If item.m_borderひも = cDirectionEnumAll Then
+        '            _Graphic.DrawRectangle(colset.PenBand, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        '        Else
+        '            If item.m_borderひも.HasFlag(DirectionEnum._上) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                                  rect.X + widHalf, rect.Y + widHalf,
+        '                                  rect.X + rect.Width - widHalf, rect.Y + widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._左) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                                  rect.X + widHalf, rect.Y + widHalf,
+        '                                  rect.X + widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._下) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                                  rect.X + widHalf, rect.Y + rect.Height - widHalf,
+        '                                  rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '            If item.m_borderひも.HasFlag(DirectionEnum._右) Then
+        '                _Graphic.DrawLine(colset.PenBand,
+        '                                  rect.X + rect.Width - widHalf, rect.Y + widHalf,
+        '                                  rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+        '            End If
+        '        End If
+        '    End If
+
+        'End If
+
+        'If Not item.m_bNoMark Then
+        '    '記号を上に
+        '    If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+        '        Dim pMark As New PointF(rect.X + 2, rect.Y - _FontSize * 1.5)
+        '        _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+        '    End If
+        'End If
+        'Return True
+    End Function
+
+    Function subバンド(ByVal item As clsImageItem, ByVal isVirtical As Boolean) As Boolean
         If item.m_row縦横展開 Is Nothing Then
             Return False
         End If
@@ -415,47 +509,155 @@ Public Class CImageDraw
         If colset Is Nothing Then
             Return False
         End If
+        Dim ret As Boolean = True
         Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
-        If 0 < rect.Height Then
-            '塗りつぶし
-            If colset.BrushAlfa IsNot Nothing Then
-                _Graphic.FillRectangle(colset.BrushAlfa, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        If (isVirtical And (0 < rect.Height)) OrElse (Not isVirtical And (0 < rect.Width)) Then
+            Dim widraw As Single
+            If isVirtical Then
+                widraw = pixcel_width(item.m_rひも位置.x幅)
+            Else
+                widraw = pixcel_height(item.m_rひも位置.y高さ)
             End If
 
-            '本幅線
-            If colset.PenLane IsNot Nothing AndAlso 1 < item.m_row縦横展開.f_i何本幅 Then
-                Dim wid As Single = (pixcel_width(item.m_rひも位置.x幅) - colset.PenWidth) / item.m_row縦横展開.f_i何本幅
-                For i As Integer = 1 To item.m_row縦横展開.f_i何本幅 - 1
-                    Dim p上 As New PointF(rect.X + wid * i + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
-                    Dim p下 As New PointF(rect.X + wid * i + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth)
-                    _Graphic.DrawLine(colset.PenLane, p上, p下)
-                Next
-            End If
+            If item.m_regionList IsNot Nothing AndAlso 0 < item.m_regionList.Count Then
+                '白抜き箇所がある
+                If isVirtical Then
+                    '縦ひも
+                    item.m_regionList.SortByY()
+                    'Debug.Print(item.m_regionList.ToString)
+                    Dim YStart As Double = item.m_rひも位置.y最下
+                    Dim YEnd As Double = item.m_rひも位置.y最上
+                    Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._上)
 
-            'バンド
-            If colset.PenBand IsNot Nothing Then
-                If item.m_bPortion Then
-                    '下側の線を省略
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
-                                      rect.X + colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + rect.Height - colset.PenWidth / 2)
-                    _Graphic.DrawLine(colset.PenBand,
-                                      rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2,
-                                      rect.X + rect.Width - colset.PenWidth / 2, rect.Y + colset.PenWidth / 2)
+                    Dim part_r As S領域 = item.m_rひも位置
+                    For Each r As S領域 In item.m_regionList
+                        If r.y最下 < YStart Then
+                            '範囲より下なのでスルー
+                        ElseIf YEnd < r.y最下 Then
+                            '範囲より上なので終わり
+                            Exit For
+                        Else
+                            '範囲内
+                            part_r.y最上 = r.y最下
+                            ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+                                                  widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+                            part_r.y最下 = r.y最上
+                        End If
+                        borderひも = borderひも And Not (DirectionEnum._下)
+                    Next
+                    '
+                    borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._上))
+                    part_r.p右上.Y = YEnd
+                    ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+                                                  widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+
                 Else
-                    _Graphic.DrawRectangle(colset.PenBand, rect.X + colset.PenWidth / 2, rect.Y + colset.PenWidth / 2, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+                    '横ひも
+                    item.m_regionList.SortByX()
+                    'Debug.Print(item.m_regionList.ToString)
+                    Dim XStart As Double = item.m_rひも位置.x最左
+                    Dim XEnd As Double = item.m_rひも位置.x最右
+                    Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._右)
+
+                    Dim part_r As S領域 = item.m_rひも位置
+                    For Each r As S領域 In item.m_regionList
+                        If r.x最左 < XStart Then
+                            '範囲より左なのでスルー
+                        ElseIf XEnd < r.x最左 Then
+                            '範囲より右なので終わり
+                            Exit For
+                        Else
+                            '範囲内
+                            part_r.x最右 = r.x最左
+                            ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+                                                  widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+                            part_r.x最左 = r.x最右
+                        End If
+                        borderひも = borderひも And Not (DirectionEnum._左)
+                    Next
+                    '
+                    borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._右))
+                    part_r.p右上.X = XEnd
+                    ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+                                                  widraw, item.m_row縦横展開.f_i何本幅, borderひも)
                 End If
+
+            Else
+                '1本だけのひも
+                ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
             End If
         End If
 
+        '記号
         If Not item.m_bNoMark Then
-            '記号を上に
-            If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
-                Dim pMark As New PointF(rect.X + 2, rect.Y - _FontSize * 1.5)
-                _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+            If isVirtical Then
+                '記号を上に
+                If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+                    Dim pMark As New PointF(rect.X + 2, rect.Y - _FontSize * 1.5)
+                    _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+                End If
+            Else
+                '記号を左に
+                If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+                    Dim pMark As New PointF(rect.X - _FontSize * 2.7, rect.Y + 3)
+                    _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+                End If
+            End If
+        End If
+        Return True
+    End Function
+
+    Private Function partバンド(ByVal isVirtical As Boolean, ByVal colset As CPenBrush, ByVal rect As RectangleF, ByVal widraw As Single, ByVal i何本幅 As Integer, ByVal borderひも As DirectionEnum) As Boolean
+        Dim widHalf As Single = colset.PenWidth / 2
+
+        '塗りつぶし
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillRectangle(colset.BrushAlfa, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+        End If
+
+        '本幅線
+        Dim wid As Single = (widraw - colset.PenWidth) / i何本幅
+        If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
+            If isVirtical Then
+                For i As Integer = 1 To i何本幅 - 1
+                    Dim p上 As New PointF(rect.X + wid * i + widHalf, rect.Y + widHalf)
+                    Dim p下 As New PointF(rect.X + wid * i + widHalf, rect.Y + rect.Height - colset.PenWidth)
+                    _Graphic.DrawLine(colset.PenLane, p上, p下)
+                Next
+            Else
+                For i As Integer = 1 To i何本幅 - 1
+                    Dim p左 As New PointF(rect.X + widHalf, rect.Y + wid * i + widHalf)
+                    Dim p右 As New PointF(rect.X + rect.Width - colset.PenWidth, rect.Y + wid * i + widHalf)
+                    _Graphic.DrawLine(colset.PenLane, p左, p右)
+                Next
+            End If
+        End If
+
+        'バンド枠
+        If colset.PenBand IsNot Nothing Then
+            If borderひも = cDirectionEnumAll Then
+                _Graphic.DrawRectangle(colset.PenBand, rect.X + widHalf, rect.Y + widHalf, rect.Width - colset.PenWidth, rect.Height - colset.PenWidth)
+            Else
+                If borderひも.HasFlag(DirectionEnum._上) Then
+                    _Graphic.DrawLine(colset.PenBand,
+                                          rect.X + widHalf, rect.Y + widHalf,
+                                          rect.X + rect.Width - widHalf, rect.Y + widHalf)
+                End If
+                If borderひも.HasFlag(DirectionEnum._左) Then
+                    _Graphic.DrawLine(colset.PenBand,
+                                          rect.X + widHalf, rect.Y + widHalf,
+                                          rect.X + widHalf, rect.Y + rect.Height - widHalf)
+                End If
+                If borderひも.HasFlag(DirectionEnum._下) Then
+                    _Graphic.DrawLine(colset.PenBand,
+                                          rect.X + widHalf, rect.Y + rect.Height - widHalf,
+                                          rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+                End If
+                If borderひも.HasFlag(DirectionEnum._右) Then
+                    _Graphic.DrawLine(colset.PenBand,
+                                          rect.X + rect.Width - widHalf, rect.Y + widHalf,
+                                          rect.X + rect.Width - widHalf, rect.Y + rect.Height - widHalf)
+                End If
             End If
         End If
         Return True

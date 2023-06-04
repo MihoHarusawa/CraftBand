@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Text
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsImageItem
@@ -14,6 +15,15 @@ Public Class clsImageItem
     '                │                              左上(B)      ／
     '     左下     -Y↓        右下                      ＼ 左下(C)
     '
+
+    <Flags()>
+    Enum DirectionEnum
+        _上 = 1
+        _左 = 2
+        _下 = 4
+        _右 = 8
+    End Enum
+    Public Const cDirectionEnumAll As DirectionEnum = DirectionEnum._上 Or DirectionEnum._左 Or DirectionEnum._右 Or DirectionEnum._下
 
 #Region "配置構造体"
     'point:点
@@ -166,7 +176,7 @@ Public Class clsImageItem
         End Property
 
         Public Overrides Function ToString() As String
-            Return String.Format("line{0}-{1} range:{2}", p開始, p終了, r外接領域)
+            Return String.Format("S線分<{0}-{1}> range:{2}", p開始, p終了, r外接領域)
         End Function
     End Structure
 
@@ -189,7 +199,9 @@ Public Class clsImageItem
             For Each line As S線分 In Me
                 sb.AppendLine(line.ToString)
             Next
-            sb.AppendFormat("All 描画領域:{0}", Get描画領域())
+            If 0 < Me.Count Then
+                sb.AppendFormat("C線分リスト 描画領域:{0}", Get描画領域())
+            End If
             Return sb.ToString
         End Function
     End Class
@@ -308,9 +320,9 @@ Public Class clsImageItem
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("最左X({0:f1})最上Y({1:f1}) 最右X({2:f1})最下Y({3:f1})", x最左, y最上, x最右, y最下).AppendLine()
-            sb.AppendFormat("  左上({0:f1},{1:f1}) 右上({2:f1},{3:f1})", p左上.X, p左上.Y, p右上.X, p右上.Y).AppendLine()
-            sb.AppendFormat("  左下({0:f1},{1:f1}) 右下({2:f1},{3:f1})", p左下.X, p左下.Y, p右下.X, p右下.Y).AppendLine()
+            sb.AppendFormat("S四隅<最左X({0:f1})最上Y({1:f1}) 最右X({2:f1})最下Y({3:f1})>", x最左, y最上, x最右, y最下)
+            sb.AppendFormat(" 左上({0:f1},{1:f1}) 右上({2:f1},{3:f1})", p左上.X, p左上.Y, p右上.X, p右上.Y)
+            sb.AppendFormat(" 左下({0:f1},{1:f1}) 右下({2:f1},{3:f1})", p左下.X, p左下.Y, p右下.X, p右下.Y)
             Return sb.ToString
 
         End Function
@@ -318,6 +330,8 @@ Public Class clsImageItem
 
     'rect:領域(X軸・Y軸に並行な4点)
     Structure S領域
+        Implements IComparable(Of S領域)
+
         Public p右上 As S実座標
         Public p左下 As S実座標
 
@@ -326,6 +340,10 @@ Public Class clsImageItem
             x最右 = mdlUnit.Max(p1.X, p2.X)
             y最上 = mdlUnit.Max(p1.Y, p2.Y)
             y最下 = mdlUnit.Min(p1.Y, p2.Y)
+        End Sub
+
+        Sub New(ByVal ref As S領域)
+            Me.New(ref.p右上, ref.p左下)
         End Sub
 
         ReadOnly Property IsEmpty() As Boolean
@@ -455,12 +473,79 @@ Public Class clsImageItem
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("最左X({0:f1})最上Y({1:f1}) 最右X({2:f1})最下Y({3:f1})", x最左, y最上, x最右, y最下).AppendLine()
-            sb.AppendFormat("  左下({0:f1},{1:f1}) 右上({2:f1},{3:f1})", p左下.X, p左下.Y, p右上.X, p右上.Y).AppendLine()
+            sb.AppendFormat("S領域<最左X({0:f1})最上Y({1:f1}) 最右X({2:f1})最下Y({3:f1})>", x最左, y最上, x最右, y最下)
+            sb.AppendFormat("  左下({0:f1},{1:f1}) 右上({2:f1},{3:f1})", p左下.X, p左下.Y, p右上.X, p右上.Y)
             Return sb.ToString
 
         End Function
+
+        '既定のソート: 右上座標の原点からの距離
+        Public Function CompareTo(other As S領域) As Integer Implements IComparable(Of S領域).CompareTo
+            Dim myDis As Double = p右上.X ^ 2 + p右上.Y ^ 2
+            Dim otherDis As Double = other.p右上.X ^ 2 + other.p右上.Y ^ 2
+            If myDis.CompareTo(otherDis) <> 0 Then
+                Return myDis.CompareTo(otherDis)
+            End If
+            myDis = p左下.X ^ 2 + p左下.Y ^ 2
+            otherDis = other.p左下.X ^ 2 + other.p左下.Y ^ 2
+            Return myDis.CompareTo(otherDis)
+        End Function
+
+        'X座標
+        Public Shared Function CompareToX(this As S領域, other As S領域) As Integer
+            If this.p右上.X.CompareTo(other.p右上.X) <> 0 Then
+                Return this.p右上.X.CompareTo(other.p右上.X)
+            End If
+            Return this.p左下.X.CompareTo(other.p左下.X)
+        End Function
+
+        'Y座標
+        Public Shared Function CompareToY(this As S領域, other As S領域) As Integer
+            If this.p右上.Y.CompareTo(other.p右上.Y) <> 0 Then
+                Return this.p右上.Y.CompareTo(other.p右上.Y)
+            End If
+            Return this.p左下.Y.CompareTo(other.p左下.Y)
+        End Function
+
     End Structure
+
+    Class C領域リスト
+        Inherits List(Of S領域)
+
+        Function Get描画領域() As S領域
+            If Me.Count = 0 Then
+                Return Nothing 'ゼロ
+            End If
+            Dim r描画領域 As S領域 = Me(0)
+            For i As Integer = 1 To Count - 1
+                r描画領域 = r描画領域.get拡大領域(Me(i))
+            Next
+            Return r描画領域
+        End Function
+
+        Sub Add領域(ByVal r As S領域)
+            Me.Add(New S領域(r))
+        End Sub
+
+        Sub SortByX()
+            Me.Sort(AddressOf S領域.CompareToX)
+        End Sub
+
+        Sub SortByY()
+            Me.Sort(AddressOf S領域.CompareToY)
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Dim sb As New StringBuilder
+            For Each rct As S領域 In Me
+                sb.AppendLine(rct.ToString)
+            Next
+            sb.AppendFormat("C領域リスト 描画領域:{0}", Get描画領域())
+            Return sb.ToString
+        End Function
+    End Class
+
+
 #End Region
 
     '四つ畳み編み
@@ -571,7 +656,9 @@ Public Class clsImageItem
     Public m_dひも幅 As Double
     Public m_rひも位置 As S領域
     Public m_bNoMark As Boolean = False '記号なし
-    Public m_bPortion As Boolean = False '一部
+    Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
+    Public m_regionList As C領域リスト 'クロス表示用
+
 
     '線分リスト
     Public m_lineList As New C線分リスト
@@ -867,8 +954,14 @@ Public Class clsImageItem
         If m_row縦横展開2 IsNot Nothing Then
             sb.AppendFormat("位置({0}) d長さ({1}) dひも長({2}) d出力ひも長({3})", m_row縦横展開2.f_i位置番号, m_row縦横展開2.f_d長さ, m_row縦横展開2.f_dひも長, m_row縦横展開2.f_d出力ひも長).AppendLine()
         End If
-        'sb.AppendFormat("四隅:{0}  中心:{1}", m_a四隅, m_p中心).AppendLine()
+        If Not m_a四隅.IsEmpty Then
+            sb.AppendFormat("四隅:{0}", m_a四隅).AppendLine()
+        End If
         sb.AppendFormat("dひも幅={0} ひも位置:{1}", m_dひも幅, m_rひも位置).AppendLine()
+        sb.AppendFormat("bNoMark={0} border:{1}", m_bNoMark, m_borderひも).AppendLine()
+        If m_regionList IsNot Nothing AndAlso 0 < m_regionList.Count Then
+            sb.AppendLine(m_regionList.ToString)
+        End If
         sb.AppendLine(m_lineList.ToString)
         Return sb.ToString
     End Function
@@ -931,7 +1024,7 @@ Public Class clsImageItemList
         Next
         If create Then
             'あるはずなので
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsBandList.GetBand 追加({0},{1})", iひも種, iひも番号)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsBandList.GetRowItem 追加({0},{1})", iひも種, iひも番号)
             Dim add As New clsImageItem((New tbl縦横展開DataTable).Newtbl縦横展開Row)
             add.m_row縦横展開.f_iひも種 = iひも種
             add.m_row縦横展開.f_iひも番号 = iひも番号

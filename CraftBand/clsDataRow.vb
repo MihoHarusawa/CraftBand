@@ -46,7 +46,7 @@ Public Class clsDataRow
                     Select Case col.DataType.ToString
                         Case "System.String"
                             Return ""
-                        Case "System.Int16", "System.Int32"
+                        Case "System.Int16", "System.Int32", "System.UInt32"
                             Return 0
                         Case "System.Double"
                             Return 0
@@ -62,7 +62,7 @@ Public Class clsDataRow
                 Select Case col.DataType.ToString
                     Case "System.String"
                         Return CType(obj, String)
-                    Case "System.Int16", "System.Int32"
+                    Case "System.Int16", "System.Int32", "System.UInt32"
                         Return CType(obj, Integer)
                     Case "System.Double"
                         Return CType(obj, Double)
@@ -134,7 +134,7 @@ Public Class clsDataRow
                 Select Case col.DataType.ToString
                     Case "System.String"
                         Return 0 < obj.ToString.Length
-                    Case "System.Int16", "System.Int32", "System.Double", "System.Boolean"
+                    Case "System.Int16", "System.Int32", "System.Double", "System.Boolean", "System.UInt32"
                         Return True
                     Case Else
                         '未定義のDataType
@@ -187,6 +187,13 @@ Public Class clsDataRow
                 Case "System.Int32"
                     Dim obj As Int32
                     If Int32.TryParse(value, obj) Then
+                        Return obj
+                    Else
+                        Return col.DefaultValue
+                    End If
+                Case "System.UInt32"
+                    Dim obj As UInt32
+                    If UInt32.TryParse(value, obj) Then
                         Return obj
                     Else
                         Return col.DefaultValue

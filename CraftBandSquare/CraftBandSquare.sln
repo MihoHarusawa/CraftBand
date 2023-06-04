@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandSquare", "CraftBandSquare.vbproj", "{DADFEC82-23A7-4DB8-9C9B-D9CB53BA6CB6}"
+EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBand", "..\CraftBand\CraftBand.vbproj", "{2AFE52E5-438B-49A8-A40A-249DE0D53799}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DADFEC82-23A7-4DB8-9C9B-D9CB53BA6CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADFEC82-23A7-4DB8-9C9B-D9CB53BA6CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADFEC82-23A7-4DB8-9C9B-D9CB53BA6CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADFEC82-23A7-4DB8-9C9B-D9CB53BA6CB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AFE52E5-438B-49A8-A40A-249DE0D53799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AFE52E5-438B-49A8-A40A-249DE0D53799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AFE52E5-438B-49A8-A40A-249DE0D53799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AFE52E5-438B-49A8-A40A-249DE0D53799}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89D9DEBC-C0B5-4714-950D-43CF91EE8A10}
+	EndGlobalSection
+EndGlobal
