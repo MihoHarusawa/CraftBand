@@ -192,6 +192,9 @@
   <data name="CalcNoTargetSet" xml:space="preserve">
     <value>目標寸法もしくは基本のひも幅が正しくありません。</value>
   </data>
+  <data name="CalcOutTurn" xml:space="preserve">
+    <value>折り返し</value>
+  </data>
   <data name="CalcUpDownSaveErr" xml:space="preserve">
     <value>ひも上下レコードの保存エラーです。</value>
   </data>
@@ -199,7 +202,7 @@
     <value>規定値.xml</value>
   </data>
   <data name="EnumStringAngle" xml:space="preserve">
-    <value>0度(水平),45度(右斜め),90度(垂直),135度(左斜め)</value>
+    <value>0度(水平・横),45度(右斜め),90度(垂直・縦),135度(左斜め)</value>
     <comment>frmMain</comment>
   </data>
   <data name="EnumStringCenter" xml:space="preserve">
@@ -222,8 +225,16 @@
     <value>左上</value>
     <comment>frmMain</comment>
   </data>
+  <data name="MessageCheckOK" xml:space="preserve">
+    <value>チェックOKです。</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="MessageNoDefaultFile" xml:space="preserve">
     <value>規定値が保存されていません。先に規定値保存を行ってください。</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="MessageNoMore" xml:space="preserve">
+    <value>これ以上増やせません。</value>
     <comment>frmMain</comment>
   </data>
   <data name="MessageNotExistDefaultFile" xml:space="preserve">
@@ -247,15 +258,15 @@
     <comment>mdlMain</comment>
   </data>
   <data name="UpDownAppend" xml:space="preserve">
-    <value>上下模様の登録</value>
+    <value>上下図の登録</value>
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownAppendInstruction" xml:space="preserve">
-    <value>新たな上下模様名を入力してください。[OK]ボタンで現パターンを登録します。</value>
+    <value>新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。</value>
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownExistName" xml:space="preserve">
-    <value>'{0}'は既に登録されています。別の名前を指定してください。</value>
+    <value>'{0}'は既に登録されています。置き換えますか？(いいえで別の名前を指定)</value>
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownNoExistName" xml:space="preserve">
@@ -263,15 +274,15 @@
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownNoName" xml:space="preserve">
-    <value>上下模様名がセットされていません。</value>
+    <value>上下図名がセットされていません。</value>
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownRead" xml:space="preserve">
-    <value>上下模様の呼出</value>
+    <value>上下図の呼出</value>
     <comment>frmUpDownSetting</comment>
   </data>
   <data name="UpDownReadInstruction" xml:space="preserve">
-    <value>上下模様名を選択してください。[OK]ボタンで現パターンに反映します。</value>
+    <value>上下図名を選択してください。[OK]ボタンで現パターンに反映します。</value>
     <comment>frmUpDownSetting</comment>
   </data>
 </root>

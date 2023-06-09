@@ -1,7 +1,9 @@
 ﻿
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Page
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Spin
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
@@ -19,7 +21,6 @@ Public Class frmMain
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
-    Dim _isChangingByCode As Boolean = False
 
 
 #Region "基本的な画面処理"
@@ -150,10 +151,10 @@ Public Class frmMain
         If 0 < siz.Height AndAlso 0 < siz.Width Then
             Me.Size = siz
             Dim colwid As String
-            'colwid = My.Settings.frmMainGridOval
-            'Me.dgv底楕円.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridSide
             Me.dgv側面.SetColumnWidthFromString(colwid)
+            colwid = My.Settings.frmMainGridInsertBand
+            Me.dgv差しひも.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridOptions
             Me.dgv追加品.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridYoko
@@ -174,15 +175,15 @@ Public Class frmMain
             End If
         End If
 
-        'My.Settings.frmMainGridOval = Me.dgv底楕円.GetColumnWidthString()
         My.Settings.frmMainGridSide = Me.dgv側面.GetColumnWidthString()
+        My.Settings.frmMainGridInsertBand = Me.dgv差しひも.GetColumnWidthString()
         My.Settings.frmMainGridOptions = Me.dgv追加品.GetColumnWidthString()
         My.Settings.frmMainGridYoko = Me.dgv横ひも.GetColumnWidthString()
         My.Settings.frmMainGridTate = Me.dgv縦ひも.GetColumnWidthString()
         My.Settings.frmMainSize = Me.Size
         '
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底楕円={0}", My.Settings.frmMainGridOval)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv側面={0}", My.Settings.frmMainGridSide)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv差しひも={0}", My.Settings.frmMainGridInsertBand)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv追加品={0}", My.Settings.frmMainGridOptions)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の横={0}", My.Settings.frmMainGridYoko)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の縦={0}", My.Settings.frmMainGridTate)
@@ -226,6 +227,9 @@ Public Class frmMain
             'Grid
             Dim format As String = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
 
+            Me.f_dひも長1.DefaultCellStyle.Format = format
+            Me.f_d出力ひも長1.DefaultCellStyle.Format = format
+
             Me.f_d高さ2.DefaultCellStyle.Format = format
             Me.f_d垂直ひも長2.DefaultCellStyle.Format = format
             Me.f_d周長2.DefaultCellStyle.Format = format
@@ -236,10 +240,12 @@ Public Class frmMain
 
             Me.f_d長さ4.DefaultCellStyle.Format = format
             Me.f_dひも長4.DefaultCellStyle.Format = format
+            Me.f_d出力ひも長4.DefaultCellStyle.Format = format
             Me.f_d幅4.DefaultCellStyle.Format = format
 
             Me.f_d長さ5.DefaultCellStyle.Format = format
             Me.f_dひも長5.DefaultCellStyle.Format = format
+            Me.f_d出力ひも長5.DefaultCellStyle.Format = format
             Me.f_d幅5.DefaultCellStyle.Format = format
 
         End With
@@ -793,7 +799,7 @@ Public Class frmMain
         End If
     End Sub
 
-    '上下模様
+    '上下図
     Private Sub ToolStripMenuItemSettingUpDown_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingUpDown.Click
         Dim dlg As New frmUpDownPattern
         If dlg.ShowDialog() = DialogResult.OK Then
@@ -1126,11 +1132,20 @@ Public Class frmMain
             txt目_本幅分.Text = ""
         End If
 
-        If Not _isChangingByCode Then
-            recalc(CalcCategory.Square_Gap, sender)
-        End If
+        recalc(CalcCategory.Square_Gap, sender)
     End Sub
 
+    Private Sub nudひも長係数_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長係数.ValueChanged
+        recalc(CalcCategory.Square_Gap, sender)
+    End Sub
+
+    Private Sub nudひも長加算_縦横端_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_縦横端.ValueChanged
+        recalc(CalcCategory.Square_Gap, sender)
+    End Sub
+
+    Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
+        recalc(CalcCategory.Square_Vert, sender)
+    End Sub
 #End Region
 
 #Region "側面"
@@ -1143,7 +1158,7 @@ Public Class frmMain
         End If
 
         Save四角数(works.p_row底_縦横) '縦横側面展開値
-        If Not _clsCalcSquare.adjust_側面() Then
+        If Not _clsCalcSquare.CalcSize(CalcCategory.SideEdge, Nothing, Nothing) Then '側面と縁
             MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
@@ -1377,55 +1392,37 @@ Public Class frmMain
 
 
     Sub Show横ひも(ByVal works As clsDataTables)
-        BindingSource横ひも.Sort = Nothing
-        BindingSource横ひも.DataSource = Nothing
-        If works Is Nothing Then
-            Exit Sub
-        End If
-
-        'タブ切り替えタイミングのため、表示は更新済
         Save四角数(works.p_row底_縦横) '補強ひも・キャッシュなし
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcSquare.set横展開DataTable(True)
-
-        BindingSource横ひも.DataSource = tmptable
-        BindingSource横ひも.Sort = "f_iひも種 DESC, f_iひも番号"
+        BindingSource横ひも.DataSource = _clsCalcSquare.get横展開DataTable()
+        BindingSource横ひも.Sort = "f_i位置番号"
 
         dgv横ひも.Refresh()
     End Sub
 
     Function Hide横ひも(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = _clsCalcSquare.reset横展開DataTable(BindingSource横ひも.DataSource)
+        Dim ret As Boolean = _clsCalcSquare.save横展開DataTable(True)
         BindingSource横ひも.Sort = Nothing
         BindingSource横ひも.DataSource = Nothing
 
         dgv横ひも.Refresh()
-        Return 0 < change
+        Return ret
     End Function
 
     Sub Show縦ひも(ByVal works As clsDataTables)
-        BindingSource縦ひも.Sort = Nothing
-        BindingSource縦ひも.DataSource = Nothing
-        If works Is Nothing Then
-            Exit Sub
-        End If
-
-        'タブ切り替えタイミングのため、表示は更新済
         Save四角数(works.p_row底_縦横) '補強ひも・キャッシュなし
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcSquare.set縦展開DataTable(True)
-
-        BindingSource縦ひも.DataSource = tmptable
+        BindingSource縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable()
         BindingSource縦ひも.Sort = "f_i位置番号"
 
         dgv縦ひも.Refresh()
     End Sub
 
     Function Hide縦ひも(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = _clsCalcSquare.reset縦展開DataTable(BindingSource縦ひも.DataSource)
+        Dim ret As Boolean = _clsCalcSquare.save縦展開DataTable(True)
         BindingSource縦ひも.Sort = Nothing
         BindingSource縦ひも.DataSource = Nothing
 
         dgv縦ひも.Refresh()
-        Return 0 < change
+        Return ret
     End Function
 
     Private Sub btnリセット_横_Click(sender As Object, e As EventArgs) Handles btnリセット_横.Click
@@ -1434,8 +1431,7 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource横ひも.DataSource = _clsCalcSquare.set横展開DataTable(False)
-        BindingSource横ひも.Sort = "f_iひも種,f_iひも番号"
+        BindingSource横ひも.DataSource = _clsCalcSquare.get横展開DataTable(True)
         dgv横ひも.Refresh()
     End Sub
 
@@ -1445,8 +1441,7 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
-        BindingSource縦ひも.DataSource = _clsCalcSquare.set縦展開DataTable(False)
-        BindingSource縦ひも.Sort = "f_iひも種,f_iひも番号"
+        BindingSource縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable(True)
         dgv縦ひも.Refresh()
     End Sub
 
@@ -1482,7 +1477,7 @@ Public Class frmMain
 
 #End Region
 
-#Region "差しひも"
+#Region "差しひものEnum文字列"
     Dim _PlateTable As dstWork.tblEnumDataTable
     Dim _AngleTable As dstWork.tblEnumDataTable
     Dim _CenterTable As dstWork.tblEnumDataTable
@@ -1547,16 +1542,42 @@ Public Class frmMain
         f_i中心点1.DisplayMember = "Display"
         f_i中心点1.ValueMember = "Value"
 
-
     End Sub
 
+    Public Function PlateString(ByVal plate As enum配置面) As String
+        Try
+            Return CType(_PlateTable.Rows(CType(plate, Integer)), dstWork.tblEnumRow).Display
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function AngleString(ByVal angle As enum角度) As String
+        Try
+            Return CType(_AngleTable.Rows(CType(angle, Integer)), dstWork.tblEnumRow).Display
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function CenterString(ByVal center As enum中心点) As String
+        Try
+            Return CType(_CenterTable.Rows(CType(center, Integer)), dstWork.tblEnumRow).Display
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+#End Region
+
+#Region "差しひも"
     Sub Show差しひも(ByVal works As clsDataTables)
         BindingSource差しひも.Sort = Nothing
         BindingSource差しひも.DataSource = Nothing
         If works Is Nothing Then
             Exit Sub
         End If
-        If Not _clsCalcSquare.adjust_差しひも() Then
+        If Not _clsCalcSquare.CalcSize(CalcCategory.Inserted, Nothing, Nothing) Then
             MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
@@ -1670,7 +1691,7 @@ Public Class frmMain
         If col < 0 OrElse clsUpDown.cMaxUpdownColumns < col Then
             Return False
         End If
-
+        '0はIndex, 1～
         For i As Integer = 1 To col
             dgvひも上下.Columns(i).Visible = True
         Next
@@ -1687,9 +1708,10 @@ Public Class frmMain
                 BindingSourceひも上下.DataSource = Nothing
                 txt開始位置.Text = ""
             Else
-                'nud水平に.Value = updown.HorizontalCount
-                'nud垂直に.Value = updown.VerticalCount
-                'setUpdownColumns(updown.HorizontalCount)
+                nud水平に.Value = updown.HorizontalCount
+                nud垂直に.Value = updown.VerticalCount
+                setUpdownColumns(updown.HorizontalCount)
+                setUpDownCountLeft()
                 BindingSourceひも上下.DataSource = updown.CheckBoxTable
                 If rad下から上へ.Checked AndAlso _CurrentIsSide Then
                     BindingSourceひも上下.Sort = "Index desc"
@@ -1699,12 +1721,49 @@ Public Class frmMain
                     txt開始位置.Text = My.Resources.LeftUpper
                 End If
             End If
+            btnサイズ変更_ひも上下.Enabled = False
             Return True
 
         Catch ex As Exception
             g_clsLog.LogException(ex, "frmMain.setDataSourceUpDown")
             Return False
         End Try
+    End Function
+
+    '上下図の残り数
+    Private Function setUpDownCountLeft() As Boolean
+        lbl水平残.Text = "-"
+        lbl垂直残.Text = "-"
+
+        Dim horizontalCount As Integer = nud水平に.Value
+        Dim verticalCount As Integer = nud垂直に.Value
+        If horizontalCount = 0 OrElse verticalCount = 0 Then
+            Return False
+        End If
+
+        Dim left_h As Integer
+        Dim left_v As Integer
+
+        If _CurrentIsSide Then
+            left_h = _clsCalcSquare.p_i垂直ひも数 Mod horizontalCount
+            left_v = _clsCalcSquare.p_i側面ひもの本数 Mod verticalCount
+        Else
+            left_h = _clsCalcSquare.p_i横ひもの本数 Mod horizontalCount
+            left_v = _clsCalcSquare.p_i縦ひもの本数 Mod verticalCount
+        End If
+
+        If left_h = 0 Then
+            lbl水平残.Text = "OK"
+        Else
+            lbl水平残.Text = String.Format("[ {0} ]", left_h)
+        End If
+        If left_v = 0 Then
+            lbl垂直残.Text = "OK"
+        Else
+            lbl垂直残.Text = String.Format("[ {0} ]", left_v)
+        End If
+
+        Return True
     End Function
 
 
@@ -1717,18 +1776,13 @@ Public Class frmMain
 
         _CurrentIsSide = rad側面.Checked
 
-        Dim updown As clsUpDown = _clsCalcSquare.setひも上下(_CurrentIsSide)
+        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(_CurrentIsSide)
         If updown Is Nothing Then
             MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
-        nud水平に.Value = updown.HorizontalCount
-        nud垂直に.Value = updown.VerticalCount
-        btnサイズ変更_ひも上下.Enabled = False
-        setUpdownColumns(updown.HorizontalCount)
         txt上下のメモ.Text = updown.Memo
-
         setDataSourceUpDown(updown)
 
         dgvひも上下.Refresh()
@@ -1737,14 +1791,18 @@ Public Class frmMain
 
     Function saveひも上下(ByVal isMsg As Boolean) As Boolean
         If _UpdownChanged Then
-            Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-            updown.CheckBoxTable = BindingSourceひも上下.DataSource
-            updown.Memo = txt上下のメモ.Text
+            If BindingSourceひも上下.DataSource IsNot Nothing Then
+                Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+                updown.CheckBoxTable = BindingSourceひも上下.DataSource
+                updown.Memo = txt上下のメモ.Text
 
-            If Not _clsCalcSquare.resetひも上下(updown) Then
-                If isMsg Then
-                    MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                If Not _clsCalcSquare.saveひも上下(updown) Then
+                    If isMsg Then
+                        MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    End If
+                    Return False
                 End If
+            Else
                 Return False
             End If
         End If
@@ -1759,26 +1817,20 @@ Public Class frmMain
     End Function
 
     Private Sub btnサイズ変更_ひも上下_Click(sender As Object, e As EventArgs) Handles btnサイズ変更_ひも上下.Click
-        Dim updown As New clsUpDown(_CurrentIsSide)
-        updown.HorizontalCount = nud水平に.Value
-        updown.VerticalCount = nud垂直に.Value
-        If updown.HorizontalCount <= 0 OrElse updown.VerticalCount <= 0 Then
+        If nud水平に.Value <= 0 OrElse nud垂直に.Value <= 0 Then
             '水平・垂直の本数を指定してください。
             MessageBox.Show(My.Resources.MessageNoUpDownSize, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
 
         setDataSourceUpDown(Nothing)
-        btnサイズ変更_ひも上下.Enabled = False
 
-        If Not updown.ReSize() Then
+        Dim updown As clsUpDown = _clsCalcSquare.updownサイズ変更(nud水平に.Value, nud垂直に.Value, False)
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnサイズ変更_ひも上下.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
-            '本数は指定通り
-            setUpdownColumns(updown.HorizontalCount)
             setDataSourceUpDown(updown)
         End If
         dgvひも上下.Refresh()
@@ -1786,26 +1838,23 @@ Public Class frmMain
     End Sub
 
     Private Sub btnリセット_ひも上下_Click(sender As Object, e As EventArgs) Handles btnリセット_ひも上下.Click
-        'ひも上下の編集内容をすべてクリアします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetUpDown, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
+        If BindingSourceひも上下.DataSource IsNot Nothing Then
+            'ひも上下の編集内容をすべてクリアします。よろしいですか？
+            Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetUpDown, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If r <> DialogResult.OK Then
+                Exit Sub
+            End If
         End If
 
-        Dim updown As New clsUpDown(_CurrentIsSide) 'サイズは変わるので読まない
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
         setDataSourceUpDown(Nothing)
-        btnサイズ変更_ひも上下.Enabled = False
         txt上下のメモ.Text = ""
 
-        If Not updown.Reset() Then
+        Dim updown As clsUpDown = _clsCalcSquare.updownリセット()
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnリセット_ひも上下.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
-            nud水平に.Value = updown.HorizontalCount
-            nud垂直に.Value = updown.VerticalCount
-            setUpdownColumns(updown.HorizontalCount)
             setDataSourceUpDown(updown)
         End If
         dgvひも上下.Refresh()
@@ -1813,11 +1862,10 @@ Public Class frmMain
     End Sub
 
     Private Sub btn上下交換_Click(sender As Object, e As EventArgs) Handles btn上下交換.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
-
         setDataSourceUpDown(Nothing)
-        If Not updown.Revert() Then
+
+        Dim updown As clsUpDown = _clsCalcSquare.updown上下交換()
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn上下交換.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1829,11 +1877,10 @@ Public Class frmMain
     End Sub
 
     Private Sub btn左右反転_Click(sender As Object, e As EventArgs) Handles btn左右反転.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
-
         setDataSourceUpDown(Nothing)
-        If Not updown.LeftSideRight() Then
+
+        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転()
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左右反転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1845,11 +1892,10 @@ Public Class frmMain
     End Sub
 
     Private Sub btn天地反転_Click(sender As Object, e As EventArgs) Handles btn天地反転.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
-
         setDataSourceUpDown(Nothing)
-        If Not updown.UpSideDown() Then
+
+        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転()
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn天地反転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1861,36 +1907,137 @@ Public Class frmMain
     End Sub
 
     Private Sub btn右回転_Click(sender As Object, e As EventArgs) Handles btn右回転.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
-
         setDataSourceUpDown(Nothing)
-        If Not updown.RotateRight() Then
+
+        Dim updown As clsUpDown = _clsCalcSquare.updown右回転()
+        If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn右回転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
-            nud水平に.Value = updown.HorizontalCount
-            nud垂直に.Value = updown.VerticalCount
-            setUpdownColumns(updown.HorizontalCount)
             setDataSourceUpDown(updown)
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
     End Sub
 
+    Private Sub btnシフト_Click(sender As Object, e As EventArgs) Handles btnシフト.Click
+        Dim updown As clsUpDown
+        If rad上.Checked Then
+            setDataSourceUpDown(Nothing)
+            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+                updown = _clsCalcSquare.updown垂直シフト(False) '逆順なので後
+            Else
+                updown = _clsCalcSquare.updown垂直シフト(True) '正順なので先頭
+            End If
 
-    Private Sub btn水平追加_Click(sender As Object, e As EventArgs) Handles btn水平追加.Click
-        If nud水平に.Value < nud水平に.Maximum Then
-            nud水平に.Value = nud水平に.Value + 1
-            btnサイズ変更_ひも上下.PerformClick()
+        ElseIf rad下.Checked Then
+            setDataSourceUpDown(Nothing)
+            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+                updown = _clsCalcSquare.updown垂直シフト(True) '逆順なので先頭
+            Else
+                updown = _clsCalcSquare.updown垂直シフト(False) '正順なので後
+            End If
+
+        ElseIf rad右.Checked Then
+            setDataSourceUpDown(Nothing)
+            updown = _clsCalcSquare.updown水平シフト(False)
+
+        ElseIf rad左.Checked Then
+            setDataSourceUpDown(Nothing)
+            updown = _clsCalcSquare.updown水平シフト(True)
+
+        Else
+            Exit Sub
         End If
+
+        If updown Is Nothing Then
+            '{0}できませんでした。リセットしてやり直してください。
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnシフト.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            setDataSourceUpDown(updown)
+        End If
+        dgvひも上下.Refresh()
+        _UpdownChanged = True
     End Sub
 
-    Private Sub btn垂直追加_Click(sender As Object, e As EventArgs) Handles btn垂直追加.Click
-        If nud垂直に.Value < nud垂直に.Maximum Then
-            nud垂直に.Value = nud垂直に.Value + 1
-            btnサイズ変更_ひも上下.PerformClick()
+    Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
+        If rad上.Checked OrElse rad下.Checked Then
+            If clsUpDown.cMaxUpdownColumns <= dgvひも上下.Rows.Count Then
+                'これ以上増やせません。
+                MessageBox.Show(My.Resources.MessageNoMore, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+
+        ElseIf rad右.Checked OrElse rad左.Checked Then
+            If dgvひも上下.Columns(clsUpDown.cMaxUpdownColumns).Visible Then
+                'これ以上増やせません。
+                MessageBox.Show(My.Resources.MessageNoMore, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+        Else
+            Exit Sub
+        End If
+
+        setDataSourceUpDown(Nothing)
+        Dim updown As clsUpDown = Nothing
+
+        If rad上.Checked Then
+            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+                updown = _clsCalcSquare.updown垂直追加(False) '逆順なので後
+            Else
+                updown = _clsCalcSquare.updown垂直追加(True) '正順なので先頭
+            End If
+
+        ElseIf rad下.Checked Then
+            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+                updown = _clsCalcSquare.updown垂直追加(True) '逆順なので先頭
+            Else
+                updown = _clsCalcSquare.updown垂直追加(False) '正順なので後
+            End If
+
+        ElseIf rad右.Checked Then
+            updown = _clsCalcSquare.updown水平追加(False)
+
+        ElseIf rad左.Checked Then
+            updown = _clsCalcSquare.updown水平追加(True)
+        End If
+
+        If updown Is Nothing Then
+            '{0}できませんでした。リセットしてやり直してください。
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn追加.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            setDataSourceUpDown(updown)
+        End If
+        dgvひも上下.Refresh()
+        _UpdownChanged = True
+    End Sub
+
+    Private Sub btnランダム_Click(sender As Object, e As EventArgs) Handles btnランダム.Click
+        setDataSourceUpDown(Nothing)
+
+        Dim updown As clsUpDown = _clsCalcSquare.updownランダム()
+        If updown Is Nothing Then
+            '{0}できませんでした。リセットしてやり直してください。
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnランダム.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            setDataSourceUpDown(updown)
+        End If
+        dgvひも上下.Refresh()
+        _UpdownChanged = True
+    End Sub
+
+    Private Sub btnチェック_Click(sender As Object, e As EventArgs) Handles btnチェック.Click
+        If Not _clsCalcSquare.updownチェック() Then
+            MessageBox.Show(_clsCalcSquare.p_sメッセージ,
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            'チェックOKです。
+            MessageBox.Show(My.Resources.MessageCheckOK,
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 
@@ -1911,10 +2058,12 @@ Public Class frmMain
 
     Private Sub nud水平に_ValueChanged(sender As Object, e As EventArgs) Handles nud水平に.ValueChanged
         btnサイズ変更_ひも上下.Enabled = True
+        lbl水平残.Text = "-"
     End Sub
 
     Private Sub nud垂直に_ValueChanged(sender As Object, e As EventArgs) Handles nud垂直に.ValueChanged
         btnサイズ変更_ひも上下.Enabled = True
+        lbl垂直残.Text = "-"
     End Sub
 
     Private Sub dgvひも上下_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvひも上下.CellPainting
@@ -1938,29 +2087,49 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub dgvひも上下_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvひも上下.CellFormatting
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
+            Exit Sub
+        End If
+        If dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value Then
+            e.CellStyle.BackColor = Color.DarkGray
+        Else
+            e.CellStyle.BackColor = Color.White
+        End If
+    End Sub
+
     Private Sub btn設定呼出_Click(sender As Object, e As EventArgs) Handles btn設定呼出.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
+        Dim updown_tmp As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+        updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
 
         Dim dlg As New frmUpDownSetting
-        dlg.CurrentUpdown = updown
+        dlg.CurrentUpdown = updown_tmp
         dlg.IsLoadToCurrent = True
         If dlg.ShowDialog() = DialogResult.OK Then
-            nud水平に.Value = updown.HorizontalCount
-            nud垂直に.Value = updown.VerticalCount
-            setUpdownColumns(updown.HorizontalCount)
-            setDataSourceUpDown(updown)
+            setDataSourceUpDown(Nothing)
+            txt上下のメモ.Text = updown_tmp.Memo
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown_tmp:{0}", updown_tmp.ToString)
+
+            'CheckBoxTableに結果が入っている
+            Dim updown As clsUpDown = _clsCalcSquare.updownサイズ変更(updown_tmp.HorizontalCount, updown_tmp.VerticalCount, True)
+            If updown Is Nothing Then
+                '{0}できませんでした。リセットしてやり直してください。
+                MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn設定呼出.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Else
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown:{0}", updown.ToString)
+                setDataSourceUpDown(updown)
+            End If
             dgvひも上下.Refresh()
-            txt上下のメモ.Text = updown.Memo
             _UpdownChanged = True
         End If
     End Sub
 
     Private Sub btn設定登録_Click(sender As Object, e As EventArgs) Handles btn設定登録.Click
-        Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
-        updown.CheckBoxTable = BindingSourceひも上下.DataSource
+        Dim updown_tmp As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+        updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
         Dim dlg As New frmUpDownSetting
-        dlg.CurrentUpdown = updown
+        dlg.CurrentUpdown = updown_tmp
         dlg.IsSaveFromCurrent = True
         If dlg.ShowDialog() = DialogResult.OK Then
             '変わりません
@@ -2047,7 +2216,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 
 
 #End Region

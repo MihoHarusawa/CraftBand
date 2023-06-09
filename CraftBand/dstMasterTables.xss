@@ -12,7 +12,7 @@
     <Shape ID="DesignTable:tbl基本値" ZOrder="4" X="65" Y="413" Height="79" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="75" />
     <Shape ID="DesignTable:tbl描画色" ZOrder="3" X="971" Y="699" Height="217" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="213" />
     <Shape ID="DesignTable:tblゲージ" ZOrder="2" X="36" Y="84" Height="195" Width="158" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="191" />
-    <Shape ID="DesignTable:tbl上下模様" ZOrder="1" X="72" Y="610" Height="148" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="144" />
+    <Shape ID="DesignTable:tbl上下図" ZOrder="1" X="72" Y="610" Height="148" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="144" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

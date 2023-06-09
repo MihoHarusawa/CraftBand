@@ -29,15 +29,15 @@ Partial Class frmUpDownPattern
         Me.btnキャンセル = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.dgvData = New CraftBand.ctrDataGridView()
-        Me.Fs上下模様名DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Fs上下図名DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi水平本数DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fi垂直本数DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fs上下DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Fs備考DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BindingSource上下模様 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.BindingSource上下図 = New System.Windows.Forms.BindingSource(Me.components)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.BindingSource上下模様, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BindingSource上下図, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn削除
@@ -48,7 +48,7 @@ Partial Class frmUpDownPattern
         Me.btn削除.Size = New System.Drawing.Size(111, 46)
         Me.btn削除.TabIndex = 9
         Me.btn削除.Text = "削除(&D)"
-        Me.ToolTip1.SetToolTip(Me.btn削除, "選択されている上下模様を削除します")
+        Me.ToolTip1.SetToolTip(Me.btn削除, "選択されている上下図を削除します")
         Me.btn削除.UseVisualStyleBackColor = True
         '
         'btnキャンセル
@@ -84,8 +84,8 @@ Partial Class frmUpDownPattern
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs上下模様名DataGridViewTextBoxColumn, Me.Fi水平本数DataGridViewTextBoxColumn, Me.Fi垂直本数DataGridViewTextBoxColumn, Me.Fs上下DataGridViewTextBoxColumn, Me.Fs備考DataGridViewTextBoxColumn})
-        Me.dgvData.DataSource = Me.BindingSource上下模様
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs上下図名DataGridViewTextBoxColumn, Me.Fi水平本数DataGridViewTextBoxColumn, Me.Fi垂直本数DataGridViewTextBoxColumn, Me.Fs上下DataGridViewTextBoxColumn, Me.Fs備考DataGridViewTextBoxColumn})
+        Me.dgvData.DataSource = Me.BindingSource上下図
         Me.dgvData.Location = New System.Drawing.Point(12, 12)
         Me.dgvData.Name = "dgvData"
         Me.dgvData.RowHeadersWidth = 51
@@ -93,14 +93,14 @@ Partial Class frmUpDownPattern
         Me.dgvData.Size = New System.Drawing.Size(425, 176)
         Me.dgvData.TabIndex = 15
         '
-        'Fs上下模様名DataGridViewTextBoxColumn
+        'Fs上下図名DataGridViewTextBoxColumn
         '
-        Me.Fs上下模様名DataGridViewTextBoxColumn.DataPropertyName = "f_s上下模様名"
-        Me.Fs上下模様名DataGridViewTextBoxColumn.HeaderText = "上下模様名"
-        Me.Fs上下模様名DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fs上下模様名DataGridViewTextBoxColumn.Name = "Fs上下模様名DataGridViewTextBoxColumn"
-        Me.Fs上下模様名DataGridViewTextBoxColumn.ToolTipText = "重複しない名前"
-        Me.Fs上下模様名DataGridViewTextBoxColumn.Width = 150
+        Me.Fs上下図名DataGridViewTextBoxColumn.DataPropertyName = "f_s上下図名"
+        Me.Fs上下図名DataGridViewTextBoxColumn.HeaderText = "上下図名"
+        Me.Fs上下図名DataGridViewTextBoxColumn.MinimumWidth = 6
+        Me.Fs上下図名DataGridViewTextBoxColumn.Name = "Fs上下図名DataGridViewTextBoxColumn"
+        Me.Fs上下図名DataGridViewTextBoxColumn.ToolTipText = "重複しない名前"
+        Me.Fs上下図名DataGridViewTextBoxColumn.Width = 150
         '
         'Fi水平本数DataGridViewTextBoxColumn
         '
@@ -139,10 +139,10 @@ Partial Class frmUpDownPattern
         Me.Fs備考DataGridViewTextBoxColumn.Name = "Fs備考DataGridViewTextBoxColumn"
         Me.Fs備考DataGridViewTextBoxColumn.Width = 125
         '
-        'BindingSource上下模様
+        'BindingSource上下図
         '
-        Me.BindingSource上下模様.DataMember = "tbl上下模様"
-        Me.BindingSource上下模様.DataSource = GetType(CraftBand.Tables.dstMasterTables)
+        Me.BindingSource上下図.DataMember = "tbl上下図"
+        Me.BindingSource上下図.DataSource = GetType(CraftBand.Tables.dstMasterTables)
         '
         'frmUpDownPattern
         '
@@ -156,9 +156,9 @@ Partial Class frmUpDownPattern
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmUpDownPattern"
-        Me.Text = "上下模様"
+        Me.Text = "上下図"
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.BindingSource上下模様, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BindingSource上下図, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -167,9 +167,9 @@ Partial Class frmUpDownPattern
     Friend WithEvents btnキャンセル As Windows.Forms.Button
     Friend WithEvents btnOK As Windows.Forms.Button
     Friend WithEvents dgvData As ctrDataGridView
-    Friend WithEvents BindingSource上下模様 As Windows.Forms.BindingSource
+    Friend WithEvents BindingSource上下図 As Windows.Forms.BindingSource
     Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
-    Friend WithEvents Fs上下模様名DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Fs上下図名DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fi水平本数DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fi垂直本数DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Fs上下DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn

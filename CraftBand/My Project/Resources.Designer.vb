@@ -223,6 +223,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}行を確認してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrCheckHorizontal() As String
+            Get
+                Return ResourceManager.GetString("ErrCheckHorizontal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  サイズ({0},{1})のエラーです。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrCheckValid() As String
+            Get
+                Return ResourceManager.GetString("ErrCheckValid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}列を確認してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrCheckVertical() As String
+            Get
+                Return ResourceManager.GetString("ErrCheckVertical", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  実測値の不足もしくは値のエラーのため計算できなかった係数があります。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrGridCoeff() As String

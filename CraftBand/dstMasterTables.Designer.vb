@@ -37,7 +37,7 @@ Namespace Tables
         
         Private tabletblゲージ As tblゲージDataTable
         
-        Private tabletbl上下模様 As tbl上下模様DataTable
+        Private tabletbl上下図 As tbl上下図DataTable
         
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
@@ -86,8 +86,8 @@ Namespace Tables
                 If (Not (ds.Tables("tblゲージ")) Is Nothing) Then
                     MyBase.Tables.Add(New tblゲージDataTable(ds.Tables("tblゲージ")))
                 End If
-                If (Not (ds.Tables("tbl上下模様")) Is Nothing) Then
-                    MyBase.Tables.Add(New tbl上下模様DataTable(ds.Tables("tbl上下模様")))
+                If (Not (ds.Tables("tbl上下図")) Is Nothing) Then
+                    MyBase.Tables.Add(New tbl上下図DataTable(ds.Tables("tbl上下図")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -170,9 +170,9 @@ Namespace Tables
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false),  _
          Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
-        Public ReadOnly Property tbl上下模様() As tbl上下模様DataTable
+        Public ReadOnly Property tbl上下図() As tbl上下図DataTable
             Get
-                Return Me.tabletbl上下模様
+                Return Me.tabletbl上下図
             End Get
         End Property
         
@@ -261,8 +261,8 @@ Namespace Tables
                 If (Not (ds.Tables("tblゲージ")) Is Nothing) Then
                     MyBase.Tables.Add(New tblゲージDataTable(ds.Tables("tblゲージ")))
                 End If
-                If (Not (ds.Tables("tbl上下模様")) Is Nothing) Then
-                    MyBase.Tables.Add(New tbl上下模様DataTable(ds.Tables("tbl上下模様")))
+                If (Not (ds.Tables("tbl上下図")) Is Nothing) Then
+                    MyBase.Tables.Add(New tbl上下図DataTable(ds.Tables("tbl上下図")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -332,10 +332,10 @@ Namespace Tables
                     Me.tabletblゲージ.InitVars
                 End If
             End If
-            Me.tabletbl上下模様 = CType(MyBase.Tables("tbl上下模様"),tbl上下模様DataTable)
+            Me.tabletbl上下図 = CType(MyBase.Tables("tbl上下図"),tbl上下図DataTable)
             If (initTable = true) Then
-                If (Not (Me.tabletbl上下模様) Is Nothing) Then
-                    Me.tabletbl上下模様.InitVars
+                If (Not (Me.tabletbl上下図) Is Nothing) Then
+                    Me.tabletbl上下図.InitVars
                 End If
             End If
         End Sub
@@ -360,8 +360,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletbl描画色)
             Me.tabletblゲージ = New tblゲージDataTable()
             MyBase.Tables.Add(Me.tabletblゲージ)
-            Me.tabletbl上下模様 = New tbl上下模様DataTable()
-            MyBase.Tables.Add(Me.tabletbl上下模様)
+            Me.tabletbl上下図 = New tbl上下図DataTable()
+            MyBase.Tables.Add(Me.tabletbl上下図)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -402,7 +402,7 @@ Namespace Tables
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-        Private Function ShouldSerializetbl上下模様() As Boolean
+        Private Function ShouldSerializetbl上下図() As Boolean
             Return false
         End Function
         
@@ -483,7 +483,7 @@ Namespace Tables
         Public Delegate Sub tblゲージRowChangeEventHandler(ByVal sender As Object, ByVal e As tblゲージRowChangeEvent)
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-        Public Delegate Sub tbl上下模様RowChangeEventHandler(ByVal sender As Object, ByVal e As tbl上下模様RowChangeEvent)
+        Public Delegate Sub tbl上下図RowChangeEventHandler(ByVal sender As Object, ByVal e As tbl上下図RowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -3170,10 +3170,10 @@ Namespace Tables
         '''</summary>
         <Global.System.Serializable(),  _
          Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
-        Partial Public Class tbl上下模様DataTable
-            Inherits Global.System.Data.TypedTableBase(Of tbl上下模様Row)
+        Partial Public Class tbl上下図DataTable
+            Inherits Global.System.Data.TypedTableBase(Of tbl上下図Row)
             
-            Private columnf_s上下模様名 As Global.System.Data.DataColumn
+            Private columnf_s上下図名 As Global.System.Data.DataColumn
             
             Private columnf_i水平本数 As Global.System.Data.DataColumn
             
@@ -3187,7 +3187,7 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub New()
                 MyBase.New
-                Me.TableName = "tbl上下模様"
+                Me.TableName = "tbl上下図"
                 Me.BeginInit
                 Me.InitClass
                 Me.EndInit
@@ -3220,9 +3220,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property f_s上下模様名Column() As Global.System.Data.DataColumn
+            Public ReadOnly Property f_s上下図名Column() As Global.System.Data.DataColumn
                 Get
-                    Return Me.columnf_s上下模様名
+                    Return Me.columnf_s上下図名
                 End Get
             End Property
             
@@ -3269,50 +3269,50 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Default ReadOnly Property Item(ByVal index As Integer) As tbl上下模様Row
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tbl上下図Row
                 Get
-                    Return CType(Me.Rows(index),tbl上下模様Row)
+                    Return CType(Me.Rows(index),tbl上下図Row)
                 End Get
             End Property
             
             <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Event tbl上下模様RowChanging As tbl上下模様RowChangeEventHandler
+            Public Event tbl上下図RowChanging As tbl上下図RowChangeEventHandler
             
             <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Event tbl上下模様RowChanged As tbl上下模様RowChangeEventHandler
+            Public Event tbl上下図RowChanged As tbl上下図RowChangeEventHandler
             
             <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Event tbl上下模様RowDeleting As tbl上下模様RowChangeEventHandler
+            Public Event tbl上下図RowDeleting As tbl上下図RowChangeEventHandler
             
             <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Event tbl上下模様RowDeleted As tbl上下模様RowChangeEventHandler
+            Public Event tbl上下図RowDeleted As tbl上下図RowChangeEventHandler
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Sub Addtbl上下模様Row(ByVal row As tbl上下模様Row)
+            Public Overloads Sub Addtbl上下図Row(ByVal row As tbl上下図Row)
                 Me.Rows.Add(row)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl上下模様Row(ByVal f_s上下模様名 As String, ByVal f_i水平本数 As Integer, ByVal f_i垂直本数 As Integer, ByVal f_s上下 As String, ByVal f_s備考 As String) As tbl上下模様Row
-                Dim rowtbl上下模様Row As tbl上下模様Row = CType(Me.NewRow,tbl上下模様Row)
-                Dim columnValuesArray() As Object = New Object() {f_s上下模様名, f_i水平本数, f_i垂直本数, f_s上下, f_s備考}
-                rowtbl上下模様Row.ItemArray = columnValuesArray
-                Me.Rows.Add(rowtbl上下模様Row)
-                Return rowtbl上下模様Row
+            Public Overloads Function Addtbl上下図Row(ByVal f_s上下図名 As String, ByVal f_i水平本数 As Integer, ByVal f_i垂直本数 As Integer, ByVal f_s上下 As String, ByVal f_s備考 As String) As tbl上下図Row
+                Dim rowtbl上下図Row As tbl上下図Row = CType(Me.NewRow,tbl上下図Row)
+                Dim columnValuesArray() As Object = New Object() {f_s上下図名, f_i水平本数, f_i垂直本数, f_s上下, f_s備考}
+                rowtbl上下図Row.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtbl上下図Row)
+                Return rowtbl上下図Row
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function FindByf_s上下模様名(ByVal f_s上下模様名 As String) As tbl上下模様Row
-                Return CType(Me.Rows.Find(New Object() {f_s上下模様名}),tbl上下模様Row)
+            Public Function FindByf_s上下図名(ByVal f_s上下図名 As String) As tbl上下図Row
+                Return CType(Me.Rows.Find(New Object() {f_s上下図名}),tbl上下図Row)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Overrides Function Clone() As Global.System.Data.DataTable
-                Dim cln As tbl上下模様DataTable = CType(MyBase.Clone,tbl上下模様DataTable)
+                Dim cln As tbl上下図DataTable = CType(MyBase.Clone,tbl上下図DataTable)
                 cln.InitVars
                 Return cln
             End Function
@@ -3320,13 +3320,13 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
-                Return New tbl上下模様DataTable()
+                Return New tbl上下図DataTable()
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Friend Sub InitVars()
-                Me.columnf_s上下模様名 = MyBase.Columns("f_s上下模様名")
+                Me.columnf_s上下図名 = MyBase.Columns("f_s上下図名")
                 Me.columnf_i水平本数 = MyBase.Columns("f_i水平本数")
                 Me.columnf_i垂直本数 = MyBase.Columns("f_i垂直本数")
                 Me.columnf_s上下 = MyBase.Columns("f_s上下")
@@ -3336,8 +3336,8 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Private Sub InitClass()
-                Me.columnf_s上下模様名 = New Global.System.Data.DataColumn("f_s上下模様名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
-                MyBase.Columns.Add(Me.columnf_s上下模様名)
+                Me.columnf_s上下図名 = New Global.System.Data.DataColumn("f_s上下図名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s上下図名)
                 Me.columnf_i水平本数 = New Global.System.Data.DataColumn("f_i水平本数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i水平本数)
                 Me.columnf_i垂直本数 = New Global.System.Data.DataColumn("f_i垂直本数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
@@ -3346,10 +3346,10 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s上下)
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
-                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tbl上下模様PKey", New Global.System.Data.DataColumn() {Me.columnf_s上下模様名}, true))
-                Me.columnf_s上下模様名.AllowDBNull = false
-                Me.columnf_s上下模様名.Unique = true
-                Me.columnf_s上下模様名.DefaultValue = CType("",String)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tbl上下図PKey", New Global.System.Data.DataColumn() {Me.columnf_s上下図名}, true))
+                Me.columnf_s上下図名.AllowDBNull = false
+                Me.columnf_s上下図名.Unique = true
+                Me.columnf_s上下図名.DefaultValue = CType("",String)
                 Me.columnf_i水平本数.DefaultValue = CType(0,Integer)
                 Me.columnf_i垂直本数.DefaultValue = CType(0,Integer)
                 Me.columnf_s上下.DefaultValue = CType("",String)
@@ -3358,28 +3358,28 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function Newtbl上下模様Row() As tbl上下模様Row
-                Return CType(Me.NewRow,tbl上下模様Row)
+            Public Function Newtbl上下図Row() As tbl上下図Row
+                Return CType(Me.NewRow,tbl上下図Row)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
-                Return New tbl上下模様Row(builder)
+                Return New tbl上下図Row(builder)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Function GetRowType() As Global.System.Type
-                Return GetType(tbl上下模様Row)
+                Return GetType(tbl上下図Row)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
                 MyBase.OnRowChanged(e)
-                If (Not (Me.tbl上下模様RowChangedEvent) Is Nothing) Then
-                    RaiseEvent tbl上下模様RowChanged(Me, New tbl上下模様RowChangeEvent(CType(e.Row,tbl上下模様Row), e.Action))
+                If (Not (Me.tbl上下図RowChangedEvent) Is Nothing) Then
+                    RaiseEvent tbl上下図RowChanged(Me, New tbl上下図RowChangeEvent(CType(e.Row,tbl上下図Row), e.Action))
                 End If
             End Sub
             
@@ -3387,8 +3387,8 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
                 MyBase.OnRowChanging(e)
-                If (Not (Me.tbl上下模様RowChangingEvent) Is Nothing) Then
-                    RaiseEvent tbl上下模様RowChanging(Me, New tbl上下模様RowChangeEvent(CType(e.Row,tbl上下模様Row), e.Action))
+                If (Not (Me.tbl上下図RowChangingEvent) Is Nothing) Then
+                    RaiseEvent tbl上下図RowChanging(Me, New tbl上下図RowChangeEvent(CType(e.Row,tbl上下図Row), e.Action))
                 End If
             End Sub
             
@@ -3396,8 +3396,8 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
                 MyBase.OnRowDeleted(e)
-                If (Not (Me.tbl上下模様RowDeletedEvent) Is Nothing) Then
-                    RaiseEvent tbl上下模様RowDeleted(Me, New tbl上下模様RowChangeEvent(CType(e.Row,tbl上下模様Row), e.Action))
+                If (Not (Me.tbl上下図RowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tbl上下図RowDeleted(Me, New tbl上下図RowChangeEvent(CType(e.Row,tbl上下図Row), e.Action))
                 End If
             End Sub
             
@@ -3405,14 +3405,14 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
                 MyBase.OnRowDeleting(e)
-                If (Not (Me.tbl上下模様RowDeletingEvent) Is Nothing) Then
-                    RaiseEvent tbl上下模様RowDeleting(Me, New tbl上下模様RowChangeEvent(CType(e.Row,tbl上下模様Row), e.Action))
+                If (Not (Me.tbl上下図RowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tbl上下図RowDeleting(Me, New tbl上下図RowChangeEvent(CType(e.Row,tbl上下図Row), e.Action))
                 End If
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub Removetbl上下模様Row(ByVal row As tbl上下模様Row)
+            Public Sub Removetbl上下図Row(ByVal row As tbl上下図Row)
                 Me.Rows.Remove(row)
             End Sub
             
@@ -3439,7 +3439,7 @@ Namespace Tables
                 type.Attributes.Add(attribute1)
                 Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
                 attribute2.Name = "tableTypeName"
-                attribute2.FixedValue = "tbl上下模様DataTable"
+                attribute2.FixedValue = "tbl上下図DataTable"
                 type.Attributes.Add(attribute2)
                 type.Particle = sequence
                 Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
@@ -5609,26 +5609,26 @@ Namespace Tables
         '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
-        Partial Public Class tbl上下模様Row
+        Partial Public Class tbl上下図Row
             Inherits Global.System.Data.DataRow
             
-            Private tabletbl上下模様 As tbl上下模様DataTable
+            Private tabletbl上下図 As tbl上下図DataTable
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
                 MyBase.New(rb)
-                Me.tabletbl上下模様 = CType(Me.Table,tbl上下模様DataTable)
+                Me.tabletbl上下図 = CType(Me.Table,tbl上下図DataTable)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_s上下模様名() As String
+            Public Property f_s上下図名() As String
                 Get
-                    Return CType(Me(Me.tabletbl上下模様.f_s上下模様名Column),String)
+                    Return CType(Me(Me.tabletbl上下図.f_s上下図名Column),String)
                 End Get
                 Set
-                    Me(Me.tabletbl上下模様.f_s上下模様名Column) = value
+                    Me(Me.tabletbl上下図.f_s上下図名Column) = value
                 End Set
             End Property
             
@@ -5639,11 +5639,11 @@ Namespace Tables
                     If Me.Isf_i水平本数Null Then
                         Return 0
                     Else
-                        Return CType(Me(Me.tabletbl上下模様.f_i水平本数Column),Integer)
+                        Return CType(Me(Me.tabletbl上下図.f_i水平本数Column),Integer)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletbl上下模様.f_i水平本数Column) = value
+                    Me(Me.tabletbl上下図.f_i水平本数Column) = value
                 End Set
             End Property
             
@@ -5654,11 +5654,11 @@ Namespace Tables
                     If Me.Isf_i垂直本数Null Then
                         Return 0
                     Else
-                        Return CType(Me(Me.tabletbl上下模様.f_i垂直本数Column),Integer)
+                        Return CType(Me(Me.tabletbl上下図.f_i垂直本数Column),Integer)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletbl上下模様.f_i垂直本数Column) = value
+                    Me(Me.tabletbl上下図.f_i垂直本数Column) = value
                 End Set
             End Property
             
@@ -5669,11 +5669,11 @@ Namespace Tables
                     If Me.Isf_s上下Null Then
                         Return ""
                     Else
-                        Return CType(Me(Me.tabletbl上下模様.f_s上下Column),String)
+                        Return CType(Me(Me.tabletbl上下図.f_s上下Column),String)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletbl上下模様.f_s上下Column) = value
+                    Me(Me.tabletbl上下図.f_s上下Column) = value
                 End Set
             End Property
             
@@ -5684,60 +5684,60 @@ Namespace Tables
                     If Me.Isf_s備考Null Then
                         Return ""
                     Else
-                        Return CType(Me(Me.tabletbl上下模様.f_s備考Column),String)
+                        Return CType(Me(Me.tabletbl上下図.f_s備考Column),String)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletbl上下模様.f_s備考Column) = value
+                    Me(Me.tabletbl上下図.f_s備考Column) = value
                 End Set
             End Property
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_i水平本数Null() As Boolean
-                Return Me.IsNull(Me.tabletbl上下模様.f_i水平本数Column)
+                Return Me.IsNull(Me.tabletbl上下図.f_i水平本数Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i水平本数Null()
-                Me(Me.tabletbl上下模様.f_i水平本数Column) = Global.System.Convert.DBNull
+                Me(Me.tabletbl上下図.f_i水平本数Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_i垂直本数Null() As Boolean
-                Return Me.IsNull(Me.tabletbl上下模様.f_i垂直本数Column)
+                Return Me.IsNull(Me.tabletbl上下図.f_i垂直本数Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i垂直本数Null()
-                Me(Me.tabletbl上下模様.f_i垂直本数Column) = Global.System.Convert.DBNull
+                Me(Me.tabletbl上下図.f_i垂直本数Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_s上下Null() As Boolean
-                Return Me.IsNull(Me.tabletbl上下模様.f_s上下Column)
+                Return Me.IsNull(Me.tabletbl上下図.f_s上下Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_s上下Null()
-                Me(Me.tabletbl上下模様.f_s上下Column) = Global.System.Convert.DBNull
+                Me(Me.tabletbl上下図.f_s上下Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_s備考Null() As Boolean
-                Return Me.IsNull(Me.tabletbl上下模様.f_s備考Column)
+                Return Me.IsNull(Me.tabletbl上下図.f_s備考Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_s備考Null()
-                Me(Me.tabletbl上下模様.f_s備考Column) = Global.System.Convert.DBNull
+                Me(Me.tabletbl上下図.f_s備考Column) = Global.System.Convert.DBNull
             End Sub
         End Class
         
@@ -5961,16 +5961,16 @@ Namespace Tables
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-        Public Class tbl上下模様RowChangeEvent
+        Public Class tbl上下図RowChangeEvent
             Inherits Global.System.EventArgs
             
-            Private eventRow As tbl上下模様Row
+            Private eventRow As tbl上下図Row
             
             Private eventAction As Global.System.Data.DataRowAction
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub New(ByVal row As tbl上下模様Row, ByVal action As Global.System.Data.DataRowAction)
+            Public Sub New(ByVal row As tbl上下図Row, ByVal action As Global.System.Data.DataRowAction)
                 MyBase.New
                 Me.eventRow = row
                 Me.eventAction = action
@@ -5978,7 +5978,7 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property Row() As tbl上下模様Row
+            Public ReadOnly Property Row() As tbl上下図Row
                 Get
                     Return Me.eventRow
                 End Get

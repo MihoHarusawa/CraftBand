@@ -5,12 +5,12 @@ Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmUpDownPattern
 
-    Dim _table As tbl上下模様DataTable
+    Dim _table As tbl上下図DataTable
     Dim _NameColumnIndex As Integer = -1
     Dim _SubNameHeaderText As String = Nothing
 
     Dim _MyProfile As New CDataGridViewProfile(
-            (New tbl上下模様DataTable),
+            (New tbl上下図DataTable),
             Nothing,
             enumAction._None
             )
@@ -20,8 +20,8 @@ Public Class frmUpDownPattern
         dgvData.SetProfile(_MyProfile)
 
         _table = g_clsMasterTables.GetUpDownTableCopy()
-        BindingSource上下模様.DataSource = _table
-        BindingSource上下模様.Sort = "f_s上下模様名"
+        BindingSource上下図.DataSource = _table
+        BindingSource上下図.Sort = "f_s上下図名"
 
         dgvData.Refresh()
 
@@ -47,15 +47,15 @@ Public Class frmUpDownPattern
     End Sub
 
     Private Sub btn削除_Click(sender As Object, e As EventArgs) Handles btn削除.Click
-        Dim current As System.Data.DataRowView = BindingSource上下模様.Current
+        Dim current As System.Data.DataRowView = BindingSource上下図.Current
         If current Is Nothing OrElse current.Row Is Nothing Then
             Exit Sub
         End If
 
-        Dim row As tbl上下模様Row = CType(current.Row, tbl上下模様Row)
-        Dim name As String = row.f_s上下模様名
+        Dim row As tbl上下図Row = CType(current.Row, tbl上下図Row)
+        Dim name As String = row.f_s上下図名
         Dim dels() As DataRow
-        dels = _table.Select(String.Format("f_s上下模様名='{0}'", name))
+        dels = _table.Select(String.Format("f_s上下図名='{0}'", name))
         If dels Is Nothing OrElse dels.Count = 0 Then
                 Exit Sub
             End If

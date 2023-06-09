@@ -24,8 +24,8 @@ Partial Class frmUpDownSetting
     Private Sub InitializeComponent()
         Me.btnキャンセル = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
-        Me.cmb上下模様名 = New System.Windows.Forms.ComboBox()
-        Me.lbl上下模様名 = New System.Windows.Forms.Label()
+        Me.cmb上下図名 = New System.Windows.Forms.ComboBox()
+        Me.lbl上下図名 = New System.Windows.Forms.Label()
         Me.lbl垂直本数 = New System.Windows.Forms.Label()
         Me.lbl水平本数 = New System.Windows.Forms.Label()
         Me.txtl水平本数 = New System.Windows.Forms.TextBox()
@@ -54,22 +54,22 @@ Partial Class frmUpDownSetting
         Me.btnOK.Text = "OK(&O)"
         Me.btnOK.UseVisualStyleBackColor = True
         '
-        'cmb上下模様名
+        'cmb上下図名
         '
-        Me.cmb上下模様名.FormattingEnabled = True
-        Me.cmb上下模様名.Location = New System.Drawing.Point(117, 51)
-        Me.cmb上下模様名.Name = "cmb上下模様名"
-        Me.cmb上下模様名.Size = New System.Drawing.Size(427, 28)
-        Me.cmb上下模様名.TabIndex = 8
+        Me.cmb上下図名.FormattingEnabled = True
+        Me.cmb上下図名.Location = New System.Drawing.Point(117, 51)
+        Me.cmb上下図名.Name = "cmb上下図名"
+        Me.cmb上下図名.Size = New System.Drawing.Size(427, 28)
+        Me.cmb上下図名.TabIndex = 8
         '
-        'lbl上下模様名
+        'lbl上下図名
         '
-        Me.lbl上下模様名.AutoSize = True
-        Me.lbl上下模様名.Location = New System.Drawing.Point(12, 54)
-        Me.lbl上下模様名.Name = "lbl上下模様名"
-        Me.lbl上下模様名.Size = New System.Drawing.Size(84, 20)
-        Me.lbl上下模様名.TabIndex = 9
-        Me.lbl上下模様名.Text = "上下模様名"
+        Me.lbl上下図名.AutoSize = True
+        Me.lbl上下図名.Location = New System.Drawing.Point(12, 54)
+        Me.lbl上下図名.Name = "lbl上下図名"
+        Me.lbl上下図名.Size = New System.Drawing.Size(84, 20)
+        Me.lbl上下図名.TabIndex = 9
+        Me.lbl上下図名.Text = "上下図名"
         '
         'lbl垂直本数
         '
@@ -126,8 +126,8 @@ Partial Class frmUpDownSetting
         Me.Controls.Add(Me.txtl水平本数)
         Me.Controls.Add(Me.lbl垂直本数)
         Me.Controls.Add(Me.lbl水平本数)
-        Me.Controls.Add(Me.lbl上下模様名)
-        Me.Controls.Add(Me.cmb上下模様名)
+        Me.Controls.Add(Me.lbl上下図名)
+        Me.Controls.Add(Me.cmb上下図名)
         Me.Controls.Add(Me.btnキャンセル)
         Me.Controls.Add(Me.btnOK)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -135,7 +135,7 @@ Partial Class frmUpDownSetting
         Me.MinimizeBox = False
         Me.Name = "frmUpDownSetting"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "上下模様の呼び出しと登録"
+        Me.Text = "上下図の呼び出しと登録"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -143,8 +143,8 @@ Partial Class frmUpDownSetting
 
     Friend WithEvents btnキャンセル As Button
     Friend WithEvents btnOK As Button
-    Friend WithEvents cmb上下模様名 As ComboBox
-    Friend WithEvents lbl上下模様名 As Label
+    Friend WithEvents cmb上下図名 As ComboBox
+    Friend WithEvents lbl上下図名 As Label
     Friend WithEvents lbl垂直本数 As Label
     Friend WithEvents lbl水平本数 As Label
     Friend WithEvents txtl水平本数 As TextBox

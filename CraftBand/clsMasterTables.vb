@@ -808,12 +808,12 @@ Public Class clsMasterTables
 
 #End Region
 
-#Region "上下模様/UpDown"
+#Region "上下図/UpDown"
 
     Private Function SetAvairableUpDown() As Boolean
-        Dim table As tbl上下模様DataTable = _dstMasterTables.Tables("tbl上下模様")
+        Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
         Dim modified As Boolean = False
-        For Each r As tbl上下模様Row In table.Rows
+        For Each r As tbl上下図Row In table.Rows
             Dim crow As New clsDataRow(r)
             '※スキーマ上Null許容＆値の存在前提で使用
             If crow.SetDefaultForNull() Then
@@ -824,16 +824,16 @@ Public Class clsMasterTables
         Return modified
     End Function
 
-    Public Function GetUpDownTableCopy() As tbl上下模様DataTable
-        Return CType(getCopyDataSetTable("tbl上下模様"), tbl上下模様DataTable)
+    Public Function GetUpDownTableCopy() As tbl上下図DataTable
+        Return CType(getCopyDataSetTable("tbl上下図"), tbl上下図DataTable)
     End Function
 
-    Public Function UpdateUpDownTable(ByVal table As tbl上下模様DataTable) As Boolean
+    Public Function UpdateUpDownTable(ByVal table As tbl上下図DataTable) As Boolean
         If table Is Nothing Then
             Return False 'No Update
         End If
 
-        Dim original As tbl上下模様DataTable = _dstMasterTables.Tables("tbl上下模様")
+        Dim original As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
 
         If table.GetChanges IsNot Nothing Then
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "UpdateUpDownTable:{0}", New clsGroupDataRow(table).ToString)
@@ -843,24 +843,24 @@ Public Class clsMasterTables
     End Function
 
 
-    '上下模様名の配列を返す　f_s上下模様名順
+    '上下図名の配列を返す　f_s上下図名順
     Public Function GetUpDownNames() As String()
-        Dim table As tbl上下模様DataTable = _dstMasterTables.Tables("tbl上下模様")
-        Dim res = (From row As tbl上下模様Row In table
-                   Select UpDownName = row.f_s上下模様名
+        Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
+        Dim res = (From row As tbl上下図Row In table
+                   Select UpDownName = row.f_s上下図名
                    Order By UpDownName).Distinct.ToList
         Return res.ToArray
     End Function
 
-    '指定名のtbl上下模様Row, なければNothing
-    Public Function GetUpDownRecord(ByVal updownname As String) As tbl上下模様Row
+    '指定名のtbl上下図Row, なければNothing
+    Public Function GetUpDownRecord(ByVal updownname As String) As tbl上下図Row
         If String.IsNullOrWhiteSpace(updownname) Then
             Return Nothing
         End If
-        Dim table As tbl上下模様DataTable = _dstMasterTables.Tables("tbl上下模様")
+        Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
 
-        Dim cond As String = String.Format("f_s上下模様名 = '{0}'", updownname)
-        Dim rows() As tbl上下模様Row = table.Select(cond)
+        Dim cond As String = String.Format("f_s上下図名 = '{0}'", updownname)
+        Dim rows() As tbl上下図Row = table.Select(cond)
         If rows IsNot Nothing AndAlso 0 < rows.Count Then
             Return rows(0) 'キーなので1点のはず
         Else
@@ -868,8 +868,8 @@ Public Class clsMasterTables
         End If
     End Function
 
-    '指定名のtbl上下模様Rowを作る。既にあればNothing
-    Public Function GetNewUpDownRecord(ByVal updownname As String) As tbl上下模様Row
+    '指定名のtbl上下図Rowを作る。既にあればNothing
+    Public Function GetNewUpDownRecord(ByVal updownname As String) As tbl上下図Row
         If String.IsNullOrWhiteSpace(updownname) Then
             Return Nothing
         End If
@@ -877,9 +877,9 @@ Public Class clsMasterTables
             Return Nothing
         End If
 
-        Dim table As tbl上下模様DataTable = _dstMasterTables.Tables("tbl上下模様")
-        Dim row As tbl上下模様Row = table.Newtbl上下模様Row
-        row.f_s上下模様名 = updownname
+        Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
+        Dim row As tbl上下図Row = table.Newtbl上下図Row
+        row.f_s上下図名 = updownname
         table.Rows.Add(row)
         Return row
     End Function

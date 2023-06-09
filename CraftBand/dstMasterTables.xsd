@@ -129,10 +129,10 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tbl上下模様" msprop:Generator_RowEvHandlerName="tbl上下模様RowChangeEventHandler" msprop:Generator_RowDeletedName="tbl上下模様RowDeleted" msprop:Generator_RowDeletingName="tbl上下模様RowDeleting" msprop:Generator_RowEvArgName="tbl上下模様RowChangeEvent" msprop:Generator_TablePropName="tbl上下模様" msprop:Generator_RowChangedName="tbl上下模様RowChanged" msprop:Generator_RowChangingName="tbl上下模様RowChanging" msprop:Generator_TableClassName="tbl上下模様DataTable" msprop:Generator_RowClassName="tbl上下模様Row" msprop:Generator_TableVarName="tabletbl上下模様" msprop:Generator_UserTableName="tbl上下模様">
+        <xs:element name="tbl上下図" msprop:Generator_RowEvHandlerName="tbl上下図RowChangeEventHandler" msprop:Generator_RowDeletedName="tbl上下図RowDeleted" msprop:Generator_RowDeletingName="tbl上下図RowDeleting" msprop:Generator_RowEvArgName="tbl上下図RowChangeEvent" msprop:Generator_TablePropName="tbl上下図" msprop:Generator_RowChangedName="tbl上下図RowChanged" msprop:Generator_RowChangingName="tbl上下図RowChanging" msprop:Generator_TableClassName="tbl上下図DataTable" msprop:Generator_RowClassName="tbl上下図Row" msprop:Generator_TableVarName="tabletbl上下図" msprop:Generator_UserTableName="tbl上下図">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="f_s上下模様名" msprop:Generator_ColumnPropNameInTable="f_s上下模様名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s上下模様名" msprop:Generator_UserColumnName="f_s上下模様名" msprop:Generator_ColumnVarNameInTable="columnf_s上下模様名" type="xs:string" default="" />
+              <xs:element name="f_s上下図名" msprop:Generator_ColumnPropNameInTable="f_s上下図名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s上下図名" msprop:Generator_UserColumnName="f_s上下図名" msprop:Generator_ColumnVarNameInTable="columnf_s上下図名" type="xs:string" default="" />
               <xs:element name="f_i水平本数" msprop:Generator_ColumnPropNameInTable="f_i水平本数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i水平本数" msprop:Generator_UserColumnName="f_i水平本数" msprop:Generator_ColumnVarNameInTable="columnf_i水平本数" type="xs:int" default="0" minOccurs="0" />
               <xs:element name="f_i垂直本数" msprop:Generator_ColumnPropNameInTable="f_i垂直本数Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i垂直本数" msprop:Generator_UserColumnName="f_i垂直本数" msprop:Generator_ColumnVarNameInTable="columnf_i垂直本数" type="xs:int" default="0" minOccurs="0" />
               <xs:element name="f_s上下" msprop:Generator_ColumnPropNameInTable="f_s上下Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s上下" msprop:Generator_UserColumnName="f_s上下" msprop:Generator_ColumnVarNameInTable="columnf_s上下" type="xs:string" default="" minOccurs="0" />
@@ -165,9 +165,9 @@
       <xs:field xpath="mstns:f_sバンドの種類名" />
       <xs:field xpath="mstns:f_i本幅" />
     </xs:unique>
-    <xs:unique name="tbl上下模様PKey" msdata:PrimaryKey="true">
-      <xs:selector xpath=".//mstns:tbl上下模様" />
-      <xs:field xpath="mstns:f_s上下模様名" />
+    <xs:unique name="tbl上下図PKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tbl上下図" />
+      <xs:field xpath="mstns:f_s上下図名" />
     </xs:unique>
   </xs:element>
 </xs:schema>

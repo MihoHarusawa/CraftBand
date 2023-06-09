@@ -259,6 +259,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  折り返し に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutTurn() As String
+            Get
+                Return ResourceManager.GetString("CalcOutTurn", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  ひも上下レコードの保存エラーです。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcUpDownSaveErr() As String
@@ -277,7 +286,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  0度(水平),45度(右斜め),90度(垂直),135度(左斜め) に類似しているローカライズされた文字列を検索します。
+        '''  0度(水平・横),45度(右斜め),90度(垂直・縦),135度(左斜め) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringAngle() As String
             Get
@@ -331,11 +340,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  チェックOKです。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageCheckOK() As String
+            Get
+                Return ResourceManager.GetString("MessageCheckOK", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  規定値が保存されていません。先に規定値保存を行ってください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MessageNoDefaultFile() As String
             Get
                 Return ResourceManager.GetString("MessageNoDefaultFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  これ以上増やせません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageNoMore() As String
+            Get
+                Return ResourceManager.GetString("MessageNoMore", resourceCulture)
             End Get
         End Property
         
@@ -385,7 +412,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  上下模様の登録 に類似しているローカライズされた文字列を検索します。
+        '''  上下図の登録 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownAppend() As String
             Get
@@ -394,7 +421,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  新たな上下模様名を入力してください。[OK]ボタンで現パターンを登録します。 に類似しているローカライズされた文字列を検索します。
+        '''  新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownAppendInstruction() As String
             Get
@@ -403,7 +430,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  &apos;{0}&apos;は既に登録されています。別の名前を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''  &apos;{0}&apos;は既に登録されています。置き換えますか？(いいえで別の名前を指定) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownExistName() As String
             Get
@@ -421,7 +448,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  上下模様名がセットされていません。 に類似しているローカライズされた文字列を検索します。
+        '''  上下図名がセットされていません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownNoName() As String
             Get
@@ -430,7 +457,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  上下模様の呼出 に類似しているローカライズされた文字列を検索します。
+        '''  上下図の呼出 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownRead() As String
             Get
@@ -439,7 +466,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  上下模様名を選択してください。[OK]ボタンで現パターンに反映します。 に類似しているローカライズされた文字列を検索します。
+        '''  上下図名を選択してください。[OK]ボタンで現パターンに反映します。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownReadInstruction() As String
             Get

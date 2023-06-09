@@ -183,6 +183,18 @@
     <value>{0}の値をセットしてください。</value>
     <comment>frmBandTypeWeight</comment>
   </data>
+  <data name="ErrCheckHorizontal" xml:space="preserve">
+    <value>{0}行を確認してください。</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="ErrCheckValid" xml:space="preserve">
+    <value>サイズ({0},{1})のエラーです。</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="ErrCheckVertical" xml:space="preserve">
+    <value>{0}列を確認してください。</value>
+    <comment>clsUpDown</comment>
+  </data>
   <data name="ErrGridCoeff" xml:space="preserve">
     <value>実測値の不足もしくは値のエラーのため計算できなかった係数があります。</value>
     <comment>frmGauge</comment>
