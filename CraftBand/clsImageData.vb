@@ -3,6 +3,7 @@ Imports System.Drawing
 Imports CraftBand
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables
+Imports CraftBand.Tables.dstDataTables
 ''' <summary>
 ''' イメージ処理データ(1枚の絵のデータ要素の配置)
 ''' </summary>
@@ -67,10 +68,14 @@ Public Class clsImageData
     Function MakeImage(ByVal outp As clsOutput) As Boolean
         _clsOutput = outp
 
-        'ひもに記号を振る
+        'ひもに記号を振る(縦横展開テーブルを作り直した時用)
         For Each item As clsImageItem In _ImageList
             If item.m_row縦横展開 IsNot Nothing Then
-                item.m_row縦横展開.f_s記号 = outp.GetBandMark(item.m_row縦横展開.f_i何本幅, item.m_row縦横展開.f_d出力ひも長, item.m_row縦横展開.f_s色)
+                Dim row As tbl縦横展開Row = item.m_row縦横展開
+                If String.IsNullOrEmpty(row.f_s記号) AndAlso
+                    0 < row.f_i何本幅 AndAlso 0 < row.f_d出力ひも長 Then
+                    row.f_s記号 = outp.GetBandMark(row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
+                End If
             End If
         Next
 

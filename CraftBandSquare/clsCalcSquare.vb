@@ -1,16 +1,9 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Windows.Forms.AxHost
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Button
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
-Imports CraftBand.mdlUnit
-Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -186,23 +179,24 @@ Class clsCalcSquare
         End Get
     End Property
 
-    Public ReadOnly Property p_d四角ベース_横 As Double '底の長さとして使用
+    Public ReadOnly Property p_d四角ベース_横 As Double '底ひもが配置される領域
         Get
             Return _d四角ベース_横計
         End Get
     End Property
-    Public ReadOnly Property p_d四角ベース_縦 As Double '底の長さとして使用
+    Public ReadOnly Property p_d四角ベース_縦 As Double '底ひもが配置される領域
         Get
             Return _d四角ベース_縦計
         End Get
     End Property
-    Public ReadOnly Property p_d四角ベース_高さ As Double
+    Public ReadOnly Property p_d四角ベース_高さ As Double '側面ひもが配置される高さ
         Get
             Return _d四角ベース_高さ計
         End Get
     End Property
 
-    ReadOnly Property p_d四角ベース_周 As Double '編みひも長計算に使用
+#Region "表示用(計算には使わない)"
+    ReadOnly Property p_d四角ベース_周 As Double '底の配置領域に立ち上げ増分をプラス
         Get
             If 0 < p_d四角ベース_横 AndAlso 0 < p_d四角ベース_縦 Then
                 Return 2 * (p_d四角ベース_横 + p_d四角ベース_縦) _
@@ -213,20 +207,6 @@ Class clsCalcSquare
         End Get
     End Property
 
-    ReadOnly Property p_d四角ベース_周の横 As Double '横ひも長計算に使用
-        Get
-            Return _d四角ベース_横計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4
-        End Get
-    End Property
-
-    ReadOnly Property p_d四角ベース_周の縦 As Double '縦ひも長計算に使用
-        Get
-            Return _d四角ベース_縦計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4
-        End Get
-    End Property
-
-#Region "表示用・計算には使わない値"
-
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
             If 0 < p_d四角ベース_周 Then
@@ -235,7 +215,6 @@ Class clsCalcSquare
             Return 0
         End Get
     End Property
-
 
     '表示文字列
     Public ReadOnly Property p_s縦横_目 As String
@@ -398,7 +377,7 @@ Class clsCalcSquare
     Public ReadOnly Property p_i垂直ひも数 As Integer
         Get
             If 0 < _i横の目の数 AndAlso 0 < _i縦の目の数 Then
-                Return 2 * ((_i横の目の数 + 1) + (_i縦の目の数 + 1))
+                Return 2 * (p_i横ひもの本数 + p_i縦ひもの本数)
             Else
                 Return 0
             End If
@@ -421,49 +400,6 @@ Class clsCalcSquare
         End Get
     End Property
 
-    '底の角(縦ひもと横ひものクロス位置)の外に有効な目がある
-    Public ReadOnly Property p_i底の斜めの目の数 As Integer
-        Get
-            If 1 <= _d左端右端の目 + _d上端下端の目 Then
-                Return _i縦の目の数 + _i横の目の数 + 1
-            Else
-                Return _i縦の目の数 + _i横の目の数 - 1
-            End If
-        End Get
-    End Property
-
-    '縦の目数として処理する数
-    Public ReadOnly Property p_i縦の目の実質数 As Integer
-        Get
-            If 1 <= _d上端下端の目 Then
-                Return _i縦の目の数 + 2
-            Else
-                Return _i縦の目の数
-            End If
-        End Get
-    End Property
-
-    '横の目数として処理する数
-    Public ReadOnly Property p_i横の目の実質数 As Integer
-        Get
-            If 1 <= _d左端右端の目 Then
-                Return _i横の目の数 + 2
-            Else
-                Return _i横の目の数
-            End If
-        End Get
-    End Property
-
-    '高さの目数として処理する数
-    Public ReadOnly Property p_i高さの目の実質数 As Integer
-        Get
-            If 1 <= _d最下段の目 Then
-                Return _i高さの目の数 + 1
-            Else
-                Return _i高さの目の数
-            End If
-        End Get
-    End Property
 
     'データ内容
     Public Function dump() As String
@@ -905,9 +841,9 @@ Class clsCalcSquare
             RemoveNumberFromTable(table, cIdxSpace)
         End If
 
-        If 0 < _i高さの目の数 Then
+        If 0 < p_i側面ひもの本数 Then
             '「編みひも+目」のセット
-            For i As Integer = 1 To _i高さの目の数
+            For i As Integer = 1 To p_i側面ひもの本数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
                     If row Is Nothing Then
@@ -924,8 +860,8 @@ Class clsCalcSquare
                         row.f_i周数 = 1
                     Else
                         row.f_i何本幅 = _I基本のひも幅
-                        row.f_iひも本数 = _i高さの目の数
-                        row.f_i周数 = _i高さの目の数
+                        row.f_iひも本数 = p_i側面ひもの本数
+                        row.f_i周数 = p_i側面ひもの本数
                     End If
                     ret = ret And adjust_側面(row)
                 Else
@@ -937,7 +873,7 @@ Class clsCalcSquare
 
             '以降はあれば削除
             Dim submax As Integer = clsDataTables.NumberSubMax(table, cIdxHeight)
-            For i As Integer = _i高さの目の数 + 1 To submax
+            For i As Integer = p_i側面ひもの本数 + 1 To submax
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If row IsNot Nothing Then
                     table.Rows.Remove(row)
@@ -962,8 +898,8 @@ Class clsCalcSquare
             row.Setf_d高さNull()
             row.Setf_d垂直ひも長Null()
         End If
-        row.f_d周長 = p_d四角ベース_周 '立ち上げ時の増分
-        row.f_dひも長 = p_d四角ベース_周 * _dひも長係数
+        row.f_d周長 = get周の横()
+        row.f_dひも長 = get周の横() * _dひも長係数
         row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
         row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
 
@@ -1150,7 +1086,7 @@ Class clsCalcSquare
         '周数は一致項目
         Dim i周数 As Integer = groupRow.GetNameValue("f_i周数")
         '周長は固定
-        groupRow.SetNameValue("f_d周長", p_d四角ベース_周)
+        groupRow.SetNameValue("f_d周長", get側面の周長())
 
         'tbl編みかたRow
         Dim grpMst As clsGroupDataRow = g_clsMasterTables.GetPatternRecordGroup(groupRow.GetNameValue("f_s編みかた名"))
@@ -1341,8 +1277,8 @@ Class clsCalcSquare
             Else
                 row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間
             End If
-            row.f_d長さ = p_d四角ベース_周の横 '_d四角ベース_横計に立ち上げ分プラス
-            row.f_dひも長 = (p_d四角ベース_周の横 + 2 * _d四角ベース_高さ計) * _dひも長係数
+            row.f_d長さ = get周の横() + get側面高(2)
+            row.f_dひも長 = (get周の横() + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
                 row.f_dひも長加算
@@ -1468,8 +1404,8 @@ Class clsCalcSquare
             Else
                 row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間
             End If
-            row.f_d長さ = p_d四角ベース_周の縦 '_d四角ベース_縦計に立ち上げ分プラス
-            row.f_dひも長 = (p_d四角ベース_周の縦 + 2 * _d四角ベース_高さ計) * _dひも長係数
+            row.f_d長さ = get周の縦() + get側面高(2)
+            row.f_dひも長 = (get周の縦() + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
                 row.f_dひも長加算
@@ -1730,124 +1666,33 @@ Class clsCalcSquare
         row.Setf_dひも長Null()
         row.Setf_d出力ひも長Null()
 
-        '設定なし
-        If row.f_i配置面 = enum配置面.i_なし Then
-            row.f_s無効理由 = text配置面()
-            Return True 'unnable
-        End If
+        '開始位置は1以上、何本ごとはゼロ以上
         If row.f_i開始位置 < 1 Then
             row.f_s無効理由 = text開始位置()
-            Return True 'unnable
+            Return True '無効を返す
         End If
         If row.f_i何本ごと < 0 Then
             row.f_s無効理由 = text何本ごと()
-            Return True 'unnable
+            Return True '無効を返す
         End If
 
-        '斜めの場合
-        If (row.f_i角度 = enum角度.i_45度 OrElse row.f_i角度 = enum角度.i_135度) Then
-            '幅変更なし
-            If (_b横ひも本幅変更 OrElse _b縦ひも本幅変更 OrElse _b側面ひも本幅変更) Then
-                row.f_s無効理由 = textひも本幅変更()
-                Return True 'unnable
-            End If
-            If (row.f_i中心点 = enum中心点.i_目の中央) Then
-                '目の中央を通すので対角線分の空き
-                If _d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
-                    row.f_s無効理由 = text何本幅()
-                    Return True 'unnable
-                End If
-            End If
-        End If
-        '縦横の場合
-        If (row.f_i角度 = enum角度.i_0度 OrElse row.f_i角度 = enum角度.i_90度) Then
-            '重ねるなら幅変更なし
-            If (_b横ひも本幅変更 OrElse _b縦ひも本幅変更 OrElse _b側面ひも本幅変更) AndAlso
-                (row.f_i中心点 = enum中心点.i_ひも中央) Then
-                row.f_s無効理由 = textひも本幅変更()
-                Return True 'unnable
-            End If
-            '目を通すなら
-            If (row.f_i中心点 = enum中心点.i_目の中央) AndAlso
-                _d目_ひも間のすき間 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
-                row.f_s無効理由 = text何本幅()
-                Return True 'unnable
-            End If
-        End If
 
+        '差しひもが有効か？
+        If Not is差しひもavairable(row) Then
+            Return True '無効を返す
+        End If
 
         '本数を得る
-        Dim count As Integer = 0
-        If row.f_i配置面 = enum配置面.i_底面 Then
-            If row.f_i角度 = enum角度.i_0度 Then '底の横
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = p_i縦の目の実質数
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = p_i横ひもの本数 '_i縦の目の数+1
-                End If
-                row.f_dひも長 = p_d四角ベース_横
-
-            ElseIf row.f_i角度 = enum角度.i_90度 Then '底の縦
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = p_i横の目の実質数
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = p_i縦ひもの本数 '_i横の目の数+1
-                End If
-                row.f_dひも長 = p_d四角ベース_縦
-
-            ElseIf row.f_i角度 = enum角度.i_45度 OrElse row.f_i角度 = enum角度.i_135度 Then '底斜め
-                count = p_i底の斜めの目の数
-            End If
-
-        ElseIf row.f_i配置面 = enum配置面.i_側面 Then
-            If row.f_i角度 = enum角度.i_0度 Then '側面を水平に
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = p_i横の目の実質数
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = _i高さの目の数 '編みひもの数
-                End If
-                row.f_dひも長 = p_d四角ベース_周
-
-            ElseIf row.f_i角度 = enum角度.i_90度 Then '側面を垂直に
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = 2 * (p_i横の目の実質数 + p_i縦の目の実質数)
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = p_i垂直ひも数
-                End If
-                row.f_dひも長 = _d四角ベース_高さ計 + _d縁の高さ
-
-            ElseIf row.f_i角度 = enum角度.i_45度 OrElse row.f_i角度 = enum角度.i_135度 Then '側面斜め
-                '目に配置
-                count = 2 * (p_i横の目の実質数 + p_i縦の目の実質数)
-                row.f_dひも長 = ROOT2 * (_d四角ベース_高さ計 + _d縁の高さ)
-            End If
-
-        ElseIf row.f_i配置面 = enum配置面.i_全面 Then
-            If row.f_i角度 = enum角度.i_0度 Then '水平、側面に対してと同じ
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = p_i横の目の実質数
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = _i高さの目の数 '編みひもの数
-                End If
-                row.f_dひも長 = p_d四角ベース_周
-
-            ElseIf row.f_i角度 = enum角度.i_90度 Then '垂直、縦ひも+横ひも
-                If row.f_i中心点 = enum中心点.i_目の中央 Then
-                    count = p_i横の目の実質数 + p_i縦の目の実質数
-                ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-                    count = p_i縦ひもの本数 + p_i横ひもの本数
-                End If
-
-            ElseIf row.f_i角度 = enum角度.i_45度 OrElse row.f_i角度 = enum角度.i_135度 Then '底斜め
-                '底と同じ
-                count = p_i底の斜めの目の数
-            End If
-        End If
-
+        Dim count As Integer = get差しひもCount(row)
         If count <= 0 OrElse count < row.f_i開始位置 Then
             row.f_s無効理由 = text開始位置()
             Return True 'unnable
         End If
+        If count < row.f_i開始位置 + row.f_i何本ごと Then
+            row.f_s無効理由 = text何本ごと()
+            Return True 'unnable
+        End If
+        '本数OK
         row.f_b有効区分 = True
         row.Setf_s無効理由Null()
 
@@ -2043,667 +1888,13 @@ Class clsCalcSquare
 
 #End Region
 
-#Region "プレビュー"
-
-    'プレビュー時に生成,描画後はNothing
-    Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
-    Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
-    Dim _imageList側面上 As clsImageItemList    '側面の展開レコードを含む
-    Dim _imageList側面左 As clsImageItemList    '側面の展開レコードを含む
-    Dim _imageList側面下 As clsImageItemList    '側面の展開レコードを含む
-    Dim _imageList側面右 As clsImageItemList    '側面の展開レコードを含む
-    Dim _ImageList描画要素 As clsImageItemList '底と側面
-
-
-
-    '横ひもリストの描画情報 : _tbl縦横展開_横ひも → _ImageList横ひも
-    Private Function imageList横ひも() As Boolean
-        If _tbl縦横展開_横ひも Is Nothing OrElse _tbl縦横展開_横ひも.Rows.Count = 0 Then
-            Return False
-        End If
-
-        _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも)
-
-        Dim dひも表示長 As Double = p_d四角ベース_高さ + _d縁の高さ + p_d厚さ * 2
-        Dim p横ひも左上 As New S実座標(-dひも表示長 - p_d四角ベース_横 / 2, p_d四角ベース_縦 / 2)
-        Dim p横ひも右上 As New S実座標(dひも表示長 + p_d四角ベース_横 / 2, p_d四角ベース_縦 / 2)
-
-        '上から下へ(位置順)
-        _ImageList横ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList横ひも
-            If band.m_row縦横展開 Is Nothing Then
-                Continue For
-            End If
-
-            Dim width As S差分 = Unit270 * band.m_row縦横展開.f_d幅
-            Dim bandwidth As S差分 = Unit270 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
-
-            If band.m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
-                band.m_rひも位置.p左上 = p横ひも左上
-                band.m_rひも位置.p右下 = p横ひも右上 + bandwidth
-                band.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
-            Else
-                '補強ひもは描画しない
-                band.m_bNoMark = True
-            End If
-            '
-            p横ひも左上 = p横ひも左上 + width
-            p横ひも右上 = p横ひも右上 + width
-        Next
-
-        Return True
-    End Function
-
-    '縦ひもリストの描画情報 : _tbl縦横展開_縦ひも → _ImageList縦ひも
-    Private Function imageList縦ひも() As Boolean
-        If _tbl縦横展開_縦ひも Is Nothing OrElse _tbl縦横展開_縦ひも.Rows.Count = 0 Then
-            Return False
-        End If
-
-        _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも)
-
-        Dim dひも表示長 As Double = p_d四角ベース_高さ + _d縁の高さ + p_d厚さ * 2
-        Dim p縦ひも左上 As New S実座標(-p_d四角ベース_横 / 2, p_d四角ベース_縦 / 2 + dひも表示長)
-        Dim p縦ひも左下 As New S実座標(-p_d四角ベース_横 / 2, -p_d四角ベース_縦 / 2 - dひも表示長)
-
-        '左から右へ(位置順)
-        _ImageList縦ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList縦ひも
-            If band.m_row縦横展開 Is Nothing Then
-                Continue For
-            End If
-
-            Dim width As S差分 = Unit0 * band.m_row縦横展開.f_d幅
-            Dim bandwidth As S差分 = Unit0 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
-
-            If band.m_row縦横展開.f_iひも種 = enumひも種.i_縦 Then
-                band.m_rひも位置.p左上 = p縦ひも左上
-                band.m_rひも位置.p右下 = p縦ひも左下 + bandwidth
-                band.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
-            Else
-                band.m_bNoMark = True
-            End If
-
-            '
-            p縦ひも左上 = p縦ひも左上 + width
-            p縦ひも左下 = p縦ひも左下 + width
-        Next
-
-        Return True
-    End Function
-
-    '底の上下をm_regionListにセット
-    Private Function regionUpDown底() As Boolean
-        If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
-            Return False
-        End If
-
-        _CUpDown.IsSide = False '底
-        If Not _Data.ToClsUpDown(clsUpDown.cBottomNumber, _CUpDown) Then
-            _CUpDown.Reset()
-        End If
-        If Not _CUpDown.IsValid Then
-            Return False
-        End If
-
-        For iTate As Integer = 1 To p_i縦ひもの本数
-            Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-            If itemTate Is Nothing Then
-                Continue For
-            End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
-
-            For iYoko As Integer = 1 To p_i横ひもの本数
-                If _CUpDown.GetIsDown(iTate, iYoko) Then
-                    Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
-                        itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemTate({0}):{1}", iTate, itemTate.m_regionList.ToString)
-        Next
-
-        For iYoko As Integer = 1 To p_i横ひもの本数
-            Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-            If itemYoko Is Nothing Then
-                Continue For
-            End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
-
-            For iTate As Integer = 1 To p_i縦ひもの本数
-                If _CUpDown.GetIsUp(iTate, iYoko) Then
-                    Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
-                        itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemYoko({0}):{1}", iYoko, itemYoko.m_regionList.ToString)
-        Next
-
-        Return True
-    End Function
-
-    '側面の上下をm_regionListにセット
-    Private Function regionUpDown側面() As Boolean
-        If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
-            Return False
-        End If
-        If _imageList側面上 Is Nothing OrElse _imageList側面左 Is Nothing OrElse _imageList側面下 Is Nothing OrElse _imageList側面右 Is Nothing Then
-            Return False
-        End If
-
-        _CUpDown.IsSide = True '側面
-        If Not _Data.ToClsUpDown(clsUpDown.cSideNumber, _CUpDown) Then
-            _CUpDown.Reset()
-        End If
-        If Not _CUpDown.IsValid Then
-            Return False
-        End If
-
-
-        Dim horzDif As Integer = 0 '横に上→右→下→左
-        '*上の側面
-        For iTate As Integer = 1 To p_i縦ひもの本数
-            Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-            If itemTate Is Nothing Then
-                Continue For
-            End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
-
-            For iTakasa As Integer = 1 To _i高さの目の数
-                If _CUpDown.GetIsDown(iTate + horzDif, iTakasa) Then
-                    Dim itemUSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemUSide IsNot Nothing Then
-                        itemTate.m_regionList.Add領域(itemUSide.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemTate({0}):{1}", iTate, itemTate.m_regionList.ToString)
-        Next
-
-        For iTakasa As Integer = 1 To _i高さの目の数
-            Dim itemUSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, iTakasa)
-            If itemUSide Is Nothing Then
-                Continue For
-            End If
-            If itemUSide.m_regionList Is Nothing Then itemUSide.m_regionList = New C領域リスト
-
-            For iTate As Integer = 1 To p_i縦ひもの本数
-                If _CUpDown.GetIsUp(iTate + horzDif, iTakasa) Then
-                    Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
-                        itemUSide.m_regionList.Add領域(itemTate.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemUSide({0}):{1}", iTakasa, itemUSide.m_regionList.ToString)
-        Next
-        horzDif += p_i縦ひもの本数
-
-
-        '*右の側面
-        For iYoko As Integer = 1 To p_i横ひもの本数
-            Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-            If itemYoko Is Nothing Then
-                Continue For
-            End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
-
-            For iTakasa As Integer = 1 To _i高さの目の数
-                If _CUpDown.GetIsDown(iYoko + horzDif, iTakasa) Then
-                    Dim itemRSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemRSide IsNot Nothing Then
-                        itemYoko.m_regionList.Add領域(itemRSide.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemYoko({0}):{1}", iYoko, itemYoko.m_regionList.ToString)
-        Next
-
-        For iTakasa As Integer = 1 To _i高さの目の数
-            Dim itemRSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, iTakasa)
-            If itemRSide Is Nothing Then
-                Continue For
-            End If
-            If itemRSide.m_regionList Is Nothing Then itemRSide.m_regionList = New C領域リスト
-
-            For iYoko As Integer = 1 To p_i横ひもの本数
-                If _CUpDown.GetIsUp(iYoko + horzDif, iTakasa) Then
-                    Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
-                        itemRSide.m_regionList.Add領域(itemYoko.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemRSide({0}):{1}", iTakasa, itemRSide.m_regionList.ToString)
-        Next
-        horzDif += p_i横ひもの本数
-
-
-        '*下の側面(UpDownは左→右)
-        For iTate As Integer = 1 To p_i縦ひもの本数
-            Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-            If itemTate Is Nothing Then
-                Continue For
-            End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
-            Dim horzIdx As Integer = p_i縦ひもの本数 - iTate + 1 + horzDif
-
-            For iTakasa As Integer = 1 To _i高さの目の数
-                If _CUpDown.GetIsDown(horzIdx, iTakasa) Then
-                    Dim itemDSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemDSide IsNot Nothing Then
-                        itemTate.m_regionList.Add領域(itemDSide.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemTate({0}):{1}", iTate, itemTate.m_regionList.ToString)
-        Next
-
-        For iTakasa As Integer = 1 To _i高さの目の数
-            Dim itemDSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, iTakasa)
-            If itemDSide Is Nothing Then
-                Continue For
-            End If
-            If itemDSide.m_regionList Is Nothing Then itemDSide.m_regionList = New C領域リスト
-
-            For iTate As Integer = 1 To p_i縦ひもの本数
-                Dim horzIdx As Integer = p_i縦ひもの本数 - iTate + 1 + horzDif
-                If _CUpDown.GetIsUp(horzIdx, iTakasa) Then
-                    Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
-                        itemDSide.m_regionList.Add領域(itemTate.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemUSide({0}):{1}", iTakasa, itemDSide.m_regionList.ToString)
-        Next
-        horzDif += p_i縦ひもの本数
-
-        '*左の側面(UpDownは下→上)
-        For iYoko As Integer = 1 To p_i横ひもの本数
-            Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-            If itemYoko Is Nothing Then
-                Continue For
-            End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
-
-            Dim horzIdx As Integer = p_i横ひもの本数 - iYoko + 1 + horzDif
-            For iTakasa As Integer = 1 To _i高さの目の数
-                If _CUpDown.GetIsDown(horzIdx, iTakasa) Then
-                    Dim itemLSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemLSide IsNot Nothing Then
-                        itemYoko.m_regionList.Add領域(itemLSide.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemYoko({0}):{1}", iYoko, itemYoko.m_regionList.ToString)
-        Next
-
-        For iTakasa As Integer = 1 To _i高さの目の数
-            Dim itemLSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, iTakasa)
-            If itemLSide Is Nothing Then
-                Continue For
-            End If
-            If itemLSide.m_regionList Is Nothing Then itemLSide.m_regionList = New C領域リスト
-
-            For iYoko As Integer = 1 To p_i横ひもの本数
-                Dim horzIdx As Integer = p_i横ひもの本数 - iYoko + 1 + horzDif
-                If _CUpDown.GetIsUp(horzIdx, iTakasa) Then
-                    Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
-                        itemLSide.m_regionList.Add領域(itemYoko.m_rひも位置)
-                    End If
-                End If
-            Next
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemRSide({0}):{1}", iTakasa, itemLSide.m_regionList.ToString)
-        Next
-
-        Return True
-    End Function
-
-    '_imageList側面上・_imageList側面左・_imageList側面下・_imageList側面右生成、
-    '※側面のレコードはリスト出力時にadjust_側面() 済み
-    Function imageList四側面() As Boolean
-
-        '側面のレコードを縦横レコード化
-        Dim tmptable As New tbl縦横展開DataTable
-        Dim row As tbl縦横展開Row
-
-        Dim d最下の高さ As Double = 0
-
-        Dim idx As Integer = 1
-        For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC")
-            If r.f_i番号 = cHemNumber Then
-                '縁は編みかたとして処理
-                Continue For
-            End If
-            If r.f_i番号 = cIdxSpace Then
-                '最下段のスペースはレコードにしない
-                d最下の高さ = r.f_d高さ
-                Continue For
-            End If
-            For i As Integer = 1 To r.f_iひも本数
-                row = tmptable.Newtbl縦横展開Row
-                row.f_iひも種 = enumひも種.i_側面
-                row.f_iひも番号 = idx
-                row.f_i位置番号 = i '参考値
-                row.f_i何本幅 = r.f_i何本幅
-                row.f_s記号 = r.f_s記号
-                row.f_s色 = r.f_s色
-                row.f_dひも長 = r.f_dひも長
-                row.f_dひも長加算 = r.f_dひも長加算
-                row.f_dひも長加算2 = 0
-                row.f_d出力ひも長 = r.f_d連続ひも長
-                If _b縦横側面を展開する Then
-                    row.f_d幅 = r.f_d高さ '個別
-                Else
-                    row.f_d幅 = _d基本のひも幅 + _d目_ひも間のすき間 '合計なので再計算
-                End If
-                tmptable.Rows.Add(row)
-
-                idx += 1
-            Next
-        Next
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tmptable:{0}", New clsGroupDataRow(tmptable).ToString)
-
-
-        '以降参照するのでここでセットする
-        _imageList側面上 = New clsImageItemList(tmptable)
-        _imageList側面左 = New clsImageItemList(tmptable)
-        _imageList側面下 = New clsImageItemList(tmptable)
-        _imageList側面右 = New clsImageItemList(tmptable)
-
-        Dim item As clsImageItem
-
-        Dim p上ひも左下 As New S実座標(-p_d四角ベース_周の横 / 2, d最下の高さ + p_d四角ベース_周の縦 / 2)
-        Dim p下ひも左上 As New S実座標(-p_d四角ベース_周の横 / 2, -d最下の高さ - p_d四角ベース_周の縦 / 2)
-        Dim p左ひも右上 As New S実座標(-d最下の高さ - p_d四角ベース_周の横 / 2, p_d四角ベース_周の縦 / 2)
-        Dim p右ひも左上 As New S実座標(d最下の高さ + p_d四角ベース_周の横 / 2, p_d四角ベース_周の縦 / 2)
-
-        '1～_i高さの目の数
-        For i As Integer = 1 To _i高さの目の数
-            '*上
-            item = _imageList側面上.GetRowItem(enumひも種.i_側面, i)
-            If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面上:{0}", i)
-            Else
-                item.m_ImageType = ImageTypeEnum._横バンド
-
-                item.m_rひも位置.p左下 = p上ひも左下
-                item.m_rひも位置.p右上 = p上ひも左下 _
-                + Unit90 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit0 * p_d四角ベース_周の横
-                item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
-
-                p上ひも左下 = p上ひも左下 + Unit90 * item.m_row縦横展開.f_d幅
-            End If
-
-            '*下
-            item = _imageList側面下.GetRowItem(enumひも種.i_側面, i)
-            If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面下:{0}", i)
-            Else
-                item.m_ImageType = ImageTypeEnum._横バンド
-
-                item.m_rひも位置.p左上 = p下ひも左上
-                item.m_rひも位置.p右下 = p下ひも左上 _
-                + Unit270 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit0 * p_d四角ベース_周の横
-                item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
-                item.m_bNoMark = True '記号なし
-
-                p下ひも左上 = p下ひも左上 + Unit270 * item.m_row縦横展開.f_d幅
-            End If
-
-            '*左
-            item = _imageList側面左.GetRowItem(enumひも種.i_側面, i)
-            If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面左:{0}", i)
-            Else
-                item.m_ImageType = ImageTypeEnum._縦バンド
-
-                item.m_rひも位置.p右上 = p左ひも右上
-                item.m_rひも位置.p左下 = p左ひも右上 _
-                + Unit180 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit270 * p_d四角ベース_周の縦
-                item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
-                item.m_bNoMark = True '記号なし
-
-                p左ひも右上 = p左ひも右上 + Unit180 * item.m_row縦横展開.f_d幅
-            End If
-
-            '*右
-            item = _imageList側面右.GetRowItem(enumひも種.i_側面, i)
-            If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面右:{0}", i)
-            Else
-                item.m_ImageType = ImageTypeEnum._縦バンド
-
-                item.m_rひも位置.p左上 = p右ひも左上
-                item.m_rひも位置.p右下 = p右ひも左上 _
-                + Unit0 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit270 * p_d四角ベース_周の縦
-                item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
-                item.m_bNoMark = True '記号なし
-
-                p右ひも左上 = p右ひも左上 + Unit0 * item.m_row縦横展開.f_d幅
-            End If
-        Next
-
-        '縁のレコードをイメージ情報化
-        Dim cond As String = String.Format("f_i番号 = {0}", cHemNumber)
-        Dim groupRow = New clsGroupDataRow(_Data.p_tbl側面.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
-
-        Dim d高さ As Double = groupRow.GetNameValueSum("f_d高さ")
-        Dim nひも本数 As Integer = groupRow.GetNameValueSum("f_iひも本数")
-        If 0 < nひも本数 Then
-
-            '*上
-            item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
-            item.m_a四隅.p左下 = p上ひも左下
-            item.m_a四隅.p右下 = p上ひも左下 + Unit0 * p_d四角ベース_周の横
-            item.m_a四隅.p左上 = p上ひも左下 + Unit90 * d高さ
-            item.m_a四隅.p右上 = p上ひも左下 + Unit90 * d高さ + Unit0 * p_d四角ベース_周の横
-
-            '文字位置
-            item.p_p文字位置 = p上ひも左下 + Unit0 * p_d四角ベース_周の横 + Unit90 * d高さ
-            _imageList側面上.AddItem(item)
-
-            '*下
-            item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 2)
-            item.m_a四隅.p左上 = p下ひも左上
-            item.m_a四隅.p右上 = p下ひも左上 + Unit0 * p_d四角ベース_周の横
-            item.m_a四隅.p左下 = p下ひも左上 + Unit270 * d高さ
-            item.m_a四隅.p右下 = p下ひも左上 + Unit270 * d高さ + Unit0 * p_d四角ベース_周の横
-            '文字なし
-            _imageList側面下.AddItem(item)
-
-            '*左
-            item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 3)
-            item.m_a四隅.p右上 = p左ひも右上
-            item.m_a四隅.p左上 = p左ひも右上 + Unit180 * d高さ
-            item.m_a四隅.p右下 = p左ひも右上 + Unit270 * p_d四角ベース_周の縦
-            item.m_a四隅.p左下 = p左ひも右上 + Unit180 * d高さ + Unit270 * p_d四角ベース_周の縦
-            '文字なし
-            _imageList側面左.AddItem(item)
-
-            '*右
-            item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 4)
-            item.m_a四隅.p左上 = p右ひも左上
-            item.m_a四隅.p右上 = p右ひも左上 + Unit0 * d高さ
-            item.m_a四隅.p左下 = p右ひも左上 + Unit270 * p_d四角ベース_周の縦
-            item.m_a四隅.p右下 = p右ひも左上 + Unit0 * d高さ + Unit270 * p_d四角ベース_周の縦
-            '文字なし
-            _imageList側面右.AddItem(item)
-
-        End If
-
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面上:{0}", _imageList側面上.ToString)
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面左:{0}", _imageList側面左.ToString)
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面下:{0}", _imageList側面下.ToString)
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面右:{0}", _imageList側面右.ToString)
-        Return True
-    End Function
-
-    '底と側面枠
-    Function imageList底と側面枠() As clsImageItemList
-        Dim item As clsImageItem
-        Dim itemlist As New clsImageItemList
-
-
-        Dim a底 As S四隅
-        a底.p左上 = New S実座標(-p_d四角ベース_横 / 2, p_d四角ベース_縦 / 2)
-        a底.p右上 = New S実座標(p_d四角ベース_横 / 2, p_d四角ベース_縦 / 2)
-        a底.p左下 = -a底.p右上
-        a底.p右下 = -a底.p左上
-
-        Dim a底の周 As S四隅
-        a底の周.p左上 = New S実座標(-p_d四角ベース_周の横 / 2, p_d四角ベース_周の縦 / 2)
-        a底の周.p右上 = New S実座標(p_d四角ベース_周の横 / 2, p_d四角ベース_周の縦 / 2)
-        a底の周.p左下 = -a底の周.p右上
-        a底の周.p右下 = -a底の周.p左上
-
-
-        '底
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._底枠, 1)
-        item.m_a四隅 = a底
-
-        Dim line As S線分
-        '右上→左上
-        line = New S線分(a底の周.p右上, a底の周.p左上)
-        item.m_lineList.Add(line)
-        '左上→左下
-        line = New S線分(a底の周.p左上, a底の周.p左下)
-        item.m_lineList.Add(line)
-        '左下→右下
-        line = New S線分(a底の周.p左下, a底の周.p右下)
-        item.m_lineList.Add(line)
-        '右下→右上
-        line = New S線分(a底の周.p右下, a底の周.p右上)
-        item.m_lineList.Add(line)
-
-        itemlist.AddItem(item)
-
-
-        '上の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
-        item.m_a四隅.p左下 = a底の周.p左上
-        item.m_a四隅.p右下 = a底の周.p右上
-        item.m_a四隅.p左上 = item.m_a四隅.p左下 + Unit90 * p_d縁厚さプラス_高さ
-        item.m_a四隅.p右上 = item.m_a四隅.p右下 + Unit90 * p_d縁厚さプラス_高さ
-        itemlist.AddItem(item)
-
-        '右の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
-        item.m_a四隅.p左上 = a底の周.p右上
-        item.m_a四隅.p左下 = a底の周.p右下
-        item.m_a四隅.p右上 = item.m_a四隅.p左上 + Unit0 * p_d縁厚さプラス_高さ
-        item.m_a四隅.p右下 = item.m_a四隅.p左下 + Unit0 * p_d縁厚さプラス_高さ
-        itemlist.AddItem(item)
-
-        '下の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
-        item.m_a四隅.p左上 = a底の周.p左下
-        item.m_a四隅.p右上 = a底の周.p右下
-        item.m_a四隅.p左下 = item.m_a四隅.p左上 + Unit270 * p_d縁厚さプラス_高さ
-        item.m_a四隅.p右下 = item.m_a四隅.p右上 + Unit270 * p_d縁厚さプラス_高さ
-        itemlist.AddItem(item)
-
-        '左の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
-        item.m_a四隅.p右上 = a底の周.p左上
-        item.m_a四隅.p右下 = a底の周.p左下
-        item.m_a四隅.p左上 = item.m_a四隅.p右上 + Unit180 * p_d縁厚さプラス_高さ
-        item.m_a四隅.p左下 = item.m_a四隅.p右下 + Unit180 * p_d縁厚さプラス_高さ
-        itemlist.AddItem(item)
-
-        Return itemlist
-    End Function
-
-
-    'プレビュー画像生成
-    Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
-        If imgData Is Nothing Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-            Return False
-        End If
-
-        '念のため
-        _ImageList横ひも = Nothing
-        _ImageList縦ひも = Nothing
-        _imageList側面上 = Nothing
-        _imageList側面左 = Nothing
-        _imageList側面下 = Nothing
-        _imageList側面右 = Nothing
-        _ImageList描画要素 = Nothing
-
-        '出力ひもリスト情報
-        Dim outp As New clsOutput(imgData.FilePath)
-        If Not CalcOutput(outp) Then
-            Return False 'p_sメッセージあり
-        End If
-
-        '_tbl縦横展開_横ひも,_tbl縦横展開_縦ひもにレコードが残されているはず
-        '_ImageList横ひも, _ImageList縦ひもを作る
-        If Not imageList横ひも() OrElse Not imageList縦ひも() Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-            Return False
-        End If
-
-        '基本のひも幅(文字サイズ)と基本色
-        imgData.setBasics(_d基本のひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
-
-
-        If Not imageList四側面() Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-            Return False
-        End If
-        _ImageList描画要素 = imageList底と側面枠()
-
-
-        '描画用のデータ追加
-        regionUpDown底()
-        regionUpDown側面()
-
-
-        '中身を移動
-        imgData.MoveList(_ImageList横ひも)
-        _ImageList横ひも = Nothing
-        imgData.MoveList(_ImageList縦ひも)
-        _ImageList縦ひも = Nothing
-
-        imgData.MoveList(_imageList側面上)
-        imgData.MoveList(_imageList側面左)
-        imgData.MoveList(_imageList側面下)
-        imgData.MoveList(_imageList側面右)
-        _imageList側面上 = Nothing
-        _imageList側面左 = Nothing
-        _imageList側面下 = Nothing
-        _imageList側面右 = Nothing
-
-        imgData.MoveList(_ImageList描画要素)
-        _ImageList描画要素 = Nothing
-
-        '描画ファイル作成
-        If Not imgData.MakeImage(outp) Then
-            p_sメッセージ = imgData.LastError
-            Return False
-        End If
-
-        Return True
-    End Function
-#End Region
-
 #Region "リスト出力"
+    Dim _sasihimo As New Dictionary(Of Integer, tbl縦横展開DataTable)
 
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
+        _sasihimo.Clear()
+
         If output Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -2757,7 +1948,7 @@ Class clsCalcSquare
             '長い順に記号を振る
             Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
             For Each tt As tbl縦横展開Row In tmps
-                If 0 < tt.f_iひも番号 Then
+                If 0 < tt.f_iひも番号 AndAlso 0 < tt.f_d出力ひも長 Then
                     tt.f_s記号 = output.SetBandRow(0, tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
                 End If
             Next
@@ -2845,8 +2036,11 @@ Class clsCalcSquare
             If is側面下から上へ() Then
                 '記号をとる
                 For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
+                    If r.f_i番号 = cIdxSpace Then
+                        Continue For
+                    End If
                     If 0 < r.f_iひも本数 Then
-                        If 0 <= r.f_d連続ひも長 Then
+                        If 0 < r.f_d連続ひも長 Then
                             r.f_s記号 = output.SetBandRow(0, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                         End If
                     End If
@@ -2877,7 +2071,9 @@ Class clsCalcSquare
                         row.f_i周数 = contcount
                         row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                         row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
-                        output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                        If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
+                            output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                        End If
                         row.f_sメモ = r_prv.f_sメモ
                     End If
                     contcount = r.f_iひも本数
@@ -2900,7 +2096,9 @@ Class clsCalcSquare
                 row.f_i周数 = contcount
                 row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                 row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
-                output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
+                    output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                End If
                 row.f_sメモ = r_prv.f_sメモ
             End If
 
@@ -2929,11 +2127,31 @@ Class clsCalcSquare
                 row.f_s編みひも名 = _frmMain.CenterString(r.f_i中心点)
                 row.f_i周数 = r.f_i開始位置
                 row.f_i段数 = r.f_i何本ごと
+                row.f_sメモ = r.f_sメモ
+                If Not r.f_b有効区分 Then
+                    Continue For
+                End If
+
                 If 0 < r.f_dひも長 AndAlso 0 < r.f_iひも本数 Then
+                    '固定長
                     row.f_s長さ = output.outLengthText(r.f_dひも長)
                     r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
+
+                ElseIf 0 < r.f_iひも本数 Then
+                    '差しひもの各長をセットしたテーブル
+                    Dim tmptable As tbl縦横展開DataTable = get差しひもLength(r)
+                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Rows.Count Then
+                        For Each tmp As tbl縦横展開Row In tmptable
+                            row = output.NextNewRow
+                            row.f_s長さ = output.outLengthText(tmp.f_dひも長)
+                            row.f_s編みひも名 = tmp.f_iひも番号
+                            'ひも数=f_iVal1
+                            tmp.f_s記号 = output.SetBandRow(tmp.f_iVal1, tmp.f_i何本幅, tmp.f_d出力ひも長, tmp.f_s色)
+                        Next
+                        _sasihimo.Add(r.f_i番号, tmptable)
+                    End If
+
                 End If
-                row.f_sメモ = r.f_sメモ
             Next
 
             output.AddBlankLine()
@@ -3177,6 +2395,10 @@ Class clsCalcSquare
     'dgv差しひも
     Private Function text配置面() As String
         Return _frmMain.f_i配置面1.HeaderText
+    End Function
+
+    Private Function text角度() As String
+        Return _frmMain.f_i角度1.HeaderText
     End Function
 
     Private Function text開始位置() As String

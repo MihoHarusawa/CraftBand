@@ -99,6 +99,12 @@ Public Class clsImageItem
             dY = way.Y - base.Y
         End Sub
 
+        ReadOnly Property IsZero() As Boolean
+            Get
+                Return dX = 0 AndAlso dY = 0
+            End Get
+        End Property
+
         '回転
         Function Rotate(ByVal angle As Double) As S差分
             Dim rad As Double = angle * System.Math.PI / 180
@@ -220,13 +226,20 @@ Public Class clsImageItem
             pD = d
         End Sub
 
+        Sub New(r As S領域)
+            p左上 = r.p左上
+            p左下 = r.p左下
+            p右上 = r.p右上
+            p右下 = r.p右下
+        End Sub
+
         ReadOnly Property IsEmpty() As Boolean
             Get
                 Return p左上.IsZero AndAlso p左下.IsZero AndAlso p右上.IsZero AndAlso p右下.IsZero
             End Get
         End Property
 
-        '回転
+        '回転 ※回転角によっては、左<=右,下<=上を満たさなくなります
         Function Rotate(ByVal center As S実座標, ByVal angle As Double) As S四隅
             Return New S四隅(Me.pA.Rotate(center, angle), Me.pB.Rotate(center, angle), Me.pC.Rotate(center, angle), Me.pD.Rotate(center, angle))
         End Function
@@ -248,6 +261,8 @@ Public Class clsImageItem
         Function VertLeft() As S四隅
             Return New S四隅(pA.VertLeft, pB.VertLeft, pC.VertLeft, pD.VertLeft)
         End Function
+
+        'A～D(位置関係が合っていれば)
         Property pA As S実座標
             Get
                 Return p右上
@@ -647,7 +662,8 @@ Public Class clsImageItem
     'レコード情報
     Public m_row縦横展開 As tbl縦横展開Row = Nothing 'バンド指定の時・コマの横
     Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
-    Public m_groupRow As clsGroupDataRow = Nothing 'Meshの側面,付属品
+    Public m_groupRow As clsGroupDataRow = Nothing 'Meshの側面,付属品("f_s記号","f_s編みかた名","f_s色"))
+    Public m_rowData As clsDataRow = Nothing 'Squareの差しひも
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
@@ -689,8 +705,10 @@ Public Class clsImageItem
         _四隅領域 'm_a四隅,m_lineList
         _全体枠    'm_a四隅
 
-        _底楕円    'm_a四隅,m_lineList,m_p位置,m_rひも位置
-        _差しひも    'm_a四隅,m_p位置,m_rひも位置
+        _底楕円    'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
+        _差しひも    'm_groupRow,m_a四隅,m_p位置,m_rひも位置           (Meshの底)
+
+        _ひも領域   'm_rowData,m_a四隅,m_p位置                       (Squareの差しひも)
 
         _底の中央線  'm_listLine
 
@@ -781,6 +799,14 @@ Public Class clsImageItem
         End If
     End Sub
 
+    'Squareの差しひも
+    Sub New(ByVal imageType As ImageTypeEnum, ByVal row As clsDataRow, ByVal idx1 As Integer, ByVal idx2 As Integer)
+        m_ImageType = imageType
+        m_rowData = row
+        m_Index = idx1
+        m_Index2 = idx2
+    End Sub
+
     '文字列
     Sub New(ByVal p As S実座標, ByVal arystr() As String, ByVal siz As Double, ByVal idx As Integer)
         m_ImageType = ImageTypeEnum._文字列
@@ -826,6 +852,11 @@ Public Class clsImageItem
                         If m_groupRow IsNot Nothing Then
                             chars = Len(m_groupRow.GetIndexNameValue(1, "f_s付属品名"))
                             chars += m_groupRow.Count '記号数
+                            line = 1
+                        End If
+                    Case ImageTypeEnum._ひも領域
+                        If m_rowData IsNot Nothing Then
+                            chars += 1 '記号1点
                             line = 1
                         End If
                     Case ImageTypeEnum._文字列
@@ -883,7 +914,7 @@ Public Class clsImageItem
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも
+            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも, ImageTypeEnum._ひも領域
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())

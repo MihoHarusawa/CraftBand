@@ -103,8 +103,8 @@ Public Class clsDataTables
     'tbl差しひも
     Public Enum enum配置面
         i_なし = 0
-        i_側面 = 1
-        i_底面 = 2
+        i_底面 = 1
+        i_側面 = 2
         i_全面 = 3
     End Enum
 

@@ -210,7 +210,7 @@
     <comment>frmMain</comment>
   </data>
   <data name="EnumStringPlate" xml:space="preserve">
-    <value>なし,側面,底面,全面</value>
+    <value>なし,底面,側面,全面</value>
     <comment>frmMain</comment>
   </data>
   <data name="FormCaption" xml:space="preserve">

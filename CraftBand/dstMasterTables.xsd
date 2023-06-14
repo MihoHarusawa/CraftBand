@@ -67,6 +67,7 @@
               <xs:element name="f_dコマ要尺係数a" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数aColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数a" msprop:Generator_UserColumnName="f_dコマ要尺係数a" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数a" type="xs:double" default="0.98" minOccurs="0" />
               <xs:element name="f_dコマ要尺係数b" msprop:Generator_ColumnPropNameInTable="f_dコマ要尺係数bColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_dコマ要尺係数b" msprop:Generator_UserColumnName="f_dコマ要尺係数b" msprop:Generator_ColumnVarNameInTable="columnf_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
               <xs:element name="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnPropNameInTable="f_d四つ畳みひも長加算初期値Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d四つ畳みひも長加算初期値" msprop:Generator_UserColumnName="f_d四つ畳みひも長加算初期値" msprop:Generator_ColumnVarNameInTable="columnf_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d目と数える端の目" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="f_d目と数える端の目Column" msprop:Generator_ColumnVarNameInTable="columnf_d目と数える端の目" msprop:Generator_UserColumnName="f_d目と数える端の目" msprop:Generator_ColumnPropNameInRow="f_d目と数える端の目" type="xs:double" default="1" minOccurs="0" />
               <xs:element name="f_s備考" msprop:Generator_ColumnPropNameInTable="f_s備考Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s備考" msprop:Generator_UserColumnName="f_s備考" msprop:Generator_ColumnVarNameInTable="columnf_s備考" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
@@ -129,7 +130,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tbl上下図" msprop:Generator_RowEvHandlerName="tbl上下図RowChangeEventHandler" msprop:Generator_RowDeletedName="tbl上下図RowDeleted" msprop:Generator_RowDeletingName="tbl上下図RowDeleting" msprop:Generator_RowEvArgName="tbl上下図RowChangeEvent" msprop:Generator_TablePropName="tbl上下図" msprop:Generator_RowChangedName="tbl上下図RowChanged" msprop:Generator_RowChangingName="tbl上下図RowChanging" msprop:Generator_TableClassName="tbl上下図DataTable" msprop:Generator_RowClassName="tbl上下図Row" msprop:Generator_TableVarName="tabletbl上下図" msprop:Generator_UserTableName="tbl上下図">
+        <xs:element name="tbl上下図" msprop:Generator_RowClassName="tbl上下図Row" msprop:Generator_RowEvHandlerName="tbl上下図RowChangeEventHandler" msprop:Generator_RowDeletedName="tbl上下図RowDeleted" msprop:Generator_RowDeletingName="tbl上下図RowDeleting" msprop:Generator_RowEvArgName="tbl上下図RowChangeEvent" msprop:Generator_TablePropName="tbl上下図" msprop:Generator_RowChangedName="tbl上下図RowChanged" msprop:Generator_UserTableName="tbl上下図" msprop:Generator_RowChangingName="tbl上下図RowChanging" msprop:Generator_TableClassName="tbl上下図DataTable" msprop:Generator_TableVarName="tabletbl上下図">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_s上下図名" msprop:Generator_ColumnPropNameInTable="f_s上下図名Column" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="f_s上下図名" msprop:Generator_UserColumnName="f_s上下図名" msprop:Generator_ColumnVarNameInTable="columnf_s上下図名" type="xs:string" default="" />

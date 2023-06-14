@@ -345,6 +345,9 @@ Public Class CImageDraw
                 Case ImageTypeEnum._差しひも
                     ret = ret And draw差しひも(item)
 
+                Case ImageTypeEnum._ひも領域
+                    ret = ret And drawひも領域(item)
+
                 Case ImageTypeEnum._付属品
                     ret = ret And draw付属品(item)
 
@@ -856,6 +859,34 @@ Public Class CImageDraw
 
         Return True
     End Function
+
+    Function drawひも領域(ByVal item As clsImageItem) As Boolean
+        If item.m_rowData Is Nothing Then
+            Return False
+        End If
+        'ひもの色
+        Dim color As String = item.m_rowData.Value("f_s色")
+        Dim colset As CPenBrush = GetBandPenBrush(color)
+        If colset Is Nothing Then
+            Return False
+        End If
+        'ひもの領域
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillPolygon(colset.BrushAlfa, points)
+        End If
+        _Graphic.DrawLines(colset.PenBand, points)
+
+        '記号
+        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim str As String = item.m_rowData.Value("f_s記号")
+            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+        End If
+
+        Return True
+    End Function
+
 
     Function draw付属品(ByVal item As clsImageItem) As Boolean
         If item.m_groupRow Is Nothing Then

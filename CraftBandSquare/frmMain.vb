@@ -687,7 +687,8 @@ Public Class frmMain
     'ひもリスト
     Private Sub ToolStripMenuItemEditList_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditList.Click
         SaveTables(_clsDataTables)
-        _clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        '_clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        _clsCalcSquare.CalcSize(CalcCategory.FixLength, Nothing, Nothing)
 
         If Not _clsCalcSquare.p_b有効 Then
             Dim msg As String = _clsCalcSquare.p_sメッセージ & vbCrLf
@@ -2207,6 +2208,8 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl側面).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl追加品).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl縦横展開).ToString())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl差しひも).ToString())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tblひも上下).ToString())
 
     End Sub
     Private Sub setDgvColumnsVisible(ByVal dgv As DataGridView)

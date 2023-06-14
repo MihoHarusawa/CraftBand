@@ -153,6 +153,9 @@ Public Class clsOutput
     'countが正の時、合計に加える
     Private Function AddMark(ByVal count As Integer, ByVal lane As Integer, ByVal length As Double, ByVal color As String, ByVal group As String) As String
         Dim lengthText As String = g_clsSelectBasics.p_sリスト出力長(length)
+        'If lengthText = g_clsSelectBasics.p_sリスト出力長(0) Then
+        '    Debug.Print("length=0")
+        'End If
 
         Dim cond As String = String.Format("f_i本幅 = {0} AND f_s長さ = '{1}' AND f_s色 = '{2}' AND f_s記号範囲 = '{3}'", lane, lengthText, color, group)
         Dim sels() As tblCutListRow = CutListTable.Select(cond)

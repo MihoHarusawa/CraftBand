@@ -50,6 +50,11 @@ Public Class clsGroupDataRow
         Next
     End Sub
 
+    'clsImageItem.m_groupRow
+    Sub New(ByVal row As DataRow)
+        Add(1, row)
+    End Sub
+
     '複製
     Sub New(ByVal ref As clsGroupDataRow)
         For Each idx As Int16 In ref._map.Keys
