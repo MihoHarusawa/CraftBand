@@ -10,8 +10,8 @@
     <Authors>MihoHarusawa</Authors>
     <Title>クラフトバンド・共通ライブラリ</Title>
     <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
-    <FileVersion>1.5.1.0</FileVersion>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
     <Description>クラフトバンド・共通ライブラリ</Description>
   </PropertyGroup>
 

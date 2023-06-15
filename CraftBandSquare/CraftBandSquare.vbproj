@@ -13,6 +13,7 @@
     <Description>クラフトバンド・四つ目の計算</Description>
     <Copyright>Copyright © LaboHarusawa 2023</Copyright>
     <PackageIcon>IconSquare.ico</PackageIcon>
+    <Authors>MihoHarusawa</Authors>
   </PropertyGroup>
 
   <ItemGroup>

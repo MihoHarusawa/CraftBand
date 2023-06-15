@@ -15,6 +15,9 @@
 入力した実測値/実測値から計算した係数/既定の係数、どれを使うか設定できます。
 コマの形状(右側・左側)やひもの色に応じたプレビュー画像で出来上がりを確認することができます。
 
+# CraftBandSquare / CraftBandSquare.exe
+縦横に組んだ底をそのまま立ち上げる方式のサイズ計算を行うアプリです。ひもの間隔を指定すれば四つ目になります。ひもの上や目の中に、縦/横/斜め方向の差しひもを指定することができます。ひも幅や色を個別に変えたり、底や側面の交差の上下パターンを指定してプレビューすれば、模様をデザインできます。
+
 # CraftBand / CraftBand.dll
 xmlによるデータベース、編集用フォームなどの共通ライブラリです
 
@@ -24,7 +27,11 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 * シリーズのアプリは、同じ設定データを共有することができます。
 * でき上がり寸法を見ながら、ひも幅やひも数を変えることで、自分の好きなサイズに作れます。
 * 手持ちのひもの長さに合わせて、サイズを決めることができます。
-* ひもに色を設定することで、色ごとのカットリストを出力することができます。
+* ひもに色を設定することで、色ごとのカットリストを出力することができます
+
+
+The CraftBandMesh series is a collection of applications designed to assist with size calculations and designs for paper bands basket. It consists of multiple applications that cater to different basic knitting methods. These applications share a common database, which serves as the configuration file. With this series, you can easily create your own original recipes, and by saving them to files, you can organize and manage your recipes as a library.
+
 
 # Requirement
 
@@ -45,6 +52,7 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 * CraftBandMesh:    https://labo.com/CraftBand/craftbandmesh/
 * CraftBandSqare45: https://labo.com/CraftBand/CraftBandSquare45/
 * CraftBandKnot :   https://labo.com/CraftBand/CraftBandKnot/
+* CraftBandSquare:  https://labo.com/CraftBand/CraftBandSquare/
 * サンプルなど      https://labo.com/CraftBand/
 
 
@@ -56,3 +64,8 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 # License
 
 CraftBand Series is under [MIT license]
+
+
+## Seeking Translation Contributors
+
+If you wish to use these applications in another language and if you have the ability to translate it from Japanese to that language, Please consider participating as a contributor to the project.
