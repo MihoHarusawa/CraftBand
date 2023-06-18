@@ -138,12 +138,16 @@ Public Class clsImageData
         Dim scale As S差分 '目盛方向
         Dim count As Integer '目盛の数
         Dim len As New Length(2, "mm") '目盛の幅
+        Dim scalelong As Integer = 10 '目盛を長くする数
 
         Dim p座標開始点 As S実座標 = _rDrawingRect.p左上
         Dim p座標終了点 As S実座標
 
         '座標の描画
         Dim unit As Length = New Length(1, g_clsSelectBasics.p_unit出力時の寸法単位)
+        If g_clsSelectBasics.p_unit出力時の寸法単位.Is_inch Then '#24
+            scalelong = 12
+        End If
         Try
             Dim item As clsImageItem
             If isVirtical Then
@@ -163,7 +167,7 @@ Public Class clsImageData
             Dim p As S実座標 = p座標開始点 '目盛点
             Dim line As S線分
             For i As Integer = 0 To count - 1
-                If i Mod 10 = 0 Then
+                If i Mod scalelong = 0 Then
                     line = New S線分(p, p + scale * 2)
                 Else
                     line = New S線分(p, p + scale)

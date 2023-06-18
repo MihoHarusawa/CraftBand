@@ -161,7 +161,7 @@ Class clsCalcSquare
     'ひも幅+すき間
     Public ReadOnly Property p_d縦横_四角 As Double
         Get
-            If 0 < _d目_ひも間のすき間 AndAlso 0 < _d基本のひも幅 Then
+            If 0 <= _d目_ひも間のすき間 AndAlso 0 < _d基本のひも幅 Then
                 Return _d目_ひも間のすき間 + _d基本のひも幅
             Else
                 Return 0
@@ -723,7 +723,7 @@ Class clsCalcSquare
 
     '横寸法から横に並ぶ四角数・偶数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = Int(_d横_目標 / p_d縦横_四角)
+        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i横の四角数 Mod 2 <> 0 Then
@@ -731,7 +731,7 @@ Class clsCalcSquare
             End If
         Else
             '外側
-            Do While i横の四角数 * p_d縦横_四角 < _d横_目標
+            Do While i横の四角数 * p_d縦横_四角 < (_d横_目標 - _d基本のひも幅)
                 i横の四角数 += 1
             Loop
             If i横の四角数 Mod 2 <> 0 Then
@@ -751,14 +751,14 @@ Class clsCalcSquare
 
     '縦寸法から縦に並ぶ四角数・偶数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = Int(_d縦_目標 / p_d縦横_四角)
+        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i縦の四角数 Mod 2 <> 0 Then
                 i縦の四角数 -= 1
             End If
         Else
-            Do While i縦の四角数 * p_d縦横_四角 < _d縦_目標
+            Do While i縦の四角数 * p_d縦横_四角 < (_d縦_目標 - _d基本のひも幅)
                 i縦の四角数 += 1
             Loop
             If i縦の四角数 Mod 2 <> 0 Then

@@ -106,7 +106,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  目標寸法以外をリセットします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
+        '''(はいで全てリセット、いいえで目(ひも間のすき間)を保持) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskResetInput() As String
             Get

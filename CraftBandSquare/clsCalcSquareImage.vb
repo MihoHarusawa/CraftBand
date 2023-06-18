@@ -248,15 +248,15 @@ Partial Public Class clsCalcSquare
     '               0度(a)            90度(c)      45度(b)135度(d)
     '--------+-----------------+-----------------+-----------------+
     '底面(A) |    <固定長>     |    <固定長>     |  ※斜め各長     |
-    '        |    底枠横のみ   |    底枠縦のみ   |                 |
+    '        |    底枠横のみ   |    底枠縦のみ   | ひも本幅変更不可|
     '--------+-----------------+-----------------+-----------------+
     '側面(B) |    <固定長>     |    <固定長>     |   <固定長>      |
     '        |    水平4側面(*) |    縦横4側面    |  斜めに4側面    |
     '--------+-----------------+-----------------+-----------------+
     '全面(C) |    <固定長>     |     長さ2種     |  ※斜め各長     |
-    '        |    水平4側面(*) |    縦横の全長   |                 |
+    '        |    水平4側面(*) |    縦横の全長   | ひも本幅変更不可|
     '--------+-----------------+-----------------+-----------------+
-    '                                             ↑ひも本幅変更不可
+    '                                             ※斜め各長は、ひも本幅変更なしとして計算する                                          
 
 #Region "呼び出しケース分類"
 
@@ -312,16 +312,14 @@ Partial Public Class clsCalcSquare
                         End If
 
                     Case enum角度.i_45度, enum角度.i_135度 'b,d
-                        If (_b横ひも本幅変更 OrElse _b縦ひも本幅変更 OrElse _b側面ひも本幅変更) Then
-                            row.f_s無効理由 = textひも本幅変更()
-                            Return False
-                        ElseIf (row.f_i中心点 = enum中心点.i_目の中央) Then
+                        If (row.f_i中心点 = enum中心点.i_目の中央) Then
                             '目の中央を通すので対角線分の空き
                             If _d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
                         End If
+                        'ひも位置をもとに配置するので本幅変更可能、ひも外の目に対する仮想ひもは無し
 
                     Case Else
                         row.f_s無効理由 = text角度()
@@ -1215,25 +1213,36 @@ Partial Public Class clsCalcSquare
 #Region "底を斜めに"
     ' ←←←←←←←←←←←←←←←←＼135度
     '↓   45度／→→→→→→→→→→→→→→→→→
-    '↓　┌──┬──┬──┬──┬──┬──┐　↓ y_line                  縦ひも
-    '↓　│1／ │2／ │3／ │4／ │　　│n／1│　↓   ・目の中心             ┌┐
-    '↓　├──┼──┼──┼──┼──┼──┤　↓    　　もしくは          ││
-    '↓　│　　│　  │　　│　　│　　│ ／2│　↓   ・交差ひもの中心       ││
-    '↓　├──┼──┼──┼──┼──┼──┤　↓                          ││
-    '↓　│　　│　  │　　│　　│　　│ ／3│　↓       ┌──────┐   └┘
-    '↓　├──┼──┼──┼──┼──┼──┤　↓       └──────┘横ひも 
+    '↓　┌──┬──┬──┬──┬──┬──┐　↓ y_line                                      →横方向: 縦置き計算(中心まで↓dy)
+    '↓　│1／ │2／ │3／ │4／ │　　│n／1│　↓← y_center1   (x_center,y_center)              ┌┐  ┌┐  ┌┐  
+    '↓　├──┼──┼──┼──┼──┼──┤　↓                　目の中心/交差ひもの中心       ││  ││  ││  ↓縦方向:横置き計算(中心まで←dx)
+    '↓　│　　│　  │　　│　　│　　│ ／2│　↓                  イメージ回転の中心            ││  ││  ││     ┌──────┐
+    '↓　├──┼──┼──┼──┼──┼──┤　↓                                                ││  ││  ││     └──────┘
+    '↓　│　　│　  │　　│　　│　　│ ／3│　↓                                             　 └┘  └┘  └┘     ┌──────┐ 
+    '↓　├──┼──┼──┼──┼──┼──┤　↓                                 　　　     f_d長さ:回転前の長さ     └──────┘
     '↓　│　　│　  │　　│　　│　　│    │　↓       
-    '↓　├──┼──┼──┼──┼──┼──┤　↓        
-    '↓　│　　│　  │　　│　　│　　│ ／m│　↓  -y_line       
-    '　　└──┴──┴──┴──┴──┴──┘
-    '  -x_line                                x_line
+    '↓　├──┼──┼──┼──┼──┼──┤　↓                  1～n:横の目の実質数/縦ひもの本数(全面＆0<高さの目の実質数＆横の左右に目ありの時は+2)
+    '↓　│　　│　  │　　│　　│　　│ ／m│　↓                  1～m;縦の目の実質数/横ひもの本数(全面＆0<高さの目の実質数＆縦の上下に目ありの時は+2)
+    '　　└──┴──┴──┴──┴──┴──┘     -y_line
+    '-x_line ↑                            ↑   x_line
+    '      x_center1                  x_centerCorner
 
-    '全数は、全面も底面も同じ
+    '全数
     Private Function get底の斜めCount(ByVal row As tbl差しひもRow) As Integer
         If row.f_i中心点 = enum中心点.i_目の中央 Then
             Return get横の目の実質数() + get縦の目の実質数() - 1
         ElseIf row.f_i中心点 = enum中心点.i_ひも中央 Then
-            Return p_i縦ひもの本数 + p_i横ひもの本数 - 1
+            Dim i縦ひもの本数 As Integer = p_i縦ひもの本数
+            Dim i横ひもの本数 As Integer = p_i横ひもの本数
+            If row.f_i配置面 = enum配置面.i_全面 AndAlso 0 < get高さの目の実質数() Then
+                If is横の左右に目あり() Then
+                    i縦ひもの本数 += 2 '左右の目の外に仮想的なひも
+                End If
+                If is縦の上下に目あり() Then
+                    i横ひもの本数 += 2 '上下の目の外に仮想的なひも
+                End If
+            End If
+            Return i縦ひもの本数 + i横ひもの本数 - 1
         Else
             Return -1
         End If
@@ -1247,28 +1256,7 @@ Partial Public Class clsCalcSquare
             Return Nothing
         End If
 
-        Dim isCenterBand As Boolean = (row.f_i中心点 = enum中心点.i_ひも中央)
-        Dim nCorner As Integer = p_i縦ひもの本数
-        Dim nCorner2 As Integer = p_i横ひもの本数 '反対の角
-        If Not isCenterBand Then
-            nCorner = get横の目の実質数()
-            nCorner2 = get縦の目の実質数()
-        End If
-
-        Dim x_line As Double '絶対値
-        Dim y_line As Double '絶対値
-        Dim dShortCorner As Double = 0 '角を短くする
-        If row.f_i配置面 = enum配置面.i_全面 Then
-            x_line = get周の横(1 / 2) + get側面高(1)
-            y_line = get周の縦(1 / 2) + get側面高(1)
-            dShortCorner = get側面高(1) + (get周の横() - p_d四角ベース_横) / 2
-        ElseIf row.f_i配置面 = enum配置面.i_底面 Then
-            x_line = p_d四角ベース_横 / 2
-            y_line = p_d四角ベース_縦 / 2
-        Else
-            Return Nothing
-        End If
-        Dim maxLine As Double = mdlUnit.Min(x_line, y_line) * 2
+        '斜め指定
         Dim iひも種 As Integer
         If row.f_i角度 = enum角度.i_45度 Then
             iひも種 = enumひも種.i_45度
@@ -1278,34 +1266,67 @@ Partial Public Class clsCalcSquare
             Return Nothing
         End If
 
-        Dim y_center1 As Double = p_d四角ベース_縦 / 2 - _d上端下端の目 * _d目_ひも間のすき間
-        If isCenterBand Then
-            'get横ひもの中心Y(1, False)
-            y_center1 = y_center1 - _d基本のひも幅 / 2
-        Else
-            'get横ひもの目の中心Y(1, False)
-            If is縦の上下に目あり() Then
-                y_center1 = y_center1 + _d目_ひも間のすき間 / 2
+        '斜めひもが配置される全体エリア
+        Dim x_line As Double '絶対値
+        Dim y_line As Double '絶対値
+        Dim dShortCorner As Double = 0 '角を短くする分、長さ(回転前)ベース
+        If row.f_i配置面 = enum配置面.i_全面 Then
+            x_line = get周の横(1 / 2) + get側面高(1)
+            y_line = get周の縦(1 / 2) + get側面高(1)
+            If is縦の上下に目あり() AndAlso is横の左右に目あり() Then
+                '側面高の対角線ではなく、側面高にする
+                dShortCorner = get側面高(1) * (1 - ROOT2 / 2)
             Else
-                y_center1 = y_center1 - _d基本のひも幅 - _d目_ひも間のすき間 / 2
+                '角まで短くする
+                dShortCorner = get側面高(1) + (get周の横() - p_d四角ベース_横) / 2
             End If
+        ElseIf row.f_i配置面 = enum配置面.i_底面 Then
+            x_line = p_d四角ベース_横 / 2
+            y_line = p_d四角ベース_縦 / 2
+        Else
+            Return Nothing
+        End If
+        Dim maxLine As Double = mdlUnit.Min(x_line, y_line) * 2
+
+        '縦横の点数と通し番号 #23
+        Dim nCorner As Integer  '角になるnの通し番号,横に並ぶ数
+        Dim nCorner2 As Integer  'もう一方の角の通し番号,縦に並ぶ数
+        'n点数 = nCorner + nCorner2 - 1
+
+        If row.f_i中心点 = enum中心点.i_ひも中央 Then
+            Dim i縦ひもの本数 As Integer = p_i縦ひもの本数
+            Dim i横ひもの本数 As Integer = p_i横ひもの本数
+            If row.f_i配置面 = enum配置面.i_全面 AndAlso 0 < get高さの目の実質数() Then
+                If is横の左右に目あり() Then
+                    i縦ひもの本数 += 2 '左右の目の外に仮想的なひも
+                End If
+                If is縦の上下に目あり() Then
+                    i横ひもの本数 += 2 '上下の目の外に仮想的なひも
+                End If
+            End If
+            nCorner = i縦ひもの本数
+            nCorner2 = i横ひもの本数 '反対の角
+
+        ElseIf row.f_i中心点 = enum中心点.i_目の中央 Then
+            nCorner = get横の目の実質数()
+            nCorner2 = get縦の目の実質数()
+        Else
+            Return Nothing
         End If
 
-        Dim x_centerCorner As Double = p_d四角ベース_横 / 2 - _d左端右端の目 * _d目_ひも間のすき間
-        If isCenterBand Then
-            'get縦ひもの中心X(nかど, False)
-            x_centerCorner = x_centerCorner - _d基本のひも幅 / 2
-        Else
-            'get縦ひもの目の中心X(nかど, False)
-            If is横の左右に目あり() Then
-                x_centerCorner = x_centerCorner + _d目_ひも間のすき間 / 2
-            Else
-                x_centerCorner = x_centerCorner - _d基本のひも幅 - _d目_ひも間のすき間 / 2
-            End If
-        End If
 
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "i番号:{0} n点数={1} nCorner={2} y_center1({3:0.0}) x_centerCorner({4:0.0})", row.f_i番号, n点数, nCorner, y_center1, x_centerCorner)
+        '座標値
+        '開始位置となるX
+        Dim x_center1 As Double = -(nCorner - 1) * p_d縦横_四角 / 2
+        '角(nCorner)のX
+        Dim x_centerCorner As Double = -x_center1
+        '角(nCorner=縦の1)のY
+        Dim y_center1 As Double = (nCorner2 - 1) * p_d縦横_四角 / 2
 
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "i番号:{0} n点数={1} nCorner={2} nCorner2={3} x_center1={4:0.0} x_centerCorner({5:0.0}) y_center1({6:0.0}) ",
+                                  row.f_i番号, n点数, nCorner, nCorner2, x_center1, x_centerCorner, y_center1)
+
+        '各長さのレコード作成
         Dim tmptable As tbl縦横展開DataTable = New tbl縦横展開DataTable
         For i As Integer = row.f_i開始位置 To n点数 Step row.f_i何本ごと
             Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
@@ -1322,8 +1343,7 @@ Partial Public Class clsCalcSquare
             If i < nCorner Then
                 '→横にカウント
                 idx = i
-                ' get縦ひもの中心X(idx, False)/get縦ひもの目の中心X(idx, False)
-                x_center = x_centerCorner - p_d縦横_四角 * (nCorner - idx)
+                x_center = x_center1 + p_d縦横_四角 * (idx - 1)
                 y_center = y_center1
                 tmp.f_iVal4 = 1 '横へ
                 tmp.f_dVal1 = (x_center + x_line) 'dx
@@ -1371,7 +1391,6 @@ Partial Public Class clsCalcSquare
                 '↓下にカウント
                 idx = i - nCorner + 1
                 x_center = x_centerCorner
-                'get横ひもの中心Y(idx, False)/ get横ひもの目の中心Y(idx, False)
                 y_center = y_center1 - p_d縦横_四角 * (idx - 1)
                 tmp.f_iVal4 = 0 '下へ
                 tmp.f_dVal1 = (x_line - x_center) 'dx
@@ -1410,7 +1429,7 @@ Partial Public Class clsCalcSquare
         End If
     End Function
 
-    '斜めの差しひもの
+    '斜めの差しひものイメージ
     Private Function imageList底の斜め(ByVal row As tbl差しひもRow) As Boolean
         If Not _sasihimo.ContainsKey(row.f_i番号) Then
             Return False

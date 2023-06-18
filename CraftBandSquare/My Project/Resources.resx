@@ -138,7 +138,8 @@
     <comment>frmMain</comment>
   </data>
   <data name="AskResetInput" xml:space="preserve">
-    <value>目標寸法以外をリセットします。よろしいですか？</value>
+    <value>目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
+(はいで全てリセット、いいえで目(ひも間のすき間)を保持)</value>
     <comment>frmMain</comment>
   </data>
   <data name="AskResetUpDown" xml:space="preserve">
