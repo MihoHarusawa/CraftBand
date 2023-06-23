@@ -10,11 +10,21 @@ Imports CraftBand.Tables.dstMasterTables
 Public Class clsUpDown
     Public Const cMaxUpdownColumns As Integer = 50 'CheckBoxフィールド数
     Public Const cBottomNumber As Integer = 0 '底のレコード番号
-    Public Const cSideNumber As Integer = 1 '側面のレコード番号
+    Public Const cSide12Number As Integer = 1 '側面(上右)のレコード番号
+    Public Const cSide34Number As Integer = 2 '側面(下左)のレコード番号
+
+    Enum enumTargetFace
+        Bottom = 0  '底
+        Side12 = 1  '側面(上右)
+        Side34 = 2  '側面(下左)
+    End Enum
+    '側面(下から適用)
+    Public Shared Function IsSide(ByVal face As enumTargetFace) As Boolean
+        Return face = enumTargetFace.Side12 OrElse face = enumTargetFace.Side34
+    End Function
 
 
-    Public IsSide As Boolean 'False=底, True=側面　※初期化・リセット対象外
-
+    Public TargetFace As enumTargetFace = enumTargetFace.Bottom 　'※初期化・リセット対象外
     Public HorizontalCount As Integer
     Public VerticalCount As Integer
     Public CheckBoxTable As dstWork.tblCheckBoxDataTable = Nothing  '編集用
@@ -24,11 +34,11 @@ Public Class clsUpDown
     Dim _Matrix(cMaxUpdownColumns, cMaxUpdownColumns) As Boolean '1～HorizontalCount, 1～VerticalCountで使用
 
 
-    Sub New(ByVal side As Boolean)
-        IsSide = side
+    Sub New(ByVal face As enumTargetFace)
+        TargetFace = face
     End Sub
-    Sub New(ByVal side As Boolean, ByVal horizon As Integer, ByVal vert As Integer)
-        IsSide = side
+    Sub New(ByVal face As enumTargetFace, ByVal horizon As Integer, ByVal vert As Integer)
+        TargetFace = face
         HorizontalCount = horizon
         VerticalCount = vert
     End Sub
@@ -133,9 +143,17 @@ Public Class clsUpDown
 
 
     '初期値
-    Function Reset() As Boolean
+    Function Reset(ByVal sidecount As Integer) As Boolean
         Try
-            Dim isFirstUp As Boolean = IsSide
+            Dim isFirstUp As Boolean
+            Select Case TargetFace
+                Case enumTargetFace.Side12
+                    isFirstUp = True
+                Case enumTargetFace.Side34
+                    isFirstUp = (sidecount Mod 2) = 0
+                Case Else 'bottom
+                    isFirstUp = False
+            End Select
             Clear()
 
             HorizontalCount = 2
@@ -545,7 +563,7 @@ Public Class clsUpDown
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
-        sb.AppendFormat("{0} IsSide={1} Size({2},{3})", Me.GetType.Name, IsSide, HorizontalCount, VerticalCount).AppendLine()
+        sb.AppendFormat("{0} TargetFace={1} Size({2},{3})", Me.GetType.Name, TargetFace, HorizontalCount, VerticalCount).AppendLine()
         sb.Append("Table ")
         For y As Integer = 1 To CheckBoxTable.Rows.Count
             Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)

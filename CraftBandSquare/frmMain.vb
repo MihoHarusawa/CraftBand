@@ -4,6 +4,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Spin
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
@@ -1691,7 +1692,7 @@ Public Class frmMain
 #End Region
 
 #Region "ひも上下"
-    Dim _CurrentIsSide As Boolean
+    Dim _CurrentTargetFace As enumTargetFace
     Dim _UpdownChanged As Boolean
 
     Private Function setUpdownColumns(ByVal col As Integer) As Boolean
@@ -1720,7 +1721,7 @@ Public Class frmMain
                 setUpdownColumns(updown.HorizontalCount)
                 setUpDownCountLeft()
                 BindingSourceひも上下.DataSource = updown.CheckBoxTable
-                If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+                If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
                     BindingSourceひも上下.Sort = "Index desc"
                     txt開始位置.Text = My.Resources.LeftLower
                 Else
@@ -1751,8 +1752,8 @@ Public Class frmMain
         Dim left_h As Integer
         Dim left_v As Integer
 
-        If _CurrentIsSide Then
-            left_h = _clsCalcSquare.p_i垂直ひも数 Mod horizontalCount
+        If IsSide(_CurrentTargetFace) Then
+            left_h = _clsCalcSquare.p_i垂直ひも半数 Mod horizontalCount
             left_v = _clsCalcSquare.p_i側面ひもの本数 Mod verticalCount
         Else
             left_h = _clsCalcSquare.p_i横ひもの本数 Mod horizontalCount
@@ -1781,9 +1782,14 @@ Public Class frmMain
             Exit Sub
         End If
 
-        _CurrentIsSide = rad側面.Checked
+        _CurrentTargetFace = enumTargetFace.Bottom
+        If rad側面_上右.Checked Then
+            _CurrentTargetFace = enumTargetFace.Side12
+        ElseIf rad側面_下左.Checked Then
+            _CurrentTargetFace = enumTargetFace.Side34
+        End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(_CurrentIsSide)
+        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(_CurrentTargetFace)
         If updown Is Nothing Then
             MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -1799,7 +1805,7 @@ Public Class frmMain
     Function saveひも上下(ByVal isMsg As Boolean) As Boolean
         If _UpdownChanged Then
             If BindingSourceひも上下.DataSource IsNot Nothing Then
-                Dim updown As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+                Dim updown As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
                 updown.CheckBoxTable = BindingSourceひも上下.DataSource
                 updown.Memo = txt上下のメモ.Text
 
@@ -1932,7 +1938,7 @@ Public Class frmMain
         Dim updown As clsUpDown
         If rad上.Checked Then
             setDataSourceUpDown(Nothing)
-            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
                 updown = _clsCalcSquare.updown垂直シフト(False) '逆順なので後
             Else
                 updown = _clsCalcSquare.updown垂直シフト(True) '正順なので先頭
@@ -1940,7 +1946,7 @@ Public Class frmMain
 
         ElseIf rad下.Checked Then
             setDataSourceUpDown(Nothing)
-            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
                 updown = _clsCalcSquare.updown垂直シフト(True) '逆順なので先頭
             Else
                 updown = _clsCalcSquare.updown垂直シフト(False) '正順なので後
@@ -1991,14 +1997,14 @@ Public Class frmMain
         Dim updown As clsUpDown = Nothing
 
         If rad上.Checked Then
-            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
                 updown = _clsCalcSquare.updown垂直追加(False) '逆順なので後
             Else
                 updown = _clsCalcSquare.updown垂直追加(True) '正順なので先頭
             End If
 
         ElseIf rad下.Checked Then
-            If rad下から上へ.Checked AndAlso _CurrentIsSide Then
+            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
                 updown = _clsCalcSquare.updown垂直追加(True) '逆順なので先頭
             Else
                 updown = _clsCalcSquare.updown垂直追加(False) '正順なので後
@@ -2056,11 +2062,53 @@ Public Class frmMain
         _UpdownChanged = True
     End Sub
 
-    Private Sub rad底側面_CheckedChanged(sender As Object, e As EventArgs) Handles rad底.CheckedChanged, rad側面.CheckedChanged
-        If _CurrentIsSide <> rad側面.Checked Then
+    Private Sub rad底側面_CheckedChanged(sender As Object, e As EventArgs) Handles rad底.CheckedChanged, rad側面_上右.CheckedChanged, rad側面_下左.CheckedChanged
+        Dim target As enumTargetFace = enumTargetFace.Bottom
+        If rad側面_上右.Checked Then
+            target = enumTargetFace.Side12
+        ElseIf rad側面_下左.Checked Then
+            target = enumTargetFace.Side34
+        End If
+
+        If _CurrentTargetFace <> target Then
             saveひも上下(True)
             Showひも上下(_clsDataTables)
         End If
+    End Sub
+
+    Private Sub btn先と同じ_Click(sender As Object, e As EventArgs) Handles btn先と同じ.Click
+        Dim prvS As String
+        Dim prv As enumTargetFace
+        Select Case _CurrentTargetFace
+            Case enumTargetFace.Side12
+                prv = enumTargetFace.Bottom
+                prvS = String.Format(My.Resources.AskLoadSameAs, rad底.Text)
+            Case enumTargetFace.Side34
+                prv = enumTargetFace.Side12
+                prvS = String.Format(My.Resources.AskLoadSameAs, rad側面_上右.Text)
+            Case Else 'bottom
+                prv = enumTargetFace.Side34
+                prvS = String.Format(My.Resources.AskLoadSameAs, rad側面_下左.Text)
+        End Select
+        '現編集内容を破棄し{0}と同じにします。よろしいですか？
+        Dim r As DialogResult = MessageBox.Show(prvS, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+        If r <> DialogResult.OK Then
+            Exit Sub
+        End If
+
+        setDataSourceUpDown(Nothing)
+
+        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(prv)
+        updown.TargetFace = _CurrentTargetFace
+        If updown Is Nothing Then
+            '{0}できませんでした。リセットしてやり直してください。
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn先と同じ.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            setDataSourceUpDown(updown)
+        End If
+        dgvひも上下.Refresh()
+        _UpdownChanged = True
     End Sub
 
     Private Sub nud水平に_ValueChanged(sender As Object, e As EventArgs) Handles nud水平に.ValueChanged
@@ -2106,7 +2154,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btn設定呼出_Click(sender As Object, e As EventArgs) Handles btn設定呼出.Click
-        Dim updown_tmp As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+        Dim updown_tmp As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
         updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
 
         Dim dlg As New frmUpDownSetting
@@ -2133,7 +2181,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btn設定登録_Click(sender As Object, e As EventArgs) Handles btn設定登録.Click
-        Dim updown_tmp As New clsUpDown(_CurrentIsSide, nud水平に.Value, nud垂直に.Value)
+        Dim updown_tmp As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
         updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
         Dim dlg As New frmUpDownSetting
         dlg.CurrentUpdown = updown_tmp
@@ -2225,7 +2273,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 
 #End Region
 

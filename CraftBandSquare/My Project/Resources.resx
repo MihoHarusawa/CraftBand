@@ -129,6 +129,10 @@
     <value>規定値をロードします。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
+  <data name="AskLoadSameAs" xml:space="preserve">
+    <value>現編集内容を破棄し{0}と同じにします。よろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="AskOutput" xml:space="preserve">
     <value>このままリスト出力を行いますか？</value>
     <comment>frmMain</comment>

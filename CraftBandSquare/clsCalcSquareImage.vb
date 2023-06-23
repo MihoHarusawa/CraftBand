@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 
 Partial Public Class clsCalcSquare
@@ -85,7 +86,8 @@ Partial Public Class clsCalcSquare
 
         '描画用のデータ追加
         regionUpDown底()
-        regionUpDown側面()
+        regionUpDown側面12()
+        regionUpDown側面34()
 
         '差しひも
         imageList差しひも() '_ImageList差しひも生成
@@ -1838,9 +1840,9 @@ Partial Public Class clsCalcSquare
             Return False
         End If
 
-        _CUpDown.IsSide = False '底
-        If Not _Data.ToClsUpDown(clsUpDown.cBottomNumber, _CUpDown) Then
-            _CUpDown.Reset()
+        _CUpDown.TargetFace = enumTargetFace.Bottom '底
+        If Not _Data.ToClsUpDown(cBottomNumber, _CUpDown) Then
+            _CUpDown.Reset(p_i垂直ひも半数)
         End If
         If Not _CUpDown.IsValid Then
             Return False
@@ -1885,25 +1887,26 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '側面の上下をm_regionListにセット
-    Private Function regionUpDown側面() As Boolean
+
+    '側面(上右)の上下をm_regionListにセット
+    Private Function regionUpDown側面12() As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
             Return False
         End If
-        If _imageList側面上 Is Nothing OrElse _imageList側面左 Is Nothing OrElse _imageList側面下 Is Nothing OrElse _imageList側面右 Is Nothing Then
+        If _imageList側面上 Is Nothing OrElse _imageList側面右 Is Nothing Then
             Return False
         End If
 
-        _CUpDown.IsSide = True '側面
-        If Not _Data.ToClsUpDown(clsUpDown.cSideNumber, _CUpDown) Then
-            _CUpDown.Reset()
+        _CUpDown.TargetFace = enumTargetFace.Side12 '側面(上右)
+        If Not _Data.ToClsUpDown(clsUpDown.cSide12Number, _CUpDown) Then
+            _CUpDown.Reset(p_i垂直ひも半数)
         End If
         If Not _CUpDown.IsValid Then
             Return False
         End If
 
 
-        Dim horzDif As Integer = 0 '横に上→右→下→左
+        Dim horzDif As Integer = 0 '横に上→右
         '*上の側面
         For iTate As Integer = 1 To p_i縦ひもの本数
             Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
@@ -1981,6 +1984,27 @@ Partial Public Class clsCalcSquare
         Next
         horzDif += p_i横ひもの本数
 
+        Return True
+    End Function
+
+    '側面(下左)の上下をm_regionListにセット
+    Private Function regionUpDown側面34() As Boolean
+        If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
+            Return False
+        End If
+        If _imageList側面左 Is Nothing OrElse _imageList側面下 Is Nothing Then
+            Return False
+        End If
+
+        _CUpDown.TargetFace = enumTargetFace.Side34 '側面
+        If Not _Data.ToClsUpDown(clsUpDown.cSide34Number, _CUpDown) Then
+            _CUpDown.Reset(p_i垂直ひも半数)
+        End If
+        If Not _CUpDown.IsValid Then
+            Return False
+        End If
+
+        Dim horzDif As Integer = 0 '横に下→左
 
         '*下の側面(UpDownは左→右)
         For iTate As Integer = 1 To p_i縦ひもの本数
@@ -2063,7 +2087,6 @@ Partial Public Class clsCalcSquare
 
         Return True
     End Function
-
 
 #End Region
 

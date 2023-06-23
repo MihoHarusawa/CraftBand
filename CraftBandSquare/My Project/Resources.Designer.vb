@@ -88,6 +88,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  現編集内容を破棄し{0}と同じにします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskLoadSameAs() As String
+            Get
+                Return ResourceManager.GetString("AskLoadSameAs", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  このままリスト出力を行いますか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskOutput() As String

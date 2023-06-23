@@ -4,6 +4,7 @@ Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsMasterTables
+Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -383,6 +384,13 @@ Class clsCalcSquare
             End If
         End Get
     End Property
+
+    Public ReadOnly Property p_i垂直ひも半数 As Integer
+        Get
+            Return p_i横ひもの本数 + p_i縦ひもの本数
+        End Get
+    End Property
+
 
     Public ReadOnly Property p_b横ひも本幅変更 As Boolean
         Get
@@ -1766,20 +1774,23 @@ Class clsCalcSquare
     Dim _CUpDown As clsUpDown 'New時に作成、以降は存在が前提
 
     'ひも上下の展開
-    Function loadひも上下(ByVal isSide As Boolean) As clsUpDown
+    Function loadひも上下(ByVal face As enumTargetFace) As clsUpDown
 
         '_CUpDownにセットする
         _CUpDown.Clear()
-        _CUpDown.IsSide = isSide
+        _CUpDown.TargetFace = face
 
-        If isSide Then
-            _Data.ToClsUpDown(clsUpDown.cSideNumber, _CUpDown)
-        Else
-            _Data.ToClsUpDown(clsUpDown.cBottomNumber, _CUpDown)
-        End If
+        Select Case _CUpDown.TargetFace
+            Case enumTargetFace.Side12
+                _Data.ToClsUpDown(clsUpDown.cSide12Number, _CUpDown)
+            Case enumTargetFace.Side34
+                _Data.ToClsUpDown(clsUpDown.cSide34Number, _CUpDown)
+            Case Else 'bottom
+                _Data.ToClsUpDown(clsUpDown.cBottomNumber, _CUpDown)
+        End Select
 
         If Not _CUpDown.IsValid Then
-            _CUpDown.Reset()
+            _CUpDown.Reset(p_i垂直ひも半数)
         End If
 
         Return _CUpDown
@@ -1788,12 +1799,15 @@ Class clsCalcSquare
     'ひも上下の編集完了,_Dataに反映
     Function saveひも上下(ByVal updown As clsUpDown) As Boolean
         'レコードにセットする
-        Dim ret As Boolean
-        If updown.IsSide Then
-            ret = _Data.FromClsUpDown(clsUpDown.cSideNumber, updown)
-        Else
-            ret = _Data.FromClsUpDown(clsUpDown.cBottomNumber, updown)
-        End If
+        Dim ret As Boolean = False
+        Select Case _CUpDown.TargetFace
+            Case enumTargetFace.Side12
+                ret = _Data.FromClsUpDown(clsUpDown.cSide12Number, updown)
+            Case enumTargetFace.Side34
+                ret = _Data.FromClsUpDown(clsUpDown.cSide34Number, updown)
+            Case enumTargetFace.Bottom
+                ret = _Data.FromClsUpDown(clsUpDown.cBottomNumber, updown)
+        End Select
 
         If Not ret Then
             'ひも上下レコードの保存エラーです。
@@ -1813,7 +1827,7 @@ Class clsCalcSquare
     End Function
 
     Function updownリセット() As clsUpDown
-        If Not _CUpDown.Reset() Then
+        If Not _CUpDown.Reset(p_i垂直ひも半数) Then
             Return Nothing
         End If
         Return _CUpDown
