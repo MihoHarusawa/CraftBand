@@ -906,10 +906,10 @@ Class clsCalcSquare
             row.Setf_d高さNull()
             row.Setf_d垂直ひも長Null()
         End If
-        row.f_d周長 = get周の横()
-        row.f_dひも長 = get周の横() * _dひも長係数
-        row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        row.f_d周長 = get側面の周長()
+        row.f_dひも長 = row.f_d周長 * _dひも長係数
         row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
+        row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
 
         Return True
     End Function
