@@ -184,7 +184,8 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_b始末ひも区分") = False '縦の補強ひも
                 p_row底_縦横.Value("f_dひも間のすき間") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも間のすき間初期値")
                 p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
-                p_row底_縦横.Value("f_dひも長加算_側面") = p_row底_縦横.Value("f_d垂直ひも長加算")
+                p_row底_縦横.Value("f_dひも長加算_側面") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
+                p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
 
         End Select
 
