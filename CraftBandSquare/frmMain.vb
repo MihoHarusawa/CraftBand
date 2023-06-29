@@ -1907,7 +1907,7 @@ Public Class frmMain
     Private Sub btn天地反転_Click(sender As Object, e As EventArgs) Handles btn天地反転.Click
         setDataSourceUpDown(Nothing)
 
-        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転()
+        Dim updown As clsUpDown = _clsCalcSquare.updown天地反転()
         If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn天地反転.Text),
