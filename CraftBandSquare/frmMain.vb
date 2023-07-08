@@ -1005,6 +1005,7 @@ Public Class frmMain
             If IsContinueEditing() Then
                 Exit Sub
             End If
+            ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '#27
             If _clsDataTables.Load(fname) Then
                 DispTables(_clsDataTables)
                 _sFilePath = fname
