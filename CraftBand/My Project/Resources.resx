@@ -183,16 +183,12 @@
     <value>{0}の値をセットしてください。</value>
     <comment>frmBandTypeWeight</comment>
   </data>
-  <data name="ErrCheckHorizontal" xml:space="preserve">
-    <value>{0}行を確認してください。</value>
+  <data name="ErrCheckNoCross" xml:space="preserve">
+    <value>{0}{1}を確認してください。</value>
     <comment>clsUpDown</comment>
   </data>
   <data name="ErrCheckValid" xml:space="preserve">
     <value>サイズ({0},{1})のエラーです。</value>
-    <comment>clsUpDown</comment>
-  </data>
-  <data name="ErrCheckVertical" xml:space="preserve">
-    <value>{0}列を確認してください。</value>
     <comment>clsUpDown</comment>
   </data>
   <data name="ErrGridCoeff" xml:space="preserve">
@@ -315,6 +311,30 @@
   </data>
   <data name="LOG_FormEnd" xml:space="preserve">
     <value>ダイアログ表示終了</value>
+  </data>
+  <data name="MsgUpDounCount" xml:space="preserve">
+    <value>ON:{0}点 OFF:{1}点(全{2}点)　ON比率 {3:f2}</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="MsgUpDounMinMax" xml:space="preserve">
+    <value>最小連続数:{0}  最大連続数:{1}</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="MsgUpDownHorizontal" xml:space="preserve">
+    <value>行</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="MsgUpDownMax" xml:space="preserve">
+    <value>{0}の最大連続数:{1} ({2})</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="MsgUpDownMin" xml:space="preserve">
+    <value>{0}の最小連続数:{1} ({2})</value>
+    <comment>clsUpDown</comment>
+  </data>
+  <data name="MsgUpDownVertical" xml:space="preserve">
+    <value>列</value>
+    <comment>clsUpDown</comment>
   </data>
   <data name="WarningBadWorkData" xml:space="preserve">
     <value>指定されたファイル'{0}'は読み取れませんでした。</value>

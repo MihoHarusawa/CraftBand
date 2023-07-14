@@ -223,11 +223,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}行を確認してください。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}{1}を確認してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property ErrCheckHorizontal() As String
+        Friend ReadOnly Property ErrCheckNoCross() As String
             Get
-                Return ResourceManager.GetString("ErrCheckHorizontal", resourceCulture)
+                Return ResourceManager.GetString("ErrCheckNoCross", resourceCulture)
             End Get
         End Property
         
@@ -237,15 +237,6 @@ Namespace My.Resources
         Friend ReadOnly Property ErrCheckValid() As String
             Get
                 Return ResourceManager.GetString("ErrCheckValid", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  {0}列を確認してください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property ErrCheckVertical() As String
-            Get
-                Return ResourceManager.GetString("ErrCheckVertical", resourceCulture)
             End Get
         End Property
         
@@ -525,6 +516,60 @@ Namespace My.Resources
         Friend ReadOnly Property LOG_FormEnd() As String
             Get
                 Return ResourceManager.GetString("LOG_FormEnd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ON:{0}点 OFF:{1}点(全{2}点)　ON比率 {3:f2} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDounCount() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDounCount", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  最小連続数:{0}  最大連続数:{1} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDounMinMax() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDounMinMax", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  行 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDownHorizontal() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDownHorizontal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}の最大連続数:{1} ({2}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDownMax() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDownMax", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}の最小連続数:{1} ({2}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDownMin() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDownMin", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  列 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpDownVertical() As String
+            Get
+                Return ResourceManager.GetString("MsgUpDownVertical", resourceCulture)
             End Get
         End Property
         

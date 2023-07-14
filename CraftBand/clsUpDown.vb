@@ -505,39 +505,240 @@ Public Class clsUpDown
         Return False
     End Function
 
-    Function Check(ByRef errmsg As String) As Boolean
+    'xの列の連続最小値
+    Private Function cont_count_min_x(ByVal x As Integer) As Integer
+        If VerticalCount < 2 Then
+            Return -1
+        End If
+        Dim cur As Boolean = _Matrix(x, 1)
+        Dim mincount As Integer = Integer.MaxValue
+        Dim count As Integer = 0
+        For yy As Integer = 2 To VerticalCount * 2
+            Dim y As Integer = yy
+            If VerticalCount < y Then
+                y = y - VerticalCount
+            End If
+            If cur = _Matrix(x, y) Then
+                If 0 < count Then
+                    count += 1
+                End If
+            Else
+                If count = 1 Then
+                    Return 1    '1が最小
+                End If
+                If 0 < count AndAlso count < mincount Then
+                    mincount = count
+                End If
+                count = 1
+                cur = _Matrix(x, y)
+            End If
+        Next
+        Return mincount
+    End Function
+
+    'yの行の連続最小値
+    Private Function cont_count_min_y(ByVal y As Integer) As Integer
+        If HorizontalCount < 2 Then
+            Return -1
+        End If
+        Dim cur As Boolean = _Matrix(1, y)
+        Dim mincount As Integer = Integer.MaxValue
+        Dim count As Integer = 0
+        For xx As Integer = 2 To HorizontalCount * 2
+            Dim x As Integer = xx
+            If HorizontalCount < x Then
+                x = x - HorizontalCount
+            End If
+            If cur = _Matrix(x, y) Then
+                If 0 < count Then
+                    count += 1
+                End If
+            Else
+                If count = 1 Then
+                    Return 1    '1が最小
+                End If
+                If 0 < count AndAlso count < mincount Then
+                    mincount = count
+                End If
+                count = 1
+                cur = _Matrix(x, y)
+            End If
+        Next
+        Return mincount
+    End Function
+
+    'xの列の連続最大値
+    Private Function cont_count_max_x(ByVal x As Integer) As Integer
+        If VerticalCount < 2 Then
+            Return -1
+        End If
+        Dim cur As Boolean = _Matrix(x, 1)
+        Dim maxcount As Integer = 1
+        Dim count As Integer = 1
+        For yy As Integer = 2 To VerticalCount * 2
+            Dim y As Integer = yy
+            If VerticalCount < yy Then
+                y = yy - VerticalCount
+            End If
+            If cur = _Matrix(x, y) Then
+                count += 1
+            Else
+                If count = VerticalCount Then
+                    Return VerticalCount    'VerticalCountが最大
+                End If
+                If maxcount < count Then
+                    maxcount = count
+                End If
+                count = 1
+                cur = _Matrix(x, y)
+            End If
+        Next
+        Return maxcount
+    End Function
+
+    'yの行の連続最大値
+    Private Function cont_count_max_y(ByVal y As Integer) As Integer
+        If HorizontalCount < 2 Then
+            Return -1
+        End If
+        Dim cur As Boolean = _Matrix(1, y)
+        Dim maxcount As Integer = 1
+        Dim count As Integer = 1
+        For xx As Integer = 2 To HorizontalCount * 2
+            Dim x As Integer = xx
+            If HorizontalCount < xx Then
+                x = xx - HorizontalCount
+            End If
+            If cur = _Matrix(x, y) Then
+                count += 1
+            Else
+                If count = HorizontalCount Then
+                    Return HorizontalCount    'HorizontalCount
+                End If
+                If maxcount < count Then
+                    maxcount = count
+                End If
+                count = 1
+                cur = _Matrix(x, y)
+            End If
+        Next
+        Return maxcount
+    End Function
+
+    'チェック #28 戻り値 OK/NG 戻り値によらずチェック結果を返す
+    Function Check(ByRef msg As String) As Boolean
         If Not IsValid Then
             'サイズ({0},{1})のエラーです。
-            errmsg = String.Format(My.Resources.ErrCheckValid, HorizontalCount, VerticalCount)
+            msg = String.Format(My.Resources.ErrCheckValid, HorizontalCount, VerticalCount)
             Return False
         End If
 
         table_to_matrix() '読めた結果をチェック
+
         Dim sb As New System.Text.StringBuilder
-        Dim bad As New List(Of Integer)
+        Dim intlist As New List(Of Integer)
+        '1点も上下のない行
         For y As Integer = 1 To VerticalCount
             If Not check_y(y) Then
-                bad.Add(y)
+                intlist.Add(y)
             End If
         Next
-        If 0 < bad.Count Then
-            '{0}行を確認してください。
-            sb.AppendFormat(My.Resources.ErrCheckHorizontal, String.Join(",", bad))
-            bad.Clear()
+        If 0 < intlist.Count Then
+            '{0}{1}を確認してください。行
+            sb.AppendFormat(My.Resources.ErrCheckNoCross, My.Resources.MsgUpDownHorizontal, String.Join(",", intlist))
+            intlist.Clear()
         End If
-
+        '1点も上下のない列
         For x As Integer = 1 To HorizontalCount
             If Not check_x(x) Then
-                bad.Add(x)
+                intlist.Add(x)
             End If
         Next
-        If 0 < bad.Count Then
-            '{0}列を確認してください。
-            sb.AppendFormat(My.Resources.ErrCheckVertical, String.Join(",", bad))
+        If 0 < intlist.Count Then
+            '{0}{1}を確認してください。列
+            sb.AppendFormat(My.Resources.ErrCheckNoCross, My.Resources.MsgUpDownVertical, String.Join(",", intlist))
+        End If
+        If 0 < sb.Length Then
+            msg = sb.ToString
+            Return False
         End If
 
-        errmsg = sb.ToString
-        Return sb.Length = 0
+
+        '行の最小
+        Dim mincount_h As Integer = Integer.MaxValue
+        For y As Integer = 1 To VerticalCount
+            Dim count As Integer = cont_count_min_y(y)
+            intlist.Add(count)
+            If count < mincount_h Then
+                mincount_h = count
+            End If
+        Next
+        '{0}の最小連続数:{1} ({2})  行
+        sb.AppendFormat(My.Resources.MsgUpDownMin, My.Resources.MsgUpDownHorizontal, mincount_h, String.Join(",", intlist)).AppendLine()
+        intlist.Clear()
+        '行の最大
+        Dim maxcount_h As Integer = 0
+        For y As Integer = 1 To VerticalCount
+            Dim count As Integer = cont_count_max_y(y)
+            intlist.Add(count)
+            If maxcount_h < count Then
+                maxcount_h = count
+            End If
+        Next
+        '{0}の最大連続数:{1} ({2})  行
+        sb.AppendFormat(My.Resources.MsgUpDownMax, My.Resources.MsgUpDownHorizontal, maxcount_h, String.Join(",", intlist)).AppendLine()
+        intlist.Clear()
+
+        '列の最小
+        Dim mincount_v As Integer = Integer.MaxValue
+        For x As Integer = 1 To HorizontalCount
+            Dim count As Integer = cont_count_min_x(x)
+            intlist.Add(count)
+            If count < mincount_v Then
+                mincount_v = count
+            End If
+        Next
+        '{0}の最小連続数:{1} ({2})  列
+        sb.AppendFormat(My.Resources.MsgUpDownMin, My.Resources.MsgUpDownVertical, mincount_v, String.Join(",", intlist)).AppendLine()
+        intlist.Clear()
+        '列の最大
+        Dim maxcount_v As Integer = 0
+        For x As Integer = 1 To HorizontalCount
+            Dim count As Integer = cont_count_max_x(x)
+            intlist.Add(count)
+            If maxcount_v < count Then
+                maxcount_v = count
+            End If
+        Next
+        '{0}の最大連続数:{1} ({2})  列
+        sb.AppendFormat(My.Resources.MsgUpDownMax, My.Resources.MsgUpDownVertical, maxcount_v, String.Join(",", intlist)).AppendLine()
+        intlist.Clear()
+
+        '最小と最大
+        Dim mincount As Integer = IIf(mincount_v < mincount_h, mincount_v, mincount_h)
+        Dim maxcount As Integer = IIf(maxcount_h < maxcount_v, maxcount_v, maxcount_h)
+        sb.AppendLine()
+        '最小連続数:{0}  最大連続数:{1}
+        sb.AppendFormat(My.Resources.MsgUpDounMinMax, mincount, maxcount).AppendLine()
+
+
+        '数
+        Dim ons As Integer = 0
+        Dim offs As Integer = 0
+        For y As Integer = 1 To VerticalCount
+            For x As Integer = 1 To HorizontalCount
+                If _Matrix(x, y) Then
+                    ons += 1
+                Else
+                    offs += 1
+                End If
+            Next
+        Next
+        'ON:{0}点 OFF:{1}点(全{2}点)　ON比率 {3:f2}
+        sb.AppendFormat(My.Resources.MsgUpDounCount, ons, offs, ons + offs, ons / (ons + offs))
+
+        msg = sb.ToString
+        Return True
     End Function
 
 

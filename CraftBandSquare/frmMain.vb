@@ -2045,13 +2045,17 @@ Public Class frmMain
     End Sub
 
     Private Sub btnチェック_Click(sender As Object, e As EventArgs) Handles btnチェック.Click
-        If Not _clsCalcSquare.updownチェック() Then
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ,
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Dim msg As String = Nothing
+        If Not _clsCalcSquare.updownチェック(msg) Then
+            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
-            'チェックOKです。
-            MessageBox.Show(My.Resources.MessageCheckOK,
+            If String.IsNullOrWhiteSpace(msg) Then
+                'チェックOKです。
+                MessageBox.Show(My.Resources.MessageCheckOK,
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
         End If
     End Sub
 

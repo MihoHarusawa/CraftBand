@@ -1896,8 +1896,9 @@ Class clsCalcSquare
         Return _CUpDown
     End Function
 
-    Function updownチェック() As Boolean
-        Return _CUpDown.Check(p_sメッセージ)
+    'チェック #28
+    Function updownチェック(ByRef msg As String) As Boolean
+        Return _CUpDown.Check(msg)
     End Function
 
 #End Region
