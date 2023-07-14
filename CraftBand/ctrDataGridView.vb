@@ -269,15 +269,19 @@ Public Class ctrDataGridView
             Me.BeginEdit(True)
             'SendKeys.Send("{F2}")
         Else
-            Dim comboBox = TryCast(Me.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
-            If comboBox Is Nothing Then
-                Return
-            End If
+            Try
+                Dim comboBox = TryCast(Me.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
+                If comboBox Is Nothing Then
+                    Return
+                End If
+                Dim orgValue = comboBox.Value
+                If String.IsNullOrWhiteSpace(orgValue) AndAlso comboBox.Items.Count > 0 Then
+                    SendKeys.Send("{F4}")
+                End If
 
-            Dim orgValue = comboBox.Value
-            If String.IsNullOrWhiteSpace(orgValue) AndAlso comboBox.Items.Count > 0 Then
-                SendKeys.Send("{F4}")
-            End If
+            Catch ex As Exception
+                'comboBox = Nothing?
+            End Try
         End If
     End Sub
 #End Region
