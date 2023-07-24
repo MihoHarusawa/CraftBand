@@ -70,15 +70,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  縁を削除してよろしいですか？ に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property AskDeleteEdge() As String
-            Get
-                Return ResourceManager.GetString("AskDeleteEdge", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  規定値をロードします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskLoadDefault() As String

@@ -418,40 +418,36 @@ Public Class clsDataTables
         Dim count As Integer = 0
         For Each tmp As tbl縦横展開Row In tmptable
             '同じキーレコードを検索
-            Dim cond As String = String.Format("f_iひも種={0} AND f_iひも番号={1}", tmp.f_iひも種, tmp.f_iひも番号)
-            Dim sels() As tbl縦横展開Row = p_tbl縦横展開.Select(cond)
-            If sels Is Nothing OrElse sels.Length = 0 Then
+            Dim row As tbl縦横展開Row = Find縦横展開Row(p_tbl縦横展開, tmp.f_iひも種, tmp.f_iひも番号, False) '追加しない
+            If row Is Nothing Then
                 Continue For
             End If
 
             'f_dひも長加算, f_s色, f_sメモを取得
-            Dim i As Integer = 0
-            tmp.f_dひも長加算 = sels(i).f_dひも長加算
-            tmp.f_dひも長加算2 = sels(i).f_dひも長加算2
+            tmp.f_dひも長加算 = row.f_dひも長加算
+            tmp.f_dひも長加算2 = row.f_dひも長加算2
             If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
                 tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算 + tmp.f_dひも長加算2
             End If
-            If g_clsSelectBasics.IsExistColor(sels(i).f_s色) Then
-                tmp.f_s色 = sels(i).f_s色
+            If g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                tmp.f_s色 = row.f_s色
             Else
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_s色)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", row.f_sひも名, row.f_iひも番号, row.f_s色)
             End If
-            tmp.f_sメモ = sels(i).f_sメモ
+            tmp.f_sメモ = row.f_sメモ
 
             'f_i何本幅は対応Exeのみ
             If g_enumExeName = enumExeName.CraftBandSquare Then
-                If sels(i).f_i何本幅 < 0 Then
+                If row.f_i何本幅 < 0 Then
                     tmp.f_i何本幅 = 1
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_i何本幅)
-                ElseIf g_clsSelectBasics.p_i本幅 < sels(i).f_i何本幅 Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", row.f_sひも名, row.f_iひも番号, row.f_i何本幅)
+                ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
                     tmp.f_i何本幅 = g_clsSelectBasics.p_i本幅
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", sels(i).f_sひも名, sels(i).f_iひも番号, sels(i).f_i何本幅, g_clsSelectBasics.p_i本幅)
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", row.f_sひも名, row.f_iひも番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
                 Else
-                    tmp.f_i何本幅 = sels(i).f_i何本幅
+                    tmp.f_i何本幅 = row.f_i何本幅
                 End If
             End If
-
-            'キーなので1点しかないはず
 
             count += 1
         Next
@@ -494,6 +490,35 @@ Public Class clsDataTables
 
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Add({0}) {1}点", iひも種, tmptable.Rows.Count)
         Return count
+    End Function
+
+
+    Public Shared Function Find縦横展開Row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As Integer, ByVal iひも番号 As Integer, ByVal addnew As Boolean) As tbl縦横展開Row
+        Dim cond As String = String.Format("f_iひも種={0} AND f_iひも番号={1}", iひも種, iひも番号)
+        Dim sels() As tbl縦横展開Row = table.Select(cond)
+        If sels IsNot Nothing AndAlso 0 < sels.Length Then
+            Return sels(0)
+        End If
+        If addnew Then
+            Dim row As tbl縦横展開Row = table.Newtbl縦横展開Row
+            row.f_iひも種 = iひも種
+            row.f_iひも番号 = iひも番号
+            table.Rows.Add(row)
+            Return row
+        End If
+        Return Nothing
+    End Function
+
+    Public Shared Function SetMaxひも番号(ByVal table As tbl縦横展開DataTable, ByVal iひも番号 As Integer) As Integer
+        Dim cond As String = String.Format("f_iひも番号 > {0}", iひも番号)
+        Dim sels() As tbl縦横展開Row = table.Select(cond)
+        If sels Is Nothing OrElse sels.Length = 0 Then
+            Return 0 '対象なし
+        End If
+        For Each sel As tbl縦横展開Row In sels
+            sel.Delete()
+        Next
+        Return sels.Length
     End Function
 
 #End Region

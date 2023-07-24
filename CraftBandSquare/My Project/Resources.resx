@@ -121,10 +121,6 @@
     <value>編集中のデータを破棄してよろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="AskDeleteEdge" xml:space="preserve">
-    <value>縁を削除してよろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
   <data name="AskLoadDefault" xml:space="preserve">
     <value>規定値をロードします。よろしいですか？</value>
     <comment>frmMain</comment>

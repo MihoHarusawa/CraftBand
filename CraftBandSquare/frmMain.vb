@@ -135,9 +135,11 @@ Public Class frmMain
         f_s色5.DisplayMember = "Display"
         f_s色5.ValueMember = "Value"
 
-        cmb基本色.DataSource = g_clsSelectBasics.p_tblColor
-        cmb基本色.DisplayMember = "Display"
-        cmb基本色.ValueMember = "Value"
+        '#29
+        cmb基本色.Items.Clear()
+        For Each r As dstWork.tblColorRow In g_clsSelectBasics.p_tblColor
+            cmb基本色.Items.Add(r.Display)
+        Next
 
         setBasics()
         setPattern()
@@ -1192,44 +1194,61 @@ Public Class frmMain
 
 
     Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
-        Dim table As tbl側面DataTable = Nothing
-        Dim number As Integer = -1
-        If Not dgv側面.GetTableAndNumber(table, number) Then
+        If dgv側面.Rows.Count = 0 Then
+            nud高さの目の数.Value = nud高さの目の数.Value + 1
             Exit Sub
         End If
 
-        Dim row As tbl側面Row = Nothing
-        If _clsCalcSquare.add_縁(cmb編みかた名_側面.Text,
-                     nud基本のひも幅.Value, row) Then
-
-            dgv側面.NumberPositionsSelect(row.f_i番号)
-            recalc(CalcCategory.SideEdge, row, "f_i周数")
-        Else
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        Dim table As tbl側面DataTable = Nothing
+        Dim currow As tbl側面Row = Nothing
+        If Not dgv側面.GetTableAndRow(table, currow) Then
+            Exit Sub
         End If
 
+        If String.IsNullOrWhiteSpace(cmb編みかた名_側面.Text) Then
+            '編みかた名指定なし
+            If _clsCalcSquare.add_高さ(currow) Then
+                If currow IsNot Nothing Then
+                    dgv側面.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+                End If
+                nud高さの目の数.Value = nud高さの目の数.Value + 1 '→recalc
+            End If
+        Else
+            '編みかた名指定あり
+            Dim row As tbl側面Row = Nothing
+            If _clsCalcSquare.add_縁(cmb編みかた名_側面.Text, nud基本のひも幅.Value, row) Then
+                dgv側面.NumberPositionsSelect(row.f_i番号)
+                recalc(CalcCategory.SideEdge, row, "f_i周数")
+            Else
+                MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        End If
     End Sub
 
     Private Sub btn削除_側面_Click(sender As Object, e As EventArgs) Handles btn削除_側面.Click
-        Dim table As tbl側面DataTable = Nothing
-        Dim number As Integer = -1
-        If Not dgv側面.GetTableAndNumber(table, number) Then
+        If dgv側面.Rows.Count = 0 Then
             Exit Sub
-        End If
-        If NumberCount(table, clsDataTables.cHemNumber) = 0 Then
-            Exit Sub
-        End If
-        If number <> clsDataTables.cHemNumber Then
-            '縁を削除してよろしいですか？
-            Dim r As DialogResult = MessageBox.Show(My.Resources.AskDeleteEdge, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-            If r <> DialogResult.Yes Then
-                Exit Sub
-            End If
         End If
 
-        '縁を削除
-        clsDataTables.RemoveNumberFromTable(table, clsDataTables.cHemNumber)
-        recalc(CalcCategory.SideEdge, Nothing, Nothing)
+        Dim table As tbl側面DataTable = Nothing
+        Dim currow As tbl側面Row = Nothing
+        If Not dgv側面.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+
+        If currow.f_i番号 = clsDataTables.cHemNumber Then
+            '縁を削除
+            clsDataTables.RemoveNumberFromTable(table, clsDataTables.cHemNumber)
+            recalc(CalcCategory.SideEdge, Nothing, Nothing)
+        Else
+            '高さを削除
+            If _clsCalcSquare.del_高さ(currow) Then
+                If currow IsNot Nothing Then
+                    dgv側面.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+                End If
+                nud高さの目の数.Value = nud高さの目の数.Value - 1 '→recalc
+            End If
+        End If
     End Sub
 
     Private Sub rad下から上へ_CheckedChanged(sender As Object, e As EventArgs) Handles rad下から上へ.CheckedChanged, rad上から下へ.CheckedChanged
@@ -1383,11 +1402,11 @@ Public Class frmMain
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
-            If Not TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Add(tpage横ひも)
-            End If
             If Not TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Add(tpage縦ひも)
+            End If
+            If Not TabControl.TabPages.Contains(tpage横ひも) Then
+                TabControl.TabPages.Add(tpage横ひも)
             End If
         Else
             If TabControl.TabPages.Contains(tpage横ひも) Then
@@ -1481,6 +1500,66 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv縦ひも_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         If IsDataPropertyName縦横展開(DataPropertyName) Then
             recalc(CalcCategory.Expand_Tate, current.Row, DataPropertyName)
+        End If
+    End Sub
+
+    Private Sub btn削除_縦_Click(sender As Object, e As EventArgs) Handles btn削除_縦.Click
+        Dim table As tbl縦横展開DataTable = Nothing
+        Dim currow As DataRow = Nothing
+        If Not dgv縦ひも.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+
+        If _clsCalcSquare.del_縦ひも(currow) Then
+            If currow IsNot Nothing Then
+                dgv縦ひも.PositionSelect(currow, {"f_iひも種", "f_iひも番号"})
+            End If
+            nud横の目の数.Value = nud横の目の数.Value - 1 'with recalc
+        End If
+    End Sub
+
+    Private Sub btn追加_縦_Click(sender As Object, e As EventArgs) Handles btn追加_縦.Click
+        Dim table As tbl縦横展開DataTable = Nothing
+        Dim currow As DataRow = Nothing
+        If Not dgv縦ひも.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+
+        If _clsCalcSquare.add_縦ひも(currow) Then
+            If currow IsNot Nothing Then
+                dgv縦ひも.PositionSelect(currow, {"f_iひも種", "f_iひも番号"})
+            End If
+            nud横の目の数.Value = nud横の目の数.Value + 1 'with recalc
+        End If
+    End Sub
+
+    Private Sub btn削除_横_Click(sender As Object, e As EventArgs) Handles btn削除_横.Click
+        Dim table As tbl縦横展開DataTable = Nothing
+        Dim currow As DataRow = Nothing
+        If Not dgv横ひも.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+
+        If _clsCalcSquare.del_横ひも(currow) Then
+            If currow IsNot Nothing Then
+                dgv横ひも.PositionSelect(currow, {"f_iひも種", "f_iひも番号"})
+            End If
+            nud縦の目の数.Value = nud縦の目の数.Value - 1 'with recalc
+        End If
+    End Sub
+
+    Private Sub btn追加_横_Click(sender As Object, e As EventArgs) Handles btn追加_横.Click
+        Dim table As tbl縦横展開DataTable = Nothing
+        Dim currow As DataRow = Nothing
+        If Not dgv横ひも.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+
+        If _clsCalcSquare.add_横ひも(currow) Then
+            If currow IsNot Nothing Then
+                dgv横ひも.PositionSelect(currow, {"f_iひも種", "f_iひも番号"})
+            End If
+            nud縦の目の数.Value = nud縦の目の数.Value + 1 'with recalc
         End If
     End Sub
 

@@ -1,4 +1,5 @@
 ﻿Imports CraftBand
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmUpDownSetting
@@ -91,6 +92,7 @@ Public Class frmUpDownSetting
                 row = g_clsMasterTables.GetNewUpDownRecord(cmb上下図名.Text)
                 CurrentUpdown.ToMasterRecord(row)
             End If
+            g_clsMasterTables.SaveUpDownTable()
         End If
 
         DialogResult = DialogResult.OK

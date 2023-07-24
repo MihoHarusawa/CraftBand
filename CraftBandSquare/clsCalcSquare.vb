@@ -138,6 +138,9 @@ Class clsCalcSquare
         _d縁の高さ = 0
         _d縁の垂直ひも長 = 0
         _d縁の厚さ = 0
+
+        _tbl縦横展開_横ひも.Clear()
+        _tbl縦横展開_縦ひも.Clear()
     End Sub
 
 #Region "プロパティ値"
@@ -1000,6 +1003,122 @@ Class clsCalcSquare
         Return True
     End Function
 
+    '追加ボタンによる側面の高さ追加
+    'Trueを返すと、四角数のタブの高さを+1
+    Function add_高さ(ByRef currow As tbl側面Row) As Boolean
+        If Not _b縦横側面を展開する OrElse p_i側面ひもの本数 = 0 Then
+            Return True '高さをUPするだけ
+        End If
+
+        '追加位置
+        Dim bandnum As Integer = -1
+        If currow.f_i番号 = cIdxHeight Then
+            bandnum = currow.f_iひも番号
+        ElseIf currow.f_i番号 = cIdxSpace Then
+            bandnum = 1 '最初
+        ElseIf currow.f_i番号 = cHemNumber Then
+            bandnum = p_i側面ひもの本数 + 1  '最後の後
+        End If
+        If bandnum < 0 Then
+            Return False
+        End If
+
+        'レコードを後ろに追加
+        Dim table As tbl側面DataTable = _Data.p_tbl側面
+        Dim add As tbl側面Row = table.Newtbl側面Row
+        add.f_i番号 = cIdxHeight
+        add.f_iひも番号 = p_i側面ひもの本数 + 1
+        add.f_i何本幅 = _I基本のひも幅
+        table.Rows.Add(add)
+
+        currow = Nothing
+        If p_i側面ひもの本数 < bandnum Then
+            currow = add
+            Return True
+        End If
+
+        '追加位置以降を後ろにシフト(高さUPによりrecalcされるので、レコードに保持される分のみ
+        Dim cond As String = String.Format("f_i番号 = {0}", cIdxHeight)
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 DESC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim lastrow As tbl側面Row = Nothing
+        For Each row As tbl側面Row In rows
+            If lastrow Is Nothing Then
+                lastrow = row
+                Continue For
+            End If
+            If row.f_iひも番号 < bandnum Then
+                Exit For '↓で処理済のはずだが
+            End If
+
+            lastrow.f_i何本幅 = row.f_i何本幅
+            lastrow.f_s色 = row.f_s色
+            lastrow.f_dひも長加算 = row.f_dひも長加算
+            lastrow.f_sメモ = row.f_sメモ
+            If row.f_iひも番号 = bandnum Then
+                currow = row
+                row.f_i何本幅 = _I基本のひも幅
+                row.f_s色 = ""
+                row.f_dひも長加算 = 0
+                row.f_sメモ = ""
+                Exit For
+            End If
+            lastrow = row
+        Next
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_高さ currow={0}", New clsDataRow(currow).ToString)
+        Return True
+    End Function
+
+    '削除ボタンによる側面の高さ削除
+    'Trueを返すと、四角数のタブの高さを-1
+    Function del_高さ(ByRef currow As tbl側面Row) As Boolean
+        If _i高さの目の数 = 0 OrElse currow.f_i番号 <> cIdxHeight Then
+            Return False
+        End If
+        '削除位置
+        Dim bandnum As Integer = currow.f_iひも番号
+        If bandnum < 1 OrElse _i高さの目の数 < bandnum Then
+            Return False
+        End If
+        If Not _b縦横側面を展開する Then
+            Return True '高さをDOWNするだけ
+        End If
+        currow = Nothing
+
+        Dim table As tbl側面DataTable = _Data.p_tbl側面
+        '現在位置以降を前にシフトする(高さDOWNによりrecalcされるので、レコードに保持される分のみ)
+        Dim cond As String = String.Format("f_i番号 = {0}", cIdxHeight)
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 ASC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim lastrow As tbl側面Row = Nothing
+        For Each row As tbl側面Row In rows
+            If row.f_iひも番号 < bandnum Then
+                Continue For
+            ElseIf row.f_iひも番号 = bandnum Then
+                currow = row
+                lastrow = row
+                Continue For
+            End If
+            If lastrow IsNot Nothing Then
+                lastrow.f_i何本幅 = row.f_i何本幅
+                lastrow.f_s色 = row.f_s色
+                lastrow.f_dひも長加算 = row.f_dひも長加算
+                lastrow.f_sメモ = row.f_sメモ
+            End If
+            lastrow = row
+        Next
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "del_高さ currow={0}", New clsDataRow(currow).ToString)
+        Return True
+    End Function
+
+
     '更新処理が必要なフィールド名
     Shared _fields側面と縁() As String = {"f_i何本幅", "f_i周数", "f_dひも長加算"}
     Shared Function IsDataPropertyName側面と縁(ByVal name As String) As Boolean
@@ -1251,6 +1370,111 @@ Class clsCalcSquare
     End Function
 
 
+    Function add_row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal i本数 As Integer, ByRef currow As tbl縦横展開Row) As Boolean
+
+        '追加位置
+        Dim bandnum As Integer = -1
+        If currow.f_iひも種 = iひも種 Then
+            bandnum = currow.f_iひも番号
+        Else
+            bandnum = i本数 + 1  '最後の後
+        End If
+        If bandnum < 0 Then
+            Return False
+        End If
+
+        'レコードを後ろに追加
+        Dim add As tbl縦横展開Row = Find縦横展開Row(table, iひも種, i本数 + 1, True)
+        add.f_i何本幅 = _I基本のひも幅
+
+        currow = Nothing
+        If i本数 < bandnum Then
+            currow = add
+            Return True
+        End If
+
+        '追加位置以降を後ろにシフト(recalcされるので、レコードに保持される分のみ
+        Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 DESC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim lastrow As tbl縦横展開Row = Nothing
+        For Each row As tbl縦横展開Row In rows
+            If lastrow Is Nothing Then
+                lastrow = row
+                Continue For
+            End If
+            If row.f_iひも番号 < bandnum Then
+                Exit For '↓で処理済のはずだが
+            End If
+
+            lastrow.f_i何本幅 = row.f_i何本幅
+            lastrow.f_s色 = row.f_s色
+            lastrow.f_dひも長加算 = row.f_dひも長加算
+            lastrow.f_sメモ = row.f_sメモ
+            If row.f_iひも番号 = bandnum Then
+                currow = row
+                row.f_i何本幅 = _I基本のひも幅
+                row.f_s色 = ""
+                row.f_dひも長加算 = 0
+                row.f_sメモ = ""
+                Exit For
+            End If
+            lastrow = row
+        Next
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_row currow={0}", New clsDataRow(currow).ToString)
+        Return True
+    End Function
+
+    '削除ボタン(縦横側面を展開時のみ)
+    Function del_row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal i本数 As Integer, ByRef currow As tbl縦横展開Row) As Boolean
+        If currow.f_iひも種 <> iひも種 Then    '補強ひもやすき間は除外
+            Return False
+        End If
+        If i本数 <= 1 Then
+            Return False
+        End If
+
+        '削除位置
+        Dim bandnum As Integer = currow.f_iひも番号
+        If bandnum < 1 OrElse i本数 < bandnum Then
+            Return False
+        End If
+        currow = Nothing
+
+        '現在位置以降を前にシフトする(recalcされるので、レコードに保持される分のみ)
+        Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 ASC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim lastrow As tbl縦横展開Row = Nothing
+        For Each row As tbl縦横展開Row In rows
+            If row.f_iひも番号 < bandnum Then
+                Continue For
+            ElseIf row.f_iひも番号 = bandnum Then
+                currow = row
+                lastrow = row
+                Continue For
+            End If
+            If lastrow IsNot Nothing Then
+                lastrow.f_i何本幅 = row.f_i何本幅
+                lastrow.f_s色 = row.f_s色
+                lastrow.f_dひも長加算 = row.f_dひも長加算
+                lastrow.f_sメモ = row.f_sメモ
+            End If
+            lastrow = row
+        Next
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "del_row currow={0}", New clsDataRow(currow).ToString)
+        Return True
+    End Function
+
+
 #Region "横ひも"
     'CalcSizeからの呼び出し 対応した更新の後、再集計(_d四角ベース_縦計,_b横ひも本幅変更)
     'Expand_Yokoカテゴリの場合は、対応レコードの派生更新(画面で編集中のみ)   
@@ -1295,45 +1519,69 @@ Class clsCalcSquare
         Return True
     End Function
 
+    '追加ボタン(縦横側面を展開時のみ)
+    Function add_横ひも(ByRef currow As tbl縦横展開Row) As Boolean
+        Dim ret As Boolean = add_row(_tbl縦横展開_横ひも, enumひも種.i_横, p_i横ひもの本数, currow)
+        If Not ret Then
+            Return False
+        End If
+
+        save横展開DataTable(True)
+        Return True
+    End Function
+
+    '削除ボタン(縦横側面を展開時のみ)
+    Function del_横ひも(ByRef currow As tbl縦横展開Row) As Boolean
+        Dim ret As Boolean = del_row(_tbl縦横展開_横ひも, enumひも種.i_横, p_i横ひもの本数, currow)
+        If Not ret Then
+            Return False
+        End If
+
+        save横展開DataTable(True)
+        Return True
+    End Function
+
 
     '底の横ひもの再展開       ※adjust_横ひも()呼び出し
     'IN:    p_i横ひもの本数,_d上端下端の目,_d目_ひも間のすき間,_d四角ベース_横計
     'OUT:   _tbl縦横展開_横ひも
     Private Function renew横展開DataTable(ByVal isRefSaved As Boolean) As Boolean
+        If Not isRefSaved Then
+            _tbl縦横展開_横ひも.Clear()
+        End If
+        _tbl縦横展開_横ひも.AcceptChanges()
+
         '上から下へ
         Dim pos As Integer = -(p_i横ひもの本数 \ 2)
         Dim zero As Integer = p_i横ひもの本数 Mod 2
-
-        _tbl縦横展開_横ひも.Clear()
         Dim row As tbl縦横展開Row
 
         If 0 < _d上端下端の目 * _d目_ひも間のすき間 Then
-            row = _tbl縦横展開_横ひも.Newtbl縦横展開Row
-            row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_すき間
+            row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_すき間, 0, True)
             row.f_i位置番号 = pos - 1
-            row.f_iひも番号 = 0
             row.f_sひも名 = text上端下端()
             row.Setf_i何本幅Null()
             row.f_d幅 = _d上端下端の目 * _d目_ひも間のすき間
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
-
-            _tbl縦横展開_横ひも.Rows.Add(row)
+        Else
+            row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_すき間, 0, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
         End If
 
+        SetMaxひも番号(_tbl縦横展開_横ひも, p_i横ひもの本数)
         If 0 < p_i横ひもの本数 Then
             For idx As Integer = 1 To p_i横ひもの本数
-                row = _tbl縦横展開_横ひも.Newtbl縦横展開Row
+                row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横, idx, True)
 
-                row.f_iひも種 = enumひも種.i_横
                 row.f_i位置番号 = pos
-                row.f_iひも番号 = idx
                 row.f_sひも名 = text横ひも()
                 row.f_i何本幅 = _I基本のひも幅
                 adjust_横ひも(row, p_i横ひもの本数)
 
-                _tbl縦横展開_横ひも.Rows.Add(row)
                 pos += 1
                 If pos = 0 AndAlso zero = 0 Then
                     pos = 1
@@ -1345,10 +1593,8 @@ Class clsCalcSquare
         Dim posyoko As Integer = cBackPosition
         If _Data.p_row底_縦横.Value("f_b補強ひも区分") Then
             For idx As Integer = 1 To 2
-                row = _tbl縦横展開_横ひも.Newtbl縦横展開Row
-                row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_補強
+                row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_補強, idx, True)
                 row.f_i位置番号 = posyoko
-                row.f_iひも番号 = idx
                 row.f_sひも名 = text横の補強ひも()
                 row.f_i何本幅 = _I基本のひも幅
                 row.Setf_d幅Null()
@@ -1357,10 +1603,19 @@ Class clsCalcSquare
                 row.f_dひも長 = p_d四角ベース_横
                 row.f_d出力ひも長 = row.f_dひも長
 
-                _tbl縦横展開_横ひも.Rows.Add(row)
                 posyoko += 1
             Next
+        Else
+            row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_補強, 1, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
+            row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_補強, 2, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
         End If
+        _tbl縦横展開_横ひも.AcceptChanges()
 
         '指定があれば既存情報反映
         If isRefSaved Then
@@ -1422,44 +1677,67 @@ Class clsCalcSquare
         Return True
     End Function
 
+    Function add_縦ひも(ByRef currow As tbl縦横展開Row) As Boolean
+        Dim ret As Boolean = add_row(_tbl縦横展開_縦ひも, enumひも種.i_縦, p_i縦ひもの本数, currow)
+        If Not ret Then
+            Return False
+        End If
+
+        save縦展開DataTable(True)
+        Return True
+    End Function
+
+    Function del_縦ひも(ByRef currow As tbl縦横展開Row) As Boolean
+        Dim ret As Boolean = del_row(_tbl縦横展開_縦ひも, enumひも種.i_縦, p_i縦ひもの本数, currow)
+        If Not ret Then
+            Return False
+        End If
+
+        save縦展開DataTable(True)
+        Return True
+    End Function
+
+
     '底の縦ひもの再展開       ※adjust_縦ひも()呼び出し
     'IN:    p_i縦ひもの本数,_d左端右端の目,_d目_ひも間のすき間,_d四角ベース_縦計
     'OUT:   _tbl縦横展開_縦ひも
     Private Function renew縦展開DataTable(ByVal isRefSaved As Boolean) As Boolean
+        If Not isRefSaved Then
+            _tbl縦横展開_縦ひも.Clear()
+        End If
+        _tbl縦横展開_縦ひも.AcceptChanges()
+
         '左から右へ
         Dim pos As Integer = -(p_i縦ひもの本数 \ 2)
         Dim zero As Integer = p_i縦ひもの本数 Mod 2
-
-        _tbl縦横展開_縦ひも.Clear()
         Dim row As tbl縦横展開Row
 
         If 0 < _d左端右端の目 * _d目_ひも間のすき間 Then
-            row = _tbl縦横展開_縦ひも.Newtbl縦横展開Row
-            row.f_iひも種 = enumひも種.i_縦 Or enumひも種.i_すき間
+            row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_すき間, 0, True)
             row.f_i位置番号 = pos - 1
-            row.f_iひも番号 = 0
             row.f_sひも名 = text左端右端()
             row.Setf_i何本幅Null()
             row.f_d幅 = _d左端右端の目 * _d目_ひも間のすき間
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
-
-            _tbl縦横展開_縦ひも.Rows.Add(row)
+        Else
+            row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_すき間, 0, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
         End If
 
+        SetMaxひも番号(_tbl縦横展開_縦ひも, p_i縦ひもの本数)
         If 0 < p_i縦ひもの本数 Then
             For idx As Integer = 1 To p_i縦ひもの本数
-                row = _tbl縦横展開_縦ひも.Newtbl縦横展開Row
+                row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦, idx, True)
 
-                row.f_iひも種 = enumひも種.i_縦
                 row.f_i位置番号 = pos
-                row.f_iひも番号 = idx
                 row.f_sひも名 = text縦ひも()
                 row.f_i何本幅 = _I基本のひも幅
                 adjust_縦ひも(row, p_i縦ひもの本数)
 
-                _tbl縦横展開_縦ひも.Rows.Add(row)
                 pos += 1
                 If pos = 0 AndAlso zero = 0 Then
                     pos = 1
@@ -1472,9 +1750,8 @@ Class clsCalcSquare
         If _Data.p_row底_縦横.Value("f_b始末ひも区分") Then
             For idx As Integer = 1 To 2
                 row = _tbl縦横展開_縦ひも.Newtbl縦横展開Row
-                row.f_iひも種 = enumひも種.i_縦 Or enumひも種.i_補強
+                row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_補強, idx, True)
                 row.f_i位置番号 = postate
-                row.f_iひも番号 = idx
                 row.f_sひも名 = text縦の補強ひも()
                 row.f_i何本幅 = _I基本のひも幅
                 row.Setf_d幅Null()
@@ -1483,10 +1760,19 @@ Class clsCalcSquare
                 row.f_dひも長 = p_d四角ベース_縦
                 row.f_d出力ひも長 = row.f_dひも長
 
-                _tbl縦横展開_縦ひも.Rows.Add(row)
                 postate += 1
             Next
+        Else
+            row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_補強, 1, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
+            row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_補強, 2, False)
+            If row IsNot Nothing Then
+                row.Delete()
+            End If
         End If
+        _tbl縦横展開_縦ひも.AcceptChanges()
 
         '指定があれば既存情報反映
         If isRefSaved Then

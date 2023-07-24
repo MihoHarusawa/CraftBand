@@ -2,6 +2,7 @@
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.ctrDataGridView
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
 Imports CraftBandKnot.clsCalcKnot
@@ -104,9 +105,11 @@ Public Class frmMain
         f_s色5.DisplayMember = "Display"
         f_s色5.ValueMember = "Value"
 
-        cmb基本色.DataSource = g_clsSelectBasics.p_tblColor
-        cmb基本色.DisplayMember = "Display"
-        cmb基本色.ValueMember = "Value"
+        '#29
+        cmb基本色.Items.Clear()
+        For Each r As dstWork.tblColorRow In g_clsSelectBasics.p_tblColor
+            cmb基本色.Items.Add(r.Display)
+        Next
 
         setBasics()
         setPattern()

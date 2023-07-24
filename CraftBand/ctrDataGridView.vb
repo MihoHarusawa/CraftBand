@@ -629,6 +629,56 @@ Public Class ctrDataGridView
 
         End Try
     End Function
+
+    'テーブルと現DataRowを返す
+    Function GetTableAndRow(ByRef table As DataTable, ByRef row As DataRow) As Boolean
+        Try
+            Dim bs As BindingSource = Me.DataSource
+            If bs Is Nothing Then
+                Return False
+            End If
+            table = bs.DataSource
+
+            Dim current As System.Data.DataRowView = bs.Current
+            If current Is Nothing OrElse current.Row Is Nothing Then
+                Return False
+            End If
+            row = current.Row
+            Return (table IsNot Nothing)
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "ctrDataGridView.GetTableAndRow")
+            Return False
+
+        End Try
+    End Function
+
+    '指定名のフィールド値が一致する最初の1行を選択する
+    Function PositionSelect(ByVal row As DataRow, ByVal fldnames() As String) As Boolean
+        Me.ClearSelection()
+
+        Dim bs As BindingSource = Me.DataSource
+        If bs Is Nothing Then
+            Return False
+        End If
+
+        For pos As Integer = 0 To bs.Count - 1
+            Dim r As DataRow = bs.Item(pos).row
+            Dim match As Boolean = True
+            For Each fldname As String In fldnames
+                If r(fldname) <> row(fldname) Then
+                    match = False
+                    Continue For
+                End If
+            Next
+            If match Then
+                bs.Position = pos
+                Me.Rows(pos).Selected = True
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
 #End Region
 
 #Region "カラム幅"

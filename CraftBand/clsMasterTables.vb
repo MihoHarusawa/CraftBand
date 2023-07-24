@@ -884,6 +884,15 @@ Public Class clsMasterTables
         Return row
     End Function
 
+    Public Function SaveUpDownTable() As Boolean
+        If _dstMasterTables.Tables("tbl上下図").GetChanges IsNot Nothing Then
+            _IsDirty = True
+            _dstMasterTables.Tables("tbl上下図").AcceptChanges()
+        End If
+        Return False
+    End Function
+
+
 #End Region
 
 
