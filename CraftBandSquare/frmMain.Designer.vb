@@ -193,6 +193,8 @@ Partial Class frmMain
         Me.ToolStripMenuItemFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemEditSelectBand = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripMenuItemEditColorChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemEditReset = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemEditDefault = New System.Windows.Forms.ToolStripMenuItem()
@@ -1818,7 +1820,7 @@ Partial Class frmMain
         '
         'ToolStripMenuItemEdit
         '
-        Me.ToolStripMenuItemEdit.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemEditSelectBand, Me.ToolStripSeparator4, Me.ToolStripMenuItemEditReset, Me.ToolStripMenuItemEditDefault, Me.ToolStripMenuItemEditCalc, Me.ToolStripSeparator5, Me.ToolStripMenuItemEditList, Me.ToolStripMenuItemEditDefaultFile})
+        Me.ToolStripMenuItemEdit.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemEditSelectBand, Me.ToolStripSeparator4, Me.ToolStripMenuItemEditReset, Me.ToolStripMenuItemEditDefault, Me.ToolStripMenuItemEditCalc, Me.ToolStripSeparator5, Me.ToolStripMenuItemEditColorChange, Me.ToolStripSeparator1, Me.ToolStripMenuItemEditList, Me.ToolStripMenuItemEditDefaultFile})
         Me.ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
         Me.ToolStripMenuItemEdit.Size = New System.Drawing.Size(71, 24)
         Me.ToolStripMenuItemEdit.Text = "編集(&E)"
@@ -1826,47 +1828,58 @@ Partial Class frmMain
         'ToolStripMenuItemEditSelectBand
         '
         Me.ToolStripMenuItemEditSelectBand.Name = "ToolStripMenuItemEditSelectBand"
-        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditSelectBand.Text = "バンドの種類選択(&S)"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
+        '
+        'ToolStripMenuItemEditColorChange
+        '
+        Me.ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
+        Me.ToolStripMenuItemEditColorChange.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditColorChange.Text = "色変更(&I)"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(213, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(221, 6)
         '
         'ToolStripMenuItemEditReset
         '
         Me.ToolStripMenuItemEditReset.Name = "ToolStripMenuItemEditReset"
-        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditReset.Text = "リセット(&R)"
         '
         'ToolStripMenuItemEditDefault
         '
         Me.ToolStripMenuItemEditDefault.Name = "ToolStripMenuItemEditDefault"
-        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditDefault.Text = "規定値(&D)"
         '
         'ToolStripMenuItemEditCalc
         '
         Me.ToolStripMenuItemEditCalc.Name = "ToolStripMenuItemEditCalc"
-        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditCalc.Text = "概算(&C)"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(213, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(221, 6)
         '
         'ToolStripMenuItemEditList
         '
         Me.ToolStripMenuItemEditList.Name = "ToolStripMenuItemEditList"
-        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditList.Text = "ひもリスト(&L)"
         '
         'ToolStripMenuItemEditDefaultFile
         '
         Me.ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
-        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(216, 26)
+        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemEditDefaultFile.Text = "規定値保存(&F)"
         '
         'ToolStripMenuItemSetting
@@ -4770,4 +4783,6 @@ Partial Class frmMain
     Friend WithEvents btn追加_横 As Button
     Friend WithEvents btn削除_縦 As Button
     Friend WithEvents btn追加_縦 As Button
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
 End Class

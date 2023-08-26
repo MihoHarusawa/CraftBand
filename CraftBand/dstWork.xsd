@@ -44,7 +44,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblCheckBox" msprop:Generator_RowClassName="tblCheckBoxRow" msprop:Generator_RowEvHandlerName="tblCheckBoxRowChangeEventHandler" msprop:Generator_RowDeletedName="tblCheckBoxRowDeleted" msprop:Generator_RowDeletingName="tblCheckBoxRowDeleting" msprop:Generator_RowEvArgName="tblCheckBoxRowChangeEvent" msprop:Generator_TablePropName="tblCheckBox" msprop:Generator_RowChangedName="tblCheckBoxRowChanged" msprop:Generator_UserTableName="tblCheckBox" msprop:Generator_RowChangingName="tblCheckBoxRowChanging" msprop:Generator_TableClassName="tblCheckBoxDataTable" msprop:Generator_TableVarName="tabletblCheckBox">
+        <xs:element name="tblCheckBox" msprop:Generator_RowEvHandlerName="tblCheckBoxRowChangeEventHandler" msprop:Generator_RowDeletedName="tblCheckBoxRowDeleted" msprop:Generator_RowDeletingName="tblCheckBoxRowDeleting" msprop:Generator_RowEvArgName="tblCheckBoxRowChangeEvent" msprop:Generator_TablePropName="tblCheckBox" msprop:Generator_RowChangedName="tblCheckBoxRowChanged" msprop:Generator_UserTableName="tblCheckBox" msprop:Generator_RowChangingName="tblCheckBoxRowChanging" msprop:Generator_RowClassName="tblCheckBoxRow" msprop:Generator_TableClassName="tblCheckBoxDataTable" msprop:Generator_TableVarName="tabletblCheckBox">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Index" msprop:Generator_ColumnPropNameInTable="IndexColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Index" msprop:Generator_UserColumnName="Index" msprop:Generator_ColumnVarNameInTable="columnIndex" type="xs:short" default="0" />
@@ -101,11 +101,21 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblEnum" msprop:Generator_RowEvHandlerName="tblEnumRowChangeEventHandler" msprop:Generator_RowDeletedName="tblEnumRowDeleted" msprop:Generator_RowDeletingName="tblEnumRowDeleting" msprop:Generator_RowEvArgName="tblEnumRowChangeEvent" msprop:Generator_TablePropName="tblEnum" msprop:Generator_RowChangedName="tblEnumRowChanged" msprop:Generator_RowChangingName="tblEnumRowChanging" msprop:Generator_TableClassName="tblEnumDataTable" msprop:Generator_RowClassName="tblEnumRow" msprop:Generator_TableVarName="tabletblEnum" msprop:Generator_UserTableName="tblEnum">
+        <xs:element name="tblEnum" msprop:Generator_RowEvHandlerName="tblEnumRowChangeEventHandler" msprop:Generator_RowDeletedName="tblEnumRowDeleted" msprop:Generator_RowDeletingName="tblEnumRowDeleting" msprop:Generator_RowEvArgName="tblEnumRowChangeEvent" msprop:Generator_TablePropName="tblEnum" msprop:Generator_RowChangedName="tblEnumRowChanged" msprop:Generator_UserTableName="tblEnum" msprop:Generator_RowChangingName="tblEnumRowChanging" msprop:Generator_RowClassName="tblEnumRow" msprop:Generator_TableClassName="tblEnumDataTable" msprop:Generator_TableVarName="tabletblEnum">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Display" msprop:nullValue="" msprop:Generator_ColumnPropNameInTable="DisplayColumn" msprop:Generator_ColumnVarNameInTable="columnDisplay" msprop:Generator_UserColumnName="Display" msprop:Generator_ColumnPropNameInRow="Display" type="xs:string" default="" minOccurs="0" />
-              <xs:element name="Value" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnPropNameInRow="Value" type="xs:short" default="0" />
+              <xs:element name="Display" msprop:Generator_ColumnPropNameInTable="DisplayColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Display" msprop:Generator_UserColumnName="Display" msprop:Generator_ColumnVarNameInTable="columnDisplay" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_UserColumnName="Value" msprop:Generator_ColumnVarNameInTable="columnValue" type="xs:short" default="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblColorChange" msprop:Generator_RowClassName="tblColorChangeRow" msprop:Generator_RowEvHandlerName="tblColorChangeRowChangeEventHandler" msprop:Generator_RowDeletedName="tblColorChangeRowDeleted" msprop:Generator_RowDeletingName="tblColorChangeRowDeleting" msprop:Generator_RowEvArgName="tblColorChangeRowChangeEvent" msprop:Generator_TablePropName="tblColorChange" msprop:Generator_RowChangedName="tblColorChangeRowChanged" msprop:Generator_UserTableName="tblColorChange" msprop:Generator_RowChangingName="tblColorChangeRowChanging" msprop:Generator_TableClassName="tblColorChangeDataTable" msprop:Generator_TableVarName="tabletblColorChange">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="IsTarget" msprop:Generator_ColumnPropNameInTable="IsTargetColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="IsTarget" msprop:Generator_UserColumnName="IsTarget" msprop:Generator_ColumnVarNameInTable="columnIsTarget" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="Before" msprop:Generator_ColumnPropNameInTable="BeforeColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Before" msprop:Generator_UserColumnName="Before" msprop:Generator_ColumnVarNameInTable="columnBefore" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Count" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="CountColumn" msprop:Generator_ColumnVarNameInTable="columnCount" msprop:Generator_UserColumnName="Count" msprop:Generator_ColumnPropNameInRow="Count" type="xs:int" default="0" minOccurs="0" />
+              <xs:element name="After" msprop:Generator_ColumnPropNameInTable="AfterColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="After" msprop:Generator_UserColumnName="After" msprop:Generator_ColumnVarNameInTable="columnAfter" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

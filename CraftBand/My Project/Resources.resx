@@ -117,6 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AskColorClear" xml:space="preserve">
+    <value>色&lt;{0}&gt;はクリアされます。よろしいですか？
+(残す場合は変更対象のチェックを外してください)</value>
+    <comment>frmColorChange</comment>
+  </data>
   <data name="AskConfirmAdd" xml:space="preserve">
     <value>新たに'{0}'を追加します。よろしいですか？</value>
     <comment>frmPattern,frmOptions</comment>
@@ -170,6 +175,14 @@
   <data name="CaptionBandTypeWeight" xml:space="preserve">
     <value>長さと重さの換算 &lt;{0}&gt;</value>
     <comment>frmBandTypeWeight</comment>
+  </data>
+  <data name="CaptionBottomOval" xml:space="preserve">
+    <value>底(楕円)</value>
+    <comment>frmChangeColor</comment>
+  </data>
+  <data name="CaptionInsertBand" xml:space="preserve">
+    <value>差しひも</value>
+    <comment>frmChangeColor</comment>
   </data>
   <data name="ErrAddRecord" xml:space="preserve">
     <value>レコードを追加できませんでした。</value>

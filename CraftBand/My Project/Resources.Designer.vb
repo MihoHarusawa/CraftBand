@@ -61,6 +61,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  色&lt;{0}&gt;はクリアされます。よろしいですか？
+        '''(残す場合は変更対象のチェックを外してください) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskColorClear() As String
+            Get
+                Return ResourceManager.GetString("AskColorClear", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  新たに&apos;{0}&apos;を追加します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskConfirmAdd() As String
@@ -192,6 +202,24 @@ Namespace My.Resources
         Friend ReadOnly Property CaptionBandTypeWeight() As String
             Get
                 Return ResourceManager.GetString("CaptionBandTypeWeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  底(楕円) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionBottomOval() As String
+            Get
+                Return ResourceManager.GetString("CaptionBottomOval", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  差しひも に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionInsertBand() As String
+            Get
+                Return ResourceManager.GetString("CaptionInsertBand", resourceCulture)
             End Get
         End Property
         

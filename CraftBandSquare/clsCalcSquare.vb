@@ -848,12 +848,14 @@ Class clsCalcSquare
             row.f_dひも長 = 0
             row.f_d厚さ = 0
             row.f_i周数 = 0
+            row.f_s色 = ""
         Else
             RemoveNumberFromTable(table, cIdxSpace)
         End If
 
         If 0 < p_i側面ひもの本数 Then
             '「編みひも+目」のセット
+            Dim colprv As String = ""
             For i As Integer = 1 To p_i側面ひもの本数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -863,12 +865,19 @@ Class clsCalcSquare
                         row.f_iひも番号 = i
                         row.f_i何本幅 = _I基本のひも幅
                         table.Rows.Add(row)
+                    ElseIf i = 1 Then
+                        colprv = row.f_s色
                     End If
                     row.f_s編みかた名 = String.Format(My.Resources.FormCaption, "")
                     row.f_s編みひも名 = text側面の編みひも()
                     If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                         row.f_i周数 = 1
+                        If String.IsNullOrWhiteSpace(row.f_s色) Then
+                            row.f_s色 = colprv
+                        Else
+                            colprv = row.f_s色
+                        End If
                     Else
                         row.f_i何本幅 = _I基本のひも幅
                         row.f_iひも本数 = p_i側面ひもの本数
@@ -1565,6 +1574,7 @@ Class clsCalcSquare
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
+            row.Setf_s色Null()
         Else
             row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_すき間, 0, False)
             If row IsNot Nothing Then
@@ -1622,6 +1632,11 @@ Class clsCalcSquare
             _Data.ToTmpTable(enumひも種.i_横, _tbl縦横展開_横ひも)
             For Each row In _tbl縦横展開_横ひも
                 adjust_横ひも(row, p_i横ひもの本数)
+                '本幅・色なし
+                If row.f_iひも種 And enumひも種.i_すき間 Then
+                    row.Setf_s色Null()
+                    row.Setf_i何本幅Null()
+                End If
             Next
         End If
 
@@ -1721,6 +1736,7 @@ Class clsCalcSquare
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
+            row.Setf_s色Null()
         Else
             row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_すき間, 0, False)
             If row IsNot Nothing Then
@@ -1779,6 +1795,11 @@ Class clsCalcSquare
             _Data.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, _tbl縦横展開_縦ひも)
             For Each row In _tbl縦横展開_縦ひも
                 adjust_縦ひも(row, p_i縦ひもの本数)
+                '本幅・色なし
+                If row.f_iひも種 And enumひも種.i_すき間 Then
+                    row.Setf_s色Null()
+                    row.Setf_i何本幅Null()
+                End If
             Next
         End If
 

@@ -44,12 +44,22 @@ Public Class clsSelectBasics
             Return _dstWork.Tables("tblColor")
         End Get
     End Property
+    '空もしくは登録色
     Function IsExistColor(ByVal color As String) As Boolean
         If String.IsNullOrEmpty(color) Then
             Return True
         End If
         Return _dstWork.Tables("tblColor").Rows.Contains(color)
     End Function
+    '色フィールド値を文字列化(空は"")
+    Shared Function ColorString(ByVal col_obj As Object) As String
+        If col_obj Is Nothing OrElse IsDBNull(col_obj) Then
+            Return ""
+        End If
+        Dim color As String = col_obj
+        Return color.Trim
+    End Function
+
 
     'n本幅の選択肢
     Public ReadOnly Property p_tblLane As dstWork.tblLaneDataTable

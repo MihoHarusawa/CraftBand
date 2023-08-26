@@ -105,12 +105,6 @@ Public Class frmMain
         f_s色5.DisplayMember = "Display"
         f_s色5.ValueMember = "Value"
 
-        '#29
-        cmb基本色.Items.Clear()
-        For Each r As dstWork.tblColorRow In g_clsSelectBasics.p_tblColor
-            cmb基本色.Items.Add(r.Display)
-        Next
-
         setBasics()
         setPattern()
         setOptions()
@@ -184,7 +178,11 @@ Public Class frmMain
             nud基本のひも幅.Maximum = maxLane '表示中のValueは追随
 
             '色リスト
-            cmb基本色.Refresh()
+            '#29
+            cmb基本色.Items.Clear()
+            For Each r As dstWork.tblColorRow In g_clsSelectBasics.p_tblColor
+                cmb基本色.Items.Add(r.Display)
+            Next
 
             lbl基本のひも幅length.Text = New Length(.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
 
