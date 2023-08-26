@@ -1,5 +1,4 @@
-﻿Imports System.Drawing.Drawing2D
-Imports CraftBand.Tables
+﻿Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
 
@@ -414,7 +413,7 @@ Public Class clsUpDown
                         _Matrix(x + 1, y) = save(x, y)
                     Next
                     _Matrix(1, y) = save(HorizontalCount, y)
-            End If
+                End If
             Next
             Return matrix_to_table()
         Else

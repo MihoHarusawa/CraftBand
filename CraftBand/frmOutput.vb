@@ -1,7 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Windows.Forms
 Imports CraftBand.ctrDataGridView
-Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmOutput
 

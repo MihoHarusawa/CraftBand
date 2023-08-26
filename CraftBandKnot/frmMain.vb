@@ -4,7 +4,6 @@ Imports CraftBand.clsDataTables
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBand.Tables.dstMasterTables
 Imports CraftBandKnot.clsCalcKnot
 
 Public Class frmMain

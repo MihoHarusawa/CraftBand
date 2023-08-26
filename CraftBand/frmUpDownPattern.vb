@@ -57,8 +57,8 @@ Public Class frmUpDownPattern
         Dim dels() As DataRow
         dels = _table.Select(String.Format("f_s上下図名='{0}'", name))
         If dels Is Nothing OrElse dels.Count = 0 Then
-                Exit Sub
-            End If
+            Exit Sub
+        End If
         ''{0}'をすべて削除します。よろしいですか？
         Dim msg As String = String.Format(My.Resources.AskConfirmDeleteGroup, name)
         Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)

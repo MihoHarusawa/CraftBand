@@ -1,7 +1,5 @@
-﻿Imports System.Drawing
-Imports System.Text
+﻿Imports System.Text
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsImageItem

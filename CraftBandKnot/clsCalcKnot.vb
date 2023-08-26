@@ -1,7 +1,6 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem

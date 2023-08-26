@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports System.Runtime
 Imports System.Windows.Forms
 
 Public Class frmSelectBand

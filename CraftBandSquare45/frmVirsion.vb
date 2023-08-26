@@ -1,6 +1,4 @@
-﻿
-Imports System.IO
-Imports CraftBand
+﻿Imports CraftBand
 
 Public Class frmVirsion
     Private Sub frmVirsion_Load(sender As Object, e As EventArgs) Handles MyBase.Load

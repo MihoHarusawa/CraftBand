@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Forms
-
-Public Class frmBandTypeWeight
+﻿Public Class frmBandTypeWeight
 
     Public Property p_sバンドの種類名 As String
     Public Property p_s長さと重さ As String

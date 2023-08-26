@@ -2,7 +2,6 @@
 Imports System.Windows.Forms
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
-Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmGauge
     Const coeff_format As String = "0.00"

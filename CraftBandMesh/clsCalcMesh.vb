@@ -1,8 +1,6 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem

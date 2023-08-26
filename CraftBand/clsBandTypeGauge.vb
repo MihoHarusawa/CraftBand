@@ -1,5 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports CraftBand.Tables
+﻿Imports CraftBand.Tables
 Imports CraftBand.Tables.dstMasterTables
 
 Public Class clsBandTypeGauge

@@ -1,11 +1,9 @@
-﻿Imports System.Diagnostics.Metrics
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.Windows.Forms
 Imports CraftBand.clsDataTables
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmColorChange
 

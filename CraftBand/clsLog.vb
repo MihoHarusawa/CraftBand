@@ -1,10 +1,5 @@
-﻿
+﻿#Const DEBUGPRINT = 1 'デバッグウィンドウへの表示、不要なときはゼロにセット
 
-#Const DEBUGPRINT = 1 'デバッグウィンドウへの表示、不要なときはゼロにセット
-
-
-Imports System.Reflection.Emit
-Imports System.Xml
 
 Public Class clsLog
 

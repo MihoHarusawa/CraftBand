@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports System.Security.Permissions
 Imports System.Windows.Forms
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstMasterTables

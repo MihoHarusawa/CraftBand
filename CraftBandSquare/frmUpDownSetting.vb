@@ -1,5 +1,4 @@
 ﻿Imports CraftBand
-Imports CraftBand.Tables
 Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmUpDownSetting

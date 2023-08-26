@@ -1,6 +1,4 @@
-﻿Imports System.Numerics
-
-Public Module mdlUnit
+﻿Public Module mdlUnit
 
     Const cMilliCentiRatio As Integer = 10
     Const cMilliInchRatio As Integer = 25.4

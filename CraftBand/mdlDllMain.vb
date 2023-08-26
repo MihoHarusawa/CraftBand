@@ -1,9 +1,6 @@
-﻿Imports System.Configuration
-Imports System.Drawing
-Imports System.IO
+﻿Imports System.Drawing
 Imports System.Text
 Imports System.Windows.Forms
-Imports System.Xml
 
 Public Module mdlDllMain
 

@@ -1,8 +1,4 @@
-﻿
-Imports System.Drawing
-Imports CraftBand
-Imports CraftBand.clsImageItem
-Imports CraftBand.Tables
+﻿Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 ''' <summary>
 ''' イメージ処理データ(1枚の絵のデータ要素の配置)

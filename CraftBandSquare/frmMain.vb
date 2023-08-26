@@ -1,9 +1,5 @@
-﻿
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Page
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Spin
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables

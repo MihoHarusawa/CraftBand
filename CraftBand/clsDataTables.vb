@@ -1,6 +1,4 @@
-﻿
-Imports System.Windows.Forms
-Imports CraftBand.Tables
+﻿Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsDataTables

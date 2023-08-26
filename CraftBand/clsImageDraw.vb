@@ -1,8 +1,5 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Imaging
-Imports System.Reflection
-Imports System.Windows.Forms.AxHost
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
