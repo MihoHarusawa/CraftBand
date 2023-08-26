@@ -33,12 +33,12 @@ Partial Class frmColorChange
         Me.btnOK = New System.Windows.Forms.Button()
         Me.btn変更実行 = New System.Windows.Forms.Button()
         Me.dgvColorChange = New CraftBand.ctrDataGridView()
-        Me.BindingSourceColorChange = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.BeforeDataGridViewColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Count = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.IsTargetDataGridViewCheckBoxColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.AfterDataGridViewColumn = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.BindingSourceColorChange = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvColorChange, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceColorChange, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -157,11 +157,6 @@ Partial Class frmColorChange
         Me.dgvColorChange.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.dgvColorChange, "何色を何色に変更するか")
         '
-        'BindingSourceColorChange
-        '
-        Me.BindingSourceColorChange.DataMember = "tblColorChange"
-        Me.BindingSourceColorChange.DataSource = GetType(CraftBand.Tables.dstWork)
-        '
         'BeforeDataGridViewColumn
         '
         Me.BeforeDataGridViewColumn.DataPropertyName = "Before"
@@ -202,6 +197,11 @@ Partial Class frmColorChange
         Me.AfterDataGridViewColumn.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.AfterDataGridViewColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.AfterDataGridViewColumn.Width = 180
+        '
+        'BindingSourceColorChange
+        '
+        Me.BindingSourceColorChange.DataMember = "tblColorChange"
+        Me.BindingSourceColorChange.DataSource = GetType(CraftBand.Tables.dstWork)
         '
         'frmColorChange
         '

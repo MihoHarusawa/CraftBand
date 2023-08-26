@@ -166,7 +166,7 @@ Public Class frmColorChange
     Private Function setGridCurrentColor() As Boolean
 
         Try
-            dgvColorChange.DataSource = Nothing
+            BindingSourceColorChange.DataSource = Nothing
             _Table.Clear()
 
             Dim newrow As dstWork.tblColorChangeRow = _Table.NewtblColorChangeRow
@@ -178,7 +178,7 @@ Public Class frmColorChange
                 _Table.Rows.Add(newrow)
             Next
 
-            dgvColorChange.DataSource = _Table
+            BindingSourceColorChange.DataSource = _Table
             dgvColorChange.Refresh()
             Return True
 
@@ -321,4 +321,17 @@ Public Class frmColorChange
 
     End Sub
 
+    Private Sub dgvColorChange_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvColorChange.CellValueChanged
+        Dim dgv As DataGridView = CType(sender, DataGridView)
+        Dim current As System.Data.DataRowView = BindingSourceColorChange.Current
+        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
+            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+            Exit Sub
+        End If
+
+        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
+        If {"After"}.Contains(DataPropertyName) Then
+            current.Row("IsTarget") = True
+        End If
+    End Sub
 End Class
