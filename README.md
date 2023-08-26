@@ -1,7 +1,7 @@
 # CraftBandMesh / CraftBandMesh.exe
 縦横(+楕円)の底、プラス側面を編む方式のサイズ計算を行うアプリです。
 データベース化したバンドの種類や編みかた・付属品から選択して組み合わせられますので、
-クラフトバンドのオリジナルレシピが簡単に作成できます。
+クラフトバンド/紙バンドのオリジナルレシピが簡単に作成できます。
 プレビュー機能で、底ひもの配置間隔や側面の編みかたのバランスを確認できます。
 
 # CraftBandSqare45 / CraftBandSqare45.exe
@@ -16,21 +16,28 @@
 コマの形状(右側・左側)やひもの色に応じたプレビュー画像で出来上がりを確認することができます。
 
 # CraftBandSquare / CraftBandSquare.exe
-縦横に組んだ底をそのまま立ち上げる方式のサイズ計算を行うアプリです。ひもの間隔を指定すれば四つ目になります。ひもの上や目の中に、縦/横/斜め方向の差しひもを指定することができます。ひも幅や色を個別に変えたり、底や側面の交差の上下パターンを指定してプレビューすれば、模様をデザインできます。
+縦横に組んだ底をそのまま立ち上げる方式のサイズ計算を行うアプリです。
+ひもの間隔を指定すれば四つ目になります。
+ひもの上や目の中に、縦/横/斜め方向の差しひもを指定することができます。
+ひも幅や色を個別に変えたり、底や側面の交差の上下パターンを指定してプレビューすれば、模様をデザインできます。
 
 # CraftBand / CraftBand.dll
 xmlによるデータベース、編集用フォームなどの共通ライブラリです
 
 
 # Features
+* バンドによって作る'かご'をデザインすることができます。
 * バンドの種類・編みかた・付属品などは、設定ファイルに登録し、選ぶだけで使用できます。
 * シリーズのアプリは、同じ設定データを共有することができます。
 * でき上がり寸法を見ながら、ひも幅やひも数を変えることで、自分の好きなサイズに作れます。
 * 手持ちのひもの長さに合わせて、サイズを決めることができます。
-* ひもに色を設定することで、色ごとのカットリストを出力することができます
+* ひもに色を設定することで、色ごとのカットリストを出力することができます。
 
 
-The CraftBandMesh series is a collection of applications designed to assist with size calculations and designs for paper bands basket. It consists of multiple applications that cater to different basic knitting methods. These applications share a common database, which serves as the configuration file. With this series, you can easily create your own original recipes, and by saving them to files, you can organize and manage your recipes as a library.
+The CraftBandMesh series is a collection of applications designed to assist with size calculations and designs for paper bands basket.
+It consists of multiple applications that cater to different basic knitting methods. 
+These applications share a common database, which serves as the configuration file. 
+With this series, you can easily create your own original recipes, and by saving them to files, you can organize and manage your recipes as a library.
 
 
 # Requirement
@@ -46,6 +53,17 @@ The CraftBandMesh series is a collection of applications designed to assist with
 
 バイナリ一式があれば、どこに置いてもよいです。
 各、実行ファイル(.exe)を開いて実行してください。
+
+
+# Current Binary Version
+
+Installer         1.6.2.0
+CraftBand.dll     1.6.2.0  
+CraftBandMesh     1.6.2.0
+CraftBandSqare45  1.3.2.0  
+CraftBandKnot     1.2.2.0
+CraftBandSquare   1.1.2.0
+
 
 # Usage
 

@@ -606,6 +606,17 @@ Public Class frmMain
         End If
     End Sub
 
+    '色変更
+    Private Sub ToolStripMenuItemEditColorChange_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditColorChange.Click
+        SaveTables(_clsDataTables)
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色変更
+
+        Dim dlg As New frmColorChange
+        dlg.SetDataAndExpand(_clsDataTables, chk縦横側面を展開する.Checked)
+        dlg.ShowDialog()
+    End Sub
+
+
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
         If _clsCalcKnot.IsValidInput() Then

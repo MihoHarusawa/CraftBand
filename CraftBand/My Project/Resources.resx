@@ -119,7 +119,7 @@
   </resheader>
   <data name="AskColorClear" xml:space="preserve">
     <value>色&lt;{0}&gt;はクリアされます。よろしいですか？
-(残す場合は変更対象のチェックを外してください)</value>
+(残す場合は'対象'のチェックを外してください)</value>
     <comment>frmColorChange</comment>
   </data>
   <data name="AskConfirmAdd" xml:space="preserve">
@@ -267,6 +267,10 @@
   <data name="ErrNewName" xml:space="preserve">
     <value>{0}を指定してください。</value>
     <comment>frmBandType</comment>
+  </data>
+  <data name="ErrNoChangeCheck" xml:space="preserve">
+    <value>変更したい色の'対象'にチェックを入れてください。</value>
+    <comment>frmColorChange</comment>
   </data>
   <data name="ErrNoGifFile" xml:space="preserve">
     <value>画像ファイルが作られていません。</value>

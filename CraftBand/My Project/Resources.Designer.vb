@@ -62,7 +62,7 @@ Namespace My.Resources
         
         '''<summary>
         '''  色&lt;{0}&gt;はクリアされます。よろしいですか？
-        '''(残す場合は変更対象のチェックを外してください) に類似しているローカライズされた文字列を検索します。
+        '''(残す場合は&apos;対象&apos;のチェックを外してください) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskColorClear() As String
             Get
@@ -409,6 +409,15 @@ Namespace My.Resources
         Friend ReadOnly Property ErrNewName() As String
             Get
                 Return ResourceManager.GetString("ErrNewName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  変更したい色の&apos;対象&apos;にチェックを入れてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrNoChangeCheck() As String
+            Get
+                Return ResourceManager.GetString("ErrNoChangeCheck", resourceCulture)
             End Get
         End Property
         

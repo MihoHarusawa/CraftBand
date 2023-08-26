@@ -31,14 +31,14 @@ Partial Class frmColorChange
         Me.chk個別 = New System.Windows.Forms.CheckBox()
         Me.btn使用色 = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
-        Me.btn色変更 = New System.Windows.Forms.Button()
+        Me.btn変更実行 = New System.Windows.Forms.Button()
         Me.dgvColorChange = New CraftBand.ctrDataGridView()
+        Me.BindingSourceColorChange = New System.Windows.Forms.BindingSource(Me.components)
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.BeforeDataGridViewColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Count = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.IsTargetDataGridViewCheckBoxColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.AfterDataGridViewColumn = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.BindingSourceColorChange = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgvColorChange, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceColorChange, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -51,7 +51,7 @@ Partial Class frmColorChange
         Me.chk側面と縁.Location = New System.Drawing.Point(38, 17)
         Me.chk側面と縁.Name = "chk側面と縁"
         Me.chk側面と縁.Size = New System.Drawing.Size(87, 24)
-        Me.chk側面と縁.TabIndex = 1
+        Me.chk側面と縁.TabIndex = 0
         Me.chk側面と縁.Text = "側面と縁"
         Me.chk側面と縁.UseVisualStyleBackColor = True
         '
@@ -75,7 +75,7 @@ Partial Class frmColorChange
         Me.chk縦ひも.Location = New System.Drawing.Point(294, 17)
         Me.chk縦ひも.Name = "chk縦ひも"
         Me.chk縦ひも.Size = New System.Drawing.Size(121, 24)
-        Me.chk縦ひも.TabIndex = 1
+        Me.chk縦ひも.TabIndex = 2
         Me.chk縦ひも.Text = "縦ひも(底の縦)"
         Me.chk縦ひも.UseVisualStyleBackColor = True
         '
@@ -87,7 +87,7 @@ Partial Class frmColorChange
         Me.chk追加品.Location = New System.Drawing.Point(439, 17)
         Me.chk追加品.Name = "chk追加品"
         Me.chk追加品.Size = New System.Drawing.Size(76, 24)
-        Me.chk追加品.TabIndex = 1
+        Me.chk追加品.TabIndex = 3
         Me.chk追加品.Text = "追加品"
         Me.chk追加品.UseVisualStyleBackColor = True
         '
@@ -99,7 +99,7 @@ Partial Class frmColorChange
         Me.chk個別.Location = New System.Drawing.Point(539, 17)
         Me.chk個別.Name = "chk個別"
         Me.chk個別.Size = New System.Drawing.Size(71, 24)
-        Me.chk個別.TabIndex = 2
+        Me.chk個別.TabIndex = 4
         Me.chk個別.Text = "(個別)"
         Me.chk個別.UseVisualStyleBackColor = True
         '
@@ -109,7 +109,7 @@ Partial Class frmColorChange
         Me.btn使用色.Location = New System.Drawing.Point(555, 63)
         Me.btn使用色.Name = "btn使用色"
         Me.btn使用色.Size = New System.Drawing.Size(111, 46)
-        Me.btn使用色.TabIndex = 13
+        Me.btn使用色.TabIndex = 6
         Me.btn使用色.Text = "使用色(&P)"
         Me.ToolTip1.SetToolTip(Me.btn使用色, "使われている色をピックアップします")
         Me.btn使用色.UseVisualStyleBackColor = True
@@ -121,21 +121,21 @@ Partial Class frmColorChange
         Me.btnOK.Location = New System.Drawing.Point(555, 197)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 14
+        Me.btnOK.TabIndex = 8
         Me.btnOK.Text = "OK(&O)"
         Me.ToolTip1.SetToolTip(Me.btnOK, "画面を閉じます")
         Me.btnOK.UseVisualStyleBackColor = True
         '
-        'btn色変更
+        'btn変更実行
         '
-        Me.btn色変更.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn色変更.Location = New System.Drawing.Point(555, 134)
-        Me.btn色変更.Name = "btn色変更"
-        Me.btn色変更.Size = New System.Drawing.Size(111, 46)
-        Me.btn色変更.TabIndex = 26
-        Me.btn色変更.Text = "色変更(&C)"
-        Me.ToolTip1.SetToolTip(Me.btn色変更, "色の変更を実行します")
-        Me.btn色変更.UseVisualStyleBackColor = True
+        Me.btn変更実行.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn変更実行.Location = New System.Drawing.Point(555, 134)
+        Me.btn変更実行.Name = "btn変更実行"
+        Me.btn変更実行.Size = New System.Drawing.Size(111, 46)
+        Me.btn変更実行.TabIndex = 7
+        Me.btn変更実行.Text = "変更実行(&E)"
+        Me.ToolTip1.SetToolTip(Me.btn変更実行, "色の変更を実行します")
+        Me.btn変更実行.UseVisualStyleBackColor = True
         '
         'dgvColorChange
         '
@@ -154,8 +154,13 @@ Partial Class frmColorChange
         Me.dgvColorChange.RowHeadersWidth = 30
         Me.dgvColorChange.RowTemplate.Height = 29
         Me.dgvColorChange.Size = New System.Drawing.Size(494, 180)
-        Me.dgvColorChange.TabIndex = 27
+        Me.dgvColorChange.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.dgvColorChange, "何色を何色に変更するか")
+        '
+        'BindingSourceColorChange
+        '
+        Me.BindingSourceColorChange.DataMember = "tblColorChange"
+        Me.BindingSourceColorChange.DataSource = GetType(CraftBand.Tables.dstWork)
         '
         'BeforeDataGridViewColumn
         '
@@ -172,16 +177,17 @@ Partial Class frmColorChange
         Me.Count.DataPropertyName = "Count"
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         Me.Count.DefaultCellStyle = DataGridViewCellStyle1
-        Me.Count.HeaderText = "本数"
+        Me.Count.HeaderText = "行数"
         Me.Count.MinimumWidth = 6
         Me.Count.Name = "Count"
         Me.Count.ReadOnly = True
+        Me.Count.ToolTipText = "その色が設定された行数"
         Me.Count.Width = 125
         '
         'IsTargetDataGridViewCheckBoxColumn
         '
         Me.IsTargetDataGridViewCheckBoxColumn.DataPropertyName = "IsTarget"
-        Me.IsTargetDataGridViewCheckBoxColumn.HeaderText = "変更対象"
+        Me.IsTargetDataGridViewCheckBoxColumn.HeaderText = "対象"
         Me.IsTargetDataGridViewCheckBoxColumn.MinimumWidth = 6
         Me.IsTargetDataGridViewCheckBoxColumn.Name = "IsTargetDataGridViewCheckBoxColumn"
         Me.IsTargetDataGridViewCheckBoxColumn.ToolTipText = "色変更対象の場合チェックON"
@@ -197,18 +203,13 @@ Partial Class frmColorChange
         Me.AfterDataGridViewColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.AfterDataGridViewColumn.Width = 180
         '
-        'BindingSourceColorChange
-        '
-        Me.BindingSourceColorChange.DataMember = "tblColorChange"
-        Me.BindingSourceColorChange.DataSource = GetType(CraftBand.Tables.dstWork)
-        '
         'frmColorChange
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(682, 265)
         Me.Controls.Add(Me.dgvColorChange)
-        Me.Controls.Add(Me.btn色変更)
+        Me.Controls.Add(Me.btn変更実行)
         Me.Controls.Add(Me.btn使用色)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.chk個別)
@@ -234,7 +235,7 @@ Partial Class frmColorChange
     Friend WithEvents chk個別 As Windows.Forms.CheckBox
     Friend WithEvents btn使用色 As Windows.Forms.Button
     Friend WithEvents btnOK As Windows.Forms.Button
-    Friend WithEvents btn色変更 As Windows.Forms.Button
+    Friend WithEvents btn変更実行 As Windows.Forms.Button
     Friend WithEvents dgvColorChange As ctrDataGridView
     Friend WithEvents BindingSourceColorChange As Windows.Forms.BindingSource
     Friend WithEvents ToolTip1 As Windows.Forms.ToolTip

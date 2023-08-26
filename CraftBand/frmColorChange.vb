@@ -10,6 +10,8 @@ Imports CraftBand.Tables.dstMasterTables
 Public Class frmColorChange
 
     Dim _Data As clsDataTables = Nothing
+    Dim _Expanding As Boolean = False
+
     Dim _CurrentColors As New Dictionary(Of String, Integer)
 
     Enum enmUsageAppendix
@@ -27,13 +29,9 @@ Public Class frmColorChange
             enumAction._BackColorReadOnlyYellow
             )
 
-    Sub New(ByVal data As clsDataTables)
-
-        ' この呼び出しはデザイナーで必要です。
-        InitializeComponent()
-
-        ' InitializeComponent() 呼び出しの後で初期化を追加します。
+    Sub SetDataAndExpand(ByVal data As clsDataTables, ByVal expand As Boolean)
         _Data = data
+        _Expanding = expand
 
         If g_enumExeName = enumExeName.CraftBandSquare Then
             _UsageAppendix = enmUsageAppendix.usage_InsertBand
@@ -46,26 +44,30 @@ Public Class frmColorChange
         _MyProfile.FormCaption = Me.Text
         dgvColorChange.SetProfile(_MyProfile)
 
+        'Default:Visible = True,Checked = True
+        '縦横展開
+        chk横ひも.Checked = _Expanding
+        chk縦ひも.Checked = _Expanding
+        chk横ひも.Enabled = _Expanding
+        chk縦ひも.Enabled = _Expanding
+
+
+        '個別
         If _UsageAppendix = enmUsageAppendix.usage_BottomOval Then
-            'chk個別.Visible = True
-            'chk個別.Checked = True
             chk個別.Text = My.Resources.CaptionBottomOval
-
         ElseIf _UsageAppendix = enmUsageAppendix.usage_InsertBand Then
-            'chk個別.Visible = True
-            'chk個別.Checked = True
             chk個別.Text = My.Resources.CaptionInsertBand
-
         Else
             chk個別.Visible = False
             chk個別.Checked = False
         End If
 
+        'グリッドの色
         AfterDataGridViewColumn.DataSource = g_clsSelectBasics.p_tblColor
         AfterDataGridViewColumn.DisplayMember = "Display"
         AfterDataGridViewColumn.ValueMember = "Value"
 
-        '
+        '最初の表示
         collectCurrentColor()
         setGridCurrentColor()
 
@@ -170,7 +172,7 @@ Public Class frmColorChange
             Dim newrow As dstWork.tblColorChangeRow = _Table.NewtblColorChangeRow
             For Each color As String In _CurrentColors.Keys
                 newrow = _Table.NewtblColorChangeRow
-                newrow.IsTarget = True
+                newrow.IsTarget = False '非対象
                 newrow.Before = color
                 newrow.Count = _CurrentColors(color)
                 _Table.Rows.Add(newrow)
@@ -235,14 +237,17 @@ Public Class frmColorChange
         End Try
     End Function
 
-    '色変更ボタン
-    Private Sub btn色変更_Click(sender As Object, e As EventArgs) Handles btn色変更.Click
-        '変更する色が空
+    '変更実行ボタン
+    Private Sub btn変更実行_Click(sender As Object, e As EventArgs) Handles btn変更実行.Click
+        '変更する色が空/対象なし
+        Dim targetExist As Boolean = False
         Dim emptylist As New List(Of String)
+
         For Each rcolchg As dstWork.tblColorChangeRow In _Table
             If Not rcolchg.IsTarget Then
                 Continue For
             End If
+            targetExist = True
 
             If clsSelectBasics.ColorString(rcolchg.After) = "" Then
                 Dim rcolbefore As String = clsSelectBasics.ColorString(rcolchg.Before)
@@ -251,8 +256,16 @@ Public Class frmColorChange
                 End If
             End If
         Next
+
+        '少なくとも1点のチェックがあること
+        If Not targetExist Then
+            '変更したい色の'対象'にチェックを入れてください。
+            MessageBox.Show(My.Resources.ErrNoChangeCheck, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+        'afterに空が指定されている場合は確認をとる
         If 0 < emptylist.Count Then
-            '色<{0}>はクリアされます。よろしいですか？(残す場合は変更対象のチェックを外してください)
+            '色<{0}>はクリアされます。よろしいですか？(残す場合は'対象'のチェックを外してください)
             Dim msg As String = String.Format(My.Resources.AskColorClear, String.Join(",", emptylist.ToArray))
             Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If r <> DialogResult.OK Then
@@ -260,7 +273,7 @@ Public Class frmColorChange
             End If
         End If
 
-        '色変更
+        '変更実行
         If chk側面と縁.Checked Then
             For Each row As tbl側面Row In _Data.p_tbl側面
                 colorChangeRow(row)
