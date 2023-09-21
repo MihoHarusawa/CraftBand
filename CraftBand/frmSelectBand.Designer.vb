@@ -250,7 +250,7 @@ Partial Class frmSelectBand
         'nudマイひも長係数
         '
         Me.nudマイひも長係数.DecimalPlaces = 2
-        Me.nudマイひも長係数.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        Me.nudマイひも長係数.Increment = New Decimal(New Integer() {5, 0, 0, 131072})
         Me.nudマイひも長係数.Location = New System.Drawing.Point(129, 61)
         Me.nudマイひも長係数.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         Me.nudマイひも長係数.Name = "nudマイひも長係数"

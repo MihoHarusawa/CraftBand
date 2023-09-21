@@ -7,7 +7,7 @@ Imports CraftBand.Tables.dstMasterTables
 ''' ※今のところそう大きくはないので、固定サイズ・固定フィールドで処理
 ''' </summary>
 Public Class clsUpDown
-    Public Const cMaxUpdownColumns As Integer = 50 'CheckBoxフィールド数
+    Public Const cMaxUpdownColumns As Integer = 99 'CheckBoxフィールド数
     Public Const cBottomNumber As Integer = 0 '底のレコード番号
     Public Const cSide12Number As Integer = 1 '側面(上右)のレコード番号
     Public Const cSide34Number As Integer = 2 '側面(下左)のレコード番号

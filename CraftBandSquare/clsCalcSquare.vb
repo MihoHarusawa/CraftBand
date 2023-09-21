@@ -2116,6 +2116,8 @@ Class clsCalcSquare
                 ret = _Data.FromClsUpDown(clsUpDown.cBottomNumber, updown)
         End Select
 
+        '_CUpDownにも反映しておく
+
         If Not ret Then
             'ひも上下レコードの保存エラーです。
             p_sメッセージ = My.Resources.CalcUpDownSaveErr
@@ -2141,28 +2143,29 @@ Class clsCalcSquare
     End Function
 
     Function updown上下交換() As clsUpDown
-        If Not _CUpDown.Revert() Then
+        '#32 DataGrid操作が認識されないケースもあるようなので
+        If Not _CUpDown.Revert(True) Then
             Return Nothing
         End If
         Return _CUpDown
     End Function
 
     Function updown左右反転() As clsUpDown
-        If Not _CUpDown.LeftSideRight() Then
+        If Not _CUpDown.LeftSideRight(True) Then
             Return Nothing
         End If
         Return _CUpDown
     End Function
 
     Function updown天地反転() As clsUpDown
-        If Not _CUpDown.UpSideDown() Then
+        If Not _CUpDown.UpSideDown(True) Then
             Return Nothing
         End If
         Return _CUpDown
     End Function
 
     Function updown右回転() As clsUpDown
-        If Not _CUpDown.RotateRight() Then
+        If Not _CUpDown.RotateRight(True) Then
             Return Nothing
         End If
         Return _CUpDown
@@ -2176,21 +2179,21 @@ Class clsCalcSquare
     End Function
 
     Function updown垂直追加(ByVal atTop As Boolean) As clsUpDown
-        If Not _CUpDown.AddVertical(atTop) Then
+        If Not _CUpDown.AddVertical(atTop, True) Then
             Return Nothing
         End If
         Return _CUpDown
     End Function
 
     Function updown水平シフト(ByVal desc As Boolean) As clsUpDown
-        If Not _CUpDown.ShiftHorizontal(desc) Then
+        If Not _CUpDown.ShiftHorizontal(desc, True) Then
             Return Nothing
         End If
         Return _CUpDown
     End Function
 
     Function updown垂直シフト(ByVal desc As Boolean) As clsUpDown
-        If Not _CUpDown.ShiftVertical(desc) Then
+        If Not _CUpDown.ShiftVertical(desc, True) Then
             Return Nothing
         End If
         Return _CUpDown
