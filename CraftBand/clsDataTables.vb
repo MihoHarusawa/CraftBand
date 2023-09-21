@@ -463,8 +463,26 @@ Public Class clsDataTables
             Return 0
         End If
 
+        'ひも種で指定されたカテゴリーのレコードを削除
+        Dim count As Integer = Removeひも種Rows(iひも種)
+
+        'レコードを追加
+        For Each tmp As tbl縦横展開Row In tmptable
+            p_tbl縦横展開.ImportRow(tmp)
+            count += 1
+            _b縦横展開Changed = True
+        Next
+        p_tbl縦横展開.AcceptChanges()
+        tmptable.AcceptChanges()
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Add({0}) {1}点", iひも種, tmptable.Rows.Count)
+        Return count
+    End Function
+
+    'p_tbl縦横展開からひも種で指定されたカテゴリーを削除
+    Public Function Removeひも種Rows(ByVal iひも種 As Integer) As Integer
         Dim count As Integer = 0
-        'ひも種で指定されたカテゴリーを削除
+
         p_tbl縦横展開.AcceptChanges()
         Dim query = From r In p_tbl縦横展開.AsEnumerable
                     Where (r.f_iひも種 And iひも種) <> 0
@@ -475,18 +493,11 @@ Public Class clsDataTables
             r.Delete()
             count -= 1
         Next
-        p_tbl縦横展開.AcceptChanges()
+        If count <> 0 Then
+            _b縦横展開Changed = True
+            p_tbl縦横展開.AcceptChanges()
+        End If
 
-        'レコードを追加
-        For Each tmp As tbl縦横展開Row In tmptable
-            p_tbl縦横展開.ImportRow(tmp)
-            count += 1
-        Next
-        p_tbl縦横展開.AcceptChanges()
-        _b縦横展開Changed = True
-        tmptable.AcceptChanges()
-
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tbl縦横展開 Add({0}) {1}点", iひも種, tmptable.Rows.Count)
         Return count
     End Function
 

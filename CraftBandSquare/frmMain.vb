@@ -1463,6 +1463,8 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
+        _clsDataTables.Removeひも種Rows(enumひも種.i_横)
+
         BindingSource横ひも.DataSource = _clsCalcSquare.get横展開DataTable(True)
         dgv横ひも.Refresh()
     End Sub
@@ -1473,6 +1475,8 @@ Public Class frmMain
         If r <> DialogResult.OK Then
             Exit Sub
         End If
+        _clsDataTables.Removeひも種Rows(enumひも種.i_縦)
+
         BindingSource縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable(True)
         dgv縦ひも.Refresh()
     End Sub
@@ -2234,10 +2238,44 @@ Public Class frmMain
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
         End If
+        If Not dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Visible Then
+            Exit Sub
+        End If
+
         If dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value Then
-            e.CellStyle.BackColor = Color.DarkGray
+            Dim cStep As Integer = 3
+            Dim iRow As Integer = If((e.RowIndex + 1) Mod cStep = 0, 1, 0)
+            Dim iCol As Integer = If(e.ColumnIndex Mod cStep = 0, 1, 0)
+            Dim iBack As Integer = 160 - iRow * 10 - iCol * 10
+            e.CellStyle.BackColor = Color.FromArgb(iBack, iBack, iBack)
         Else
             e.CellStyle.BackColor = Color.White
+        End If
+    End Sub
+
+    '1の幅変更を波及,lastdata対象外
+    Private Sub dgvひも上下_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles dgvひも上下.ColumnWidthChanged
+        If _isLoadingData OrElse e.Column Is Nothing OrElse e.Column.Index < 1 Then
+            Exit Sub
+        End If
+        'Debug.Print("Index={0} width={1}", e.Column.Index, e.Column.Width) 1～
+        If e.Column.Index = 1 Then
+            For i As Integer = 2 To nud水平に.Value
+                dgvひも上下.Columns(i).Width = e.Column.Width
+            Next
+        End If
+    End Sub
+
+    '1の高さ変更を波及,lastdata対象外
+    Private Sub dgvひも上下_RowHeightChanged(sender As Object, e As DataGridViewRowEventArgs) Handles dgvひも上下.RowHeightChanged
+        If _isLoadingData OrElse e.Row Is Nothing OrElse e.Row.Index < 0 Then
+            Exit Sub
+        End If
+        'Debug.Print("Index={0} width={1}", e.Row.Index, e.Row.Height) 0～
+        If e.Row.Index = 0 Then
+            For i As Integer = 1 To nud垂直に.Value - 1
+                dgvひも上下.Rows(i).Height = e.Row.Height
+            Next
         End If
     End Sub
 

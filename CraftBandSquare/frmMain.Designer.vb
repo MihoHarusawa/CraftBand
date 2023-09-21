@@ -289,100 +289,6 @@ Partial Class frmMain
         Me.lbl上下のメモ = New System.Windows.Forms.Label()
         Me.txt上下のメモ = New System.Windows.Forms.TextBox()
         Me.dgvひも上下 = New CraftBand.ctrDataGridView()
-        Me.BindingSourceひも上下 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.btnサイズ変更_ひも上下 = New System.Windows.Forms.Button()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.lbl垂直に = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.lbl水平に = New System.Windows.Forms.Label()
-        Me.lbl開始位置 = New System.Windows.Forms.Label()
-        Me.tpage追加品 = New System.Windows.Forms.TabPage()
-        Me.lbl長さ_単位 = New System.Windows.Forms.Label()
-        Me.lbl長さ = New System.Windows.Forms.Label()
-        Me.lbl点数 = New System.Windows.Forms.Label()
-        Me.lbl付属品名 = New System.Windows.Forms.Label()
-        Me.dgv追加品 = New CraftBand.ctrDataGridView()
-        Me.f_i番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s付属品名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s付属品ひも名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_b巻きひも区分3 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.f_i何本幅3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_d長さ3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i点数3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s色3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_dひも長3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長加算3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも本数3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s記号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_sメモ3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_bError3 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.BindingSource追加品 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.tpageメモ他 = New System.Windows.Forms.TabPage()
-        Me.lblメモ = New System.Windows.Forms.Label()
-        Me.tpageプレビュー = New System.Windows.Forms.TabPage()
-        Me.picプレビュー = New System.Windows.Forms.PictureBox()
-        Me.tpage縦ひも = New System.Windows.Forms.TabPage()
-        Me.lbl左から順に右へ = New System.Windows.Forms.Label()
-        Me.dgv縦ひも = New CraftBand.ctrDataGridView()
-        Me.f_iひも種5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i位置番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_sひも名5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i何本幅5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_d長さ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d幅5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長加算5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s記号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d出力ひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s色5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_sメモ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BindingSource縦ひも = New System.Windows.Forms.BindingSource(Me.components)
-        Me.tpage横ひも = New System.Windows.Forms.TabPage()
-        Me.lbl上から順に下へ = New System.Windows.Forms.Label()
-        Me.dgv横ひも = New CraftBand.ctrDataGridView()
-        Me.f_iひも種4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i位置番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_sひも名4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_iひも番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i何本幅4 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_d長さ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d幅4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_dひも長加算4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s記号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d出力ひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s色4 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.f_sメモ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BindingSource横ひも = New System.Windows.Forms.BindingSource(Me.components)
-        Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lbl縦横 = New System.Windows.Forms.Label()
-        Me.lbl計算寸法 = New System.Windows.Forms.Label()
-        Me.lbl計算寸法縦 = New System.Windows.Forms.Label()
-        Me.lbl計算寸法高さ = New System.Windows.Forms.Label()
-        Me.lbl計算寸法_単位 = New System.Windows.Forms.Label()
-        Me.lbl計算寸法横 = New System.Windows.Forms.Label()
-        Me.lbl計算寸法の周 = New System.Windows.Forms.Label()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.cmb基本色 = New System.Windows.Forms.ComboBox()
-        Me.lbl基本色 = New System.Windows.Forms.Label()
-        Me.lbl横寸法の差 = New System.Windows.Forms.Label()
-        Me.lbl縦寸法の差 = New System.Windows.Forms.Label()
-        Me.lbl高さ寸法の差 = New System.Windows.Forms.Label()
-        Me.txtバンドの種類名 = New System.Windows.Forms.TextBox()
-        Me.lbl基本のひも幅length = New System.Windows.Forms.Label()
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.lbl単位 = New System.Windows.Forms.Label()
-        Me.btnDEBUG = New System.Windows.Forms.Button()
-        Me.lbl四角 = New System.Windows.Forms.Label()
-        Me.lbl目 = New System.Windows.Forms.Label()
-        Me.lbl縁厚さプラス = New System.Windows.Forms.Label()
-        Me.lbl四角ベース = New System.Windows.Forms.Label()
-        Me.lblひも本幅変更 = New System.Windows.Forms.Label()
         Me.Index = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CheckBox01 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox02 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -483,6 +389,100 @@ Partial Class frmMain
         Me.CheckBox97 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox98 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox99 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.BindingSourceひも上下 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.btnサイズ変更_ひも上下 = New System.Windows.Forms.Button()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.lbl垂直に = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.lbl水平に = New System.Windows.Forms.Label()
+        Me.lbl開始位置 = New System.Windows.Forms.Label()
+        Me.tpage追加品 = New System.Windows.Forms.TabPage()
+        Me.lbl長さ_単位 = New System.Windows.Forms.Label()
+        Me.lbl長さ = New System.Windows.Forms.Label()
+        Me.lbl点数 = New System.Windows.Forms.Label()
+        Me.lbl付属品名 = New System.Windows.Forms.Label()
+        Me.dgv追加品 = New CraftBand.ctrDataGridView()
+        Me.f_i番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s付属品名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s付属品ひも名3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_b巻きひも区分3 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.f_i何本幅3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_d長さ3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i点数3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_dひも長3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも本数3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sメモ3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_bError3 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.BindingSource追加品 = New System.Windows.Forms.BindingSource(Me.components)
+        Me.tpageメモ他 = New System.Windows.Forms.TabPage()
+        Me.lblメモ = New System.Windows.Forms.Label()
+        Me.tpageプレビュー = New System.Windows.Forms.TabPage()
+        Me.picプレビュー = New System.Windows.Forms.PictureBox()
+        Me.tpage縦ひも = New System.Windows.Forms.TabPage()
+        Me.lbl左から順に右へ = New System.Windows.Forms.Label()
+        Me.dgv縦ひも = New CraftBand.ctrDataGridView()
+        Me.f_iひも種5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i位置番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sひも名5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i何本幅5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_d長さ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d幅5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d出力ひも長5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色5 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_sメモ5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSource縦ひも = New System.Windows.Forms.BindingSource(Me.components)
+        Me.tpage横ひも = New System.Windows.Forms.TabPage()
+        Me.lbl上から順に下へ = New System.Windows.Forms.Label()
+        Me.dgv横ひも = New CraftBand.ctrDataGridView()
+        Me.f_iひも種4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i位置番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_sひも名4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_iひも番号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_i何本幅4 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_d長さ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d幅4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_dひも長加算4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s記号4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_d出力ひも長4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s色4 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.f_sメモ4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.BindingSource横ひも = New System.Windows.Forms.BindingSource(Me.components)
+        Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lbl縦横 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法縦 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法高さ = New System.Windows.Forms.Label()
+        Me.lbl計算寸法_単位 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法横 = New System.Windows.Forms.Label()
+        Me.lbl計算寸法の周 = New System.Windows.Forms.Label()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.cmb基本色 = New System.Windows.Forms.ComboBox()
+        Me.lbl基本色 = New System.Windows.Forms.Label()
+        Me.lbl横寸法の差 = New System.Windows.Forms.Label()
+        Me.lbl縦寸法の差 = New System.Windows.Forms.Label()
+        Me.lbl高さ寸法の差 = New System.Windows.Forms.Label()
+        Me.txtバンドの種類名 = New System.Windows.Forms.TextBox()
+        Me.lbl基本のひも幅length = New System.Windows.Forms.Label()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.lbl単位 = New System.Windows.Forms.Label()
+        Me.btnDEBUG = New System.Windows.Forms.Button()
+        Me.lbl四角 = New System.Windows.Forms.Label()
+        Me.lbl目 = New System.Windows.Forms.Label()
+        Me.lbl縁厚さプラス = New System.Windows.Forms.Label()
+        Me.lbl四角ベース = New System.Windows.Forms.Label()
+        Me.lblひも本幅変更 = New System.Windows.Forms.Label()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2914,6 +2914,809 @@ Partial Class frmMain
         Me.dgvひも上下.Size = New System.Drawing.Size(710, 190)
         Me.dgvひも上下.TabIndex = 15
         '
+        'Index
+        '
+        Me.Index.DataPropertyName = "Index"
+        Me.Index.HeaderText = "垂直"
+        Me.Index.MinimumWidth = 6
+        Me.Index.Name = "Index"
+        Me.Index.ReadOnly = True
+        Me.Index.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.Index.Visible = False
+        Me.Index.Width = 70
+        '
+        'CheckBox01
+        '
+        Me.CheckBox01.DataPropertyName = "CheckBox01"
+        Me.CheckBox01.HeaderText = "1"
+        Me.CheckBox01.MinimumWidth = 6
+        Me.CheckBox01.Name = "CheckBox01"
+        Me.CheckBox01.Width = 50
+        '
+        'CheckBox02
+        '
+        Me.CheckBox02.DataPropertyName = "CheckBox02"
+        Me.CheckBox02.HeaderText = "2"
+        Me.CheckBox02.MinimumWidth = 6
+        Me.CheckBox02.Name = "CheckBox02"
+        Me.CheckBox02.Width = 50
+        '
+        'CheckBox03
+        '
+        Me.CheckBox03.DataPropertyName = "CheckBox03"
+        Me.CheckBox03.HeaderText = "3"
+        Me.CheckBox03.MinimumWidth = 6
+        Me.CheckBox03.Name = "CheckBox03"
+        Me.CheckBox03.Width = 50
+        '
+        'CheckBox04
+        '
+        Me.CheckBox04.DataPropertyName = "CheckBox04"
+        Me.CheckBox04.HeaderText = "4"
+        Me.CheckBox04.MinimumWidth = 6
+        Me.CheckBox04.Name = "CheckBox04"
+        Me.CheckBox04.Width = 50
+        '
+        'CheckBox05
+        '
+        Me.CheckBox05.DataPropertyName = "CheckBox05"
+        Me.CheckBox05.HeaderText = "5"
+        Me.CheckBox05.MinimumWidth = 6
+        Me.CheckBox05.Name = "CheckBox05"
+        Me.CheckBox05.Width = 50
+        '
+        'CheckBox06
+        '
+        Me.CheckBox06.DataPropertyName = "CheckBox06"
+        Me.CheckBox06.HeaderText = "6"
+        Me.CheckBox06.MinimumWidth = 6
+        Me.CheckBox06.Name = "CheckBox06"
+        Me.CheckBox06.Width = 50
+        '
+        'CheckBox07
+        '
+        Me.CheckBox07.DataPropertyName = "CheckBox07"
+        Me.CheckBox07.HeaderText = "7"
+        Me.CheckBox07.MinimumWidth = 6
+        Me.CheckBox07.Name = "CheckBox07"
+        Me.CheckBox07.Width = 50
+        '
+        'CheckBox08
+        '
+        Me.CheckBox08.DataPropertyName = "CheckBox08"
+        Me.CheckBox08.HeaderText = "8"
+        Me.CheckBox08.MinimumWidth = 6
+        Me.CheckBox08.Name = "CheckBox08"
+        Me.CheckBox08.Width = 50
+        '
+        'CheckBox09
+        '
+        Me.CheckBox09.DataPropertyName = "CheckBox09"
+        Me.CheckBox09.HeaderText = "9"
+        Me.CheckBox09.MinimumWidth = 6
+        Me.CheckBox09.Name = "CheckBox09"
+        Me.CheckBox09.Width = 50
+        '
+        'CheckBox10
+        '
+        Me.CheckBox10.DataPropertyName = "CheckBox10"
+        Me.CheckBox10.HeaderText = "10"
+        Me.CheckBox10.MinimumWidth = 6
+        Me.CheckBox10.Name = "CheckBox10"
+        Me.CheckBox10.Width = 50
+        '
+        'CheckBox11
+        '
+        Me.CheckBox11.DataPropertyName = "CheckBox11"
+        Me.CheckBox11.HeaderText = "11"
+        Me.CheckBox11.MinimumWidth = 6
+        Me.CheckBox11.Name = "CheckBox11"
+        Me.CheckBox11.Width = 50
+        '
+        'CheckBox12
+        '
+        Me.CheckBox12.DataPropertyName = "CheckBox12"
+        Me.CheckBox12.HeaderText = "12"
+        Me.CheckBox12.MinimumWidth = 6
+        Me.CheckBox12.Name = "CheckBox12"
+        Me.CheckBox12.Width = 50
+        '
+        'CheckBox13
+        '
+        Me.CheckBox13.DataPropertyName = "CheckBox13"
+        Me.CheckBox13.HeaderText = "13"
+        Me.CheckBox13.MinimumWidth = 6
+        Me.CheckBox13.Name = "CheckBox13"
+        Me.CheckBox13.Width = 50
+        '
+        'CheckBox14
+        '
+        Me.CheckBox14.DataPropertyName = "CheckBox14"
+        Me.CheckBox14.HeaderText = "14"
+        Me.CheckBox14.MinimumWidth = 6
+        Me.CheckBox14.Name = "CheckBox14"
+        Me.CheckBox14.Width = 50
+        '
+        'CheckBox15
+        '
+        Me.CheckBox15.DataPropertyName = "CheckBox15"
+        Me.CheckBox15.HeaderText = "15"
+        Me.CheckBox15.MinimumWidth = 6
+        Me.CheckBox15.Name = "CheckBox15"
+        Me.CheckBox15.Width = 50
+        '
+        'CheckBox16
+        '
+        Me.CheckBox16.DataPropertyName = "CheckBox16"
+        Me.CheckBox16.HeaderText = "16"
+        Me.CheckBox16.MinimumWidth = 6
+        Me.CheckBox16.Name = "CheckBox16"
+        Me.CheckBox16.Width = 50
+        '
+        'CheckBox17
+        '
+        Me.CheckBox17.DataPropertyName = "CheckBox17"
+        Me.CheckBox17.HeaderText = "17"
+        Me.CheckBox17.MinimumWidth = 6
+        Me.CheckBox17.Name = "CheckBox17"
+        Me.CheckBox17.Width = 50
+        '
+        'CheckBox18
+        '
+        Me.CheckBox18.DataPropertyName = "CheckBox18"
+        Me.CheckBox18.HeaderText = "18"
+        Me.CheckBox18.MinimumWidth = 6
+        Me.CheckBox18.Name = "CheckBox18"
+        Me.CheckBox18.Width = 50
+        '
+        'CheckBox19
+        '
+        Me.CheckBox19.DataPropertyName = "CheckBox19"
+        Me.CheckBox19.HeaderText = "19"
+        Me.CheckBox19.MinimumWidth = 6
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Width = 50
+        '
+        'CheckBox20
+        '
+        Me.CheckBox20.DataPropertyName = "CheckBox20"
+        Me.CheckBox20.HeaderText = "20"
+        Me.CheckBox20.MinimumWidth = 6
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Width = 50
+        '
+        'CheckBox21
+        '
+        Me.CheckBox21.DataPropertyName = "CheckBox21"
+        Me.CheckBox21.HeaderText = "21"
+        Me.CheckBox21.MinimumWidth = 6
+        Me.CheckBox21.Name = "CheckBox21"
+        Me.CheckBox21.Width = 50
+        '
+        'CheckBox22
+        '
+        Me.CheckBox22.DataPropertyName = "CheckBox22"
+        Me.CheckBox22.HeaderText = "22"
+        Me.CheckBox22.MinimumWidth = 6
+        Me.CheckBox22.Name = "CheckBox22"
+        Me.CheckBox22.Width = 50
+        '
+        'CheckBox23
+        '
+        Me.CheckBox23.DataPropertyName = "CheckBox23"
+        Me.CheckBox23.HeaderText = "23"
+        Me.CheckBox23.MinimumWidth = 6
+        Me.CheckBox23.Name = "CheckBox23"
+        Me.CheckBox23.Width = 50
+        '
+        'CheckBox24
+        '
+        Me.CheckBox24.DataPropertyName = "CheckBox24"
+        Me.CheckBox24.HeaderText = "24"
+        Me.CheckBox24.MinimumWidth = 6
+        Me.CheckBox24.Name = "CheckBox24"
+        Me.CheckBox24.Width = 50
+        '
+        'CheckBox25
+        '
+        Me.CheckBox25.DataPropertyName = "CheckBox25"
+        Me.CheckBox25.HeaderText = "25"
+        Me.CheckBox25.MinimumWidth = 6
+        Me.CheckBox25.Name = "CheckBox25"
+        Me.CheckBox25.Width = 50
+        '
+        'CheckBox26
+        '
+        Me.CheckBox26.DataPropertyName = "CheckBox26"
+        Me.CheckBox26.HeaderText = "26"
+        Me.CheckBox26.MinimumWidth = 6
+        Me.CheckBox26.Name = "CheckBox26"
+        Me.CheckBox26.Width = 50
+        '
+        'CheckBox27
+        '
+        Me.CheckBox27.DataPropertyName = "CheckBox27"
+        Me.CheckBox27.HeaderText = "27"
+        Me.CheckBox27.MinimumWidth = 6
+        Me.CheckBox27.Name = "CheckBox27"
+        Me.CheckBox27.Width = 50
+        '
+        'CheckBox28
+        '
+        Me.CheckBox28.DataPropertyName = "CheckBox28"
+        Me.CheckBox28.HeaderText = "28"
+        Me.CheckBox28.MinimumWidth = 6
+        Me.CheckBox28.Name = "CheckBox28"
+        Me.CheckBox28.Width = 50
+        '
+        'CheckBox29
+        '
+        Me.CheckBox29.DataPropertyName = "CheckBox29"
+        Me.CheckBox29.HeaderText = "29"
+        Me.CheckBox29.MinimumWidth = 6
+        Me.CheckBox29.Name = "CheckBox29"
+        Me.CheckBox29.Width = 50
+        '
+        'CheckBox30
+        '
+        Me.CheckBox30.DataPropertyName = "CheckBox30"
+        Me.CheckBox30.HeaderText = "30"
+        Me.CheckBox30.MinimumWidth = 6
+        Me.CheckBox30.Name = "CheckBox30"
+        Me.CheckBox30.Width = 50
+        '
+        'CheckBox31
+        '
+        Me.CheckBox31.DataPropertyName = "CheckBox31"
+        Me.CheckBox31.HeaderText = "31"
+        Me.CheckBox31.MinimumWidth = 6
+        Me.CheckBox31.Name = "CheckBox31"
+        Me.CheckBox31.Width = 50
+        '
+        'CheckBox32
+        '
+        Me.CheckBox32.DataPropertyName = "CheckBox32"
+        Me.CheckBox32.HeaderText = "32"
+        Me.CheckBox32.MinimumWidth = 6
+        Me.CheckBox32.Name = "CheckBox32"
+        Me.CheckBox32.Width = 50
+        '
+        'CheckBox33
+        '
+        Me.CheckBox33.DataPropertyName = "CheckBox33"
+        Me.CheckBox33.HeaderText = "33"
+        Me.CheckBox33.MinimumWidth = 6
+        Me.CheckBox33.Name = "CheckBox33"
+        Me.CheckBox33.Width = 50
+        '
+        'CheckBox34
+        '
+        Me.CheckBox34.DataPropertyName = "CheckBox34"
+        Me.CheckBox34.HeaderText = "34"
+        Me.CheckBox34.MinimumWidth = 6
+        Me.CheckBox34.Name = "CheckBox34"
+        Me.CheckBox34.Width = 50
+        '
+        'CheckBox35
+        '
+        Me.CheckBox35.DataPropertyName = "CheckBox35"
+        Me.CheckBox35.HeaderText = "35"
+        Me.CheckBox35.MinimumWidth = 6
+        Me.CheckBox35.Name = "CheckBox35"
+        Me.CheckBox35.Width = 50
+        '
+        'CheckBox36
+        '
+        Me.CheckBox36.DataPropertyName = "CheckBox36"
+        Me.CheckBox36.HeaderText = "36"
+        Me.CheckBox36.MinimumWidth = 6
+        Me.CheckBox36.Name = "CheckBox36"
+        Me.CheckBox36.Width = 50
+        '
+        'CheckBox37
+        '
+        Me.CheckBox37.DataPropertyName = "CheckBox37"
+        Me.CheckBox37.HeaderText = "37"
+        Me.CheckBox37.MinimumWidth = 6
+        Me.CheckBox37.Name = "CheckBox37"
+        Me.CheckBox37.Width = 50
+        '
+        'CheckBox38
+        '
+        Me.CheckBox38.DataPropertyName = "CheckBox38"
+        Me.CheckBox38.HeaderText = "38"
+        Me.CheckBox38.MinimumWidth = 6
+        Me.CheckBox38.Name = "CheckBox38"
+        Me.CheckBox38.Width = 50
+        '
+        'CheckBox39
+        '
+        Me.CheckBox39.DataPropertyName = "CheckBox39"
+        Me.CheckBox39.HeaderText = "39"
+        Me.CheckBox39.MinimumWidth = 6
+        Me.CheckBox39.Name = "CheckBox39"
+        Me.CheckBox39.Width = 50
+        '
+        'CheckBox40
+        '
+        Me.CheckBox40.DataPropertyName = "CheckBox40"
+        Me.CheckBox40.HeaderText = "40"
+        Me.CheckBox40.MinimumWidth = 6
+        Me.CheckBox40.Name = "CheckBox40"
+        Me.CheckBox40.Width = 50
+        '
+        'CheckBox41
+        '
+        Me.CheckBox41.DataPropertyName = "CheckBox41"
+        Me.CheckBox41.HeaderText = "41"
+        Me.CheckBox41.MinimumWidth = 6
+        Me.CheckBox41.Name = "CheckBox41"
+        Me.CheckBox41.Width = 50
+        '
+        'CheckBox42
+        '
+        Me.CheckBox42.DataPropertyName = "CheckBox42"
+        Me.CheckBox42.HeaderText = "42"
+        Me.CheckBox42.MinimumWidth = 6
+        Me.CheckBox42.Name = "CheckBox42"
+        Me.CheckBox42.Width = 50
+        '
+        'CheckBox43
+        '
+        Me.CheckBox43.DataPropertyName = "CheckBox43"
+        Me.CheckBox43.HeaderText = "43"
+        Me.CheckBox43.MinimumWidth = 6
+        Me.CheckBox43.Name = "CheckBox43"
+        Me.CheckBox43.Width = 50
+        '
+        'CheckBox44
+        '
+        Me.CheckBox44.DataPropertyName = "CheckBox44"
+        Me.CheckBox44.HeaderText = "44"
+        Me.CheckBox44.MinimumWidth = 6
+        Me.CheckBox44.Name = "CheckBox44"
+        Me.CheckBox44.Width = 50
+        '
+        'CheckBox45
+        '
+        Me.CheckBox45.DataPropertyName = "CheckBox45"
+        Me.CheckBox45.HeaderText = "45"
+        Me.CheckBox45.MinimumWidth = 6
+        Me.CheckBox45.Name = "CheckBox45"
+        Me.CheckBox45.Width = 50
+        '
+        'CheckBox46
+        '
+        Me.CheckBox46.DataPropertyName = "CheckBox46"
+        Me.CheckBox46.HeaderText = "46"
+        Me.CheckBox46.MinimumWidth = 6
+        Me.CheckBox46.Name = "CheckBox46"
+        Me.CheckBox46.Width = 50
+        '
+        'CheckBox47
+        '
+        Me.CheckBox47.DataPropertyName = "CheckBox47"
+        Me.CheckBox47.HeaderText = "47"
+        Me.CheckBox47.MinimumWidth = 6
+        Me.CheckBox47.Name = "CheckBox47"
+        Me.CheckBox47.Width = 50
+        '
+        'CheckBox48
+        '
+        Me.CheckBox48.DataPropertyName = "CheckBox48"
+        Me.CheckBox48.HeaderText = "48"
+        Me.CheckBox48.MinimumWidth = 6
+        Me.CheckBox48.Name = "CheckBox48"
+        Me.CheckBox48.Width = 50
+        '
+        'CheckBox49
+        '
+        Me.CheckBox49.DataPropertyName = "CheckBox49"
+        Me.CheckBox49.HeaderText = "49"
+        Me.CheckBox49.MinimumWidth = 6
+        Me.CheckBox49.Name = "CheckBox49"
+        Me.CheckBox49.Width = 50
+        '
+        'CheckBox50
+        '
+        Me.CheckBox50.DataPropertyName = "CheckBox50"
+        Me.CheckBox50.HeaderText = "50"
+        Me.CheckBox50.MinimumWidth = 6
+        Me.CheckBox50.Name = "CheckBox50"
+        Me.CheckBox50.Width = 50
+        '
+        'CheckBox51
+        '
+        Me.CheckBox51.DataPropertyName = "CheckBox51"
+        Me.CheckBox51.HeaderText = "51"
+        Me.CheckBox51.MinimumWidth = 6
+        Me.CheckBox51.Name = "CheckBox51"
+        Me.CheckBox51.Width = 50
+        '
+        'CheckBox52
+        '
+        Me.CheckBox52.DataPropertyName = "CheckBox52"
+        Me.CheckBox52.HeaderText = "52"
+        Me.CheckBox52.MinimumWidth = 6
+        Me.CheckBox52.Name = "CheckBox52"
+        Me.CheckBox52.Width = 50
+        '
+        'CheckBox53
+        '
+        Me.CheckBox53.DataPropertyName = "CheckBox53"
+        Me.CheckBox53.HeaderText = "53"
+        Me.CheckBox53.MinimumWidth = 6
+        Me.CheckBox53.Name = "CheckBox53"
+        Me.CheckBox53.Width = 50
+        '
+        'CheckBox54
+        '
+        Me.CheckBox54.DataPropertyName = "CheckBox54"
+        Me.CheckBox54.HeaderText = "54"
+        Me.CheckBox54.MinimumWidth = 6
+        Me.CheckBox54.Name = "CheckBox54"
+        Me.CheckBox54.Width = 50
+        '
+        'CheckBox55
+        '
+        Me.CheckBox55.DataPropertyName = "CheckBox55"
+        Me.CheckBox55.HeaderText = "55"
+        Me.CheckBox55.MinimumWidth = 6
+        Me.CheckBox55.Name = "CheckBox55"
+        Me.CheckBox55.Width = 50
+        '
+        'CheckBox56
+        '
+        Me.CheckBox56.DataPropertyName = "CheckBox56"
+        Me.CheckBox56.HeaderText = "56"
+        Me.CheckBox56.MinimumWidth = 6
+        Me.CheckBox56.Name = "CheckBox56"
+        Me.CheckBox56.Width = 50
+        '
+        'CheckBox57
+        '
+        Me.CheckBox57.DataPropertyName = "CheckBox57"
+        Me.CheckBox57.HeaderText = "57"
+        Me.CheckBox57.MinimumWidth = 6
+        Me.CheckBox57.Name = "CheckBox57"
+        Me.CheckBox57.Width = 50
+        '
+        'CheckBox58
+        '
+        Me.CheckBox58.DataPropertyName = "CheckBox58"
+        Me.CheckBox58.HeaderText = "58"
+        Me.CheckBox58.MinimumWidth = 6
+        Me.CheckBox58.Name = "CheckBox58"
+        Me.CheckBox58.Width = 50
+        '
+        'CheckBox59
+        '
+        Me.CheckBox59.DataPropertyName = "CheckBox59"
+        Me.CheckBox59.HeaderText = "59"
+        Me.CheckBox59.MinimumWidth = 6
+        Me.CheckBox59.Name = "CheckBox59"
+        Me.CheckBox59.Width = 50
+        '
+        'CheckBox60
+        '
+        Me.CheckBox60.DataPropertyName = "CheckBox60"
+        Me.CheckBox60.HeaderText = "60"
+        Me.CheckBox60.MinimumWidth = 6
+        Me.CheckBox60.Name = "CheckBox60"
+        Me.CheckBox60.Width = 50
+        '
+        'CheckBox61
+        '
+        Me.CheckBox61.DataPropertyName = "CheckBox61"
+        Me.CheckBox61.HeaderText = "61"
+        Me.CheckBox61.MinimumWidth = 6
+        Me.CheckBox61.Name = "CheckBox61"
+        Me.CheckBox61.Width = 50
+        '
+        'CheckBox62
+        '
+        Me.CheckBox62.DataPropertyName = "CheckBox62"
+        Me.CheckBox62.HeaderText = "62"
+        Me.CheckBox62.MinimumWidth = 6
+        Me.CheckBox62.Name = "CheckBox62"
+        Me.CheckBox62.Width = 50
+        '
+        'CheckBox63
+        '
+        Me.CheckBox63.DataPropertyName = "CheckBox63"
+        Me.CheckBox63.HeaderText = "63"
+        Me.CheckBox63.MinimumWidth = 6
+        Me.CheckBox63.Name = "CheckBox63"
+        Me.CheckBox63.Width = 50
+        '
+        'CheckBox64
+        '
+        Me.CheckBox64.DataPropertyName = "CheckBox64"
+        Me.CheckBox64.HeaderText = "64"
+        Me.CheckBox64.MinimumWidth = 6
+        Me.CheckBox64.Name = "CheckBox64"
+        Me.CheckBox64.Width = 50
+        '
+        'CheckBox65
+        '
+        Me.CheckBox65.DataPropertyName = "CheckBox65"
+        Me.CheckBox65.HeaderText = "65"
+        Me.CheckBox65.MinimumWidth = 6
+        Me.CheckBox65.Name = "CheckBox65"
+        Me.CheckBox65.Width = 50
+        '
+        'CheckBox66
+        '
+        Me.CheckBox66.DataPropertyName = "CheckBox66"
+        Me.CheckBox66.HeaderText = "66"
+        Me.CheckBox66.MinimumWidth = 6
+        Me.CheckBox66.Name = "CheckBox66"
+        Me.CheckBox66.Width = 50
+        '
+        'CheckBox67
+        '
+        Me.CheckBox67.DataPropertyName = "CheckBox67"
+        Me.CheckBox67.HeaderText = "67"
+        Me.CheckBox67.MinimumWidth = 6
+        Me.CheckBox67.Name = "CheckBox67"
+        Me.CheckBox67.Width = 50
+        '
+        'CheckBox68
+        '
+        Me.CheckBox68.DataPropertyName = "CheckBox68"
+        Me.CheckBox68.HeaderText = "68"
+        Me.CheckBox68.MinimumWidth = 6
+        Me.CheckBox68.Name = "CheckBox68"
+        Me.CheckBox68.Width = 50
+        '
+        'CheckBox69
+        '
+        Me.CheckBox69.DataPropertyName = "CheckBox69"
+        Me.CheckBox69.HeaderText = "69"
+        Me.CheckBox69.MinimumWidth = 6
+        Me.CheckBox69.Name = "CheckBox69"
+        Me.CheckBox69.Width = 50
+        '
+        'CheckBox70
+        '
+        Me.CheckBox70.DataPropertyName = "CheckBox70"
+        Me.CheckBox70.HeaderText = "70"
+        Me.CheckBox70.MinimumWidth = 6
+        Me.CheckBox70.Name = "CheckBox70"
+        Me.CheckBox70.Width = 50
+        '
+        'CheckBox71
+        '
+        Me.CheckBox71.DataPropertyName = "CheckBox71"
+        Me.CheckBox71.HeaderText = "71"
+        Me.CheckBox71.MinimumWidth = 6
+        Me.CheckBox71.Name = "CheckBox71"
+        Me.CheckBox71.Width = 50
+        '
+        'CheckBox72
+        '
+        Me.CheckBox72.DataPropertyName = "CheckBox72"
+        Me.CheckBox72.HeaderText = "72"
+        Me.CheckBox72.MinimumWidth = 6
+        Me.CheckBox72.Name = "CheckBox72"
+        Me.CheckBox72.Width = 50
+        '
+        'CheckBox73
+        '
+        Me.CheckBox73.DataPropertyName = "CheckBox73"
+        Me.CheckBox73.HeaderText = "73"
+        Me.CheckBox73.MinimumWidth = 6
+        Me.CheckBox73.Name = "CheckBox73"
+        Me.CheckBox73.Width = 50
+        '
+        'CheckBox74
+        '
+        Me.CheckBox74.DataPropertyName = "CheckBox74"
+        Me.CheckBox74.HeaderText = "74"
+        Me.CheckBox74.MinimumWidth = 6
+        Me.CheckBox74.Name = "CheckBox74"
+        Me.CheckBox74.Width = 50
+        '
+        'CheckBox75
+        '
+        Me.CheckBox75.DataPropertyName = "CheckBox75"
+        Me.CheckBox75.HeaderText = "75"
+        Me.CheckBox75.MinimumWidth = 6
+        Me.CheckBox75.Name = "CheckBox75"
+        Me.CheckBox75.Width = 50
+        '
+        'CheckBox76
+        '
+        Me.CheckBox76.DataPropertyName = "CheckBox76"
+        Me.CheckBox76.HeaderText = "76"
+        Me.CheckBox76.MinimumWidth = 6
+        Me.CheckBox76.Name = "CheckBox76"
+        Me.CheckBox76.Width = 50
+        '
+        'CheckBox77
+        '
+        Me.CheckBox77.DataPropertyName = "CheckBox77"
+        Me.CheckBox77.HeaderText = "77"
+        Me.CheckBox77.MinimumWidth = 6
+        Me.CheckBox77.Name = "CheckBox77"
+        Me.CheckBox77.Width = 50
+        '
+        'CheckBox78
+        '
+        Me.CheckBox78.DataPropertyName = "CheckBox78"
+        Me.CheckBox78.HeaderText = "78"
+        Me.CheckBox78.MinimumWidth = 6
+        Me.CheckBox78.Name = "CheckBox78"
+        Me.CheckBox78.Width = 50
+        '
+        'CheckBox79
+        '
+        Me.CheckBox79.DataPropertyName = "CheckBox79"
+        Me.CheckBox79.HeaderText = "79"
+        Me.CheckBox79.MinimumWidth = 6
+        Me.CheckBox79.Name = "CheckBox79"
+        Me.CheckBox79.Width = 50
+        '
+        'CheckBox80
+        '
+        Me.CheckBox80.DataPropertyName = "CheckBox80"
+        Me.CheckBox80.HeaderText = "80"
+        Me.CheckBox80.MinimumWidth = 6
+        Me.CheckBox80.Name = "CheckBox80"
+        Me.CheckBox80.Width = 50
+        '
+        'CheckBox81
+        '
+        Me.CheckBox81.DataPropertyName = "CheckBox81"
+        Me.CheckBox81.HeaderText = "81"
+        Me.CheckBox81.MinimumWidth = 6
+        Me.CheckBox81.Name = "CheckBox81"
+        Me.CheckBox81.Width = 50
+        '
+        'CheckBox82
+        '
+        Me.CheckBox82.DataPropertyName = "CheckBox82"
+        Me.CheckBox82.HeaderText = "82"
+        Me.CheckBox82.MinimumWidth = 6
+        Me.CheckBox82.Name = "CheckBox82"
+        Me.CheckBox82.Width = 50
+        '
+        'CheckBox83
+        '
+        Me.CheckBox83.DataPropertyName = "CheckBox83"
+        Me.CheckBox83.HeaderText = "83"
+        Me.CheckBox83.MinimumWidth = 6
+        Me.CheckBox83.Name = "CheckBox83"
+        Me.CheckBox83.Width = 50
+        '
+        'CheckBox84
+        '
+        Me.CheckBox84.DataPropertyName = "CheckBox84"
+        Me.CheckBox84.HeaderText = "84"
+        Me.CheckBox84.MinimumWidth = 6
+        Me.CheckBox84.Name = "CheckBox84"
+        Me.CheckBox84.Width = 50
+        '
+        'CheckBox85
+        '
+        Me.CheckBox85.DataPropertyName = "CheckBox85"
+        Me.CheckBox85.HeaderText = "85"
+        Me.CheckBox85.MinimumWidth = 6
+        Me.CheckBox85.Name = "CheckBox85"
+        Me.CheckBox85.Width = 50
+        '
+        'CheckBox86
+        '
+        Me.CheckBox86.DataPropertyName = "CheckBox86"
+        Me.CheckBox86.HeaderText = "86"
+        Me.CheckBox86.MinimumWidth = 6
+        Me.CheckBox86.Name = "CheckBox86"
+        Me.CheckBox86.Width = 50
+        '
+        'CheckBox87
+        '
+        Me.CheckBox87.DataPropertyName = "CheckBox87"
+        Me.CheckBox87.HeaderText = "87"
+        Me.CheckBox87.MinimumWidth = 6
+        Me.CheckBox87.Name = "CheckBox87"
+        Me.CheckBox87.Width = 50
+        '
+        'CheckBox88
+        '
+        Me.CheckBox88.DataPropertyName = "CheckBox88"
+        Me.CheckBox88.HeaderText = "88"
+        Me.CheckBox88.MinimumWidth = 6
+        Me.CheckBox88.Name = "CheckBox88"
+        Me.CheckBox88.Width = 50
+        '
+        'CheckBox89
+        '
+        Me.CheckBox89.DataPropertyName = "CheckBox89"
+        Me.CheckBox89.HeaderText = "89"
+        Me.CheckBox89.MinimumWidth = 6
+        Me.CheckBox89.Name = "CheckBox89"
+        Me.CheckBox89.Width = 50
+        '
+        'CheckBox90
+        '
+        Me.CheckBox90.DataPropertyName = "CheckBox90"
+        Me.CheckBox90.HeaderText = "90"
+        Me.CheckBox90.MinimumWidth = 6
+        Me.CheckBox90.Name = "CheckBox90"
+        Me.CheckBox90.Width = 50
+        '
+        'CheckBox91
+        '
+        Me.CheckBox91.DataPropertyName = "CheckBox91"
+        Me.CheckBox91.HeaderText = "91"
+        Me.CheckBox91.MinimumWidth = 6
+        Me.CheckBox91.Name = "CheckBox91"
+        Me.CheckBox91.Width = 50
+        '
+        'CheckBox92
+        '
+        Me.CheckBox92.DataPropertyName = "CheckBox92"
+        Me.CheckBox92.HeaderText = "92"
+        Me.CheckBox92.MinimumWidth = 6
+        Me.CheckBox92.Name = "CheckBox92"
+        Me.CheckBox92.Width = 50
+        '
+        'CheckBox93
+        '
+        Me.CheckBox93.DataPropertyName = "CheckBox93"
+        Me.CheckBox93.HeaderText = "93"
+        Me.CheckBox93.MinimumWidth = 6
+        Me.CheckBox93.Name = "CheckBox93"
+        Me.CheckBox93.Width = 50
+        '
+        'CheckBox94
+        '
+        Me.CheckBox94.DataPropertyName = "CheckBox94"
+        Me.CheckBox94.HeaderText = "94"
+        Me.CheckBox94.MinimumWidth = 6
+        Me.CheckBox94.Name = "CheckBox94"
+        Me.CheckBox94.Width = 50
+        '
+        'CheckBox95
+        '
+        Me.CheckBox95.DataPropertyName = "CheckBox95"
+        Me.CheckBox95.HeaderText = "95"
+        Me.CheckBox95.MinimumWidth = 6
+        Me.CheckBox95.Name = "CheckBox95"
+        Me.CheckBox95.Width = 50
+        '
+        'CheckBox96
+        '
+        Me.CheckBox96.DataPropertyName = "CheckBox96"
+        Me.CheckBox96.HeaderText = "96"
+        Me.CheckBox96.MinimumWidth = 6
+        Me.CheckBox96.Name = "CheckBox96"
+        Me.CheckBox96.Width = 50
+        '
+        'CheckBox97
+        '
+        Me.CheckBox97.DataPropertyName = "CheckBox97"
+        Me.CheckBox97.HeaderText = "97"
+        Me.CheckBox97.MinimumWidth = 6
+        Me.CheckBox97.Name = "CheckBox97"
+        Me.CheckBox97.Width = 50
+        '
+        'CheckBox98
+        '
+        Me.CheckBox98.DataPropertyName = "CheckBox98"
+        Me.CheckBox98.HeaderText = "98"
+        Me.CheckBox98.MinimumWidth = 6
+        Me.CheckBox98.Name = "CheckBox98"
+        Me.CheckBox98.Width = 50
+        '
+        'CheckBox99
+        '
+        Me.CheckBox99.DataPropertyName = "CheckBox99"
+        Me.CheckBox99.HeaderText = "99"
+        Me.CheckBox99.MinimumWidth = 6
+        Me.CheckBox99.Name = "CheckBox99"
+        Me.CheckBox99.Width = 50
+        '
         'BindingSourceひも上下
         '
         Me.BindingSourceひも上下.DataMember = "tblCheckBox"
@@ -3909,809 +4712,6 @@ Partial Class frmMain
         Me.lblひも本幅変更.Size = New System.Drawing.Size(92, 20)
         Me.lblひも本幅変更.TabIndex = 30
         Me.lblひも本幅変更.Text = "ひも本幅変更"
-        '
-        'Index
-        '
-        Me.Index.DataPropertyName = "Index"
-        Me.Index.HeaderText = "垂直"
-        Me.Index.MinimumWidth = 6
-        Me.Index.Name = "Index"
-        Me.Index.ReadOnly = True
-        Me.Index.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.Index.Visible = False
-        Me.Index.Width = 70
-        '
-        'CheckBox01
-        '
-        Me.CheckBox01.DataPropertyName = "CheckBox01"
-        Me.CheckBox01.HeaderText = "1"
-        Me.CheckBox01.MinimumWidth = 6
-        Me.CheckBox01.Name = "CheckBox01"
-        Me.CheckBox01.Width = 50
-        '
-        'CheckBox02
-        '
-        Me.CheckBox02.DataPropertyName = "CheckBox02"
-        Me.CheckBox02.HeaderText = "2"
-        Me.CheckBox02.MinimumWidth = 6
-        Me.CheckBox02.Name = "CheckBox02"
-        Me.CheckBox02.Width = 50
-        '
-        'CheckBox03
-        '
-        Me.CheckBox03.DataPropertyName = "CheckBox03"
-        Me.CheckBox03.HeaderText = "3"
-        Me.CheckBox03.MinimumWidth = 6
-        Me.CheckBox03.Name = "CheckBox03"
-        Me.CheckBox03.Width = 50
-        '
-        'CheckBox04
-        '
-        Me.CheckBox04.DataPropertyName = "CheckBox04"
-        Me.CheckBox04.HeaderText = "4"
-        Me.CheckBox04.MinimumWidth = 6
-        Me.CheckBox04.Name = "CheckBox04"
-        Me.CheckBox04.Width = 50
-        '
-        'CheckBox05
-        '
-        Me.CheckBox05.DataPropertyName = "CheckBox05"
-        Me.CheckBox05.HeaderText = "5"
-        Me.CheckBox05.MinimumWidth = 6
-        Me.CheckBox05.Name = "CheckBox05"
-        Me.CheckBox05.Width = 50
-        '
-        'CheckBox06
-        '
-        Me.CheckBox06.DataPropertyName = "CheckBox06"
-        Me.CheckBox06.HeaderText = "6"
-        Me.CheckBox06.MinimumWidth = 6
-        Me.CheckBox06.Name = "CheckBox06"
-        Me.CheckBox06.Width = 50
-        '
-        'CheckBox07
-        '
-        Me.CheckBox07.DataPropertyName = "CheckBox07"
-        Me.CheckBox07.HeaderText = "7"
-        Me.CheckBox07.MinimumWidth = 6
-        Me.CheckBox07.Name = "CheckBox07"
-        Me.CheckBox07.Width = 50
-        '
-        'CheckBox08
-        '
-        Me.CheckBox08.DataPropertyName = "CheckBox08"
-        Me.CheckBox08.HeaderText = "8"
-        Me.CheckBox08.MinimumWidth = 6
-        Me.CheckBox08.Name = "CheckBox08"
-        Me.CheckBox08.Width = 50
-        '
-        'CheckBox09
-        '
-        Me.CheckBox09.DataPropertyName = "CheckBox09"
-        Me.CheckBox09.HeaderText = "9"
-        Me.CheckBox09.MinimumWidth = 6
-        Me.CheckBox09.Name = "CheckBox09"
-        Me.CheckBox09.Width = 50
-        '
-        'CheckBox10
-        '
-        Me.CheckBox10.DataPropertyName = "CheckBox10"
-        Me.CheckBox10.HeaderText = "10"
-        Me.CheckBox10.MinimumWidth = 6
-        Me.CheckBox10.Name = "CheckBox10"
-        Me.CheckBox10.Width = 50
-        '
-        'CheckBox11
-        '
-        Me.CheckBox11.DataPropertyName = "CheckBox11"
-        Me.CheckBox11.HeaderText = "11"
-        Me.CheckBox11.MinimumWidth = 6
-        Me.CheckBox11.Name = "CheckBox11"
-        Me.CheckBox11.Width = 50
-        '
-        'CheckBox12
-        '
-        Me.CheckBox12.DataPropertyName = "CheckBox12"
-        Me.CheckBox12.HeaderText = "12"
-        Me.CheckBox12.MinimumWidth = 6
-        Me.CheckBox12.Name = "CheckBox12"
-        Me.CheckBox12.Width = 50
-        '
-        'CheckBox13
-        '
-        Me.CheckBox13.DataPropertyName = "CheckBox13"
-        Me.CheckBox13.HeaderText = "13"
-        Me.CheckBox13.MinimumWidth = 6
-        Me.CheckBox13.Name = "CheckBox13"
-        Me.CheckBox13.Width = 50
-        '
-        'CheckBox14
-        '
-        Me.CheckBox14.DataPropertyName = "CheckBox14"
-        Me.CheckBox14.HeaderText = "14"
-        Me.CheckBox14.MinimumWidth = 6
-        Me.CheckBox14.Name = "CheckBox14"
-        Me.CheckBox14.Width = 50
-        '
-        'CheckBox15
-        '
-        Me.CheckBox15.DataPropertyName = "CheckBox15"
-        Me.CheckBox15.HeaderText = "15"
-        Me.CheckBox15.MinimumWidth = 6
-        Me.CheckBox15.Name = "CheckBox15"
-        Me.CheckBox15.Width = 50
-        '
-        'CheckBox16
-        '
-        Me.CheckBox16.DataPropertyName = "CheckBox16"
-        Me.CheckBox16.HeaderText = "16"
-        Me.CheckBox16.MinimumWidth = 6
-        Me.CheckBox16.Name = "CheckBox16"
-        Me.CheckBox16.Width = 50
-        '
-        'CheckBox17
-        '
-        Me.CheckBox17.DataPropertyName = "CheckBox17"
-        Me.CheckBox17.HeaderText = "17"
-        Me.CheckBox17.MinimumWidth = 6
-        Me.CheckBox17.Name = "CheckBox17"
-        Me.CheckBox17.Width = 50
-        '
-        'CheckBox18
-        '
-        Me.CheckBox18.DataPropertyName = "CheckBox18"
-        Me.CheckBox18.HeaderText = "18"
-        Me.CheckBox18.MinimumWidth = 6
-        Me.CheckBox18.Name = "CheckBox18"
-        Me.CheckBox18.Width = 50
-        '
-        'CheckBox19
-        '
-        Me.CheckBox19.DataPropertyName = "CheckBox19"
-        Me.CheckBox19.HeaderText = "19"
-        Me.CheckBox19.MinimumWidth = 6
-        Me.CheckBox19.Name = "CheckBox19"
-        Me.CheckBox19.Width = 50
-        '
-        'CheckBox20
-        '
-        Me.CheckBox20.DataPropertyName = "CheckBox20"
-        Me.CheckBox20.HeaderText = "20"
-        Me.CheckBox20.MinimumWidth = 6
-        Me.CheckBox20.Name = "CheckBox20"
-        Me.CheckBox20.Width = 50
-        '
-        'CheckBox21
-        '
-        Me.CheckBox21.DataPropertyName = "CheckBox21"
-        Me.CheckBox21.HeaderText = "21"
-        Me.CheckBox21.MinimumWidth = 6
-        Me.CheckBox21.Name = "CheckBox21"
-        Me.CheckBox21.Width = 50
-        '
-        'CheckBox22
-        '
-        Me.CheckBox22.DataPropertyName = "CheckBox22"
-        Me.CheckBox22.HeaderText = "22"
-        Me.CheckBox22.MinimumWidth = 6
-        Me.CheckBox22.Name = "CheckBox22"
-        Me.CheckBox22.Width = 50
-        '
-        'CheckBox23
-        '
-        Me.CheckBox23.DataPropertyName = "CheckBox23"
-        Me.CheckBox23.HeaderText = "23"
-        Me.CheckBox23.MinimumWidth = 6
-        Me.CheckBox23.Name = "CheckBox23"
-        Me.CheckBox23.Width = 50
-        '
-        'CheckBox24
-        '
-        Me.CheckBox24.DataPropertyName = "CheckBox24"
-        Me.CheckBox24.HeaderText = "24"
-        Me.CheckBox24.MinimumWidth = 6
-        Me.CheckBox24.Name = "CheckBox24"
-        Me.CheckBox24.Width = 50
-        '
-        'CheckBox25
-        '
-        Me.CheckBox25.DataPropertyName = "CheckBox25"
-        Me.CheckBox25.HeaderText = "25"
-        Me.CheckBox25.MinimumWidth = 6
-        Me.CheckBox25.Name = "CheckBox25"
-        Me.CheckBox25.Width = 50
-        '
-        'CheckBox26
-        '
-        Me.CheckBox26.DataPropertyName = "CheckBox26"
-        Me.CheckBox26.HeaderText = "26"
-        Me.CheckBox26.MinimumWidth = 6
-        Me.CheckBox26.Name = "CheckBox26"
-        Me.CheckBox26.Width = 50
-        '
-        'CheckBox27
-        '
-        Me.CheckBox27.DataPropertyName = "CheckBox27"
-        Me.CheckBox27.HeaderText = "27"
-        Me.CheckBox27.MinimumWidth = 6
-        Me.CheckBox27.Name = "CheckBox27"
-        Me.CheckBox27.Width = 50
-        '
-        'CheckBox28
-        '
-        Me.CheckBox28.DataPropertyName = "CheckBox28"
-        Me.CheckBox28.HeaderText = "28"
-        Me.CheckBox28.MinimumWidth = 6
-        Me.CheckBox28.Name = "CheckBox28"
-        Me.CheckBox28.Width = 50
-        '
-        'CheckBox29
-        '
-        Me.CheckBox29.DataPropertyName = "CheckBox29"
-        Me.CheckBox29.HeaderText = "29"
-        Me.CheckBox29.MinimumWidth = 6
-        Me.CheckBox29.Name = "CheckBox29"
-        Me.CheckBox29.Width = 50
-        '
-        'CheckBox30
-        '
-        Me.CheckBox30.DataPropertyName = "CheckBox30"
-        Me.CheckBox30.HeaderText = "30"
-        Me.CheckBox30.MinimumWidth = 6
-        Me.CheckBox30.Name = "CheckBox30"
-        Me.CheckBox30.Width = 50
-        '
-        'CheckBox31
-        '
-        Me.CheckBox31.DataPropertyName = "CheckBox31"
-        Me.CheckBox31.HeaderText = "31"
-        Me.CheckBox31.MinimumWidth = 6
-        Me.CheckBox31.Name = "CheckBox31"
-        Me.CheckBox31.Width = 50
-        '
-        'CheckBox32
-        '
-        Me.CheckBox32.DataPropertyName = "CheckBox32"
-        Me.CheckBox32.HeaderText = "32"
-        Me.CheckBox32.MinimumWidth = 6
-        Me.CheckBox32.Name = "CheckBox32"
-        Me.CheckBox32.Width = 50
-        '
-        'CheckBox33
-        '
-        Me.CheckBox33.DataPropertyName = "CheckBox33"
-        Me.CheckBox33.HeaderText = "33"
-        Me.CheckBox33.MinimumWidth = 6
-        Me.CheckBox33.Name = "CheckBox33"
-        Me.CheckBox33.Width = 50
-        '
-        'CheckBox34
-        '
-        Me.CheckBox34.DataPropertyName = "CheckBox34"
-        Me.CheckBox34.HeaderText = "34"
-        Me.CheckBox34.MinimumWidth = 6
-        Me.CheckBox34.Name = "CheckBox34"
-        Me.CheckBox34.Width = 50
-        '
-        'CheckBox35
-        '
-        Me.CheckBox35.DataPropertyName = "CheckBox35"
-        Me.CheckBox35.HeaderText = "35"
-        Me.CheckBox35.MinimumWidth = 6
-        Me.CheckBox35.Name = "CheckBox35"
-        Me.CheckBox35.Width = 50
-        '
-        'CheckBox36
-        '
-        Me.CheckBox36.DataPropertyName = "CheckBox36"
-        Me.CheckBox36.HeaderText = "36"
-        Me.CheckBox36.MinimumWidth = 6
-        Me.CheckBox36.Name = "CheckBox36"
-        Me.CheckBox36.Width = 50
-        '
-        'CheckBox37
-        '
-        Me.CheckBox37.DataPropertyName = "CheckBox37"
-        Me.CheckBox37.HeaderText = "37"
-        Me.CheckBox37.MinimumWidth = 6
-        Me.CheckBox37.Name = "CheckBox37"
-        Me.CheckBox37.Width = 50
-        '
-        'CheckBox38
-        '
-        Me.CheckBox38.DataPropertyName = "CheckBox38"
-        Me.CheckBox38.HeaderText = "38"
-        Me.CheckBox38.MinimumWidth = 6
-        Me.CheckBox38.Name = "CheckBox38"
-        Me.CheckBox38.Width = 50
-        '
-        'CheckBox39
-        '
-        Me.CheckBox39.DataPropertyName = "CheckBox39"
-        Me.CheckBox39.HeaderText = "39"
-        Me.CheckBox39.MinimumWidth = 6
-        Me.CheckBox39.Name = "CheckBox39"
-        Me.CheckBox39.Width = 50
-        '
-        'CheckBox40
-        '
-        Me.CheckBox40.DataPropertyName = "CheckBox40"
-        Me.CheckBox40.HeaderText = "40"
-        Me.CheckBox40.MinimumWidth = 6
-        Me.CheckBox40.Name = "CheckBox40"
-        Me.CheckBox40.Width = 50
-        '
-        'CheckBox41
-        '
-        Me.CheckBox41.DataPropertyName = "CheckBox41"
-        Me.CheckBox41.HeaderText = "41"
-        Me.CheckBox41.MinimumWidth = 6
-        Me.CheckBox41.Name = "CheckBox41"
-        Me.CheckBox41.Width = 50
-        '
-        'CheckBox42
-        '
-        Me.CheckBox42.DataPropertyName = "CheckBox42"
-        Me.CheckBox42.HeaderText = "42"
-        Me.CheckBox42.MinimumWidth = 6
-        Me.CheckBox42.Name = "CheckBox42"
-        Me.CheckBox42.Width = 50
-        '
-        'CheckBox43
-        '
-        Me.CheckBox43.DataPropertyName = "CheckBox43"
-        Me.CheckBox43.HeaderText = "43"
-        Me.CheckBox43.MinimumWidth = 6
-        Me.CheckBox43.Name = "CheckBox43"
-        Me.CheckBox43.Width = 50
-        '
-        'CheckBox44
-        '
-        Me.CheckBox44.DataPropertyName = "CheckBox44"
-        Me.CheckBox44.HeaderText = "44"
-        Me.CheckBox44.MinimumWidth = 6
-        Me.CheckBox44.Name = "CheckBox44"
-        Me.CheckBox44.Width = 50
-        '
-        'CheckBox45
-        '
-        Me.CheckBox45.DataPropertyName = "CheckBox45"
-        Me.CheckBox45.HeaderText = "45"
-        Me.CheckBox45.MinimumWidth = 6
-        Me.CheckBox45.Name = "CheckBox45"
-        Me.CheckBox45.Width = 50
-        '
-        'CheckBox46
-        '
-        Me.CheckBox46.DataPropertyName = "CheckBox46"
-        Me.CheckBox46.HeaderText = "46"
-        Me.CheckBox46.MinimumWidth = 6
-        Me.CheckBox46.Name = "CheckBox46"
-        Me.CheckBox46.Width = 50
-        '
-        'CheckBox47
-        '
-        Me.CheckBox47.DataPropertyName = "CheckBox47"
-        Me.CheckBox47.HeaderText = "47"
-        Me.CheckBox47.MinimumWidth = 6
-        Me.CheckBox47.Name = "CheckBox47"
-        Me.CheckBox47.Width = 50
-        '
-        'CheckBox48
-        '
-        Me.CheckBox48.DataPropertyName = "CheckBox48"
-        Me.CheckBox48.HeaderText = "48"
-        Me.CheckBox48.MinimumWidth = 6
-        Me.CheckBox48.Name = "CheckBox48"
-        Me.CheckBox48.Width = 50
-        '
-        'CheckBox49
-        '
-        Me.CheckBox49.DataPropertyName = "CheckBox49"
-        Me.CheckBox49.HeaderText = "49"
-        Me.CheckBox49.MinimumWidth = 6
-        Me.CheckBox49.Name = "CheckBox49"
-        Me.CheckBox49.Width = 50
-        '
-        'CheckBox50
-        '
-        Me.CheckBox50.DataPropertyName = "CheckBox50"
-        Me.CheckBox50.HeaderText = "50"
-        Me.CheckBox50.MinimumWidth = 6
-        Me.CheckBox50.Name = "CheckBox50"
-        Me.CheckBox50.Width = 50
-        '
-        'CheckBox51
-        '
-        Me.CheckBox51.DataPropertyName = "CheckBox51"
-        Me.CheckBox51.HeaderText = "51"
-        Me.CheckBox51.MinimumWidth = 6
-        Me.CheckBox51.Name = "CheckBox51"
-        Me.CheckBox51.Width = 50
-        '
-        'CheckBox52
-        '
-        Me.CheckBox52.DataPropertyName = "CheckBox52"
-        Me.CheckBox52.HeaderText = "52"
-        Me.CheckBox52.MinimumWidth = 6
-        Me.CheckBox52.Name = "CheckBox52"
-        Me.CheckBox52.Width = 50
-        '
-        'CheckBox53
-        '
-        Me.CheckBox53.DataPropertyName = "CheckBox53"
-        Me.CheckBox53.HeaderText = "53"
-        Me.CheckBox53.MinimumWidth = 6
-        Me.CheckBox53.Name = "CheckBox53"
-        Me.CheckBox53.Width = 50
-        '
-        'CheckBox54
-        '
-        Me.CheckBox54.DataPropertyName = "CheckBox54"
-        Me.CheckBox54.HeaderText = "54"
-        Me.CheckBox54.MinimumWidth = 6
-        Me.CheckBox54.Name = "CheckBox54"
-        Me.CheckBox54.Width = 50
-        '
-        'CheckBox55
-        '
-        Me.CheckBox55.DataPropertyName = "CheckBox55"
-        Me.CheckBox55.HeaderText = "55"
-        Me.CheckBox55.MinimumWidth = 6
-        Me.CheckBox55.Name = "CheckBox55"
-        Me.CheckBox55.Width = 50
-        '
-        'CheckBox56
-        '
-        Me.CheckBox56.DataPropertyName = "CheckBox56"
-        Me.CheckBox56.HeaderText = "56"
-        Me.CheckBox56.MinimumWidth = 6
-        Me.CheckBox56.Name = "CheckBox56"
-        Me.CheckBox56.Width = 50
-        '
-        'CheckBox57
-        '
-        Me.CheckBox57.DataPropertyName = "CheckBox57"
-        Me.CheckBox57.HeaderText = "57"
-        Me.CheckBox57.MinimumWidth = 6
-        Me.CheckBox57.Name = "CheckBox57"
-        Me.CheckBox57.Width = 50
-        '
-        'CheckBox58
-        '
-        Me.CheckBox58.DataPropertyName = "CheckBox58"
-        Me.CheckBox58.HeaderText = "58"
-        Me.CheckBox58.MinimumWidth = 6
-        Me.CheckBox58.Name = "CheckBox58"
-        Me.CheckBox58.Width = 50
-        '
-        'CheckBox59
-        '
-        Me.CheckBox59.DataPropertyName = "CheckBox59"
-        Me.CheckBox59.HeaderText = "59"
-        Me.CheckBox59.MinimumWidth = 6
-        Me.CheckBox59.Name = "CheckBox59"
-        Me.CheckBox59.Width = 50
-        '
-        'CheckBox60
-        '
-        Me.CheckBox60.DataPropertyName = "CheckBox60"
-        Me.CheckBox60.HeaderText = "60"
-        Me.CheckBox60.MinimumWidth = 6
-        Me.CheckBox60.Name = "CheckBox60"
-        Me.CheckBox60.Width = 50
-        '
-        'CheckBox61
-        '
-        Me.CheckBox61.DataPropertyName = "CheckBox61"
-        Me.CheckBox61.HeaderText = "61"
-        Me.CheckBox61.MinimumWidth = 6
-        Me.CheckBox61.Name = "CheckBox61"
-        Me.CheckBox61.Width = 50
-        '
-        'CheckBox62
-        '
-        Me.CheckBox62.DataPropertyName = "CheckBox62"
-        Me.CheckBox62.HeaderText = "62"
-        Me.CheckBox62.MinimumWidth = 6
-        Me.CheckBox62.Name = "CheckBox62"
-        Me.CheckBox62.Width = 50
-        '
-        'CheckBox63
-        '
-        Me.CheckBox63.DataPropertyName = "CheckBox63"
-        Me.CheckBox63.HeaderText = "63"
-        Me.CheckBox63.MinimumWidth = 6
-        Me.CheckBox63.Name = "CheckBox63"
-        Me.CheckBox63.Width = 50
-        '
-        'CheckBox64
-        '
-        Me.CheckBox64.DataPropertyName = "CheckBox64"
-        Me.CheckBox64.HeaderText = "64"
-        Me.CheckBox64.MinimumWidth = 6
-        Me.CheckBox64.Name = "CheckBox64"
-        Me.CheckBox64.Width = 50
-        '
-        'CheckBox65
-        '
-        Me.CheckBox65.DataPropertyName = "CheckBox65"
-        Me.CheckBox65.HeaderText = "65"
-        Me.CheckBox65.MinimumWidth = 6
-        Me.CheckBox65.Name = "CheckBox65"
-        Me.CheckBox65.Width = 50
-        '
-        'CheckBox66
-        '
-        Me.CheckBox66.DataPropertyName = "CheckBox66"
-        Me.CheckBox66.HeaderText = "66"
-        Me.CheckBox66.MinimumWidth = 6
-        Me.CheckBox66.Name = "CheckBox66"
-        Me.CheckBox66.Width = 50
-        '
-        'CheckBox67
-        '
-        Me.CheckBox67.DataPropertyName = "CheckBox67"
-        Me.CheckBox67.HeaderText = "67"
-        Me.CheckBox67.MinimumWidth = 6
-        Me.CheckBox67.Name = "CheckBox67"
-        Me.CheckBox67.Width = 50
-        '
-        'CheckBox68
-        '
-        Me.CheckBox68.DataPropertyName = "CheckBox68"
-        Me.CheckBox68.HeaderText = "68"
-        Me.CheckBox68.MinimumWidth = 6
-        Me.CheckBox68.Name = "CheckBox68"
-        Me.CheckBox68.Width = 50
-        '
-        'CheckBox69
-        '
-        Me.CheckBox69.DataPropertyName = "CheckBox69"
-        Me.CheckBox69.HeaderText = "69"
-        Me.CheckBox69.MinimumWidth = 6
-        Me.CheckBox69.Name = "CheckBox69"
-        Me.CheckBox69.Width = 50
-        '
-        'CheckBox70
-        '
-        Me.CheckBox70.DataPropertyName = "CheckBox70"
-        Me.CheckBox70.HeaderText = "70"
-        Me.CheckBox70.MinimumWidth = 6
-        Me.CheckBox70.Name = "CheckBox70"
-        Me.CheckBox70.Width = 50
-        '
-        'CheckBox71
-        '
-        Me.CheckBox71.DataPropertyName = "CheckBox71"
-        Me.CheckBox71.HeaderText = "71"
-        Me.CheckBox71.MinimumWidth = 6
-        Me.CheckBox71.Name = "CheckBox71"
-        Me.CheckBox71.Width = 50
-        '
-        'CheckBox72
-        '
-        Me.CheckBox72.DataPropertyName = "CheckBox72"
-        Me.CheckBox72.HeaderText = "72"
-        Me.CheckBox72.MinimumWidth = 6
-        Me.CheckBox72.Name = "CheckBox72"
-        Me.CheckBox72.Width = 50
-        '
-        'CheckBox73
-        '
-        Me.CheckBox73.DataPropertyName = "CheckBox73"
-        Me.CheckBox73.HeaderText = "73"
-        Me.CheckBox73.MinimumWidth = 6
-        Me.CheckBox73.Name = "CheckBox73"
-        Me.CheckBox73.Width = 50
-        '
-        'CheckBox74
-        '
-        Me.CheckBox74.DataPropertyName = "CheckBox74"
-        Me.CheckBox74.HeaderText = "74"
-        Me.CheckBox74.MinimumWidth = 6
-        Me.CheckBox74.Name = "CheckBox74"
-        Me.CheckBox74.Width = 50
-        '
-        'CheckBox75
-        '
-        Me.CheckBox75.DataPropertyName = "CheckBox75"
-        Me.CheckBox75.HeaderText = "75"
-        Me.CheckBox75.MinimumWidth = 6
-        Me.CheckBox75.Name = "CheckBox75"
-        Me.CheckBox75.Width = 50
-        '
-        'CheckBox76
-        '
-        Me.CheckBox76.DataPropertyName = "CheckBox76"
-        Me.CheckBox76.HeaderText = "76"
-        Me.CheckBox76.MinimumWidth = 6
-        Me.CheckBox76.Name = "CheckBox76"
-        Me.CheckBox76.Width = 50
-        '
-        'CheckBox77
-        '
-        Me.CheckBox77.DataPropertyName = "CheckBox77"
-        Me.CheckBox77.HeaderText = "77"
-        Me.CheckBox77.MinimumWidth = 6
-        Me.CheckBox77.Name = "CheckBox77"
-        Me.CheckBox77.Width = 50
-        '
-        'CheckBox78
-        '
-        Me.CheckBox78.DataPropertyName = "CheckBox78"
-        Me.CheckBox78.HeaderText = "78"
-        Me.CheckBox78.MinimumWidth = 6
-        Me.CheckBox78.Name = "CheckBox78"
-        Me.CheckBox78.Width = 50
-        '
-        'CheckBox79
-        '
-        Me.CheckBox79.DataPropertyName = "CheckBox79"
-        Me.CheckBox79.HeaderText = "79"
-        Me.CheckBox79.MinimumWidth = 6
-        Me.CheckBox79.Name = "CheckBox79"
-        Me.CheckBox79.Width = 50
-        '
-        'CheckBox80
-        '
-        Me.CheckBox80.DataPropertyName = "CheckBox80"
-        Me.CheckBox80.HeaderText = "80"
-        Me.CheckBox80.MinimumWidth = 6
-        Me.CheckBox80.Name = "CheckBox80"
-        Me.CheckBox80.Width = 50
-        '
-        'CheckBox81
-        '
-        Me.CheckBox81.DataPropertyName = "CheckBox81"
-        Me.CheckBox81.HeaderText = "81"
-        Me.CheckBox81.MinimumWidth = 6
-        Me.CheckBox81.Name = "CheckBox81"
-        Me.CheckBox81.Width = 50
-        '
-        'CheckBox82
-        '
-        Me.CheckBox82.DataPropertyName = "CheckBox82"
-        Me.CheckBox82.HeaderText = "82"
-        Me.CheckBox82.MinimumWidth = 6
-        Me.CheckBox82.Name = "CheckBox82"
-        Me.CheckBox82.Width = 50
-        '
-        'CheckBox83
-        '
-        Me.CheckBox83.DataPropertyName = "CheckBox83"
-        Me.CheckBox83.HeaderText = "83"
-        Me.CheckBox83.MinimumWidth = 6
-        Me.CheckBox83.Name = "CheckBox83"
-        Me.CheckBox83.Width = 50
-        '
-        'CheckBox84
-        '
-        Me.CheckBox84.DataPropertyName = "CheckBox84"
-        Me.CheckBox84.HeaderText = "84"
-        Me.CheckBox84.MinimumWidth = 6
-        Me.CheckBox84.Name = "CheckBox84"
-        Me.CheckBox84.Width = 50
-        '
-        'CheckBox85
-        '
-        Me.CheckBox85.DataPropertyName = "CheckBox85"
-        Me.CheckBox85.HeaderText = "85"
-        Me.CheckBox85.MinimumWidth = 6
-        Me.CheckBox85.Name = "CheckBox85"
-        Me.CheckBox85.Width = 50
-        '
-        'CheckBox86
-        '
-        Me.CheckBox86.DataPropertyName = "CheckBox86"
-        Me.CheckBox86.HeaderText = "86"
-        Me.CheckBox86.MinimumWidth = 6
-        Me.CheckBox86.Name = "CheckBox86"
-        Me.CheckBox86.Width = 50
-        '
-        'CheckBox87
-        '
-        Me.CheckBox87.DataPropertyName = "CheckBox87"
-        Me.CheckBox87.HeaderText = "87"
-        Me.CheckBox87.MinimumWidth = 6
-        Me.CheckBox87.Name = "CheckBox87"
-        Me.CheckBox87.Width = 50
-        '
-        'CheckBox88
-        '
-        Me.CheckBox88.DataPropertyName = "CheckBox88"
-        Me.CheckBox88.HeaderText = "88"
-        Me.CheckBox88.MinimumWidth = 6
-        Me.CheckBox88.Name = "CheckBox88"
-        Me.CheckBox88.Width = 50
-        '
-        'CheckBox89
-        '
-        Me.CheckBox89.DataPropertyName = "CheckBox89"
-        Me.CheckBox89.HeaderText = "89"
-        Me.CheckBox89.MinimumWidth = 6
-        Me.CheckBox89.Name = "CheckBox89"
-        Me.CheckBox89.Width = 50
-        '
-        'CheckBox90
-        '
-        Me.CheckBox90.DataPropertyName = "CheckBox90"
-        Me.CheckBox90.HeaderText = "90"
-        Me.CheckBox90.MinimumWidth = 6
-        Me.CheckBox90.Name = "CheckBox90"
-        Me.CheckBox90.Width = 50
-        '
-        'CheckBox91
-        '
-        Me.CheckBox91.DataPropertyName = "CheckBox91"
-        Me.CheckBox91.HeaderText = "91"
-        Me.CheckBox91.MinimumWidth = 6
-        Me.CheckBox91.Name = "CheckBox91"
-        Me.CheckBox91.Width = 50
-        '
-        'CheckBox92
-        '
-        Me.CheckBox92.DataPropertyName = "CheckBox92"
-        Me.CheckBox92.HeaderText = "92"
-        Me.CheckBox92.MinimumWidth = 6
-        Me.CheckBox92.Name = "CheckBox92"
-        Me.CheckBox92.Width = 50
-        '
-        'CheckBox93
-        '
-        Me.CheckBox93.DataPropertyName = "CheckBox93"
-        Me.CheckBox93.HeaderText = "93"
-        Me.CheckBox93.MinimumWidth = 6
-        Me.CheckBox93.Name = "CheckBox93"
-        Me.CheckBox93.Width = 50
-        '
-        'CheckBox94
-        '
-        Me.CheckBox94.DataPropertyName = "CheckBox94"
-        Me.CheckBox94.HeaderText = "94"
-        Me.CheckBox94.MinimumWidth = 6
-        Me.CheckBox94.Name = "CheckBox94"
-        Me.CheckBox94.Width = 50
-        '
-        'CheckBox95
-        '
-        Me.CheckBox95.DataPropertyName = "CheckBox95"
-        Me.CheckBox95.HeaderText = "95"
-        Me.CheckBox95.MinimumWidth = 6
-        Me.CheckBox95.Name = "CheckBox95"
-        Me.CheckBox95.Width = 50
-        '
-        'CheckBox96
-        '
-        Me.CheckBox96.DataPropertyName = "CheckBox96"
-        Me.CheckBox96.HeaderText = "96"
-        Me.CheckBox96.MinimumWidth = 6
-        Me.CheckBox96.Name = "CheckBox96"
-        Me.CheckBox96.Width = 50
-        '
-        'CheckBox97
-        '
-        Me.CheckBox97.DataPropertyName = "CheckBox97"
-        Me.CheckBox97.HeaderText = "97"
-        Me.CheckBox97.MinimumWidth = 6
-        Me.CheckBox97.Name = "CheckBox97"
-        Me.CheckBox97.Width = 50
-        '
-        'CheckBox98
-        '
-        Me.CheckBox98.DataPropertyName = "CheckBox98"
-        Me.CheckBox98.HeaderText = "98"
-        Me.CheckBox98.MinimumWidth = 6
-        Me.CheckBox98.Name = "CheckBox98"
-        Me.CheckBox98.Width = 50
-        '
-        'CheckBox99
-        '
-        Me.CheckBox99.DataPropertyName = "CheckBox99"
-        Me.CheckBox99.HeaderText = "99"
-        Me.CheckBox99.MinimumWidth = 6
-        Me.CheckBox99.Name = "CheckBox99"
-        Me.CheckBox99.Width = 50
         '
         'frmMain
         '
