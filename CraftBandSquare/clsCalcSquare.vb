@@ -2142,31 +2142,70 @@ Class clsCalcSquare
         Return _CUpDown
     End Function
 
-    Function updown上下交換() As clsUpDown
-        '#32 DataGrid操作が認識されないケースもあるようなので
-        If Not _CUpDown.Revert(True) Then
-            Return Nothing
+    Function updown上下交換(ByVal subrange As CSubRange) As clsUpDown
+        If subrange IsNot Nothing Then
+            If Not _CUpDown.RevertRange(subrange, True) Then
+                Return Nothing
+            End If
+        Else
+            '#32 DataGrid操作が認識されないケースもあるようなので
+            If Not _CUpDown.Revert(True) Then
+                Return Nothing
+            End If
         End If
         Return _CUpDown
     End Function
 
-    Function updown左右反転() As clsUpDown
-        If Not _CUpDown.LeftSideRight(True) Then
-            Return Nothing
+    Function updown左右反転(ByVal subrange As CSubRange) As clsUpDown
+        If subrange IsNot Nothing Then
+            If Not _CUpDown.LeftSideRightRange(subrange, True) Then
+                Return Nothing
+            End If
+        Else
+            If Not _CUpDown.LeftSideRight(True) Then
+                Return Nothing
+            End If
         End If
         Return _CUpDown
     End Function
 
-    Function updown天地反転() As clsUpDown
-        If Not _CUpDown.UpSideDown(True) Then
-            Return Nothing
+    Function updown天地反転(ByVal subrange As CSubRange) As clsUpDown
+        If subrange IsNot Nothing Then
+            If Not _CUpDown.UpSideDownRange(subrange, True) Then
+                Return Nothing
+            End If
+        Else
+            If Not _CUpDown.UpSideDown(True) Then
+                Return Nothing
+            End If
         End If
         Return _CUpDown
     End Function
 
-    Function updown右回転() As clsUpDown
-        If Not _CUpDown.RotateRight(True) Then
-            Return Nothing
+    Function updown右回転(ByVal desc As Boolean, ByVal subrange As CSubRange) As clsUpDown
+        If Not desc Then
+            '右回転
+            If subrange IsNot Nothing Then
+                If Not _CUpDown.RotateRightRange(subrange, True) Then
+                    Return Nothing
+                End If
+            Else
+                If Not _CUpDown.RotateRight(True) Then
+                    Return Nothing
+                End If
+            End If
+        Else
+            '左回転
+            If subrange IsNot Nothing Then
+                If Not _CUpDown.RotateLeftRange(subrange, True) Then
+                    Return Nothing
+                End If
+            Else
+                If Not _CUpDown.RotateLeft(True) Then
+                    Return Nothing
+                End If
+            End If
+
         End If
         Return _CUpDown
     End Function

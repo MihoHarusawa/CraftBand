@@ -1588,7 +1588,7 @@ Partial Class frmMain
         Me.btn右回転.Name = "btn右回転"
         Me.btn右回転.Size = New System.Drawing.Size(111, 46)
         Me.btn右回転.TabIndex = 20
-        Me.btn右回転.Text = "右回転(&O)"
+        Me.btn右回転.Text = "右回転"
         Me.ToolTip1.SetToolTip(Me.btn右回転, "パターンを右に90度回転します")
         Me.btn右回転.UseVisualStyleBackColor = True
         '
@@ -1617,7 +1617,7 @@ Partial Class frmMain
         Me.btn上下交換.Name = "btn上下交換"
         Me.btn上下交換.Size = New System.Drawing.Size(111, 46)
         Me.btn上下交換.TabIndex = 17
-        Me.btn上下交換.Text = "上下交換(&C)"
+        Me.btn上下交換.Text = "上下交換"
         Me.ToolTip1.SetToolTip(Me.btn上下交換, "パターンの上下(チェックの有無)を入れ替えます")
         Me.btn上下交換.UseVisualStyleBackColor = True
         '
@@ -1650,7 +1650,7 @@ Partial Class frmMain
         Me.btn天地反転.Name = "btn天地反転"
         Me.btn天地反転.Size = New System.Drawing.Size(111, 46)
         Me.btn天地反転.TabIndex = 19
-        Me.btn天地反転.Text = "天地反転(&U)"
+        Me.btn天地反転.Text = "天地反転"
         Me.ToolTip1.SetToolTip(Me.btn天地反転, "パターンの上下を入れ替えます")
         Me.btn天地反転.UseVisualStyleBackColor = True
         '
@@ -1661,7 +1661,7 @@ Partial Class frmMain
         Me.btn左右反転.Name = "btn左右反転"
         Me.btn左右反転.Size = New System.Drawing.Size(111, 46)
         Me.btn左右反転.TabIndex = 18
-        Me.btn左右反転.Text = "左右反転(&L)"
+        Me.btn左右反転.Text = "左右反転"
         Me.ToolTip1.SetToolTip(Me.btn左右反転, "パターンの左右を入れ替えます")
         Me.btn左右反転.UseVisualStyleBackColor = True
         '

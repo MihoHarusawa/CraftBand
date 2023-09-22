@@ -154,6 +154,10 @@
     <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
+  <data name="AskTargetAllRange" xml:space="preserve">
+    <value>全範囲を{0}します。よろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="CalcBadRecord" xml:space="preserve">
     <value>無効レコード(番号={0})</value>
   </data>

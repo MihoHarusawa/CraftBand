@@ -32,6 +32,7 @@ Public Class frmUpDownSetting
     End Sub
 
     Private Function LoadCurrent() As Boolean
+        grp反映方法.Visible = True
         '上下図名を選択してください。[OK]ボタンで現パターンに反映します。
         lblしてください.Text = My.Resources.UpDownReadInstruction
         Me.Text = My.Resources.UpDownRead
@@ -40,6 +41,7 @@ Public Class frmUpDownSetting
     End Function
 
     Private Function SaveCurrent() As Boolean
+        grp反映方法.Visible = False
         '新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。
         lblしてください.Text = My.Resources.UpDownAppendInstruction
         Me.Text = My.Resources.UpDownAppend
@@ -64,9 +66,18 @@ Public Class frmUpDownSetting
                 MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
             End If
-            CurrentUpdown.FromMasterRecord(row)
+            Dim memo As String = CurrentUpdown.Memo
+            If chk入れ換え.Checked Then
+                CurrentUpdown.FromMasterRecord(row)
+            Else
+                CurrentUpdown.ReflectMasterRecord(row, chk繰り返す.Checked)
+            End If
             If String.IsNullOrWhiteSpace(CurrentUpdown.Memo) Then
-                CurrentUpdown.Memo = cmb上下図名.Text
+                If String.IsNullOrWhiteSpace(memo) Then
+                    CurrentUpdown.Memo = cmb上下図名.Text
+                Else
+                    CurrentUpdown.Memo = memo 'あれば先を保持
+                End If
             End If
 
         ElseIf IsSaveFromCurrent Then
@@ -117,5 +128,9 @@ Public Class frmUpDownSetting
             End If
         End If
 
+    End Sub
+
+    Private Sub chk入れ換え_CheckedChanged(sender As Object, e As EventArgs) Handles chk入れ換え.CheckedChanged
+        chk繰り返す.Enabled = Not chk入れ換え.Checked
     End Sub
 End Class

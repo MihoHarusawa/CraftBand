@@ -1963,10 +1963,18 @@ Public Class frmMain
     End Sub
 
     Private Sub btn上下交換_Click(sender As Object, e As EventArgs) Handles btn上下交換.Click
-        setDataSourceUpDown(Nothing)
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+            '全範囲を{0}します。よろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn上下交換.Text),
+                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.updown上下交換()
+        Dim updown As clsUpDown = _clsCalcSquare.updown上下交換(gridsel.SubRange(dgvひも上下))
         If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn上下交換.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1975,13 +1983,22 @@ Public Class frmMain
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
+        gridsel.GridCellsSelect(dgvひも上下)
     End Sub
 
     Private Sub btn左右反転_Click(sender As Object, e As EventArgs) Handles btn左右反転.Click
-        setDataSourceUpDown(Nothing)
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+            '全範囲を{0}します。よろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左右反転.Text),
+                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転()
+        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転(gridsel.SubRange(dgvひも上下))
         If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左右反転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1990,13 +2007,22 @@ Public Class frmMain
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
+        gridsel.GridCellsSelect(dgvひも上下)
     End Sub
 
     Private Sub btn天地反転_Click(sender As Object, e As EventArgs) Handles btn天地反転.Click
-        setDataSourceUpDown(Nothing)
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+            '全範囲を{0}します。よろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn天地反転.Text),
+                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.updown天地反転()
+        Dim updown As clsUpDown = _clsCalcSquare.updown天地反転(gridsel.SubRange(dgvひも上下))
         If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn天地反転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -2005,13 +2031,23 @@ Public Class frmMain
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
+        gridsel.GridCellsSelect(dgvひも上下)
     End Sub
 
     Private Sub btn右回転_Click(sender As Object, e As EventArgs) Handles btn右回転.Click
-        setDataSourceUpDown(Nothing)
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
+            '全範囲を{0}します。よろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn右回転.Text),
+                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.updown右回転()
+        Dim desc As Boolean = rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace)
+        Dim updown As clsUpDown = _clsCalcSquare.updown右回転(desc, gridsel.SubRange(dgvひも上下))
         If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn右回転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -2020,6 +2056,7 @@ Public Class frmMain
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
+        gridsel.GridCellsSelect(dgvひも上下)
     End Sub
 
     Private Sub btnシフト_Click(sender As Object, e As EventArgs) Handles btnシフト.Click
@@ -2243,7 +2280,7 @@ Public Class frmMain
         End If
 
         If dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value Then
-            Dim cStep As Integer = 3
+            Dim cStep As Integer = 3 '3本ごと背景色を少し変える
             Dim iRow As Integer = If((e.RowIndex + 1) Mod cStep = 0, 1, 0)
             Dim iCol As Integer = If(e.ColumnIndex Mod cStep = 0, 1, 0)
             Dim iBack As Integer = 160 - iRow * 10 - iCol * 10
@@ -2282,6 +2319,7 @@ Public Class frmMain
     Private Sub btn設定呼出_Click(sender As Object, e As EventArgs) Handles btn設定呼出.Click
         Dim updown_tmp As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
         updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
+        updown_tmp.Memo = txt上下のメモ.Text
 
         Dim dlg As New frmUpDownSetting
         dlg.CurrentUpdown = updown_tmp
@@ -2316,6 +2354,121 @@ Public Class frmMain
             '変わりません
         End If
     End Sub
+
+    '範囲選択
+    Class CDataGridSelection
+        Property ColumnIndexFrom As Integer = Integer.MaxValue
+        Property ColumnIndexTo As Integer = Integer.MinValue
+        Property RowIndexFrom As Integer = Integer.MaxValue
+        Property RowIndexTo As Integer = Integer.MinValue
+        Property SelectedCellsCount As Integer = 0
+
+        ReadOnly Property IsValid As Boolean
+            Get
+                Return (ColumnIndexFrom <= ColumnIndexTo) AndAlso (RowIndexFrom <= RowIndexTo)
+            End Get
+        End Property
+
+        ReadOnly Property FromToRangeCells As Integer
+            Get
+                If Not IsValid Then
+                    Return 0
+                Else
+                    Return (ColumnIndexTo - ColumnIndexFrom + 1) * (RowIndexTo - RowIndexFrom + 1)
+                End If
+            End Get
+        End Property
+
+        ReadOnly Property IsRangeSelect As Boolean
+            Get
+                Return 0 < SelectedCellsCount AndAlso SelectedCellsCount = FromToRangeCells
+            End Get
+        End Property
+
+        ReadOnly Property IsSquareSelect As Boolean
+            Get
+                Return IsRangeSelect AndAlso (ColumnIndexTo - ColumnIndexFrom) = (RowIndexTo - RowIndexFrom)
+            End Get
+        End Property
+
+
+        Private WriteOnly Property ColumnnIndex As Integer
+            Set(value As Integer)
+                If value < ColumnIndexFrom Then
+                    ColumnIndexFrom = value
+                End If
+                If ColumnIndexTo < value Then
+                    ColumnIndexTo = value
+                End If
+            End Set
+        End Property
+
+        Private WriteOnly Property RowIndex As Integer
+            Set(value As Integer)
+                If value < RowIndexFrom Then
+                    RowIndexFrom = value
+                End If
+                If RowIndexTo < value Then
+                    RowIndexTo = value
+                End If
+            End Set
+        End Property
+
+        Function GridSelectedCells(ByVal dgv As DataGridView) As Boolean
+            '行選択は対象外
+            If 0 < dgv.SelectedRows.Count Then
+                Return False
+            End If
+
+            '選択を範囲化
+            For Each c As DataGridViewCell In dgv.SelectedCells
+                ColumnnIndex = c.ColumnIndex
+                RowIndex = c.RowIndex
+            Next
+
+            '数が一致
+            SelectedCellsCount = dgv.SelectedCells.Count
+            Return IsRangeSelect
+        End Function
+
+        Function GridCellsSelect(ByVal dgv As DataGridView) As Boolean
+            '範囲選択であること
+            If Not IsRangeSelect Then
+                Return False
+            End If
+
+            '範囲を選択
+            dgv.ClearSelection()
+            For r As Integer = RowIndexFrom To RowIndexTo
+                For c As Integer = ColumnIndexFrom To ColumnIndexTo
+                    dgv.Rows(r).Cells(c).Selected = True
+                Next
+            Next
+
+            SelectedCellsCount = dgv.SelectedCells.Count
+            Return True
+        End Function
+
+        Function SubRange(ByVal dgv As DataGridView) As CSubRange
+            '範囲選択かつ2点以上であること
+            If Not IsRangeSelect OrElse SelectedCellsCount = 1 Then
+                Return Nothing
+            End If
+
+            '垂直の番号
+            Dim IndexFrom As Integer = dgv.Rows(RowIndexFrom).Cells(0).Value
+            Dim IndexTo As Integer = dgv.Rows(RowIndexTo).Cells(0).Value
+            If IndexFrom <= IndexTo Then
+                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexFrom, IndexTo)
+            Else
+                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexTo, IndexFrom)
+            End If
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return String.Format("{0}-{1}:{2}-{3}:{4}/{5}", ColumnIndexFrom, ColumnIndexTo, RowIndexFrom, RowIndexTo, SelectedCellsCount, FromToRangeCells)
+        End Function
+    End Class
 
 #End Region
 

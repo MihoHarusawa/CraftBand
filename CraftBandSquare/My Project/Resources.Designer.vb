@@ -143,6 +143,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  全範囲を{0}します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskTargetAllRange() As String
+            Get
+                Return ResourceManager.GetString("AskTargetAllRange", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  無効レコード(番号={0}) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcBadRecord() As String
