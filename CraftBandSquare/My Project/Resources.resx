@@ -143,7 +143,8 @@
     <comment>frmMain</comment>
   </data>
   <data name="AskResetUpDown" xml:space="preserve">
-    <value>ひも上下の編集内容をすべてクリアします。よろしいですか？</value>
+    <value>ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？
+(はいで全て初期化、いいえはサイズ保持)</value>
     <comment>frmMain</comment>
   </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">

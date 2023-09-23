@@ -362,6 +362,15 @@ Public Class clsUpDown
         End Property
     End Class
 
+    '全てOFF
+    Function ResetValue() As Boolean
+        For y As Integer = 1 To VerticalCount
+            For x As Integer = 1 To HorizontalCount
+                _Matrix(x, y) = False
+            Next
+        Next
+        Return matrix_to_table()
+    End Function
 
     'サイズ変更(VerticalCountに合わせる)
     Function ReSize(Optional ByVal set_mtx As Boolean = False) As Boolean
@@ -453,7 +462,7 @@ Public Class clsUpDown
             Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
             For y As Integer = subrange.FromY To subrange.ToY
                 For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = save(x, subrange.ToX - (y - subrange.FromY))
+                    _Matrix(x, y) = save(x, subrange.ToY - (y - subrange.FromY))
                 Next
             Next
             Return matrix_to_table()
@@ -473,7 +482,11 @@ Public Class clsUpDown
 
             For y As Integer = 1 To VerticalCount
                 For x As Integer = 1 To HorizontalCount
-                    _Matrix(x, y) = save(y, iOldVerticalCount - x + 1)
+                    Try
+                        _Matrix(x, y) = save(y, iOldVerticalCount - x + 1)
+                    Catch ex As Exception
+                        g_clsLog.LogException(ex, "RotateRight({0},{1})", x, y)
+                    End Try
                 Next
             Next
             Return matrix_to_table()
@@ -491,7 +504,11 @@ Public Class clsUpDown
 
             For y As Integer = subrange.FromY To subrange.ToY
                 For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = save(subrange.FromX + y - subrange.FromY, subrange.ToY - (x - subrange.FromX))
+                    Try
+                        _Matrix(x, y) = save(subrange.FromX + y - subrange.FromY, subrange.ToY - (x - subrange.FromX))
+                    Catch ex As Exception
+                        g_clsLog.LogException(ex, "RotateRightRange({0},{1})", x, y)
+                    End Try
                 Next
             Next
             Return matrix_to_table()
@@ -511,7 +528,11 @@ Public Class clsUpDown
 
             For y As Integer = 1 To VerticalCount
                 For x As Integer = 1 To HorizontalCount
-                    _Matrix(x, y) = save(iOldHorizontalCount - y + 1, x)
+                    Try
+                        _Matrix(x, y) = save(iOldHorizontalCount - y + 1, x)
+                    Catch ex As Exception
+                        g_clsLog.LogException(ex, "RotateLeft({0},{1})", x, y)
+                    End Try
                 Next
             Next
             Return matrix_to_table()
@@ -529,7 +550,11 @@ Public Class clsUpDown
 
             For y As Integer = subrange.FromY To subrange.ToY
                 For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = save(subrange.ToX - (y - subrange.FromY), subrange.FromY + (x - subrange.FromX))
+                    Try
+                        _Matrix(x, y) = save(subrange.ToX - (y - subrange.FromY), subrange.FromY + (x - subrange.FromX))
+                    Catch ex As Exception
+                        g_clsLog.LogException(ex, "RotateLeftRange({0},{1})", x, y)
+                    End Try
                 Next
             Next
             Return matrix_to_table()

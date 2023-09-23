@@ -2135,9 +2135,15 @@ Class clsCalcSquare
         Return _CUpDown
     End Function
 
-    Function updownリセット() As clsUpDown
-        If Not _CUpDown.Reset(p_i垂直ひも半数) Then
-            Return Nothing
+    Function updownリセット(ByVal isReset As Boolean) As clsUpDown
+        If isReset Then
+            If Not _CUpDown.Reset(p_i垂直ひも半数) Then
+                Return Nothing
+            End If
+        Else
+            If Not _CUpDown.ResetValue() Then
+                Return Nothing
+            End If
         End If
         Return _CUpDown
     End Function

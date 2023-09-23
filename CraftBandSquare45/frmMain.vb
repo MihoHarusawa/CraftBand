@@ -1286,8 +1286,12 @@ Public Class frmMain
             Return
         End If
 
+        Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
-        If Not _clsCalcSquare45.CalcImage(_clsImageData) Then
+        ret = _clsCalcSquare45.CalcImage(_clsImageData)
+        Cursor.Current = Cursors.Default
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcSquare45.p_sメッセージ) Then
             MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If

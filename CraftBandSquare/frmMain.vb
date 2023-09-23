@@ -1939,19 +1939,24 @@ Public Class frmMain
     End Sub
 
     Private Sub btnリセット_ひも上下_Click(sender As Object, e As EventArgs) Handles btnリセット_ひも上下.Click
+        Dim isReset As Boolean = True
         If BindingSourceひも上下.DataSource IsNot Nothing Then
-            'ひも上下の編集内容をすべてクリアします。よろしいですか？
-            Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetUpDown, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-            If r <> DialogResult.OK Then
+            'ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？(はいで全て初期化、いいえはサイズ保持)
+            Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetUpDown, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If r = DialogResult.Yes Then
+                isReset = True
+            ElseIf r = DialogResult.No Then
+                isReset = False
+            Else
                 Exit Sub
             End If
         End If
 
-        setDataSourceUpDown(Nothing)
         txt上下のメモ.Text = ""
 
-        Dim updown As clsUpDown = _clsCalcSquare.updownリセット()
+        Dim updown As clsUpDown = _clsCalcSquare.updownリセット(isReset)
         If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnリセット_ひも上下.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -2050,6 +2055,31 @@ Public Class frmMain
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
             MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn右回転.Text),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        Else
+            setDataSourceUpDown(updown)
+        End If
+        dgvひも上下.Refresh()
+        _UpdownChanged = True
+        gridsel.GridCellsSelect(dgvひも上下)
+    End Sub
+
+    Private Sub btn左回転_Click(sender As Object, e As EventArgs) Handles btn左回転.Click
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
+            '全範囲を{0}します。よろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左回転.Text),
+                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
+
+        Dim desc As Boolean = rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace)
+        Dim updown As clsUpDown = _clsCalcSquare.updown右回転(Not desc, gridsel.SubRange(dgvひも上下))
+        If updown Is Nothing Then
+            setDataSourceUpDown(Nothing)
+            '{0}できませんでした。リセットしてやり直してください。
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左回転.Text),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -2297,7 +2327,7 @@ Public Class frmMain
         End If
         'Debug.Print("Index={0} width={1}", e.Column.Index, e.Column.Width) 1～
         If e.Column.Index = 1 Then
-            For i As Integer = 2 To nud水平に.Value
+            For i As Integer = 2 To cMaxUpdownColumns '全カラム
                 dgvひも上下.Columns(i).Width = e.Column.Width
             Next
         End If
@@ -2310,9 +2340,10 @@ Public Class frmMain
         End If
         'Debug.Print("Index={0} width={1}", e.Row.Index, e.Row.Height) 0～
         If e.Row.Index = 0 Then
-            For i As Integer = 1 To nud垂直に.Value - 1
+            For i As Integer = 1 To nud垂直に.Value - 1 '表示分
                 dgvひも上下.Rows(i).Height = e.Row.Height
             Next
+            dgvひも上下.RowTemplate.Height = e.Row.Height
         End If
     End Sub
 
@@ -2485,8 +2516,11 @@ Public Class frmMain
             Return
         End If
 
+        Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
         ret = _clsCalcSquare.CalcImage(_clsImageData)
+        Cursor.Current = Cursors.Default
+
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcSquare.p_sメッセージ) Then
             MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
@@ -2552,6 +2586,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 
 #End Region

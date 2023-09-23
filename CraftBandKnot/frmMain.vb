@@ -1400,8 +1400,11 @@ Public Class frmMain
             Return
         End If
 
+        Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
         ret = _clsCalcKnot.CalcImage(_clsImageData)
+        Cursor.Current = Cursors.Default
+
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
             MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub

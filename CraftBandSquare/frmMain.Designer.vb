@@ -483,6 +483,7 @@ Partial Class frmMain
         Me.lbl縁厚さプラス = New System.Windows.Forms.Label()
         Me.lbl四角ベース = New System.Windows.Forms.Label()
         Me.lblひも本幅変更 = New System.Windows.Forms.Label()
+        Me.btn左回転 = New System.Windows.Forms.Button()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1383,7 +1384,7 @@ Partial Class frmMain
         Me.rad右.Location = New System.Drawing.Point(788, 197)
         Me.rad右.Name = "rad右"
         Me.rad右.Size = New System.Drawing.Size(45, 24)
-        Me.rad右.TabIndex = 24
+        Me.rad右.TabIndex = 26
         Me.rad右.TabStop = True
         Me.rad右.Text = "右"
         Me.ToolTip1.SetToolTip(Me.rad右, "右方向")
@@ -1396,7 +1397,7 @@ Partial Class frmMain
         Me.rad左.Location = New System.Drawing.Point(722, 197)
         Me.rad左.Name = "rad左"
         Me.rad左.Size = New System.Drawing.Size(45, 24)
-        Me.rad左.TabIndex = 23
+        Me.rad左.TabIndex = 24
         Me.rad左.Text = "左"
         Me.ToolTip1.SetToolTip(Me.rad左, "左方向")
         Me.rad左.UseVisualStyleBackColor = True
@@ -1420,18 +1421,18 @@ Partial Class frmMain
         Me.rad上.Location = New System.Drawing.Point(763, 162)
         Me.rad上.Name = "rad上"
         Me.rad上.Size = New System.Drawing.Size(45, 24)
-        Me.rad上.TabIndex = 22
+        Me.rad上.TabIndex = 23
         Me.rad上.Text = "上"
         Me.ToolTip1.SetToolTip(Me.rad上, "上方向")
         Me.rad上.UseVisualStyleBackColor = True
         '
         'btnランダム
         '
-        Me.btnランダム.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnランダム.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnランダム.Location = New System.Drawing.Point(605, 361)
         Me.btnランダム.Name = "btnランダム"
         Me.btnランダム.Size = New System.Drawing.Size(111, 46)
-        Me.btnランダム.TabIndex = 21
+        Me.btnランダム.TabIndex = 22
         Me.btnランダム.Text = "ランダム(&M)"
         Me.ToolTip1.SetToolTip(Me.btnランダム, "ランダム値に入れ替えます")
         Me.btnランダム.UseVisualStyleBackColor = True
@@ -1442,7 +1443,7 @@ Partial Class frmMain
         Me.btnチェック.Location = New System.Drawing.Point(722, 361)
         Me.btnチェック.Name = "btnチェック"
         Me.btnチェック.Size = New System.Drawing.Size(111, 46)
-        Me.btnチェック.TabIndex = 28
+        Me.btnチェック.TabIndex = 29
         Me.btnチェック.Text = "チェック(&K)"
         Me.ToolTip1.SetToolTip(Me.btnチェック, "パターンをチェックします")
         Me.btnチェック.UseVisualStyleBackColor = True
@@ -1453,7 +1454,7 @@ Partial Class frmMain
         Me.btn追加.Location = New System.Drawing.Point(722, 257)
         Me.btn追加.Name = "btn追加"
         Me.btn追加.Size = New System.Drawing.Size(111, 46)
-        Me.btn追加.TabIndex = 26
+        Me.btn追加.TabIndex = 27
         Me.btn追加.Text = "追加(&A)"
         Me.ToolTip1.SetToolTip(Me.btn追加, "指定した方向に1行/1列増やします")
         Me.btn追加.UseVisualStyleBackColor = True
@@ -1627,7 +1628,7 @@ Partial Class frmMain
         Me.btnシフト.Location = New System.Drawing.Point(722, 309)
         Me.btnシフト.Name = "btnシフト"
         Me.btnシフト.Size = New System.Drawing.Size(111, 46)
-        Me.btnシフト.TabIndex = 27
+        Me.btnシフト.TabIndex = 28
         Me.btnシフト.Text = "シフト(&H)"
         Me.ToolTip1.SetToolTip(Me.btnシフト, "指定した方向に1行/1列移動します")
         Me.btnシフト.UseVisualStyleBackColor = True
@@ -2839,6 +2840,7 @@ Partial Class frmMain
         '
         'tpageひも上下
         '
+        Me.tpageひも上下.Controls.Add(Me.btn左回転)
         Me.tpageひも上下.Controls.Add(Me.rad右)
         Me.tpageひも上下.Controls.Add(Me.rad左)
         Me.tpageひも上下.Controls.Add(Me.rad下)
@@ -4713,6 +4715,17 @@ Partial Class frmMain
         Me.lblひも本幅変更.TabIndex = 30
         Me.lblひも本幅変更.Text = "ひも本幅変更"
         '
+        'btn左回転
+        '
+        Me.btn左回転.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btn左回転.Location = New System.Drawing.Point(598, 361)
+        Me.btn左回転.Name = "btn左回転"
+        Me.btn左回転.Size = New System.Drawing.Size(111, 46)
+        Me.btn左回転.TabIndex = 21
+        Me.btn左回転.Text = "左回転"
+        Me.ToolTip1.SetToolTip(Me.btn左回転, "パターンを左に90度回転します")
+        Me.btn左回転.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -5275,4 +5288,5 @@ Partial Class frmMain
     Friend WithEvents CheckBox97 As DataGridViewCheckBoxColumn
     Friend WithEvents CheckBox98 As DataGridViewCheckBoxColumn
     Friend WithEvents CheckBox99 As DataGridViewCheckBoxColumn
+    Friend WithEvents btn左回転 As Button
 End Class

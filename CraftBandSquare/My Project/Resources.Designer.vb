@@ -116,7 +116,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  ひも上下の編集内容をすべてクリアします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？
+        '''(はいで全て初期化、いいえはサイズ保持) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskResetUpDown() As String
             Get
