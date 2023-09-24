@@ -13,8 +13,8 @@
     <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.6.2.0</FileVersion>
-    <AssemblyVersion>1.6.2.0</AssemblyVersion>
+    <FileVersion>1.6.3.0</FileVersion>
+    <AssemblyVersion>1.6.3.0</AssemblyVersion>
     <Description>クラフトバンド・四角底と楕円底の計算</Description>
   </PropertyGroup>
 
