@@ -450,7 +450,7 @@ Public Class clsMasterTables
                 changecount += 1
             End If
         Next
-        sb.AppendLine(change_message((New frmPattern).Text, changecount))
+        sb.AppendLine(change_message((New frmOptions).Text, changecount))
         changesum += changecount
 
         'ファイル'{0}'に {1}点の書き出しを行いました。
@@ -1697,7 +1697,7 @@ Public Class clsMasterTables
             Return ImportResult.NoOtherRecord
         End If
 
-        Dim thisUpDownRecord As clsDataRow = New clsDataRow(othermaster.GetUpDownRecord(upDownName))
+        Dim thisUpDownRecord As clsDataRow = New clsDataRow(GetUpDownRecord(upDownName))
         If thisUpDownRecord.IsValid Then
             'thisにある上下図
 

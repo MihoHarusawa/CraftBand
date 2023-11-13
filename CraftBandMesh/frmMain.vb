@@ -1165,6 +1165,10 @@ Public Class frmMain
         Else
             nud長い横ひもの本数.Increment = 1
         End If
+        If nud長い横ひもの本数.Value = 0 Then
+            rad最上と最下の短いひも_なし.Checked = True
+            '※後から変更したとしてもゼロ扱いで計算
+        End If
         recalc(CalcCategory.Horizontal, sender)
     End Sub
 

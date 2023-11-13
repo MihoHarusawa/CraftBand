@@ -369,7 +369,7 @@ Class clsCalcMesh
     End Property
     Private ReadOnly Property isValid計算_縦 As Boolean
         Get
-            Return 0 < _d縦横の縦
+            Return 0 <= _d縦横の縦
         End Get
     End Property
     Private ReadOnly Property isValid計算_高さ As Boolean
@@ -613,7 +613,7 @@ Class clsCalcMesh
                 '1本の時はすき間なし
             End If
 
-            If 0 < d縦ひも間の最小間隔 AndAlso .Value("f_dひとつのすき間の寸法") <= d縦ひも間の最小間隔 Then
+            If 0 < d縦ひも間の最小間隔 AndAlso .Value("f_dひとつのすき間の寸法") < d縦ひも間の最小間隔 Then
                 '縦ひも間のすき間が最小間隔より小さくなっています。
                 p_sメッセージ = My.Resources.CalcNoSpaceHeight
                 warning = True
@@ -652,17 +652,19 @@ Class clsCalcMesh
 
             '最上と最下の短いひもの縦寸法
             Dim vert3 As Double = 0
-            If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 Then
-                _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも"))
-                vert3 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも")) * 2
-                i横ひもの数 += 2
+            If 0 < i横ひもの数 Then
+                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 Then
+                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも"))
+                    vert3 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも")) * 2
+                    i横ひもの数 += 2
 
-            ElseIf .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 Then
-                _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i最上と最下の短いひもの幅"))
-                vert3 = _d最上と最下の短いひもの幅 * 2
-                i横ひもの数 += 2
-            Else 'なし
-                _d最上と最下の短いひもの幅 = 0
+                ElseIf .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 Then
+                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i最上と最下の短いひもの幅"))
+                    vert3 = _d最上と最下の短いひもの幅 * 2
+                    i横ひもの数 += 2
+                Else 'なし
+                    _d最上と最下の短いひもの幅 = 0
+                End If
             End If
 
             '横ひも間のすき間の合計
