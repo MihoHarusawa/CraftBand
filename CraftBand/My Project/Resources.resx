@@ -142,13 +142,29 @@
     <value>'{0}'(ひも番号{1})を削除します。よろしいですか？</value>
     <comment>frmPattern,frmOptions</comment>
   </data>
+  <data name="AskOverwriteForExist" xml:space="preserve">
+    <value>同名データに対しては、現設定値で上書きしてよろしいですか？
+(はい=上書き,いいえ=既存値保持)</value>
+    <comment>frmBasics</comment>
+  </data>
+  <data name="AskOverwriteForSame" xml:space="preserve">
+    <value>同名データに対しては、読み取り値で上書きしてよろしいですか？
+(はい=上書き,いいえ=現在値保持)</value>
+    <comment>frmBasics</comment>
+  </data>
   <data name="AskReloadMasterDataFile" xml:space="preserve">
-    <value>{0}が変更されました。選択されたファイルを読み直しますか？</value>
-    <comment>frmBasic</comment>
+    <value>{0}が変更されました。選択されたファイル'{1}'を読み直しますか？
+(はい=読み直す,いいえ=現設定を上書きする)</value>
+    <comment>frmBasics</comment>
   </data>
   <data name="AskResetAll" xml:space="preserve">
     <value>実測値を全てクリアし規定値に戻します。よろしいですか？</value>
     <comment>frmGauge</comment>
+  </data>
+  <data name="AskResetMasterDataFile" xml:space="preserve">
+    <value>新しい{0}として'{1}'が指定されました。現在の設定をクリアしますか？
+(はい=ゼロから作り直す,いいえ=現設定維持)</value>
+    <comment>frmBasics</comment>
   </data>
   <data name="AskSaveChange" xml:space="preserve">
     <value>先の'{0}'の変更を保存します。よろしいですか？(保存しない場合は[いいえ])</value>
@@ -256,6 +272,10 @@
     <value>設定データを保存するファイルが指定されませんでした。</value>
     <comment>mdlDllMain</comment>
   </data>
+  <data name="ErrMsgSameMasterTableFile" xml:space="preserve">
+    <value>'{0}'とは別の設定データファイルを指定してください。</value>
+    <comment>frmBasics</comment>
+  </data>
   <data name="ErrMsgTooLarge" xml:space="preserve">
     <value>{0}以下の数値を設定してください。</value>
     <comment>frmColor</comment>
@@ -312,6 +332,42 @@
     <value>長さを入力して[→] / 重さを入力して[←]</value>
     <comment>frmBandTypeWeight</comment>
   </data>
+  <data name="LogExportMasterFile" xml:space="preserve">
+    <value>設定ファイルのエクスポート (上書き)</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportAdd" xml:space="preserve">
+    <value>+ 追加</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportAddColor" xml:space="preserve">
+    <value>+ 色の追加</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportAfter" xml:space="preserve">
+    <value>- 変更後</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportBefore" xml:space="preserve">
+    <value>+ 変更前</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportExistSkip" xml:space="preserve">
+    <value>- 同名あり 既存を保持</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportMasterFile" xml:space="preserve">
+    <value>設定ファイルのインポート (上書き)</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportSameSkip" xml:space="preserve">
+    <value>- 同名あり 既存と一致</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportTable" xml:space="preserve">
+    <value>テーブルの現点数とファイル点数</value>
+    <comment>clsMasterTables</comment>
+  </data>
   <data name="LOG_DataType" xml:space="preserve">
     <value>未定義のDataType</value>
     <comment>clsDataRow</comment>
@@ -328,6 +384,26 @@
   </data>
   <data name="LOG_FormEnd" xml:space="preserve">
     <value>ダイアログ表示終了</value>
+  </data>
+  <data name="MsgExported" xml:space="preserve">
+    <value>ファイル'{0}'に {1}点の書き出しを行いました。</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="MsgUpdate" xml:space="preserve">
+    <value>[{0}] の {1}点を更新しました。</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="MsgUpdateAll" xml:space="preserve">
+    <value>全更新数は {0}点でした。</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="MsgUpdateError" xml:space="preserve">
+    <value>[{0}] の更新エラーです。設定メニューで確認してください。</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="MsgUpdateNone" xml:space="preserve">
+    <value>[{0}] の更新はありません。</value>
+    <comment>clsMasterTables</comment>
   </data>
   <data name="MsgUpDounCount" xml:space="preserve">
     <value>ON:{0}点 OFF:{1}点(全{2}点)　ON比率 {3:f2}</value>

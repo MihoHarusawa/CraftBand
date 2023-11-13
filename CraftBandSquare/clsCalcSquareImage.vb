@@ -1491,11 +1491,14 @@ Partial Public Class clsCalcSquare
 
     '横ひもリストの描画情報 : _tbl縦横展開_横ひも → _ImageList横ひも
     Private Function imageList横ひも() As Boolean
-        If _tbl縦横展開_横ひも Is Nothing OrElse _tbl縦横展開_横ひも.Rows.Count = 0 Then
+        If _tbl縦横展開_横ひも Is Nothing Then
             Return False
         End If
 
         _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも)
+        If _tbl縦横展開_横ひも.Rows.Count = 0 Then
+            Return True
+        End If
 
         'Dim d縁までの固定長 As Double = get周の横() + get側面高(2) + 2 * mdlUnit.Min(_d縁の高さ, _d縁の垂直ひも長)
         Dim Y横ひも上 As Double = p_d四角ベース_縦 / 2
@@ -1528,11 +1531,14 @@ Partial Public Class clsCalcSquare
 
     '縦ひもリストの描画情報 : _tbl縦横展開_縦ひも → _ImageList縦ひも
     Private Function imageList縦ひも() As Boolean
-        If _tbl縦横展開_縦ひも Is Nothing OrElse _tbl縦横展開_縦ひも.Rows.Count = 0 Then
+        If _tbl縦横展開_縦ひも Is Nothing Then
             Return False
         End If
 
         _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも)
+        If _tbl縦横展開_縦ひも.Rows.Count = 0 Then
+            Return True
+        End If
 
         'Dim d縁までの固定長 As Double = get周の縦() + get側面高(2) + 2 * mdlUnit.Min(_d縁の高さ, _d縁の垂直ひも長)
         Dim X縦ひも左 As Double = -p_d四角ベース_横 / 2

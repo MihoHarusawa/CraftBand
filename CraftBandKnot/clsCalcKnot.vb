@@ -208,7 +208,7 @@ Class clsCalcKnot
 
     ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
-            If p_dコマベース_横 <= 0 Then
+            If p_dコマベース_横 < 0 Then
                 Return 0
             End If
             Return p_dコマベース_横 + p_d厚さ '外側には1/2,その2倍
@@ -217,7 +217,7 @@ Class clsCalcKnot
 
     ReadOnly Property p_d縁厚さプラス_縦 As Double
         Get
-            If p_dコマベース_縦 <= 0 Then
+            If p_dコマベース_縦 < 0 Then
                 Return 0
             End If
             Return p_dコマベース_縦 + p_d厚さ '外側には1/2,その2倍
@@ -235,7 +235,7 @@ Class clsCalcKnot
 
     ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
-            If p_d縁厚さプラス_横 <= 0 OrElse p_d縁厚さプラス_縦 <= 0 Then
+            If p_d縁厚さプラス_横 < 0 OrElse p_d縁厚さプラス_縦 < 0 Then
                 Return 0
             End If
             Return 2 * (p_d縁厚さプラス_横 + p_d縁厚さプラス_縦)
@@ -245,7 +245,7 @@ Class clsCalcKnot
     '表示文字列
     Public ReadOnly Property p_sコマベース_横 As String
         Get
-            If 0 < p_dコマベース_横 Then
+            If 0 <= p_dコマベース_横 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_dコマベース_横)
             End If
             Return ""
@@ -253,7 +253,7 @@ Class clsCalcKnot
     End Property
     Public ReadOnly Property p_sコマベース_縦 As String
         Get
-            If 0 < p_dコマベース_縦 Then
+            If 0 <= p_dコマベース_縦 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_dコマベース_縦)
             End If
             Return ""
@@ -557,12 +557,7 @@ Class clsCalcKnot
     '有効な入力がある
     Public Function IsValidInput() As Boolean
 
-        If _i横のコマ数 <= 0 OrElse _i縦のコマ数 <= 0 Then
-            '横のコマ数・縦のコマ数・高さのコマ数をセットしてください。
-            p_sメッセージ = My.Resources.CalcNoPieceCountSet
-            Return False
-        End If
-        If _i高さのコマ数 < 0 Then
+        If _i横のコマ数 < 0 OrElse _i縦のコマ数 < 0 OrElse _i高さのコマ数 < 0 Then
             '横のコマ数・縦のコマ数・高さのコマ数をセットしてください。
             p_sメッセージ = My.Resources.CalcNoPieceCountSet
             Return False
@@ -573,6 +568,21 @@ Class clsCalcKnot
             Return False
         End If
 
+        Dim nonzero_count As Integer = 0
+        If 0 < _i横のコマ数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _i縦のコマ数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _i高さのコマ数 Then
+            nonzero_count += 1
+        End If
+        If nonzero_count < 2 Then
+            '横のコマ数・縦のコマ数・高さのコマ数をセットしてください。
+            p_sメッセージ = My.Resources.CalcNoPieceCountSet
+            Return False
+        End If
         Return True
     End Function
 

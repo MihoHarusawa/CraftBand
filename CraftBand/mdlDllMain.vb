@@ -154,7 +154,7 @@ Public Module mdlDllMain
         Next
 
         '*設定データ(マスターテーブル)
-        g_clsMasterTables = New clsMasterTables
+        g_clsMasterTables = New clsMasterTables 'まだ使えません
 
         '保存した名前を得る
         Dim masterTablesFilePath As String = __paras.MasterTablesFilePath
@@ -191,6 +191,7 @@ Public Module mdlDllMain
                 Else
                     '読めないので初期値から
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.New={0}", masterTablesFilePath)
+                    g_clsMasterTables.SetAvairable() '使える状態にする
                 End If
                 '名前のみセット
                 g_clsMasterTables.MasterTablesFilePath = masterTablesFilePath

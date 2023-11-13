@@ -152,26 +152,8 @@ Public Class clsSelectBasics
         End With
 
         '色リストの選択肢
-        Dim _ColorTable As dstWork.tblColorDataTable = _dstWork.Tables("tblColor")
-        _ColorTable.Rows.Clear()
-        Dim rc As DataRow = _ColorTable.NewRow
-        rc("Display") = ""
-        rc("Value") = ""
-        _ColorTable.Rows.Add(rc)
-        If Not String.IsNullOrWhiteSpace(str) Then
-            Dim ary As String() = str.Split(",")
-            For Each s As String In ary
-                If Not String.IsNullOrWhiteSpace(s) Then
-                    s = s.Trim
-                    If Not _ColorTable.Rows.Contains(s) Then
-                        rc = _ColorTable.NewRow
-                        rc("Display") = s
-                        rc("Value") = s
-                        _ColorTable.Rows.Add(rc)
-                    End If
-                End If
-            Next
-        End If
+        ToColorTable(_dstWork.Tables("tblColor"), str, True)
+
 
         'n本幅の選択肢
         Dim _LaneTable As dstWork.tblLaneDataTable = _dstWork.Tables("tblLane")
@@ -198,6 +180,72 @@ Public Class clsSelectBasics
         End If
 
     End Sub
+
+    '色文字列をテーブルレコード化,レコード数を返す
+    Public Shared Function ToColorTable(ByVal colorTable As dstWork.tblColorDataTable, ByVal str As String, ByVal isAddBlank As Boolean) As Integer
+        colorTable.Rows.Clear()
+        Dim rc As DataRow
+        If isAddBlank Then
+            rc = colorTable.NewRow
+            rc("Display") = ""
+            rc("Value") = ""
+            colorTable.Rows.Add(rc)
+        End If
+        If Not String.IsNullOrWhiteSpace(str) Then
+            Dim ary As String() = str.Split(",")
+            For Each s As String In ary
+                If Not String.IsNullOrWhiteSpace(s) Then
+                    s = s.Trim
+                    If Not colorTable.Rows.Contains(s) Then
+                        rc = colorTable.NewRow
+                        rc("Display") = s
+                        rc("Value") = s
+                        colorTable.Rows.Add(rc)
+                    End If
+                End If
+            Next
+        End If
+        Return colorTable.Rows.Count
+    End Function
+
+    '色文字列の追加
+    Public Shared Function AddColorString(ByRef strBase As String, ByRef strAdd As String) As Boolean
+        If String.IsNullOrWhiteSpace(strBase) OrElse String.IsNullOrWhiteSpace(strAdd) Then
+            Return False
+        End If
+        Dim tableBase As New dstWork.tblColorDataTable
+        If ToColorTable(tableBase, strBase, False) = 0 Then
+            Return False '変更なし
+        End If
+        Dim tableAdd As New dstWork.tblColorDataTable
+        If ToColorTable(tableAdd, strAdd, False) = 0 Then
+            Return False '変更なし
+        End If
+        Dim isAdd As Boolean = False
+        For Each r As dstWork.tblColorRow In tableAdd
+            If tableBase.FindByValue(r.Value) Is Nothing Then 'TODO
+                Dim rc As DataRow = tableBase.NewRow
+                rc.ItemArray = r.ItemArray 'TODO
+                tableBase.Rows.Add(rc)
+                isAdd = True
+            End If
+        Next
+        If isAdd Then
+            strBase = colorString(tableBase)
+            Return True
+        End If
+        Return False
+    End Function
+
+    Private Shared Function colorString(ByVal coltable As dstWork.tblColorDataTable) As String
+        If coltable Is Nothing OrElse coltable.Rows.Count = 0 Then
+            Return String.Empty
+        End If
+        Dim res = (From row In coltable
+                   Select val = row.Field(Of String)("Value") Order By val).Distinct.ToList()
+
+        Return String.Join(",", res.ToArray)
+    End Function
 
     '対象バンドの種類名に対するマスターの再読み込み
     Public Sub UpdateTargetBandType()

@@ -1,5 +1,7 @@
 ﻿Imports System.Drawing
+Imports System.Threading.Channels
 Imports CraftBand.Tables
+Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
 
 ''' <summary>
@@ -20,9 +22,13 @@ Public Class clsMasterTables
             Return _MasterTablesFilePath
         End Get
         Set(value As String)
-            If String.Compare(value, _MasterTablesFilePath, True) <> 0 Then
-                _MasterTablesFilePath = value
-                _IsDirty = True
+            If Not String.IsNullOrEmpty(value) Then
+                If String.IsNullOrEmpty(_MasterTablesFilePath) OrElse String.Compare(value, _MasterTablesFilePath, True) <> 0 Then
+                    _MasterTablesFilePath = value
+                    _IsDirty = True
+                End If
+            Else
+                '空はスキップ
             End If
         End Set
     End Property
@@ -42,28 +48,51 @@ Public Class clsMasterTables
     Dim _copyDataSet As dstMasterTables = Nothing
     Dim _copyTable As DataTable = Nothing
 
-
+    '生成。まだ設定ファイルとしては使えない状態
     Sub New()
         _dstMasterTables = New dstMasterTables
         IsDirty = False
-        SetAvairable() 'Dirtyにはしない
     End Sub
 
-    Sub New(ByVal ref As clsMasterTables)
-        _dstMasterTables = ref._dstMasterTables.Copy
-        _MasterTablesFilePath = ref._MasterTablesFilePath
-        IsDirty = ref.IsDirty
+    '現内容をクリアし設定ファイルとして使える状態にする
+    Sub ReNew()
+        _dstMasterTables.Dispose()
+        _dstMasterTables = Nothing
+        _dstMasterTables = New dstMasterTables
+
+        If _copyDataSet IsNot Nothing Then
+            _copyDataSet.Dispose()
+            _copyDataSet = Nothing
+        End If
+        If _copyTable IsNot Nothing Then
+            _copyTable.Dispose()
+            _copyTable = Nothing
+        End If
+
+        _MasterTablesFilePath = Nothing
+
+        SetAvairable()
+        IsDirty = False
     End Sub
 
-    '有効にするため更新した場合はTrueを返す
-    Private Function SetAvairable() As Boolean
-        Return SetAvairableBasics() Or
+
+    '設定ファイルとして使える状態にする
+    '更新した場合はTrueを返す,_IsDirtyは変えない。
+    Public Function SetAvairable() As Boolean
+
+        Dim changed As Boolean = SetAvairableBasics() Or
         SetAvairableBandType() Or
         SetAvairablePattern() Or
         SetAvairableOptions() Or
         SetAvairableColorType() Or
         SetAvairableGauge() Or
         SetAvairableUpDown()
+
+        If changed Then
+            acceptChangesAll()
+        End If
+
+        Return changed
     End Function
 
     'DataSet.HasChanges←False
@@ -73,7 +102,7 @@ Public Class clsMasterTables
         Next
     End Sub
 
-
+    'ファイル読み取り。読み取れた場合は設定ファイルとして使える状態にする。読み取れなければ元の状態
     Public Function LoadFile(ByVal path As String, ByVal isSetName As Boolean) As Boolean
         If String.IsNullOrWhiteSpace(path) OrElse Not IO.File.Exists(path) Then
             Return False
@@ -88,6 +117,12 @@ Public Class clsMasterTables
         Try
             Dim readmode As System.Data.XmlReadMode = _dstMasterTables.ReadXml(path, System.Data.XmlReadMode.IgnoreSchema)
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "dstMasterTables.ReadXml={0} {1}", path, readmode)
+
+            '正しいXML形式であることをチェック
+            If _dstMasterTables.Tables("tbl基本値").Rows.Count = 0 Then
+                Throw New Exception("Bad XML (No Basic Record)")
+            End If
+
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsMasterTables.LoadFile", path)
             _dstMasterTables.Dispose()
@@ -198,8 +233,242 @@ Public Class clsMasterTables
         Return True
     End Function
 
+#Region "インポート・エクスポート"
+    Private Enum ImportResult
+        NoOtherRecord       'レコードなし
+        KeepThisSkip        '両: 変更なし・上書きしないため。比較はしない
+        KeepThisModify      '両: 上書しない指定だが、色のみ追記
+        SameNoAction        '両: 上書きだが同じなので変更なし
+        UpdateThis          '両: 上書き更新
+        AddToThis           '追加
+    End Enum
+
+    '別の設定ファイルからの更新インポート
+    Public Function Import(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean, ByRef msg As String) As Boolean
+        '設定ファイルのインポート (上書き)
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportMasterFile", othermaster.MasterTablesFilePath, isOverWrite)
+
+        Dim changecount As Integer
+        Dim changesum As Integer = 0
+        Dim success As Boolean = True
+        Dim sb As New System.Text.StringBuilder
+        Dim changedBandTypeList As New List(Of String)
+
+        '基本値は更新なし
+
+        '描画色
+        changecount = importColorTable(othermaster, isOverWrite)
+        sb.AppendLine(change_message((New frmColor).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        'バンドの種類名
+        changecount = importBandTypeTable(othermaster, isOverWrite, changedBandTypeList)
+        sb.AppendLine(change_message((New frmBandType).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        '編みかた
+        changecount = importPatternTable(othermaster, isOverWrite)
+        sb.AppendLine(change_message((New frmPattern).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        '付属品
+        changecount = importOptionsTable(othermaster, isOverWrite)
+        sb.AppendLine(change_message((New frmOptions).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        'ゲージ
+        changecount = importBandTypeGauges(othermaster, isOverWrite, changedBandTypeList)
+        sb.AppendLine(change_message((New frmGauge).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        '上下図
+        changecount = importUpDownTable(othermaster, isOverWrite)
+        sb.AppendLine(change_message((New frmUpDownPattern).Text, changecount))
+        If changecount < 0 Then
+            success = False
+        Else
+            changesum += changecount
+        End If
+
+        If 0 < changesum Then
+            '全更新数は {0}点でした。
+            sb.AppendLine(String.Format(My.Resources.MsgUpdateAll, changesum))
+        End If
+
+        msg = sb.ToString
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "success={0} {1}", success, msg)
+        Return success
+    End Function
+
+    Private Function change_message(ByVal tablename As String, ByVal changecount As Integer) As String
+        If 0 < changecount Then
+            '[{0}] の {1}点を更新しました。
+            Return String.Format(My.Resources.MsgUpdate, tablename, changecount)
+        ElseIf changecount < 0 Then
+            '[{0}] の更新エラーです。設定メニューで確認してください。
+            Return String.Format(My.Resources.MsgUpdateError, tablename)
+        Else
+            '[{0}] の更新はありません。
+            Return String.Format(My.Resources.MsgUpdateNone, tablename)
+        End If
+    End Function
+
+    'データによる参照を別の設定ファイルに書き出し
+    '※othermasterはNewされただけ(SetAvairable()が呼ばれていない)可能性あり
+    Public Function Export(ByVal data As clsDataTables, ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean, ByRef msg As String) As Boolean
+        '設定ファイルのエクスポート (上書き)
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogExportMasterFile", othermaster.MasterTablesFilePath, isOverWrite)
+
+        Dim changecount As Integer
+        Dim changesum As Integer = 0
+        Dim success As Boolean = True
+        Dim sb As New System.Text.StringBuilder
+
+        Dim level As clsLog.LogLevel = clsLog.LogLevel.Detail
+        Dim result As ImportResult
+
+        '基本値
+        othermaster.SetBasicUnit(GetBasicUnit())
+
+        'バンドの種類
+        Dim bandTypeName As String = data.p_row目標寸法.Value("f_sバンドの種類名")
+        result = othermaster.importBandType(bandTypeName, othermaster._dstMasterTables.Tables("tblバンドの種類"), level, Me, isOverWrite)
+        If {ImportResult.AddToThis, ImportResult.UpdateThis, ImportResult.KeepThisModify}.Contains(result) Then
+            sb.AppendLine(change_message((New frmBandType).Text, 1))
+            changesum += 1
+        Else
+            sb.AppendLine(change_message((New frmBandType).Text, 0))
+        End If
+
+        'バンドの種類の色
+        changecount = 0
+        Dim bandTypeRecord As clsDataRow = GetBandTypeRecord(bandTypeName, False)
+        If bandTypeRecord IsNot Nothing AndAlso bandTypeRecord.IsValid Then
+            Dim colstr As String = bandTypeRecord.Value("f_s色リスト")
+            Dim tableColor As New dstWork.tblColorDataTable
+            If 0 < clsSelectBasics.ToColorTable(tableColor, colstr, False) Then
+                For Each colrow As dstWork.tblColorRow In tableColor
+                    '色を追加
+                    result = othermaster.importColor(colrow.Value, othermaster._dstMasterTables.Tables("tbl描画色"), level, Me, isOverWrite)
+                    If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                        changecount += 1
+                    End If
+                Next
+            End If
+        End If
+        sb.AppendLine(change_message((New frmColor).Text, changecount))
+        changesum += changecount
+
+        'バンドの種類のゲージ
+        result = othermaster.importBandTypeGauge(bandTypeName, othermaster._dstMasterTables.Tables("tblゲージ"), level, Me, isOverWrite)
+        If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+            sb.AppendLine(change_message((New frmGauge).Text, 1))
+            changesum += 1
+        Else
+            sb.AppendLine(change_message((New frmGauge).Text, 0))
+        End If
+
+        'EXEの種類
+        Dim enumExeName As enumExeName = enumExeName.Nodef
+#If 1 Then
+        enumExeName = g_enumExeName
+#Else
+        Dim exename As String = data.p_row目標寸法.Value("f_sEXE名")
+        For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
+            If [String].Compare(exename, enumExe.ToString, True) = 0 Then
+                enumExeName = enumExe
+                Exit For
+            End If
+        Next
+#End If
+        '編みかた
+        Dim patternlist As New List(Of String)
+        'p_tbl底_楕円 Meshのみ使用
+        For Each row As tbl底_楕円Row In data.p_tbl底_楕円
+            If Not row.f_b差しひも区分 Then
+                If Not patternlist.Contains(row.f_s編みかた名) Then
+                    patternlist.Add(row.f_s編みかた名)
+                End If
+            End If
+        Next
+        'p_tbl側面
+        For Each row As tbl側面Row In data.p_tbl側面
+            If row.f_i番号 = clsDataTables.cHemNumber Then
+                If Not patternlist.Contains(row.f_s編みかた名) Then
+                    patternlist.Add(row.f_s編みかた名)
+                End If
+            Else
+                If enumExeName = enumExeName.CraftBandMesh Then
+                    If Not patternlist.Contains(row.f_s編みかた名) Then
+                        patternlist.Add(row.f_s編みかた名)
+                    End If
+                End If
+            End If
+        Next
+        changecount = 0
+        For Each patternname As String In patternlist
+            result = othermaster.importPattern(patternname, othermaster._dstMasterTables.Tables("tbl編みかた"), level, Me, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+        sb.AppendLine(change_message((New frmPattern).Text, changecount))
+        changesum += changecount
+
+        '付属品
+        'p_tbl追加品
+        Dim optionlist As New List(Of String)
+        For Each row As tbl追加品Row In data.p_tbl追加品
+            If Not optionlist.Contains(row.f_s付属品名) Then
+                optionlist.Add(row.f_s付属品名)
+            End If
+        Next
+        changecount = 0
+        For Each optionname As String In optionlist
+            result = othermaster.importOption(optionname, othermaster._dstMasterTables.Tables("tbl付属品"), level, Me, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+        sb.AppendLine(change_message((New frmPattern).Text, changecount))
+        changesum += changecount
+
+        'ファイル'{0}'に {1}点の書き出しを行いました。
+        sb.AppendLine(String.Format(My.Resources.MsgExported, othermaster._MasterTablesFilePath, changesum))
+
+        If Not othermaster.Save() Then
+            '指定されたファイル'{0}'への保存ができませんでした。
+            msg = String.Format(My.Resources.WarningFileSaveError, othermaster._MasterTablesFilePath)
+            Return False
+        Else
+            msg = sb.ToString
+            Return True
+        End If
+    End Function
+#End Region
 
 #Region "基本値/Basics"
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableBasics() As Boolean
         '1レコードのみ
         Dim deleted As Boolean = False
@@ -260,6 +529,7 @@ Public Class clsMasterTables
 #End Region
 
 #Region "バンドの種類/BandType"
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableBandType() As Boolean
         Dim table As tblバンドの種類DataTable = _dstMasterTables.Tables("tblバンドの種類")
 
@@ -292,6 +562,9 @@ Public Class clsMasterTables
         Dim table As tblバンドの種類DataTable = _dstMasterTables.Tables("tblバンドの種類")
 
         If table.Rows.Count = 0 Then
+            If Not isSetAnyIfNone Then
+                Return Nothing
+            End If
             SetAvairableBandType()
             IsDirty = True
         End If
@@ -345,9 +618,95 @@ Public Class clsMasterTables
 
         Return updateCopyTableIfModified(original, table)
     End Function
+
+    Private Function importBandTypeTable(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean, ByVal changedBandTypeList As List(Of String)) As Integer
+        Dim table As tblバンドの種類DataTable = _dstMasterTables.Tables("tblバンドの種類")
+        Dim changecount As Integer = 0
+
+        'バンドの種類名
+        Dim otherBandTypeNames() As String = othermaster.GetBandTypeNames()
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, GetBandTypeNames().Count, otherBandTypeNames.Count)
+
+        For Each otherBandTypeName As String In otherBandTypeNames
+            Dim result As ImportResult = importBandType(otherBandTypeName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+
+            If {ImportResult.AddToThis, ImportResult.UpdateThis, ImportResult.KeepThisModify}.Contains(result) Then
+                changecount += 1
+            End If
+            If {ImportResult.AddToThis, ImportResult.UpdateThis, ImportResult.SameNoAction}.Contains(result) Then
+                changedBandTypeList.Add(otherBandTypeName)
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+
+        Return changecount
+    End Function
+
+    Private Function importBandType(ByVal bandTypeName As String, ByVal table As tblバンドの種類DataTable, ByVal level As clsLog.LogLevel,
+                                    ByVal otherMaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherBandTypeRedord As clsDataRow = otherMaster.GetBandTypeRecord(bandTypeName, False)
+        If otherBandTypeRedord Is Nothing Then
+            Return ImportResult.NoOtherRecord
+        End If
+
+        Dim thisBandTypeRedord As clsDataRow = GetBandTypeRecord(bandTypeName, False)
+        If thisBandTypeRedord Is Nothing Then
+            'thisにないので追加
+            Dim newDataRow As New clsDataRow(table.NewRow)
+            newDataRow.SetValuesFrom(otherBandTypeRedord)
+            table.Rows.Add(newDataRow.DataRow)
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherBandTypeRedord)
+            Return ImportResult.AddToThis
+
+        ElseIf isOverWrite Then
+            '両方にある。入れ替え
+            If Not thisBandTypeRedord.Equals(otherBandTypeRedord) Then
+                '- 変更前
+                g_clsLog.LogResourceMessage(level, "LogImportBefore", thisBandTypeRedord)
+                thisBandTypeRedord.SetValuesFrom(otherBandTypeRedord)
+                thisBandTypeRedord.DataRow.AcceptChanges()
+                '- 変更後
+                g_clsLog.LogResourceMessage(level, "LogImportAfter", thisBandTypeRedord)
+                Return ImportResult.UpdateThis
+            Else
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", thisBandTypeRedord)
+                Return ImportResult.SameNoAction
+            End If
+
+        Else
+            '両方にある。上書きしないが色のみ追加
+
+            ' - 同名あり 既存を保持
+            g_clsLog.LogResourceMessage(level, "LogImportExistSkip", thisBandTypeRedord)
+
+            Dim strThis As String = thisBandTypeRedord.Value("f_s色リスト")
+            Dim strOther As String = otherBandTypeRedord.Value("f_s色リスト")
+            If clsSelectBasics.AddColorString(strThis, strOther) Then
+                thisBandTypeRedord.Value("f_s色リスト") = strThis
+                '- 色の追加
+                g_clsLog.LogResourceMessage(level, "LogImportAddColor", strThis)
+                Return ImportResult.KeepThisModify
+            Else
+                Return ImportResult.KeepThisSkip
+            End If
+        End If
+
+    End Function
+
+
 #End Region
 
 #Region "編みかた/Pattern"
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairablePattern() As Boolean
         Dim table As tbl編みかたDataTable = _dstMasterTables.Tables("tbl編みかた")
         Dim modified As Boolean = False
@@ -384,7 +743,8 @@ Public Class clsMasterTables
     '編みかた名の配列を返す　f_s編みかた名順
     '(issue#3)縁でも底でもなく、is概算用=Trueの時は、概算で使える編みかた
     Public Function GetPatternNames(ByVal is縁専用 As Boolean, ByVal is底使用 As Boolean,
-                                    Optional ByVal is概算用 As Boolean = False) As String()
+                                    Optional ByVal is概算用 As Boolean = False,
+                                    Optional ByVal isAll As Boolean = False) As String()
 
         Dim fieldNameExe As String = "f_b" & g_enumExeName.ToString
         Dim table As tbl編みかたDataTable = _dstMasterTables.Tables("tbl編みかた")
@@ -405,8 +765,13 @@ Public Class clsMasterTables
                    Where Not row.f_b縁専用区分 And row(fieldNameExe) And 0 < row.f_d高さ比率対ひも幅 And 0 < row.f_dひも長比率対周長
                    Select PatternName = row.f_s編みかた名
                    Order By PatternName).Distinct.ToList
+        ElseIf isAll Then
+            'テーブル全て
+            res = (From row As tbl編みかたRow In table
+                   Select PatternName = row.f_s編みかた名
+                   Order By PatternName).Distinct.ToList
         Else
-            '側面用の全て
+            'そのEXEの側面用の全て
             res = (From row As tbl編みかたRow In table
                    Where Not row.f_b縁専用区分 And row(fieldNameExe)
                    Select PatternName = row.f_s編みかた名
@@ -495,9 +860,89 @@ Public Class clsMasterTables
 
     End Class
 
+    Private Function importPatternTable(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As Integer
+        Dim table As tbl編みかたDataTable = _dstMasterTables.Tables("tbl編みかた")
+        Dim changecount As Integer = 0
+
+        Dim otherPatternNames() As String = othermaster.GetPatternNames(False, False, False, True)
+
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, GetPatternNames(False, False, False, True).Count, otherPatternNames.Count)
+
+        For Each otherPatternName As String In otherPatternNames
+            Dim result As ImportResult = importPattern(otherPatternName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+        Return changecount
+    End Function
+
+    Private Function importPattern(ByVal patternName As String, ByVal table As tbl編みかたDataTable, ByVal level As clsLog.LogLevel,
+                                   ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherPatternGroup As clsGroupDataRow = othermaster.GetPatternRecordGroup(patternName)
+        If otherPatternGroup Is Nothing OrElse Not otherPatternGroup.IsValid OrElse otherPatternGroup.Count = 0 Then
+            Return ImportResult.NoOtherRecord
+        End If
+
+        Dim thisPatternGroup As clsGroupDataRow = GetPatternRecordGroup(patternName)
+        If thisPatternGroup Is Nothing OrElse Not thisPatternGroup.IsValid OrElse thisPatternGroup.Count = 0 Then
+            'ないので追加する
+            For Each drow As clsDataRow In otherPatternGroup
+                Dim newDataRow As New clsDataRow(table.NewRow)
+                newDataRow.SetValuesFrom(drow)
+                table.Rows.Add(newDataRow.DataRow)
+            Next
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherPatternGroup)
+            Return ImportResult.AddToThis
+
+        ElseIf isOverWrite Then
+            If Not thisPatternGroup.Equals(otherPatternGroup) Then
+                '両方にある。入れ替え
+
+                '- 変更前
+                g_clsLog.LogResourceMessage(level, "LogImportBefore", thisPatternGroup)
+
+                '一旦削除
+                For Each drow As clsDataRow In thisPatternGroup
+                    table.Rows.Remove(drow.DataRow)
+                Next
+                table.AcceptChanges()
+                '改めて追加
+                For Each drow As clsDataRow In otherPatternGroup
+                    Dim newDataRow As New clsDataRow(table.NewRow)
+                    newDataRow.SetValuesFrom(drow)
+                    table.Rows.Add(newDataRow.DataRow)
+                Next
+                '- 変更後
+                g_clsLog.LogResourceMessage(level, "LogImportAfter", otherPatternGroup)
+                Return ImportResult.UpdateThis
+
+            Else
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", patternName)
+                Return ImportResult.SameNoAction
+            End If
+        Else
+            ' - 同名あり 既存を保持
+            g_clsLog.LogResourceMessage(level, "LogImportExistSkip", patternName)
+            Return ImportResult.KeepThisSkip
+        End If
+    End Function
+
+
 #End Region
 
 #Region "付属品/Options"
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableOptions() As Boolean
         Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")
         Dim modified As Boolean = False
@@ -546,14 +991,21 @@ Public Class clsMasterTables
     End Function
 
     '付属品名の配列を返す f_s付属品名順 
-    Public Function GetOptionNames() As String()
+    Public Function GetOptionNames(Optional ByVal isAll As Boolean = False) As String()
 
         Dim fieldNameExe As String = "f_b" & g_enumExeName.ToString
         Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")
-        Dim res = (From row As tbl付属品Row In table
+        Dim res
+        If isAll Then
+            res = (From row As tbl付属品Row In table
+                   Select OptionName = row.f_s付属品名
+                   Order By OptionName).Distinct.ToList()
+        Else
+            res = (From row As tbl付属品Row In table
                    Where row(fieldNameExe)
                    Select OptionName = row.f_s付属品名
                    Order By OptionName).Distinct.ToList()
+        End If
 
         Return res.ToArray
     End Function
@@ -619,11 +1071,91 @@ Public Class clsMasterTables
 
     End Class
 
+    Private Function importOptionsTable(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As Integer
+        Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")
+        Dim changecount As Integer = 0
+
+        Dim otherOptionNames() As String = othermaster.GetOptionNames(True)
+
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, GetOptionNames(True).Count, otherOptionNames.Count)
+
+        For Each otherOptionName As String In otherOptionNames
+            Dim result As ImportResult = importOption(otherOptionName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+        Return changecount
+    End Function
+
+    Private Function importOption(ByVal otherOptionName As String, ByVal table As tbl付属品DataTable, ByVal level As clsLog.LogLevel,
+                                  ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherOptionGroup As clsGroupDataRow = othermaster.GetOptionRecordGroup(otherOptionName)
+        If otherOptionGroup Is Nothing OrElse Not otherOptionGroup.IsValid OrElse otherOptionGroup.Count = 0 Then
+            Return ImportResult.NoOtherRecord
+        End If
+
+        Dim thisOptionGroup As clsGroupDataRow = GetOptionRecordGroup(otherOptionName)
+        If thisOptionGroup Is Nothing OrElse Not thisOptionGroup.IsValid OrElse thisOptionGroup.Count = 0 Then
+            'ないので追加する
+            For Each drow As clsDataRow In otherOptionGroup
+                Dim newDataRow As New clsDataRow(table.NewRow)
+                newDataRow.SetValuesFrom(drow)
+                table.Rows.Add(newDataRow.DataRow)
+            Next
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherOptionGroup)
+            Return ImportResult.AddToThis
+
+        ElseIf isOverWrite Then
+            If Not thisOptionGroup.Equals(otherOptionGroup) Then
+                '両方にある。入れ替え
+
+                '- 変更前
+                g_clsLog.LogResourceMessage(level, "LogImportBefore", thisOptionGroup)
+
+                '一旦削除
+                For Each drow As clsDataRow In thisOptionGroup
+                    table.Rows.Remove(drow.DataRow)
+                Next
+                table.AcceptChanges()
+                '改めて追加
+                For Each drow As clsDataRow In otherOptionGroup
+                    Dim newDataRow As New clsDataRow(table.NewRow)
+                    newDataRow.SetValuesFrom(drow)
+                    table.Rows.Add(newDataRow.DataRow)
+                Next
+                '- 変更後
+                g_clsLog.LogResourceMessage(level, "LogImportAfter", otherOptionGroup)
+                Return ImportResult.UpdateThis
+
+            Else
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", otherOptionName)
+                Return ImportResult.SameNoAction
+            End If
+        Else
+            ' - 同名あり 既存を保持
+            g_clsLog.LogResourceMessage(level, "LogImportExistSkip", otherOptionName)
+            Return ImportResult.KeepThisSkip
+        End If
+
+    End Function
 #End Region
 
 #Region "描画色/Color"
 
     Class clsColorRecordSet
+        Implements IEquatable(Of clsColorRecordSet)
+
         Public PenColor As Drawing.Color = Color.Empty  '描画色・Solid塗りつぶし色
         Public LanePenColor As Drawing.Color = Color.Empty '本幅描画色
         Public BrushAlfaColor As Drawing.Color = Color.Empty 'Alfa塗りつぶし色
@@ -631,7 +1163,14 @@ Public Class clsMasterTables
         Public PenWidth As Single = 0  'ペンの幅
         Public LanePenWidth As Single = 0  '本幅ペンの幅
 
+        'レコード値の保持
+        Public Name As String '色名
+        Public Appendix As String '備考
+
         Sub New(ByVal row As tbl描画色Row)
+            Name = row.f_s色
+            Appendix = row.f_s備考
+
             PenColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
             If Not row.Isf_i透明度Null AndAlso 0 < row.f_i透明度 Then
                 BrushAlfaColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青, row.f_i透明度)
@@ -650,9 +1189,34 @@ Public Class clsMasterTables
             '本幅描画色については、とりあえず、少し薄い色にしておく
             LanePenColor = Color.FromArgb(100, PenColor)
         End Sub
+
+        Public Function ToRow(ByVal row As tbl描画色Row) As Boolean
+            If row Is Nothing Then
+                Return False
+            End If
+            row.f_i赤 = PenColor.R
+            row.f_i緑 = PenColor.G
+            row.f_i青 = PenColor.B
+            row.f_i透明度 = BrushAlfaColor.A
+            row.f_d線幅 = PenWidth
+            row.f_d中線幅 = LanePenWidth
+
+            row.f_s色 = Name
+            row.f_s備考 = Appendix
+            Return True
+        End Function
+
+        Public Overloads Function Equals(other As clsColorRecordSet) As Boolean Implements IEquatable(Of clsColorRecordSet).Equals
+            '色の値のみを比較
+            Return BrushAlfaColor = other.BrushAlfaColor AndAlso PenWidth = other.PenWidth AndAlso LanePenWidth = other.LanePenWidth
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return String.Format("{0}:R({1}) G({2}) B({3}) Alfa({4}) Width({5}) Lane({6}) {7}", Name, PenColor.R, PenColor.G, PenColor.B, BrushAlfaColor.A, PenWidth, LanePenWidth, Appendix)
+        End Function
     End Class
 
-
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableColorType() As Boolean
         Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
 
@@ -744,24 +1308,116 @@ Public Class clsMasterTables
 
         Return updateCopyTableIfModified(original, table)
     End Function
+
+    Private Function getColorNames() As String()
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+        Dim res = (From row As tbl描画色Row In table
+                   Select ColorName = row.f_s色
+                   Order By ColorName).Distinct.ToList
+        Return res.ToArray
+    End Function
+
+    Private Function importColorTable(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As Integer
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+        Dim changecount As Integer = 0
+
+        Dim otherColorNames() As String = othermaster.getColorNames
+
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, getColorNames().Count, otherColorNames.Count)
+
+        For Each otherColorName As String In otherColorNames
+            Dim result As ImportResult = importColor(otherColorName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+        Return changecount
+    End Function
+
+    Private Function importColor(ByVal colorName As String, ByVal table As tbl描画色DataTable, ByVal level As clsLog.LogLevel,
+                                 ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherColor As clsColorRecordSet = othermaster.GetColorRecordSet(colorName)
+        If otherColor Is Nothing Then
+            Return ImportResult.NoOtherRecord
+        End If
+
+        Dim thisColor As clsColorRecordSet = GetColorRecordSet(colorName)
+        If thisColor IsNot Nothing Then
+            'thisにある色
+            If Not isOverWrite Then
+                ' - 同名あり 既存を保持
+                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", colorName)
+                Return ImportResult.KeepThisSkip
+            End If
+            If otherColor.Equals(thisColor) Then
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", colorName)
+                Return ImportResult.SameNoAction
+            End If
+
+            '入れ替え
+            Dim cond As String = String.Format("f_s色 = '{0}'", colorName)
+            Dim rows() As tbl描画色Row = table.Select(cond)
+            If rows.Count < 1 Then
+                Return ImportResult.NoOtherRecord '念のため
+            End If
+            otherColor.ToRow(rows(0))
+            rows(0).AcceptChanges()
+            '- 変更前
+            g_clsLog.LogResourceMessage(level, "LogImportBefore", thisColor)
+            '- 変更後
+            g_clsLog.LogResourceMessage(level, "LogImportAfter", otherColor)
+            Return ImportResult.UpdateThis
+        Else
+            'thisにない色
+            Dim row As tbl描画色Row = table.Newtbl描画色Row
+            otherColor.ToRow(row)
+            table.Rows.Add(row)
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherColor)
+            Return ImportResult.AddToThis
+        End If
+    End Function
+
 #End Region
 
 #Region "ゲージ/Gauge"
+    '既定値はレコード無し。入力があるレコードのみ生成。
 
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableGauge() As Boolean
         Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+
+        '登録されているバンドの種類名
+        Dim bandTypeNames() As String = GetBandTypeNames()
 
         Dim modified As Boolean = False
         For Each r As tblゲージRow In table.Rows
             Dim crow As New clsDataRow(r)
+            If Not bandTypeNames.Contains(crow.Value("f_sバンドの種類名")) Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableGauge Delete {0}", crow)
+                r.Delete()
+                modified = True
+                Continue For
+            End If
+
             If crow.SetDefaultForNull() Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableGauge Modify {0}", crow.ToString)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "SetAvairableGauge Modify {0}", crow)
                 modified = True
             End If
         Next
         Return modified
     End Function
 
+    '指定名のレコードを取得
     Public Function GetBandTypeGauges(ByVal bandtypename As String) As tblゲージRow()
         If String.IsNullOrWhiteSpace(bandtypename) Then
             Return Nothing
@@ -771,23 +1427,35 @@ Public Class clsMasterTables
         Return table.Select(cond)
     End Function
 
-    Public Function UpdateBandTypeGauges(ByVal bandtypename As String, ByVal subtable As tblゲージDataTable) As Boolean
-        Dim changed As Boolean = False
-
-        '該当バンドの種類を削除
+    '該当バンドの種類を削除
+    Private Function DeleteBandTypeGauges(ByVal bandtypename As String) As Integer
         Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
-        table.AcceptChanges()
+        Dim deleted As Integer = 0
 
+        table.AcceptChanges()
         Dim query = From r In table.AsEnumerable
                     Where r.f_sバンドの種類名 = bandtypename
                     Select r
         For Each r As tblゲージRow In query
             r.Delete()
-            changed = True
+            deleted += 1
         Next
         table.AcceptChanges()
 
+        Return deleted
+    End Function
+
+    '指定名のレコードを入れ替え
+    Public Function UpdateBandTypeGauges(ByVal bandtypename As String, ByVal subtable As tblゲージDataTable) As Boolean
+        Dim changed As Boolean = False
+
+        '該当バンドの種類を削除
+        If 0 < DeleteBandTypeGauges(bandtypename) Then
+            changed = True
+        End If
+
         '該当バンドの種類を追加
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
         If subtable IsNot Nothing AndAlso 0 < subtable.Rows.Count Then
             For Each gage As tblゲージRow In subtable
                 If gage.f_sバンドの種類名 = bandtypename Then
@@ -804,10 +1472,117 @@ Public Class clsMasterTables
         Return changed
     End Function
 
+    '(名前で選択された)レコードを入れ替え
+    Private Function UpdateBandTypeGauges(ByVal gaugeGroup As clsGroupDataRow) As Boolean
+        Dim changed As Boolean = False
+
+        '該当バンドの種類を削除
+        If 0 < DeleteBandTypeGauges(gaugeGroup.GetNameValue("f_sバンドの種類名")) Then
+            changed = True
+        End If
+
+        'レコードを追加
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+        For Each drow As clsDataRow In gaugeGroup
+            Dim newDataRow As New clsDataRow(table.NewRow)
+            newDataRow.SetValuesFrom(drow)
+            table.Rows.Add(newDataRow.DataRow)
+            changed = True
+        Next
+
+        If changed Then
+            table.AcceptChanges()
+            _IsDirty = True
+        End If
+        Return changed
+    End Function
+
+    Private Function importBandTypeGauges(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean, ByVal changedBandTypeList As List(Of String)) As Integer
+        Dim table As tblゲージDataTable = _dstMasterTables.Tables("tblゲージ")
+        Dim changecount As Integer = 0
+
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, table.Rows.Count, String.Join(",", changedBandTypeList.ToArray))
+        If changedBandTypeList.Count = 0 Then
+            Return 0
+        End If
+
+        For Each bandTypeName As String In changedBandTypeList
+            Dim result As ImportResult = importBandTypeGauge(bandTypeName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+        Return changecount
+    End Function
+
+    Private Function importBandTypeGauge(ByVal bandTypeName As String, ByVal table As tblゲージDataTable, ByVal level As clsLog.LogLevel,
+                                         ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherBandTypeGauges As New clsGroupDataRow(othermaster.GetBandTypeGauges(bandTypeName), "f_i本幅")
+        Dim thisBandTypeGauges As New clsGroupDataRow(GetBandTypeGauges(bandTypeName), "f_i本幅")
+
+        'otherレコードなし
+        If Not otherBandTypeGauges.IsValid OrElse otherBandTypeGauges.Count = 0 Then
+            If Not thisBandTypeGauges.IsValid OrElse thisBandTypeGauges.Count = 0 Then
+                'thisレコードもない
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", bandTypeName, "No Gauge")
+                Return ImportResult.SameNoAction
+            Else
+                '- 変更前
+                g_clsLog.LogResourceMessage(level, "LogImportBefore", thisBandTypeGauges)
+                'thisレコードがあるので削除
+                DeleteBandTypeGauges(bandTypeName)
+                '- 変更後
+                g_clsLog.LogResourceMessage(level, "LogImportAfter", bandTypeName, "No Gauge")
+                Return ImportResult.UpdateThis
+            End If
+        End If
+
+        'otherレコードがある
+        If Not thisBandTypeGauges.IsValid OrElse thisBandTypeGauges.Count = 0 Then
+            'thisレコードはないので追加するだけ
+            UpdateBandTypeGauges(otherBandTypeGauges)
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherBandTypeGauges)
+            Return ImportResult.AddToThis
+
+        ElseIf isOverWrite Then
+            'ともにレコードがある
+            If thisBandTypeGauges.Equals(otherBandTypeGauges) Then
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", bandTypeName)
+                Return ImportResult.SameNoAction
+            Else
+                '- 変更前
+                g_clsLog.LogResourceMessage(level, "LogImportBefore", thisBandTypeGauges)
+
+                '入れ替え
+                UpdateBandTypeGauges(otherBandTypeGauges)
+                '- 変更後
+                g_clsLog.LogResourceMessage(level, "LogImportAfter", otherBandTypeGauges)
+                Return ImportResult.UpdateThis
+            End If
+        Else
+            ' - 同名あり 既存を保持
+            g_clsLog.LogResourceMessage(level, "LogImportExistSkip", bandTypeName)
+            Return ImportResult.KeepThisSkip
+        End If
+
+    End Function
+
+
 #End Region
 
 #Region "上下図/UpDown"
-
+    '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableUpDown() As Boolean
         Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
         Dim modified As Boolean = False
@@ -888,6 +1663,79 @@ Public Class clsMasterTables
             _dstMasterTables.Tables("tbl上下図").AcceptChanges()
         End If
         Return False
+    End Function
+
+    Private Function importUpDownTable(ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As Integer
+        Dim table As tbl上下図DataTable = _dstMasterTables.Tables("tbl上下図")
+        Dim changecount As Integer = 0
+
+        Dim otherUpDownNames() As String = othermaster.GetUpDownNames
+
+        'テーブルの現点数とファイル点数
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, GetUpDownNames().Count, otherUpDownNames.Count)
+
+        For Each otherUpDownName As String In otherUpDownNames
+            Dim result As ImportResult = importUpDown(otherUpDownName, table, clsLog.LogLevel.Basic,
+                                                        othermaster, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        If 0 < changecount Then
+            table.AcceptChanges()
+            IsDirty = True
+        End If
+        Return changecount
+    End Function
+
+    Private Function importUpDown(ByVal upDownName As String, ByVal table As tbl上下図DataTable, ByVal level As clsLog.LogLevel,
+                                  ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+
+        Dim otherUpDownRecord As clsDataRow = New clsDataRow(othermaster.GetUpDownRecord(upDownName))
+        If Not otherUpDownRecord.IsValid Then
+            Return ImportResult.NoOtherRecord
+        End If
+
+        Dim thisUpDownRecord As clsDataRow = New clsDataRow(othermaster.GetUpDownRecord(upDownName))
+        If thisUpDownRecord.IsValid Then
+            'thisにある上下図
+
+            If isOverWrite Then
+                'ともにある。上書き指定
+
+                If otherUpDownRecord.Equals(thisUpDownRecord) Then
+                    '- 同名あり 既存と一致
+                    g_clsLog.LogResourceMessage(level, "LogImportSameSkip", upDownName)
+                    Return ImportResult.SameNoAction
+
+                Else
+                    '両方にある。入れ替え
+                    '- 変更前
+                    g_clsLog.LogResourceMessage(level, "LogImportBefore", thisUpDownRecord)
+                    thisUpDownRecord.SetValuesFrom(otherUpDownRecord)
+                    thisUpDownRecord.DataRow.AcceptChanges()
+                    '- 変更後
+                    g_clsLog.LogResourceMessage(level, "LogImportAfter", thisUpDownRecord)
+                    Return ImportResult.UpdateThis
+                End If
+
+            Else
+                ' - 同名あり 既存を保持
+                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", upDownName)
+                Return ImportResult.KeepThisSkip
+
+            End If
+        Else
+            'thisにない上下図
+            Dim newDataRow As New clsDataRow(table.NewRow)
+            newDataRow.SetValuesFrom(otherUpDownRecord)
+
+            table.Rows.Add(newDataRow.DataRow)
+            '- 追加
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherUpDownRecord)
+            Return ImportResult.AddToThis
+        End If
     End Function
 
 

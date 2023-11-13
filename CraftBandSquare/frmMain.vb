@@ -433,8 +433,8 @@ Public Class frmMain
             nud縦の目の数.Value = .Value("f_i縦の四角数")
             nud高さの目の数.Value = Int(.Value("f_d高さの四角数"))  'double
 
-            'nud横ひもの本数.Value = .Value("f_i長い横ひもの本数")
-            'nud縦ひもの本数.Value = .Value("f_i縦ひもの本数")
+            nud横ひもの本数.Value = .Value("f_i長い横ひもの本数")
+            nud縦ひもの本数.Value = .Value("f_i縦ひもの本数")
             'nud編みひもの本数.Value = nud高さの目の数.Value
 
             dispValidValueNud(nud目_ひも間のすき間, .Value("f_dひも間のすき間"))
@@ -558,7 +558,7 @@ Public Class frmMain
             .Value("f_i縦の四角数") = nud縦の目の数.Value
             .Value("f_d高さの四角数") = nud高さの目の数.Value 'double
 
-            '読み取りますが使いません
+            '読み取りますが四角数と合わなければ調整されます
             .Value("f_i長い横ひもの本数") = nud横ひもの本数.Value
             .Value("f_i縦ひもの本数") = nud縦ひもの本数.Value
             '読み取りなし　nud高さの目の数.Value 
@@ -825,8 +825,11 @@ Public Class frmMain
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
+        SaveTables(_clsDataTables)
+        dlg.DataEditing = _clsDataTables
+        dlg.DataPath = _sFilePath
+
         If dlg.ShowDialog() = DialogResult.OK Then
-            SaveTables(_clsDataTables)
             setBasics()
             recalc(CalcCategory.BsMaster)
         End If
@@ -1094,7 +1097,7 @@ Public Class frmMain
         Else
             nud縦の目の数.Value = 0
         End If
-        'recalc(CalcCategory.Square_Tate, sender)縦の目の数
+        recalc(CalcCategory.Square_Tate, sender)
     End Sub
 
     Private Sub nud縦の目の数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の目の数.ValueChanged
@@ -1104,8 +1107,8 @@ Public Class frmMain
         Else
             nud縦の目の数.Increment = 2
         End If
-        nud横ひもの本数.Value = nud縦の目の数.Value + 1
-        recalc(CalcCategory.Square_Tate, sender)
+        nud横ひもの本数.Value = nud縦の目の数.Value + 1 'recalc
+        'recalc(CalcCategory.Square_Tate, sender)
     End Sub
 
     Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
@@ -1120,7 +1123,7 @@ Public Class frmMain
         Else
             nud横の目の数.Value = 0
         End If
-        'recalc(CalcCategory.Square_Yoko, sender)横の目の数
+        recalc(CalcCategory.Square_Yoko, sender)
     End Sub
 
     Private Sub nud横の目の数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の目の数.ValueChanged
@@ -1130,8 +1133,8 @@ Public Class frmMain
         Else
             nud横の目の数.Increment = 2
         End If
-        nud縦ひもの本数.Value = nud横の目の数.Value + 1
-        recalc(CalcCategory.Square_Yoko, sender)
+        nud縦ひもの本数.Value = nud横の目の数.Value + 1 'recalc
+        'recalc(CalcCategory.Square_Yoko, sender)
     End Sub
 
     Private Sub 目_ひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nud目_ひも間のすき間.ValueChanged
@@ -1844,8 +1847,8 @@ Public Class frmMain
             left_h = _clsCalcSquare.p_i垂直ひも半数 Mod horizontalCount
             left_v = _clsCalcSquare.p_i側面ひもの本数 Mod verticalCount
         Else
-            left_h = _clsCalcSquare.p_i横ひもの本数 Mod horizontalCount
-            left_v = _clsCalcSquare.p_i縦ひもの本数 Mod verticalCount
+            left_h = _clsCalcSquare.p_i縦ひもの本数 Mod horizontalCount
+            left_v = _clsCalcSquare.p_i横ひもの本数 Mod verticalCount
         End If
 
         If left_h = 0 Then
@@ -2585,6 +2588,22 @@ Public Class frmMain
                 col.Visible = True
             End If
         Next
+    End Sub
+
+    Private Sub rad上_CheckedChanged(sender As Object, e As EventArgs) Handles rad上.CheckedChanged
+
+    End Sub
+
+    Private Sub rad左_CheckedChanged(sender As Object, e As EventArgs) Handles rad左.CheckedChanged
+
+    End Sub
+
+    Private Sub rad下_CheckedChanged(sender As Object, e As EventArgs) Handles rad下.CheckedChanged
+
+    End Sub
+
+    Private Sub rad右_CheckedChanged(sender As Object, e As EventArgs) Handles rad右.CheckedChanged
+
     End Sub
 
 

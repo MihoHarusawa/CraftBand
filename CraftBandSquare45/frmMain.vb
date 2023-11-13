@@ -774,8 +774,11 @@ Public Class frmMain
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
+        SaveTables(_clsDataTables)
+        dlg.DataEditing = _clsDataTables
+        dlg.DataPath = _sFilePath
+
         If dlg.ShowDialog() = DialogResult.OK Then
-            SaveTables(_clsDataTables)
             setBasics()
             recalc(CalcCategory.BsMaster)
         End If

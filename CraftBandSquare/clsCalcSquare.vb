@@ -53,8 +53,10 @@ Class clsCalcSquare
     Private Property _d基本のひも幅 As Double
 
     '四角数キャッシュ
-    Private Property _i横の目の数 As Integer '縦ひも数=この数+1
-    Private Property _i縦の目の数 As Integer '横ひも数=この数+1
+    Private Property _i横の目の数 As Integer '(主)_i縦ひもの本数=この数+1
+    Private Property _i縦の目の数 As Integer '(主)_i横ひもの本数=この数+1
+    Private Property _i横ひもの本数 As Integer '(従)
+    Private Property _i縦ひもの本数 As Integer '(従)
     Private Property _i高さの目の数 As Integer '=側面の編みひも数
     Private Property _d左端右端の目 As Double '0～1
     Private Property _d上端下端の目 As Double '0～1
@@ -116,6 +118,8 @@ Class clsCalcSquare
 
         _i横の目の数 = -1
         _i縦の目の数 = -1
+        _i横ひもの本数 = -1
+        _i縦ひもの本数 = -1
         _i高さの目の数 = -1
         _d左端右端の目 = -1
         _d上端下端の目 = -1
@@ -146,13 +150,13 @@ Class clsCalcSquare
 #Region "プロパティ値"
     Public ReadOnly Property p_i縦ひもの本数 As Integer
         Get
-            Return _i横の目の数 + 1
+            Return _i縦ひもの本数
         End Get
     End Property
 
     Public ReadOnly Property p_i横ひもの本数 As Integer
         Get
-            Return _i縦の目の数 + 1
+            Return _i横ひもの本数
         End Get
     End Property
 
@@ -202,7 +206,7 @@ Class clsCalcSquare
 #Region "表示用(計算には使わない)"
     ReadOnly Property p_d四角ベース_周 As Double '底の配置領域に立ち上げ増分をプラス
         Get
-            If 0 < p_d四角ベース_横 AndAlso 0 < p_d四角ベース_縦 Then
+            If 0 <= p_d四角ベース_横 AndAlso 0 <= p_d四角ベース_縦 Then
                 Return 2 * (p_d四角ベース_横 + p_d四角ベース_縦) _
                 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分")
             Else
@@ -213,7 +217,7 @@ Class clsCalcSquare
 
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
-            If 0 < p_d四角ベース_周 Then
+            If 0 <= p_d四角ベース_周 Then
                 Return p_d四角ベース_周 + 8 * p_d厚さ
             End If
             Return 0
@@ -256,7 +260,7 @@ Class clsCalcSquare
 
     Public ReadOnly Property p_s四角ベース_横 As String
         Get
-            If 0 < p_d四角ベース_横 Then
+            If 0 <= p_d四角ベース_横 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_横)
             End If
             Return ""
@@ -264,7 +268,7 @@ Class clsCalcSquare
     End Property
     Public ReadOnly Property p_s四角ベース_縦 As String
         Get
-            If 0 < p_d四角ベース_縦 Then
+            If 0 <= p_d四角ベース_縦 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_縦)
             End If
             Return ""
@@ -289,7 +293,7 @@ Class clsCalcSquare
 
     Public ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
-            If 0 < p_d四角ベース_横 Then
+            If 0 <= p_d四角ベース_横 Then
                 Return p_d四角ベース_横 + p_d厚さ * 2
             End If
             Return 0
@@ -297,7 +301,7 @@ Class clsCalcSquare
     End Property
     Public ReadOnly Property p_s縁厚さプラス_横 As String
         Get
-            If 0 < p_d縁厚さプラス_横 Then
+            If 0 <= p_d縁厚さプラス_横 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縁厚さプラス_横)
             End If
             Return ""
@@ -306,7 +310,7 @@ Class clsCalcSquare
 
     Public ReadOnly Property p_d縁厚さプラス_縦 As Double
         Get
-            If 0 < p_d四角ベース_縦 Then
+            If 0 <= p_d四角ベース_縦 Then
                 Return p_d四角ベース_縦 + p_d厚さ * 2
             End If
             Return 0
@@ -314,7 +318,7 @@ Class clsCalcSquare
     End Property
     Public ReadOnly Property p_s縁厚さプラス_縦 As String
         Get
-            If 0 < p_d縁厚さプラス_縦 Then
+            If 0 <= p_d縁厚さプラス_縦 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縁厚さプラス_縦)
             End If
             Return ""
@@ -504,12 +508,12 @@ Class clsCalcSquare
                 ret = ret And calc_横ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
 
-            Case CalcCategory.Square_Yoko '四角数タブ横の目の数
+            Case CalcCategory.Square_Yoko '四角数タブ(横の目の数)縦ひもの本数
                 ret = ret And set_四角数()
                 '
                 ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
 
-            Case CalcCategory.Square_Tate '四角数タブ縦の目の数
+            Case CalcCategory.Square_Tate '四角数タブ(縦の目の数)横ひもの本数
                 ret = ret And set_四角数()
                 '
                 ret = ret And calc_横ひも展開(category, Nothing, Nothing)
@@ -610,6 +614,28 @@ Class clsCalcSquare
             _d左端右端の目 = .Value("f_d左端右端の目")
             _d上端下端の目 = .Value("f_d上端下端の目")
             _d最下段の目 = .Value("f_d最下段の目")
+
+            '調整してセット
+            If 0 < _i横の目の数 Then
+                _i縦ひもの本数 = _i横の目の数 + 1
+            Else
+                _i縦ひもの本数 = .Value("f_i縦ひもの本数") '0/1
+                If 0 = _i縦ひもの本数 Then
+                    _d左端右端の目 = 0
+                Else
+                    _i縦ひもの本数 = 1
+                End If
+            End If
+            If 0 < _i縦の目の数 Then
+                _i横ひもの本数 = _i縦の目の数 + 1
+            Else
+                _i横ひもの本数 = .Value("f_i長い横ひもの本数") '0/1
+                If 0 = _i横ひもの本数 Then
+                    _d上端下端の目 = 0
+                Else
+                    _i横ひもの本数 = 1
+                End If
+            End If
         End With
 
         Return IsValidInput()
@@ -639,12 +665,7 @@ Class clsCalcSquare
     '有効な入力がある
     Public Function IsValidInput() As Boolean
 
-        If _i横の目の数 <= 0 OrElse _i縦の目の数 <= 0 Then
-            '横ひも・縦ひも・編みひもの本数(目の数)をセットしてください。
-            p_sメッセージ = My.Resources.CalcNoSquareCountSet
-            Return False
-        End If
-        If _i高さの目の数 < 0 Then
+        If _i横の目の数 < 0 OrElse _i縦の目の数 < 0 OrElse _i高さの目の数 < 0 Then
             '横ひも・縦ひも・編みひもの本数(目の数)をセットしてください。
             p_sメッセージ = My.Resources.CalcNoSquareCountSet
             Return False
@@ -655,6 +676,21 @@ Class clsCalcSquare
             Return False
         End If
 
+        Dim nonzero_count As Integer = 0
+        If 0 < _i横の目の数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _i縦の目の数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _i高さの目の数 Then
+            nonzero_count += 1
+        End If
+        If nonzero_count < 2 Then
+            '横ひも・縦ひも・編みひもの本数(目の数)をセットしてください。
+            p_sメッセージ = My.Resources.CalcNoSquareCountSet
+            Return False
+        End If
         Return True
     End Function
 
@@ -1355,19 +1391,24 @@ Class clsCalcSquare
     '本幅変更と幅の合計を返す共通関数
     Private Function recalc_ひも展開(ByVal table As tbl縦横展開DataTable, ByVal filt As enumひも種, ByRef isChange As Boolean) As Double
         Dim dSum幅 As Double = 0
+        Dim iMax何本幅 As Integer = 0
+        Dim iMin何本幅 As Integer = 0
+        isChange = False
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Return dSum幅
+        End If
+
         Dim obj As Object = table.Compute("SUM(f_d幅)", Nothing)
         If Not IsDBNull(obj) AndAlso 0 < obj Then
             dSum幅 = obj
         End If
 
         Dim itype As Integer = filt
-        Dim iMax何本幅 As Integer = 0
         Dim objMax As Object = table.Compute("MAX(f_i何本幅)", String.Format("f_iひも種 = {0}", itype))
         If Not IsDBNull(objMax) AndAlso 0 < objMax Then
             iMax何本幅 = objMax
         End If
 
-        Dim iMin何本幅 As Integer = 0
         Dim objMin As Object = table.Compute("MIN(f_i何本幅)", String.Format("f_iひも種 = {0}", itype))
         If Not IsDBNull(objMin) AndAlso 0 < objMin Then
             iMin何本幅 = objMin

@@ -36,16 +36,21 @@ Partial Class frmBasics
         Me.btn設定データの保存先 = New System.Windows.Forms.Button()
         Me.SaveFileDialogMasterTable = New System.Windows.Forms.SaveFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnImport = New System.Windows.Forms.Button()
+        Me.OpenFileDialogImport = New System.Windows.Forms.OpenFileDialog()
+        Me.btnExport = New System.Windows.Forms.Button()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.SaveFileDialogExport = New System.Windows.Forms.SaveFileDialog()
         Me.grp設定時の寸法単位.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnOK
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(252, 146)
+        Me.btnOK.Location = New System.Drawing.Point(259, 146)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 4
+        Me.btnOK.TabIndex = 6
         Me.btnOK.Text = "OK(&O)"
         Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
         Me.btnOK.UseVisualStyleBackColor = True
@@ -54,10 +59,10 @@ Partial Class frmBasics
         '
         Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(371, 146)
+        Me.btnキャンセル.Location = New System.Drawing.Point(378, 146)
         Me.btnキャンセル.Name = "btnキャンセル"
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        Me.btnキャンセル.TabIndex = 5
+        Me.btnキャンセル.TabIndex = 7
         Me.btnキャンセル.Text = "キャンセル(&C)"
         Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
         Me.btnキャンセル.UseVisualStyleBackColor = True
@@ -125,14 +130,14 @@ Partial Class frmBasics
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt設定データの保存先.Location = New System.Drawing.Point(157, 102)
         Me.txt設定データの保存先.Name = "txt設定データの保存先"
-        Me.txt設定データの保存先.Size = New System.Drawing.Size(291, 27)
+        Me.txt設定データの保存先.Size = New System.Drawing.Size(298, 27)
         Me.txt設定データの保存先.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.txt設定データの保存先, "設定データの保存先ファイル名")
         '
         'btn設定データの保存先
         '
         Me.btn設定データの保存先.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn設定データの保存先.Location = New System.Drawing.Point(452, 101)
+        Me.btn設定データの保存先.Location = New System.Drawing.Point(459, 101)
         Me.btn設定データの保存先.Name = "btn設定データの保存先"
         Me.btn設定データの保存先.Size = New System.Drawing.Size(30, 30)
         Me.btn設定データの保存先.TabIndex = 3
@@ -146,11 +151,52 @@ Partial Class frmBasics
         Me.SaveFileDialogMasterTable.OverwritePrompt = False
         Me.SaveFileDialogMasterTable.Title = "設定データを保存するファイルを指定してください"
         '
+        'btnImport
+        '
+        Me.btnImport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnImport.Location = New System.Drawing.Point(21, 146)
+        Me.btnImport.Name = "btnImport"
+        Me.btnImport.Size = New System.Drawing.Size(111, 46)
+        Me.btnImport.TabIndex = 4
+        Me.btnImport.Text = "インポート(&I)"
+        Me.ToolTip1.SetToolTip(Me.btnImport, "別の設定データファイルを読み取ります")
+        Me.btnImport.UseVisualStyleBackColor = True
+        '
+        'OpenFileDialogImport
+        '
+        Me.OpenFileDialogImport.DefaultExt = "XML"
+        Me.OpenFileDialogImport.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        Me.OpenFileDialogImport.Title = "インポートしたい設定データファイルを指定してください"
+        '
+        'btnExport
+        '
+        Me.btnExport.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnExport.Location = New System.Drawing.Point(140, 146)
+        Me.btnExport.Name = "btnExport"
+        Me.btnExport.Size = New System.Drawing.Size(111, 46)
+        Me.btnExport.TabIndex = 5
+        Me.btnExport.Text = "エクスポート(&E)"
+        Me.ToolTip1.SetToolTip(Me.btnExport, "現データで参照している設定を別のファイルに書き出します")
+        Me.btnExport.UseVisualStyleBackColor = True
+        '
+        'SaveFileDialog1
+        '
+        Me.SaveFileDialog1.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        Me.SaveFileDialog1.OverwritePrompt = False
+        Me.SaveFileDialog1.Title = "設定データを保存するファイルを指定してください"
+        '
+        'SaveFileDialogExport
+        '
+        Me.SaveFileDialogExport.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        Me.SaveFileDialogExport.Title = "参照している設定データを書き出すファイルを指定してください"
+        '
         'frmBasics
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(501, 207)
+        Me.ClientSize = New System.Drawing.Size(508, 207)
+        Me.Controls.Add(Me.btnExport)
+        Me.Controls.Add(Me.btnImport)
         Me.Controls.Add(Me.btn設定データの保存先)
         Me.Controls.Add(Me.txt設定データの保存先)
         Me.Controls.Add(Me.lbl設定データの保存先)
@@ -180,4 +226,9 @@ Partial Class frmBasics
     Friend WithEvents btn設定データの保存先 As Button
     Friend WithEvents SaveFileDialogMasterTable As SaveFileDialog
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents btnImport As Button
+    Friend WithEvents OpenFileDialogImport As OpenFileDialog
+    Friend WithEvents btnExport As Button
+    Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents SaveFileDialogExport As SaveFileDialog
 End Class

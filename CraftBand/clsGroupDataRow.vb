@@ -3,6 +3,7 @@
 ''' </summary>
 Public Class clsGroupDataRow
     Implements IEnumerable
+    Implements IEquatable(Of clsGroupDataRow)
 
     Dim _fieldNameKey As String = Nothing
     Dim _map As New SortedDictionary(Of Int16, clsDataRow)
@@ -210,9 +211,32 @@ Public Class clsGroupDataRow
         Return sb.ToString
     End Function
 
+    Public Overloads Function Equals(other As clsGroupDataRow) As Boolean Implements IEquatable(Of clsGroupDataRow).Equals
+        'otherがMeと同じ値を持つ
+        If Not IsValid OrElse Not other.IsValid Then
+            Throw New Exception("clsGroupDataRow.Equals:Compare No Valid Group")
+        End If
+        'フィールド指定タイプのみ想定
+        If _fieldNameKey <> other._fieldNameKey OrElse _map.Count <> other._map.Count Then
+            Return False
+        End If
+        For Each myRow As clsDataRow In Me
+            Dim otherRow As clsDataRow = other.IndexDataRow(myRow.Value(_fieldNameKey))
+            If otherRow Is Nothing Then
+                Return False
+            Else
+                If Not myRow.Equals(otherRow) Then
+                    Return False
+                End If
+            End If
+        Next
+        Return True
+    End Function
+
     Public Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
         Return New CArrayEnumerator(Of clsDataRow)(_map.Values().ToArray)
     End Function
+
 End Class
 
 Class CArrayEnumerator(Of Teach)

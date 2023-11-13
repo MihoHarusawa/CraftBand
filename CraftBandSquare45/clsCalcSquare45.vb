@@ -486,14 +486,25 @@ Class clsCalcSquare45
             p_sメッセージ = My.Resources.CalcNoSquareCountSet
             Return False
         End If
-        If _i横の四角数 = 0 OrElse _i縦の四角数 = 0 Then
-            '横の四角数・縦の四角数・高さの四角数をセットしてください。
-            p_sメッセージ = My.Resources.CalcNoSquareCountSet
-            Return False
-        End If
         If _I基本のひも幅 <= 0 Then
             '基本のひも幅を設定してください。
             p_sメッセージ = My.Resources.CalcNoBaseBandSet
+            Return False
+        End If
+
+        Dim nonzero_count As Integer = 0
+        If 0 < _i横の四角数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _i縦の四角数 Then
+            nonzero_count += 1
+        End If
+        If 0 < _d高さの四角数 Then
+            nonzero_count += 1
+        End If
+        If nonzero_count < 2 Then
+            '横の四角数・縦の四角数・高さの四角数をセットしてください。
+            p_sメッセージ = My.Resources.CalcNoSquareCountSet
             Return False
         End If
         Return True

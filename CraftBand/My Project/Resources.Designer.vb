@@ -116,7 +116,28 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}が変更されました。選択されたファイルを読み直しますか？ に類似しているローカライズされた文字列を検索します。
+        '''  同名データに対しては、現設定値で上書きしてよろしいですか？
+        '''(はい=上書き,いいえ=既存値保持) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskOverwriteForExist() As String
+            Get
+                Return ResourceManager.GetString("AskOverwriteForExist", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  同名データに対しては、読み取り値で上書きしてよろしいですか？
+        '''(はい=上書き,いいえ=現在値保持) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskOverwriteForSame() As String
+            Get
+                Return ResourceManager.GetString("AskOverwriteForSame", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}が変更されました。選択されたファイル&apos;{1}&apos;を読み直しますか？
+        '''(はい=読み直す,いいえ=現設定を上書きする) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskReloadMasterDataFile() As String
             Get
@@ -130,6 +151,16 @@ Namespace My.Resources
         Friend ReadOnly Property AskResetAll() As String
             Get
                 Return ResourceManager.GetString("AskResetAll", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  新しい{0}として&apos;{1}&apos;が指定されました。現在の設定をクリアしますか？
+        '''(はい=ゼロから作り直す,いいえ=現設定維持) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskResetMasterDataFile() As String
+            Get
+                Return ResourceManager.GetString("AskResetMasterDataFile", resourceCulture)
             End Get
         End Property
         
@@ -386,6 +417,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  &apos;{0}&apos;とは別の設定データファイルを指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgSameMasterTableFile() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgSameMasterTableFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}以下の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrMsgTooLarge() As String
@@ -553,6 +593,132 @@ Namespace My.Resources
         Friend ReadOnly Property LOG_FormEnd() As String
             Get
                 Return ResourceManager.GetString("LOG_FormEnd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  設定ファイルのエクスポート (上書き) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogExportMasterFile() As String
+            Get
+                Return ResourceManager.GetString("LogExportMasterFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  + 追加 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportAdd() As String
+            Get
+                Return ResourceManager.GetString("LogImportAdd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  + 色の追加 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportAddColor() As String
+            Get
+                Return ResourceManager.GetString("LogImportAddColor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  - 変更後 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportAfter() As String
+            Get
+                Return ResourceManager.GetString("LogImportAfter", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  + 変更前 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportBefore() As String
+            Get
+                Return ResourceManager.GetString("LogImportBefore", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  - 同名あり 既存を保持 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportExistSkip() As String
+            Get
+                Return ResourceManager.GetString("LogImportExistSkip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  設定ファイルのインポート (上書き) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportMasterFile() As String
+            Get
+                Return ResourceManager.GetString("LogImportMasterFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  - 同名あり 既存と一致 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportSameSkip() As String
+            Get
+                Return ResourceManager.GetString("LogImportSameSkip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  テーブルの現点数とファイル点数 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportTable() As String
+            Get
+                Return ResourceManager.GetString("LogImportTable", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ファイル&apos;{0}&apos;に {1}点の書き出しを行いました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgExported() As String
+            Get
+                Return ResourceManager.GetString("MsgExported", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  [{0}] の {1}点を更新しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpdate() As String
+            Get
+                Return ResourceManager.GetString("MsgUpdate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  全更新数は {0}点でした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpdateAll() As String
+            Get
+                Return ResourceManager.GetString("MsgUpdateAll", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  [{0}] の更新エラーです。設定メニューで確認してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpdateError() As String
+            Get
+                Return ResourceManager.GetString("MsgUpdateError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  [{0}] の更新はありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgUpdateNone() As String
+            Get
+                Return ResourceManager.GetString("MsgUpdateNone", resourceCulture)
             End Get
         End Property
         
