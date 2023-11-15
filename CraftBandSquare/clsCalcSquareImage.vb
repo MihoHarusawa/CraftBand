@@ -1839,6 +1839,7 @@ Partial Public Class clsCalcSquare
 #End Region
 
 #Region "ひも上下"
+    Dim _CUpDown As New clsUpDown   'CheckBoxTableは使わない
 
     '底の上下をm_regionListにセット
     Private Function regionUpDown底() As Boolean
@@ -1850,7 +1851,7 @@ Partial Public Class clsCalcSquare
         If Not _Data.ToClsUpDown(cBottomNumber, _CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
-        If Not _CUpDown.IsValid Then
+        If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
             Return False
         End If
 
@@ -1907,7 +1908,7 @@ Partial Public Class clsCalcSquare
         If Not _Data.ToClsUpDown(clsUpDown.cSide12Number, _CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
-        If Not _CUpDown.IsValid Then
+        If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
             Return False
         End If
 
@@ -2006,7 +2007,7 @@ Partial Public Class clsCalcSquare
         If Not _Data.ToClsUpDown(clsUpDown.cSide34Number, _CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
-        If Not _CUpDown.IsValid Then
+        If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
             Return False
         End If
 

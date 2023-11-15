@@ -65,9 +65,6 @@ Public Class frmMain
         _Profile_dgv差しひも.FormCaption = Me.Text
         dgv差しひも.SetProfile(_Profile_dgv差しひも)
 
-        _Profile_dgvひも上下.FormCaption = Me.Text
-        dgvひも上下.SetProfile(_Profile_dgvひも上下)
-
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
 #Else
@@ -530,7 +527,7 @@ Public Class frmMain
             works.FromTmpTable(enumひも種.i_縦, BindingSource縦ひも.DataSource)
         End If
         If _CurrentTabControlName = "tpageひも上下" Then
-            saveひも上下(False)
+            saveひも上下(works, False)
         End If
 
         Return True
@@ -1784,94 +1781,20 @@ Public Class frmMain
 
 #Region "ひも上下"
     Dim _CurrentTargetFace As enumTargetFace
-    Dim _UpdownChanged As Boolean
-
-    Private Function setUpdownColumns(ByVal col As Integer) As Boolean
-        If col < 0 OrElse clsUpDown.cMaxUpdownColumns < col Then
-            Return False
-        End If
-        '0はIndex, 1～
-        For i As Integer = 1 To col
-            dgvひも上下.Columns(i).Visible = True
-        Next
-        For i As Integer = col + 1 To clsUpDown.cMaxUpdownColumns
-            dgvひも上下.Columns(i).Visible = False
-        Next
-        Return True
-    End Function
-
-    Private Function setDataSourceUpDown(ByVal updown As clsUpDown) As Boolean
-        Try
-            If updown Is Nothing Then
-                BindingSourceひも上下.Sort = Nothing
-                BindingSourceひも上下.DataSource = Nothing
-                txt開始位置.Text = ""
-            Else
-                nud水平に.Value = updown.HorizontalCount
-                nud垂直に.Value = updown.VerticalCount
-                setUpdownColumns(updown.HorizontalCount)
-                setUpDownCountLeft()
-                BindingSourceひも上下.DataSource = updown.CheckBoxTable
-                If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
-                    BindingSourceひも上下.Sort = "Index desc"
-                    txt開始位置.Text = My.Resources.LeftLower
-                Else
-                    BindingSourceひも上下.Sort = "Index"
-                    txt開始位置.Text = My.Resources.LeftUpper
-                End If
-            End If
-            btnサイズ変更_ひも上下.Enabled = False
-            Return True
-
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "frmMain.setDataSourceUpDown")
-            Return False
-        End Try
-    End Function
-
-    '上下図の残り数
-    Private Function setUpDownCountLeft() As Boolean
-        lbl水平残.Text = "-"
-        lbl垂直残.Text = "-"
-
-        Dim horizontalCount As Integer = nud水平に.Value
-        Dim verticalCount As Integer = nud垂直に.Value
-        If horizontalCount = 0 OrElse verticalCount = 0 Then
-            Return False
-        End If
-
-        Dim left_h As Integer
-        Dim left_v As Integer
-
-        If IsSide(_CurrentTargetFace) Then
-            left_h = _clsCalcSquare.p_i垂直ひも半数 Mod horizontalCount
-            left_v = _clsCalcSquare.p_i側面ひもの本数 Mod verticalCount
-        Else
-            left_h = _clsCalcSquare.p_i縦ひもの本数 Mod horizontalCount
-            left_v = _clsCalcSquare.p_i横ひもの本数 Mod verticalCount
-        End If
-
-        If left_h = 0 Then
-            lbl水平残.Text = "OK"
-        Else
-            lbl水平残.Text = String.Format("[ {0} ]", left_h)
-        End If
-        If left_v = 0 Then
-            lbl垂直残.Text = "OK"
-        Else
-            lbl垂直残.Text = String.Format("[ {0} ]", left_v)
-        End If
-
-        Return True
-    End Function
 
 
     Sub Showひも上下(ByVal works As clsDataTables)
-        BindingSourceひも上下.Sort = Nothing
-        BindingSourceひも上下.DataSource = Nothing
         If works Is Nothing Then
             Exit Sub
         End If
+
+        editUpDown.I垂直ひも半数 = _clsCalcSquare.p_i垂直ひも半数
+        editUpDown.I側面ひもの本数 = _clsCalcSquare.p_i側面ひもの本数
+        editUpDown.I縦ひもの本数 = _clsCalcSquare.p_i縦ひもの本数
+        editUpDown.I横ひもの本数 = _clsCalcSquare.p_i横ひもの本数
+        editUpDown.Rad下から上へChecked = rad下から上へ.Checked '側面のタブ
+
+        editUpDown.PanelSize = tpageひも上下.Size
 
         _CurrentTargetFace = enumTargetFace.Bottom
         If rad側面_上右.Checked Then
@@ -1880,349 +1803,16 @@ Public Class frmMain
             _CurrentTargetFace = enumTargetFace.Side34
         End If
 
-        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(_CurrentTargetFace)
-        If updown Is Nothing Then
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        txt上下のメモ.Text = updown.Memo
-        setDataSourceUpDown(updown)
-
-        dgvひも上下.Refresh()
-        _UpdownChanged = False
+        editUpDown.Showひも上下(works, _CurrentTargetFace, _CurrentTargetFace)
     End Sub
 
-    Function saveひも上下(ByVal isMsg As Boolean) As Boolean
-        If _UpdownChanged Then
-            If BindingSourceひも上下.DataSource IsNot Nothing Then
-                Dim updown As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
-                updown.CheckBoxTable = BindingSourceひも上下.DataSource
-                updown.Memo = txt上下のメモ.Text
-
-                If Not _clsCalcSquare.saveひも上下(updown) Then
-                    If isMsg Then
-                        MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    End If
-                    Return False
-                End If
-            Else
-                Return False
-            End If
-        End If
-        Return True
+    Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
+        Return editUpDown.Saveひも上下(works, isMsg)
     End Function
 
     Function Hideひも上下(ByVal works As clsDataTables) As Boolean
-        Dim ret As Boolean = saveひも上下(True)
-        BindingSourceひも上下.Sort = Nothing
-        BindingSourceひも上下.DataSource = Nothing
-        Return ret
+        Return editUpDown.Hideひも上下(works)
     End Function
-
-    Private Sub btnサイズ変更_ひも上下_Click(sender As Object, e As EventArgs) Handles btnサイズ変更_ひも上下.Click
-        If nud水平に.Value <= 0 OrElse nud垂直に.Value <= 0 Then
-            '水平・垂直の本数を指定してください。
-            MessageBox.Show(My.Resources.MessageNoUpDownSize, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
-
-        setDataSourceUpDown(Nothing)
-
-        Dim updown As clsUpDown = _clsCalcSquare.updownサイズ変更(nud水平に.Value, nud垂直に.Value, False)
-        If updown Is Nothing Then
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnサイズ変更_ひも上下.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub btnリセット_ひも上下_Click(sender As Object, e As EventArgs) Handles btnリセット_ひも上下.Click
-        Dim isReset As Boolean = True
-        If BindingSourceひも上下.DataSource IsNot Nothing Then
-            'ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？(はいで全て初期化、いいえはサイズ保持)
-            Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetUpDown, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-            If r = DialogResult.Yes Then
-                isReset = True
-            ElseIf r = DialogResult.No Then
-                isReset = False
-            Else
-                Exit Sub
-            End If
-        End If
-
-        txt上下のメモ.Text = ""
-
-        Dim updown As clsUpDown = _clsCalcSquare.updownリセット(isReset)
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnリセット_ひも上下.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub btn上下交換_Click(sender As Object, e As EventArgs) Handles btn上下交換.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
-            '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn上下交換.Text),
-                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-
-        Dim updown As clsUpDown = _clsCalcSquare.updown上下交換(gridsel.SubRange(dgvひも上下))
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn上下交換.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
-    End Sub
-
-    Private Sub btn左右反転_Click(sender As Object, e As EventArgs) Handles btn左右反転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
-            '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左右反転.Text),
-                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-
-        Dim updown As clsUpDown = _clsCalcSquare.updown左右反転(gridsel.SubRange(dgvひも上下))
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左右反転.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
-    End Sub
-
-    Private Sub btn天地反転_Click(sender As Object, e As EventArgs) Handles btn天地反転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
-            '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn天地反転.Text),
-                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-
-        Dim updown As clsUpDown = _clsCalcSquare.updown天地反転(gridsel.SubRange(dgvひも上下))
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn天地反転.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
-    End Sub
-
-    Private Sub btn右回転_Click(sender As Object, e As EventArgs) Handles btn右回転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
-            '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn右回転.Text),
-                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-
-        Dim desc As Boolean = rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace)
-        Dim updown As clsUpDown = _clsCalcSquare.updown右回転(desc, gridsel.SubRange(dgvひも上下))
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn右回転.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
-    End Sub
-
-    Private Sub btn左回転_Click(sender As Object, e As EventArgs) Handles btn左回転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
-            '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左回転.Text),
-                            Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-
-        Dim desc As Boolean = rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace)
-        Dim updown As clsUpDown = _clsCalcSquare.updown右回転(Not desc, gridsel.SubRange(dgvひも上下))
-        If updown Is Nothing Then
-            setDataSourceUpDown(Nothing)
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左回転.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
-    End Sub
-
-    Private Sub btnシフト_Click(sender As Object, e As EventArgs) Handles btnシフト.Click
-        Dim updown As clsUpDown
-        If rad上.Checked Then
-            setDataSourceUpDown(Nothing)
-            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
-                updown = _clsCalcSquare.updown垂直シフト(False) '逆順なので後
-            Else
-                updown = _clsCalcSquare.updown垂直シフト(True) '正順なので先頭
-            End If
-
-        ElseIf rad下.Checked Then
-            setDataSourceUpDown(Nothing)
-            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
-                updown = _clsCalcSquare.updown垂直シフト(True) '逆順なので先頭
-            Else
-                updown = _clsCalcSquare.updown垂直シフト(False) '正順なので後
-            End If
-
-        ElseIf rad右.Checked Then
-            setDataSourceUpDown(Nothing)
-            updown = _clsCalcSquare.updown水平シフト(False)
-
-        ElseIf rad左.Checked Then
-            setDataSourceUpDown(Nothing)
-            updown = _clsCalcSquare.updown水平シフト(True)
-
-        Else
-            Exit Sub
-        End If
-
-        If updown Is Nothing Then
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnシフト.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
-        If rad上.Checked OrElse rad下.Checked Then
-            If clsUpDown.cMaxUpdownColumns <= dgvひも上下.Rows.Count Then
-                'これ以上増やせません。
-                MessageBox.Show(My.Resources.MessageNoMore, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Exit Sub
-            End If
-
-        ElseIf rad右.Checked OrElse rad左.Checked Then
-            If dgvひも上下.Columns(clsUpDown.cMaxUpdownColumns).Visible Then
-                'これ以上増やせません。
-                MessageBox.Show(My.Resources.MessageNoMore, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Exit Sub
-            End If
-        Else
-            Exit Sub
-        End If
-
-        setDataSourceUpDown(Nothing)
-        Dim updown As clsUpDown = Nothing
-
-        If rad上.Checked Then
-            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
-                updown = _clsCalcSquare.updown垂直追加(False) '逆順なので後
-            Else
-                updown = _clsCalcSquare.updown垂直追加(True) '正順なので先頭
-            End If
-
-        ElseIf rad下.Checked Then
-            If rad下から上へ.Checked AndAlso IsSide(_CurrentTargetFace) Then
-                updown = _clsCalcSquare.updown垂直追加(True) '逆順なので先頭
-            Else
-                updown = _clsCalcSquare.updown垂直追加(False) '正順なので後
-            End If
-
-        ElseIf rad右.Checked Then
-            updown = _clsCalcSquare.updown水平追加(False)
-
-        ElseIf rad左.Checked Then
-            updown = _clsCalcSquare.updown水平追加(True)
-        End If
-
-        If updown Is Nothing Then
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn追加.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub btnランダム_Click(sender As Object, e As EventArgs) Handles btnランダム.Click
-        setDataSourceUpDown(Nothing)
-
-        Dim updown As clsUpDown = _clsCalcSquare.updownランダム()
-        If updown Is Nothing Then
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnランダム.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub btnチェック_Click(sender As Object, e As EventArgs) Handles btnチェック.Click
-        Dim msg As String = Nothing
-        If Not _clsCalcSquare.updownチェック(msg) Then
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            If String.IsNullOrWhiteSpace(msg) Then
-                'チェックOKです。
-                MessageBox.Show(My.Resources.MessageCheckOK,
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Else
-                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-        End If
-    End Sub
-
-    Private Sub dgvひも上下_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvひも上下.CellValueChanged
-        _UpdownChanged = True
-    End Sub
-
-    Private Sub txt上下のメモ_TextChanged(sender As Object, e As EventArgs) Handles txt上下のメモ.TextChanged
-        _UpdownChanged = True
-    End Sub
 
     Private Sub rad底側面_CheckedChanged(sender As Object, e As EventArgs) Handles rad底.CheckedChanged, rad側面_上右.CheckedChanged, rad側面_下左.CheckedChanged
         Dim target As enumTargetFace = enumTargetFace.Bottom
@@ -2233,7 +1823,7 @@ Public Class frmMain
         End If
 
         If _CurrentTargetFace <> target Then
-            saveひも上下(True)
+            saveひも上下(_clsDataTables, True)
             Showひも上下(_clsDataTables)
         End If
     End Sub
@@ -2258,251 +1848,13 @@ Public Class frmMain
             Exit Sub
         End If
 
-        setDataSourceUpDown(Nothing)
-
-        Dim updown As clsUpDown = _clsCalcSquare.loadひも上下(prv)
-        updown.TargetFace = _CurrentTargetFace
-        If updown Is Nothing Then
-            '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn先と同じ.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        Else
-            setDataSourceUpDown(updown)
-        End If
-        dgvひも上下.Refresh()
-        _UpdownChanged = True
+        editUpDown.Hideひも上下(_clsDataTables, False)
+        editUpDown.Showひも上下(_clsDataTables, prv, _CurrentTargetFace)
     End Sub
 
-    Private Sub nud水平に_ValueChanged(sender As Object, e As EventArgs) Handles nud水平に.ValueChanged
-        btnサイズ変更_ひも上下.Enabled = True
-        lbl水平残.Text = "-"
+    Private Sub tpageひも上下_Resize(sender As Object, e As EventArgs) Handles tpageひも上下.Resize
+        editUpDown.PanelSize = tpageひも上下.Size
     End Sub
-
-    Private Sub nud垂直に_ValueChanged(sender As Object, e As EventArgs) Handles nud垂直に.ValueChanged
-        btnサイズ変更_ひも上下.Enabled = True
-        lbl垂直残.Text = "-"
-    End Sub
-
-    Private Sub dgvひも上下_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvひも上下.CellPainting
-        '列ヘッダーかどうか調べる
-        If e.ColumnIndex < 0 And e.RowIndex >= 0 Then
-            Dim Index As Integer = dgvひも上下.Rows(e.RowIndex).Cells(0).Value '垂直の番号
-
-            'セルを描画する
-            e.Paint(e.ClipBounds, DataGridViewPaintParts.All)
-
-            '行番号を描画する範囲を決定する
-            'e.AdvancedBorderStyleやe.CellStyle.Paddingは無視しています
-            Dim indexRect As Rectangle = e.CellBounds
-            indexRect.Inflate(-2, -2)
-            '行番号を描画する
-            TextRenderer.DrawText(e.Graphics,
-                                  Index.ToString(),
-                e.CellStyle.Font, indexRect, e.CellStyle.ForeColor, TextFormatFlags.Right Or TextFormatFlags.VerticalCenter)
-            '描画が完了したことを知らせる
-            e.Handled = True
-        End If
-    End Sub
-
-    Private Sub dgvひも上下_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvひも上下.CellFormatting
-        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
-            Exit Sub
-        End If
-        If Not dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Visible Then
-            Exit Sub
-        End If
-
-        If dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value Then
-            Dim cStep As Integer = 3 '3本ごと背景色を少し変える
-            Dim iRow As Integer = If((e.RowIndex + 1) Mod cStep = 0, 1, 0)
-            Dim iCol As Integer = If(e.ColumnIndex Mod cStep = 0, 1, 0)
-            Dim iBack As Integer = 160 - iRow * 10 - iCol * 10
-            e.CellStyle.BackColor = Color.FromArgb(iBack, iBack, iBack)
-        Else
-            e.CellStyle.BackColor = Color.White
-        End If
-    End Sub
-
-    '1の幅変更を波及,lastdata対象外
-    Private Sub dgvひも上下_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles dgvひも上下.ColumnWidthChanged
-        If _isLoadingData OrElse e.Column Is Nothing OrElse e.Column.Index < 1 Then
-            Exit Sub
-        End If
-        'Debug.Print("Index={0} width={1}", e.Column.Index, e.Column.Width) 1～
-        If e.Column.Index = 1 Then
-            For i As Integer = 2 To cMaxUpdownColumns '全カラム
-                dgvひも上下.Columns(i).Width = e.Column.Width
-            Next
-        End If
-    End Sub
-
-    '1の高さ変更を波及,lastdata対象外
-    Private Sub dgvひも上下_RowHeightChanged(sender As Object, e As DataGridViewRowEventArgs) Handles dgvひも上下.RowHeightChanged
-        If _isLoadingData OrElse e.Row Is Nothing OrElse e.Row.Index < 0 Then
-            Exit Sub
-        End If
-        'Debug.Print("Index={0} width={1}", e.Row.Index, e.Row.Height) 0～
-        If e.Row.Index = 0 Then
-            For i As Integer = 1 To nud垂直に.Value - 1 '表示分
-                dgvひも上下.Rows(i).Height = e.Row.Height
-            Next
-            dgvひも上下.RowTemplate.Height = e.Row.Height
-        End If
-    End Sub
-
-    Private Sub btn設定呼出_Click(sender As Object, e As EventArgs) Handles btn設定呼出.Click
-        Dim updown_tmp As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
-        updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
-        updown_tmp.Memo = txt上下のメモ.Text
-
-        Dim dlg As New frmUpDownSetting
-        dlg.CurrentUpdown = updown_tmp
-        dlg.IsLoadToCurrent = True
-        If dlg.ShowDialog() = DialogResult.OK Then
-            setDataSourceUpDown(Nothing)
-            txt上下のメモ.Text = updown_tmp.Memo
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown_tmp:{0}", updown_tmp.ToString)
-
-            'CheckBoxTableに結果が入っている
-            Dim updown As clsUpDown = _clsCalcSquare.updownサイズ変更(updown_tmp.HorizontalCount, updown_tmp.VerticalCount, True)
-            If updown Is Nothing Then
-                '{0}できませんでした。リセットしてやり直してください。
-                MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn設定呼出.Text),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Else
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown:{0}", updown.ToString)
-                setDataSourceUpDown(updown)
-            End If
-            dgvひも上下.Refresh()
-            _UpdownChanged = True
-        End If
-    End Sub
-
-    Private Sub btn設定登録_Click(sender As Object, e As EventArgs) Handles btn設定登録.Click
-        Dim updown_tmp As New clsUpDown(_CurrentTargetFace, nud水平に.Value, nud垂直に.Value)
-        updown_tmp.CheckBoxTable = BindingSourceひも上下.DataSource
-        Dim dlg As New frmUpDownSetting
-        dlg.CurrentUpdown = updown_tmp
-        dlg.IsSaveFromCurrent = True
-        If dlg.ShowDialog() = DialogResult.OK Then
-            '変わりません
-        End If
-    End Sub
-
-    '範囲選択
-    Class CDataGridSelection
-        Property ColumnIndexFrom As Integer = Integer.MaxValue
-        Property ColumnIndexTo As Integer = Integer.MinValue
-        Property RowIndexFrom As Integer = Integer.MaxValue
-        Property RowIndexTo As Integer = Integer.MinValue
-        Property SelectedCellsCount As Integer = 0
-
-        ReadOnly Property IsValid As Boolean
-            Get
-                Return (ColumnIndexFrom <= ColumnIndexTo) AndAlso (RowIndexFrom <= RowIndexTo)
-            End Get
-        End Property
-
-        ReadOnly Property FromToRangeCells As Integer
-            Get
-                If Not IsValid Then
-                    Return 0
-                Else
-                    Return (ColumnIndexTo - ColumnIndexFrom + 1) * (RowIndexTo - RowIndexFrom + 1)
-                End If
-            End Get
-        End Property
-
-        ReadOnly Property IsRangeSelect As Boolean
-            Get
-                Return 0 < SelectedCellsCount AndAlso SelectedCellsCount = FromToRangeCells
-            End Get
-        End Property
-
-        ReadOnly Property IsSquareSelect As Boolean
-            Get
-                Return IsRangeSelect AndAlso (ColumnIndexTo - ColumnIndexFrom) = (RowIndexTo - RowIndexFrom)
-            End Get
-        End Property
-
-
-        Private WriteOnly Property ColumnnIndex As Integer
-            Set(value As Integer)
-                If value < ColumnIndexFrom Then
-                    ColumnIndexFrom = value
-                End If
-                If ColumnIndexTo < value Then
-                    ColumnIndexTo = value
-                End If
-            End Set
-        End Property
-
-        Private WriteOnly Property RowIndex As Integer
-            Set(value As Integer)
-                If value < RowIndexFrom Then
-                    RowIndexFrom = value
-                End If
-                If RowIndexTo < value Then
-                    RowIndexTo = value
-                End If
-            End Set
-        End Property
-
-        Function GridSelectedCells(ByVal dgv As DataGridView) As Boolean
-            '行選択は対象外
-            If 0 < dgv.SelectedRows.Count Then
-                Return False
-            End If
-
-            '選択を範囲化
-            For Each c As DataGridViewCell In dgv.SelectedCells
-                ColumnnIndex = c.ColumnIndex
-                RowIndex = c.RowIndex
-            Next
-
-            '数が一致
-            SelectedCellsCount = dgv.SelectedCells.Count
-            Return IsRangeSelect
-        End Function
-
-        Function GridCellsSelect(ByVal dgv As DataGridView) As Boolean
-            '範囲選択であること
-            If Not IsRangeSelect Then
-                Return False
-            End If
-
-            '範囲を選択
-            dgv.ClearSelection()
-            For r As Integer = RowIndexFrom To RowIndexTo
-                For c As Integer = ColumnIndexFrom To ColumnIndexTo
-                    dgv.Rows(r).Cells(c).Selected = True
-                Next
-            Next
-
-            SelectedCellsCount = dgv.SelectedCells.Count
-            Return True
-        End Function
-
-        Function SubRange(ByVal dgv As DataGridView) As CSubRange
-            '範囲選択かつ2点以上であること
-            If Not IsRangeSelect OrElse SelectedCellsCount = 1 Then
-                Return Nothing
-            End If
-
-            '垂直の番号
-            Dim IndexFrom As Integer = dgv.Rows(RowIndexFrom).Cells(0).Value
-            Dim IndexTo As Integer = dgv.Rows(RowIndexTo).Cells(0).Value
-            If IndexFrom <= IndexTo Then
-                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexFrom, IndexTo)
-            Else
-                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexTo, IndexFrom)
-            End If
-        End Function
-
-        Public Overrides Function ToString() As String
-            Return String.Format("{0}-{1}:{2}-{3}:{4}/{5}", ColumnIndexFrom, ColumnIndexTo, RowIndexFrom, RowIndexTo, SelectedCellsCount, FromToRangeCells)
-        End Function
-    End Class
 
 #End Region
 
@@ -2590,19 +1942,19 @@ Public Class frmMain
         Next
     End Sub
 
-    Private Sub rad上_CheckedChanged(sender As Object, e As EventArgs) Handles rad上.CheckedChanged
+    Private Sub rad上_CheckedChanged(sender As Object, e As EventArgs)
 
     End Sub
 
-    Private Sub rad左_CheckedChanged(sender As Object, e As EventArgs) Handles rad左.CheckedChanged
+    Private Sub rad左_CheckedChanged(sender As Object, e As EventArgs)
 
     End Sub
 
-    Private Sub rad下_CheckedChanged(sender As Object, e As EventArgs) Handles rad下.CheckedChanged
+    Private Sub rad下_CheckedChanged(sender As Object, e As EventArgs)
 
     End Sub
 
-    Private Sub rad右_CheckedChanged(sender As Object, e As EventArgs) Handles rad右.CheckedChanged
+    Private Sub rad右_CheckedChanged(sender As Object, e As EventArgs)
 
     End Sub
 

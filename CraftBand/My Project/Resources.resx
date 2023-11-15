@@ -166,9 +166,18 @@
 (はい=ゼロから作り直す,いいえ=現設定維持)</value>
     <comment>frmBasics</comment>
   </data>
+  <data name="AskResetUpDown" xml:space="preserve">
+    <value>ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？
+(はいで全て初期化、いいえはサイズ保持)</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
   <data name="AskSaveChange" xml:space="preserve">
     <value>先の'{0}'の変更を保存します。よろしいですか？(保存しない場合は[いいえ])</value>
     <comment>frmGauge</comment>
+  </data>
+  <data name="AskTargetAllRange" xml:space="preserve">
+    <value>全範囲を{0}します。よろしいですか？</value>
+    <comment>ctrEditUpDown</comment>
   </data>
   <data name="CalcOutCount" xml:space="preserve">
     <value>{0} 本</value>
@@ -187,6 +196,10 @@
   </data>
   <data name="CalcOutSum" xml:space="preserve">
     <value>集計値</value>
+  </data>
+  <data name="CalcUpDownSaveErr" xml:space="preserve">
+    <value>ひも上下レコードの保存エラーです。</value>
+    <comment>ctrEditUpDown</comment>
   </data>
   <data name="CaptionBandTypeWeight" xml:space="preserve">
     <value>長さと重さの換算 &lt;{0}&gt;</value>
@@ -332,6 +345,14 @@
     <value>長さを入力して[→] / 重さを入力して[←]</value>
     <comment>frmBandTypeWeight</comment>
   </data>
+  <data name="LeftLower" xml:space="preserve">
+    <value>左下</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="LeftUpper" xml:space="preserve">
+    <value>左上</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
   <data name="LogExportMasterFile" xml:space="preserve">
     <value>設定ファイルのエクスポート (上書き)</value>
     <comment>clsMasterTables</comment>
@@ -385,6 +406,22 @@
   <data name="LOG_FormEnd" xml:space="preserve">
     <value>ダイアログ表示終了</value>
   </data>
+  <data name="MessageCheckOK" xml:space="preserve">
+    <value>チェックOKです。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="MessageNoMore" xml:space="preserve">
+    <value>これ以上増やせません。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="MessageNoUpDownSize" xml:space="preserve">
+    <value>水平・垂直の本数を指定してください。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="MessageUpDownError" xml:space="preserve">
+    <value>{0}できませんでした。リセットしてやり直してください。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
   <data name="MsgExported" xml:space="preserve">
     <value>ファイル'{0}'に {1}点の書き出しを行いました。</value>
     <comment>clsMasterTables</comment>
@@ -428,6 +465,34 @@
   <data name="MsgUpDownVertical" xml:space="preserve">
     <value>列</value>
     <comment>clsUpDown</comment>
+  </data>
+  <data name="UpDownAppend" xml:space="preserve">
+    <value>上下図の登録</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownAppendInstruction" xml:space="preserve">
+    <value>新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownExistName" xml:space="preserve">
+    <value>'{0}'は既に登録されています。置き換えますか？(いいえで別の名前を指定)</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownNoExistName" xml:space="preserve">
+    <value>'{0}'は登録されていません。登録名を選択してください。</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownNoName" xml:space="preserve">
+    <value>上下図名がセットされていません。</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownRead" xml:space="preserve">
+    <value>上下図の呼出</value>
+    <comment>frmUpDownSetting</comment>
+  </data>
+  <data name="UpDownReadInstruction" xml:space="preserve">
+    <value>上下図名を選択してください。[OK]ボタンで現パターンに反映します。</value>
+    <comment>frmUpDownSetting</comment>
   </data>
   <data name="WarningBadWorkData" xml:space="preserve">
     <value>指定されたファイル'{0}'は読み取れませんでした。</value>

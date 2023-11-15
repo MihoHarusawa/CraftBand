@@ -541,7 +541,7 @@ Public Class clsDataTables
         End If
         If num < p_tblひも上下.Rows.Count Then
             updown.FromRecord(p_tblひも上下.Rows(num))
-            Return updown.IsValid
+            Return updown.IsValid(False) 'チェックはMatrix
         Else
             Return False
         End If

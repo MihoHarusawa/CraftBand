@@ -1,4 +1,5 @@
-﻿Imports CraftBand
+﻿Imports System.Windows.Forms
+Imports CraftBand
 Imports CraftBand.Tables.dstMasterTables
 
 Public Class frmUpDownSetting

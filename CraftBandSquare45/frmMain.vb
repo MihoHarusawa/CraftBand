@@ -1,6 +1,7 @@
 ﻿
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
@@ -111,7 +112,9 @@ Public Class frmMain
 
         DispTables(_clsDataTables)
 
-        'サイズ復元
+
+#If 0 Then
+       'サイズ復元
         Dim siz As Size = My.Settings.frmMainSize
         If 0 < siz.Height AndAlso 0 < siz.Width Then
             Me.Size = siz
@@ -125,7 +128,7 @@ Public Class frmMain
             colwid = My.Settings.frmMainGridTate
             Me.dgv縦ひも.SetColumnWidthFromString(colwid)
         End If
-
+#End If
         setStartEditing()
     End Sub
 
@@ -283,6 +286,8 @@ Public Class frmMain
                 Show底の縦(works)
             Case "tpageプレビュー"
                 Showプレビュー(works)
+            Case "tpageひも上下"
+                Showひも上下(works)
             Case Else ' "tpageメモ他"
 
         End Select
@@ -303,7 +308,7 @@ Public Class frmMain
             End If
         End If
         If reason.HasFlag(enumReason._Preview) Then
-            If {"tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+            If {"tpageプレビュー", "tpageひも上下"}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -334,6 +339,8 @@ Public Class frmMain
                 Hide底の縦(_clsDataTables)
             Case "tpageプレビュー"
                 Hideプレビュー(_clsDataTables)
+            Case "tpageひも上下"
+                Hideひも上下(_clsDataTables)
             Case Else ' 
                 '
         End Select
@@ -509,6 +516,9 @@ Public Class frmMain
         End If
         If _CurrentTabControlName = "tpage縦ひも" Then
             works.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_315度, BindingSource縦ひも.DataSource)
+        End If
+        If _CurrentTabControlName = "tpageひも上下" Then
+            saveひも上下(works, False)
         End If
 
         Return True
@@ -1190,12 +1200,18 @@ Public Class frmMain
             If Not TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Add(tpage縦ひも)
             End If
+            If Not TabControl.TabPages.Contains(tpageひも上下) Then
+                TabControl.TabPages.Add(tpageひも上下)
+            End If
         Else
             If TabControl.TabPages.Contains(tpage横ひも) Then
                 TabControl.TabPages.Remove(tpage横ひも)
             End If
             If TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Remove(tpage縦ひも)
+            End If
+            If TabControl.TabPages.Contains(tpageひも上下) Then
+                TabControl.TabPages.Remove(tpageひも上下)
             End If
         End If
     End Sub
@@ -1276,6 +1292,30 @@ Public Class frmMain
     End Sub
 #End Region
 
+#Region "ひも上下"
+
+    Sub Showひも上下(ByVal works As clsDataTables)
+        editUpDown.I縦ひもの本数 = _clsCalcSquare45.p_i縦ひもの本数
+        editUpDown.I横ひもの本数 = _clsCalcSquare45.p_i縦ひもの本数
+        editUpDown.PanelSize = tpageひも上下.Size
+
+        editUpDown.Showひも上下(works, enumTargetFace.Bottom, enumTargetFace.Bottom)
+    End Sub
+
+    Function Hideひも上下(ByVal works As clsDataTables) As Boolean
+        Return editUpDown.Hideひも上下(works)
+    End Function
+
+    Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
+        Return editUpDown.Saveひも上下(works, isMsg)
+    End Function
+
+    Private Sub tpageひも上下_Resize(sender As Object, e As EventArgs) Handles tpageひも上下.Resize
+        editUpDown.PanelSize = tpageひも上下.Size
+    End Sub
+
+#End Region
+
 #Region "プレビュー"
     Dim _clsImageData As clsImageData
     Private Sub Showプレビュー(works As clsDataTables)
@@ -1332,6 +1372,7 @@ Public Class frmMain
 #Region "DEBUG"
     Dim bVisible As Boolean = False
     Private Sub btnDEBUG_Click(sender As Object, e As EventArgs) Handles btnDEBUG.Click
+
         If Not bVisible Then
             setDgvColumnsVisible(dgv縁の始末)
             setDgvColumnsVisible(dgv追加品)
@@ -1356,7 +1397,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 
 #End Region
 

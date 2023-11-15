@@ -13,6 +13,7 @@ Public Class clsUpDown
     Public Const cSide34Number As Integer = 2 '側面(下左)のレコード番号
 
     Enum enumTargetFace
+        NoDef = -1
         Bottom = 0  '底
         Side12 = 1  '側面(上右)
         Side34 = 2  '側面(下左)
@@ -33,22 +34,30 @@ Public Class clsUpDown
     Dim _Matrix(cMaxUpdownColumns, cMaxUpdownColumns) As Boolean '1～HorizontalCount, 1～VerticalCountで使用
 
 
-    Sub New(ByVal face As enumTargetFace)
+    Sub New(Optional ByVal face As enumTargetFace = enumTargetFace.Bottom)
         TargetFace = face
     End Sub
+
     Sub New(ByVal face As enumTargetFace, ByVal horizon As Integer, ByVal vert As Integer)
         TargetFace = face
         HorizontalCount = horizon
         VerticalCount = vert
     End Sub
 
-    ReadOnly Property IsValid As Boolean
+    ReadOnly Property IsValid(ByVal isCheckExistTable As Boolean) As Boolean
         Get
-            '数が有効で、テーブルがある
-            Return 2 <= HorizontalCount AndAlso 2 <= VerticalCount AndAlso
-                 HorizontalCount <= cMaxUpdownColumns AndAlso VerticalCount <= cMaxUpdownColumns AndAlso
-                CheckBoxTable IsNot Nothing AndAlso
-                CheckBoxTable.Rows.Count = VerticalCount
+            '数が有効
+            If Not (2 <= HorizontalCount AndAlso 2 <= VerticalCount AndAlso
+                 HorizontalCount <= cMaxUpdownColumns AndAlso VerticalCount <= cMaxUpdownColumns) Then
+                Return False
+            End If
+            '
+            'テーブルがある
+            If isCheckExistTable Then
+                Return (CheckBoxTable IsNot Nothing AndAlso CheckBoxTable.Rows.Count = VerticalCount)
+            Else
+                Return True
+            End If
         End Get
     End Property
 
@@ -66,6 +75,10 @@ Public Class clsUpDown
 
     'テーブルに存在するレコードをそのまま配列へ
     Private Function table_to_matrix(Optional ByVal set_mtx As Boolean = False) As Boolean
+        If CheckBoxTable Is Nothing Then
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "table_to_matrix <no CheckBoxTable>")
+            Return False
+        End If
         Try
             If set_mtx OrElse CheckBoxTable.GetChanges IsNot Nothing Then
                 For y As Integer = 1 To CheckBoxTable.Rows.Count
@@ -98,6 +111,10 @@ Public Class clsUpDown
 
     '配列をVerticalCount,HorizontalCountサイズのテーブルへ(x残りは保持)
     Private Function matrix_to_table() As Boolean
+        If CheckBoxTable Is Nothing Then
+            Return True
+        End If
+
         Try
             If cMaxUpdownColumns < VerticalCount Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsUpDown.matrix_to_table VerticalCount{0}->{1}", VerticalCount, cMaxUpdownColumns)
@@ -829,7 +846,7 @@ Public Class clsUpDown
 
     'チェック #28 戻り値 OK/NG 戻り値によらずチェック結果を返す
     Function Check(ByRef msg As String) As Boolean
-        If Not IsValid Then
+        If Not IsValid(True) Then 'Tableが原本
             'サイズ({0},{1})のエラーです。
             msg = String.Format(My.Resources.ErrCheckValid, HorizontalCount, VerticalCount)
             Return False
@@ -946,7 +963,7 @@ Public Class clsUpDown
 
     '上値を取得 Idx は各、1～Countの値
     Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
-        If Not IsValid Then
+        If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
         Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
@@ -956,7 +973,7 @@ Public Class clsUpDown
 
     '下値を取得 Idx は各、1～Countの値
     Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
-        If Not IsValid Then
+        If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
         Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
@@ -967,19 +984,21 @@ Public Class clsUpDown
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("{0} TargetFace={1} Size({2},{3})", Me.GetType.Name, TargetFace, HorizontalCount, VerticalCount).AppendLine()
-        sb.Append("Table ")
-        For y As Integer = 1 To CheckBoxTable.Rows.Count
-            Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
-            sb.AppendFormat("[{0}]", r.Index)
-            For x As Integer = 1 To HorizontalCount
-                If r(String.Format("CheckBox{0:00}", x)) Then
-                    sb.Append("1 ")
-                Else
-                    sb.Append("0 ")
-                End If
+        If CheckBoxTable IsNot Nothing Then
+            sb.Append("Table ")
+            For y As Integer = 1 To CheckBoxTable.Rows.Count
+                Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
+                sb.AppendFormat("[{0}]", r.Index)
+                For x As Integer = 1 To HorizontalCount
+                    If r(String.Format("CheckBox{0:00}", x)) Then
+                        sb.Append("1 ")
+                    Else
+                        sb.Append("0 ")
+                    End If
+                Next
             Next
-        Next
-        sb.AppendLine()
+            sb.AppendLine()
+        End If
         sb.Append("Matrix")
         For y As Integer = 1 To VerticalCount
             sb.AppendFormat("[{0}]", y)

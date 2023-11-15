@@ -187,17 +187,17 @@ Partial Class frmUpDownSetting
 
     End Sub
 
-    Friend WithEvents btnキャンセル As Button
-    Friend WithEvents btnOK As Button
-    Friend WithEvents cmb上下図名 As ComboBox
-    Friend WithEvents lbl上下図名 As Label
-    Friend WithEvents lbl垂直本数 As Label
-    Friend WithEvents lbl水平本数 As Label
-    Friend WithEvents txtl水平本数 As TextBox
-    Friend WithEvents txtl垂直本数 As TextBox
-    Friend WithEvents lblしてください As Label
-    Friend WithEvents grp反映方法 As GroupBox
-    Friend WithEvents chk繰り返す As CheckBox
-    Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents chk入れ換え As CheckBox
+    Friend WithEvents btnキャンセル As Windows.Forms.Button
+    Friend WithEvents btnOK As Windows.Forms.Button
+    Friend WithEvents cmb上下図名 As Windows.Forms.ComboBox
+    Friend WithEvents lbl上下図名 As Windows.Forms.Label
+    Friend WithEvents lbl垂直本数 As Windows.Forms.Label
+    Friend WithEvents lbl水平本数 As Windows.Forms.Label
+    Friend WithEvents txtl水平本数 As Windows.Forms.TextBox
+    Friend WithEvents txtl垂直本数 As Windows.Forms.TextBox
+    Friend WithEvents lblしてください As Windows.Forms.Label
+    Friend WithEvents grp反映方法 As Windows.Forms.GroupBox
+    Friend WithEvents chk繰り返す As Windows.Forms.CheckBox
+    Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
+    Friend WithEvents chk入れ換え As Windows.Forms.CheckBox
 End Class

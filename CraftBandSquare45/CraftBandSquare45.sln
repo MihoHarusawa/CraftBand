@@ -7,6 +7,8 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandSquare45", "CraftB
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBand", "..\CraftBand\CraftBand.vbproj", "{86C5A0CD-DE41-47AD-941A-204AB84617C4}"
 EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandSquare", "..\CraftBandSquare\CraftBandSquare.vbproj", "{962DC960-DAB3-4D91-8EAC-5088EC9E2841}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{86C5A0CD-DE41-47AD-941A-204AB84617C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86C5A0CD-DE41-47AD-941A-204AB84617C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86C5A0CD-DE41-47AD-941A-204AB84617C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962DC960-DAB3-4D91-8EAC-5088EC9E2841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962DC960-DAB3-4D91-8EAC-5088EC9E2841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962DC960-DAB3-4D91-8EAC-5088EC9E2841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962DC960-DAB3-4D91-8EAC-5088EC9E2841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

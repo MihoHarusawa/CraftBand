@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿Imports CraftBand
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmMain
     Inherits System.Windows.Forms.Form
 
@@ -257,6 +259,8 @@ Partial Class frmMain
         Me.BindingSource縦ひも = New System.Windows.Forms.BindingSource(Me.components)
         Me.tpageプレビュー = New System.Windows.Forms.TabPage()
         Me.picプレビュー = New System.Windows.Forms.PictureBox()
+        Me.tpageひも上下 = New System.Windows.Forms.TabPage()
+        Me.editUpDown = New CraftBand.ctrEditUpDown()
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl四角ベース = New System.Windows.Forms.Label()
         Me.lbl計算寸法 = New System.Windows.Forms.Label()
@@ -281,6 +285,13 @@ Partial Class frmMain
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lbl単位 = New System.Windows.Forms.Label()
         Me.btnDEBUG = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -314,7 +325,11 @@ Partial Class frmMain
         CType(Me.BindingSource縦ひも, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpageプレビュー.SuspendLayout()
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpageひも上下.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'nud基本のひも幅
@@ -1015,58 +1030,58 @@ Partial Class frmMain
         'ToolStripMenuItemEditSelectBand
         '
         Me.ToolStripMenuItemEditSelectBand.Name = "ToolStripMenuItemEditSelectBand"
-        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditSelectBand.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditSelectBand.Text = "バンドの種類選択(&S)"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(213, 6)
         '
         'ToolStripMenuItemEditReset
         '
         Me.ToolStripMenuItemEditReset.Name = "ToolStripMenuItemEditReset"
-        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditReset.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditReset.Text = "リセット(&R)"
         '
         'ToolStripMenuItemEditDefault
         '
         Me.ToolStripMenuItemEditDefault.Name = "ToolStripMenuItemEditDefault"
-        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditDefault.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditDefault.Text = "規定値(&D)"
         '
         'ToolStripMenuItemEditCalc
         '
         Me.ToolStripMenuItemEditCalc.Name = "ToolStripMenuItemEditCalc"
-        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditCalc.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditCalc.Text = "概算(&C)"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(213, 6)
         '
         'ToolStripMenuItemEditColorChange
         '
         Me.ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
-        Me.ToolStripMenuItemEditColorChange.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditColorChange.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditColorChange.Text = "色の変更(&I)"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(213, 6)
         '
         'ToolStripMenuItemEditList
         '
         Me.ToolStripMenuItemEditList.Name = "ToolStripMenuItemEditList"
-        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditList.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditList.Text = "ひもリスト(&L)"
         '
         'ToolStripMenuItemEditDefaultFile
         '
         Me.ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
-        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemEditDefaultFile.Size = New System.Drawing.Size(216, 26)
         Me.ToolStripMenuItemEditDefaultFile.Text = "規定値保存(&F)"
         '
         'ToolStripMenuItemSetting
@@ -1147,6 +1162,7 @@ Partial Class frmMain
         Me.TabControl.Controls.Add(Me.tpage横ひも)
         Me.TabControl.Controls.Add(Me.tpage縦ひも)
         Me.TabControl.Controls.Add(Me.tpageプレビュー)
+        Me.TabControl.Controls.Add(Me.tpageひも上下)
         Me.TabControl.Location = New System.Drawing.Point(19, 171)
         Me.TabControl.Name = "TabControl"
         Me.TabControl.SelectedIndex = 0
@@ -2378,6 +2394,28 @@ Partial Class frmMain
         Me.picプレビュー.TabIndex = 0
         Me.picプレビュー.TabStop = False
         '
+        'tpageひも上下
+        '
+        Me.tpageひも上下.Controls.Add(Me.GroupBox1)
+        Me.tpageひも上下.Controls.Add(Me.editUpDown)
+        Me.tpageひも上下.Location = New System.Drawing.Point(4, 29)
+        Me.tpageひも上下.Name = "tpageひも上下"
+        Me.tpageひも上下.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpageひも上下.Size = New System.Drawing.Size(840, 413)
+        Me.tpageひも上下.TabIndex = 8
+        Me.tpageひも上下.Text = "ひも上下"
+        Me.tpageひも上下.UseVisualStyleBackColor = True
+        '
+        'editUpDown
+        '
+        Me.editUpDown.AutoSize = True
+        Me.editUpDown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.editUpDown.Location = New System.Drawing.Point(-4, 0)
+        Me.editUpDown.Name = "editUpDown"
+        Me.editUpDown.PanelSize = New System.Drawing.Size(800, 400)
+        Me.editUpDown.Size = New System.Drawing.Size(803, 403)
+        Me.editUpDown.TabIndex = 1
+        '
         'f_i段数2
         '
         Me.f_i段数2.DataPropertyName = "f_i段数"
@@ -2593,6 +2631,73 @@ Partial Class frmMain
         Me.btnDEBUG.UseVisualStyleBackColor = True
         Me.btnDEBUG.Visible = False
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(341, 25)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(111, 46)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "生成する"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label2)
+        Me.GroupBox1.Controls.Add(Me.NumericUpDown2)
+        Me.GroupBox1.Controls.Add(Me.Label1)
+        Me.GroupBox1.Controls.Add(Me.CheckBox1)
+        Me.GroupBox1.Controls.Add(Me.NumericUpDown1)
+        Me.GroupBox1.Controls.Add(Me.Button1)
+        Me.GroupBox1.Location = New System.Drawing.Point(22, 6)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(463, 84)
+        Me.GroupBox1.TabIndex = 3
+        Me.GroupBox1.TabStop = False
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(152, 36)
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(46, 27)
+        Me.NumericUpDown1.TabIndex = 3
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(8, 38)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(73, 24)
+        Me.CheckBox1.TabIndex = 4
+        Me.CheckBox1.Text = "横の辺"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(98, 39)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(51, 20)
+        Me.Label1.TabIndex = 5
+        Me.Label1.Text = "垂直に"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(224, 39)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(36, 20)
+        Me.Label2.TabIndex = 7
+        Me.Label2.Text = "底に"
+        '
+        'NumericUpDown2
+        '
+        Me.NumericUpDown2.Location = New System.Drawing.Point(266, 37)
+        Me.NumericUpDown2.Name = "NumericUpDown2"
+        Me.NumericUpDown2.Size = New System.Drawing.Size(46, 27)
+        Me.NumericUpDown2.TabIndex = 6
+        Me.NumericUpDown2.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -2703,8 +2808,14 @@ Partial Class frmMain
         CType(Me.BindingSource縦ひも, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpageプレビュー.ResumeLayout(False)
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpageひも上下.ResumeLayout(False)
+        Me.tpageひも上下.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2938,4 +3049,13 @@ Partial Class frmMain
     Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents tpageひも上下 As TabPage
+    Friend WithEvents editUpDown As ctrEditUpDown
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents NumericUpDown2 As NumericUpDown
+    Friend WithEvents Label1 As Label
+    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents NumericUpDown1 As NumericUpDown
+    Friend WithEvents Button1 As Button
 End Class
