@@ -202,6 +202,7 @@ Public Class frmBasics
             exportMaster.MasterTablesFilePath = SaveFileDialogExport.FileName
         End If
 
+        msg = Nothing
         If g_clsMasterTables.Export(DataEditing, exportMaster, isOverWrite, msg) Then
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else

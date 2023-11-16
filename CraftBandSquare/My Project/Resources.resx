@@ -142,21 +142,12 @@
 (はいで全てリセット、いいえで目(ひも間のすき間)を保持)</value>
     <comment>frmMain</comment>
   </data>
-  <data name="AskResetUpDown" xml:space="preserve">
-    <value>ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？
-(はいで全て初期化、いいえはサイズ保持)</value>
-    <comment>frmMain</comment>
-  </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">
     <value>編集中のデータを保存しますか？</value>
     <comment>frmMain</comment>
   </data>
   <data name="AskSaveDefault" xml:space="preserve">
     <value>現データの状態を規定値として保存します。よろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="AskTargetAllRange" xml:space="preserve">
-    <value>全範囲を{0}します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
   <data name="CalcBadRecord" xml:space="preserve">
@@ -201,9 +192,6 @@
   <data name="CalcOutTurn" xml:space="preserve">
     <value>折り返し</value>
   </data>
-  <data name="CalcUpDownSaveErr" xml:space="preserve">
-    <value>ひも上下レコードの保存エラーです。</value>
-  </data>
   <data name="DefaultFileName" xml:space="preserve">
     <value>規定値.xml</value>
   </data>
@@ -223,36 +211,16 @@
     <value>四つ目と四角 {0}</value>
     <comment>frmMain</comment>
   </data>
-  <data name="LeftLower" xml:space="preserve">
-    <value>左下</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="LeftUpper" xml:space="preserve">
-    <value>左上</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageCheckOK" xml:space="preserve">
-    <value>チェックOKです。</value>
-    <comment>frmMain</comment>
-  </data>
   <data name="MessageNoDefaultFile" xml:space="preserve">
     <value>規定値が保存されていません。先に規定値保存を行ってください。</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageNoMore" xml:space="preserve">
-    <value>これ以上増やせません。</value>
     <comment>frmMain</comment>
   </data>
   <data name="MessageNotExistDefaultFile" xml:space="preserve">
     <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
     <comment>frmMain</comment>
   </data>
-  <data name="MessageNoUpDownSize" xml:space="preserve">
-    <value>水平・垂直の本数を指定してください。</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageUpDownError" xml:space="preserve">
-    <value>{0}できませんでした。リセットしてやり直してください。</value>
+  <data name="MessageReplaceError" xml:space="preserve">
+    <value>{0}のデータを表示できませんでした。</value>
     <comment>frmMain</comment>
   </data>
   <data name="TitleDllError" xml:space="preserve">
@@ -262,33 +230,5 @@
   <data name="TitleException" xml:space="preserve">
     <value>例外発生</value>
     <comment>mdlMain</comment>
-  </data>
-  <data name="UpDownAppend" xml:space="preserve">
-    <value>上下図の登録</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownAppendInstruction" xml:space="preserve">
-    <value>新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownExistName" xml:space="preserve">
-    <value>'{0}'は既に登録されています。置き換えますか？(いいえで別の名前を指定)</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownNoExistName" xml:space="preserve">
-    <value>'{0}'は登録されていません。登録名を選択してください。</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownNoName" xml:space="preserve">
-    <value>上下図名がセットされていません。</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownRead" xml:space="preserve">
-    <value>上下図の呼出</value>
-    <comment>frmUpDownSetting</comment>
-  </data>
-  <data name="UpDownReadInstruction" xml:space="preserve">
-    <value>上下図名を選択してください。[OK]ボタンで現パターンに反映します。</value>
-    <comment>frmUpDownSetting</comment>
   </data>
 </root>

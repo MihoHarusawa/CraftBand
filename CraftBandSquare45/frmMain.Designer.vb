@@ -260,6 +260,13 @@ Partial Class frmMain
         Me.tpageプレビュー = New System.Windows.Forms.TabPage()
         Me.picプレビュー = New System.Windows.Forms.PictureBox()
         Me.tpageひも上下 = New System.Windows.Forms.TabPage()
+        Me.grp縦横の四角数 = New System.Windows.Forms.GroupBox()
+        Me.lbl底に = New System.Windows.Forms.Label()
+        Me.nud底に = New System.Windows.Forms.NumericUpDown()
+        Me.lbl垂直に = New System.Windows.Forms.Label()
+        Me.chk横の辺 = New System.Windows.Forms.CheckBox()
+        Me.nud垂直に = New System.Windows.Forms.NumericUpDown()
+        Me.btn合わせる = New System.Windows.Forms.Button()
         Me.editUpDown = New CraftBand.ctrEditUpDown()
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl四角ベース = New System.Windows.Forms.Label()
@@ -285,13 +292,6 @@ Partial Class frmMain
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lbl単位 = New System.Windows.Forms.Label()
         Me.btnDEBUG = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -326,10 +326,10 @@ Partial Class frmMain
         Me.tpageプレビュー.SuspendLayout()
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpageひも上下.SuspendLayout()
+        Me.grp縦横の四角数.SuspendLayout()
+        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'nud基本のひも幅
@@ -2396,7 +2396,7 @@ Partial Class frmMain
         '
         'tpageひも上下
         '
-        Me.tpageひも上下.Controls.Add(Me.GroupBox1)
+        Me.tpageひも上下.Controls.Add(Me.grp縦横の四角数)
         Me.tpageひも上下.Controls.Add(Me.editUpDown)
         Me.tpageひも上下.Location = New System.Drawing.Point(4, 29)
         Me.tpageひも上下.Name = "tpageひも上下"
@@ -2406,10 +2406,82 @@ Partial Class frmMain
         Me.tpageひも上下.Text = "ひも上下"
         Me.tpageひも上下.UseVisualStyleBackColor = True
         '
+        'grp縦横の四角数
+        '
+        Me.grp縦横の四角数.Controls.Add(Me.lbl底に)
+        Me.grp縦横の四角数.Controls.Add(Me.nud底に)
+        Me.grp縦横の四角数.Controls.Add(Me.lbl垂直に)
+        Me.grp縦横の四角数.Controls.Add(Me.chk横の辺)
+        Me.grp縦横の四角数.Controls.Add(Me.nud垂直に)
+        Me.grp縦横の四角数.Controls.Add(Me.btn合わせる)
+        Me.grp縦横の四角数.Location = New System.Drawing.Point(22, 6)
+        Me.grp縦横の四角数.Name = "grp縦横の四角数"
+        Me.grp縦横の四角数.Size = New System.Drawing.Size(463, 84)
+        Me.grp縦横の四角数.TabIndex = 3
+        Me.grp縦横の四角数.TabStop = False
+        Me.grp縦横の四角数.Text = "縦横の四角数"
+        '
+        'lbl底に
+        '
+        Me.lbl底に.AutoSize = True
+        Me.lbl底に.Location = New System.Drawing.Point(224, 39)
+        Me.lbl底に.Name = "lbl底に"
+        Me.lbl底に.Size = New System.Drawing.Size(36, 20)
+        Me.lbl底に.TabIndex = 7
+        Me.lbl底に.Text = "底に"
+        '
+        'nud底に
+        '
+        Me.nud底に.Location = New System.Drawing.Point(266, 37)
+        Me.nud底に.Name = "nud底に"
+        Me.nud底に.Size = New System.Drawing.Size(46, 27)
+        Me.nud底に.TabIndex = 6
+        Me.nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'lbl垂直に
+        '
+        Me.lbl垂直に.AutoSize = True
+        Me.lbl垂直に.Location = New System.Drawing.Point(98, 39)
+        Me.lbl垂直に.Name = "lbl垂直に"
+        Me.lbl垂直に.Size = New System.Drawing.Size(51, 20)
+        Me.lbl垂直に.TabIndex = 5
+        Me.lbl垂直に.Text = "垂直に"
+        '
+        'chk横の辺
+        '
+        Me.chk横の辺.AutoSize = True
+        Me.chk横の辺.Location = New System.Drawing.Point(8, 38)
+        Me.chk横の辺.Name = "chk横の辺"
+        Me.chk横の辺.Size = New System.Drawing.Size(73, 24)
+        Me.chk横の辺.TabIndex = 4
+        Me.chk横の辺.Text = "横の辺"
+        Me.chk横の辺.UseVisualStyleBackColor = True
+        '
+        'nud垂直に
+        '
+        Me.nud垂直に.Location = New System.Drawing.Point(152, 36)
+        Me.nud垂直に.Name = "nud垂直に"
+        Me.nud垂直に.Size = New System.Drawing.Size(46, 27)
+        Me.nud垂直に.TabIndex = 3
+        Me.nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'btn合わせる
+        '
+        Me.btn合わせる.Location = New System.Drawing.Point(341, 25)
+        Me.btn合わせる.Name = "btn合わせる"
+        Me.btn合わせる.Size = New System.Drawing.Size(111, 46)
+        Me.btn合わせる.TabIndex = 2
+        Me.btn合わせる.Text = "合わせる"
+        Me.btn合わせる.UseVisualStyleBackColor = True
+        '
         'editUpDown
         '
         Me.editUpDown.AutoSize = True
         Me.editUpDown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.editUpDown.FormCaption = Nothing
+        Me.editUpDown.I上右側面本数 = 0
+        Me.editUpDown.I垂直領域四角数 = 0
+        Me.editUpDown.I水平領域四角数 = 0
         Me.editUpDown.Location = New System.Drawing.Point(-4, 0)
         Me.editUpDown.Name = "editUpDown"
         Me.editUpDown.PanelSize = New System.Drawing.Size(800, 400)
@@ -2631,73 +2703,6 @@ Partial Class frmMain
         Me.btnDEBUG.UseVisualStyleBackColor = True
         Me.btnDEBUG.Visible = False
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(341, 25)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(111, 46)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "生成する"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.NumericUpDown2)
-        Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Controls.Add(Me.NumericUpDown1)
-        Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Location = New System.Drawing.Point(22, 6)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(463, 84)
-        Me.GroupBox1.TabIndex = 3
-        Me.GroupBox1.TabStop = False
-        '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(152, 36)
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(46, 27)
-        Me.NumericUpDown1.TabIndex = 3
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(8, 38)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(73, 24)
-        Me.CheckBox1.TabIndex = 4
-        Me.CheckBox1.Text = "横の辺"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(98, 39)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(51, 20)
-        Me.Label1.TabIndex = 5
-        Me.Label1.Text = "垂直に"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(224, 39)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(36, 20)
-        Me.Label2.TabIndex = 7
-        Me.Label2.Text = "底に"
-        '
-        'NumericUpDown2
-        '
-        Me.NumericUpDown2.Location = New System.Drawing.Point(266, 37)
-        Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(46, 27)
-        Me.NumericUpDown2.TabIndex = 6
-        Me.NumericUpDown2.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -2810,12 +2815,12 @@ Partial Class frmMain
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpageひも上下.ResumeLayout(False)
         Me.tpageひも上下.PerformLayout()
+        Me.grp縦横の四角数.ResumeLayout(False)
+        Me.grp縦横の四角数.PerformLayout()
+        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3051,11 +3056,11 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents tpageひも上下 As TabPage
     Friend WithEvents editUpDown As ctrEditUpDown
-    Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents Label2 As Label
-    Friend WithEvents NumericUpDown2 As NumericUpDown
-    Friend WithEvents Label1 As Label
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents NumericUpDown1 As NumericUpDown
-    Friend WithEvents Button1 As Button
+    Friend WithEvents grp縦横の四角数 As GroupBox
+    Friend WithEvents lbl底に As Label
+    Friend WithEvents nud底に As NumericUpDown
+    Friend WithEvents lbl垂直に As Label
+    Friend WithEvents chk横の辺 As CheckBox
+    Friend WithEvents nud垂直に As NumericUpDown
+    Friend WithEvents btn合わせる As Button
 End Class

@@ -116,16 +116,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？
-        '''(はいで全て初期化、いいえはサイズ保持) に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property AskResetUpDown() As String
-            Get
-                Return ResourceManager.GetString("AskResetUpDown", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  編集中のデータを保存しますか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskSaveCurrentWork() As String
@@ -140,15 +130,6 @@ Namespace My.Resources
         Friend ReadOnly Property AskSaveDefault() As String
             Get
                 Return ResourceManager.GetString("AskSaveDefault", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  全範囲を{0}します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property AskTargetAllRange() As String
-            Get
-                Return ResourceManager.GetString("AskTargetAllRange", resourceCulture)
             End Get
         End Property
         
@@ -279,15 +260,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  ひも上下レコードの保存エラーです。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcUpDownSaveErr() As String
-            Get
-                Return ResourceManager.GetString("CalcUpDownSaveErr", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  規定値.xml に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property DefaultFileName() As String
@@ -333,47 +305,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  左下 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property LeftLower() As String
-            Get
-                Return ResourceManager.GetString("LeftLower", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  左上 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property LeftUpper() As String
-            Get
-                Return ResourceManager.GetString("LeftUpper", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  チェックOKです。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageCheckOK() As String
-            Get
-                Return ResourceManager.GetString("MessageCheckOK", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  規定値が保存されていません。先に規定値保存を行ってください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MessageNoDefaultFile() As String
             Get
                 Return ResourceManager.GetString("MessageNoDefaultFile", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  これ以上増やせません。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageNoMore() As String
-            Get
-                Return ResourceManager.GetString("MessageNoMore", resourceCulture)
             End Get
         End Property
         
@@ -387,20 +323,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  水平・垂直の本数を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}のデータを表示できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property MessageNoUpDownSize() As String
+        Friend ReadOnly Property MessageReplaceError() As String
             Get
-                Return ResourceManager.GetString("MessageNoUpDownSize", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  {0}できませんでした。リセットしてやり直してください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageUpDownError() As String
-            Get
-                Return ResourceManager.GetString("MessageUpDownError", resourceCulture)
+                Return ResourceManager.GetString("MessageReplaceError", resourceCulture)
             End Get
         End Property
         
@@ -419,69 +346,6 @@ Namespace My.Resources
         Friend ReadOnly Property TitleException() As String
             Get
                 Return ResourceManager.GetString("TitleException", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  上下図の登録 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownAppend() As String
-            Get
-                Return ResourceManager.GetString("UpDownAppend", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  新たな上下図名を入力してください。[OK]ボタンで現パターンを登録します。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownAppendInstruction() As String
-            Get
-                Return ResourceManager.GetString("UpDownAppendInstruction", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  &apos;{0}&apos;は既に登録されています。置き換えますか？(いいえで別の名前を指定) に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownExistName() As String
-            Get
-                Return ResourceManager.GetString("UpDownExistName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  &apos;{0}&apos;は登録されていません。登録名を選択してください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownNoExistName() As String
-            Get
-                Return ResourceManager.GetString("UpDownNoExistName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  上下図名がセットされていません。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownNoName() As String
-            Get
-                Return ResourceManager.GetString("UpDownNoName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  上下図の呼出 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownRead() As String
-            Get
-                Return ResourceManager.GetString("UpDownRead", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  上下図名を選択してください。[OK]ボタンで現パターンに反映します。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property UpDownReadInstruction() As String
-            Get
-                Return ResourceManager.GetString("UpDownReadInstruction", resourceCulture)
             End Get
         End Property
     End Module

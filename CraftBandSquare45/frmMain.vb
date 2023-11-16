@@ -55,6 +55,9 @@ Public Class frmMain
         dgv横ひも.SetProfile(_Profile_dgv縦横ひも)
         dgv縦ひも.SetProfile(_Profile_dgv縦横ひも)
 
+        editUpDown.FormCaption = Me.Text
+        editUpDown.IsSquare45 = True
+
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
 #Else
@@ -1295,19 +1298,19 @@ Public Class frmMain
 #Region "ひも上下"
 
     Sub Showひも上下(ByVal works As clsDataTables)
-        editUpDown.I縦ひもの本数 = _clsCalcSquare45.p_i縦ひもの本数
-        editUpDown.I横ひもの本数 = _clsCalcSquare45.p_i縦ひもの本数
+        editUpDown.I横の四角数 = _clsCalcSquare45.p_i横の四角数
+        editUpDown.I縦の四角数 = _clsCalcSquare45.p_i縦の四角数
         editUpDown.PanelSize = tpageひも上下.Size
 
-        editUpDown.Showひも上下(works, enumTargetFace.Bottom, enumTargetFace.Bottom)
+        editUpDown.ShowGrid(works, enumTargetFace.Bottom)
     End Sub
 
     Function Hideひも上下(ByVal works As clsDataTables) As Boolean
-        Return editUpDown.Hideひも上下(works)
+        Return editUpDown.HideGrid(works)
     End Function
 
     Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
-        Return editUpDown.Saveひも上下(works, isMsg)
+        Return editUpDown.Save(works, isMsg)
     End Function
 
     Private Sub tpageひも上下_Resize(sender As Object, e As EventArgs) Handles tpageひも上下.Resize
@@ -1396,6 +1399,10 @@ Public Class frmMain
                 col.Visible = True
             End If
         Next
+    End Sub
+
+    Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
+
     End Sub
 
 #End Region

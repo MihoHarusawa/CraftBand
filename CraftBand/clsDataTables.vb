@@ -1,4 +1,5 @@
-﻿Imports CraftBand.Tables
+﻿Imports CraftBand.clsUpDown
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsDataTables
@@ -534,8 +535,25 @@ Public Class clsDataTables
 
 #Region "p_tblひも上下とclsUpDownの転送"
 
+    '指定面のレコード内容をupdownにセット
+    Public Function ToClsUpDown(ByVal updown As clsUpDown) As Boolean
+        If updown Is Nothing Then
+            Return False
+        End If
+        Select Case updown.TargetFace
+            Case enumTargetFace.Bottom
+                Return toClsUpDown(clsUpDown.cBottomNumber, updown)
+            Case enumTargetFace.Side12
+                Return toClsUpDown(clsUpDown.cSide12Number, updown)
+            Case enumTargetFace.Side34
+                Return toClsUpDown(clsUpDown.cSide34Number, updown)
+            Case Else
+                Return False
+        End Select
+    End Function
+
     '指定番号のレコード内容をupdownにセット
-    Public Function ToClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
+    Private Function toClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
         If num < 0 Then
             Return False
         End If
@@ -547,8 +565,25 @@ Public Class clsDataTables
         End If
     End Function
 
+    'updown内容を指定面のレコードにセット
+    Public Function FromClsUpDown(ByVal updown As clsUpDown) As Boolean
+        If updown Is Nothing Then
+            Return False
+        End If
+        Select Case updown.TargetFace
+            Case enumTargetFace.Bottom
+                Return fromClsUpDown(clsUpDown.cBottomNumber, updown)
+            Case enumTargetFace.Side12
+                Return fromClsUpDown(clsUpDown.cSide12Number, updown)
+            Case enumTargetFace.Side34
+                Return fromClsUpDown(clsUpDown.cSide34Number, updown)
+            Case Else
+                Return False
+        End Select
+    End Function
+
     'updown内容を指定番号のレコードにセット、空き番は空レコード
-    Public Function FromClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
+    Private Function fromClsUpDown(ByVal num As Integer, ByVal updown As clsUpDown) As Boolean
         Dim row As tblひも上下Row
         Do While p_tblひも上下.Rows.Count <= num
             row = p_tblひも上下.Newtblひも上下Row

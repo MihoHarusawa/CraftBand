@@ -197,6 +197,10 @@
   <data name="CalcOutSum" xml:space="preserve">
     <value>集計値</value>
   </data>
+  <data name="CalcUpDownLoadErr" xml:space="preserve">
+    <value>ひも上下レコードの読み取りエラーです。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
   <data name="CalcUpDownSaveErr" xml:space="preserve">
     <value>ひも上下レコードの保存エラーです。</value>
     <comment>ctrEditUpDown</comment>

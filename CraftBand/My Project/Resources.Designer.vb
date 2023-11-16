@@ -247,6 +247,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ひも上下レコードの読み取りエラーです。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcUpDownLoadErr() As String
+            Get
+                Return ResourceManager.GetString("CalcUpDownLoadErr", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  ひも上下レコードの保存エラーです。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcUpDownSaveErr() As String

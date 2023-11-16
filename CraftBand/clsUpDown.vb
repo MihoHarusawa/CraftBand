@@ -7,10 +7,10 @@ Imports CraftBand.Tables.dstMasterTables
 ''' ※今のところそう大きくはないので、固定サイズ・固定フィールドで処理
 ''' </summary>
 Public Class clsUpDown
-    Public Const cMaxUpdownColumns As Integer = 99 'CheckBoxフィールド数
-    Public Const cBottomNumber As Integer = 0 '底のレコード番号
-    Public Const cSide12Number As Integer = 1 '側面(上右)のレコード番号
-    Public Const cSide34Number As Integer = 2 '側面(下左)のレコード番号
+    Friend Const cMaxUpdownColumns As Integer = 99 'CheckBoxフィールド数
+    Friend Const cBottomNumber As Integer = 0 '底のレコード番号
+    Friend Const cSide12Number As Integer = 1 '側面(上右)のレコード番号
+    Friend Const cSide34Number As Integer = 2 '側面(下左)のレコード番号
 
     Enum enumTargetFace
         NoDef = -1
@@ -76,11 +76,15 @@ Public Class clsUpDown
     'テーブルに存在するレコードをそのまま配列へ
     Private Function table_to_matrix(Optional ByVal set_mtx As Boolean = False) As Boolean
         If CheckBoxTable Is Nothing Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "table_to_matrix <no CheckBoxTable>")
-            Return False
+            If set_mtx Then 'テーブル必須
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "table_to_matrix <no CheckBoxTable>")
+                Return False
+            Else
+                Return True
+            End If
         End If
         Try
-            If set_mtx OrElse CheckBoxTable.GetChanges IsNot Nothing Then
+            If set_mtx Then 'CheckBoxTable.GetChanges は見ない
                 For y As Integer = 1 To CheckBoxTable.Rows.Count
                     Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
                     If r.Index <> y Then
@@ -114,7 +118,6 @@ Public Class clsUpDown
         If CheckBoxTable Is Nothing Then
             Return True
         End If
-
         Try
             If cMaxUpdownColumns < VerticalCount Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsUpDown.matrix_to_table VerticalCount{0}->{1}", VerticalCount, cMaxUpdownColumns)
@@ -187,7 +190,27 @@ Public Class clsUpDown
         End Try
     End Function
 
+    '内容を取り込む
+    Function Import(ByVal ref As clsUpDown) As Boolean
+        If Me Is ref Then
+            Return True
+        End If
+        If ref Is Nothing OrElse Not ref.IsValid(False) OrElse Not ref.table_to_matrix() Then
+            Return False
+        End If
+
+        'TargetFaceは保持
+        HorizontalCount = ref.HorizontalCount
+        VerticalCount = ref.VerticalCount
+        Memo = ref.Memo
+
+        Array.Copy(ref._Matrix, _Matrix, ref._Matrix.Length)
+        Return matrix_to_table()
+    End Function
+
+
 #Region "レコードR/W"
+
     '文字列をそのまま全て読みとって_Matrixへ 行数を返す
     Private Function updownstrToMatrix(ByVal str As String) As Integer
         '_Matrixクリア
@@ -258,7 +281,7 @@ Public Class clsUpDown
     'データレコードにセットする
     Function ToRecord(ByVal row As tblひも上下Row) As Boolean
         Try
-            table_to_matrix(True) '常に反映
+            table_to_matrix(True) '編集結果はテーブルから
             row.f_i水平本数 = HorizontalCount
             row.f_i垂直本数 = VerticalCount
             row.f_s上下 = updownstrFromMatrix()
@@ -294,7 +317,7 @@ Public Class clsUpDown
     '設定レコードにセットする
     Function ToMasterRecord(ByVal row As tbl上下図Row) As Boolean
         Try
-            table_to_matrix(True) '常に反映
+            table_to_matrix(True) ''編集結果はテーブルから
             row.f_i水平本数 = HorizontalCount
             row.f_i垂直本数 = VerticalCount
             row.f_s上下 = updownstrFromMatrix()
@@ -309,7 +332,7 @@ Public Class clsUpDown
     '現状に設定レコードを反映する
     Function ReflectMasterRecord(ByVal row As tbl上下図Row, ByVal isRepeat As Boolean) As Boolean
         Try
-            table_to_matrix(True) '常に反映
+            table_to_matrix(True) '編集結果はテーブルから
 
             'サイズはノーチェックで読み取る
             Dim master As New clsUpDown(Me.TargetFace, row.f_i水平本数, row.f_i垂直本数)

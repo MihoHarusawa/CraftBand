@@ -65,6 +65,8 @@ Public Class frmMain
         _Profile_dgv差しひも.FormCaption = Me.Text
         dgv差しひも.SetProfile(_Profile_dgv差しひも)
 
+        editUpDown.FormCaption = Me.Text
+
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
 #Else
@@ -1788,30 +1790,38 @@ Public Class frmMain
             Exit Sub
         End If
 
-        editUpDown.I垂直ひも半数 = _clsCalcSquare.p_i垂直ひも半数
-        editUpDown.I側面ひもの本数 = _clsCalcSquare.p_i側面ひもの本数
-        editUpDown.I縦ひもの本数 = _clsCalcSquare.p_i縦ひもの本数
-        editUpDown.I横ひもの本数 = _clsCalcSquare.p_i横ひもの本数
-        editUpDown.Rad下から上へChecked = rad下から上へ.Checked '側面のタブ
+        editUpDown.Is側面_下から上へ = rad下から上へ.Checked '側面のタブ
+        editUpDown.I上右側面本数 = _clsCalcSquare.p_i垂直ひも半数 '下左側面の開始パターン取得用
 
-        editUpDown.PanelSize = tpageひも上下.Size
-
-        _CurrentTargetFace = enumTargetFace.Bottom
+        _CurrentTargetFace = enumTargetFace.NoDef
         If rad側面_上右.Checked Then
             _CurrentTargetFace = enumTargetFace.Side12
+            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i垂直ひも半数
+            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i側面ひもの本数
+
         ElseIf rad側面_下左.Checked Then
             _CurrentTargetFace = enumTargetFace.Side34
+            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i垂直ひも半数
+            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i側面ひもの本数
+
+        ElseIf rad底.Checked Then
+            _CurrentTargetFace = enumTargetFace.Bottom
+            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i縦ひもの本数
+            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i横ひもの本数
+        Else
+            Exit Sub
         End If
 
-        editUpDown.Showひも上下(works, _CurrentTargetFace, _CurrentTargetFace)
+        editUpDown.PanelSize = tpageひも上下.Size
+        editUpDown.ShowGrid(works, _CurrentTargetFace)
     End Sub
 
     Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
-        Return editUpDown.Saveひも上下(works, isMsg)
+        Return editUpDown.Save(works, isMsg)
     End Function
 
     Function Hideひも上下(ByVal works As clsDataTables) As Boolean
-        Return editUpDown.Hideひも上下(works)
+        Return editUpDown.HideGrid(works)
     End Function
 
     Private Sub rad底側面_CheckedChanged(sender As Object, e As EventArgs) Handles rad底.CheckedChanged, rad側面_上右.CheckedChanged, rad側面_下左.CheckedChanged
@@ -1823,7 +1833,7 @@ Public Class frmMain
         End If
 
         If _CurrentTargetFace <> target Then
-            saveひも上下(_clsDataTables, True)
+            editUpDown.Save(_clsDataTables, True)
             Showひも上下(_clsDataTables)
         End If
     End Sub
@@ -1834,22 +1844,29 @@ Public Class frmMain
         Select Case _CurrentTargetFace
             Case enumTargetFace.Side12
                 prv = enumTargetFace.Bottom
-                prvS = String.Format(My.Resources.AskLoadSameAs, rad底.Text)
+                prvS = rad底.Text
             Case enumTargetFace.Side34
                 prv = enumTargetFace.Side12
-                prvS = String.Format(My.Resources.AskLoadSameAs, rad側面_上右.Text)
+                prvS = rad側面_上右.Text
             Case Else 'bottom
                 prv = enumTargetFace.Side34
-                prvS = String.Format(My.Resources.AskLoadSameAs, rad側面_下左.Text)
+                prvS = rad側面_下左.Text
         End Select
         '現編集内容を破棄し{0}と同じにします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(prvS, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+        Dim r As DialogResult = MessageBox.Show(String.Format(My.Resources.AskLoadSameAs, prvS),
+                                                Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
         If r <> DialogResult.OK Then
             Exit Sub
         End If
 
-        editUpDown.Hideひも上下(_clsDataTables, False)
-        editUpDown.Showひも上下(_clsDataTables, prv, _CurrentTargetFace)
+        Dim updown As New clsUpDown(prv)
+        If _clsDataTables.ToClsUpDown(updown) Then
+            editUpDown.Replace(updown)
+        Else
+            '{0}のデータを表示できませんでした。
+            MessageBox.Show(String.Format(My.Resources.MessageReplaceError, prvS),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
     End Sub
 
     Private Sub tpageひも上下_Resize(sender As Object, e As EventArgs) Handles tpageひも上下.Resize

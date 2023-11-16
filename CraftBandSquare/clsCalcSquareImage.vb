@@ -1848,7 +1848,7 @@ Partial Public Class clsCalcSquare
         End If
 
         _CUpDown.TargetFace = enumTargetFace.Bottom '底
-        If Not _Data.ToClsUpDown(cBottomNumber, _CUpDown) Then
+        If Not _Data.ToClsUpDown(_CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
         If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
@@ -1905,7 +1905,7 @@ Partial Public Class clsCalcSquare
         End If
 
         _CUpDown.TargetFace = enumTargetFace.Side12 '側面(上右)
-        If Not _Data.ToClsUpDown(clsUpDown.cSide12Number, _CUpDown) Then
+        If Not _Data.ToClsUpDown(_CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
         If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
@@ -2004,7 +2004,7 @@ Partial Public Class clsCalcSquare
         End If
 
         _CUpDown.TargetFace = enumTargetFace.Side34 '側面
-        If Not _Data.ToClsUpDown(clsUpDown.cSide34Number, _CUpDown) Then
+        If Not _Data.ToClsUpDown(_CUpDown) Then
             _CUpDown.Reset(p_i垂直ひも半数)
         End If
         If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
