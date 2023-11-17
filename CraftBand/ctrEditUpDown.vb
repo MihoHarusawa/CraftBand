@@ -6,6 +6,9 @@ Imports CraftBand.Tables
 
 Public Class ctrEditUpDown
 
+    'Panelを置き、各ControlはPanelにAnchorし、Panelをコードでリサイズする
+    '※ユーザーコントロールとしてのサイズでは制御できない・表示がずれる
+
     Public Property FormCaption As String
 
     Public Property PanelSize As Drawing.Size
@@ -34,7 +37,7 @@ Public Class ctrEditUpDown
     Public Property I横の四角数 As Integer '配置表示用 45度側
     Public Property I縦の四角数 As Integer '〃　　　　135度側
 
-    Dim _Is位置番号表示 As Boolean = False 'Square45かつサイズ一致字
+    Dim _Is底位置表示 As Boolean = False 'Square45かつサイズ一致時
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
@@ -183,7 +186,7 @@ Public Class ctrEditUpDown
                 nud水平に.Value = updown.HorizontalCount
                 nud垂直に.Value = updown.VerticalCount
 
-                _Is位置番号表示 = IsSquare45 AndAlso (updown.HorizontalCount = I水平領域四角数 AndAlso updown.VerticalCount = I垂直領域四角数)
+                _Is底位置表示 = IsSquare45 AndAlso (updown.HorizontalCount = I水平領域四角数 AndAlso updown.VerticalCount = I垂直領域四角数)
                 setUpdownColumns(updown.HorizontalCount)
                 setUpDownCountLeft()
                 BindingSourceひも上下.DataSource = updown.CheckBoxTable
@@ -195,12 +198,12 @@ Public Class ctrEditUpDown
                     txt開始位置.Text = My.Resources.LeftUpper
                 End If
             End If
-            btnサイズ変更_ひも上下.Enabled = False
+            btnサイズ変更.Enabled = False
 
             Return True
 
         Catch ex As Exception
-            g_clsLog.LogException(ex, "frmMain.setDataSourceUpDown")
+            g_clsLog.LogException(ex, "ctrEditUpDown.setDataSourceUpDown")
             Return False
         End Try
     End Function
@@ -236,7 +239,7 @@ Public Class ctrEditUpDown
 
     '1～(縦+横) → .. -3, -2, -1, 0, 0, 0, 1, 2, 3 ..
     Private Function getIndexPosition(ByVal idx As Integer) As Integer
-        If _Is位置番号表示 Then
+        If _Is底位置表示 Then
 
             Dim smalls As Integer
             Dim coms As Integer
@@ -262,10 +265,61 @@ Public Class ctrEditUpDown
         End If
     End Function
 
+    '1～I水平領域四角数, 1～I垂直領域四角数
+    Private Function getBackColor(ByVal horzIdx As Integer, ByVal vertIdx As Integer, ByVal value As Boolean) As Drawing.Color
+        If _Is底位置表示 Then
+            Dim cat As Integer = checkIsInBottom(horzIdx, vertIdx)
+            If 0 < cat Then
+                '底の中
+                Return If(value, Color.FromArgb(160, 160, 160), Color.White)
+            ElseIf cat < 0 Then
+                '側面
+                Return If(value, Color.FromArgb(140, 140, 140), Color.FromArgb(240, 240, 240))
+            Else 'cat=0
+                '境界線
+                Return If(value, Color.FromArgb(140, 140, 110), Color.FromArgb(240, 240, 210))
+            End If
+        Else
+            Return If(value, Color.FromArgb(160, 160, 160), Color.White)
+        End If
+    End Function
+
+    '戻り値 1=底 0=境界線 -1=側面
+    Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Integer
+        Dim n左上ライン As Integer = horzIdx + vertIdx
+        Dim n右下ライン As Integer = (I水平領域四角数 - horzIdx + 1) + (I垂直領域四角数 - vertIdx + 1)
+        Dim n右上ライン As Integer = (I水平領域四角数 - horzIdx + 1) + vertIdx
+        Dim n左下ライン As Integer = horzIdx + (I垂直領域四角数 - vertIdx + 1)
+
+        If n左上ライン = I横の四角数 + 1 Then
+            Return 0
+        ElseIf n左上ライン < I横の四角数 + 1 Then
+            Return -1
+
+        ElseIf n右下ライン = I横の四角数 + 1 Then
+            Return 0
+        ElseIf n右下ライン < I横の四角数 + 1 Then
+            Return -1
+
+        ElseIf n右上ライン = I縦の四角数 + 1 Then
+            Return 0
+        ElseIf n右上ライン < I縦の四角数 + 1 Then
+            Return -1
+
+        ElseIf n左下ライン = I縦の四角数 + 1 Then
+            Return 0
+        ElseIf n左下ライン < I縦の四角数 + 1 Then
+            Return -1
+
+        Else
+            Return 1 '底
+        End If
+    End Function
+
 
 #Region "ボタン処理"
 
-    Private Sub btnサイズ変更_ひも上下_Click(sender As Object, e As EventArgs) Handles btnサイズ変更_ひも上下.Click
+    Private Sub btnサイズ変更_Click(sender As Object, e As EventArgs) Handles btnサイズ変更.Click
         If nud水平に.Value <= 0 OrElse nud垂直に.Value <= 0 Then
             '水平・垂直の本数を指定してください。
             MessageBox.Show(My.Resources.MessageNoUpDownSize, FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -277,7 +331,7 @@ Public Class ctrEditUpDown
         Dim updown As clsUpDown = _Calc.updownサイズ変更(nud水平に.Value, nud垂直に.Value, False)
         If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnサイズ変更_ひも上下.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -286,7 +340,7 @@ Public Class ctrEditUpDown
         _UpdownChanged = True
     End Sub
 
-    Private Sub btnリセット_ひも上下_Click(sender As Object, e As EventArgs) Handles btnリセット_ひも上下.Click
+    Private Sub btnクリア_Click(sender As Object, e As EventArgs) Handles btnクリア.Click
         Dim isReset As Boolean = True
         If BindingSourceひも上下.DataSource IsNot Nothing Then
             'ひも上下の編集内容をクリアします。サイズも初期化してよろしいですか？(はいで全て初期化、いいえはサイズ保持)
@@ -306,7 +360,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnリセット_ひも上下.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -319,7 +373,7 @@ Public Class ctrEditUpDown
         Dim gridsel As New CDataGridSelection
         If Not gridsel.GridSelectedCells(dgvひも上下) Then
             '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn上下交換.Text),
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
@@ -329,7 +383,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn上下交換.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -343,7 +397,7 @@ Public Class ctrEditUpDown
         Dim gridsel As New CDataGridSelection
         If Not gridsel.GridSelectedCells(dgvひも上下) Then
             '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左右反転.Text),
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
@@ -353,7 +407,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左右反転.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -367,7 +421,7 @@ Public Class ctrEditUpDown
         Dim gridsel As New CDataGridSelection
         If Not gridsel.GridSelectedCells(dgvひも上下) Then
             '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn天地反転.Text),
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
@@ -377,7 +431,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn天地反転.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -391,7 +445,7 @@ Public Class ctrEditUpDown
         Dim gridsel As New CDataGridSelection
         If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
             '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn右回転.Text),
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
@@ -402,7 +456,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn右回転.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -416,7 +470,7 @@ Public Class ctrEditUpDown
         Dim gridsel As New CDataGridSelection
         If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
             '全範囲を{0}します。よろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, btn左回転.Text),
+            If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
@@ -427,7 +481,7 @@ Public Class ctrEditUpDown
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn左回転.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -469,7 +523,7 @@ Public Class ctrEditUpDown
 
         If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnシフト.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -522,7 +576,7 @@ Public Class ctrEditUpDown
 
         If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btn追加.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -537,7 +591,7 @@ Public Class ctrEditUpDown
         Dim updown As clsUpDown = _Calc.updownランダム()
         If updown Is Nothing Then
             '{0}できませんでした。リセットしてやり直してください。
-            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, btnランダム.Text),
+            MessageBox.Show(String.Format(My.Resources.MessageUpDownError, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             setDataSourceUpDown(updown)
@@ -560,6 +614,21 @@ Public Class ctrEditUpDown
             End If
         End If
     End Sub
+
+    Private Function buttenText(sender As Object) As String
+        Dim btn As Button = CType(sender, Button)
+        Dim text = btn.Text
+        If String.IsNullOrEmpty(text) OrElse text.Length < 2 Then
+            Return text
+        End If
+        '(&x)
+        Dim nPh As Integer = text.IndexOf("(")
+        If 1 < nPh Then
+            Return text.Substring(0, nPh)
+        End If
+        '&A
+        Return text.Replace("&", "")
+    End Function
 #End Region
 
 #Region "イベント処理"
@@ -573,12 +642,12 @@ Public Class ctrEditUpDown
     End Sub
 
     Private Sub nud水平に_ValueChanged(sender As Object, e As EventArgs) Handles nud水平に.ValueChanged
-        btnサイズ変更_ひも上下.Enabled = True
+        btnサイズ変更.Enabled = True
         lbl水平残.Text = "-"
     End Sub
 
     Private Sub nud垂直に_ValueChanged(sender As Object, e As EventArgs) Handles nud垂直に.ValueChanged
-        btnサイズ変更_ひも上下.Enabled = True
+        btnサイズ変更.Enabled = True
         lbl垂直残.Text = "-"
     End Sub
 
@@ -611,15 +680,8 @@ Public Class ctrEditUpDown
             Exit Sub
         End If
 
-        If dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value Then
-            Dim cStep As Integer = 3 '3本ごと背景色を少し変える
-            Dim iRow As Integer = If((e.RowIndex + 1) Mod cStep = 0, 1, 0)
-            Dim iCol As Integer = If(e.ColumnIndex Mod cStep = 0, 1, 0)
-            Dim iBack As Integer = 160 - iRow * 10 - iCol * 10
-            e.CellStyle.BackColor = Color.FromArgb(iBack, iBack, iBack)
-        Else
-            e.CellStyle.BackColor = Color.White
-        End If
+        'Index = e.RowIndex + 1
+        e.CellStyle.BackColor = getBackColor(e.ColumnIndex, e.RowIndex + 1, dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
     End Sub
 
     '1の幅変更を波及,lastdata対象外

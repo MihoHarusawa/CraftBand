@@ -42,13 +42,13 @@ Partial Class ctrEditUpDown
         Me.nud水平に = New System.Windows.Forms.NumericUpDown()
         Me.btn上下交換 = New System.Windows.Forms.Button()
         Me.btnシフト = New System.Windows.Forms.Button()
-        Me.btnリセット_ひも上下 = New System.Windows.Forms.Button()
+        Me.btnクリア = New System.Windows.Forms.Button()
         Me.btn天地反転 = New System.Windows.Forms.Button()
         Me.btn左右反転 = New System.Windows.Forms.Button()
         Me.btnランダム = New System.Windows.Forms.Button()
         Me.lbl上下のメモ = New System.Windows.Forms.Label()
         Me.txt上下のメモ = New System.Windows.Forms.TextBox()
-        Me.btnサイズ変更_ひも上下 = New System.Windows.Forms.Button()
+        Me.btnサイズ変更 = New System.Windows.Forms.Button()
         Me.lbl本_垂直 = New System.Windows.Forms.Label()
         Me.lbl垂直に = New System.Windows.Forms.Label()
         Me.lbl本_水平 = New System.Windows.Forms.Label()
@@ -172,7 +172,7 @@ Partial Class ctrEditUpDown
         Me.btn左回転.Name = "btn左回転"
         Me.btn左回転.Size = New System.Drawing.Size(111, 46)
         Me.btn左回転.TabIndex = 27
-        Me.btn左回転.Text = "左回転"
+        Me.btn左回転.Text = "左回転(&L)"
         Me.ToolTip1.SetToolTip(Me.btn左回転, "パターンを左に90度回転します")
         Me.btn左回転.UseVisualStyleBackColor = True
         '
@@ -299,7 +299,7 @@ Partial Class ctrEditUpDown
         Me.btn設定登録.Name = "btn設定登録"
         Me.btn設定登録.Size = New System.Drawing.Size(111, 46)
         Me.btn設定登録.TabIndex = 1
-        Me.btn設定登録.Text = "設定登録(&T)"
+        Me.btn設定登録.Text = "設定登録(&X)"
         Me.ToolTip1.SetToolTip(Me.btn設定登録, "現パターンを上下図に登録します")
         Me.btn設定登録.UseVisualStyleBackColor = True
         '
@@ -321,7 +321,7 @@ Partial Class ctrEditUpDown
         Me.btn右回転.Name = "btn右回転"
         Me.btn右回転.Size = New System.Drawing.Size(111, 46)
         Me.btn右回転.TabIndex = 26
-        Me.btn右回転.Text = "右回転"
+        Me.btn右回転.Text = "右回転(&R)"
         Me.ToolTip1.SetToolTip(Me.btn右回転, "パターンを右に90度回転します")
         Me.btn右回転.UseVisualStyleBackColor = True
         '
@@ -350,7 +350,7 @@ Partial Class ctrEditUpDown
         Me.btn上下交換.Name = "btn上下交換"
         Me.btn上下交換.Size = New System.Drawing.Size(111, 46)
         Me.btn上下交換.TabIndex = 23
-        Me.btn上下交換.Text = "上下交換"
+        Me.btn上下交換.Text = "上下交換(&U)"
         Me.ToolTip1.SetToolTip(Me.btn上下交換, "パターンの上下(チェックの有無)を入れ替えます")
         Me.btn上下交換.UseVisualStyleBackColor = True
         '
@@ -361,20 +361,20 @@ Partial Class ctrEditUpDown
         Me.btnシフト.Name = "btnシフト"
         Me.btnシフト.Size = New System.Drawing.Size(111, 46)
         Me.btnシフト.TabIndex = 20
-        Me.btnシフト.Text = "シフト(&H)"
+        Me.btnシフト.Text = "シフト(&T)"
         Me.ToolTip1.SetToolTip(Me.btnシフト, "指定した方向に1行/1列移動します")
         Me.btnシフト.UseVisualStyleBackColor = True
         '
-        'btnリセット_ひも上下
+        'btnクリア
         '
-        Me.btnリセット_ひも上下.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnリセット_ひも上下.Location = New System.Drawing.Point(4, 351)
-        Me.btnリセット_ひも上下.Name = "btnリセット_ひも上下"
-        Me.btnリセット_ひも上下.Size = New System.Drawing.Size(111, 46)
-        Me.btnリセット_ひも上下.TabIndex = 22
-        Me.btnリセット_ひも上下.Text = "リセット(&R)"
-        Me.ToolTip1.SetToolTip(Me.btnリセット_ひも上下, "パターンを初期状態に戻します")
-        Me.btnリセット_ひも上下.UseVisualStyleBackColor = True
+        Me.btnクリア.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnクリア.Location = New System.Drawing.Point(4, 351)
+        Me.btnクリア.Name = "btnクリア"
+        Me.btnクリア.Size = New System.Drawing.Size(111, 46)
+        Me.btnクリア.TabIndex = 22
+        Me.btnクリア.Text = "クリア(&C)"
+        Me.ToolTip1.SetToolTip(Me.btnクリア, "パターンを初期状態に戻します")
+        Me.btnクリア.UseVisualStyleBackColor = True
         '
         'btn天地反転
         '
@@ -383,7 +383,7 @@ Partial Class ctrEditUpDown
         Me.btn天地反転.Name = "btn天地反転"
         Me.btn天地反転.Size = New System.Drawing.Size(111, 46)
         Me.btn天地反転.TabIndex = 25
-        Me.btn天地反転.Text = "天地反転"
+        Me.btn天地反転.Text = "天地反転(&H)"
         Me.ToolTip1.SetToolTip(Me.btn天地反転, "パターンの上下を入れ替えます")
         Me.btn天地反転.UseVisualStyleBackColor = True
         '
@@ -394,7 +394,7 @@ Partial Class ctrEditUpDown
         Me.btn左右反転.Name = "btn左右反転"
         Me.btn左右反転.Size = New System.Drawing.Size(111, 46)
         Me.btn左右反転.TabIndex = 24
-        Me.btn左右反転.Text = "左右反転"
+        Me.btn左右反転.Text = "左右反転(&V)"
         Me.ToolTip1.SetToolTip(Me.btn左右反転, "パターンの左右を入れ替えます")
         Me.btn左右反転.UseVisualStyleBackColor = True
         '
@@ -427,15 +427,15 @@ Partial Class ctrEditUpDown
         Me.txt上下のメモ.Size = New System.Drawing.Size(250, 27)
         Me.txt上下のメモ.TabIndex = 13
         '
-        'btnサイズ変更_ひも上下
+        'btnサイズ変更
         '
-        Me.btnサイズ変更_ひも上下.AccessibleRole = System.Windows.Forms.AccessibleRole.None
-        Me.btnサイズ変更_ひも上下.Location = New System.Drawing.Point(395, 104)
-        Me.btnサイズ変更_ひも上下.Name = "btnサイズ変更_ひも上下"
-        Me.btnサイズ変更_ひも上下.Size = New System.Drawing.Size(111, 46)
-        Me.btnサイズ変更_ひも上下.TabIndex = 11
-        Me.btnサイズ変更_ひも上下.Text = "サイズ変更(&S)"
-        Me.btnサイズ変更_ひも上下.UseVisualStyleBackColor = True
+        Me.btnサイズ変更.AccessibleRole = System.Windows.Forms.AccessibleRole.None
+        Me.btnサイズ変更.Location = New System.Drawing.Point(395, 104)
+        Me.btnサイズ変更.Name = "btnサイズ変更"
+        Me.btnサイズ変更.Size = New System.Drawing.Size(111, 46)
+        Me.btnサイズ変更.TabIndex = 11
+        Me.btnサイズ変更.Text = "サイズ変更(&S)"
+        Me.btnサイズ変更.UseVisualStyleBackColor = True
         '
         'lbl本_垂直
         '
@@ -1317,7 +1317,7 @@ Partial Class ctrEditUpDown
         Me.Panel.Controls.Add(Me.grp設定ファイル)
         Me.Panel.Controls.Add(Me.dgvひも上下)
         Me.Panel.Controls.Add(Me.rad右)
-        Me.Panel.Controls.Add(Me.btnサイズ変更_ひも上下)
+        Me.Panel.Controls.Add(Me.btnサイズ変更)
         Me.Panel.Controls.Add(Me.rad左)
         Me.Panel.Controls.Add(Me.btn左回転)
         Me.Panel.Controls.Add(Me.rad下)
@@ -1336,7 +1336,7 @@ Partial Class ctrEditUpDown
         Me.Panel.Controls.Add(Me.btn上下交換)
         Me.Panel.Controls.Add(Me.lbl垂直残)
         Me.Panel.Controls.Add(Me.nud水平に)
-        Me.Panel.Controls.Add(Me.btnリセット_ひも上下)
+        Me.Panel.Controls.Add(Me.btnクリア)
         Me.Panel.Controls.Add(Me.lbl水平残)
         Me.Panel.Controls.Add(Me.btn天地反転)
         Me.Panel.Controls.Add(Me.nud垂直に)
@@ -1389,12 +1389,12 @@ Partial Class ctrEditUpDown
     Friend WithEvents nud水平に As Windows.Forms.NumericUpDown
     Friend WithEvents btn上下交換 As Windows.Forms.Button
     Friend WithEvents btnシフト As Windows.Forms.Button
-    Friend WithEvents btnリセット_ひも上下 As Windows.Forms.Button
+    Friend WithEvents btnクリア As Windows.Forms.Button
     Friend WithEvents btn天地反転 As Windows.Forms.Button
     Friend WithEvents btn左右反転 As Windows.Forms.Button
     Friend WithEvents lbl上下のメモ As Windows.Forms.Label
     Friend WithEvents txt上下のメモ As Windows.Forms.TextBox
-    Friend WithEvents btnサイズ変更_ひも上下 As Windows.Forms.Button
+    Friend WithEvents btnサイズ変更 As Windows.Forms.Button
     Friend WithEvents lbl本_垂直 As Windows.Forms.Label
     Friend WithEvents lbl垂直に As Windows.Forms.Label
     Friend WithEvents lbl本_水平 As Windows.Forms.Label

@@ -277,6 +277,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  現在の値では合わせることはできません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageCannotSuit() As String
+            Get
+                Return ResourceManager.GetString("MessageCannotSuit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  規定値が保存されていません。先に規定値保存を行ってください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MessageNoDefaultFile() As String

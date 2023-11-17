@@ -260,7 +260,7 @@ Partial Class frmMain
         Me.tpageプレビュー = New System.Windows.Forms.TabPage()
         Me.picプレビュー = New System.Windows.Forms.PictureBox()
         Me.tpageひも上下 = New System.Windows.Forms.TabPage()
-        Me.grp縦横の四角数 = New System.Windows.Forms.GroupBox()
+        Me.grp縦横の四角 = New System.Windows.Forms.GroupBox()
         Me.lbl底に = New System.Windows.Forms.Label()
         Me.nud底に = New System.Windows.Forms.NumericUpDown()
         Me.lbl垂直に = New System.Windows.Forms.Label()
@@ -326,7 +326,7 @@ Partial Class frmMain
         Me.tpageプレビュー.SuspendLayout()
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpageひも上下.SuspendLayout()
-        Me.grp縦横の四角数.SuspendLayout()
+        Me.grp縦横の四角.SuspendLayout()
         CType(Me.nud底に, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
@@ -2396,7 +2396,7 @@ Partial Class frmMain
         '
         'tpageひも上下
         '
-        Me.tpageひも上下.Controls.Add(Me.grp縦横の四角数)
+        Me.tpageひも上下.Controls.Add(Me.grp縦横の四角)
         Me.tpageひも上下.Controls.Add(Me.editUpDown)
         Me.tpageひも上下.Location = New System.Drawing.Point(4, 29)
         Me.tpageひも上下.Name = "tpageひも上下"
@@ -2406,20 +2406,20 @@ Partial Class frmMain
         Me.tpageひも上下.Text = "ひも上下"
         Me.tpageひも上下.UseVisualStyleBackColor = True
         '
-        'grp縦横の四角数
+        'grp縦横の四角
         '
-        Me.grp縦横の四角数.Controls.Add(Me.lbl底に)
-        Me.grp縦横の四角数.Controls.Add(Me.nud底に)
-        Me.grp縦横の四角数.Controls.Add(Me.lbl垂直に)
-        Me.grp縦横の四角数.Controls.Add(Me.chk横の辺)
-        Me.grp縦横の四角数.Controls.Add(Me.nud垂直に)
-        Me.grp縦横の四角数.Controls.Add(Me.btn合わせる)
-        Me.grp縦横の四角数.Location = New System.Drawing.Point(22, 6)
-        Me.grp縦横の四角数.Name = "grp縦横の四角数"
-        Me.grp縦横の四角数.Size = New System.Drawing.Size(463, 84)
-        Me.grp縦横の四角数.TabIndex = 3
-        Me.grp縦横の四角数.TabStop = False
-        Me.grp縦横の四角数.Text = "縦横の四角数"
+        Me.grp縦横の四角.Controls.Add(Me.lbl底に)
+        Me.grp縦横の四角.Controls.Add(Me.nud底に)
+        Me.grp縦横の四角.Controls.Add(Me.lbl垂直に)
+        Me.grp縦横の四角.Controls.Add(Me.chk横の辺)
+        Me.grp縦横の四角.Controls.Add(Me.nud垂直に)
+        Me.grp縦横の四角.Controls.Add(Me.btn合わせる)
+        Me.grp縦横の四角.Location = New System.Drawing.Point(22, 6)
+        Me.grp縦横の四角.Name = "grp縦横の四角"
+        Me.grp縦横の四角.Size = New System.Drawing.Size(463, 84)
+        Me.grp縦横の四角.TabIndex = 3
+        Me.grp縦横の四角.TabStop = False
+        Me.grp縦横の四角.Text = "縦横の四角"
         '
         'lbl底に
         '
@@ -2471,7 +2471,7 @@ Partial Class frmMain
         Me.btn合わせる.Name = "btn合わせる"
         Me.btn合わせる.Size = New System.Drawing.Size(111, 46)
         Me.btn合わせる.TabIndex = 2
-        Me.btn合わせる.Text = "合わせる"
+        Me.btn合わせる.Text = "合わせる(&I)"
         Me.btn合わせる.UseVisualStyleBackColor = True
         '
         'editUpDown
@@ -2479,9 +2479,12 @@ Partial Class frmMain
         Me.editUpDown.AutoSize = True
         Me.editUpDown.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.editUpDown.FormCaption = Nothing
+        Me.editUpDown.IsSquare45 = False
         Me.editUpDown.I上右側面本数 = 0
         Me.editUpDown.I垂直領域四角数 = 0
+        Me.editUpDown.I横の四角数 = 0
         Me.editUpDown.I水平領域四角数 = 0
+        Me.editUpDown.I縦の四角数 = 0
         Me.editUpDown.Location = New System.Drawing.Point(-4, 0)
         Me.editUpDown.Name = "editUpDown"
         Me.editUpDown.PanelSize = New System.Drawing.Size(800, 400)
@@ -2815,8 +2818,8 @@ Partial Class frmMain
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpageひも上下.ResumeLayout(False)
         Me.tpageひも上下.PerformLayout()
-        Me.grp縦横の四角数.ResumeLayout(False)
-        Me.grp縦横の四角数.PerformLayout()
+        Me.grp縦横の四角.ResumeLayout(False)
+        Me.grp縦横の四角.PerformLayout()
         CType(Me.nud底に, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StatusStrip1.ResumeLayout(False)
@@ -3056,7 +3059,7 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents tpageひも上下 As TabPage
     Friend WithEvents editUpDown As ctrEditUpDown
-    Friend WithEvents grp縦横の四角数 As GroupBox
+    Friend WithEvents grp縦横の四角 As GroupBox
     Friend WithEvents lbl底に As Label
     Friend WithEvents nud底に As NumericUpDown
     Friend WithEvents lbl垂直に As Label

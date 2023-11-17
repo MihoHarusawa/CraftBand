@@ -984,7 +984,7 @@ Public Class clsUpDown
     End Function
 
 
-    '上値を取得 Idx は各、1～Countの値
+    '上値を取得 Idx は各、1～描画領域Count(繰り返す)　
     Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
@@ -994,7 +994,7 @@ Public Class clsUpDown
         Return _Matrix(hIdx, vIdx)
     End Function
 
-    '下値を取得 Idx は各、1～Countの値
+    '下値を取得 Idx は各、1～描画領域Count(繰り返す)
     Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
@@ -1003,6 +1003,59 @@ Public Class clsUpDown
         Dim vIdx As Integer = ((vertIdx - 1) Mod VerticalCount) + 1
         Return Not _Matrix(hIdx, vIdx)
     End Function
+
+    '上値をセット 範囲内のIdxであること
+    Function SetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        If horzIdx < 1 OrElse HorizontalCount < horzIdx Then
+            Return False
+        End If
+        If vertIdx < 1 OrElse VerticalCount < vertIdx Then
+            Return False
+        End If
+        _Matrix(horzIdx, vertIdx) = True
+        Return True
+    End Function
+    Function SetIsUpAll() As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        For horzIdx As Integer = 1 To HorizontalCount
+            For vertIdx As Integer = 1 To VerticalCount
+                _Matrix(horzIdx, vertIdx) = True
+            Next
+        Next
+        Return True
+    End Function
+
+    '下値をセット 範囲内のIdxであること
+    Function SetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        If horzIdx < 1 OrElse HorizontalCount < horzIdx Then
+            Return False
+        End If
+        If vertIdx < 1 OrElse VerticalCount < vertIdx Then
+            Return False
+        End If
+        _Matrix(horzIdx, vertIdx) = False
+        Return True
+    End Function
+    Function SetIsDownpAll() As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        For horzIdx As Integer = 1 To HorizontalCount
+            For vertIdx As Integer = 1 To VerticalCount
+                _Matrix(horzIdx, vertIdx) = False
+            Next
+        Next
+        Return True
+    End Function
+
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder

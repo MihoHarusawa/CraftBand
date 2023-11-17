@@ -1317,6 +1317,17 @@ Public Class frmMain
         editUpDown.PanelSize = tpageひも上下.Size
     End Sub
 
+
+    Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
+        Dim updown As clsUpDown = _clsCalcSquare45.suitひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value)
+        If updown Is Nothing OrElse Not updown.IsValid(False) Then
+            '現在の値では合わせることはできません。
+            MessageBox.Show(My.Resources.MessageCannotSuit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        editUpDown.Replace(updown)
+    End Sub
+
 #End Region
 
 #Region "プレビュー"
@@ -1401,9 +1412,6 @@ Public Class frmMain
         Next
     End Sub
 
-    Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
-
-    End Sub
 
 #End Region
 

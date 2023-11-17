@@ -1012,6 +1012,45 @@ Class clsCalcSquare45
     End Function
 #End Region
 
+#Region "ひも上下"
+    Function suitひも上下(ByVal yoko As Boolean, ByVal vert As Integer, ByVal horz As Integer) As clsUpDown
+
+        Dim updown As New clsUpDown(clsUpDown.enumTargetFace.Bottom)
+        updown.HorizontalCount = _i横の四角数 + _i縦の四角数
+        updown.VerticalCount = _i横の四角数 + _i縦の四角数
+
+
+        '横のライン
+        For horzIdx As Integer = 1 To updown.HorizontalCount
+            For vertIdx As Integer = 1 To updown.VerticalCount
+
+                If horzIdx + vertIdx = _i横の四角数 + 1 Then
+                    updown.SetIsUp(horzIdx, vertIdx)
+
+                ElseIf ((_i縦の四角数 + _i横の四角数 - horzIdx + 1) + (_i縦の四角数 + _i横の四角数 - vertIdx + 1)) = _i横の四角数 + 1 Then
+                    updown.SetIsUp(horzIdx, vertIdx)
+                End If
+
+            Next
+        Next
+
+        '縦のライン
+        For horzIdx As Integer = 1 To updown.HorizontalCount
+            For vertIdx As Integer = 1 To updown.VerticalCount
+
+                If ((_i縦の四角数 + _i横の四角数 - horzIdx + 1) + vertIdx) = _i縦の四角数 + 1 Then
+                    updown.SetIsUp(horzIdx, vertIdx)
+
+                ElseIf (horzIdx + (_i縦の四角数 + _i横の四角数 - vertIdx + 1)) = _i縦の四角数 + 1 Then
+                    updown.SetIsUp(horzIdx, vertIdx)
+                End If
+            Next
+        Next
+
+        Return updown
+    End Function
+
+#End Region
 
     '横ひもの展開テーブル作成
     'OUT:   _ImageList横ひも
