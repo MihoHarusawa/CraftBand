@@ -163,9 +163,6 @@
   <data name="CalcNoMaster" xml:space="preserve">
     <value>{0}'{1}'は登録されていません。</value>
   </data>
-  <data name="CalcNoMasterOption" xml:space="preserve">
-    <value>{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。</value>
-  </data>
   <data name="CalcNoMasterPattern" xml:space="preserve">
     <value>{0}の番号{1}で設定にない編みかた名'{2}'(ひも番号{3})が参照されています。</value>
   </data>

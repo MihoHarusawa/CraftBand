@@ -38,7 +38,7 @@ Public Class clsSelectBasics
         End Get
     End Property
 
-    ''色の選択肢
+    '色の選択肢　※変更時には中身を入れ替えます
     Public ReadOnly Property p_tblColor As dstWork.tblColorDataTable
         Get
             Return _dstWork.Tables("tblColor")
@@ -61,7 +61,7 @@ Public Class clsSelectBasics
     End Function
 
 
-    'n本幅の選択肢
+    'n本幅の選択肢　※変更時には中身を入れ替えます
     Public ReadOnly Property p_tblLane As dstWork.tblLaneDataTable
         Get
             Return _dstWork.Tables("tblLane")

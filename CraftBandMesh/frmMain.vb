@@ -33,11 +33,6 @@ Public Class frmMain
             Nothing,
             enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
             )
-    Dim _Profile_追加品 As New CDataGridViewProfile(
-            (New tbl追加品DataTable),
-            Nothing,
-            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
-            )
     Dim _Profile_dgv底の縦横 As New CDataGridViewProfile(
             (New tbl縦横展開DataTable),
             Nothing,
@@ -47,9 +42,6 @@ Public Class frmMain
 
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'dgv底楕円.RowTemplate.Height = cRowHeightIdxOne
-        'dgv側面.RowTemplate.Height = cRowHeightIdxOne
-        'dgv追加品.RowTemplate.Height = cRowHeightIdxOne
 
         _Profile_dgv底楕円.FormCaption = Me.Text
         dgv底楕円.SetProfile(_Profile_dgv底楕円)
@@ -57,12 +49,12 @@ Public Class frmMain
         _Profile_dgv側面.FormCaption = Me.Text
         dgv側面.SetProfile(_Profile_dgv側面)
 
-        _Profile_追加品.FormCaption = Me.Text
-        dgv追加品.SetProfile(_Profile_追加品)
-
         _Profile_dgv底の縦横.FormCaption = Me.Text
         dgv底の横.SetProfile(_Profile_dgv底の縦横)
         dgv底の縦.SetProfile(_Profile_dgv底の縦横)
+
+        editAddParts.SetNames(Me.Text, tpage追加品.Text)
+
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -99,9 +91,6 @@ Public Class frmMain
         f_i何本幅2.DataSource = g_clsSelectBasics.p_tblLane
         f_i何本幅2.DisplayMember = "Display"
         f_i何本幅2.ValueMember = "Value"
-        f_i何本幅3.DataSource = g_clsSelectBasics.p_tblLane
-        f_i何本幅3.DisplayMember = "Display"
-        f_i何本幅3.ValueMember = "Value"
 
         f_s色1.DataSource = g_clsSelectBasics.p_tblColor
         f_s色1.DisplayMember = "Display"
@@ -109,9 +98,6 @@ Public Class frmMain
         f_s色2.DataSource = g_clsSelectBasics.p_tblColor
         f_s色2.DisplayMember = "Display"
         f_s色2.ValueMember = "Value"
-        f_s色3.DataSource = g_clsSelectBasics.p_tblColor
-        f_s色3.DisplayMember = "Display"
-        f_s色3.ValueMember = "Value"
         '
         f_s色4.DataSource = g_clsSelectBasics.p_tblColor
         f_s色4.DisplayMember = "Display"
@@ -122,7 +108,6 @@ Public Class frmMain
 
         setBasics()
         setPattern()
-        setOptions()
         _isLoadingData = False 'Designer.vb描画完了
 
         DispTables(_clsDataTables)
@@ -137,7 +122,7 @@ Public Class frmMain
             colwid = My.Settings.frmMainGridSide
             Me.dgv側面.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridOptions
-            Me.dgv追加品.SetColumnWidthFromString(colwid)
+            Me.editAddParts.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridYoko
             Me.dgv底の横.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridTate
@@ -158,7 +143,7 @@ Public Class frmMain
 
         My.Settings.frmMainGridOval = Me.dgv底楕円.GetColumnWidthString()
         My.Settings.frmMainGridSide = Me.dgv側面.GetColumnWidthString()
-        My.Settings.frmMainGridOptions = Me.dgv追加品.GetColumnWidthString()
+        My.Settings.frmMainGridOptions = Me.editAddParts.GetColumnWidthString()
         My.Settings.frmMainGridYoko = Me.dgv底の横.GetColumnWidthString()
         My.Settings.frmMainGridTate = Me.dgv底の縦.GetColumnWidthString()
         My.Settings.frmMainSize = Me.Size
@@ -180,7 +165,6 @@ Public Class frmMain
             Dim unitstr As String = .p_unit設定時の寸法単位.Str
             lbl目標寸法_単位.Text = unitstr
             lblひとつのすき間の寸法_単位.Text = unitstr
-            lbl長さ_単位.Text = unitstr
             lbl計算寸法_単位.Text = unitstr
             lbl横ひも間のすき間_単位.Text = unitstr
             lbl垂直ひも長加算_単位.Text = unitstr
@@ -191,7 +175,6 @@ Public Class frmMain
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
-            nud長さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud垂直ひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nudひとつのすき間の寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
@@ -232,8 +215,6 @@ Public Class frmMain
             Me.f_dひも長2.DefaultCellStyle.Format = format
             Me.f_d連続ひも長2.DefaultCellStyle.Format = format
 
-            Me.f_dひも長3.DefaultCellStyle.Format = format
-
             Me.f_d長さ4.DefaultCellStyle.Format = format
             Me.f_dひも長4.DefaultCellStyle.Format = format
 
@@ -264,12 +245,6 @@ Public Class frmMain
             cmb編みかた名_側面.Items.Clear()
             cmb編みかた名_側面.Items.AddRange(g_clsMasterTables.GetPatternNames(False, False))
         End If
-    End Sub
-
-    '付属品の変更
-    Sub setOptions()
-        cmb付属品名.Items.Clear()
-        cmb付属品名.Items.AddRange(g_clsMasterTables.GetOptionNames())
     End Sub
 
     '再計算
@@ -561,19 +536,6 @@ Public Class frmMain
         dgv側面.Refresh()
     End Sub
 
-    Sub Show追加品(ByVal works As clsDataTables)
-        BindingSource追加品.Sort = Nothing
-        BindingSource追加品.DataSource = Nothing
-        If works Is Nothing Then
-            Exit Sub
-        End If
-
-        BindingSource追加品.DataSource = works.p_tbl追加品
-        BindingSource追加品.Sort = "f_i番号 , f_iひも番号"
-
-        dgv追加品.Refresh()
-    End Sub
-
     Function Hide底_楕円(ByVal works As clsDataTables) As Boolean
         Dim ret As Boolean = works.CheckPoint(BindingSource底_楕円.DataSource)
 
@@ -588,15 +550,6 @@ Public Class frmMain
 
         BindingSource側面.Sort = Nothing
         BindingSource側面.DataSource = Nothing
-
-        Return ret
-    End Function
-
-    Function Hide追加品(ByVal works As clsDataTables) As Boolean
-        Dim ret As Boolean = works.CheckPoint(BindingSource追加品.DataSource)
-
-        BindingSource追加品.Sort = Nothing
-        BindingSource追加品.DataSource = Nothing
 
         Return ret
     End Function
@@ -879,7 +832,7 @@ Public Class frmMain
         Dim dlg As New frmOptions
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
-            setOptions()
+            'setOptions()
             recalc(CalcCategory.BsMaster)
         End If
     End Sub
@@ -1494,102 +1447,23 @@ Public Class frmMain
 #End Region
 
 #Region "追加品"
-    Private Sub btn追加_追加品_Click(sender As Object, e As EventArgs) Handles btn追加_追加品.Click
-        Dim table As tbl追加品DataTable = Nothing
-        Dim number As Integer = -1
-        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
-        If Not dgv追加品.GetTableAndNumber(table, number) Then
-            Exit Sub
-        End If
-
-        Dim row As tbl追加品Row = Nothing
-        If _clsCalcMesh.add_追加品(
-            cmb付属品名.Text, nud基本のひも幅.Value, nud長さ.Value, nud点数.Value,
-            row) Then
-
-            'numberPositionsSelect(BindingSource追加品, row.f_i番号, dgv追加品)
-            dgv追加品.NumberPositionsSelect(row.f_i番号)
-            recalc(CalcCategory.Options, row, "f_i点数")
-
-        Else
-            MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+    Sub Show追加品(ByVal works As clsDataTables)
+        editAddParts.PanelSize = tpage追加品.Size
+        editAddParts.ShowGrid(works)
+        recalc(CalcCategory.Options)
     End Sub
 
-    Private Sub btn上へ_追加品_Click(sender As Object, e As EventArgs) Handles btn上へ_追加品.Click
-        Dim table As tbl追加品DataTable = Nothing
-        Dim number As Integer = -1
-        'If Not getTableAndNumber(BindingSource追加品, table, number) Then
-        If Not dgv追加品.GetTableAndNumber(table, number) Then
-            Exit Sub
-        End If
-        If number < 0 Then
-            Exit Sub
-        End If
+    Function Hide追加品(ByVal works As clsDataTables) As Boolean
+        Return editAddParts.HideGrid(works)
+    End Function
 
-        Dim nextup As Integer = clsDataTables.SmallerNumber(table, number)
-        If nextup < 0 Then
-            Exit Sub
-        End If
-        clsDataTables.SwapNumber(table, number, nextup)
-
-        'numberPositionsSelect(BindingSource追加品, nextup, dgv追加品)
-        dgv追加品.NumberPositionsSelect(nextup)
+    Private Sub editAddParts_AddPartsError(sender As Object, e As EventArgs) Handles editAddParts.AddPartsError
+        recalc(CalcCategory.Options)
     End Sub
 
-    Private Sub btn下へ_追加品_Click(sender As Object, e As EventArgs) Handles btn下へ_追加品.Click
-        Dim table As tbl追加品DataTable = Nothing
-        Dim number As Integer = -1
-        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
-        If Not dgv追加品.GetTableAndNumber(table, number) Then
-            Exit Sub
-        End If
-        If number < 0 Then
-            Exit Sub
-        End If
-
-        Dim nextdown As Integer
-        nextdown = clsDataTables.LargerNumber(table, number)
-        If nextdown < 0 Then
-            Exit Sub
-        End If
-        clsDataTables.SwapNumber(table, number, nextdown)
-
-        'numberPositionsSelect(BindingSource追加品, nextdown, dgv追加品)
-        dgv追加品.NumberPositionsSelect(nextdown)
+    Private Sub tpage追加品_Resize(sender As Object, e As EventArgs) Handles tpage追加品.Resize
+        editAddParts.PanelSize = tpage追加品.Size
     End Sub
-
-    Private Sub btn削除_追加品_Click(sender As Object, e As EventArgs) Handles btn削除_追加品.Click
-        Dim table As tbl追加品DataTable = Nothing
-        Dim number As Integer = -1
-        'If Not GetTableAndNumber(BindingSource追加品, table, number) Then
-        If Not dgv追加品.GetTableAndNumber(table, number) Then
-            Exit Sub
-        End If
-        If number < 0 Then
-            Exit Sub
-        End If
-
-        clsDataTables.RemoveNumberFromTable(table, number)
-        clsDataTables.FillNumber(table) '#16
-        recalc(CalcCategory.Options, Nothing, Nothing)
-    End Sub
-
-    Private Sub dgv追加品_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv追加品.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource追加品.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
-            Exit Sub
-        End If
-
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv追加品_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName追加品(DataPropertyName) Then
-            recalc(CalcCategory.Options, current.Row, DataPropertyName)
-        End If
-    End Sub
-
 #End Region
 
 #Region "縦横展開"
@@ -1747,7 +1621,7 @@ Public Class frmMain
         If Not bVisible Then
             setDgvColumnsVisible(dgv底楕円)
             setDgvColumnsVisible(dgv側面)
-            setDgvColumnsVisible(dgv追加品)
+            editAddParts.SetDgvColumnsVisible()
             setDgvColumnsVisible(dgv底の横)
             setDgvColumnsVisible(dgv底の縦)
             bVisible = True

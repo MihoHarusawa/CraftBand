@@ -229,7 +229,7 @@ Partial Class ctrEditUpDown
         'btnチェック
         '
         Me.btnチェック.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnチェック.Location = New System.Drawing.Point(689, 351)
+        Me.btnチェック.Location = New System.Drawing.Point(683, 351)
         Me.btnチェック.Name = "btnチェック"
         Me.btnチェック.Size = New System.Drawing.Size(111, 46)
         Me.btnチェック.TabIndex = 21
@@ -240,7 +240,7 @@ Partial Class ctrEditUpDown
         'btn追加
         '
         Me.btn追加.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加.Location = New System.Drawing.Point(689, 251)
+        Me.btn追加.Location = New System.Drawing.Point(683, 251)
         Me.btn追加.Name = "btn追加"
         Me.btn追加.Size = New System.Drawing.Size(111, 46)
         Me.btn追加.TabIndex = 19
@@ -284,7 +284,7 @@ Partial Class ctrEditUpDown
         Me.grp設定ファイル.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grp設定ファイル.Controls.Add(Me.btn設定登録)
         Me.grp設定ファイル.Controls.Add(Me.btn設定呼出)
-        Me.grp設定ファイル.Location = New System.Drawing.Point(506, 3)
+        Me.grp設定ファイル.Location = New System.Drawing.Point(500, 3)
         Me.grp設定ファイル.Name = "grp設定ファイル"
         Me.grp設定ファイル.Size = New System.Drawing.Size(291, 87)
         Me.grp設定ファイル.TabIndex = 0
@@ -357,7 +357,7 @@ Partial Class ctrEditUpDown
         'btnシフト
         '
         Me.btnシフト.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnシフト.Location = New System.Drawing.Point(689, 303)
+        Me.btnシフト.Location = New System.Drawing.Point(683, 303)
         Me.btnシフト.Name = "btnシフト"
         Me.btnシフト.Size = New System.Drawing.Size(111, 46)
         Me.btnシフト.TabIndex = 20
@@ -401,7 +401,7 @@ Partial Class ctrEditUpDown
         'btnランダム
         '
         Me.btnランダム.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnランダム.Location = New System.Drawing.Point(572, 351)
+        Me.btnランダム.Location = New System.Drawing.Point(566, 351)
         Me.btnランダム.Name = "btnランダム"
         Me.btnランダム.Size = New System.Drawing.Size(111, 46)
         Me.btnランダム.TabIndex = 28
@@ -412,7 +412,7 @@ Partial Class ctrEditUpDown
         'lbl上下のメモ
         '
         Me.lbl上下のメモ.AutoSize = True
-        Me.lbl上下のメモ.Location = New System.Drawing.Point(547, 93)
+        Me.lbl上下のメモ.Location = New System.Drawing.Point(541, 93)
         Me.lbl上下のメモ.Name = "lbl上下のメモ"
         Me.lbl上下のメモ.Size = New System.Drawing.Size(73, 20)
         Me.lbl上下のメモ.TabIndex = 12
@@ -422,7 +422,7 @@ Partial Class ctrEditUpDown
         '
         Me.txt上下のメモ.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt上下のメモ.Location = New System.Drawing.Point(547, 120)
+        Me.txt上下のメモ.Location = New System.Drawing.Point(541, 120)
         Me.txt上下のメモ.Name = "txt上下のメモ"
         Me.txt上下のメモ.Size = New System.Drawing.Size(250, 27)
         Me.txt上下のメモ.TabIndex = 13
@@ -499,7 +499,7 @@ Partial Class ctrEditUpDown
         Me.dgvひも上下.Name = "dgvひも上下"
         Me.dgvひも上下.RowHeadersWidth = 51
         Me.dgvひも上下.RowTemplate.Height = 29
-        Me.dgvひも上下.Size = New System.Drawing.Size(676, 189)
+        Me.dgvひも上下.Size = New System.Drawing.Size(670, 189)
         Me.dgvひも上下.TabIndex = 14
         '
         'Index
@@ -1344,7 +1344,7 @@ Partial Class ctrEditUpDown
         Me.Panel.Controls.Add(Me.txt開始位置)
         Me.Panel.Controls.Add(Me.btnランダム)
         Me.Panel.Enabled = False
-        Me.Panel.Location = New System.Drawing.Point(0, 0)
+        Me.Panel.Location = New System.Drawing.Point(3, 3)
         Me.Panel.Name = "Panel"
         Me.Panel.Size = New System.Drawing.Size(800, 400)
         Me.Panel.TabIndex = 0
@@ -1353,11 +1353,10 @@ Partial Class ctrEditUpDown
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.AutoSize = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Controls.Add(Me.Panel)
         Me.Name = "ctrEditUpDown"
-        Me.Size = New System.Drawing.Size(803, 403)
+        Me.Size = New System.Drawing.Size(839, 436)
         Me.grp設定ファイル.ResumeLayout(False)
         CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nud水平に, System.ComponentModel.ISupportInitialize).EndInit()

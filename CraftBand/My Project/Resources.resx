@@ -179,6 +179,18 @@
     <value>全範囲を{0}します。よろしいですか？</value>
     <comment>ctrEditUpDown</comment>
   </data>
+  <data name="CalcNoAddNumber" xml:space="preserve">
+    <value>{0}追加用の番号がとれません。</value>
+  </data>
+  <data name="CalcNoMaster" xml:space="preserve">
+    <value>{0}'{1}'は登録されていません。</value>
+  </data>
+  <data name="CalcNoMasterOption" xml:space="preserve">
+    <value>{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。</value>
+  </data>
+  <data name="CalcNoSelect" xml:space="preserve">
+    <value>{0}を指定してください。</value>
+  </data>
   <data name="CalcOutCount" xml:space="preserve">
     <value>{0} 本</value>
   </data>

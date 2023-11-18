@@ -14,7 +14,7 @@ Public Class ctrEditUpDown
     Public Property PanelSize As Drawing.Size
         Set(value As Drawing.Size)
             If Not _isLoadingData Then
-                Panel.Size = New Size(value.Width - 6, value.Height - 6)
+                Panel.Size = New Size(value.Width, value.Height)
             End If
         End Set
         Get

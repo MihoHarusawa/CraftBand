@@ -193,6 +193,42 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}追加用の番号がとれません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoAddNumber() As String
+            Get
+                Return ResourceManager.GetString("CalcNoAddNumber", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}&apos;{1}&apos;は登録されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoMaster() As String
+            Get
+                Return ResourceManager.GetString("CalcNoMaster", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}の番号{1}で設定にない付属品名&apos;{2}&apos;(ひも番号{3})が参照されています。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoMasterOption() As String
+            Get
+                Return ResourceManager.GetString("CalcNoMasterOption", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoSelect() As String
+            Get
+                Return ResourceManager.GetString("CalcNoSelect", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0} 本 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutCount() As String

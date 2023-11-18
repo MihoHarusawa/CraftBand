@@ -187,15 +187,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}の番号{1}で設定にない付属品名&apos;{2}&apos;(ひも番号{3})が参照されています。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcNoMasterOption() As String
-            Get
-                Return ResourceManager.GetString("CalcNoMasterOption", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  {0}の番号{1}で設定にない編みかた名&apos;{2}&apos;(ひも番号{3})が参照されています。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoMasterPattern() As String

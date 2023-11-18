@@ -1047,7 +1047,8 @@ Public Class clsMasterTables
             If isFirst Then
                 Return length
             Else
-                Return length * Me.Value("f_d長さ比率対ひも1") + Me.Value("f_d長さ加減対ひも1")
+                Dim len As Double = length * Me.Value("f_d長さ比率対ひも1") + Me.Value("f_d長さ加減対ひも1")
+                Return If(len < 0, 0, len) 'f_d長さ加減対ひも1 のマイナス設定対策
             End If
         End Function
 

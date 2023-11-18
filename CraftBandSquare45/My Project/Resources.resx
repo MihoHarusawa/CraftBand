@@ -206,9 +206,6 @@
   <data name="LOG_ColorModified" xml:space="preserve">
     <value>色の修正</value>
   </data>
-  <data name="CalcNoMasterOption" xml:space="preserve">
-    <value>{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。</value>
-  </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">
     <value>編集中のデータを保存しますか？</value>
     <comment>frmMain</comment>

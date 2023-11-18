@@ -396,7 +396,12 @@ Class clsCalcSquare45
                 ret = ret And set_目標寸法(False)
                 ret = ret And set_四角数()
                 ret = ret And calc_側面(category, Nothing, Nothing)
-                ret = ret And calc_追加品(category, Nothing, Nothing)
+                If ret Then
+                    p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                    If Not String.IsNullOrEmpty(p_sメッセージ) Then
+                        ret = False
+                    End If
+                End If
 
             Case CalcCategory.Target    '目標寸法
                 ret = set_目標寸法(False)
@@ -414,8 +419,11 @@ Class clsCalcSquare45
                 ret = ret And calc_側面(category, row, key)
 
             Case CalcCategory.Options  '追加品
-                Dim row As tbl追加品Row = CType(ctr, tbl追加品Row)
-                ret = ret And calc_追加品(category, row, key)
+                'editAddParts内の処理, エラー文字列表示のみ
+                p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                If Not String.IsNullOrEmpty(p_sメッセージ) Then
+                    ret = False
+                End If
                 '(追加品は計算寸法変更なし)
 
             Case Else
@@ -862,156 +870,6 @@ Class clsCalcSquare45
 
 #End Region
 
-#Region "追加品"
-
-    Function add_追加品(ByVal nameselect As String,
-                     ByVal i何本幅 As Integer, ByVal d長さ As Double, ByVal i点数 As Integer,
-                     ByRef row As tbl追加品Row) As Boolean
-        Dim table As tbl追加品DataTable = _Data.p_tbl追加品
-
-        If String.IsNullOrWhiteSpace(nameselect) Then
-            '{0}を指定してください。
-            p_sメッセージ = String.Format(My.Resources.CalcNoSelect, text付属品名())
-            Return False
-        End If
-        'tbl付属品Row
-        Dim grpMst As New clsGroupDataRow(g_clsMasterTables.GetOptionRecordGroup(nameselect))
-        If Not grpMst.IsValid Then
-            '{0}'{1}'は登録されていません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoMaster, text付属品名(), nameselect)
-            Return False
-        End If
-
-        Dim addNumber As Integer = clsDataTables.AddNumber(table)
-        If addNumber < 0 Then
-            '{0}追加用の番号がとれません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoAddNumber, text付属品名())
-            Return False
-        End If
-
-        'tbl付属品ぶんのレコード
-        Dim groupRow As New clsGroupDataRow("f_iひも番号")
-        For Each idx As Int16 In grpMst.Keys
-            row = table.Newtbl追加品Row
-            row.f_i番号 = addNumber
-            row.f_iひも番号 = idx
-            row.f_s付属品名 = nameselect
-            row.f_i点数 = i点数
-
-            groupRow.Add(row)
-            table.Rows.Add(row)
-        Next
-        groupRow.SetNameIndexValue("f_s付属品ひも名", grpMst)
-        groupRow.SetNameIndexValue("f_b巻きひも区分", grpMst)
-        groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
-        groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
-
-        Dim first As Boolean = True
-        For Each drow As clsDataRow In groupRow
-            Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow)) '存在チェック済
-            drow.Value("f_i何本幅") = mst.GetFirstLane(i何本幅)
-            drow.Value("f_d長さ") = mst.GetLength(first, d長さ)
-            If first Then
-                first = False
-            End If
-        Next
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Add: {0}", groupRow.ToString)
-        Return True
-    End Function
-
-    '更新処理が必要なフィールド名
-    Shared _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ"}
-    Shared Function IsDataPropertyName追加品(ByVal name As String) As Boolean
-        Return _fields追加品.Contains(name)
-    End Function
-
-    Private Function calc_追加品(ByVal category As CalcCategory, ByVal row As tbl追加品Row, ByVal dataPropertyName As String) As Boolean
-        Dim ret As Boolean = True
-        If category <> CalcCategory.Options Then
-            'マスター変更もしくは派生更新
-            recalc_追加品()
-
-        Else
-            If row IsNot Nothing Then
-                '追加もしくは更新
-                Dim cond As String = String.Format("f_i番号 = {0}", row.f_i番号)
-                Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond), "f_iひも番号")
-                If dataPropertyName = "f_i点数" Then
-                    Dim i点数 As Integer = row.f_i点数
-                    groupRow.SetNameValue("f_i点数", i点数)
-                End If
-                ret = ret And set_groupRow追加品(groupRow)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Change: {0}", groupRow.ToString)
-            Else
-                '削除
-            End If
-        End If
-        Return ret
-    End Function
-
-    Private Function recalc_追加品() As Boolean
-        Dim res = (From row As tbl追加品Row In _Data.p_tbl追加品
-                   Select Num = row.f_i番号
-                   Order By Num).Distinct
-
-        Dim ret As Boolean = True
-        For Each num As Integer In res
-            Dim cond As String = String.Format("f_i番号 = {0}", num)
-            Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
-            ret = ret And set_groupRow追加品(groupRow)
-        Next
-
-        Return ret
-    End Function
-
-    Private Function set_groupRow追加品(ByVal groupRow As clsGroupDataRow) As Boolean
-        '点数は一致項目
-        Dim i点数 As Integer = groupRow.GetNameValue("f_i点数")
-
-        'tbl付属品Row
-        Dim grpMst As clsGroupDataRow = g_clsMasterTables.GetOptionRecordGroup(groupRow.GetNameValue("f_s付属品名"))
-        If Not grpMst.IsValid Then
-            'なし
-            groupRow.SetNameValue("f_dひも長", DBNull.Value)
-            groupRow.SetNameValue("f_iひも本数", DBNull.Value)
-            groupRow.SetNameValue("f_bError", True)
-            '{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。
-            p_sメッセージ = String.Format(My.Resources.CalcNoMasterOption, text追加品(), groupRow.GetNameValue("f_i番号"), groupRow.GetNameValue("f_s付属品名"), groupRow.GetNameValue("f_iひも番号"))
-            Return False
-        Else
-            Dim ret As Boolean = True
-
-            Dim i直前の何本幅 As Integer = 0
-            For Each drow As clsDataRow In groupRow
-                Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow))
-                If mst.IsValid Then
-                    drow.Value("f_iひも本数") = i点数 * mst.Value("f_iひも数")
-
-                    'ひも長
-                    If drow.Value("f_b巻きひも区分") Then
-                        drow.Value("f_dひも長") = mst.GetWindBandLength(drow.Value("f_d長さ"), drow.Value("f_i何本幅"), i直前の何本幅)
-                    Else
-                        drow.Value("f_dひも長") = mst.GetBandLength(drow.Value("f_d長さ"))
-                    End If
-
-                Else
-                    drow.Value("f_iひも本数") = DBNull.Value
-                    drow.Value("f_dひも長") = DBNull.Value
-                    drow.Value("f_bError") = True
-                    '{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。
-                    p_sメッセージ = String.Format(My.Resources.CalcNoMasterOption, text追加品(), drow.Value("f_i番号"), drow.Value("f_s付属品名"), drow.Value("f_iひも番号"))
-                    ret = False
-
-                End If
-                i直前の何本幅 = drow.Value("f_i何本幅")
-            Next
-
-            Return ret
-        End If
-
-    End Function
-#End Region
-
 #Region "ひも上下"
     Function suitひも上下(ByVal yoko As Boolean, ByVal vert As Integer, ByVal horz As Integer) As clsUpDown
 
@@ -1451,17 +1309,8 @@ Class clsCalcSquare45
         Return _frmMain.tpage縁の始末.Text
     End Function
 
-    Private Function text巻きひも() As String
-        'dgv追加品
-        Return _frmMain.f_b巻きひも区分3.HeaderText
-    End Function
-
     Private Function text編みかた名() As String
         Return _frmMain.lbl編みかた名_側面.Text
-    End Function
-
-    Private Function text付属品名() As String
-        Return _frmMain.lbl付属品名.Text
     End Function
 
     Private Function text内側() As String
