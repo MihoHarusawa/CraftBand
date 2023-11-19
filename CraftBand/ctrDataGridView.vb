@@ -74,6 +74,15 @@ Public Class ctrDataGridView
         'グリッドの警告
         Return My.Resources.ErrGridTitle
     End Function
+
+    Private ReadOnly Property MyGridDataRow As clsDataRow
+        Get
+            If _Profile Is Nothing OrElse _Profile.GridDataRow Is Nothing OrElse Not _Profile.GridDataRow.IsValid Then
+                Return Nothing
+            End If
+            Return _Profile.GridDataRow
+        End Get
+    End Property
 #End Region
 
 #Region "イベント処理"
@@ -289,33 +298,33 @@ Public Class ctrDataGridView
     '基本、行単位の個別レコードなので、貼り付け対象は選択された行・セルのみとする
 
     Private Sub ContextMenuStrip_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStripDgv.Opening
-        Me.MenuItemCopy.Enabled = RowOrCellSelected()
-        Me.MenuItemCut.Enabled = RowOrCellSelected()
-        Me.MenuItemPaste.Enabled = IsPastable()
-        Me.MenuItemDelete.Enabled = HasWritableCell()
+        Me.MenuItemCopy.Enabled = RowOrCellSelected(Me)
+        Me.MenuItemCut.Enabled = RowOrCellSelected(Me)
+        Me.MenuItemPaste.Enabled = IsPastable(Me)
+        Me.MenuItemDelete.Enabled = HasWritableCell(Me)
         Me.MenuItemCancel.Enabled = True
     End Sub
 
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
-        SetToClipBoard()
+        SetToClipBoard(Me)
         MyBase.ClearSelection()
     End Sub
 
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
-        SetToClipBoard()
-        SetDefaultWritableCell()
+        SetToClipBoard(Me)
+        SetDefaultWritableCell(Me, MyGridDataRow)
     End Sub
 
     Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
         If Me.DataSource.Current Is Nothing OrElse Me.DataSource.Current.IsNew Then
             Exit Sub
         End If
-        DoPaste()
+        DoPaste(Me, MyGridDataRow)
     End Sub
 
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
-        If Not DeleteLines() Then
-            SetDefaultWritableCell()
+        If Not DeleteLines(Me) Then
+            SetDefaultWritableCell(Me, MyGridDataRow)
         End If
     End Sub
 
@@ -323,17 +332,19 @@ Public Class ctrDataGridView
         SendKeys.Send("{Esc}")
     End Sub
 
+#Region "DataGridViewとレコードスキーマに対応したShared関数"
+
     '行もしくはセルが選択されている
-    Private Function RowOrCellSelected() As Boolean
-        Return 0 < Me.SelectedRows.Count Or 0 < Me.SelectedCells.Count
+    Public Shared Function RowOrCellSelected(ByVal dgv As DataGridView) As Boolean
+        Return 0 < dgv.SelectedRows.Count Or 0 < dgv.SelectedCells.Count
     End Function
 
     'クリップボードにコピーする
-    Private Function SetToClipBoard() As Boolean
+    Public Shared Function SetToClipBoard(ByVal dgv As DataGridView) As Boolean
         'SendKeys.Send("^C")
 
         '元のDataObjectを取得する
-        Dim oldData As DataObject = MyBase.GetClipboardContent()
+        Dim oldData As DataObject = dgv.GetClipboardContent()
         If oldData Is Nothing Then
             Return False
         End If
@@ -366,8 +377,8 @@ Public Class ctrDataGridView
     End Function
 
     '貼り付け可能か？
-    Private Function IsPastable() As Boolean
-        If Not RowOrCellSelected() Then
+    Public Shared Function IsPastable(ByVal dgv As DataGridView) As Boolean
+        If Not RowOrCellSelected(dgv) Then
             Return False
         End If
         'クリップボードにテキストがある
@@ -377,17 +388,17 @@ Public Class ctrDataGridView
         End If
 
         '行選択がある時の貼り付け条件
-        If Me.SelectedRows.Count > 0 Then
+        If dgv.SelectedRows.Count > 0 Then
             '行のセル以外が選択されるのはNG
-            For Each c As DataGridViewCell In Me.SelectedCells
-                If Not Me.SelectedRows.Contains(Me.Rows(c.RowIndex)) Then
+            For Each c As DataGridViewCell In dgv.SelectedCells
+                If Not dgv.SelectedRows.Contains(dgv.Rows(c.RowIndex)) Then
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Not Pastable 選択行以外のセル({0},{1})", c.ColumnIndex, c.RowIndex)
                     Return False
                 End If
             Next
             '表示行数
             Dim ColumnCountVisible As Integer = 0
-            For Each column As DataGridViewColumn In Me.Columns
+            For Each column As DataGridViewColumn In dgv.Columns
                 If column.Visible Then
                     ColumnCountVisible += 1
                 End If
@@ -403,12 +414,12 @@ Public Class ctrDataGridView
         End If
 
         'セルのみの選択
-        Return HasWritableCell()
+        Return HasWritableCell(dgv)
     End Function
 
     '選択に入力可能なセルを含む
-    Private Function HasWritableCell() As Boolean
-        For Each cell As DataGridViewCell In Me.SelectedCells
+    Public Shared Function HasWritableCell(ByVal dgv As DataGridView) As Boolean
+        For Each cell As DataGridViewCell In dgv.SelectedCells
             If Not cell.ReadOnly AndAlso cell.Visible Then
                 Return True '入力可能
             End If
@@ -416,47 +427,47 @@ Public Class ctrDataGridView
         Return False
     End Function
 
-    Private Function DeleteLines() As Boolean
-        If Not Me.AllowUserToDeleteRows OrElse Me.SelectedRows.Count = 0 Then
+    '行の削除
+    Public Shared Function DeleteLines(ByVal dgv As DataGridView) As Boolean
+        If Not dgv.AllowUserToDeleteRows OrElse dgv.SelectedRows.Count = 0 Then
             Return False
         End If
         '行のみ選択
-        For Each c As DataGridViewCell In Me.SelectedCells
-            If Not Me.SelectedRows.Contains(Me.Rows(c.RowIndex)) Then
+        For Each c As DataGridViewCell In dgv.SelectedCells
+            If Not dgv.SelectedRows.Contains(dgv.Rows(c.RowIndex)) Then
                 Return False
             End If
         Next
 
         Dim del As Boolean = False
-        For Each r In Me.SelectedRows
+        For Each r In dgv.SelectedRows
             If Not r.IsNewRow Then
-                Me.Rows.Remove(r)
+                dgv.Rows.Remove(r)
                 del = True
             End If
         Next r
         Return del
     End Function
 
-
     '入力可能なセルをデフォルト値にする
-    Private Sub SetDefaultWritableCell()
-        If _Profile Is Nothing OrElse _Profile.GridDataRow Is Nothing OrElse Not _Profile.GridDataRow.IsValid Then
+    Public Shared Sub SetDefaultWritableCell(ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow)
+        If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
             Exit Sub
         End If
         '選択セル
-        For Each cell As DataGridViewCell In Me.SelectedCells
+        For Each cell As DataGridViewCell In dgv.SelectedCells
             If Not cell.ReadOnly AndAlso cell.Visible Then
-                Dim col As DataGridViewColumn = Me.Columns(cell.ColumnIndex)
-                cell.Value = _Profile.GridDataRow.DefaultValue(col.DataPropertyName)
+                Dim col As DataGridViewColumn = dgv.Columns(cell.ColumnIndex)
+                cell.Value = gridDataRow.DefaultValue(col.DataPropertyName)
             End If
         Next
         '行選択がある時
-        If Me.SelectedRows.Count > 0 Then
-            For Each row As DataGridViewRow In Me.SelectedRows
+        If dgv.SelectedRows.Count > 0 Then
+            For Each row As DataGridViewRow In dgv.SelectedRows
                 For Each cell As DataGridViewCell In row.Cells
                     If Not cell.ReadOnly AndAlso cell.Visible Then
-                        Dim col As DataGridViewColumn = Me.Columns(cell.ColumnIndex)
-                        cell.Value = _Profile.GridDataRow.DefaultValue(col.DataPropertyName)
+                        Dim col As DataGridViewColumn = dgv.Columns(cell.ColumnIndex)
+                        cell.Value = gridDataRow.DefaultValue(col.DataPropertyName)
                     End If
                 Next
             Next
@@ -464,8 +475,8 @@ Public Class ctrDataGridView
     End Sub
 
     '貼り付け
-    Private Sub DoPaste()
-        If Not Me.IsPastable() Then
+    Public Shared Sub DoPaste(ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow)
+        If Not IsPastable(dgv) Then
             Return
         End If
         Dim cliptext As String = Clipboard.GetDataObject().GetData(DataFormats.Text)
@@ -478,18 +489,18 @@ Public Class ctrDataGridView
         For Each line As String In cliptext.Split(vbLf)
             clipTSV.Add(line.Split(vbTab))
         Next
-        If Me.SelectedRows.Count > 0 Then
+        If dgv.SelectedRows.Count > 0 Then
             '行選択がある場合は、行のみの貼り付け(項目数確認済)
             Dim dstLine As New SortedDictionary(Of Integer, Boolean)
-            For Each row As DataGridViewRow In Me.SelectedRows
+            For Each row As DataGridViewRow In dgv.SelectedRows
                 dstLine(row.Index) = True
             Next
-            DoPasteLines(dstLine, clipTSV)
+            DoPasteLines(dstLine, clipTSV, dgv, gridDataRow)
 
         Else
             '選択されたセルへの貼り付け
             Dim dstcels As New List(Of Integer())
-            For Each c As DataGridViewCell In Me.SelectedCells
+            For Each c As DataGridViewCell In dgv.SelectedCells
                 dstcels.Add(New Integer() {c.RowIndex, c.ColumnIndex})
             Next
             dstcels.Sort(AddressOf cmp)
@@ -510,12 +521,13 @@ Public Class ctrDataGridView
                 If src_c >= clipTSV(src_r Mod clipTSV.Count).Count Then
                     Continue For
                 End If
-                DoPasteOneCell(dst(0), dst(1), clipTSV(src_r Mod clipTSV.Count)(src_c))
+                DoPasteOneCell(dst(0), dst(1), clipTSV(src_r Mod clipTSV.Count)(src_c), dgv, gridDataRow)
             Next
         End If
     End Sub
 
-    Private Function DoPasteOneCell(ByVal cell As DataGridViewCell, ByVal pasteValue As String) As Integer
+    Private Shared Function DoPasteOneCell(ByVal cell As DataGridViewCell, ByVal pasteValue As String,
+                                           ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow) As Integer
         If Not cell.Visible Then
             Return 0    'スキップ
         ElseIf cell.ReadOnly Then
@@ -527,9 +539,9 @@ Public Class ctrDataGridView
             value = pasteValue.Replace(vbCr, "").Replace(vbLf, "").Replace(vbTab, "")
         End If
 
-        If _Profile IsNot Nothing AndAlso _Profile.GridDataRow IsNot Nothing AndAlso _Profile.GridDataRow.IsValid Then
-            Dim col As DataGridViewColumn = Me.Columns(cell.ColumnIndex)
-            cell.Value = _Profile.GridDataRow.ValidValue(col.DataPropertyName, value)
+        If gridDataRow IsNot Nothing AndAlso gridDataRow.IsValid Then
+            Dim col As DataGridViewColumn = dgv.Columns(cell.ColumnIndex)
+            cell.Value = gridDataRow.ValidValue(col.DataPropertyName, value)
         Else
             cell.Value = value
         End If
@@ -538,21 +550,23 @@ Public Class ctrDataGridView
         Return 1
     End Function
 
-    Private Sub DoPasteOneLine(ByVal row As DataGridViewRow, ByVal tsv() As String)
+    Private Shared Sub DoPasteOneLine(ByVal row As DataGridViewRow, ByVal tsv() As String,
+                                      ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow)
         Dim i As Integer = 0
         For Each cell As DataGridViewCell In row.Cells
             If i >= tsv.Count Then
                 Return
             End If
-            i += DoPasteOneCell(cell, tsv(i))
+            i += DoPasteOneCell(cell, tsv(i), dgv, gridDataRow)
         Next
     End Sub
 
-    Private Sub DoPasteLines(ByVal dstLine As SortedDictionary(Of Integer, Boolean), ByVal clipTSV As List(Of String()))
+    Private Shared Sub DoPasteLines(ByVal dstLine As SortedDictionary(Of Integer, Boolean), ByVal clipTSV As List(Of String()),
+                             ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow)
         '貼り付け先の方が多ければ繰り返し
         Dim src_r As Integer = 0
         For Each p As KeyValuePair(Of Integer, Boolean) In dstLine
-            DoPasteOneLine(Me.Rows(p.Key), clipTSV(src_r Mod clipTSV.Count))
+            DoPasteOneLine(dgv.Rows(p.Key), clipTSV(src_r Mod clipTSV.Count), dgv, gridDataRow)
             src_r += 1
         Next
         'クリップボードに残っていても貼り付けない
@@ -566,10 +580,12 @@ Public Class ctrDataGridView
         End If
     End Function
 
-    Private Function DoPasteOneCell(ByVal r As Integer, ByVal c As Integer, ByVal pasteValue As String) As Integer
+    Private Shared Function DoPasteOneCell(ByVal r As Integer, ByVal c As Integer, ByVal pasteValue As String,
+                                    ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow) As Integer
         'Debug.Print("{0}行 {1}列 値<{2}>", r, c, pasteValue)
-        Return DoPasteOneCell(Me.Rows(r).Cells(c), pasteValue)
+        Return DoPasteOneCell(dgv.Rows(r).Cells(c), pasteValue, dgv, gridDataRow)
     End Function
+#End Region
 
 #End Region
 

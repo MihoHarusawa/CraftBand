@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Reflection
 Imports System.Windows.Forms
 Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
@@ -46,6 +47,7 @@ Public Class ctrEditUpDown
     Dim _CurrentTargetFace As enumTargetFace = enumTargetFace.NoDef
     Dim _UpdownChanged As Boolean = False
 
+    Dim _Calc As New Calc
 
 #Region "公開関数"
 
@@ -140,26 +142,22 @@ Public Class ctrEditUpDown
     End Function
 #End Region
 
-
-
-
-
-    Dim _Calc As New Calc
-    Dim _Profile_dgvひも上下 As New CDataGridViewProfile(
-            (New dstWork.tblCheckBoxDataTable),
-            Nothing,
-            enumAction._None
-            )
-
+#Region "表示関連処理"
 
     Private Sub ctrEditUpDown_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        _Profile_dgvひも上下.FormCaption = Me.FormCaption
-        dgvひも上下.SetProfile(_Profile_dgvひも上下)
-
         _isLoadingData = False
+
+        '全カラムに波及・定数
+        dgvひも上下.Columns(1).Width = 45 'dgvひも上下.RowTemplate.Height
     End Sub
 
+#If DEBUG Then
+    Private Sub ctrEditUpDown_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        Debug.Print("Resize: Me({0},{1})", Me.Width, Me.Height)
+        Debug.Print("     Panel({0},{1})", Panel.Width, Panel.Height)
+    End Sub
+#End If
 
     Private Function setUpdownColumns(ByVal col As Integer) As Boolean
         If col < 0 OrElse clsUpDown.cMaxUpdownColumns < col Then
@@ -316,6 +314,16 @@ Public Class ctrEditUpDown
         End If
     End Function
 
+    '全リサイズ対象か？ 0～表示列数-1
+    Private Function getIsResizeColumn(ByVal columnIndex As Integer) As Boolean
+        Return (columnIndex = 1) OrElse (columnIndex = nud水平に.Value) '0=非表示のIndexカラム
+    End Function
+
+    '全リサイズ対象か？ 0～表示行数-1
+    Private Function getIsResizeRowIndex(ByVal rowIndex As Integer) As Boolean
+        Return (rowIndex = 0) OrElse (rowIndex = nud垂直に.Value - 1)
+    End Function
+#End Region
 
 #Region "ボタン処理"
 
@@ -631,7 +639,7 @@ Public Class ctrEditUpDown
     End Function
 #End Region
 
-#Region "イベント処理"
+#Region "DataGridViewイベント処理"
 
     Private Sub dgvひも上下_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvひも上下.CellValueChanged
         _UpdownChanged = True
@@ -652,6 +660,9 @@ Public Class ctrEditUpDown
     End Sub
 
     Private Sub dgvひも上下_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvひも上下.CellPainting
+        If _isLoadingData Then
+            Exit Sub
+        End If
         '列ヘッダーかどうか調べる
         If e.ColumnIndex < 0 And e.RowIndex >= 0 Then
             Dim Index As Integer = dgvひも上下.Rows(e.RowIndex).Cells(0).Value '垂直の番号
@@ -673,6 +684,9 @@ Public Class ctrEditUpDown
     End Sub
 
     Private Sub dgvひも上下_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgvひも上下.CellFormatting
+        If _isLoadingData Then
+            Exit Sub
+        End If
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
         End If
@@ -684,32 +698,47 @@ Public Class ctrEditUpDown
         e.CellStyle.BackColor = getBackColor(e.ColumnIndex, e.RowIndex + 1, dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
     End Sub
 
-    '1の幅変更を波及,lastdata対象外
+    '幅変更を波及　※lastdata対象外
     Private Sub dgvひも上下_ColumnWidthChanged(sender As Object, e As DataGridViewColumnEventArgs) Handles dgvひも上下.ColumnWidthChanged
         If _isLoadingData OrElse e.Column Is Nothing OrElse e.Column.Index < 1 Then
             Exit Sub
         End If
         'Debug.Print("Index={0} width={1}", e.Column.Index, e.Column.Width) 1～
-        If e.Column.Index = 1 Then
-            For i As Integer = 2 To cMaxUpdownColumns '全カラム
-                dgvひも上下.Columns(i).Width = e.Column.Width
+        If getIsResizeColumn(e.Column.Index) Then
+            For i As Integer = 1 To cMaxUpdownColumns '0(Index)を除く全カラム
+                If i <> e.Column.Index Then
+                    dgvひも上下.Columns(i).Width = e.Column.Width
+                End If
             Next
         End If
     End Sub
 
-    '1の高さ変更を波及,lastdata対象外
+    '高さ変更を波及　※lastdata対象外
     Private Sub dgvひも上下_RowHeightChanged(sender As Object, e As DataGridViewRowEventArgs) Handles dgvひも上下.RowHeightChanged
         If _isLoadingData OrElse e.Row Is Nothing OrElse e.Row.Index < 0 Then
             Exit Sub
         End If
         'Debug.Print("Index={0} width={1}", e.Row.Index, e.Row.Height) 0～
-        If e.Row.Index = 0 Then
-            For i As Integer = 1 To nud垂直に.Value - 1 '表示分
-                dgvひも上下.Rows(i).Height = e.Row.Height
+        If getIsResizeRowIndex(e.Row.Index) Then
+            For i As Integer = 0 To nud垂直に.Value - 1 '表示分
+                If i <> e.Row.Index Then
+                    dgvひも上下.Rows(i).Height = e.Row.Height
+                End If
             Next
             dgvひも上下.RowTemplate.Height = e.Row.Height
         End If
     End Sub
+
+    'True/False以外の貼り付けは無視
+    Private Sub dgvひも上下_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgvひも上下.DataError
+        If e.Exception Is Nothing Then
+            Exit Sub
+        End If
+        Debug.Print("({0},{1}){2}", e.ColumnIndex, e.RowIndex, e.Exception.Message)
+        'dgvひも上下.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = False
+        e.ThrowException = False
+    End Sub
+
 #End Region
 
 #Region "設定"
@@ -753,13 +782,15 @@ Public Class ctrEditUpDown
     End Sub
 #End Region
 
-    '範囲選択
+    'DataGridViewの選択
     Private Class CDataGridSelection
-        Property ColumnIndexFrom As Integer = Integer.MaxValue
-        Property ColumnIndexTo As Integer = Integer.MinValue
-        Property RowIndexFrom As Integer = Integer.MaxValue
-        Property RowIndexTo As Integer = Integer.MinValue
-        Property SelectedCellsCount As Integer = 0
+        '選択の最小と最大
+        Dim ColumnIndexFrom As Integer = Integer.MaxValue
+        Dim ColumnIndexTo As Integer = Integer.MinValue
+        Dim RowIndexFrom As Integer = Integer.MaxValue
+        Dim RowIndexTo As Integer = Integer.MinValue
+        Dim SelectedCellsCount As Integer = 0
+
 
         ReadOnly Property IsValid As Boolean
             Get
@@ -777,12 +808,14 @@ Public Class ctrEditUpDown
             End Get
         End Property
 
+        '矩形選択
         ReadOnly Property IsRangeSelect As Boolean
             Get
                 Return 0 < SelectedCellsCount AndAlso SelectedCellsCount = FromToRangeCells
             End Get
         End Property
 
+        '正方形選択
         ReadOnly Property IsSquareSelect As Boolean
             Get
                 Return IsRangeSelect AndAlso (ColumnIndexTo - ColumnIndexFrom) = (RowIndexTo - RowIndexFrom)
@@ -812,13 +845,14 @@ Public Class ctrEditUpDown
             End Set
         End Property
 
+        'DataGridViewで選択されているセルを取得
         Function GridSelectedCells(ByVal dgv As DataGridView) As Boolean
-            '行選択は対象外
+            '行選択
             If 0 < dgv.SelectedRows.Count Then
                 Return False
             End If
 
-            '選択を範囲化
+            'セル選択
             For Each c As DataGridViewCell In dgv.SelectedCells
                 ColumnnIndex = c.ColumnIndex
                 RowIndex = c.RowIndex
@@ -831,9 +865,9 @@ Public Class ctrEditUpDown
 
         Function GridCellsSelect(ByVal dgv As DataGridView) As Boolean
             '範囲選択であること
-            If Not IsRangeSelect Then
-                Return False
-            End If
+            'If Not IsRangeSelect Then
+            '    Return False
+            'End If
 
             '範囲を選択
             dgv.ClearSelection()
@@ -869,14 +903,13 @@ Public Class ctrEditUpDown
     End Class
 
 
-    'データ保持とクラス関数呼び出し
+    'テーブルを含むインスタンス
     Private Class Calc
-
         Dim _CUpDown As clsUpDown 'New時に作成、以降は存在が前提
 
         Sub New()
             _CUpDown = New clsUpDown(False)
-            _CUpDown.Clear(True) 'テーブル作成
+            _CUpDown.Clear(True) '唯一のテーブル作成
         End Sub
 
         'ひも上下の展開
@@ -908,10 +941,9 @@ Public Class ctrEditUpDown
 
         '中身を読み取ったテーブル
         Function replace(ByVal other_updown As clsUpDown) As clsUpDown
-
             Dim ret As Boolean = _CUpDown.Import(other_updown)
-            Return _CUpDown
             If ret Then
+                Return _CUpDown
             Else
                 Return Nothing
             End If
@@ -1049,9 +1081,228 @@ Public Class ctrEditUpDown
 
     End Class
 
-    Private Sub ctrEditUpDown_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        Debug.Print("Resize: Me({0},{1})", Me.Width, Me.Height)
-        Debug.Print("     Panel({0},{1})", Panel.Width, Panel.Height)
+
+
+
+    Private Sub GridContextMenuStrip_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles GridContextMenuStrip.Opening
+        '共通
+        Me.MenuItemCopy.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemCut.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemPaste.Enabled = ctrDataGridView.IsPastable(dgvひも上下)
+        Me.MenuItemDelete.Enabled = ctrDataGridView.HasWritableCell(dgvひも上下)
+
+        Me.MenuItemCancel.Enabled = True
+        '選択
+        Me.MenuItemRect.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemSquare.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemCenter.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+
+        '選択の移動
+        Me.MenuItemLeftDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+
+        '選択の拡張
+        Me.MenuItemLeftDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRightUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+
+        '操作
+        Me.MenuItemON.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemOFF.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemExchange.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+    End Sub
+
+    Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
+        ctrDataGridView.SetToClipBoard(dgvひも上下)
+        SetSelectedCellValue(dgvひも上下, False)
+    End Sub
+
+    Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
+        ctrDataGridView.SetToClipBoard(dgvひも上下)
+        dgvひも上下.ClearSelection()
+    End Sub
+
+    Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
+        'IsNewの行はありません
+        ctrDataGridView.DoPaste(dgvひも上下, Nothing)
+    End Sub
+
+    Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
+        '行は削除されません
+        SetSelectedCellValue(dgvひも上下, check_change.check_off)
+    End Sub
+
+    Private Sub MenuItemCancel_Click(sender As Object, e As EventArgs) Handles MenuItemCancel.Click
+        SendKeys.Send("{Esc}")
+    End Sub
+
+    Private Enum check_change
+        check_on
+        check_off
+        check_rev
+    End Enum
+
+    '全選択セルに指定値をセット
+    Private Shared Sub SetSelectedCellValue(ByVal dgv As DataGridView, ByVal val As check_change)
+        '選択セル
+        For Each cell As DataGridViewCell In dgv.SelectedCells
+            If Not cell.ReadOnly AndAlso cell.Visible Then
+                If val = check_change.check_on Then
+                    cell.Value = 1
+                ElseIf val = check_change.check_off Then
+                    cell.Value = 0
+                ElseIf val = check_change.check_rev Then
+                    cell.Value = Not cell.Value
+                End If
+            End If
+        Next
+        '行選択がある時 TODO:revert時の重複操作
+        If dgv.SelectedRows.Count > 0 Then
+            For Each row As DataGridViewRow In dgv.SelectedRows
+                For Each cell As DataGridViewCell In row.Cells
+                    If Not cell.ReadOnly AndAlso cell.Visible Then
+                        If val = check_change.check_on Then
+                            cell.Value = 1
+                        ElseIf val = check_change.check_off Then
+                            cell.Value = 0
+                        ElseIf val = check_change.check_rev Then
+                            cell.Value = Not cell.Value
+                        End If
+                    End If
+                Next
+            Next
+        End If
+        '
+    End Sub
+
+    'チェックON
+    Private Sub MenuItemON_Click(sender As Object, e As EventArgs) Handles MenuItemON.Click
+        SetSelectedCellValue(dgvひも上下, check_change.check_on)
+        BindingSourceひも上下.Current.row.acceptchanges()
+    End Sub
+
+    'チェックOFF
+    Private Sub MenuItemOFF_Click(sender As Object, e As EventArgs) Handles MenuItemOFF.Click
+        SetSelectedCellValue(dgvひも上下, check_change.check_off)
+        BindingSourceひも上下.Current.row.acceptchanges()
+    End Sub
+
+    '入れ替え
+    Private Sub MenuItemExchange_Click(sender As Object, e As EventArgs) Handles MenuItemExchange.Click
+        SetSelectedCellValue(dgvひも上下, check_change.check_rev)
+        BindingSourceひも上下.Current.row.acceptchanges()
+    End Sub
+
+
+    '矩形選択
+    Private Sub MenuItemRect_Click(sender As Object, e As EventArgs) Handles MenuItemRect.Click
+        Dim gridsel As New CDataGridSelection
+        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+            gridsel.GridCellsSelect(dgvひも上下)
+        End If
+        Debug.Print("矩形選択")
+    End Sub
+
+    '正方形選択
+    Private Sub MenuItemSquare_Click(sender As Object, e As EventArgs) Handles MenuItemSquare.Click
+        Debug.Print("正方形選択")
+    End Sub
+
+    '中心点
+    Private Sub MenuItemCenter_Click(sender As Object, e As EventArgs) Handles MenuItemCenter.Click
+        Debug.Print("中心点")
+    End Sub
+
+
+    '左下移動
+    Private Sub MenuItemLeftDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftDownMove.Click
+        Debug.Print("左下移動")
+    End Sub
+
+    '下移動
+    Private Sub MenuItemDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemDownMove.Click
+        Debug.Print("下移動")
+    End Sub
+
+    '右下移動
+    Private Sub MenuItemRightDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightDownMove.Click
+        Debug.Print("右下移動")
+    End Sub
+
+    '左移動
+    Private Sub MenuItemLeftMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftMove.Click
+        Debug.Print("左移動")
+    End Sub
+
+    '右移動
+    Private Sub MenuItemRightMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightMove.Click
+        Debug.Print("右移動")
+    End Sub
+
+    '左上移動
+    Private Sub MenuItemLeftUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftUpMove.Click
+        Debug.Print("左上移動")
+    End Sub
+
+    '上移動
+    Private Sub MenuItemUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemUpMove.Click
+        Debug.Print("上移動")
+    End Sub
+
+    '右上移動
+    Private Sub MenuItemRightUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightUpMove.Click
+        Debug.Print("右上移動")
+    End Sub
+
+    '左下拡張
+    Private Sub MenuItemLeftDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftDownExt.Click
+        Debug.Print("左下拡張")
+    End Sub
+
+    '下拡張
+    Private Sub MenuItemDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemDownExt.Click
+        Debug.Print("下拡張")
+    End Sub
+
+    '右下拡張
+    Private Sub MenuItemRightDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightDownExt.Click
+        Debug.Print("右下拡張")
+    End Sub
+
+    '左拡張
+    Private Sub MenuItemLeftExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftExt.Click
+        Debug.Print("左拡張")
+    End Sub
+
+    '右拡張
+    Private Sub MenuItemRightExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightExt.Click
+        Debug.Print("右拡張")
+    End Sub
+
+    '左上拡張
+    Private Sub MenuItemLeftUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftUpExt.Click
+        Debug.Print("左上拡張")
+    End Sub
+
+    '上拡張
+    Private Sub MenuItemUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemUpExt.Click
+        Debug.Print("上拡張")
+    End Sub
+
+    '右上拡張
+    Private Sub MenuItemRightUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightUpExt.Click
+        Debug.Print("右上拡張")
     End Sub
 
 

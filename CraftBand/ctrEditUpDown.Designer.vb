@@ -54,7 +54,7 @@ Partial Class ctrEditUpDown
         Me.lbl本_水平 = New System.Windows.Forms.Label()
         Me.lbl水平に = New System.Windows.Forms.Label()
         Me.lbl開始位置 = New System.Windows.Forms.Label()
-        Me.dgvひも上下 = New CraftBand.ctrDataGridView()
+        Me.dgvひも上下 = New System.Windows.Forms.DataGridView()
         Me.Index = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CheckBox01 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox02 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -155,12 +155,46 @@ Partial Class ctrEditUpDown
         Me.CheckBox97 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox98 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.CheckBox99 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.GridContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.MenuItemCopy = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemCut = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemPaste = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemDelete = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuItemRect = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemSquare = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemCenter = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuItemLeftDownMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemDownMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightDownMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemLeftMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemLeftUpMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemUpMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightUpMove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuItemLeftDownExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemDownExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightDownExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemLeftExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemLeftUpExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemUpExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemRightUpExt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuItemON = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemOFF = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemExchange = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MenuItemCancel = New System.Windows.Forms.ToolStripMenuItem()
         Me.BindingSourceひも上下 = New System.Windows.Forms.BindingSource(Me.components)
         Me.Panel = New System.Windows.Forms.Panel()
         Me.grp設定ファイル.SuspendLayout()
         CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud水平に, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvひも上下, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GridContextMenuStrip.SuspendLayout()
         CType(Me.BindingSourceひも上下, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel.SuspendLayout()
         Me.SuspendLayout()
@@ -494,6 +528,7 @@ Partial Class ctrEditUpDown
         Me.dgvひも上下.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvひも上下.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvひも上下.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Index, Me.CheckBox01, Me.CheckBox02, Me.CheckBox03, Me.CheckBox04, Me.CheckBox05, Me.CheckBox06, Me.CheckBox07, Me.CheckBox08, Me.CheckBox09, Me.CheckBox10, Me.CheckBox11, Me.CheckBox12, Me.CheckBox13, Me.CheckBox14, Me.CheckBox15, Me.CheckBox16, Me.CheckBox17, Me.CheckBox18, Me.CheckBox19, Me.CheckBox20, Me.CheckBox21, Me.CheckBox22, Me.CheckBox23, Me.CheckBox24, Me.CheckBox25, Me.CheckBox26, Me.CheckBox27, Me.CheckBox28, Me.CheckBox29, Me.CheckBox30, Me.CheckBox31, Me.CheckBox32, Me.CheckBox33, Me.CheckBox34, Me.CheckBox35, Me.CheckBox36, Me.CheckBox37, Me.CheckBox38, Me.CheckBox39, Me.CheckBox40, Me.CheckBox41, Me.CheckBox42, Me.CheckBox43, Me.CheckBox44, Me.CheckBox45, Me.CheckBox46, Me.CheckBox47, Me.CheckBox48, Me.CheckBox49, Me.CheckBox50, Me.CheckBox51, Me.CheckBox52, Me.CheckBox53, Me.CheckBox54, Me.CheckBox55, Me.CheckBox56, Me.CheckBox57, Me.CheckBox58, Me.CheckBox59, Me.CheckBox60, Me.CheckBox61, Me.CheckBox62, Me.CheckBox63, Me.CheckBox64, Me.CheckBox65, Me.CheckBox66, Me.CheckBox67, Me.CheckBox68, Me.CheckBox69, Me.CheckBox70, Me.CheckBox71, Me.CheckBox72, Me.CheckBox73, Me.CheckBox74, Me.CheckBox75, Me.CheckBox76, Me.CheckBox77, Me.CheckBox78, Me.CheckBox79, Me.CheckBox80, Me.CheckBox81, Me.CheckBox82, Me.CheckBox83, Me.CheckBox84, Me.CheckBox85, Me.CheckBox86, Me.CheckBox87, Me.CheckBox88, Me.CheckBox89, Me.CheckBox90, Me.CheckBox91, Me.CheckBox92, Me.CheckBox93, Me.CheckBox94, Me.CheckBox95, Me.CheckBox96, Me.CheckBox97, Me.CheckBox98, Me.CheckBox99})
+        Me.dgvひも上下.ContextMenuStrip = Me.GridContextMenuStrip
         Me.dgvひも上下.DataSource = Me.BindingSourceひも上下
         Me.dgvひも上下.Location = New System.Drawing.Point(4, 156)
         Me.dgvひも上下.Name = "dgvひも上下"
@@ -1305,6 +1340,239 @@ Partial Class ctrEditUpDown
         Me.CheckBox99.Name = "CheckBox99"
         Me.CheckBox99.Width = 50
         '
+        'GridContextMenuStrip
+        '
+        Me.GridContextMenuStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.GridContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItemCopy, Me.MenuItemCut, Me.MenuItemPaste, Me.MenuItemDelete, Me.ToolStripSeparator1, Me.MenuItemRect, Me.MenuItemSquare, Me.MenuItemCenter, Me.ToolStripSeparator4, Me.MenuItemLeftDownMove, Me.MenuItemDownMove, Me.MenuItemRightDownMove, Me.MenuItemLeftMove, Me.MenuItemRightMove, Me.MenuItemLeftUpMove, Me.MenuItemUpMove, Me.MenuItemRightUpMove, Me.ToolStripSeparator5, Me.MenuItemLeftDownExt, Me.MenuItemDownExt, Me.MenuItemRightDownExt, Me.MenuItemLeftExt, Me.MenuItemRightExt, Me.MenuItemLeftUpExt, Me.MenuItemUpExt, Me.MenuItemRightUpExt, Me.ToolStripSeparator2, Me.MenuItemON, Me.MenuItemOFF, Me.MenuItemExchange, Me.ToolStripSeparator3, Me.MenuItemCancel})
+        Me.GridContextMenuStrip.Name = "ContextMenuStrip"
+        Me.GridContextMenuStrip.Size = New System.Drawing.Size(296, 682)
+        '
+        'MenuItemCopy
+        '
+        Me.MenuItemCopy.Name = "MenuItemCopy"
+        Me.MenuItemCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
+        Me.MenuItemCopy.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemCopy.Text = "コピー(&C)"
+        '
+        'MenuItemCut
+        '
+        Me.MenuItemCut.Name = "MenuItemCut"
+        Me.MenuItemCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
+        Me.MenuItemCut.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemCut.Text = "切り取り(&T)"
+        '
+        'MenuItemPaste
+        '
+        Me.MenuItemPaste.Name = "MenuItemPaste"
+        Me.MenuItemPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
+        Me.MenuItemPaste.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemPaste.Text = "貼り付け(&P)"
+        '
+        'MenuItemDelete
+        '
+        Me.MenuItemDelete.Name = "MenuItemDelete"
+        Me.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
+        Me.MenuItemDelete.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemDelete.Text = "削除(&D)"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(292, 6)
+        '
+        'MenuItemRect
+        '
+        Me.MenuItemRect.Name = "MenuItemRect"
+        Me.MenuItemRect.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.R), System.Windows.Forms.Keys)
+        Me.MenuItemRect.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRect.Text = "矩形選択(&R)"
+        '
+        'MenuItemSquare
+        '
+        Me.MenuItemSquare.Name = "MenuItemSquare"
+        Me.MenuItemSquare.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
+        Me.MenuItemSquare.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemSquare.Text = "正方形選択(&S)"
+        '
+        'MenuItemCenter
+        '
+        Me.MenuItemCenter.Name = "MenuItemCenter"
+        Me.MenuItemCenter.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad5), System.Windows.Forms.Keys)
+        Me.MenuItemCenter.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemCenter.Text = "中心点(&5)"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(292, 6)
+        '
+        'MenuItemLeftDownMove
+        '
+        Me.MenuItemLeftDownMove.Name = "MenuItemLeftDownMove"
+        Me.MenuItemLeftDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad1), System.Windows.Forms.Keys)
+        Me.MenuItemLeftDownMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftDownMove.Text = "左下移動(&1)"
+        '
+        'MenuItemDownMove
+        '
+        Me.MenuItemDownMove.Name = "MenuItemDownMove"
+        Me.MenuItemDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad2), System.Windows.Forms.Keys)
+        Me.MenuItemDownMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemDownMove.Text = "下　移動(&2)"
+        '
+        'MenuItemRightDownMove
+        '
+        Me.MenuItemRightDownMove.Name = "MenuItemRightDownMove"
+        Me.MenuItemRightDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad3), System.Windows.Forms.Keys)
+        Me.MenuItemRightDownMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightDownMove.Text = "右下移動(&3)"
+        '
+        'MenuItemLeftMove
+        '
+        Me.MenuItemLeftMove.Name = "MenuItemLeftMove"
+        Me.MenuItemLeftMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad4), System.Windows.Forms.Keys)
+        Me.MenuItemLeftMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftMove.Text = "左　移動(&4)"
+        '
+        'MenuItemRightMove
+        '
+        Me.MenuItemRightMove.Name = "MenuItemRightMove"
+        Me.MenuItemRightMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad6), System.Windows.Forms.Keys)
+        Me.MenuItemRightMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightMove.Text = "右　移動(&6)"
+        '
+        'MenuItemLeftUpMove
+        '
+        Me.MenuItemLeftUpMove.Name = "MenuItemLeftUpMove"
+        Me.MenuItemLeftUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad7), System.Windows.Forms.Keys)
+        Me.MenuItemLeftUpMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftUpMove.Text = "左上移動(&7)"
+        '
+        'MenuItemUpMove
+        '
+        Me.MenuItemUpMove.Name = "MenuItemUpMove"
+        Me.MenuItemUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad8), System.Windows.Forms.Keys)
+        Me.MenuItemUpMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemUpMove.Text = "上　移動(&8)"
+        '
+        'MenuItemRightUpMove
+        '
+        Me.MenuItemRightUpMove.Name = "MenuItemRightUpMove"
+        Me.MenuItemRightUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad9), System.Windows.Forms.Keys)
+        Me.MenuItemRightUpMove.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightUpMove.Text = "右上移動(&9)"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(292, 6)
+        '
+        'MenuItemLeftDownExt
+        '
+        Me.MenuItemLeftDownExt.Name = "MenuItemLeftDownExt"
+        Me.MenuItemLeftDownExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad1), System.Windows.Forms.Keys)
+        Me.MenuItemLeftDownExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftDownExt.Text = "左下拡張(&J)"
+        '
+        'MenuItemDownExt
+        '
+        Me.MenuItemDownExt.Name = "MenuItemDownExt"
+        Me.MenuItemDownExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad2), System.Windows.Forms.Keys)
+        Me.MenuItemDownExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemDownExt.Text = "下　拡張(&K)"
+        '
+        'MenuItemRightDownExt
+        '
+        Me.MenuItemRightDownExt.Name = "MenuItemRightDownExt"
+        Me.MenuItemRightDownExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad3), System.Windows.Forms.Keys)
+        Me.MenuItemRightDownExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightDownExt.Text = "右下拡張(&L)"
+        '
+        'MenuItemLeftExt
+        '
+        Me.MenuItemLeftExt.Name = "MenuItemLeftExt"
+        Me.MenuItemLeftExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad4), System.Windows.Forms.Keys)
+        Me.MenuItemLeftExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftExt.Text = "左　拡張(&U)"
+        '
+        'MenuItemRightExt
+        '
+        Me.MenuItemRightExt.Name = "MenuItemRightExt"
+        Me.MenuItemRightExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad6), System.Windows.Forms.Keys)
+        Me.MenuItemRightExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightExt.Text = "右　拡張(&O)"
+        '
+        'MenuItemLeftUpExt
+        '
+        Me.MenuItemLeftUpExt.Name = "MenuItemLeftUpExt"
+        Me.MenuItemLeftUpExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad7), System.Windows.Forms.Keys)
+        Me.MenuItemLeftUpExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemLeftUpExt.Text = "左上拡張(&N)"
+        '
+        'MenuItemUpExt
+        '
+        Me.MenuItemUpExt.Name = "MenuItemUpExt"
+        Me.MenuItemUpExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad8), System.Windows.Forms.Keys)
+        Me.MenuItemUpExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemUpExt.Text = "上　拡張(&H)"
+        '
+        'MenuItemRightUpExt
+        '
+        Me.MenuItemRightUpExt.Name = "MenuItemRightUpExt"
+        Me.MenuItemRightUpExt.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.NumPad9), System.Windows.Forms.Keys)
+        Me.MenuItemRightUpExt.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemRightUpExt.Text = "右上拡張(&Y)"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(292, 6)
+        '
+        'MenuItemON
+        '
+        Me.MenuItemON.Name = "MenuItemON"
+        Me.MenuItemON.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
+        Me.MenuItemON.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemON.Text = "チェックON(&A)"
+        '
+        'MenuItemOFF
+        '
+        Me.MenuItemOFF.Name = "MenuItemOFF"
+        Me.MenuItemOFF.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
+        Me.MenuItemOFF.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemOFF.Text = "チェックOFF(&Z)"
+        '
+        'MenuItemExchange
+        '
+        Me.MenuItemExchange.Name = "MenuItemExchange"
+        Me.MenuItemExchange.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
+        Me.MenuItemExchange.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemExchange.Text = "入れ替え(&X)"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(292, 6)
+        '
+        'MenuItemCancel
+        '
+        Me.MenuItemCancel.Name = "MenuItemCancel"
+        Me.MenuItemCancel.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemCancel.Text = "キャンセル(Esc)"
+        '
         'BindingSourceひも上下
         '
         Me.BindingSourceひも上下.DataMember = "tblCheckBox"
@@ -1361,6 +1629,7 @@ Partial Class ctrEditUpDown
         CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nud水平に, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgvひも上下, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GridContextMenuStrip.ResumeLayout(False)
         CType(Me.BindingSourceひも上下, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel.ResumeLayout(False)
         Me.Panel.PerformLayout()
@@ -1400,6 +1669,18 @@ Partial Class ctrEditUpDown
     Friend WithEvents lbl水平に As Windows.Forms.Label
     Friend WithEvents lbl開始位置 As Windows.Forms.Label
     Friend WithEvents btnランダム As Windows.Forms.Button
+    Friend WithEvents dgvひも上下 As Windows.Forms.DataGridView
+    Friend WithEvents Panel As Windows.Forms.Panel
+    Friend WithEvents GridContextMenuStrip As Windows.Forms.ContextMenuStrip
+    Friend WithEvents MenuItemCut As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemCopy As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemPaste As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemDelete As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemCancel As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuItemLeftDownMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemDownMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As Windows.Forms.ToolStripSeparator
     Friend WithEvents Index As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents CheckBox01 As Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents CheckBox02 As Windows.Forms.DataGridViewCheckBoxColumn
@@ -1500,6 +1781,27 @@ Partial Class ctrEditUpDown
     Friend WithEvents CheckBox97 As Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents CheckBox98 As Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents CheckBox99 As Windows.Forms.DataGridViewCheckBoxColumn
-    Friend WithEvents dgvひも上下 As ctrDataGridView
-    Friend WithEvents Panel As Windows.Forms.Panel
+    Friend WithEvents MenuItemRightDownMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemLeftMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemON As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemOFF As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuItemRect As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemSquare As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemCenter As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuItemRightMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemLeftUpMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemUpMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemRightUpMove As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuItemLeftDownExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemDownExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemRightDownExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemLeftExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemRightExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemLeftUpExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemUpExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemRightUpExt As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemExchange As Windows.Forms.ToolStripMenuItem
 End Class
