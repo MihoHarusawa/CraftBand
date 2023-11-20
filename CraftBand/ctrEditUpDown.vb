@@ -1,5 +1,7 @@
 ﻿Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms
 Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
@@ -9,6 +11,11 @@ Public Class ctrEditUpDown
 
     'Panelを置き、各ControlはPanelにAnchorし、Panelをコードでリサイズする
     '※ユーザーコントロールとしてのサイズでは制御できない・表示がずれる
+
+    Const cDataStartColumnIndex As Integer = 1 'CheckBoxの開始位置
+    'DataGridViewの表示はColumnは1～水平数・Rowは1～垂直数-1
+    'ColumnIndex=0 には<Index>フィールド値を非表示でセット
+    'Descのケースも含め、表示された状態に対して、上・下・左・右で編集します
 
     Public Property FormCaption As String
 
@@ -48,6 +55,7 @@ Public Class ctrEditUpDown
     Dim _UpdownChanged As Boolean = False
 
     Dim _Calc As New Calc
+    Dim _DataGridSelection As CDataGridSelection = Nothing
 
 #Region "公開関数"
 
@@ -74,6 +82,7 @@ Public Class ctrEditUpDown
 
         txt上下のメモ.Text = updown.Memo
         _UpdownChanged = False
+        _DataGridSelection = New CDataGridSelection(dgvひも上下)
         setDataSourceUpDown(updown)
 
         dgvひも上下.Refresh()
@@ -135,6 +144,7 @@ Public Class ctrEditUpDown
         End If
         BindingSourceひも上下.Sort = Nothing
         BindingSourceひも上下.DataSource = Nothing
+        _DataGridSelection = Nothing
 
         Panel.Enabled = False
         _CurrentTargetFace = enumTargetFace.NoDef
@@ -378,8 +388,10 @@ Public Class ctrEditUpDown
     End Sub
 
     Private Sub btn上下交換_Click(sender As Object, e As EventArgs) Handles btn上下交換.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+        If _DataGridSelection Is Nothing Then
+            Exit Sub
+        End If
+        If Not _DataGridSelection.GetSelected() OrElse Not _DataGridSelection.IsRectangleSelect Then
             '全範囲を{0}します。よろしいですか？
             If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
@@ -387,7 +399,7 @@ Public Class ctrEditUpDown
             End If
         End If
 
-        Dim updown As clsUpDown = _Calc.updown上下交換(gridsel.SubRange(dgvひも上下))
+        Dim updown As clsUpDown = _Calc.updown上下交換(_DataGridSelection.SubRange())
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
@@ -398,12 +410,14 @@ Public Class ctrEditUpDown
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
+        _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
     End Sub
 
     Private Sub btn左右反転_Click(sender As Object, e As EventArgs) Handles btn左右反転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+        If _DataGridSelection Is Nothing Then
+            Exit Sub
+        End If
+        If Not _DataGridSelection.GetSelected() OrElse Not _DataGridSelection.IsRectangleSelect Then
             '全範囲を{0}します。よろしいですか？
             If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
@@ -411,7 +425,7 @@ Public Class ctrEditUpDown
             End If
         End If
 
-        Dim updown As clsUpDown = _Calc.updown左右反転(gridsel.SubRange(dgvひも上下))
+        Dim updown As clsUpDown = _Calc.updown左右反転(_DataGridSelection.SubRange())
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
@@ -422,12 +436,14 @@ Public Class ctrEditUpDown
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
+        _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
     End Sub
 
     Private Sub btn天地反転_Click(sender As Object, e As EventArgs) Handles btn天地反転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
+        If _DataGridSelection Is Nothing Then
+            Exit Sub
+        End If
+        If Not _DataGridSelection.GetSelected() OrElse Not _DataGridSelection.IsRectangleSelect Then
             '全範囲を{0}します。よろしいですか？
             If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
@@ -435,7 +451,7 @@ Public Class ctrEditUpDown
             End If
         End If
 
-        Dim updown As clsUpDown = _Calc.updown天地反転(gridsel.SubRange(dgvひも上下))
+        Dim updown As clsUpDown = _Calc.updown天地反転(_DataGridSelection.SubRange())
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
@@ -446,12 +462,14 @@ Public Class ctrEditUpDown
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
+        _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
     End Sub
 
     Private Sub btn右回転_Click(sender As Object, e As EventArgs) Handles btn右回転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
+        If _DataGridSelection Is Nothing Then
+            Exit Sub
+        End If
+        If Not _DataGridSelection.GetSelected() OrElse Not _DataGridSelection.IsSquareSelect Then
             '全範囲を{0}します。よろしいですか？
             If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
                             FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
@@ -460,7 +478,7 @@ Public Class ctrEditUpDown
         End If
 
         Dim desc As Boolean = _Is側面_下から上へ AndAlso IsSide(_CurrentTargetFace)
-        Dim updown As clsUpDown = _Calc.updown右回転(desc, gridsel.SubRange(dgvひも上下))
+        Dim updown As clsUpDown = _Calc.updown右回転(desc, _DataGridSelection.SubRange())
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
@@ -471,21 +489,23 @@ Public Class ctrEditUpDown
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
+        _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
     End Sub
 
     Private Sub btn左回転_Click(sender As Object, e As EventArgs) Handles btn左回転.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) OrElse Not gridsel.IsSquareSelect Then
+        If _DataGridSelection Is Nothing Then
+            Exit Sub
+        End If
+        If Not _DataGridSelection.GetSelected() OrElse Not _DataGridSelection.IsSquareSelect Then
             '全範囲を{0}します。よろしいですか？
             If MessageBox.Show(String.Format(My.Resources.AskTargetAllRange, buttenText(sender)),
-                            FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                                FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
                 Exit Sub
             End If
         End If
 
         Dim desc As Boolean = _Is側面_下から上へ AndAlso IsSide(_CurrentTargetFace)
-        Dim updown As clsUpDown = _Calc.updown右回転(Not desc, gridsel.SubRange(dgvひも上下))
+        Dim updown As clsUpDown = _Calc.updown右回転(Not desc, _DataGridSelection.SubRange())
         If updown Is Nothing Then
             setDataSourceUpDown(Nothing)
             '{0}できませんでした。リセットしてやり直してください。
@@ -496,7 +516,7 @@ Public Class ctrEditUpDown
         End If
         dgvひも上下.Refresh()
         _UpdownChanged = True
-        gridsel.GridCellsSelect(dgvひも上下)
+        _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
     End Sub
 
     Private Sub btnシフト_Click(sender As Object, e As EventArgs) Handles btnシフト.Click
@@ -784,121 +804,321 @@ Public Class ctrEditUpDown
 
     'DataGridViewの選択
     Private Class CDataGridSelection
+        Dim _DGV As DataGridView = Nothing
+
         '選択の最小と最大
-        Dim ColumnIndexFrom As Integer = Integer.MaxValue
-        Dim ColumnIndexTo As Integer = Integer.MinValue
-        Dim RowIndexFrom As Integer = Integer.MaxValue
-        Dim RowIndexTo As Integer = Integer.MinValue
-        Dim SelectedCellsCount As Integer = 0
+        Dim _ColumnIndexFrom As Integer = Integer.MaxValue
+        Dim _ColumnIndexTo As Integer = Integer.MinValue
+        Dim _RowIndexFrom As Integer = Integer.MaxValue
+        Dim _RowIndexTo As Integer = Integer.MinValue
+
+        '表示されているColumnとRowの数
+        Dim _ColumnCount As Integer = 0 '表示列のみ 0は非表示なので1～_ColumnCount
+        Dim _RowCount As Integer = 0 '行はこの数 0～_RowCount-1
+
+        'セルの選択状態
+        Dim _CellSelected(cMaxUpdownColumns, cMaxUpdownColumns) As Boolean
+        Dim _CellSelectedCount As Integer = 0
 
 
+        Sub New(ByVal dgv As DataGridView)
+            _DGV = dgv
+        End Sub
+
+        'データとして使用可能な状態であること
         ReadOnly Property IsValid As Boolean
             Get
-                Return (ColumnIndexFrom <= ColumnIndexTo) AndAlso (RowIndexFrom <= RowIndexTo)
+                Return _DGV IsNot Nothing AndAlso cDataStartColumnIndex < _ColumnCount AndAlso 0 < _RowCount
             End Get
         End Property
 
-        ReadOnly Property FromToRangeCells As Integer
+        'セルの選択数
+        ReadOnly Property CellSelectedCount As Integer
             Get
-                If Not IsValid Then
-                    Return 0
-                Else
-                    Return (ColumnIndexTo - ColumnIndexFrom + 1) * (RowIndexTo - RowIndexFrom + 1)
-                End If
+                Return _CellSelectedCount
             End Get
         End Property
 
-        '矩形選択
-        ReadOnly Property IsRangeSelect As Boolean
+        '少なくとも1点のセルが選択されており、内部値が正しくセットされている
+        ReadOnly Property IsCellSelected As Boolean
             Get
-                Return 0 < SelectedCellsCount AndAlso SelectedCellsCount = FromToRangeCells
+                Return IsValid AndAlso 0 < _CellSelectedCount AndAlso
+                    cDataStartColumnIndex <= _ColumnIndexFrom AndAlso _ColumnIndexFrom <= _ColumnCount AndAlso _ColumnIndexFrom <= _ColumnIndexTo AndAlso
+                    0 <= _RowIndexFrom AndAlso _RowIndexFrom < _RowCount AndAlso _RowIndexFrom <= _RowIndexTo
             End Get
         End Property
 
-        '正方形選択
+        '矩形に選択されている
+        ReadOnly Property IsRectangleSelect As Boolean
+            Get
+                Return IsCellSelected AndAlso
+                    _CellSelectedCount = (_ColumnIndexTo - _ColumnIndexFrom + 1) * (_RowIndexTo - _RowIndexFrom + 1)
+            End Get
+        End Property
+
+        '正方形に選択されている
         ReadOnly Property IsSquareSelect As Boolean
             Get
-                Return IsRangeSelect AndAlso (ColumnIndexTo - ColumnIndexFrom) = (RowIndexTo - RowIndexFrom)
+                Return IsRectangleSelect AndAlso (_ColumnIndexTo - _ColumnIndexFrom) = (_RowIndexTo - _RowIndexFrom)
             End Get
         End Property
 
+        'サイズを変えて初期化
+        Private Sub ClearCellSelected(ByVal colcount As Integer, rowcount As Integer)
+            _ColumnCount = colcount
+            _RowCount = rowcount
+            ClearCellSelected()
+        End Sub
 
-        Private WriteOnly Property ColumnnIndex As Integer
-            Set(value As Integer)
-                If value < ColumnIndexFrom Then
-                    ColumnIndexFrom = value
-                End If
-                If ColumnIndexTo < value Then
-                    ColumnIndexTo = value
-                End If
-            End Set
-        End Property
+        'セルの選択を初期化
+        Private Sub ClearCellSelected()
+            Array.Clear(_CellSelected, False, _CellSelected.Length)
 
-        Private WriteOnly Property RowIndex As Integer
-            Set(value As Integer)
-                If value < RowIndexFrom Then
-                    RowIndexFrom = value
+            _CellSelectedCount = 0
+            _ColumnIndexFrom = Integer.MaxValue
+            _ColumnIndexTo = Integer.MinValue
+            _RowIndexFrom = Integer.MaxValue
+            _RowIndexTo = Integer.MinValue
+        End Sub
+
+        'セルの選択をセット(表示かつ対象範囲内のみ)
+        Private Sub setCellSelected(ByVal col As Integer, row As Integer)
+            If col < cDataStartColumnIndex OrElse _ColumnCount < col OrElse row < 0 OrElse _RowCount <= row Then
+                Exit Sub
+            End If
+            If Not _CellSelected(col, row) Then
+                _CellSelected(col, row) = True
+                '
+                If col < _ColumnIndexFrom Then
+                    _ColumnIndexFrom = col
                 End If
-                If RowIndexTo < value Then
-                    RowIndexTo = value
+                If _ColumnIndexTo < col Then
+                    _ColumnIndexTo = col
                 End If
-            End Set
-        End Property
+                '
+                If row < _RowIndexFrom Then
+                    _RowIndexFrom = row
+                End If
+                If _RowIndexTo < row Then
+                    _RowIndexTo = row
+                End If
+
+                'DataGridView.SelectedCells.Countは行選択の場合非表示のセルも含みますので独自にカウントします
+                _CellSelectedCount += 1
+            End If
+        End Sub
+        Private Sub setCellSelected(cell As DataGridViewCell)
+            If cell.Visible Then
+                setCellSelected(cell.ColumnIndex, cell.RowIndex)
+            End If
+        End Sub
+
 
         'DataGridViewで選択されているセルを取得
-        Function GridSelectedCells(ByVal dgv As DataGridView) As Boolean
-            '行選択
-            If 0 < dgv.SelectedRows.Count Then
+        '戻り値: True=1点以上の選択がある　False=状態が不正もしくは選択がない
+        Function GetSelected() As Boolean
+            If _DGV Is Nothing Then
                 Return False
             End If
 
-            'セル選択
-            For Each c As DataGridViewCell In dgv.SelectedCells
-                ColumnnIndex = c.ColumnIndex
-                RowIndex = c.RowIndex
+            '一旦無効化
+            _ColumnCount = 0
+            _RowCount = 0
+
+            'サイズの初期化とクリア
+            Dim rowcount As Integer = _DGV.Rows.Count
+            If rowcount <= 0 Then
+                Return False
+            End If
+            Dim colcount As Integer = 0
+            For col As Integer = _DGV.Columns.Count - 1 To cDataStartColumnIndex Step -1
+                If _DGV.Columns(col).Visible Then
+                    colcount = col
+                    Exit For
+                End If
+            Next
+            If colcount <= 0 Then
+                Return False
+            End If
+            ClearCellSelected(colcount, rowcount)
+
+            '行選択からセル選択を取得
+            If 0 < _DGV.SelectedRows.Count Then
+                For Each row As DataGridViewRow In _DGV.SelectedRows
+                    For col As Integer = cDataStartColumnIndex To colcount
+                        setCellSelected(col, row.Index)
+                    Next
+                Next
+            End If
+
+            'セル選択を取得
+            For Each cell As DataGridViewCell In _DGV.SelectedCells
+                setCellSelected(cell)
             Next
 
-            '数が一致
-            SelectedCellsCount = dgv.SelectedCells.Count
-            Return IsRangeSelect
+            Return IsCellSelected
         End Function
 
-        Function GridCellsSelect(ByVal dgv As DataGridView) As Boolean
-            '範囲選択であること
-            'If Not IsRangeSelect Then
-            '    Return False
-            'End If
-
-            '範囲を選択
-            dgv.ClearSelection()
-            For r As Integer = RowIndexFrom To RowIndexTo
-                For c As Integer = ColumnIndexFrom To ColumnIndexTo
-                    dgv.Rows(r).Cells(c).Selected = True
+        '選択を移動する
+        Function MoveSelection(ByVal col_ref As Integer, ByVal row_ref As Integer) As Boolean
+            If Not IsValid OrElse (col_ref = 0 AndAlso row_ref = 0) Then
+                Return False
+            End If
+            Dim save(,) As Boolean = DirectCast(_CellSelected.Clone(), Boolean(,))
+            ClearCellSelected()
+            For row As Integer = 0 To _RowCount - 1
+                For col As Integer = cDataStartColumnIndex To _ColumnCount
+                    If save(col, row) Then
+                        setCellSelected(col + col_ref, row + row_ref)
+                    End If
                 Next
             Next
 
-            SelectedCellsCount = dgv.SelectedCells.Count
+            Return SetRangeCellSelected(range_type.range_selected)
+        End Function
+
+        '選択を拡張する
+        Function ExtentSelection(ByVal col_ref As Integer, ByVal row_ref As Integer) As Boolean
+            If Not IsValid OrElse (col_ref = 0 AndAlso row_ref = 0) Then
+                Return False
+            End If
+            Dim save(,) As Boolean = DirectCast(_CellSelected.Clone(), Boolean(,))
+            For row As Integer = 0 To _RowCount - 1
+                For col As Integer = cDataStartColumnIndex To _ColumnCount
+                    If save(col, row) Then
+                        setCellSelected(col + col_ref, row + row_ref)
+                    End If
+                Next
+            Next
+
+            Return SetRangeCellSelected(range_type.range_selected)
+        End Function
+
+
+        Enum check_value
+            check_on
+            check_off
+            check_revert
+        End Enum
+
+        '全選択セルに指定値をセット
+        Function SetSelectedCellValue(ByVal val As check_value) As Boolean
+            If Not IsCellSelected Then
+                Return False
+            End If
+            For row As Integer = 0 To _RowCount - 1
+                For col As Integer = cDataStartColumnIndex To _ColumnCount
+                    If _CellSelected(col, row) Then
+                        If val = check_value.check_on Then
+                            _DGV.Rows(row).Cells(col).Value = True
+                        ElseIf val = check_value.check_off Then
+                            _DGV.Rows(row).Cells(col).Value = False
+                        ElseIf val = check_value.check_revert Then
+                            _DGV.Rows(row).Cells(col).Value = Not _DGV.Rows(row).Cells(col).Value
+                        End If
+                    End If
+                Next
+            Next
             Return True
         End Function
 
-        Function SubRange(ByVal dgv As DataGridView) As CSubRange
+
+
+        Enum range_type
+            range_clear
+            range_all
+            range_selected
+            range_rectangle
+            range_square
+            range_center
+        End Enum
+
+        '指定のセルを選択する
+        Function SetRangeCellSelected(ByVal range As range_type) As Boolean
+
+            Dim rfrom As Integer = _RowIndexFrom
+            Dim rto As Integer = _RowIndexTo
+            Dim cfrom As Integer = _ColumnIndexFrom
+            Dim cto As Integer = _ColumnIndexTo
+
+            Select Case range
+                Case range_type.range_clear
+                    _DGV.ClearSelection()
+                    Return True
+
+                Case range_type.range_all
+                    rfrom = 0
+                    rto = _RowCount - 1
+                    cfrom = cDataStartColumnIndex
+                    cto = _ColumnCount
+
+                Case range_type.range_selected
+                    _DGV.ClearSelection()
+                    For row As Integer = 0 To _RowCount - 1
+                        For col As Integer = cDataStartColumnIndex To _ColumnCount
+                            If _CellSelected(col, row) Then
+                                _DGV.Rows(row).Cells(col).Selected = True
+                            End If
+                        Next
+                    Next
+                    Return True
+
+                Case range_type.range_rectangle
+                    _DGV.ClearSelection()
+
+                Case range_type.range_square
+                    _DGV.ClearSelection()
+                    If _RowIndexTo - _RowIndexFrom < _ColumnIndexTo - _ColumnIndexFrom Then
+                        '横が大きい
+                        Dim diff As Integer = (_ColumnIndexTo - _ColumnIndexFrom) - (_RowIndexTo - _RowIndexFrom)
+                        Dim half_diff As Integer = diff / 2
+                        cfrom += half_diff
+                        cto -= diff - half_diff
+                    ElseIf _RowIndexTo - _RowIndexFrom > _ColumnIndexTo - _ColumnIndexFrom Then
+                        '縦が大きい
+                        Dim diff As Integer = (_RowIndexTo - _RowIndexFrom) - (_ColumnIndexTo - _ColumnIndexFrom)
+                        Dim half_diff As Integer = diff / 2
+                        rfrom += half_diff
+                        rto -= diff - half_diff
+                    End If
+
+                Case range_type.range_center
+                    _DGV.ClearSelection()
+                    rfrom = ((_RowCount + 1) \ 2) - 1
+                    rto = ((_RowCount \ 2) + 1) - 1
+                    cfrom = (_ColumnCount + 1) \ 2
+                    cto = (_ColumnCount \ 2) + 1
+
+                Case Else
+                    Return False
+            End Select
+
+            For row As Integer = rfrom To rto
+                For col As Integer = cfrom To cto
+                    _DGV.Rows(row).Cells(col).Selected = True
+                Next
+            Next
+            Return True
+        End Function
+
+        Function SubRange() As CSubRange
             '範囲選択かつ2点以上であること
-            If Not IsRangeSelect OrElse SelectedCellsCount = 1 Then
+            If Not IsRectangleSelect OrElse CellSelectedCount = 1 Then
                 Return Nothing
             End If
 
             '垂直の番号
-            Dim IndexFrom As Integer = dgv.Rows(RowIndexFrom).Cells(0).Value
-            Dim IndexTo As Integer = dgv.Rows(RowIndexTo).Cells(0).Value
+            Dim IndexFrom As Integer = _DGV.Rows(_RowIndexFrom).Cells(cDataStartColumnIndex - 1).Value
+            Dim IndexTo As Integer = _DGV.Rows(_RowIndexTo).Cells(cDataStartColumnIndex - 1).Value
             If IndexFrom <= IndexTo Then
-                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexFrom, IndexTo)
+                Return New CSubRange(_ColumnIndexFrom, _ColumnIndexTo, IndexFrom, IndexTo)
             Else
-                Return New CSubRange(ColumnIndexFrom, ColumnIndexTo, IndexTo, IndexFrom)
+                Return New CSubRange(_ColumnIndexFrom, _ColumnIndexTo, IndexTo, IndexFrom)
             End If
         End Function
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}-{1}:{2}-{3}:{4}/{5}", ColumnIndexFrom, ColumnIndexTo, RowIndexFrom, RowIndexTo, SelectedCellsCount, FromToRangeCells)
+            Return String.Format("{0}-{1}:{2}-{3}:{4}/({5},{6})", _ColumnIndexFrom, _ColumnIndexTo, _RowIndexFrom, _RowIndexTo, _CellSelectedCount, _ColumnCount, _RowCount)
         End Function
     End Class
 
@@ -1082,228 +1302,252 @@ Public Class ctrEditUpDown
     End Class
 
 
-
+#Region "コンテキストメニュー"
 
     Private Sub GridContextMenuStrip_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles GridContextMenuStrip.Opening
+        _DataGridSelection.GetSelected()
+
         '共通
         Me.MenuItemCopy.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
         Me.MenuItemCut.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
         Me.MenuItemPaste.Enabled = ctrDataGridView.IsPastable(dgvひも上下)
-        Me.MenuItemDelete.Enabled = ctrDataGridView.HasWritableCell(dgvひも上下)
-
+        Me.MenuItemDelete.Enabled = _DataGridSelection.IsCellSelected
         Me.MenuItemCancel.Enabled = True
+
         '選択
-        Me.MenuItemRect.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemSquare.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemCenter.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemRect.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemSquare.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemCenter.Enabled = _DataGridSelection.IsCellSelected
 
         '選択の移動
-        Me.MenuItemLeftDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightDownMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemLeftMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemLeftUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightUpMove.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftDownMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemDownMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightDownMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemLeftMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemLeftUpMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemUpMove.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightUpMove.Enabled = _DataGridSelection.IsCellSelected
 
         '選択の拡張
-        Me.MenuItemLeftDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightDownExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemLeftExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemLeftUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemRightUpExt.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemLeftDownExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemDownExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightDownExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemLeftExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemLeftUpExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemUpExt.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemRightUpExt.Enabled = _DataGridSelection.IsCellSelected
 
         '操作
-        Me.MenuItemON.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemOFF.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
-        Me.MenuItemExchange.Enabled = ctrDataGridView.RowOrCellSelected(dgvひも上下)
+        Me.MenuItemON.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemOFF.Enabled = _DataGridSelection.IsCellSelected
+        Me.MenuItemExchange.Enabled = _DataGridSelection.IsCellSelected
     End Sub
 
+    '共通
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
         ctrDataGridView.SetToClipBoard(dgvひも上下)
-        SetSelectedCellValue(dgvひも上下, False)
+        'チェックOFF
+        MenuItemOFF_Click(sender, e)
     End Sub
-
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
         ctrDataGridView.SetToClipBoard(dgvひも上下)
-        dgvひも上下.ClearSelection()
+        'クリアしません
     End Sub
-
     Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
         'IsNewの行はありません
         ctrDataGridView.DoPaste(dgvひも上下, Nothing)
     End Sub
-
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
-        '行は削除されません
-        SetSelectedCellValue(dgvひも上下, check_change.check_off)
+        '行は削除されないのでチェックOFFのみ
+        'チェックOFF
+        MenuItemOFF_Click(sender, e)
     End Sub
-
     Private Sub MenuItemCancel_Click(sender As Object, e As EventArgs) Handles MenuItemCancel.Click
         SendKeys.Send("{Esc}")
     End Sub
 
-    Private Enum check_change
-        check_on
-        check_off
-        check_rev
-    End Enum
-
-    '全選択セルに指定値をセット
-    Private Shared Sub SetSelectedCellValue(ByVal dgv As DataGridView, ByVal val As check_change)
-        '選択セル
-        For Each cell As DataGridViewCell In dgv.SelectedCells
-            If Not cell.ReadOnly AndAlso cell.Visible Then
-                If val = check_change.check_on Then
-                    cell.Value = 1
-                ElseIf val = check_change.check_off Then
-                    cell.Value = 0
-                ElseIf val = check_change.check_rev Then
-                    cell.Value = Not cell.Value
-                End If
-            End If
-        Next
-        '行選択がある時 TODO:revert時の重複操作
-        If dgv.SelectedRows.Count > 0 Then
-            For Each row As DataGridViewRow In dgv.SelectedRows
-                For Each cell As DataGridViewCell In row.Cells
-                    If Not cell.ReadOnly AndAlso cell.Visible Then
-                        If val = check_change.check_on Then
-                            cell.Value = 1
-                        ElseIf val = check_change.check_off Then
-                            cell.Value = 0
-                        ElseIf val = check_change.check_rev Then
-                            cell.Value = Not cell.Value
-                        End If
-                    End If
-                Next
-            Next
-        End If
-        '
-    End Sub
 
     'チェックON
     Private Sub MenuItemON_Click(sender As Object, e As EventArgs) Handles MenuItemON.Click
-        SetSelectedCellValue(dgvひも上下, check_change.check_on)
-        BindingSourceひも上下.Current.row.acceptchanges()
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetSelectedCellValue(CDataGridSelection.check_value.check_on)
+            BindingSourceひも上下.Current.row.acceptchanges()
+        End If
     End Sub
 
     'チェックOFF
     Private Sub MenuItemOFF_Click(sender As Object, e As EventArgs) Handles MenuItemOFF.Click
-        SetSelectedCellValue(dgvひも上下, check_change.check_off)
-        BindingSourceひも上下.Current.row.acceptchanges()
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetSelectedCellValue(CDataGridSelection.check_value.check_off)
+            BindingSourceひも上下.Current.row.acceptchanges()
+        End If
     End Sub
 
     '入れ替え
     Private Sub MenuItemExchange_Click(sender As Object, e As EventArgs) Handles MenuItemExchange.Click
-        SetSelectedCellValue(dgvひも上下, check_change.check_rev)
-        BindingSourceひも上下.Current.row.acceptchanges()
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetSelectedCellValue(CDataGridSelection.check_value.check_revert)
+            BindingSourceひも上下.Current.row.acceptchanges()
+        End If
     End Sub
 
 
     '矩形選択
     Private Sub MenuItemRect_Click(sender As Object, e As EventArgs) Handles MenuItemRect.Click
-        Dim gridsel As New CDataGridSelection
-        If Not gridsel.GridSelectedCells(dgvひも上下) Then
-            gridsel.GridCellsSelect(dgvひも上下)
+        'Debug.Print("矩形選択")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_rectangle)
         End If
-        Debug.Print("矩形選択")
     End Sub
 
     '正方形選択
     Private Sub MenuItemSquare_Click(sender As Object, e As EventArgs) Handles MenuItemSquare.Click
-        Debug.Print("正方形選択")
+        'Debug.Print("正方形選択")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_square)
+        End If
     End Sub
 
     '中心点
     Private Sub MenuItemCenter_Click(sender As Object, e As EventArgs) Handles MenuItemCenter.Click
-        Debug.Print("中心点")
+        'Debug.Print("中心点")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.SetRangeCellSelected(CDataGridSelection.range_type.range_center)
+        End If
     End Sub
 
 
     '左下移動
     Private Sub MenuItemLeftDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftDownMove.Click
-        Debug.Print("左下移動")
+        'Debug.Print("左下移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(-1, 1)
+        End If
     End Sub
 
     '下移動
     Private Sub MenuItemDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemDownMove.Click
-        Debug.Print("下移動")
+        'Debug.Print("下移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(0, 1)
+        End If
     End Sub
 
     '右下移動
     Private Sub MenuItemRightDownMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightDownMove.Click
-        Debug.Print("右下移動")
+        'Debug.Print("右下移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(1, 1)
+        End If
     End Sub
 
     '左移動
     Private Sub MenuItemLeftMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftMove.Click
-        Debug.Print("左移動")
+        'Debug.Print("左移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(-1, 0)
+        End If
     End Sub
 
     '右移動
     Private Sub MenuItemRightMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightMove.Click
-        Debug.Print("右移動")
+        'Debug.Print("右移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(1, 0)
+        End If
     End Sub
 
     '左上移動
     Private Sub MenuItemLeftUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemLeftUpMove.Click
-        Debug.Print("左上移動")
+        'Debug.Print("左上移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(-1, -1)
+        End If
     End Sub
 
     '上移動
     Private Sub MenuItemUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemUpMove.Click
-        Debug.Print("上移動")
+        'Debug.Print("上移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(0, -1)
+        End If
     End Sub
 
     '右上移動
     Private Sub MenuItemRightUpMove_Click(sender As Object, e As EventArgs) Handles MenuItemRightUpMove.Click
-        Debug.Print("右上移動")
+        'Debug.Print("右上移動")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.MoveSelection(1, -1)
+        End If
     End Sub
 
     '左下拡張
     Private Sub MenuItemLeftDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftDownExt.Click
-        Debug.Print("左下拡張")
+        'Debug.Print("左下拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(-1, 1)
+        End If
     End Sub
 
     '下拡張
     Private Sub MenuItemDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemDownExt.Click
-        Debug.Print("下拡張")
+        'Debug.Print("下拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(0, 1)
+        End If
     End Sub
 
     '右下拡張
     Private Sub MenuItemRightDownExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightDownExt.Click
-        Debug.Print("右下拡張")
+        'Debug.Print("右下拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(1, 1)
+        End If
     End Sub
 
     '左拡張
     Private Sub MenuItemLeftExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftExt.Click
-        Debug.Print("左拡張")
+        'Debug.Print("左拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(-1, 0)
+        End If
     End Sub
 
     '右拡張
     Private Sub MenuItemRightExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightExt.Click
-        Debug.Print("右拡張")
+        'Debug.Print("右拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(1, 0)
+        End If
     End Sub
 
     '左上拡張
     Private Sub MenuItemLeftUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemLeftUpExt.Click
-        Debug.Print("左上拡張")
+        'Debug.Print("左上拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(-1, -1)
+        End If
     End Sub
 
     '上拡張
     Private Sub MenuItemUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemUpExt.Click
-        Debug.Print("上拡張")
+        'Debug.Print("上拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(0, -1)
+        End If
     End Sub
 
     '右上拡張
     Private Sub MenuItemRightUpExt_Click(sender As Object, e As EventArgs) Handles MenuItemRightUpExt.Click
-        Debug.Print("右上拡張")
+        'Debug.Print("右上拡張")
+        If _DataGridSelection.GetSelected() Then
+            _DataGridSelection.ExtentSelection(1, -1)
+        End If
     End Sub
+#End Region
+
 
 
 End Class

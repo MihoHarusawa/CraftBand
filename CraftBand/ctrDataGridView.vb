@@ -307,7 +307,7 @@ Public Class ctrDataGridView
 
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
         SetToClipBoard(Me)
-        MyBase.ClearSelection()
+        'MyBase.ClearSelection()
     End Sub
 
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
