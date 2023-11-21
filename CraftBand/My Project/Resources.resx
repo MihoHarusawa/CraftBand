@@ -176,7 +176,11 @@
     <comment>frmGauge</comment>
   </data>
   <data name="AskTargetAllRange" xml:space="preserve">
-    <value>全範囲を{0}します。よろしいですか？</value>
+    <value>現在の選択では{0}できません。全範囲を{0}してよろしいですか？</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="AskTargetRectangle" xml:space="preserve">
+    <value>選択された領域のみを{0}しますか？　(はい=選択領域,いいえ=全体)</value>
     <comment>ctrEditUpDown</comment>
   </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
@@ -435,7 +439,11 @@
     <comment>ctrEditUpDown</comment>
   </data>
   <data name="MessageUpDownError" xml:space="preserve">
-    <value>{0}できませんでした。リセットしてやり直してください。</value>
+    <value>{0}できませんでした。クリア(初期化)してやり直してください。</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="MessageUpDownNop" xml:space="preserve">
+    <value>{0}できませんでした。</value>
     <comment>ctrEditUpDown</comment>
   </data>
   <data name="MsgExported" xml:space="preserve">

@@ -371,6 +371,9 @@
     End Structure
 
 
+    '*共用関数
+
+    '最小
     Public Function Min(ByVal x1 As Double, ByVal x2 As Double) As Double
         If x1 <= x2 Then
             Return x1
@@ -382,6 +385,7 @@
         Return Min(Min(x1, x2), Min(x3, x4))
     End Function
 
+    '最大
     Public Function Max(ByVal x1 As Double, ByVal x2 As Double) As Double
         If x1 <= x2 Then
             Return x2
@@ -393,12 +397,35 @@
         Return Max(Max(x1, x2), Max(x3, x4))
     End Function
 
+    '絶対値
     Public Function Abs(ByVal x As Double) As Double
         If x < 0 Then
             Return -x
         Else
             Return x
         End If
+    End Function
+
+    'ボタンの文字列取得
+    Public Function ControlText(ByVal obj As Object) As String
+        Try
+            Dim ctrl As System.Windows.Forms.Control = CType(obj, System.Windows.Forms.Control)
+            Dim text = ctrl.Text
+            If String.IsNullOrEmpty(text) OrElse text.Length < 2 Then
+                Return text
+            End If
+            '(&x)
+            Dim nPh As Integer = text.IndexOf("(")
+            If 1 < nPh Then
+                Return text.Substring(0, nPh)
+            End If
+            '&A
+            Return text.Replace("&", "")
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "ControlText", obj)
+            Return Nothing
+        End Try
     End Function
 
 End Module

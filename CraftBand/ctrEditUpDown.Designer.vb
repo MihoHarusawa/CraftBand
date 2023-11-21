@@ -164,6 +164,8 @@ Partial Class ctrEditUpDown
         Me.MenuItemRect = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuItemSquare = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuItemCenter = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemSelectON = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuItemSelectOFF = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuItemLeftDownMove = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuItemDownMove = New System.Windows.Forms.ToolStripMenuItem()
@@ -207,7 +209,7 @@ Partial Class ctrEditUpDown
         Me.btn左回転.Size = New System.Drawing.Size(111, 46)
         Me.btn左回転.TabIndex = 27
         Me.btn左回転.Text = "左回転(&L)"
-        Me.ToolTip1.SetToolTip(Me.btn左回転, "パターンを左に90度回転します")
+        Me.ToolTip1.SetToolTip(Me.btn左回転, "パターンを左に90度回転します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(正方形選択はその領域、以外は全体)")
         Me.btn左回転.UseVisualStyleBackColor = True
         '
         'rad右
@@ -356,7 +358,7 @@ Partial Class ctrEditUpDown
         Me.btn右回転.Size = New System.Drawing.Size(111, 46)
         Me.btn右回転.TabIndex = 26
         Me.btn右回転.Text = "右回転(&R)"
-        Me.ToolTip1.SetToolTip(Me.btn右回転, "パターンを右に90度回転します")
+        Me.ToolTip1.SetToolTip(Me.btn右回転, "パターンを右に90度回転します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(正方形選択はその領域、以外は全体)")
         Me.btn右回転.UseVisualStyleBackColor = True
         '
         'nud垂直に
@@ -385,7 +387,7 @@ Partial Class ctrEditUpDown
         Me.btn上下交換.Size = New System.Drawing.Size(111, 46)
         Me.btn上下交換.TabIndex = 23
         Me.btn上下交換.Text = "上下交換(&U)"
-        Me.ToolTip1.SetToolTip(Me.btn上下交換, "パターンの上下(チェックの有無)を入れ替えます")
+        Me.ToolTip1.SetToolTip(Me.btn上下交換, "パターンの上下(チェックの有無)を入れ替えます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(矩形選択の場合はその領域、以外は全体)")
         Me.btn上下交換.UseVisualStyleBackColor = True
         '
         'btnシフト
@@ -396,7 +398,7 @@ Partial Class ctrEditUpDown
         Me.btnシフト.Size = New System.Drawing.Size(111, 46)
         Me.btnシフト.TabIndex = 20
         Me.btnシフト.Text = "シフト(&T)"
-        Me.ToolTip1.SetToolTip(Me.btnシフト, "指定した方向に1行/1列移動します")
+        Me.ToolTip1.SetToolTip(Me.btnシフト, "指定した方向に1行/1列移動します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(全体が対象ですが、矩形選択の場合は選べます)")
         Me.btnシフト.UseVisualStyleBackColor = True
         '
         'btnクリア
@@ -407,7 +409,7 @@ Partial Class ctrEditUpDown
         Me.btnクリア.Size = New System.Drawing.Size(111, 46)
         Me.btnクリア.TabIndex = 22
         Me.btnクリア.Text = "クリア(&C)"
-        Me.ToolTip1.SetToolTip(Me.btnクリア, "パターンを初期状態に戻します")
+        Me.ToolTip1.SetToolTip(Me.btnクリア, "パターンを初期状態に戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "もしくは全チェックをOFFします")
         Me.btnクリア.UseVisualStyleBackColor = True
         '
         'btn天地反転
@@ -418,7 +420,7 @@ Partial Class ctrEditUpDown
         Me.btn天地反転.Size = New System.Drawing.Size(111, 46)
         Me.btn天地反転.TabIndex = 25
         Me.btn天地反転.Text = "天地反転(&H)"
-        Me.ToolTip1.SetToolTip(Me.btn天地反転, "パターンの上下を入れ替えます")
+        Me.ToolTip1.SetToolTip(Me.btn天地反転, "パターンの上下を入れ替えます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(矩形選択の場合はその領域、以外は全体)")
         Me.btn天地反転.UseVisualStyleBackColor = True
         '
         'btn左右反転
@@ -429,7 +431,7 @@ Partial Class ctrEditUpDown
         Me.btn左右反転.Size = New System.Drawing.Size(111, 46)
         Me.btn左右反転.TabIndex = 24
         Me.btn左右反転.Text = "左右反転(&V)"
-        Me.ToolTip1.SetToolTip(Me.btn左右反転, "パターンの左右を入れ替えます")
+        Me.ToolTip1.SetToolTip(Me.btn左右反転, "パターンの左右を入れ替えます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(矩形選択の場合はその領域、以外は全体)")
         Me.btn左右反転.UseVisualStyleBackColor = True
         '
         'btnランダム
@@ -469,6 +471,7 @@ Partial Class ctrEditUpDown
         Me.btnサイズ変更.Size = New System.Drawing.Size(111, 46)
         Me.btnサイズ変更.TabIndex = 11
         Me.btnサイズ変更.Text = "サイズ変更(&S)"
+        Me.ToolTip1.SetToolTip(Me.btnサイズ変更, "水平・垂直の編集サイズを変更します")
         Me.btnサイズ変更.UseVisualStyleBackColor = True
         '
         'lbl本_垂直
@@ -1343,9 +1346,9 @@ Partial Class ctrEditUpDown
         'GridContextMenuStrip
         '
         Me.GridContextMenuStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.GridContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItemCopy, Me.MenuItemCut, Me.MenuItemPaste, Me.MenuItemDelete, Me.ToolStripSeparator1, Me.MenuItemRect, Me.MenuItemSquare, Me.MenuItemCenter, Me.ToolStripSeparator4, Me.MenuItemLeftDownMove, Me.MenuItemDownMove, Me.MenuItemRightDownMove, Me.MenuItemLeftMove, Me.MenuItemRightMove, Me.MenuItemLeftUpMove, Me.MenuItemUpMove, Me.MenuItemRightUpMove, Me.ToolStripSeparator5, Me.MenuItemLeftDownExt, Me.MenuItemDownExt, Me.MenuItemRightDownExt, Me.MenuItemLeftExt, Me.MenuItemRightExt, Me.MenuItemLeftUpExt, Me.MenuItemUpExt, Me.MenuItemRightUpExt, Me.ToolStripSeparator2, Me.MenuItemON, Me.MenuItemOFF, Me.MenuItemExchange, Me.ToolStripSeparator3, Me.MenuItemCancel})
+        Me.GridContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItemCopy, Me.MenuItemCut, Me.MenuItemPaste, Me.MenuItemDelete, Me.ToolStripSeparator1, Me.MenuItemRect, Me.MenuItemSquare, Me.MenuItemCenter, Me.MenuItemSelectON, Me.MenuItemSelectOFF, Me.ToolStripSeparator4, Me.MenuItemLeftDownMove, Me.MenuItemDownMove, Me.MenuItemRightDownMove, Me.MenuItemLeftMove, Me.MenuItemRightMove, Me.MenuItemLeftUpMove, Me.MenuItemUpMove, Me.MenuItemRightUpMove, Me.ToolStripSeparator5, Me.MenuItemLeftDownExt, Me.MenuItemDownExt, Me.MenuItemRightDownExt, Me.MenuItemLeftExt, Me.MenuItemRightExt, Me.MenuItemLeftUpExt, Me.MenuItemUpExt, Me.MenuItemRightUpExt, Me.ToolStripSeparator2, Me.MenuItemON, Me.MenuItemOFF, Me.MenuItemExchange, Me.ToolStripSeparator3, Me.MenuItemCancel})
         Me.GridContextMenuStrip.Name = "ContextMenuStrip"
-        Me.GridContextMenuStrip.Size = New System.Drawing.Size(296, 682)
+        Me.GridContextMenuStrip.Size = New System.Drawing.Size(296, 730)
         '
         'MenuItemCopy
         '
@@ -1353,6 +1356,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
         Me.MenuItemCopy.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemCopy.Text = "コピー(&C)"
+        Me.MenuItemCopy.ToolTipText = "選択した領域をクリップボードにコピーします"
         '
         'MenuItemCut
         '
@@ -1360,6 +1364,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
         Me.MenuItemCut.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemCut.Text = "切り取り(&T)"
+        Me.MenuItemCut.ToolTipText = "選択した領域をクリップボードにコピーし、領域をクリアします"
         '
         'MenuItemPaste
         '
@@ -1367,6 +1372,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
         Me.MenuItemPaste.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemPaste.Text = "貼り付け(&P)"
+        Me.MenuItemPaste.ToolTipText = "クリップボードのデータを選択領域に貼り付けます"
         '
         'MenuItemDelete
         '
@@ -1374,6 +1380,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
         Me.MenuItemDelete.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemDelete.Text = "削除(&D)"
+        Me.MenuItemDelete.ToolTipText = "選択領域をクリアします"
         '
         'ToolStripSeparator1
         '
@@ -1386,7 +1393,8 @@ Partial Class ctrEditUpDown
         Me.MenuItemRect.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
             Or System.Windows.Forms.Keys.R), System.Windows.Forms.Keys)
         Me.MenuItemRect.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemRect.Text = "矩形選択(&R)"
+        Me.MenuItemRect.Text = "選択矩形化(&R)"
+        Me.MenuItemRect.ToolTipText = "選択したセルを含む矩形領域化します"
         '
         'MenuItemSquare
         '
@@ -1394,14 +1402,33 @@ Partial Class ctrEditUpDown
         Me.MenuItemSquare.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
             Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
         Me.MenuItemSquare.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemSquare.Text = "正方形選択(&S)"
+        Me.MenuItemSquare.Text = "正方形化(&S)"
+        Me.MenuItemSquare.ToolTipText = "矩形領域に含まれる正方形を選択します"
         '
         'MenuItemCenter
         '
         Me.MenuItemCenter.Name = "MenuItemCenter"
-        Me.MenuItemCenter.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad5), System.Windows.Forms.Keys)
+        Me.MenuItemCenter.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+            Or System.Windows.Forms.Keys.M), System.Windows.Forms.Keys)
         Me.MenuItemCenter.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemCenter.Text = "中心点(&5)"
+        Me.MenuItemCenter.Text = "中心を選択(&M)"
+        Me.MenuItemCenter.ToolTipText = "全体の中心セルを選択します(偶数は2点)"
+        '
+        'MenuItemSelectON
+        '
+        Me.MenuItemSelectON.Name = "MenuItemSelectON"
+        Me.MenuItemSelectON.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad5), System.Windows.Forms.Keys)
+        Me.MenuItemSelectON.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemSelectON.Text = "ONを選択(&5)"
+        Me.MenuItemSelectON.ToolTipText = "チェックONのセルを全て選択します"
+        '
+        'MenuItemSelectOFF
+        '
+        Me.MenuItemSelectOFF.Name = "MenuItemSelectOFF"
+        Me.MenuItemSelectOFF.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad0), System.Windows.Forms.Keys)
+        Me.MenuItemSelectOFF.Size = New System.Drawing.Size(295, 24)
+        Me.MenuItemSelectOFF.Text = "OFFを選択(&0)"
+        Me.MenuItemSelectOFF.ToolTipText = "チェックOFFのセルを全て選択します"
         '
         'ToolStripSeparator4
         '
@@ -1414,6 +1441,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemLeftDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad1), System.Windows.Forms.Keys)
         Me.MenuItemLeftDownMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftDownMove.Text = "左下移動(&1)"
+        Me.MenuItemLeftDownMove.ToolTipText = "選択した領域を左下に移動します"
         '
         'MenuItemDownMove
         '
@@ -1421,6 +1449,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad2), System.Windows.Forms.Keys)
         Me.MenuItemDownMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemDownMove.Text = "下　移動(&2)"
+        Me.MenuItemDownMove.ToolTipText = "選択した領域を下に移動します"
         '
         'MenuItemRightDownMove
         '
@@ -1428,6 +1457,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemRightDownMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad3), System.Windows.Forms.Keys)
         Me.MenuItemRightDownMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightDownMove.Text = "右下移動(&3)"
+        Me.MenuItemRightDownMove.ToolTipText = "選択した領域を右下に移動します"
         '
         'MenuItemLeftMove
         '
@@ -1435,6 +1465,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemLeftMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad4), System.Windows.Forms.Keys)
         Me.MenuItemLeftMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftMove.Text = "左　移動(&4)"
+        Me.MenuItemLeftMove.ToolTipText = "選択した領域を左に移動します"
         '
         'MenuItemRightMove
         '
@@ -1442,6 +1473,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemRightMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad6), System.Windows.Forms.Keys)
         Me.MenuItemRightMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightMove.Text = "右　移動(&6)"
+        Me.MenuItemRightMove.ToolTipText = "選択した領域を右に移動します"
         '
         'MenuItemLeftUpMove
         '
@@ -1449,6 +1481,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemLeftUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad7), System.Windows.Forms.Keys)
         Me.MenuItemLeftUpMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftUpMove.Text = "左上移動(&7)"
+        Me.MenuItemLeftUpMove.ToolTipText = "選択した領域を左上に移動します"
         '
         'MenuItemUpMove
         '
@@ -1456,6 +1489,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad8), System.Windows.Forms.Keys)
         Me.MenuItemUpMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemUpMove.Text = "上　移動(&8)"
+        Me.MenuItemUpMove.ToolTipText = "選択した領域を上に移動します"
         '
         'MenuItemRightUpMove
         '
@@ -1463,6 +1497,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemRightUpMove.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.NumPad9), System.Windows.Forms.Keys)
         Me.MenuItemRightUpMove.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightUpMove.Text = "右上移動(&9)"
+        Me.MenuItemRightUpMove.ToolTipText = "選択した領域を右上に移動します"
         '
         'ToolStripSeparator5
         '
@@ -1476,6 +1511,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad1), System.Windows.Forms.Keys)
         Me.MenuItemLeftDownExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftDownExt.Text = "左下拡張(&J)"
+        Me.MenuItemLeftDownExt.ToolTipText = "選択した領域を左下に拡張します"
         '
         'MenuItemDownExt
         '
@@ -1484,6 +1520,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad2), System.Windows.Forms.Keys)
         Me.MenuItemDownExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemDownExt.Text = "下　拡張(&K)"
+        Me.MenuItemDownExt.ToolTipText = "選択した領域を下に拡張します"
         '
         'MenuItemRightDownExt
         '
@@ -1492,6 +1529,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad3), System.Windows.Forms.Keys)
         Me.MenuItemRightDownExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightDownExt.Text = "右下拡張(&L)"
+        Me.MenuItemRightDownExt.ToolTipText = "選択した領域を右下に拡張します"
         '
         'MenuItemLeftExt
         '
@@ -1500,6 +1538,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad4), System.Windows.Forms.Keys)
         Me.MenuItemLeftExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftExt.Text = "左　拡張(&U)"
+        Me.MenuItemLeftExt.ToolTipText = "選択した領域を左に拡張します"
         '
         'MenuItemRightExt
         '
@@ -1508,6 +1547,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad6), System.Windows.Forms.Keys)
         Me.MenuItemRightExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightExt.Text = "右　拡張(&O)"
+        Me.MenuItemRightExt.ToolTipText = "選択した領域を右に拡張します"
         '
         'MenuItemLeftUpExt
         '
@@ -1516,6 +1556,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad7), System.Windows.Forms.Keys)
         Me.MenuItemLeftUpExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemLeftUpExt.Text = "左上拡張(&N)"
+        Me.MenuItemLeftUpExt.ToolTipText = "選択した領域を左上に拡張します"
         '
         'MenuItemUpExt
         '
@@ -1524,6 +1565,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad8), System.Windows.Forms.Keys)
         Me.MenuItemUpExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemUpExt.Text = "上　拡張(&H)"
+        Me.MenuItemUpExt.ToolTipText = "選択した領域を上に拡張します"
         '
         'MenuItemRightUpExt
         '
@@ -1532,6 +1574,7 @@ Partial Class ctrEditUpDown
             Or System.Windows.Forms.Keys.NumPad9), System.Windows.Forms.Keys)
         Me.MenuItemRightUpExt.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemRightUpExt.Text = "右上拡張(&Y)"
+        Me.MenuItemRightUpExt.ToolTipText = "選択した領域を右上に拡張します"
         '
         'ToolStripSeparator2
         '
@@ -1544,7 +1587,8 @@ Partial Class ctrEditUpDown
         Me.MenuItemON.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
             Or System.Windows.Forms.Keys.A), System.Windows.Forms.Keys)
         Me.MenuItemON.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemON.Text = "チェックON(&A)"
+        Me.MenuItemON.Text = "選択をON(&A)"
+        Me.MenuItemON.ToolTipText = "選択された領域のチェックをONにします"
         '
         'MenuItemOFF
         '
@@ -1552,7 +1596,8 @@ Partial Class ctrEditUpDown
         Me.MenuItemOFF.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
             Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
         Me.MenuItemOFF.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemOFF.Text = "チェックOFF(&Z)"
+        Me.MenuItemOFF.Text = "選択をOFF(&Z)"
+        Me.MenuItemOFF.ToolTipText = "選択された領域のチェックをOFFにします"
         '
         'MenuItemExchange
         '
@@ -1560,7 +1605,8 @@ Partial Class ctrEditUpDown
         Me.MenuItemExchange.ShortcutKeys = CType(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
             Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
         Me.MenuItemExchange.Size = New System.Drawing.Size(295, 24)
-        Me.MenuItemExchange.Text = "入れ替え(&X)"
+        Me.MenuItemExchange.Text = "選択を入替(&X)"
+        Me.MenuItemExchange.ToolTipText = "選択された領域のチェックのONとOFFを入れ替えます"
         '
         'ToolStripSeparator3
         '
@@ -1572,6 +1618,7 @@ Partial Class ctrEditUpDown
         Me.MenuItemCancel.Name = "MenuItemCancel"
         Me.MenuItemCancel.Size = New System.Drawing.Size(295, 24)
         Me.MenuItemCancel.Text = "キャンセル(Esc)"
+        Me.MenuItemCancel.ToolTipText = "メニューを閉じます"
         '
         'BindingSourceひも上下
         '
@@ -1804,4 +1851,6 @@ Partial Class ctrEditUpDown
     Friend WithEvents MenuItemUpExt As Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItemRightUpExt As Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItemExchange As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemSelectON As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemSelectOFF As Windows.Forms.ToolStripMenuItem
 End Class

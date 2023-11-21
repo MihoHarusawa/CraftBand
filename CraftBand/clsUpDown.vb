@@ -373,143 +373,15 @@ Public Class clsUpDown
     End Function
 #End Region
 
-#Region "パターン操作"
+#Region "(サイズ変更を伴う)パターン操作"
 
-    '部分領域
-    Class CSubRange
-        Property FromX As Integer
-        Property ToX As Integer
-        Property FromY As Integer
-        Property ToY As Integer
-
-        Sub New(ByVal x1 As Integer, ByVal x2 As Integer, ByVal y1 As Integer, ByVal y2 As Integer)
-            FromX = x1
-            ToX = x2
-            FromY = y1
-            ToY = y2
-        End Sub
-
-        ReadOnly Property IsValid(ByVal updown As clsUpDown) As Boolean
-            Get
-                If Not ((1 <= FromX) AndAlso (1 <= FromY) AndAlso (FromX <= ToX) AndAlso (FromY <= ToY)) Then
-                    Return False
-                End If
-                If updown.HorizontalCount < ToX OrElse updown.VerticalCount < ToY Then
-                    Return False
-                End If
-                Return True
-            End Get
-        End Property
-    End Class
-
-    '全てOFF
-    Function ResetValue() As Boolean
-        For y As Integer = 1 To VerticalCount
-            For x As Integer = 1 To HorizontalCount
-                _Matrix(x, y) = False
-            Next
-        Next
-        Return matrix_to_table()
-    End Function
+    'データに対する操作なので、表示の Asc/Desc と上下(左右の回転)方向を合わせること
 
     'サイズ変更(VerticalCountに合わせる)
     Function ReSize(Optional ByVal set_mtx As Boolean = False) As Boolean
         Return table_to_matrix(set_mtx) AndAlso matrix_to_table()
     End Function
 
-    '上下交換
-    Function Revert(Optional ByVal set_mtx As Boolean = False) As Boolean
-        If table_to_matrix(set_mtx) Then
-            For y As Integer = 1 To VerticalCount
-                For x As Integer = 1 To HorizontalCount
-                    _Matrix(x, y) = Not _Matrix(x, y)
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-    Function RevertRange(ByVal subrange As CSubRange, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If Not subrange.IsValid(Me) Then
-            Return False
-        End If
-
-        If table_to_matrix(set_mtx) Then
-            For y As Integer = subrange.FromY To subrange.ToY
-                For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = Not _Matrix(x, y)
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-
-    '左右反転
-    Function LeftSideRight(Optional ByVal set_mtx As Boolean = False) As Boolean
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = 1 To VerticalCount
-                For x As Integer = 1 To HorizontalCount
-                    _Matrix(x, y) = save(HorizontalCount - x + 1, y)
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-    Function LeftSideRightRange(ByVal subrange As CSubRange, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If Not subrange.IsValid(Me) Then
-            Return False
-        End If
-
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = subrange.FromY To subrange.ToY
-                For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = save(subrange.ToX - (x - subrange.FromX), y)
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-
-    '天地反転
-    Function UpSideDown(Optional ByVal set_mtx As Boolean = False) As Boolean
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = 1 To VerticalCount
-                For x As Integer = 1 To HorizontalCount
-                    _Matrix(x, y) = save(x, VerticalCount - y + 1)
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-    Function UpSideDownRange(ByVal subrange As CSubRange, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If Not subrange.IsValid(Me) Then
-            Return False
-        End If
-
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = subrange.FromY To subrange.ToY
-                For x As Integer = subrange.FromX To subrange.ToX
-                    _Matrix(x, y) = save(x, subrange.ToY - (y - subrange.FromY))
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
 
     '右回転
     Function RotateRight(Optional ByVal set_mtx As Boolean = False) As Boolean
@@ -534,28 +406,6 @@ Public Class clsUpDown
             Return False
         End If
     End Function
-    Function RotateRightRange(ByVal subrange As CSubRange, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If Not subrange.IsValid(Me) Then
-            Return False
-        End If
-
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-
-            For y As Integer = subrange.FromY To subrange.ToY
-                For x As Integer = subrange.FromX To subrange.ToX
-                    Try
-                        _Matrix(x, y) = save(subrange.FromX + y - subrange.FromY, subrange.ToY - (x - subrange.FromX))
-                    Catch ex As Exception
-                        g_clsLog.LogException(ex, "RotateRightRange({0},{1})", x, y)
-                    End Try
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
 
     '左回転
     Function RotateLeft(Optional ByVal set_mtx As Boolean = False) As Boolean
@@ -572,28 +422,6 @@ Public Class clsUpDown
                         _Matrix(x, y) = save(iOldHorizontalCount - y + 1, x)
                     Catch ex As Exception
                         g_clsLog.LogException(ex, "RotateLeft({0},{1})", x, y)
-                    End Try
-                Next
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-    Function RotateLeftRange(ByVal subrange As CSubRange, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If Not subrange.IsValid(Me) Then
-            Return False
-        End If
-
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-
-            For y As Integer = subrange.FromY To subrange.ToY
-                For x As Integer = subrange.FromX To subrange.ToX
-                    Try
-                        _Matrix(x, y) = save(subrange.ToX - (y - subrange.FromY), subrange.FromY + (x - subrange.FromX))
-                    Catch ex As Exception
-                        g_clsLog.LogException(ex, "RotateLeftRange({0},{1})", x, y)
                     End Try
                 Next
             Next
@@ -641,51 +469,6 @@ Public Class clsUpDown
         End If
     End Function
 
-    '水平シフト
-    Function ShiftHorizontal(ByVal desc As Boolean, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = 1 To VerticalCount
-                If desc Then
-                    For x As Integer = 2 To HorizontalCount
-                        _Matrix(x - 1, y) = save(x, y)
-                    Next
-                    _Matrix(HorizontalCount, y) = save(1, y)
-                Else
-                    For x As Integer = 1 To HorizontalCount - 1
-                        _Matrix(x + 1, y) = save(x, y)
-                    Next
-                    _Matrix(1, y) = save(HorizontalCount, y)
-                End If
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
-
-    '垂直シフト
-    Function ShiftVertical(ByVal desc As Boolean, Optional ByVal set_mtx As Boolean = False) As Boolean
-        If table_to_matrix(set_mtx) Then
-            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For x As Integer = 1 To HorizontalCount
-                If desc Then
-                    For y As Integer = 2 To VerticalCount
-                        _Matrix(x, y - 1) = save(x, y)
-                    Next
-                    _Matrix(x, VerticalCount) = save(x, 1)
-                Else
-                    For y As Integer = 1 To VerticalCount - 1
-                        _Matrix(x, y + 1) = save(x, y)
-                    Next
-                    _Matrix(x, 1) = save(x, VerticalCount)
-                End If
-            Next
-            Return matrix_to_table()
-        Else
-            Return False
-        End If
-    End Function
 #End Region
 
     'ランダム化
@@ -904,7 +687,7 @@ Public Class clsUpDown
             msg = sb.ToString
             Return False
         End If
-
+        '↑ここまではNG
 
         '行の最小
         Dim mincount_h As Integer = Integer.MaxValue

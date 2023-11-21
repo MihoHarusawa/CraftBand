@@ -313,6 +313,10 @@ Public Class ctrDataGridView
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
         SetToClipBoard(Me)
         SetDefaultWritableCell(Me, MyGridDataRow)
+        '
+        If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
+            Me.DataSource.Current.row.acceptchanges()
+        End If
     End Sub
 
     Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
@@ -320,11 +324,19 @@ Public Class ctrDataGridView
             Exit Sub
         End If
         DoPaste(Me, MyGridDataRow)
+        '
+        If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
+            Me.DataSource.Current.row.acceptchanges()
+        End If
     End Sub
 
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
         If Not DeleteLines(Me) Then
             SetDefaultWritableCell(Me, MyGridDataRow)
+            '
+            If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
+                Me.DataSource.Current.row.acceptchanges()
+            End If
         End If
     End Sub
 

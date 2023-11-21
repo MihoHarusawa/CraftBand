@@ -184,11 +184,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  全範囲を{0}します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  現在の選択では{0}できません。全範囲を{0}してよろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskTargetAllRange() As String
             Get
                 Return ResourceManager.GetString("AskTargetAllRange", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  選択された領域のみを{0}しますか？　(はい=選択領域,いいえ=全体) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskTargetRectangle() As String
+            Get
+                Return ResourceManager.GetString("AskTargetRectangle", resourceCulture)
             End Get
         End Property
         
@@ -796,11 +805,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}できませんでした。リセットしてやり直してください。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}できませんでした。クリア(初期化)してやり直してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MessageUpDownError() As String
             Get
                 Return ResourceManager.GetString("MessageUpDownError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}できませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageUpDownNop() As String
+            Get
+                Return ResourceManager.GetString("MessageUpDownNop", resourceCulture)
             End Get
         End Property
         
