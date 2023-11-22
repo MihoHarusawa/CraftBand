@@ -2101,6 +2101,7 @@ Partial Class frmMain
         Me.nud底に.Name = "nud底に"
         Me.nud底に.Size = New System.Drawing.Size(46, 27)
         Me.nud底に.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.nud底に, "底側(辺を含まない)にいくつ連続するか")
         Me.nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'lbl垂直に
@@ -2120,6 +2121,7 @@ Partial Class frmMain
         Me.chk横の辺.Size = New System.Drawing.Size(73, 24)
         Me.chk横の辺.TabIndex = 4
         Me.chk横の辺.Text = "横の辺"
+        Me.ToolTip1.SetToolTip(Me.chk横の辺, "左上と右下(横の四角数側)の辺のチェックの状態" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "右上と左下(縦の四角数側)は逆になります")
         Me.chk横の辺.UseVisualStyleBackColor = True
         '
         'nud垂直に
@@ -2128,6 +2130,7 @@ Partial Class frmMain
         Me.nud垂直に.Name = "nud垂直に"
         Me.nud垂直に.Size = New System.Drawing.Size(46, 27)
         Me.nud垂直に.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.nud垂直に, "立ち上げる側(辺を含む)にいくつ連続するか")
         Me.nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'btn合わせる
@@ -2137,6 +2140,7 @@ Partial Class frmMain
         Me.btn合わせる.Size = New System.Drawing.Size(111, 46)
         Me.btn合わせる.TabIndex = 2
         Me.btn合わせる.Text = "合わせる(&I)"
+        Me.ToolTip1.SetToolTip(Me.btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
         Me.btn合わせる.UseVisualStyleBackColor = True
         '
         'editUpDown
@@ -2153,7 +2157,7 @@ Partial Class frmMain
         Me.editUpDown.Location = New System.Drawing.Point(-3, -3)
         Me.editUpDown.Name = "editUpDown"
         Me.editUpDown.PanelSize = New System.Drawing.Size(800, 400)
-        Me.editUpDown.Size = New System.Drawing.Size(803, 403)
+        Me.editUpDown.Size = New System.Drawing.Size(806, 406)
         Me.editUpDown.TabIndex = 1
         '
         'f_i段数2

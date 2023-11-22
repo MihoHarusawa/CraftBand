@@ -5,6 +5,7 @@ Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
+Imports CraftBand.ctrEditUpDown
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -130,6 +131,33 @@ Class clsCalcSquare45
             Return _i縦の四角数
         End Get
     End Property
+
+    ReadOnly Property p_b横の四角数が縦以上 As Boolean   '縦横同じならtrue
+        Get
+            Return _i縦の四角数 <= _i横の四角数
+        End Get
+    End Property
+
+    ReadOnly Property p_i縦横四角数の差 As Integer  '縦横同じならゼロ
+        Get
+            If _i縦の四角数 < _i横の四角数 Then
+                Return _i横の四角数 - _i縦の四角数
+            Else
+                Return _i縦の四角数 - _i横の四角数
+            End If
+        End Get
+    End Property
+
+    ReadOnly Property p_i縦横四角数の小さい方 As Integer
+        Get
+            If _i縦の四角数 < _i横の四角数 Then
+                Return _i縦の四角数
+            Else
+                Return _i横の四角数
+            End If
+        End Get
+    End Property
+
 
     ReadOnly Property p_i横ひもの本数 As Integer
         Get
@@ -871,42 +899,159 @@ Class clsCalcSquare45
 #End Region
 
 #Region "ひも上下"
-    Function suitひも上下(ByVal yoko As Boolean, ByVal vert As Integer, ByVal horz As Integer) As clsUpDown
+
+    Function fitsizeひも上下(ByVal yoko As Boolean, ByVal sideup As Integer, ByVal botm As Integer) As clsUpDown
 
         Dim updown As New clsUpDown(clsUpDown.enumTargetFace.Bottom)
-        updown.HorizontalCount = _i横の四角数 + _i縦の四角数
-        updown.VerticalCount = _i横の四角数 + _i縦の四角数
+        updown.HorizontalCount = p_i横ひもの本数
+        updown.VerticalCount = p_i縦ひもの本数
 
+        'ゼロの場合は底の線だけ
+        If sideup < 0 OrElse botm < 0 OrElse (sideup = 0 And botm = 0) Then
+            If yoko Then
+                '横のライン
+                For horzIdx As Integer = 1 To updown.HorizontalCount
+                    For vertIdx As Integer = 1 To updown.VerticalCount
+                        If horzIdx + vertIdx = _i横の四角数 + 1 Then
+                            updown.SetIsUp(horzIdx, vertIdx)
+                        ElseIf ((p_i縦ひもの本数 - horzIdx + 1) + (p_i横ひもの本数 - vertIdx + 1)) = _i横の四角数 + 1 Then
+                            updown.SetIsUp(horzIdx, vertIdx)
+                        End If
+                    Next
+                Next
+            Else
+                '縦のライン
+                For horzIdx As Integer = 1 To updown.HorizontalCount
+                    For vertIdx As Integer = 1 To updown.VerticalCount
+                        If ((p_i縦ひもの本数 - horzIdx + 1) + vertIdx) = _i縦の四角数 + 1 Then
+                            updown.SetIsUp(horzIdx, vertIdx)
+                        ElseIf (horzIdx + (p_i横ひもの本数 - vertIdx + 1)) = _i縦の四角数 + 1 Then
+                            updown.SetIsUp(horzIdx, vertIdx)
+                        End If
+                    Next
+                Next
+            End If
+            Return updown
+        End If
 
-        '横のライン
-        For horzIdx As Integer = 1 To updown.HorizontalCount
-            For vertIdx As Integer = 1 To updown.VerticalCount
-
-                If horzIdx + vertIdx = _i横の四角数 + 1 Then
-                    updown.SetIsUp(horzIdx, vertIdx)
-
-                ElseIf ((_i縦の四角数 + _i横の四角数 - horzIdx + 1) + (_i縦の四角数 + _i横の四角数 - vertIdx + 1)) = _i横の四角数 + 1 Then
-                    updown.SetIsUp(horzIdx, vertIdx)
-                End If
-
-            Next
+        '縦のパターン　※辺を開始点として上へ
+        Dim unit_vert As New clsUpDown(clsUpDown.enumTargetFace.Bottom)
+        unit_vert.HorizontalCount = 1
+        unit_vert.VerticalCount = (sideup + botm) * 2
+        For y = 1 To sideup
+            unit_vert.SetIsUp(1, y, yoko)
+        Next
+        For y = sideup + 1 To sideup + (sideup + botm)
+            unit_vert.SetIsUp(1, y, Not yoko)
+        Next
+        For y = sideup + (sideup + botm) + 1 To sideup + (sideup + botm) + botm
+            unit_vert.SetIsUp(1, y, yoko)
         Next
 
-        '縦のライン
-        For horzIdx As Integer = 1 To updown.HorizontalCount
-            For vertIdx As Integer = 1 To updown.VerticalCount
+        '横のパターン　※辺を開始点として上へ
+        Dim unit_horz As New clsUpDown(unit_vert)
+        unit_horz.RotateLeft()
+        unit_horz.Reverse()
 
-                If ((_i縦の四角数 + _i横の四角数 - horzIdx + 1) + vertIdx) = _i縦の四角数 + 1 Then
-                    updown.SetIsUp(horzIdx, vertIdx)
 
-                ElseIf (horzIdx + (_i縦の四角数 + _i横の四角数 - vertIdx + 1)) = _i縦の四角数 + 1 Then
-                    updown.SetIsUp(horzIdx, vertIdx)
+        '・→→→HorizontalIndex
+        '↓(左上)
+        '↓
+        '↓VerticalIndex
+
+        '左上領域,右下領域
+        For x As Integer = 1 To _i横の四角数
+            For y As Integer = 1 To _i横の四角数
+                If unit_vert.GetIsUp(1, y - x + 1) Then
+                    Dim hidx_leup As Integer = x
+                    Dim vidx_leup As Integer = _i横の四角数 - y + 1
+
+                    Dim ca As center_area = isCenterArea(hidx_leup, vidx_leup)
+                    If ca = center_area.center_lower Then
+                        'Debug.Print("center_lower skip左上領域:({0},{1})", hidx_leup, vidx_leup)
+                        Continue For
+                    End If
+                    updown.SetIsUp(hidx_leup, vidx_leup) '左上領域
+
+                    If ca = center_area.center_line Then
+                        'Debug.Print("center_line skip右下領域:({0},{1})", hidx_leup, vidx_leup)
+                        Continue For
+                    End If
+                    '点対象位置
+                    updown.SetIsUp(p_i縦ひもの本数 - hidx_leup + 1, p_i横ひもの本数 - vidx_leup + 1) '右下領域
+                End If
+            Next
+
+        Next
+
+        '右上領域,左下領域
+        For y As Integer = 1 To _i縦の四角数
+            For x As Integer = 1 To _i縦の四角数
+                If unit_horz.GetIsUp(x - y + 1, 1) Then
+                    Dim hidx_riup As Integer = _i横の四角数 + x
+                    Dim vidx_riup As Integer = y
+
+                    Dim ca As center_area = isCenterArea(hidx_riup, vidx_riup)
+                    If ca = center_area.center_lower Then
+                        'Debug.Print("center_lower skip右上領域:({0},{1})", hidx_riup, vidx_riup)
+                        Continue For
+                    End If
+                    updown.SetIsUp(hidx_riup, y) '右上領域
+
+                    If ca = center_area.center_line Then
+                        'Debug.Print("center_line skip左下領域:({0},{1})", hidx_riup, vidx_riup)
+                        Continue For
+                    End If
+                    '点対象位置
+                    updown.SetIsUp(p_i縦ひもの本数 - hidx_riup + 1, p_i横ひもの本数 - vidx_riup + 1) '左下領域
                 End If
             Next
         Next
 
         Return updown
     End Function
+
+    '                                      縦<横  　　縦=横 　　横<縦
+    Enum center_area
+        center_none     '中央領域にない   ┼──┼     　　　　┼──┼　
+        center_upper    '上側             │上／│     領域    │＼上│
+        center_lower    '下側             │／下│     なし    │下＼│
+        center_line     '中央線上         ┼──┼             ┼──┼
+    End Enum
+
+    '中央領域の内の位置を返す
+    Private Function isCenterArea(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As center_area
+        If horzIdx <= p_i縦横四角数の小さい方 OrElse (p_i縦横四角数の小さい方 + p_i縦横四角数の差) < horzIdx Then
+            Return center_area.center_none
+        End If
+        If vertIdx <= p_i縦横四角数の小さい方 OrElse (p_i縦横四角数の小さい方 + p_i縦横四角数の差) < vertIdx Then
+            Return center_area.center_none
+        End If
+
+        '中央領域内
+        If p_b横の四角数が縦以上 Then
+            '／ 縦<横
+            If horzIdx = (p_i横ひもの本数 - vertIdx + 1) Then
+                Return center_area.center_line
+            ElseIf horzIdx < (p_i横ひもの本数 - vertIdx + 1) Then
+                Return center_area.center_upper
+            Else
+                Return center_area.center_lower
+            End If
+        Else
+            '＼ 横<縦
+            If horzIdx = vertIdx Then
+                Return center_area.center_line
+            ElseIf horzIdx < vertIdx Then
+                Return center_area.center_lower
+            Else
+                Return center_area.center_upper
+            End If
+        End If
+        Return True
+    End Function
+
+
 
 #End Region
 

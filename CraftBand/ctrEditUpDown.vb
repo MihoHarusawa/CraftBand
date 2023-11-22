@@ -36,6 +36,13 @@ Public Class ctrEditUpDown
         End Set
     End Property
 
+    Public ReadOnly Property Is底位置表示 As Boolean
+        Get
+            Return _Is底位置表示
+        End Get
+    End Property
+
+
     'Square
     Public Property I水平領域四角数 As Integer '剰余数計算用
     Public Property I垂直領域四角数 As Integer '〃
@@ -290,51 +297,66 @@ Public Class ctrEditUpDown
     '1～I水平領域四角数, 1～I垂直領域四角数
     Private Function getBackColor(ByVal horzIdx As Integer, ByVal vertIdx As Integer, ByVal value As Boolean) As Drawing.Color
         If _Is底位置表示 Then
-            Dim cat As Integer = checkIsInBottom(horzIdx, vertIdx)
-            If 0 < cat Then
-                '底の中
-                Return If(value, Color.FromArgb(160, 160, 160), Color.White)
-            ElseIf cat < 0 Then
-                '側面
-                Return If(value, Color.FromArgb(140, 140, 140), Color.FromArgb(240, 240, 240))
-            Else 'cat=0
-                '境界線
-                Return If(value, Color.FromArgb(140, 140, 110), Color.FromArgb(240, 240, 210))
-            End If
+            Dim cat As bottom_category = checkIsInBottom(horzIdx, vertIdx)
+            Select Case cat
+                Case bottom_category._bottom '底の中
+                    Return If(value, Color.FromArgb(160, 160, 160), Color.White)
+                Case bottom_category._side '側面
+                    Return If(value, Color.FromArgb(140, 140, 140), Color.FromArgb(240, 240, 240))
+                Case bottom_category._edge_line '境界線
+                    Return If(value, Color.FromArgb(140, 140, 110), Color.FromArgb(240, 240, 210))
+                Case bottom_category._center_line '中央線
+                    Return If(value, Color.FromArgb(140, 140, 120), Color.FromArgb(240, 240, 220))
+                Case Else
+                    Return If(value, Color.FromArgb(160, 160, 160), Color.White)
+            End Select
+
         Else
             Return If(value, Color.FromArgb(160, 160, 160), Color.White)
         End If
     End Function
 
-    '戻り値 1=底 0=境界線 -1=側面
-    Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Integer
+    Enum bottom_category
+        _bottom '底
+        _edge_line '境界線
+        _center_line '中央線
+        _side '側面
+    End Enum
+    Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As bottom_category
         Dim n左上ライン As Integer = horzIdx + vertIdx
         Dim n右下ライン As Integer = (I水平領域四角数 - horzIdx + 1) + (I垂直領域四角数 - vertIdx + 1)
         Dim n右上ライン As Integer = (I水平領域四角数 - horzIdx + 1) + vertIdx
         Dim n左下ライン As Integer = horzIdx + (I垂直領域四角数 - vertIdx + 1)
 
         If n左上ライン = I横の四角数 + 1 Then
-            Return 0
+            Return bottom_category._edge_line
         ElseIf n左上ライン < I横の四角数 + 1 Then
-            Return -1
+            Return bottom_category._side
 
         ElseIf n右下ライン = I横の四角数 + 1 Then
-            Return 0
+            Return bottom_category._edge_line
         ElseIf n右下ライン < I横の四角数 + 1 Then
-            Return -1
+            Return bottom_category._side
 
         ElseIf n右上ライン = I縦の四角数 + 1 Then
-            Return 0
+            Return bottom_category._edge_line
         ElseIf n右上ライン < I縦の四角数 + 1 Then
-            Return -1
+            Return bottom_category._side
 
         ElseIf n左下ライン = I縦の四角数 + 1 Then
-            Return 0
+            Return bottom_category._edge_line
         ElseIf n左下ライン < I縦の四角数 + 1 Then
-            Return -1
+            Return bottom_category._side
 
         Else
-            Return 1 '底
+            If getIndexPosition(horzIdx) = 0 AndAlso getIndexPosition(vertIdx) = 0 Then
+                If (I横の四角数 < I縦の四角数) AndAlso (horzIdx = vertIdx) Then
+                    Return bottom_category._center_line
+                ElseIf (I横の四角数 > I縦の四角数) AndAlso (horzIdx = (I垂直領域四角数 - vertIdx + 1)) Then
+                    Return bottom_category._center_line
+                End If
+            End If
+            Return bottom_category._bottom '底
         End If
     End Function
 
@@ -1531,15 +1553,12 @@ Public Class ctrEditUpDown
             End If
             Dim save(,) As Boolean = DirectCast(_CellChecked.Clone(), Boolean(,))
             With _Selection
-                Do While delta < 0
-                    delta += .RectangleWidth
-                Loop
-                If delta Mod .RectangleWidth = 0 Then
+                If Modulo(delta, .RectangleWidth) = 0 Then
                     Return True '同じになる
                 End If
                 For row As Integer = ._RowIndexFrom To ._RowIndexTo
                     For x As Integer = 0 To .RectangleWidth - 1
-                        Dim xdelta As Integer = (x + delta) Mod .RectangleWidth
+                        Dim xdelta As Integer = Modulo((x + delta), .RectangleWidth)
                         'Debug.Print("({0},[{1}]) ← ({2},[{3}])", ._ColumnIndexFrom + xdelta, row, ._ColumnIndexFrom + x, row)
                         _CellChecked(._ColumnIndexFrom + xdelta, row) = save(._ColumnIndexFrom + x, row)
                     Next
@@ -1555,15 +1574,12 @@ Public Class ctrEditUpDown
             End If
             Dim save(,) As Boolean = DirectCast(_CellChecked.Clone(), Boolean(,))
             With _Selection
-                Do While delta < 0
-                    delta += .RectangleHight
-                Loop
-                If delta Mod .RectangleHight = 0 Then
+                If Modulo(delta, .RectangleHight) = 0 Then
                     Return True '同じになる
                 End If
                 For col As Integer = ._ColumnIndexFrom To ._ColumnIndexTo
                     For y As Integer = 0 To .RectangleHight - 1
-                        Dim ydelta As Integer = (y + delta) Mod .RectangleHight
+                        Dim ydelta As Integer = Modulo((y + delta), .RectangleHight)
                         'Debug.Print("([{0}],{1}) ← ([{2}],{3})", col, ._RowIndexFrom + ydelta, col, ._RowIndexFrom + y)
                         _CellChecked(col, ._RowIndexFrom + ydelta) = save(col, ._RowIndexFrom + y)
                     Next

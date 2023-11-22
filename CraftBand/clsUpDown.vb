@@ -1,4 +1,5 @@
-﻿Imports CraftBand.Tables
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
 
@@ -38,6 +39,20 @@ Public Class clsUpDown
         TargetFace = face
     End Sub
 
+    Sub New(ByVal ref As clsUpDown)
+        TargetFace = ref.TargetFace
+        HorizontalCount = ref.HorizontalCount
+        VerticalCount = ref.VerticalCount
+        Memo = ref.Memo
+        Array.Copy(ref._Matrix, _Matrix, ref._Matrix.Length)
+        If ref.CheckBoxTable IsNot Nothing Then
+            CheckBoxTable = New dstWork.tblCheckBoxDataTable
+            For Each r As dstWork.tblCheckBoxRow In ref.CheckBoxTable.Rows
+                CheckBoxTable.ImportRow(r)
+            Next
+        End If
+    End Sub
+
     Sub New(ByVal face As enumTargetFace, ByVal horizon As Integer, ByVal vert As Integer)
         TargetFace = face
         HorizontalCount = horizon
@@ -47,7 +62,7 @@ Public Class clsUpDown
     ReadOnly Property IsValid(ByVal isCheckExistTable As Boolean) As Boolean
         Get
             '数が有効
-            If Not (2 <= HorizontalCount AndAlso 2 <= VerticalCount AndAlso
+            If Not (1 <= HorizontalCount AndAlso 1 <= VerticalCount AndAlso
                  HorizontalCount <= cMaxUpdownColumns AndAlso VerticalCount <= cMaxUpdownColumns) Then
                 Return False
             End If
@@ -382,7 +397,6 @@ Public Class clsUpDown
         Return table_to_matrix(set_mtx) AndAlso matrix_to_table()
     End Function
 
-
     '右回転
     Function RotateRight(Optional ByVal set_mtx As Boolean = False) As Boolean
         If table_to_matrix(set_mtx) Then
@@ -504,6 +518,7 @@ Public Class clsUpDown
         Return matrix_to_table()
     End Function
 
+#Region "チェック関連"
     'xの列はOKか？(全ON/全OFFはNG)
     Private Function check_x(ByVal x As Integer) As Boolean
         If VerticalCount < 2 Then
@@ -765,30 +780,30 @@ Public Class clsUpDown
         msg = sb.ToString
         Return True
     End Function
+#End Region
 
+#Region "上下の取得・設定"
+    '※マトリクス部分のみを処理します
 
-    '上値を取得 Idx は各、1～描画領域Count(繰り返す)　
-    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
+    '上値を取得 Idx は各、1～描画領域Count  ※HorizontalCount,VerticalCountの剰余値の値
+    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer, Optional upval As Boolean = True) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
-        Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
-        Dim vIdx As Integer = ((vertIdx - 1) Mod VerticalCount) + 1
-        Return _Matrix(hIdx, vIdx)
+        'Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
+        Dim hIdx As Integer = Modulo((horzIdx - 1), HorizontalCount) + 1
+        'Dim vIdx As Integer = ((vertIdx - 1) Mod VerticalCount) + 1
+        Dim vIdx As Integer = Modulo((vertIdx - 1), VerticalCount) + 1
+        Return (_Matrix(hIdx, vIdx) = upval)
     End Function
 
-    '下値を取得 Idx は各、1～描画領域Count(繰り返す)
+    '下値を取得
     Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
-        If Not IsValid(False) Then 'チェックはMatrix
-            Return False
-        End If
-        Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
-        Dim vIdx As Integer = ((vertIdx - 1) Mod VerticalCount) + 1
-        Return Not _Matrix(hIdx, vIdx)
+        Return GetIsUp(horzIdx, vertIdx, False)
     End Function
 
     '上値をセット 範囲内のIdxであること
-    Function SetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
+    Function SetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer, Optional isup As Boolean = True) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
@@ -798,47 +813,46 @@ Public Class clsUpDown
         If vertIdx < 1 OrElse VerticalCount < vertIdx Then
             Return False
         End If
-        _Matrix(horzIdx, vertIdx) = True
+        _Matrix(horzIdx, vertIdx) = isup
         Return True
     End Function
-    Function SetIsUpAll() As Boolean
+
+    '全値を上
+    Function SetIsUpAll(Optional isup As Boolean = True) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
         For horzIdx As Integer = 1 To HorizontalCount
             For vertIdx As Integer = 1 To VerticalCount
-                _Matrix(horzIdx, vertIdx) = True
+                _Matrix(horzIdx, vertIdx) = isup
             Next
         Next
         Return True
     End Function
 
-    '下値をセット 範囲内のIdxであること
+    '上下の入れ替え
+    Function Reverse() As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        For y As Integer = 1 To VerticalCount
+            For x As Integer = 1 To HorizontalCount
+                _Matrix(x, y) = Not _Matrix(x, y)
+            Next
+        Next
+        Return True
+    End Function
+
+    '下値をセット 
     Function SetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
-        If Not IsValid(False) Then 'チェックはMatrix
-            Return False
-        End If
-        If horzIdx < 1 OrElse HorizontalCount < horzIdx Then
-            Return False
-        End If
-        If vertIdx < 1 OrElse VerticalCount < vertIdx Then
-            Return False
-        End If
-        _Matrix(horzIdx, vertIdx) = False
-        Return True
-    End Function
-    Function SetIsDownpAll() As Boolean
-        If Not IsValid(False) Then 'チェックはMatrix
-            Return False
-        End If
-        For horzIdx As Integer = 1 To HorizontalCount
-            For vertIdx As Integer = 1 To VerticalCount
-                _Matrix(horzIdx, vertIdx) = False
-            Next
-        Next
-        Return True
+        Return SetIsUp(horzIdx, vertIdx, False)
     End Function
 
+    '全値を下
+    Function SetIsDownpAll() As Boolean
+        Return SetIsUpAll(False)
+    End Function
+#End Region
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder

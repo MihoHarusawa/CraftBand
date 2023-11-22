@@ -214,4 +214,8 @@
     <value>現在の値では合わせることはできません。</value>
     <comment>frmMain</comment>
   </data>
+  <data name="AskInitializeAgain" xml:space="preserve">
+    <value>{0}に基づき再度初期化してよろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
 </root>

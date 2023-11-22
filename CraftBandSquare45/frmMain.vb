@@ -101,6 +101,10 @@ Public Class frmMain
 
         DispTables(_clsDataTables)
 
+        'ひも上下の初期値
+        chk横の辺.Checked = True
+        nud垂直に.Value = 2
+        nud底に.Value = 0
 
         'サイズ復元
         Dim siz As Size = My.Settings.frmMainSize
@@ -1193,7 +1197,15 @@ Public Class frmMain
 
 
     Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
-        Dim updown As clsUpDown = _clsCalcSquare45.suitひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value)
+        If editUpDown.Is底位置表示 Then
+            '{0}に基づき再度初期化してよろしいですか？
+            If MessageBox.Show(String.Format(My.Resources.AskInitializeAgain, grp縦横の四角.Text),
+                               Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
+                Exit Sub
+            End If
+        End If
+
+        Dim updown As clsUpDown = _clsCalcSquare45.fitsizeひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value)
         If updown Is Nothing OrElse Not updown.IsValid(False) Then
             '現在の値では合わせることはできません。
             MessageBox.Show(My.Resources.MessageCannotSuit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)

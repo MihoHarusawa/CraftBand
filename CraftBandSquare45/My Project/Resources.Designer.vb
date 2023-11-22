@@ -70,6 +70,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}に基づき再度初期化してよろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskInitializeAgain() As String
+            Get
+                Return ResourceManager.GetString("AskInitializeAgain", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  規定値をロードします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskLoadDefault() As String

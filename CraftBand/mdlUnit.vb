@@ -428,4 +428,18 @@
         End Try
     End Function
 
+    'マイナスを許す剰余値 0～range-1 の値で返す
+    Public Function Modulo(ByVal val As Integer, ByVal range As Integer) As Integer
+        If range <= 0 Then
+            Return (val Mod range)  'システム通り
+        End If
+        Dim v As Integer = val Mod range 'VBでは、-(range-1) ～ (range-1)の値
+        If 0 <= v Then
+            Return v
+        Else
+            Return v + range
+        End If
+    End Function
+
+
 End Module
