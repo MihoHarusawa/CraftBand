@@ -108,6 +108,10 @@ Partial Class frmMain
         Me.lbl対角線 = New System.Windows.Forms.Label()
         Me.txt対角線_四角 = New System.Windows.Forms.TextBox()
         Me.txt1つの辺_四角 = New System.Windows.Forms.TextBox()
+        Me.nud底に = New System.Windows.Forms.NumericUpDown()
+        Me.chk横の辺 = New System.Windows.Forms.CheckBox()
+        Me.nud垂直に = New System.Windows.Forms.NumericUpDown()
+        Me.btn合わせる = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -227,11 +231,7 @@ Partial Class frmMain
         Me.tpageひも上下 = New System.Windows.Forms.TabPage()
         Me.grp縦横の四角 = New System.Windows.Forms.GroupBox()
         Me.lbl底に = New System.Windows.Forms.Label()
-        Me.nud底に = New System.Windows.Forms.NumericUpDown()
         Me.lbl垂直に = New System.Windows.Forms.Label()
-        Me.chk横の辺 = New System.Windows.Forms.CheckBox()
-        Me.nud垂直に = New System.Windows.Forms.NumericUpDown()
-        Me.btn合わせる = New System.Windows.Forms.Button()
         Me.editUpDown = New CraftBand.ctrEditUpDown()
         Me.f_i段数2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lbl四角ベース = New System.Windows.Forms.Label()
@@ -257,6 +257,7 @@ Partial Class frmMain
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lbl単位 = New System.Windows.Forms.Label()
         Me.btnDEBUG = New System.Windows.Forms.Button()
+        Me.ToolStripMenuItemSettingUpDown = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -268,6 +269,8 @@ Partial Class frmMain
         CType(Me.nud縦の四角数, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横の四角数, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grp目標寸法.SuspendLayout()
+        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
         Me.TabControl.SuspendLayout()
         Me.tpage四角数.SuspendLayout()
@@ -288,8 +291,6 @@ Partial Class frmMain
         CType(Me.picプレビュー, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpageひも上下.SuspendLayout()
         Me.grp縦横の四角.SuspendLayout()
-        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -901,6 +902,45 @@ Partial Class frmMain
         Me.txt1つの辺_四角.TabIndex = 36
         Me.ToolTip1.SetToolTip(Me.txt1つの辺_四角, "ひも幅にすき間を加えた、単位となるの四角の一辺")
         '
+        'nud底に
+        '
+        Me.nud底に.Location = New System.Drawing.Point(266, 37)
+        Me.nud底に.Name = "nud底に"
+        Me.nud底に.Size = New System.Drawing.Size(46, 27)
+        Me.nud底に.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.nud底に, "底側(辺を含まない)にいくつ連続するか")
+        Me.nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'chk横の辺
+        '
+        Me.chk横の辺.AutoSize = True
+        Me.chk横の辺.Location = New System.Drawing.Point(8, 38)
+        Me.chk横の辺.Name = "chk横の辺"
+        Me.chk横の辺.Size = New System.Drawing.Size(73, 24)
+        Me.chk横の辺.TabIndex = 4
+        Me.chk横の辺.Text = "横の辺"
+        Me.ToolTip1.SetToolTip(Me.chk横の辺, "左上と右下(横の四角数側)の辺のチェックの状態" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "右上と左下(縦の四角数側)は逆になります")
+        Me.chk横の辺.UseVisualStyleBackColor = True
+        '
+        'nud垂直に
+        '
+        Me.nud垂直に.Location = New System.Drawing.Point(152, 36)
+        Me.nud垂直に.Name = "nud垂直に"
+        Me.nud垂直に.Size = New System.Drawing.Size(46, 27)
+        Me.nud垂直に.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.nud垂直に, "立ち上げる側(辺を含む)にいくつ連続するか")
+        Me.nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        '
+        'btn合わせる
+        '
+        Me.btn合わせる.Location = New System.Drawing.Point(341, 25)
+        Me.btn合わせる.Name = "btn合わせる"
+        Me.btn合わせる.Size = New System.Drawing.Size(111, 46)
+        Me.btn合わせる.TabIndex = 2
+        Me.btn合わせる.Text = "合わせる(&I)"
+        Me.ToolTip1.SetToolTip(Me.btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
+        Me.btn合わせる.UseVisualStyleBackColor = True
+        '
         'MenuStrip1
         '
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
@@ -1025,7 +1065,7 @@ Partial Class frmMain
         '
         'ToolStripMenuItemSetting
         '
-        Me.ToolStripMenuItemSetting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemSettingBandType, Me.ToolStripMenuItemSettingPattern, Me.ToolStripMenuItemSettingOptions, Me.ToolStripMenuItemSettingColor, Me.ToolStripSeparator3, Me.ToolStripMenuItemSettingBasics})
+        Me.ToolStripMenuItemSetting.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItemSettingBandType, Me.ToolStripMenuItemSettingPattern, Me.ToolStripMenuItemSettingOptions, Me.ToolStripMenuItemSettingColor, Me.ToolStripMenuItemSettingUpDown, Me.ToolStripSeparator3, Me.ToolStripMenuItemSettingBasics})
         Me.ToolStripMenuItemSetting.Name = "ToolStripMenuItemSetting"
         Me.ToolStripMenuItemSetting.Size = New System.Drawing.Size(71, 24)
         Me.ToolStripMenuItemSetting.Text = "設定(&S)"
@@ -1033,36 +1073,36 @@ Partial Class frmMain
         'ToolStripMenuItemSettingBandType
         '
         Me.ToolStripMenuItemSettingBandType.Name = "ToolStripMenuItemSettingBandType"
-        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingBandType.Text = "バンドの種類(&T)"
         '
         'ToolStripMenuItemSettingPattern
         '
         Me.ToolStripMenuItemSettingPattern.Name = "ToolStripMenuItemSettingPattern"
-        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingPattern.Text = "編みかた(&P)"
         '
         'ToolStripMenuItemSettingOptions
         '
         Me.ToolStripMenuItemSettingOptions.Name = "ToolStripMenuItemSettingOptions"
-        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingOptions.Text = "付属品(&O)"
         '
         'ToolStripMenuItemSettingColor
         '
         Me.ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
-        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingColor.Text = "描画色(&C)"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(183, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(221, 6)
         '
         'ToolStripMenuItemSettingBasics
         '
         Me.ToolStripMenuItemSettingBasics.Name = "ToolStripMenuItemSettingBasics"
-        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(224, 26)
         Me.ToolStripMenuItemSettingBasics.Text = "基本設定(&B)"
         '
         'ToolStripMenuItemHelp
@@ -2095,15 +2135,6 @@ Partial Class frmMain
         Me.lbl底に.TabIndex = 7
         Me.lbl底に.Text = "底に"
         '
-        'nud底に
-        '
-        Me.nud底に.Location = New System.Drawing.Point(266, 37)
-        Me.nud底に.Name = "nud底に"
-        Me.nud底に.Size = New System.Drawing.Size(46, 27)
-        Me.nud底に.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.nud底に, "底側(辺を含まない)にいくつ連続するか")
-        Me.nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
         'lbl垂直に
         '
         Me.lbl垂直に.AutoSize = True
@@ -2112,36 +2143,6 @@ Partial Class frmMain
         Me.lbl垂直に.Size = New System.Drawing.Size(51, 20)
         Me.lbl垂直に.TabIndex = 5
         Me.lbl垂直に.Text = "垂直に"
-        '
-        'chk横の辺
-        '
-        Me.chk横の辺.AutoSize = True
-        Me.chk横の辺.Location = New System.Drawing.Point(8, 38)
-        Me.chk横の辺.Name = "chk横の辺"
-        Me.chk横の辺.Size = New System.Drawing.Size(73, 24)
-        Me.chk横の辺.TabIndex = 4
-        Me.chk横の辺.Text = "横の辺"
-        Me.ToolTip1.SetToolTip(Me.chk横の辺, "左上と右下(横の四角数側)の辺のチェックの状態" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "右上と左下(縦の四角数側)は逆になります")
-        Me.chk横の辺.UseVisualStyleBackColor = True
-        '
-        'nud垂直に
-        '
-        Me.nud垂直に.Location = New System.Drawing.Point(152, 36)
-        Me.nud垂直に.Name = "nud垂直に"
-        Me.nud垂直に.Size = New System.Drawing.Size(46, 27)
-        Me.nud垂直に.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.nud垂直に, "立ち上げる側(辺を含む)にいくつ連続するか")
-        Me.nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'btn合わせる
-        '
-        Me.btn合わせる.Location = New System.Drawing.Point(341, 25)
-        Me.btn合わせる.Name = "btn合わせる"
-        Me.btn合わせる.Size = New System.Drawing.Size(111, 46)
-        Me.btn合わせる.TabIndex = 2
-        Me.btn合わせる.Text = "合わせる(&I)"
-        Me.ToolTip1.SetToolTip(Me.btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
-        Me.btn合わせる.UseVisualStyleBackColor = True
         '
         'editUpDown
         '
@@ -2375,6 +2376,12 @@ Partial Class frmMain
         Me.btnDEBUG.UseVisualStyleBackColor = True
         Me.btnDEBUG.Visible = False
         '
+        'ToolStripMenuItemSettingUpDown
+        '
+        Me.ToolStripMenuItemSettingUpDown.Name = "ToolStripMenuItemSettingUpDown"
+        Me.ToolStripMenuItemSettingUpDown.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingUpDown.Text = "上下図(&U)"
+        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -2454,6 +2461,8 @@ Partial Class frmMain
         CType(Me.nud横の四角数, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grp目標寸法.ResumeLayout(False)
         Me.grp目標寸法.PerformLayout()
+        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.TabControl.ResumeLayout(False)
@@ -2485,8 +2494,6 @@ Partial Class frmMain
         Me.tpageひも上下.PerformLayout()
         Me.grp縦横の四角.ResumeLayout(False)
         Me.grp縦横の四角.PerformLayout()
-        CType(Me.nud底に, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.nud垂直に, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
@@ -2704,4 +2711,5 @@ Partial Class frmMain
     Friend WithEvents nud垂直に As NumericUpDown
     Friend WithEvents btn合わせる As Button
     Friend WithEvents editAddParts As ctrAddParts
+    Friend WithEvents ToolStripMenuItemSettingUpDown As ToolStripMenuItem
 End Class

@@ -739,6 +739,14 @@ Public Class frmMain
         End If
     End Sub
 
+    '上下図
+    Private Sub ToolStripMenuItemSettingUpDown_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingUpDown.Click
+        Dim dlg As New frmUpDownPattern
+        If dlg.ShowDialog() = DialogResult.OK Then
+            '基本、影響なし
+        End If
+    End Sub
+
     '基本設定
     Private Sub ToolStripMenuItemSettingBasics_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingBasics.Click
         Dim dlg As New frmBasics
@@ -1297,6 +1305,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 
 #End Region

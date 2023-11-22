@@ -57,12 +57,12 @@ With this series, you can easily create your own original recipes, and by saving
 
 # Current Binary Version
 
-Installer         1.6.4.0
-CraftBand.dll     1.6.4.0  
-CraftBandMesh     1.6.4.0
-CraftBandSqare45  1.3.4.0  
-CraftBandKnot     1.2.4.0
-CraftBandSquare   1.1.4.0
+Installer         1.7.0.0
+CraftBand.dll     1.7.0.0  
+CraftBandMesh     1.7.0.0
+CraftBandSqare45  1.4.0.0  
+CraftBandKnot     1.3.0.0
+CraftBandSquare   1.2.0.0
 
 
 # Usage
