@@ -319,9 +319,10 @@ Public Class frmMain
     Enum enumReason
         _GridDropdown = &H1
         _Preview = &H2
+        _Always = &H100 '#41
     End Enum
     Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
-        Dim needreset As Boolean = False
+        Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If reason.HasFlag(enumReason._GridDropdown) Then
             If {"tpage側面と縁", "tpage追加品", "tpage横ひも", "tpage縦ひも"}.Contains(_CurrentTabControlName) Then
                 needreset = True
@@ -843,7 +844,7 @@ Public Class frmMain
         Return True '編集継続
     End Function
 
-    Private Sub setStartEditing()
+    Private Sub setStartEditing(Optional ByVal showTabBase As Boolean = False)
         '表示後の編集開始
         Save目標寸法(_clsDataTables.p_row目標寸法)
         Save四角数(_clsDataTables.p_row底_縦横)
@@ -851,6 +852,11 @@ Public Class frmMain
         _clsDataTables.ResetStartPoint()
 
         Me.Text = String.Format(My.Resources.FormCaption, IO.Path.GetFileNameWithoutExtension(_sFilePath))
+
+        'タブ表示(#41)
+        If showTabBase Then
+            ShowDefaultTabControlPage(enumReason._Always)
+        End If
     End Sub
 
     '新規作成
@@ -879,7 +885,7 @@ Public Class frmMain
         If _clsDataTables.Load(OpenFileDialog1.FileName) Then
             DispTables(_clsDataTables)
             _sFilePath = OpenFileDialog1.FileName
-            setStartEditing()
+            setStartEditing(True)
         Else
             MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
@@ -999,7 +1005,7 @@ Public Class frmMain
             If _clsDataTables.Load(fname) Then
                 DispTables(_clsDataTables)
                 _sFilePath = fname
-                setStartEditing()
+                setStartEditing(True)
                 Exit Sub
             Else
                 MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
