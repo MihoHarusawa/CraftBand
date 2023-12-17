@@ -95,15 +95,16 @@ Public Class frmUpDownSetting
                 Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2)
                 If r <> DialogResult.Yes Then
                     Exit Sub
-                    '置換
-                    CurrentUpdown.ToMasterRecord(row)
                 End If
+                '置換(#39)
+                CurrentUpdown.ToMasterRecord(row)
+                row.AcceptChanges()
             Else
                 '新たな名前
                 row = g_clsMasterTables.GetNewUpDownRecord(cmb上下図名.Text)
                 CurrentUpdown.ToMasterRecord(row)
             End If
-            g_clsMasterTables.SaveUpDownTable()
+            g_clsMasterTables.SaveUpDownTable(True)
         End If
 
         DialogResult = DialogResult.OK

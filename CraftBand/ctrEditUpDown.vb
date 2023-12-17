@@ -512,30 +512,64 @@ Public Class ctrEditUpDown
         End If
 
         '矩形/全体
+        Dim no_loop As Boolean = False
         If target = select_target.target_all Then
             _DataGridSelection.ChangeRangeSelected(CDataGridSelection.range_type.range_all) '全体化
+        ElseIf target = select_target.target_no_loop Then
+            no_loop = True
         End If
 
         Dim op As CDataGridValues.change_operation
         Dim delta As Integer
+        Dim add_selection As Boolean = False '#38
+        Dim dataGridSelectionSave As CDataGridSelection = _DataGridSelection.Clone
         If rad上.Checked Then
             op = CDataGridValues.change_operation.chg_ShiftDown
             delta = -1
+            If no_loop Then
+                op = CDataGridValues.change_operation.chg_ShiftDown_nl
+                add_selection = _DataGridSelection.ChangeRangeSelected(CDataGridSelection.range_type.range_add_upper)
+            End If
         ElseIf rad下.Checked Then
             op = CDataGridValues.change_operation.chg_ShiftDown
             delta = 1
+            If no_loop Then
+                op = CDataGridValues.change_operation.chg_ShiftDown_nl
+                add_selection = _DataGridSelection.ChangeRangeSelected(CDataGridSelection.range_type.range_add_lower)
+            End If
         ElseIf rad右.Checked Then
             op = CDataGridValues.change_operation.chg_ShiftRight
             delta = 1
+            If no_loop Then
+                op = CDataGridValues.change_operation.chg_ShiftRight_nl
+                add_selection = _DataGridSelection.ChangeRangeSelected(CDataGridSelection.range_type.range_add_right)
+            End If
         ElseIf rad左.Checked Then
             op = CDataGridValues.change_operation.chg_ShiftRight
             delta = -1
+            If no_loop Then
+                op = CDataGridValues.change_operation.chg_ShiftRight_nl
+                add_selection = _DataGridSelection.ChangeRangeSelected(CDataGridSelection.range_type.range_add_left)
+            End If
         Else
             Exit Sub
         End If
 
         'DataGridの値を変更する処理
         gridValueChangeOperation(sender, op, delta)
+
+        '矩形領域の選択変更
+        If no_loop Then 'AndAlso add_selection
+            If rad上.Checked Then
+                dataGridSelectionSave.MoveSelection(0, -1)
+            ElseIf rad下.Checked Then
+                dataGridSelectionSave.MoveSelection(0, 1)
+            ElseIf rad右.Checked Then
+                dataGridSelectionSave.MoveSelection(1, 0)
+            ElseIf rad左.Checked Then
+                dataGridSelectionSave.MoveSelection(-1, 0)
+            End If
+        End If
     End Sub
 
     Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
@@ -614,6 +648,8 @@ Public Class ctrEditUpDown
         target_all          '全体
         target_rectangle    '矩形
         target_square       '正方形
+        '
+        target_no_loop      '一方向シフト
     End Enum
 
     '矩形選択されていれば無条件で矩形(正方形)が対象、以外は全体が対象であることを問い合わせる
@@ -649,8 +685,8 @@ Public Class ctrEditUpDown
         End If
     End Function
 
-    '2サイズ以上の矩形選択されていれば対象にするかを問い合わせる。以外は全体が対象
-    '戻り値: target_none=キャンセル/不可  target_all=全体対象  target_rectangle=矩形対象 target_square=正方形対象
+    '2サイズ以上の矩形選択されていれば、一方向シフトか循環シフトかをを問い合わせる。以外は全体
+    '戻り値: target_none=キャンセル/不可  target_all=全体対象  target_rectangle=矩形循環 target_no_loop=一方向シフト
     Private Function getTargetSelect2(sender As Object) As select_target
         If _DataGridSelection Is Nothing OrElse Not _DataGridSelection.IsValid Then
             Return select_target.target_none
@@ -666,13 +702,15 @@ Public Class ctrEditUpDown
             Return select_target.target_all
         End If
 
-        '選択された領域のみを{0}しますか？　(はい=選択領域,いいえ=全体)
-        If MessageBox.Show(String.Format(My.Resources.AskTargetRectangle, ControlText(sender)),
-                            FormCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+        '選択された領域を循環{0}しますか？　(はい=循環,いいえ=一方向)
+        Dim ret As DialogResult = MessageBox.Show(String.Format(My.Resources.AskTargetRectangle, ControlText(sender)),
+                    FormCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        If ret = DialogResult.Yes Then
             Return select_target.target_rectangle
-        Else
-            Return select_target.target_all
+        ElseIf ret = DialogResult.no Then
+            Return select_target.target_no_loop '(一方向指定)
         End If
+        Return select_target.target_none
     End Function
 
 
@@ -1083,7 +1121,7 @@ Public Class ctrEditUpDown
             _RowIndexTo = Integer.MinValue
         End Sub
 
-        'セルの選択をセット(表示かつ対象範囲内のみ)
+        'セルの選択をTrueにセット(表示かつ対象範囲内のみ)
         Private Sub setCellSelected(ByVal col As Integer, row As Integer)
             If col < cDataStartColumnIndex OrElse _ColumnCount < col OrElse row < 0 OrElse _RowCount <= row Then
                 Exit Sub
@@ -1208,6 +1246,12 @@ Public Class ctrEditUpDown
 
             range_check_on 'チェックONのセル
             range_check_off 'チェックOFFのセル
+
+            '矩形領域が選択されている前提
+            range_add_upper '上の行へ
+            range_add_lower '下の行へ
+            range_add_left '左の列へ
+            range_add_right '右の列へ
         End Enum
 
         'DataGridView指定範囲のセルを選択する ※メンバー変数値は変わりません
@@ -1230,21 +1274,19 @@ Public Class ctrEditUpDown
                     cto = _ColumnCount
 
                 Case range_type.range_selected
-                    _DGV.ClearSelection()
+                    '_DGV.ClearSelection()
                     For row As Integer = 0 To _RowCount - 1
                         For col As Integer = cDataStartColumnIndex To _ColumnCount
-                            If _CellSelected(col, row) Then
-                                _DGV.Rows(row).Cells(col).Selected = True
-                            End If
+                            _DGV.Rows(row).Cells(col).Selected = _CellSelected(col, row)
                         Next
                     Next
                     Return True
 
                 Case range_type.range_rectangle
-                    _DGV.ClearSelection()
+                    '_DGV.ClearSelection()
 
                 Case range_type.range_square
-                    _DGV.ClearSelection()
+                    '_DGV.ClearSelection()
                     If _RowIndexTo - _RowIndexFrom < _ColumnIndexTo - _ColumnIndexFrom Then
                         '横が大きい
                         Dim diff As Integer = (_ColumnIndexTo - _ColumnIndexFrom) - (_RowIndexTo - _RowIndexFrom)
@@ -1260,7 +1302,7 @@ Public Class ctrEditUpDown
                     End If
 
                 Case range_type.range_center
-                    _DGV.ClearSelection()
+                    '_DGV.ClearSelection()
                     rfrom = ((_RowCount + 1) \ 2) - 1
                     rto = ((_RowCount \ 2) + 1) - 1
                     cfrom = (_ColumnCount + 1) \ 2
@@ -1283,9 +1325,14 @@ Public Class ctrEditUpDown
                     Return False
             End Select
 
-            For row As Integer = rfrom To rto
-                For col As Integer = cfrom To cto
-                    _DGV.Rows(row).Cells(col).Selected = True
+            '矩形領域
+            For row As Integer = 0 To _RowCount - 1
+                For col As Integer = cDataStartColumnIndex To _ColumnCount
+                    If rfrom <= row AndAlso row <= rto AndAlso cfrom <= col AndAlso col <= cfrom Then
+                        _DGV.Rows(row).Cells(col).Selected = True
+                    Else
+                        _DGV.Rows(row).Cells(col).Selected = False
+                    End If
                 Next
             Next
             Return True
@@ -1293,6 +1340,7 @@ Public Class ctrEditUpDown
 
 
         '配列を含む選択状態のメンバー変数値を変更する ※DataGridViewは変わりません
+        '変更した場合Trueを返す(厳密ではない)
         Function ChangeRangeSelected(ByVal range As range_type) As Boolean
             Select Case range
                 Case range_type.range_clear
@@ -1309,7 +1357,7 @@ Public Class ctrEditUpDown
 
                 Case range_type.range_selected
                     '変わりません
-                    Return True
+                    Return False
 
                 Case range_type.range_rectangle
                     '追記
@@ -1317,6 +1365,47 @@ Public Class ctrEditUpDown
                         For col As Integer = _ColumnIndexFrom To _ColumnIndexTo
                             setCellSelected(col, row)
                         Next
+                    Next
+
+                Case range_type.range_add_upper '矩形領域が選択されている前提で、画面上の行に広げる
+                    '追記
+                    Dim rowadd As Integer = _RowIndexFrom - 1
+                    If rowadd < 0 Then
+                        Return False
+                    End If
+                    For col As Integer = _ColumnIndexFrom To _ColumnIndexTo
+                        setCellSelected(col, rowadd)
+                    Next
+
+                Case range_type.range_add_lower '矩形領域が選択されている前提で、画面下の行に広げる
+                    '追記
+                    Dim rowadd As Integer = _RowIndexTo + 1
+                    If _RowCount < rowadd Then
+                        Return False
+                    End If
+                    For col As Integer = _ColumnIndexFrom To _ColumnIndexTo
+                        setCellSelected(col, rowadd)
+                    Next
+
+                Case range_type.range_add_left '矩形領域が選択されている前提で、画面左の列に広げる
+                    '追記
+                    Dim coladd As Integer = _ColumnIndexFrom - 1
+                    If coladd < cDataStartColumnIndex Then
+                        Return False
+                    End If
+                    For row As Integer = _RowIndexFrom To _RowIndexTo
+                        setCellSelected(coladd, row)
+                    Next
+
+
+                Case range_type.range_add_right '矩形領域が選択されている前提で、画面右の列に広げる
+                    '追記
+                    Dim coladd As Integer = _ColumnIndexTo + 1
+                    For row As Integer = _RowIndexFrom To _RowIndexTo
+                        If _ColumnCount < coladd Then
+                            Return False
+                        End If
+                        setCellSelected(coladd, row)
                     Next
 
                 Case range_type.range_square
@@ -1412,6 +1501,8 @@ Public Class ctrEditUpDown
             chg_RotateLeft    '左回転         正方形
             chg_ShiftRight    '右シフト       矩形          プラスは右、マイナスは左
             chg_ShiftDown     '下シフト       矩形          プラスは下、マイナスは上
+            chg_ShiftRight_nl '右シフト(一方向) 矩形        〃
+            chg_ShiftDown_nl  '下シフト(一方向) 矩形        〃
         End Enum
 
 
@@ -1440,10 +1531,16 @@ Public Class ctrEditUpDown
                     Return changeCheckedRotateLeft()
 
                 Case change_operation.chg_ShiftRight    '右シフト 
-                    Return changeCheckedShiftRight(delta)
+                    Return changeCheckedShiftRight(delta, False)
 
                 Case change_operation.chg_ShiftDown    '下シフト 
-                    Return changeCheckedShiftDown(delta)
+                    Return changeCheckedShiftDown(delta, False)
+
+                Case change_operation.chg_ShiftRight_nl    '右シフト(一方向) 
+                    Return changeCheckedShiftRight(delta, True)
+
+                Case change_operation.chg_ShiftDown_nl    '下シフト(一方向)  
+                    Return changeCheckedShiftDown(delta, True)
 
                 Case Else 'op_None 何もしない  
                     Return False
@@ -1547,7 +1644,7 @@ Public Class ctrEditUpDown
 
 
         '右シフト・矩形対象 
-        Private Function changeCheckedShiftRight(ByVal delta As Integer) As Boolean
+        Private Function changeCheckedShiftRight(ByVal delta As Integer, ByVal no_loop As Boolean) As Boolean
             If Not _Selection.IsRectangleSelect Then
                 Return False
             End If
@@ -1557,18 +1654,32 @@ Public Class ctrEditUpDown
                     Return True '同じになる
                 End If
                 For row As Integer = ._RowIndexFrom To ._RowIndexTo
-                    For x As Integer = 0 To .RectangleWidth - 1
-                        Dim xdelta As Integer = Modulo((x + delta), .RectangleWidth)
-                        'Debug.Print("({0},[{1}]) ← ({2},[{3}])", ._ColumnIndexFrom + xdelta, row, ._ColumnIndexFrom + x, row)
-                        _CellChecked(._ColumnIndexFrom + xdelta, row) = save(._ColumnIndexFrom + x, row)
-                    Next
+                    If no_loop Then
+                        '一方向
+                        For x As Integer = 0 To .RectangleWidth - 1
+                            _CellChecked(._ColumnIndexFrom + x, row) = False
+                        Next
+                        For x As Integer = 0 To .RectangleWidth - 1
+                            Dim xdelta As Integer = (x + delta)
+                            If 0 <= xdelta AndAlso xdelta < .RectangleWidth Then
+                                _CellChecked(._ColumnIndexFrom + xdelta, row) = save(._ColumnIndexFrom + x, row)
+                            End If
+                        Next
+                    Else
+                        '循環
+                        For x As Integer = 0 To .RectangleWidth - 1
+                            Dim xdelta As Integer = Modulo((x + delta), .RectangleWidth)
+                            'Debug.Print("({0},[{1}]) ← ({2},[{3}])", ._ColumnIndexFrom + xdelta, row, ._ColumnIndexFrom + x, row)
+                            _CellChecked(._ColumnIndexFrom + xdelta, row) = save(._ColumnIndexFrom + x, row)
+                        Next
+                    End If
                 Next
                 Return True
             End With
         End Function
 
         '下シフト・矩形対象
-        Private Function changeCheckedShiftDown(ByVal delta As Integer) As Boolean
+        Private Function changeCheckedShiftDown(ByVal delta As Integer, ByVal no_loop As Boolean) As Boolean
             If Not _Selection.IsRectangleSelect Then
                 Return False
             End If
@@ -1578,11 +1689,24 @@ Public Class ctrEditUpDown
                     Return True '同じになる
                 End If
                 For col As Integer = ._ColumnIndexFrom To ._ColumnIndexTo
-                    For y As Integer = 0 To .RectangleHight - 1
-                        Dim ydelta As Integer = Modulo((y + delta), .RectangleHight)
-                        'Debug.Print("([{0}],{1}) ← ([{2}],{3})", col, ._RowIndexFrom + ydelta, col, ._RowIndexFrom + y)
-                        _CellChecked(col, ._RowIndexFrom + ydelta) = save(col, ._RowIndexFrom + y)
-                    Next
+                    If no_loop Then
+                        '一方向
+                        For y As Integer = 0 To .RectangleHight - 1
+                            _CellChecked(col, ._RowIndexFrom + y) = False
+                        Next
+                        For y As Integer = 0 To .RectangleHight - 1
+                            Dim ydelta As Integer = (y + delta)
+                            If 0 <= ydelta AndAlso ydelta < .RectangleHight Then
+                                _CellChecked(col, ._RowIndexFrom + ydelta) = save(col, ._RowIndexFrom + y)
+                            End If
+                        Next
+                    Else
+                        For y As Integer = 0 To .RectangleHight - 1
+                            Dim ydelta As Integer = Modulo((y + delta), .RectangleHight)
+                            'Debug.Print("([{0}],{1}) ← ([{2}],{3})", col, ._RowIndexFrom + ydelta, col, ._RowIndexFrom + y)
+                            _CellChecked(col, ._RowIndexFrom + ydelta) = save(col, ._RowIndexFrom + y)
+                        Next
+                    End If
                 Next
                 Return True
             End With

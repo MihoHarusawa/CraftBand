@@ -864,7 +864,7 @@ Class clsCalcSquare
     'p_tbl側面の縁を除くレコードを現在の各設定値に合わせる　※中でadjust_側面(row)呼び出し
     'IN:    _b縦横側面を展開する,_i高さの目の数,_d最下段の目,_d目_ひも間のすき間
     'OUT:    
-    Private Function adjust_側面() As Boolean
+    Public Function adjust_側面() As Boolean
 
         Dim table As tbl側面DataTable = _Data.p_tbl側面
         Dim row As tbl側面Row
@@ -1386,6 +1386,23 @@ Class clsCalcSquare
             Return False
         End Try
     End Function
+
+    Function prepare縦横展開DataTable() As Boolean
+        Try
+            Dim yokotable As tbl縦横展開DataTable = get横展開DataTable()
+            _Data.FromTmpTable(enumひも種.i_横, yokotable)
+            save横展開DataTable(True)
+
+            Dim tatetable As tbl縦横展開DataTable = get縦展開DataTable()
+            save縦展開DataTable(True)
+
+            Return True
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "prepare縦横展開DataTable")
+            Return False
+        End Try
+    End Function
+
 
     '更新処理が必要なフィールド名
     Shared _fields縦横展開() As String = {"f_i何本幅", "f_dひも長加算"}

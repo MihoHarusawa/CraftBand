@@ -193,7 +193,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  選択された領域のみを{0}しますか？　(はい=選択領域,いいえ=全体) に類似しているローカライズされた文字列を検索します。
+        '''  選択された領域を循環{0}しますか？　(はい=循環,いいえ=一方向) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskTargetRectangle() As String
             Get

@@ -1790,6 +1790,23 @@ Class clsCalcKnot
         Return tmptable
     End Function
 
+    '縦横を展開したtbl縦横展開DataTableのレコードの初期化(なければ作成)
+    Function prepare縦横展開DataTable() As Boolean
+        Try
+            Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
+            _Data.FromTmpTable(enumひも種.i_横, yokotable)
+
+            Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
+            _Data.FromTmpTable(enumひも種.i_縦, tatetable)
+
+            Return True
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "prepare縦横展開DataTable")
+            Return False
+        End Try
+    End Function
+
+
 
     '開始位置情報
     Private Class CStartInfo

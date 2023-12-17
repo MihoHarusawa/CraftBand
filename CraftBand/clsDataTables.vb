@@ -460,9 +460,9 @@ Public Class clsDataTables
         If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
             Return 0
         End If
-        If tmptable.GetChanges() Is Nothing Then
-            Return 0
-        End If
+        'If tmptable.GetChanges() Is Nothing Then
+        '    Return 0
+        'End If
 
         'ひも種で指定されたカテゴリーのレコードを削除
         Dim count As Integer = Removeひも種Rows(iひも種)

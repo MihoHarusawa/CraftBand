@@ -2293,6 +2293,22 @@ Class clsCalcMesh
         Return tbl縦横展開
     End Function
 
+
+    Function prepare縦横展開DataTable() As Boolean
+        Try
+            Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
+            _Data.FromTmpTable(enumひも種.i_横, yokotable)
+
+        Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
+            _Data.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tatetable)
+
+            Return True
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "prepare縦横展開DataTable")
+            Return False
+        End Try
+    End Function
+
     '底楕円の出力するひも長を「連続ひも長」フィールドにセットする
     Private Function set底楕円_連続ひも長(ByVal d垂直ひも長 As Double) As Boolean
         Dim res = (From row As tbl底_楕円Row In _Data.p_tbl底_楕円

@@ -538,6 +538,11 @@ Public Class frmMain
         SaveTables(_clsDataTables)
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色変更
 
+        '#40:縦横のレコード数
+        If chk縦横を展開する.Checked Then
+            _clsCalcSquare45.prepare縦横展開DataTable()
+        End If
+
         Dim dlg As New frmColorChange
         dlg.SetDataAndExpand(_clsDataTables, chk縦横を展開する.Checked)
         dlg.ShowDialog()
