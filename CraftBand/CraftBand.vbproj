@@ -9,9 +9,9 @@
     <Company>LaboHarusawa</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>クラフトバンド・共通ライブラリ</Title>
-    <Copyright>Copyright © LaboHarusawa 2022-2023</Copyright>
-    <FileVersion>1.7.1.0</FileVersion>
-    <AssemblyVersion>1.7.1.0</AssemblyVersion>
+    <Copyright>Copyright © LaboHarusawa 2022-2024</Copyright>
+    <FileVersion>1.7.2.0</FileVersion>
+    <AssemblyVersion>1.7.2.0</AssemblyVersion>
     <Description>クラフトバンド・共通ライブラリ</Description>
   </PropertyGroup>
 

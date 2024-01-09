@@ -12,10 +12,10 @@
     <Company>LaboHarusawa</Company>
     <Product>CraftBand</Product>
     <Description>クラフトバンド・斜め45度に配置する四角ベースの計算</Description>
-    <Copyright>Copyright © LaboHarusawa 2023</Copyright>
+    <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
     <PackageIcon>IconSquare45.ico</PackageIcon>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

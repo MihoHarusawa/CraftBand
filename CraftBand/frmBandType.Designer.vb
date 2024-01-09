@@ -482,7 +482,9 @@ Partial Class frmBandType
         Me.ColumnBotton.HeaderText = "色選択"
         Me.ColumnBotton.MinimumWidth = 6
         Me.ColumnBotton.Name = "ColumnBotton"
+        Me.ColumnBotton.Text = "色選択"
         Me.ColumnBotton.ToolTipText = "描画色から選択する場合クリック"
+        Me.ColumnBotton.UseColumnTextForButtonValue = True
         Me.ColumnBotton.Width = 60
         '
         'f_s備考

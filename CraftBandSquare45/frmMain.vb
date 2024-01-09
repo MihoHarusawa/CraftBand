@@ -95,11 +95,11 @@ Public Class frmMain
         f_s色5.DisplayMember = "Display"
         f_s色5.ValueMember = "Value"
 
-        setBasics()
+        setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
         _isLoadingData = False 'Designer.vb描画完了
 
-        DispTables(_clsDataTables)
+        DispTables(_clsDataTables) 'バンドの種類変更対応含む
 
         'ひも上下の初期値
         chk横の辺.Checked = True
@@ -147,7 +147,7 @@ Public Class frmMain
 
 
     '対象バンド・基本値の更新
-    Sub setBasics()
+    Sub setBasics(ByVal isCheckUndef As Boolean)
 
         With g_clsSelectBasics
             txtバンドの種類名.Text = .p_s対象バンドの種類名
@@ -192,8 +192,16 @@ Public Class frmMain
             Me.f_dひも長5.DefaultCellStyle.Format = format
         End With
 
-        '現データ
-        _clsDataTables.ModifySelected()
+        '#42
+        If isCheckUndef Then
+            '未定義色の変更確認
+            Dim dlg As New frmColorChange
+            dlg.SetDataAndExpand(_clsDataTables, True) '縦横展開を含める
+            dlg.ShowDialogForUndef()
+
+            '未参照を排除
+            _clsDataTables.ModifySelected()
+        End If
 
     End Sub
 
@@ -337,7 +345,7 @@ Public Class frmMain
         With row目標寸法
             If .Value("f_sバンドの種類名") <> g_clsSelectBasics.p_s対象バンドの種類名 Then
                 g_clsSelectBasics.SetTargetBandTypeName(.Value("f_sバンドの種類名"))
-                setBasics()
+                setBasics(True)
             End If
             '
             If .Value("f_b内側区分") Then
@@ -529,7 +537,7 @@ Public Class frmMain
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
-            setBasics()
+            setBasics(True)
             recalc(CalcCategory.BsMaster)
         End If
     End Sub
@@ -711,7 +719,7 @@ Public Class frmMain
         ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色と本幅数変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
-            setBasics()
+            setBasics(True)
             recalc(CalcCategory.BsMaster)
         End If
     End Sub
@@ -762,7 +770,7 @@ Public Class frmMain
         dlg.DataPath = _sFilePath
 
         If dlg.ShowDialog() = DialogResult.OK Then
-            setBasics()
+            setBasics(True)
             recalc(CalcCategory.BsMaster)
         End If
     End Sub

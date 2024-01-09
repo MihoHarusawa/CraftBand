@@ -11,11 +11,11 @@
     <Company>LaboHarusawa</Company>
     <Product>CraftBand</Product>
     <Description>クラフトバンド・四つ目の計算</Description>
-    <Copyright>Copyright © LaboHarusawa 2023</Copyright>
+    <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
     <PackageIcon>IconSquare.ico</PackageIcon>
     <Authors>MihoHarusawa</Authors>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
+    <AssemblyVersion>1.2.2.0</AssemblyVersion>
+    <FileVersion>1.2.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
