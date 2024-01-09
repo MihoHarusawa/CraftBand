@@ -47,6 +47,7 @@ Partial Class frmBandType
         Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgvData = New CraftBand.ctrDataGridView()
         Me.BindingSourceバンドの種類 = New System.Windows.Forms.BindingSource(Me.components)
         Me.btnキャンセル = New System.Windows.Forms.Button()
@@ -83,6 +84,7 @@ Partial Class frmBandType
         Me.f_d四つ畳みひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d目と数える端の目 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s色リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnBotton = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceバンドの種類, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -99,7 +101,7 @@ Partial Class frmBandType
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_s長さと重さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_dコマ寸法係数a, Me.f_dコマ寸法係数b, Me.f_dコマ要尺係数a, Me.f_dコマ要尺係数b, Me.f_d四つ畳みひも長加算初期値, Me.f_d目と数える端の目, Me.f_s色リスト, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_s長さと重さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_dコマ寸法係数a, Me.f_dコマ寸法係数b, Me.f_dコマ要尺係数a, Me.f_dコマ要尺係数b, Me.f_d四つ畳みひも長加算初期値, Me.f_d目と数える端の目, Me.f_s色リスト, Me.ColumnBotton, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSourceバンドの種類
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
@@ -471,6 +473,18 @@ Partial Class frmBandType
         Me.f_s色リスト.ToolTipText = "カンマ区切りで複数を入力できます"
         Me.f_s色リスト.Width = 136
         '
+        'ColumnBotton
+        '
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle23.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ColumnBotton.DefaultCellStyle = DataGridViewCellStyle23
+        Me.ColumnBotton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.ColumnBotton.HeaderText = "色選択"
+        Me.ColumnBotton.MinimumWidth = 6
+        Me.ColumnBotton.Name = "ColumnBotton"
+        Me.ColumnBotton.ToolTipText = "描画色から選択する場合クリック"
+        Me.ColumnBotton.Width = 60
+        '
         'f_s備考
         '
         Me.f_s備考.DataPropertyName = "f_s備考"
@@ -545,5 +559,6 @@ Partial Class frmBandType
     Friend WithEvents f_d四つ畳みひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_d目と数える端の目 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色リスト As DataGridViewTextBoxColumn
+    Friend WithEvents ColumnBotton As DataGridViewButtonColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
 End Class

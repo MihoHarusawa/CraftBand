@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Threading.Channels
+Imports System.Windows.Forms
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstMasterTables
@@ -13,6 +14,8 @@ Public Class clsMasterTables
     Public Const MyExtention As String = ".XML"
     Public Const MyBakExtention As String = ".BAK"
     Public Const MaxRgbValue As Integer = 255
+    Public Const CommonColorBandType As String = "-" '描画色のバンドの種類名のDefaultValue
+
 
     Dim _dstMasterTables As dstMasterTables
 
@@ -256,18 +259,18 @@ Public Class clsMasterTables
 
         '基本値は更新なし
 
-        '描画色
-        changecount = importColorTable(othermaster, isOverWrite)
-        sb.AppendLine(change_message((New frmColor).Text, changecount))
+        'バンドの種類名 
+        changecount = importBandTypeTable(othermaster, isOverWrite, changedBandTypeList) '※参照色リスト追記
+        sb.AppendLine(change_message((New frmBandType).Text, changecount))
         If changecount < 0 Then
             success = False
         Else
             changesum += changecount
         End If
 
-        'バンドの種類名
-        changecount = importBandTypeTable(othermaster, isOverWrite, changedBandTypeList)
-        sb.AppendLine(change_message((New frmBandType).Text, changecount))
+        '描画色
+        changecount = importColorTable(othermaster, isOverWrite) '※有効なバンドの種類名の色
+        sb.AppendLine(change_message((New frmColor).Text, changecount))
         If changecount < 0 Then
             success = False
         Else
@@ -369,7 +372,7 @@ Public Class clsMasterTables
             If 0 < clsSelectBasics.ToColorTable(tableColor, colstr, False) Then
                 For Each colrow As dstWork.tblColorRow In tableColor
                     '色を追加
-                    result = othermaster.importColor(colrow.Value, othermaster._dstMasterTables.Tables("tbl描画色"), level, Me, isOverWrite)
+                    result = exportColorBandType(colrow.Value, bandTypeName, othermaster, level, isOverWrite)
                     If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
                         changecount += 1
                     End If
@@ -905,6 +908,7 @@ Public Class clsMasterTables
             Return ImportResult.AddToThis
 
         ElseIf isOverWrite Then
+            '上書きあり
             If Not thisPatternGroup.Equals(otherPatternGroup) Then
                 '両方にある。入れ替え
 
@@ -932,9 +936,16 @@ Public Class clsMasterTables
                 Return ImportResult.SameNoAction
             End If
         Else
-            ' - 同名あり 既存を保持
-            g_clsLog.LogResourceMessage(level, "LogImportExistSkip", patternName)
-            Return ImportResult.KeepThisSkip
+            '上書きなし
+            If thisPatternGroup.Equals(otherPatternGroup) Then
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", patternName)
+                Return ImportResult.SameNoAction
+            Else
+                ' - 同名あり 既存を保持
+                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", patternName)
+                Return ImportResult.KeepThisSkip
+            End If
         End If
     End Function
 
@@ -1144,6 +1155,11 @@ Public Class clsMasterTables
                 Return ImportResult.SameNoAction
             End If
         Else
+            If thisOptionGroup.Equals(otherOptionGroup) Then
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", otherOptionName)
+                Return ImportResult.SameNoAction
+            End If
             ' - 同名あり 既存を保持
             g_clsLog.LogResourceMessage(level, "LogImportExistSkip", otherOptionName)
             Return ImportResult.KeepThisSkip
@@ -1157,6 +1173,8 @@ Public Class clsMasterTables
     Class clsColorRecordSet
         Implements IEquatable(Of clsColorRecordSet)
 
+        Private Const AlfaLaneDefault As Integer = 100 '少し薄い色
+
         Public PenColor As Drawing.Color = Color.Empty  '描画色・Solid塗りつぶし色
         Public LanePenColor As Drawing.Color = Color.Empty '本幅描画色
         Public BrushAlfaColor As Drawing.Color = Color.Empty 'Alfa塗りつぶし色
@@ -1166,11 +1184,20 @@ Public Class clsMasterTables
 
         'レコード値の保持
         Public Name As String '色名
+        Public BandTypeName As String 'バンドの種類名
         Public Appendix As String '備考
+
+        Public ReadOnly Property IsEmptyBandType As Boolean
+            Get
+                Return BandTypeName = CommonColorBandType
+            End Get
+        End Property
+
 
         Sub New(ByVal row As tbl描画色Row)
             Name = row.f_s色
             Appendix = row.f_s備考
+            BandTypeName = row.f_sバンドの種類名
 
             PenColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
             If Not row.Isf_i透明度Null AndAlso 0 < row.f_i透明度 Then
@@ -1187,8 +1214,12 @@ Public Class clsMasterTables
                 LanePenWidth = row.f_d中線幅
             End If
 
-            '本幅描画色については、とりあえず、少し薄い色にしておく
-            LanePenColor = Color.FromArgb(100, PenColor)
+            '本幅描画色
+            If IsDBNull(row.f_s中線色) Then
+                LanePenColorString = Nothing
+            Else
+                LanePenColorString = row.f_s中線色.ToString
+            End If
         End Sub
 
         Public Function ToRow(ByVal row As tbl描画色Row) As Boolean
@@ -1201,19 +1232,60 @@ Public Class clsMasterTables
             row.f_i透明度 = BrushAlfaColor.A
             row.f_d線幅 = PenWidth
             row.f_d中線幅 = LanePenWidth
+            row.f_s中線色 = LanePenColorString
 
+            row.f_sバンドの種類名 = BandTypeName
             row.f_s色 = Name
             row.f_s備考 = Appendix
             Return True
         End Function
 
+        '本幅描画色文字列 ※描画色セット後使用可
+        Private Property LanePenColorString As String
+            Get
+                If PenColor.R = LanePenColor.R AndAlso PenColor.G = LanePenColor.G AndAlso PenColor.B = LanePenColor.B Then
+                    If LanePenColor.A = AlfaLaneDefault Then
+                        Return String.Empty
+                    Else
+                        Return LanePenColor.A.ToString
+                    End If
+                End If
+                Return String.Format("{0},{1},{2},{3}", LanePenColor.A, LanePenColor.R, LanePenColor.G, LanePenColor.B)
+            End Get
+            Set(value As String)
+                LanePenColor = Color.FromArgb(AlfaLaneDefault, PenColor)
+                If String.IsNullOrWhiteSpace(value) Then Exit Property
+
+                Dim ary() As String = value.Split(",")
+                If ary.Length < 1 Then Exit Property
+                Dim alfa As Integer
+                If Not Integer.TryParse(ary(0), alfa) OrElse alfa < 0 OrElse MaxRgbValue < alfa Then Exit Property
+                If ary.Length = 1 Then
+                    LanePenColor = Color.FromArgb(alfa, PenColor)
+                    Exit Property
+                ElseIf ary.Length <> 4 Then
+                    Exit Property
+                End If
+                Dim r As Integer
+                If Not Integer.TryParse(ary(1), r) OrElse r < 0 OrElse MaxRgbValue < r Then Exit Property
+                Dim g As Integer
+                If Not Integer.TryParse(ary(2), g) OrElse g < 0 OrElse MaxRgbValue < g Then Exit Property
+                Dim b As Integer
+                If Not Integer.TryParse(ary(3), b) OrElse b < 0 OrElse MaxRgbValue < b Then Exit Property
+                LanePenColor = Color.FromArgb(alfa, r, g, b)
+            End Set
+        End Property
+
         Public Overloads Function Equals(other As clsColorRecordSet) As Boolean Implements IEquatable(Of clsColorRecordSet).Equals
             '色の値のみを比較
-            Return BrushAlfaColor = other.BrushAlfaColor AndAlso PenWidth = other.PenWidth AndAlso LanePenWidth = other.LanePenWidth
+            Return BrushAlfaColor = other.BrushAlfaColor AndAlso LanePenColor = other.LanePenColor AndAlso
+                PenWidth = other.PenWidth AndAlso LanePenWidth = other.LanePenWidth
         End Function
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}:R({1}) G({2}) B({3}) Alfa({4}) Width({5}) Lane({6}) {7}", Name, PenColor.R, PenColor.G, PenColor.B, BrushAlfaColor.A, PenWidth, LanePenWidth, Appendix)
+            Return String.Format("{0}({1}):R({2}) G({3}) B({4}) Alfa({5}) Width({6}) Lane({7}:{8}) {9}",
+                                 Name, BandTypeName, PenColor.R, PenColor.G, PenColor.B, BrushAlfaColor.A, PenWidth,
+                                 LanePenWidth, LanePenColorString, Appendix)
         End Function
     End Class
 
@@ -1276,20 +1348,43 @@ Public Class clsMasterTables
         Return Color.FromArgb(ialfa, ired, igreen, iblue)
     End Function
 
-    '指定名の描画色 なければNothing
-    Public Function GetColorRecordSet(ByVal color As String) As clsColorRecordSet
-        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+    '色とバンド種の選択条件
+    Friend Shared Function CondColorBandType(ByVal color As String, ByVal bandtype As String) As String
+        If bandtype Is Nothing Then
+            Return String.Format("f_s色='{0}' AND f_sバンドの種類名='{1}'", color, CommonColorBandType)
+        Else
+            Return String.Format("f_s色='{0}' AND f_sバンドの種類名='{1}'", color, bandtype)
+        End If
+    End Function
 
+    '色・バンド種・バンド種一致を指定して描画色取得(#42) なければNothing
+    Public Function GetColorRecordSet(ByVal color As String, ByVal bandType As String, ByVal isSpecifyBand As Boolean) As clsColorRecordSet
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
         If table.Rows.Count = 0 OrElse String.IsNullOrWhiteSpace(color) Then
             Return Nothing
         End If
 
-        Dim cond As String = String.Format("f_s色 = '{0}'", color)
-        Dim rows() As tbl描画色Row = table.Select(cond)
+        '色とバンドの種類で検索
+        Dim rows() As tbl描画色Row = table.Select(CondColorBandType(color, bandType))
         If 0 < rows.Count Then
-            Return New clsColorRecordSet(rows(0)) 'First only
+            Return New clsColorRecordSet(rows(0)) '1点のはず
         End If
-        Return Nothing
+
+        'バンドの種類を特定するか
+        If isSpecifyBand Then
+            '他のバンドの種類の色は参照しない
+            Return Nothing
+
+        Else
+            '共通色
+            rows = table.Select(CondColorBandType(color, Nothing))
+            If 0 < rows.Count Then
+                Return New clsColorRecordSet(rows(0)) '1点のはず
+            End If
+
+            '他のバンドの種類の色は参照しない
+            Return Nothing
+        End If
     End Function
 
     Public Function GetColorTableCopy() As tbl描画色DataTable
@@ -1310,11 +1405,25 @@ Public Class clsMasterTables
         Return updateCopyTableIfModified(original, table)
     End Function
 
-    Private Function getColorNames() As String()
+    Public Function GetColorNames(Optional ByVal bandTypeName As String = "*") As String()
         Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
-        Dim res = (From row As tbl描画色Row In table
+        Dim res
+        If bandTypeName Is Nothing Then
+            res = (From row As tbl描画色Row In table
+                   Where row.f_sバンドの種類名 = CommonColorBandType
                    Select ColorName = row.f_s色
                    Order By ColorName).Distinct.ToList
+        ElseIf bandTypeName = "*" Then
+            res = (From row As tbl描画色Row In table
+                   Select ColorName = row.f_s色
+                   Order By ColorName).Distinct.ToList
+        Else
+            res = (From row As tbl描画色Row In table
+                   Where row.f_sバンドの種類名 = bandTypeName
+                   Select ColorName = row.f_s色
+                   Order By ColorName).Distinct.ToList
+
+        End If
         Return res.ToArray
     End Function
 
@@ -1322,16 +1431,24 @@ Public Class clsMasterTables
         Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
         Dim changecount As Integer = 0
 
-        Dim otherColorNames() As String = othermaster.getColorNames
+        'tbl描画色の色名
+        Dim otherColorNames() As String = othermaster.GetColorNames()
+
+        '登録されているバンドの種類名
+        Dim res = (From row As tblバンドの種類Row In _dstMasterTables.Tables("tblバンドの種類")
+                   Select BandTypeName = row.f_sバンドの種類名
+                   Order By BandTypeName).Distinct.ToList
+        Dim bandTypeNames() As String = res.ToArray
+
 
         'テーブルの現点数とファイル点数
-        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, getColorNames().Count, otherColorNames.Count)
+        g_clsLog.LogResourceMessage(clsLog.LogLevel.Basic, "LogImportTable", table.TableName, GetColorNames().Count, otherColorNames.Count)
 
         For Each otherColorName As String In otherColorNames
-            Dim result As ImportResult = importColor(otherColorName, table, clsLog.LogLevel.Basic,
+            Dim count As Integer = importColor(otherColorName, bandTypeNames, table, clsLog.LogLevel.Basic,
                                                         othermaster, isOverWrite)
-            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
-                changecount += 1
+            If 0 < count Then
+                changecount += count
             End If
         Next
 
@@ -1342,50 +1459,116 @@ Public Class clsMasterTables
         Return changecount
     End Function
 
-    Private Function importColor(ByVal colorName As String, ByVal table As tbl描画色DataTable, ByVal level As clsLog.LogLevel,
-                                 ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As ImportResult
+    '指定色のインポート。現有効なバンド種、共通と一致はスキップ
+    Private Function importColor(ByVal colorName As String, ByVal bandTypeNames() As String, ByVal table As tbl描画色DataTable, ByVal level As clsLog.LogLevel,
+                                 ByVal othermaster As clsMasterTables, ByVal isOverWrite As Boolean) As Integer
 
-        Dim otherColor As clsColorRecordSet = othermaster.GetColorRecordSet(colorName)
-        If otherColor Is Nothing Then
-            Return ImportResult.NoOtherRecord
+        Dim changecount As Integer = 0
+
+        '共通色
+        Dim otherColorCommon As clsColorRecordSet = othermaster.GetColorRecordSet(colorName, Nothing, True)
+        If otherColorCommon IsNot Nothing Then
+            Dim result As ImportResult = importColorRecordSet(otherColorCommon, level, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        End If
+        Dim thisColorCommon As clsColorRecordSet = GetColorRecordSet(colorName, Nothing, True)
+
+        '相手のバンド種
+        Dim res = (From row As tbl描画色Row In othermaster._dstMasterTables.Tables("tbl描画色")
+                   Where row.f_s色 = colorName And row.f_sバンドの種類名 <> CommonColorBandType
+                   Select BandTypeName = row.f_sバンドの種類名
+                   Order By BandTypeName).Distinct.ToList
+        Dim otherColorBandTypeNames() As String = res.ToArray
+
+        If otherColorBandTypeNames.Length = 0 Then
+            Return changecount
         End If
 
-        Dim thisColor As clsColorRecordSet = GetColorRecordSet(colorName)
+        For Each otherBandtype As String In otherColorBandTypeNames
+            If Not bandTypeNames.Contains(otherBandtype) Then
+                '- 対象外
+                g_clsLog.LogResourceMessage(level, "LogImportNoTarget", colorName, otherBandtype)
+                Continue For
+            End If
+
+            Dim otherColor As clsColorRecordSet = othermaster.GetColorRecordSet(colorName, otherBandtype, True)
+            If otherColor Is Nothing Then
+                Continue For 'あるはずだが念のため
+            End If
+
+            Dim thisColor As clsColorRecordSet = GetColorRecordSet(colorName, otherBandtype, False) 'なければ共通
+            If thisColor IsNot Nothing Then
+                'thisにある色
+                If otherColor.Equals(thisColor) Then
+                    '- 同名あり 既存と一致
+                    g_clsLog.LogResourceMessage(level, "LogImportSameSkip", colorName, otherBandtype, thisColor.BandTypeName)
+                    Continue For
+                End If
+            End If
+
+            'なし、同名で不一致、もしくは共通と不一致
+            Dim result As ImportResult = importColorRecordSet(otherColor, level, isOverWrite)
+            If {ImportResult.AddToThis, ImportResult.UpdateThis}.Contains(result) Then
+                changecount += 1
+            End If
+        Next
+
+        Return changecount
+    End Function
+
+    '指定色・バンドの種類をそのままインポート
+    Private Function importColorRecordSet(ByVal colorRecSet As clsColorRecordSet, ByVal level As clsLog.LogLevel, ByVal isOverWrite As Boolean) As ImportResult
+        Dim table As tbl描画色DataTable = _dstMasterTables.Tables("tbl描画色")
+
+        Dim thisColor As clsColorRecordSet = GetColorRecordSet(colorRecSet.Name, colorRecSet.BandTypeName, True)
         If thisColor IsNot Nothing Then
-            'thisにある色
+            'thisにある色・バンド種
+            If colorRecSet.Equals(thisColor) Then
+                '- 同名あり 既存と一致
+                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", colorRecSet.Name, colorRecSet.BandTypeName)
+                Return ImportResult.SameNoAction
+            End If
             If Not isOverWrite Then
                 ' - 同名あり 既存を保持
-                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", colorName)
+                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", colorRecSet.Name, colorRecSet.BandTypeName)
                 Return ImportResult.KeepThisSkip
-            End If
-            If otherColor.Equals(thisColor) Then
-                '- 同名あり 既存と一致
-                g_clsLog.LogResourceMessage(level, "LogImportSameSkip", colorName)
-                Return ImportResult.SameNoAction
             End If
 
             '入れ替え
-            Dim cond As String = String.Format("f_s色 = '{0}'", colorName)
-            Dim rows() As tbl描画色Row = table.Select(cond)
+            Dim rows() As tbl描画色Row = table.Select(CondColorBandType(colorRecSet.Name, colorRecSet.BandTypeName))
             If rows.Count < 1 Then
                 Return ImportResult.NoOtherRecord '念のため
             End If
-            otherColor.ToRow(rows(0))
+            colorRecSet.ToRow(rows(0))
             rows(0).AcceptChanges()
             '- 変更前
             g_clsLog.LogResourceMessage(level, "LogImportBefore", thisColor)
             '- 変更後
-            g_clsLog.LogResourceMessage(level, "LogImportAfter", otherColor)
+            g_clsLog.LogResourceMessage(level, "LogImportAfter", colorRecSet)
             Return ImportResult.UpdateThis
         Else
-            'thisにない色
+            'thisにない色・バンド種
             Dim row As tbl描画色Row = table.Newtbl描画色Row
-            otherColor.ToRow(row)
+            colorRecSet.ToRow(row)
             table.Rows.Add(row)
             '- 追加
-            g_clsLog.LogResourceMessage(level, "LogImportAdd", otherColor)
+            g_clsLog.LogResourceMessage(level, "LogImportAdd", colorRecSet)
             Return ImportResult.AddToThis
         End If
+    End Function
+
+    'エクスポート(現取得色にバンド種を付加する)
+    Private Function exportColorBandType(ByVal colorName As String, ByVal bandTypeName As String, ByVal othermaster As clsMasterTables, ByVal level As clsLog.LogLevel, ByVal isOverWrite As Boolean) As ImportResult
+        Dim thisColor As clsColorRecordSet = GetColorRecordSet(colorName, bandTypeName, False)
+        If thisColor Is Nothing Then
+            Return ImportResult.NoOtherRecord 'このバンド種・共通には無し
+        End If
+        If thisColor.IsEmptyBandType Then
+            thisColor.BandTypeName = bandTypeName 'このバンド種にする
+        End If
+        Return othermaster.importColorRecordSet(thisColor, level, isOverWrite)
     End Function
 
 #End Region
@@ -1722,9 +1905,17 @@ Public Class clsMasterTables
                 End If
 
             Else
-                ' - 同名あり 既存を保持
-                g_clsLog.LogResourceMessage(level, "LogImportExistSkip", upDownName)
-                Return ImportResult.KeepThisSkip
+                '上書きなし
+
+                If otherUpDownRecord.Equals(thisUpDownRecord) Then
+                    '- 同名あり 既存と一致
+                    g_clsLog.LogResourceMessage(level, "LogImportSameSkip", upDownName)
+                    Return ImportResult.SameNoAction
+                Else
+                    ' - 同名あり 既存を保持
+                    g_clsLog.LogResourceMessage(level, "LogImportExistSkip", upDownName)
+                    Return ImportResult.KeepThisSkip
+                End If
 
             End If
         Else

@@ -266,6 +266,47 @@ Public Class clsDataTables
         End Try
     End Function
 
+    '未定義色をリストアップ(#42)
+    Public Function GetUndefColors(ByVal is縦横展開 As Boolean) As String
+        Dim colors As New List(Of String)
+
+        For Each row As tbl底_楕円Row In p_tbl底_楕円
+            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                If Not colors.Contains(row.f_s色) Then
+                    colors.Add(row.f_s色)
+                End If
+            End If
+        Next
+
+        For Each row As tbl側面Row In p_tbl側面
+            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                If Not colors.Contains(row.f_s色) Then
+                    colors.Add(row.f_s色)
+                End If
+            End If
+        Next
+
+        For Each row As tbl追加品Row In p_tbl追加品
+            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                If Not colors.Contains(row.f_s色) Then
+                    colors.Add(row.f_s色)
+                End If
+            End If
+        Next
+
+        If is縦横展開 Then
+            For Each row As tbl縦横展開Row In p_tbl縦横展開
+                If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                    If Not colors.Contains(row.f_s色) Then
+                        colors.Add(row.f_s色)
+                    End If
+                End If
+            Next
+        End If
+
+        Return String.Join(",", colors.ToArray)
+    End Function
+
 
     '参照値のチェックと更新(マスタやバンドの種類が変わった時用)
     Public Sub ModifySelected()

@@ -142,6 +142,10 @@
     <value>'{0}'(ひも番号{1})を削除します。よろしいですか？</value>
     <comment>frmPattern,frmOptions</comment>
   </data>
+  <data name="AskNoBandTypeColor" xml:space="preserve">
+    <value>バンドの種類にない色({0})は使えません。変更しますか？</value>
+    <comment>frmColorChange</comment>
+  </data>
   <data name="AskOverwriteForExist" xml:space="preserve">
     <value>同名データに対しては、現設定値で上書きしてよろしいですか？
 (はい=上書き,いいえ=既存値保持)</value>
@@ -399,6 +403,10 @@
   </data>
   <data name="LogImportMasterFile" xml:space="preserve">
     <value>設定ファイルのインポート (上書き)</value>
+    <comment>clsMasterTables</comment>
+  </data>
+  <data name="LogImportNoTarget" xml:space="preserve">
+    <value>- 対象外</value>
     <comment>clsMasterTables</comment>
   </data>
   <data name="LogImportSameSkip" xml:space="preserve">

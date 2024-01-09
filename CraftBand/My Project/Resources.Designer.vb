@@ -116,6 +116,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  バンドの種類にない色({0})は使えません。変更しますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskNoBandTypeColor() As String
+            Get
+                Return ResourceManager.GetString("AskNoBandTypeColor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  同名データに対しては、現設定値で上書きしてよろしいですか？
         '''(はい=上書き,いいえ=既存値保持) に類似しているローカライズされた文字列を検索します。
         '''</summary>
@@ -756,6 +765,15 @@ Namespace My.Resources
         Friend ReadOnly Property LogImportMasterFile() As String
             Get
                 Return ResourceManager.GetString("LogImportMasterFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  - 対象外 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property LogImportNoTarget() As String
+            Get
+                Return ResourceManager.GetString("LogImportNoTarget", resourceCulture)
             End Get
         End Property
         

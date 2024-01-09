@@ -166,7 +166,7 @@ Public Class CImageDraw
                 Return _BandPenBrushMap(sColor)
             End If
         Else
-            Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(sColor)
+            Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(sColor, g_clsSelectBasics.p_s対象バンドの種類名, False)
             If drcol Is Nothing Then
                 '色はあるがマスターにない
                 _BandPenBrushMap.Add(sColor, Nothing)
@@ -287,7 +287,7 @@ Public Class CImageDraw
         _Brush_black = New SolidBrush(Drawing.Color.Black)
 
         'ひも描画用
-        Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(basiccolor)
+        Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(basiccolor, g_clsSelectBasics.p_s対象バンドの種類名, False)
         _BandDefaultPenBrush = New CPenBrush(drcol)
 
         'フォントオブジェクトの作成

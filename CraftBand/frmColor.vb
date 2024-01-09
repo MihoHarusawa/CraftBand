@@ -7,19 +7,22 @@ Imports CraftBand.Tables.dstMasterTables
 ''' 各色の数値は255まで
 ''' </summary>
 Public Class frmColor
-    Dim cColDispColor As Integer = 4 '色を表示するカラム
+    Dim cColDispColor As Integer = 5 '色を表示するカラム
 
     Shared _ColorFiledNames() As String = {"f_i赤", "f_i緑", "f_i青"}
     Dim _ColorFiledColumnIndex() As Integer
 
     Dim _table As tbl描画色DataTable
     Dim _NameColumnIndex As Integer = -1
+    Dim _BandTypeNameIndex As Integer = -1
 
     Dim _MyProfile As New CDataGridViewProfile(
             (New tbl描画色DataTable),
             AddressOf CheckCell,
             enumAction._None
             )
+
+    Dim _BandTypeNames() As String 'バンドの種類名の配列保持
 
     Private Sub frmColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         _MyProfile.FormCaption = Me.Text
@@ -29,6 +32,8 @@ Public Class frmColor
         For Each col As DataGridViewColumn In dgvData.Columns
             If col.DataPropertyName = "f_s色" Then
                 _NameColumnIndex = col.Index
+            ElseIf col.DataPropertyName = "f_sバンドの種類名" Then
+                _BandTypeNameIndex = col.Index
             ElseIf col.DataPropertyName = _ColorFiledNames(0) Then
                 _ColorFiledColumnIndex(0) = col.Index
             ElseIf col.DataPropertyName = _ColorFiledNames(1) Then
@@ -40,6 +45,7 @@ Public Class frmColor
 
         BindingSource描画色.DataSource = Nothing
         _table = g_clsMasterTables.GetColorTableCopy()
+        setBandTypeSelection(_table)
         BindingSource描画色.DataSource = _table
 
         dgvData.Refresh()
@@ -54,6 +60,36 @@ Public Class frmColor
             Me.dgvData.SetColumnWidthFromString(colwid)
         End If
 
+    End Sub
+
+    Private Sub setBandTypeSelection(ByVal table As tbl描画色DataTable)
+        'バンドの種類名の配列保持
+        _BandTypeNames = g_clsMasterTables.GetBandTypeNames()
+
+        Dim btypes As New List(Of String)
+        btypes.Add(clsMasterTables.CommonColorBandType)
+        btypes.AddRange(_BandTypeNames)
+
+        'table参照外
+        For Each r As tbl描画色Row In table
+            Try
+                Dim btype As String = r.f_sバンドの種類名
+                If Not String.IsNullOrWhiteSpace(btype) Then
+                    If Not btypes.Contains(btype) Then
+                        btypes.Add(btype)
+                    End If
+                End If
+
+            Catch ex As Exception
+                g_clsLog.LogException(ex, "frmColor.setBandTypeSelection")
+            End Try
+        Next
+
+        fsバンドの種類名ComboBoxColumn.Items.AddRange(btypes.ToArray)
+        '
+        cmbバンドの種類名.Items.Clear()
+        cmbバンドの種類名.Items.AddRange(btypes.ToArray)
+        cmbバンドの種類名.Text = clsMasterTables.CommonColorBandType
     End Sub
 
     Private Sub frmColor_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
@@ -99,10 +135,29 @@ Public Class frmColor
             Exit Sub
         End If
         '色表示のセル
-        If e.ColumnIndex <> cColDispColor Then
+        If e.ColumnIndex = cColDispColor Then
+            e.CellStyle.BackColor = gridColor(e.RowIndex)
             Exit Sub
         End If
-        e.CellStyle.BackColor = gridColor(e.RowIndex)
+        'バンドの種類名のセル
+        If e.ColumnIndex = _BandTypeNameIndex Then
+            Dim obj As Object = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+            If IsDBNull(obj) Then 'Null不許可だが念のため
+                e.Value = clsMasterTables.CommonColorBandType
+                e.CellStyle.BackColor = Color.White
+            Else
+                Dim btype As String = obj.ToString
+                If String.IsNullOrWhiteSpace(btype) Then
+                    e.Value = clsMasterTables.CommonColorBandType
+                    e.CellStyle.BackColor = Color.White
+                ElseIf btype = clsMasterTables.CommonColorBandType OrElse _BandTypeNames.Contains(btype) Then
+                    e.CellStyle.BackColor = Color.White
+                Else
+                    e.CellStyle.BackColor = Color.Gray
+                End If
+            End If
+            Exit Sub
+        End If
     End Sub
 
     Private Sub dgvData_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellValueChanged
@@ -114,11 +169,18 @@ Public Class frmColor
         End If
 
         '色のセル
-        If Not _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+        If _ColorFiledNames.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+            dgv.Rows(e.RowIndex).Cells(cColDispColor).Style.BackColor = gridColor(e.RowIndex)
             Exit Sub
         End If
-
-        dgv.Rows(e.RowIndex).Cells(cColDispColor).Style.BackColor = gridColor(e.RowIndex)
+        'バンドの種類名のセル
+        If e.ColumnIndex = _BandTypeNameIndex Then
+            Dim obj As Object = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+            If IsDBNull(obj) Then 'Null不許可だが念のため
+                dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = clsMasterTables.CommonColorBandType
+            End If
+            Exit Sub
+        End If
     End Sub
 
     Private Function gridColor(ByVal rowidx As Integer) As Color
@@ -143,14 +205,18 @@ Public Class frmColor
             Exit Sub
         End If
 
+        Dim btype As String = Nothing
+        If Not String.IsNullOrWhiteSpace(cmbバンドの種類名.Text) Then
+            btype = cmbバンドの種類名.Text
+        End If
 
-        Dim cond As String = String.Format("f_s色='{0}'", txt色.Text)
-        Dim rows() As tbl描画色Row = _table.Select(cond)
+        Dim rows() As tbl描画色Row = _table.Select(clsMasterTables.CondColorBandType(txt色.Text, btype))
         Dim row As tbl描画色Row
         If rows Is Nothing OrElse rows.Count = 0 Then
             '追加
             row = _table.NewRow
             row.f_s色 = txt色.Text.Trim
+            row.f_sバンドの種類名 = btype
             row.f_i赤 = nud赤.Value
             row.f_i緑 = nud緑.Value
             row.f_i青 = nud青.Value
@@ -164,7 +230,8 @@ Public Class frmColor
         End If
 
         For pos As Integer = 0 To _table.Rows.Count - 1
-            If CType(BindingSource描画色.Item(pos).row, tbl描画色Row).f_s色 = row.f_s色 Then
+            If CType(BindingSource描画色.Item(pos).row, tbl描画色Row).f_s色 = row.f_s色 AndAlso
+                CType(BindingSource描画色.Item(pos).row, tbl描画色Row).f_sバンドの種類名 = row.f_sバンドの種類名 Then
                 BindingSource描画色.Position = pos
                 dgvData.Refresh()
                 Exit For
@@ -179,6 +246,7 @@ Public Class frmColor
             nud赤.Value = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_ColorFiledColumnIndex(0)).Value
             nud緑.Value = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_ColorFiledColumnIndex(1)).Value
             nud青.Value = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_ColorFiledColumnIndex(2)).Value
+            cmbバンドの種類名.Text = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_BandTypeNameIndex).Value
         End If
     End Sub
 End Class

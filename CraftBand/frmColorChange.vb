@@ -38,6 +38,19 @@ Public Class frmColorChange
         End If
     End Sub
 
+    '未定義色の変更確認(#42)
+    Sub ShowDialogForUndef()
+        Dim undefs As String = _Data.GetUndefColors(_Expanding)
+        If Not String.IsNullOrWhiteSpace(undefs) Then
+            'バンドの種類にない色({0})は使えません。変更しますか？
+            Dim msg As String = String.Format(My.Resources.AskNoBandTypeColor, undefs)
+            Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If r = DialogResult.Yes Then
+                ShowDialog()
+            End If
+        End If
+    End Sub
+
     Private Sub frmColorChange_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         _MyProfile.FormCaption = Me.Text
         dgvColorChange.SetProfile(_MyProfile)

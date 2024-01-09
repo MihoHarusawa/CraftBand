@@ -193,4 +193,21 @@ Public Class frmBandType
         End Try
     End Sub
 
+    Private Sub dgvData_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellClick
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 OrElse _NameColumnIndex < 0 OrElse
+            e.ColumnIndex <> dgvData.Columns("ColumnBotton").Index Then
+            Exit Sub
+        End If
+
+        'ボタンクリック
+        Dim dlg As New frmColorList
+        dlg.BandTypeName = dgvData.Rows(e.RowIndex).Cells(_NameColumnIndex).Value
+        dlg.ColorString = dgvData.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value '1つ前のセル値
+
+        If dlg.ShowDialog() <> DialogResult.OK Then
+            Exit Sub
+        End If
+
+        dgvData.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value = dlg.ColorString
+    End Sub
 End Class
