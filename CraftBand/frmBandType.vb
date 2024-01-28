@@ -7,6 +7,7 @@ Public Class frmBandType
 
     Dim _NameColumnIndex As Integer = -1
     Dim _WeightColumnIndex As Integer = -1
+    Dim _ColorListColumnIndex As Integer = -1
     Dim _table As tblバンドの種類DataTable
 
     Dim _MyProfile As New CDataGridViewProfile(
@@ -26,6 +27,8 @@ Public Class frmBandType
                 _NameColumnIndex = col.Index
             ElseIf col.DataPropertyName = "f_s長さと重さ" Then
                 _WeightColumnIndex = col.Index
+            ElseIf col.DataPropertyName = "f_s色リスト" Then
+                _ColorListColumnIndex = col.Index
             End If
         Next
 
@@ -194,7 +197,7 @@ Public Class frmBandType
     End Sub
 
     Private Sub dgvData_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellClick
-        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 OrElse _NameColumnIndex < 0 OrElse
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 OrElse _NameColumnIndex < 0 OrElse _ColorListColumnIndex < 0 OrElse
             e.ColumnIndex <> dgvData.Columns("ColumnBotton").Index Then
             Exit Sub
         End If
@@ -202,12 +205,12 @@ Public Class frmBandType
         'ボタンクリック
         Dim dlg As New frmColorList
         dlg.BandTypeName = dgvData.Rows(e.RowIndex).Cells(_NameColumnIndex).Value
-        dlg.ColorString = dgvData.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value '1つ前のセル値
+        dlg.ColorString = dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value
 
         If dlg.ShowDialog() <> DialogResult.OK Then
             Exit Sub
         End If
 
-        dgvData.Rows(e.RowIndex).Cells(e.ColumnIndex - 1).Value = dlg.ColorString
+        dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value = dlg.ColorString
     End Sub
 End Class
