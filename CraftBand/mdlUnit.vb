@@ -2,18 +2,24 @@
 
     Const cMilliCentiRatio As Integer = 10
     Const cMilliInchRatio As Integer = 25.4
+    Const cMilliMeterRatio As Integer = 1000
+    Const cMilliFeetRatio As Integer = 304.8
 
     '寸法単位
     Structure LUnit
         Implements IEquatable(Of LUnit)
 
-        Private Shared _UnitString() As String = {"mm", "cm", "in"}
-        Private Shared _DecimalPlaces() As Integer = {1, 2, 3}
+        '単位表記
+        Private Shared _UnitString() As String = {"mm", "cm", "in", "m", "ft"}
+        '設定用の小数点位置
+        Private Shared _DecimalPlaces() As Integer = {1, 2, 3, 2, 3}
 
         Private Enum LengthUnit
             mm = 0
             cm = 1
             inch = 2 'inはキーワードのため使用できない
+            m = 3
+            feet = 4
         End Enum
 
         Private _LengthUnit As LengthUnit
@@ -46,6 +52,16 @@
                 Return _LengthUnit = LengthUnit.inch
             End Get
         End Property
+        Public ReadOnly Property Is_m As Boolean
+            Get
+                Return _LengthUnit = LengthUnit.m
+            End Get
+        End Property
+        Public ReadOnly Property Is_feet As Boolean
+            Get
+                Return _LengthUnit = LengthUnit.feet
+            End Get
+        End Property
 
         Public Sub Set_inch()
             _LengthUnit = LengthUnit.inch
@@ -55,6 +71,12 @@
         End Sub
         Public Sub Set_mm()
             _LengthUnit = LengthUnit.mm
+        End Sub
+        Public Sub Set_m()
+            _LengthUnit = LengthUnit.m
+        End Sub
+        Public Sub Set_feet()
+            _LengthUnit = LengthUnit.feet
         End Sub
 
 
@@ -104,6 +126,10 @@
                 Return Text(len.Inch)
             ElseIf is_cm Then
                 Return Text(len.Centimeter)
+            ElseIf Is_m Then
+                Return Text(len.Meter)
+            ElseIf Is_feet Then
+                Return Text(len.Feet)
             Else
                 Return Text(len.Millimeter)
             End If
@@ -119,6 +145,10 @@
                 Return TextDecimalPlaces(len.Inch, decipl)
             ElseIf Is_cm Then
                 Return TextDecimalPlaces(len.Centimeter, decipl)
+            ElseIf Is_m Then
+                Return TextDecimalPlaces(len.Meter, decipl)
+            ElseIf Is_feet Then
+                Return TextDecimalPlaces(len.Feet, decipl)
             Else
                 Return TextDecimalPlaces(len.Millimeter, decipl)
             End If
@@ -137,6 +167,16 @@
             End If
         End Function
 
+        '集計用の出力
+        Public Function SumTextWithUnit(ByVal len As Length, ByVal decipl As Integer) As String
+            If Is_inch OrElse Is_feet Then
+                Return TextDecimalPlaces(len.Feet, decipl) & _UnitString(CType(LengthUnit.feet, Integer))
+            ElseIf Is_cm OrElse Is_m Then
+                Return TextDecimalPlaces(len.Meter, decipl) & _UnitString(CType(LengthUnit.m, Integer))
+            Else
+                Return TextDecimalPlaces(len.Centimeter, decipl) & _UnitString(CType(LengthUnit.cm, Integer))
+            End If
+        End Function
 
         Public Overrides Function ToString() As String
             Return Str
@@ -163,6 +203,10 @@
                 Inch = d
             ElseIf uni.Is_cm Then
                 Centimeter = d
+            ElseIf uni.Is_m Then
+                Meter = d
+            ElseIf uni.Is_feet Then
+                Feet = d
             Else
                 Millimeter = d
             End If
@@ -221,6 +265,26 @@
             End Get
             Set(value As Double)
                 _Millimeter = value * cMilliInchRatio
+            End Set
+        End Property
+
+        'メートル
+        Public Property Meter() As Double  '
+            Get
+                Return _Millimeter / cMilliMeterRatio
+            End Get
+            Set(value As Double)
+                _Millimeter = value * cMilliMeterRatio
+            End Set
+        End Property
+
+        'フィート
+        Public Property Feet() As Double  '
+            Get
+                Return _Millimeter / cMilliFeetRatio
+            End Get
+            Set(value As Double)
+                _Millimeter = value * cMilliFeetRatio
             End Set
         End Property
 
@@ -342,6 +406,10 @@
                 Return Inch
             ElseIf uni.Is_cm Then
                 Return Centimeter
+            ElseIf uni.Is_m Then
+                Return Meter
+            ElseIf uni.Is_feet Then
+                Return Feet
             Else
                 Return Millimeter
             End If
@@ -366,7 +434,7 @@
 
 
         Public Overrides Function ToString() As String
-            Return String.Format("[{0} mm/ {1} cm/ {2} in/ {3} ByLine]", Millimeter, Centimeter, Inch, ByLane)
+            Return String.Format("[{0} mm/ {1} cm/ {2} in/ {3} m/ {4} ft/{5} ByLine]", Millimeter, Centimeter, Inch, Meter, Feet, ByLane)
         End Function
     End Structure
 

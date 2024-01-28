@@ -294,6 +294,14 @@ Public Class clsDataTables
             End If
         Next
 
+        For Each row As tbl差しひもRow In p_tbl差しひも
+            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
+                If Not colors.Contains(row.f_s色) Then
+                    colors.Add(row.f_s色)
+                End If
+            End If
+        Next
+
         If is縦横展開 Then
             For Each row As tbl縦横展開Row In p_tbl縦横展開
                 If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then

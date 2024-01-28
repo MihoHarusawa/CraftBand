@@ -1,4 +1,5 @@
 ﻿Imports CraftBand.clsBandSum
+Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstOutput
 
@@ -13,6 +14,9 @@ Public Class clsOutput
             Return _FilePath
         End Get
     End Property
+
+    Friend DataTitle As String 'タイトル
+    Friend DataCreater As String '作成者
 
     'ひもの集計
     Dim _clsBandSum As clsBandSum
@@ -197,22 +201,73 @@ Public Class clsOutput
     End Function
 #End Region
 
+    Dim _RowSemmery As tblOutputRow = Nothing
+
+    '基本情報
+    Function OutBasics(ByVal row目標寸法 As clsDataRow) As Integer
+        DataTitle = row目標寸法.Value("f_sタイトル")
+        DataCreater = row目標寸法.Value("f_s作成者")
+
+        NextNewRow()
+
+        _CurrentRow.f_sカテゴリー = IO.Path.GetFileNameWithoutExtension(FilePath) '名前
+        _CurrentRow.f_s本幅 = outLaneText(g_clsSelectBasics.p_i本幅)
+        _CurrentRow.f_sひも長 = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(g_clsSelectBasics.p_lenバンド幅)
+        _CurrentRow.f_s編みかた名 = g_clsSelectBasics.p_s対象バンドの種類名
+        _CurrentRow.f_sメモ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_s製品情報")
+
+        NextNewRow()
+
+        _CurrentRow.f_sカテゴリー = DataTitle
+        _CurrentRow.f_s本幅 = outLaneText(row目標寸法.Value("f_i基本のひも幅"))
+        Dim color As String = row目標寸法.Value("f_s基本色")
+        If Not String.IsNullOrWhiteSpace(color) Then
+            _CurrentRow.f_s色 = color
+            Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(color, g_clsSelectBasics.p_s対象バンドの種類名, False)
+            If drcol IsNot Nothing Then
+                _CurrentRow.f_sメモ = drcol.Product
+            End If
+        End If
+        _RowSemmery = _CurrentRow
+
+        AddBlankLine()
+        _CurrentRow.f_sカテゴリー = DataCreater
+
+        Return 3    '2行
+    End Function
+
+
+
+    '集計
+    Function OutSummery() As Integer
+        Dim lines As Integer = OutSumList()
+        AddBlankLine()
+        lines += OutCutList()
+        Return lines + 1
+    End Function
+
     '集計値
-    Function OutSumList() As Integer
+    Private Function OutSumList() As Integer
         Dim lines As Integer = 0
         NextNewRow()
         lines += 1
         _CurrentRow.f_sカテゴリー = My.Resources.CalcOutSum '集計値
         _CurrentRow.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         '
+        _CurrentRow.f_s編みかた名 = My.Resources.CalcOutLongest '単純計
+        _CurrentRow.f_s編みひも名 = My.Resources.CalcOutShortest '面積長
         _CurrentRow.f_s高さ = My.Resources.CalcOutShortest '面積長
         _CurrentRow.f_s長さ = My.Resources.CalcOutLonguest '最長
         _CurrentRow.f_sメモ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
+        Dim sumAllColor As Double = 0 '全色単純計
+        Dim sumlengthAllColor As Double = 0 '全色面積長の計
+        Dim sumcountAllColor As Integer = 0 '全色本数の計
         For Each color As String In _clsBandSum.Colors
-            Dim sumlength As Double = 0
-            Dim maxmaxlen As Double = 0
-            Dim sumcount As Integer = 0
+            Dim sum As Double = 0 '単純計
+            Dim sumlength As Double = 0 '面積長の計
+            Dim maxmaxlen As Double = 0 '最長の最長
+            Dim sumcount As Integer = 0 '本数の計
             Dim bandLength As LaneLength = _clsBandSum.BandLength(color)
             Dim bandMaxLength As LaneLength = _clsBandSum.BandMaxLength(color)
             Dim bandCount As LaneLength = _clsBandSum.BandCount(color)
@@ -224,6 +279,8 @@ Public Class clsOutput
                 _CurrentRow.f_sひも長 = outLengthText(length)
                 _CurrentRow.f_s色 = color
 
+                '単純計
+                sum += length
                 '面積長=割かなかったとしたらの長さ
                 Dim band As Double = length / g_clsSelectBasics.p_i本幅 * lane
                 _CurrentRow.f_s高さ = outLengthText(band)
@@ -243,19 +300,42 @@ Public Class clsOutput
             If 0 < sumlength Then
                 NextNewRow()
                 lines += 1
-                _CurrentRow.f_sひも長 = "====="
+                _CurrentRow.f_s本幅 = My.Resources.CalcOutLongest '単純計
+                _CurrentRow.f_sひも長 = outLengthText(sum)
                 _CurrentRow.f_s高さ = outLengthText(sumlength)
                 _CurrentRow.f_s長さ = outLengthText(maxmaxlen)
-                _CurrentRow.f_s色 = color
-                _CurrentRow.f_sひも本数 = outCountText(sumcount)
+                _CurrentRow.f_sひも本数 = "(" & outCountText(sumcount) & ")"
+
+                If Not String.IsNullOrWhiteSpace(color) Then
+                    _CurrentRow.f_s色 = color
+                    Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(color, g_clsSelectBasics.p_s対象バンドの種類名, False)
+                    If drcol IsNot Nothing Then
+                        _CurrentRow.f_sメモ = drcol.Product
+                    End If
+                End If
+                _CurrentRow.f_s編みかた名 = g_clsSelectBasics.p_sリスト集計出力長(sum)
+                _CurrentRow.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlength)
             End If
+
+            '全色計
+            sumAllColor += sum '単純計
+            sumlengthAllColor += sumlength '面積長の計
+            sumcountAllColor += sumcount '本数の計
         Next
+
+        If _RowSemmery IsNot Nothing Then
+            _RowSemmery.f_sひも本数 = outCountText(sumcountAllColor)
+            _RowSemmery.f_s記号 = My.Resources.CalcOutLongest '単純計
+            _RowSemmery.f_sひも長 = g_clsSelectBasics.p_sリスト集計出力長(sumAllColor)
+            _RowSemmery.f_s編みかた名 = My.Resources.CalcOutShortest '面積長
+            _RowSemmery.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlengthAllColor)
+        End If
 
         Return lines
     End Function
 
     'カットリスト
-    Function OutCutList() As Integer
+    Private Function OutCutList() As Integer
         Dim lines As Integer = 0
         NextNewRow()
         lines += 1

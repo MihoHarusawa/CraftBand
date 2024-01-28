@@ -4,7 +4,6 @@ Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsMasterTables
-Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -678,6 +677,11 @@ Class clsCalcSquare
         If _I基本のひも幅 <= 0 Then
             '基本のひも幅を設定してください。
             p_sメッセージ = My.Resources.CalcNoBaseBandSet
+            Return False
+        End If
+        If _dひも長係数 < 0.5 Then   '半分以下はNGとする
+            'ひも長係数が小さすぎます。通常1以上の値です。
+            p_sメッセージ = My.Resources.CalcSmallLengthRatio
             Return False
         End If
 
@@ -2011,12 +2015,12 @@ Class clsCalcSquare
         Dim row As tblOutputRow
         Dim order As String
 
+        output.OutBasics(_Data.p_row目標寸法) '空行で終わる
+
         row = output.NextNewRow
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_s高さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-        row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
-        row.f_s編みかた名 = IO.Path.GetFileNameWithoutExtension(output.FilePath) '名前
 
         row = output.NextNewRow
         row.f_sカテゴリー = text四角数()
@@ -2319,8 +2323,7 @@ Class clsCalcSquare
         output.AddBlankLine()
 
         '集計値
-        output.OutSumList()
-        output.OutCutList()
+        output.OutSummery() '間に空行
 
         'メモがあれば追記
         Dim memo As String = _Data.p_row目標寸法.Value("f_sメモ")

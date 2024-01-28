@@ -28,15 +28,6 @@ Partial Class frmColor
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.BindingSource描画色 = New System.Windows.Forms.BindingSource(Me.components)
         Me.dgvData = New CraftBand.ctrDataGridView()
-        Me.Fs色DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fi赤DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fi緑DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fi青DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.disp = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d線幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_d中線幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_i透明度 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnキャンセル = New System.Windows.Forms.Button()
         Me.btnOK = New System.Windows.Forms.Button()
         Me.txt色 = New System.Windows.Forms.TextBox()
@@ -62,6 +53,7 @@ Partial Class frmColor
         Me.f_i透明度 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d中線幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s中線色 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.f_s製品情報 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.BindingSource描画色, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -84,20 +76,20 @@ Partial Class frmColor
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs色DataGridViewTextBoxColumn, Me.fsバンドの種類名ComboBoxColumn, Me.Fi赤DataGridViewTextBoxColumn, Me.Fi緑DataGridViewTextBoxColumn, Me.Fi青DataGridViewTextBoxColumn, Me.disp, Me.f_d線幅, Me.f_i透明度, Me.f_d中線幅, Me.f_s中線色, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs色DataGridViewTextBoxColumn, Me.fsバンドの種類名ComboBoxColumn, Me.Fi赤DataGridViewTextBoxColumn, Me.Fi緑DataGridViewTextBoxColumn, Me.Fi青DataGridViewTextBoxColumn, Me.disp, Me.f_d線幅, Me.f_i透明度, Me.f_d中線幅, Me.f_s中線色, Me.f_s製品情報, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSource描画色
         Me.dgvData.Location = New System.Drawing.Point(12, 12)
         Me.dgvData.Name = "dgvData"
         Me.dgvData.RowHeadersWidth = 51
         Me.dgvData.RowTemplate.Height = 29
-        Me.dgvData.Size = New System.Drawing.Size(921, 128)
+        Me.dgvData.Size = New System.Drawing.Size(1010, 128)
         Me.dgvData.TabIndex = 0
         '
         'btnキャンセル
         '
         Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(821, 163)
+        Me.btnキャンセル.Location = New System.Drawing.Point(910, 163)
         Me.btnキャンセル.Name = "btnキャンセル"
         Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
         Me.btnキャンセル.TabIndex = 14
@@ -108,7 +100,7 @@ Partial Class frmColor
         'btnOK
         '
         Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(702, 163)
+        Me.btnOK.Location = New System.Drawing.Point(791, 163)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(111, 46)
         Me.btnOK.TabIndex = 13
@@ -122,7 +114,7 @@ Partial Class frmColor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt色.Location = New System.Drawing.Point(68, 178)
         Me.txt色.Name = "txt色"
-        Me.txt色.Size = New System.Drawing.Size(78, 27)
+        Me.txt色.Size = New System.Drawing.Size(167, 27)
         Me.txt色.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.txt色, "色の名前")
         '
@@ -130,7 +122,7 @@ Partial Class frmColor
         '
         Me.nud赤.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nud赤.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        Me.nud赤.Location = New System.Drawing.Point(370, 179)
+        Me.nud赤.Location = New System.Drawing.Point(459, 179)
         Me.nud赤.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
         Me.nud赤.Name = "nud赤"
         Me.nud赤.Size = New System.Drawing.Size(61, 27)
@@ -141,7 +133,7 @@ Partial Class frmColor
         '
         Me.nud緑.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nud緑.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        Me.nud緑.Location = New System.Drawing.Point(437, 179)
+        Me.nud緑.Location = New System.Drawing.Point(526, 179)
         Me.nud緑.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
         Me.nud緑.Name = "nud緑"
         Me.nud緑.Size = New System.Drawing.Size(61, 27)
@@ -152,7 +144,7 @@ Partial Class frmColor
         '
         Me.nud青.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.nud青.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        Me.nud青.Location = New System.Drawing.Point(504, 179)
+        Me.nud青.Location = New System.Drawing.Point(593, 179)
         Me.nud青.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
         Me.nud青.Name = "nud青"
         Me.nud青.Size = New System.Drawing.Size(61, 27)
@@ -173,7 +165,7 @@ Partial Class frmColor
         '
         Me.lbl赤.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl赤.AutoSize = True
-        Me.lbl赤.Location = New System.Drawing.Point(370, 149)
+        Me.lbl赤.Location = New System.Drawing.Point(459, 149)
         Me.lbl赤.Name = "lbl赤"
         Me.lbl赤.Size = New System.Drawing.Size(24, 20)
         Me.lbl赤.TabIndex = 6
@@ -183,7 +175,7 @@ Partial Class frmColor
         '
         Me.lbl緑.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl緑.AutoSize = True
-        Me.lbl緑.Location = New System.Drawing.Point(437, 149)
+        Me.lbl緑.Location = New System.Drawing.Point(526, 149)
         Me.lbl緑.Name = "lbl緑"
         Me.lbl緑.Size = New System.Drawing.Size(24, 20)
         Me.lbl緑.TabIndex = 8
@@ -193,7 +185,7 @@ Partial Class frmColor
         '
         Me.lbl青.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl青.AutoSize = True
-        Me.lbl青.Location = New System.Drawing.Point(504, 149)
+        Me.lbl青.Location = New System.Drawing.Point(593, 149)
         Me.lbl青.Name = "lbl青"
         Me.lbl青.Size = New System.Drawing.Size(24, 20)
         Me.lbl青.TabIndex = 10
@@ -202,7 +194,7 @@ Partial Class frmColor
         'btn追加
         '
         Me.btn追加.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn追加.Location = New System.Drawing.Point(571, 163)
+        Me.btn追加.Location = New System.Drawing.Point(660, 163)
         Me.btn追加.Name = "btn追加"
         Me.btn追加.Size = New System.Drawing.Size(111, 46)
         Me.btn追加.TabIndex = 12
@@ -224,7 +216,7 @@ Partial Class frmColor
         '
         Me.cmbバンドの種類名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmbバンドの種類名.FormattingEnabled = True
-        Me.cmbバンドの種類名.Location = New System.Drawing.Point(152, 178)
+        Me.cmbバンドの種類名.Location = New System.Drawing.Point(241, 178)
         Me.cmbバンドの種類名.Name = "cmbバンドの種類名"
         Me.cmbバンドの種類名.Size = New System.Drawing.Size(212, 28)
         Me.cmbバンドの種類名.TabIndex = 5
@@ -234,7 +226,7 @@ Partial Class frmColor
         '
         Me.lblバンドの種類名.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblバンドの種類名.AutoSize = True
-        Me.lblバンドの種類名.Location = New System.Drawing.Point(171, 149)
+        Me.lblバンドの種類名.Location = New System.Drawing.Point(260, 149)
         Me.lblバンドの種類名.Name = "lblバンドの種類名"
         Me.lblバンドの種類名.Size = New System.Drawing.Size(100, 20)
         Me.lblバンドの種類名.TabIndex = 4
@@ -343,6 +335,15 @@ Partial Class frmColor
         Me.f_s中線色.ToolTipText = "バンドの中線色を指定したい場合、透明度(,赤,緑,青)値"
         Me.f_s中線色.Width = 125
         '
+        'f_s製品情報
+        '
+        Me.f_s製品情報.DataPropertyName = "f_s製品情報"
+        Me.f_s製品情報.HeaderText = "製品情報"
+        Me.f_s製品情報.MinimumWidth = 6
+        Me.f_s製品情報.Name = "f_s製品情報"
+        Me.f_s製品情報.ToolTipText = "メーカーや型番など購入のためのメモ"
+        Me.f_s製品情報.Width = 125
+        '
         'f_s備考
         '
         Me.f_s備考.DataPropertyName = "f_s備考"
@@ -355,7 +356,7 @@ Partial Class frmColor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(944, 219)
+        Me.ClientSize = New System.Drawing.Size(1033, 219)
         Me.Controls.Add(Me.lblバンドの種類名)
         Me.Controls.Add(Me.cmbバンドの種類名)
         Me.Controls.Add(Me.lblColor)
@@ -390,15 +391,6 @@ Partial Class frmColor
     Friend WithEvents btnキャンセル As Windows.Forms.Button
     Friend WithEvents btnOK As Windows.Forms.Button
     Friend WithEvents 表示 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Fs色DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Fi赤DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Fi緑DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Fi青DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents f_d線幅 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents f_d中線幅 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents f_i透明度 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents f_s備考 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents disp As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents txt色 As Windows.Forms.TextBox
     Friend WithEvents nud赤 As Windows.Forms.NumericUpDown
     Friend WithEvents nud緑 As Windows.Forms.NumericUpDown
@@ -412,6 +404,16 @@ Partial Class frmColor
     Friend WithEvents ToolTip1 As Windows.Forms.ToolTip
     Friend WithEvents cmbバンドの種類名 As Windows.Forms.ComboBox
     Friend WithEvents lblバンドの種類名 As Windows.Forms.Label
+    Friend WithEvents Fs色DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents fsバンドの種類名ComboBoxColumn As Windows.Forms.DataGridViewComboBoxColumn
+    Friend WithEvents Fi赤DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Fi緑DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Fi青DataGridViewTextBoxColumn As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents disp As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_d線幅 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i透明度 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_d中線幅 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s中線色 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_s製品情報 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_s備考 As Windows.Forms.DataGridViewTextBoxColumn
 End Class

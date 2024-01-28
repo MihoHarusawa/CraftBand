@@ -65,6 +65,7 @@ Partial Class frmBandType
         Me.f_dバンド幅 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d底の厚さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s長さと重さ = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnBotton = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.f_d短い横ひも長のばらつき = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d縦ひも間の最小間隔 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d垂直ひも加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -84,7 +85,7 @@ Partial Class frmBandType
         Me.f_d四つ畳みひも長加算初期値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_d目と数える端の目 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s色リスト = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ColumnBotton = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.f_s製品情報 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSourceバンドの種類, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -101,7 +102,7 @@ Partial Class frmBandType
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_s長さと重さ, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_dコマ寸法係数a, Me.f_dコマ寸法係数b, Me.f_dコマ要尺係数a, Me.f_dコマ要尺係数b, Me.f_d四つ畳みひも長加算初期値, Me.f_d目と数える端の目, Me.f_s色リスト, Me.ColumnBotton, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_sバンドの種類名, Me.f_i本幅, Me.f_dバンド幅, Me.f_d底の厚さ, Me.f_s長さと重さ, Me.ColumnBotton, Me.f_d短い横ひも長のばらつき, Me.f_d縦ひも間の最小間隔, Me.f_d垂直ひも加算初期値, Me.f_d立ち上げ時の四角底周の増分, Me.f_d差しひもの径, Me.f_d差しひも長加算初期値, Me.f_d楕円底円弧の半径加算, Me.f_d楕円底周の加算, Me.f_d立ち上げ時の楕円底周の増分, Me.f_dひも間のすき間初期値, Me.f_dひも長係数初期値, Me.f_dひも長加算初期値, Me.f_dコマ寸法係数a, Me.f_dコマ寸法係数b, Me.f_dコマ要尺係数a, Me.f_dコマ要尺係数b, Me.f_d四つ畳みひも長加算初期値, Me.f_d目と数える端の目, Me.f_s色リスト, Me.f_s製品情報, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSourceバンドの種類
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
@@ -258,11 +259,25 @@ Partial Class frmBandType
         Me.f_s長さと重さ.ToolTipText = "<数値> <長さの単位> = <数値> <重さの単位> "
         Me.f_s長さと重さ.Width = 125
         '
+        'ColumnBotton
+        '
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.ColumnBotton.DefaultCellStyle = DataGridViewCellStyle5
+        Me.ColumnBotton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.ColumnBotton.HeaderText = "色選択"
+        Me.ColumnBotton.MinimumWidth = 6
+        Me.ColumnBotton.Name = "ColumnBotton"
+        Me.ColumnBotton.Text = "色選択"
+        Me.ColumnBotton.ToolTipText = "描画色から選択する場合クリック"
+        Me.ColumnBotton.UseColumnTextForButtonValue = True
+        Me.ColumnBotton.Width = 60
+        '
         'f_d短い横ひも長のばらつき
         '
         Me.f_d短い横ひも長のばらつき.DataPropertyName = "f_d短い横ひも長のばらつき"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d短い横ひも長のばらつき.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d短い横ひも長のばらつき.DefaultCellStyle = DataGridViewCellStyle6
         Me.f_d短い横ひも長のばらつき.HeaderText = "短い横ひも長のばらつき"
         Me.f_d短い横ひも長のばらつき.MinimumWidth = 6
         Me.f_d短い横ひも長のばらつき.Name = "f_d短い横ひも長のばらつき"
@@ -272,8 +287,8 @@ Partial Class frmBandType
         'f_d縦ひも間の最小間隔
         '
         Me.f_d縦ひも間の最小間隔.DataPropertyName = "f_d縦ひも間の最小間隔"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d縦ひも間の最小間隔.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d縦ひも間の最小間隔.DefaultCellStyle = DataGridViewCellStyle7
         Me.f_d縦ひも間の最小間隔.HeaderText = "縦ひも間の最小間隔"
         Me.f_d縦ひも間の最小間隔.MinimumWidth = 6
         Me.f_d縦ひも間の最小間隔.Name = "f_d縦ひも間の最小間隔"
@@ -283,8 +298,8 @@ Partial Class frmBandType
         'f_d垂直ひも加算初期値
         '
         Me.f_d垂直ひも加算初期値.DataPropertyName = "f_d垂直ひも加算初期値"
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d垂直ひも加算初期値.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d垂直ひも加算初期値.DefaultCellStyle = DataGridViewCellStyle8
         Me.f_d垂直ひも加算初期値.HeaderText = "垂直ひも加算初期値"
         Me.f_d垂直ひも加算初期値.MinimumWidth = 6
         Me.f_d垂直ひも加算初期値.Name = "f_d垂直ひも加算初期値"
@@ -294,8 +309,8 @@ Partial Class frmBandType
         'f_d立ち上げ時の四角底周の増分
         '
         Me.f_d立ち上げ時の四角底周の増分.DataPropertyName = "f_d立ち上げ時の四角底周の増分"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d立ち上げ時の四角底周の増分.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d立ち上げ時の四角底周の増分.DefaultCellStyle = DataGridViewCellStyle9
         Me.f_d立ち上げ時の四角底周の増分.HeaderText = "立ち上げ時の四角底周の増分"
         Me.f_d立ち上げ時の四角底周の増分.MinimumWidth = 6
         Me.f_d立ち上げ時の四角底周の増分.Name = "f_d立ち上げ時の四角底周の増分"
@@ -305,8 +320,8 @@ Partial Class frmBandType
         'f_d差しひもの径
         '
         Me.f_d差しひもの径.DataPropertyName = "f_d差しひもの径"
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d差しひもの径.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d差しひもの径.DefaultCellStyle = DataGridViewCellStyle10
         Me.f_d差しひもの径.HeaderText = "差しひもの径"
         Me.f_d差しひもの径.MinimumWidth = 6
         Me.f_d差しひもの径.Name = "f_d差しひもの径"
@@ -316,8 +331,8 @@ Partial Class frmBandType
         'f_d差しひも長加算初期値
         '
         Me.f_d差しひも長加算初期値.DataPropertyName = "f_d差しひも長加算初期値"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d差しひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d差しひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle11
         Me.f_d差しひも長加算初期値.HeaderText = "差しひも長加算初期値"
         Me.f_d差しひも長加算初期値.MinimumWidth = 6
         Me.f_d差しひも長加算初期値.Name = "f_d差しひも長加算初期値"
@@ -327,8 +342,8 @@ Partial Class frmBandType
         'f_d楕円底円弧の半径加算
         '
         Me.f_d楕円底円弧の半径加算.DataPropertyName = "f_d楕円底円弧の半径加算"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d楕円底円弧の半径加算.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d楕円底円弧の半径加算.DefaultCellStyle = DataGridViewCellStyle12
         Me.f_d楕円底円弧の半径加算.HeaderText = "楕円底円弧の半径加算"
         Me.f_d楕円底円弧の半径加算.MinimumWidth = 6
         Me.f_d楕円底円弧の半径加算.Name = "f_d楕円底円弧の半径加算"
@@ -338,8 +353,8 @@ Partial Class frmBandType
         'f_d楕円底周の加算
         '
         Me.f_d楕円底周の加算.DataPropertyName = "f_d楕円底周の加算"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d楕円底周の加算.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d楕円底周の加算.DefaultCellStyle = DataGridViewCellStyle13
         Me.f_d楕円底周の加算.HeaderText = "楕円底周の加算"
         Me.f_d楕円底周の加算.MinimumWidth = 6
         Me.f_d楕円底周の加算.Name = "f_d楕円底周の加算"
@@ -349,8 +364,8 @@ Partial Class frmBandType
         'f_d立ち上げ時の楕円底周の増分
         '
         Me.f_d立ち上げ時の楕円底周の増分.DataPropertyName = "f_d立ち上げ時の楕円底周の増分"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d立ち上げ時の楕円底周の増分.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d立ち上げ時の楕円底周の増分.DefaultCellStyle = DataGridViewCellStyle14
         Me.f_d立ち上げ時の楕円底周の増分.HeaderText = "立ち上げ時の楕円底周の増分"
         Me.f_d立ち上げ時の楕円底周の増分.MinimumWidth = 6
         Me.f_d立ち上げ時の楕円底周の増分.Name = "f_d立ち上げ時の楕円底周の増分"
@@ -360,8 +375,8 @@ Partial Class frmBandType
         'f_dひも間のすき間初期値
         '
         Me.f_dひも間のすき間初期値.DataPropertyName = "f_dひも間のすき間初期値"
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも間のすき間初期値.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも間のすき間初期値.DefaultCellStyle = DataGridViewCellStyle15
         Me.f_dひも間のすき間初期値.HeaderText = "ひも間のすき間初期値"
         Me.f_dひも間のすき間初期値.MinimumWidth = 6
         Me.f_dひも間のすき間初期値.Name = "f_dひも間のすき間初期値"
@@ -371,8 +386,8 @@ Partial Class frmBandType
         'f_dひも長係数初期値
         '
         Me.f_dひも長係数初期値.DataPropertyName = "f_dひも長係数初期値"
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長係数初期値.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長係数初期値.DefaultCellStyle = DataGridViewCellStyle16
         Me.f_dひも長係数初期値.HeaderText = "ひも長係数初期値"
         Me.f_dひも長係数初期値.MinimumWidth = 6
         Me.f_dひも長係数初期値.Name = "f_dひも長係数初期値"
@@ -382,8 +397,8 @@ Partial Class frmBandType
         'f_dひも長加算初期値
         '
         Me.f_dひも長加算初期値.DataPropertyName = "f_dひも長加算初期値"
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_dひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle17
         Me.f_dひも長加算初期値.HeaderText = "ひも長加算初期値"
         Me.f_dひも長加算初期値.MinimumWidth = 6
         Me.f_dひも長加算初期値.Name = "f_dひも長加算初期値"
@@ -393,10 +408,10 @@ Partial Class frmBandType
         'f_dコマ寸法係数a
         '
         Me.f_dコマ寸法係数a.DataPropertyName = "f_dコマ寸法係数a"
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle17.Format = "N2"
-        DataGridViewCellStyle17.NullValue = Nothing
-        Me.f_dコマ寸法係数a.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle18.Format = "N2"
+        DataGridViewCellStyle18.NullValue = Nothing
+        Me.f_dコマ寸法係数a.DefaultCellStyle = DataGridViewCellStyle18
         Me.f_dコマ寸法係数a.HeaderText = "マ寸法係数a"
         Me.f_dコマ寸法係数a.MinimumWidth = 6
         Me.f_dコマ寸法係数a.Name = "f_dコマ寸法係数a"
@@ -406,10 +421,10 @@ Partial Class frmBandType
         'f_dコマ寸法係数b
         '
         Me.f_dコマ寸法係数b.DataPropertyName = "f_dコマ寸法係数b"
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle18.Format = "N2"
-        DataGridViewCellStyle18.NullValue = Nothing
-        Me.f_dコマ寸法係数b.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle19.Format = "N2"
+        DataGridViewCellStyle19.NullValue = Nothing
+        Me.f_dコマ寸法係数b.DefaultCellStyle = DataGridViewCellStyle19
         Me.f_dコマ寸法係数b.HeaderText = "コマ寸法係数b"
         Me.f_dコマ寸法係数b.MinimumWidth = 6
         Me.f_dコマ寸法係数b.Name = "f_dコマ寸法係数b"
@@ -419,10 +434,10 @@ Partial Class frmBandType
         'f_dコマ要尺係数a
         '
         Me.f_dコマ要尺係数a.DataPropertyName = "f_dコマ要尺係数a"
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle19.Format = "N2"
-        DataGridViewCellStyle19.NullValue = Nothing
-        Me.f_dコマ要尺係数a.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle20.Format = "N2"
+        DataGridViewCellStyle20.NullValue = Nothing
+        Me.f_dコマ要尺係数a.DefaultCellStyle = DataGridViewCellStyle20
         Me.f_dコマ要尺係数a.HeaderText = "コマ要尺係数a"
         Me.f_dコマ要尺係数a.MinimumWidth = 6
         Me.f_dコマ要尺係数a.Name = "f_dコマ要尺係数a"
@@ -432,10 +447,10 @@ Partial Class frmBandType
         'f_dコマ要尺係数b
         '
         Me.f_dコマ要尺係数b.DataPropertyName = "f_dコマ要尺係数b"
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle20.Format = "N2"
-        DataGridViewCellStyle20.NullValue = Nothing
-        Me.f_dコマ要尺係数b.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle21.Format = "N2"
+        DataGridViewCellStyle21.NullValue = Nothing
+        Me.f_dコマ要尺係数b.DefaultCellStyle = DataGridViewCellStyle21
         Me.f_dコマ要尺係数b.HeaderText = "コマ要尺係数b"
         Me.f_dコマ要尺係数b.MinimumWidth = 6
         Me.f_dコマ要尺係数b.Name = "f_dコマ要尺係数b"
@@ -445,8 +460,8 @@ Partial Class frmBandType
         'f_d四つ畳みひも長加算初期値
         '
         Me.f_d四つ畳みひも長加算初期値.DataPropertyName = "f_d四つ畳みひも長加算初期値"
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d四つ畳みひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d四つ畳みひも長加算初期値.DefaultCellStyle = DataGridViewCellStyle22
         Me.f_d四つ畳みひも長加算初期値.HeaderText = "四つ畳みひも長加算初期値"
         Me.f_d四つ畳みひも長加算初期値.MinimumWidth = 6
         Me.f_d四つ畳みひも長加算初期値.Name = "f_d四つ畳みひも長加算初期値"
@@ -456,8 +471,8 @@ Partial Class frmBandType
         'f_d目と数える端の目
         '
         Me.f_d目と数える端の目.DataPropertyName = "f_d目と数える端の目"
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.f_d目と数える端の目.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.f_d目と数える端の目.DefaultCellStyle = DataGridViewCellStyle23
         Me.f_d目と数える端の目.HeaderText = "目と数える端の目"
         Me.f_d目と数える端の目.MinimumWidth = 6
         Me.f_d目と数える端の目.Name = "f_d目と数える端の目"
@@ -473,19 +488,14 @@ Partial Class frmBandType
         Me.f_s色リスト.ToolTipText = "カンマ区切りで複数を入力できます"
         Me.f_s色リスト.Width = 136
         '
-        'ColumnBotton
+        'f_s製品情報
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle23.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.ColumnBotton.DefaultCellStyle = DataGridViewCellStyle23
-        Me.ColumnBotton.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.ColumnBotton.HeaderText = "色選択"
-        Me.ColumnBotton.MinimumWidth = 6
-        Me.ColumnBotton.Name = "ColumnBotton"
-        Me.ColumnBotton.Text = "色選択"
-        Me.ColumnBotton.ToolTipText = "描画色から選択する場合クリック"
-        Me.ColumnBotton.UseColumnTextForButtonValue = True
-        Me.ColumnBotton.Width = 60
+        Me.f_s製品情報.DataPropertyName = "f_s製品情報"
+        Me.f_s製品情報.HeaderText = "製品情報"
+        Me.f_s製品情報.MinimumWidth = 6
+        Me.f_s製品情報.Name = "f_s製品情報"
+        Me.f_s製品情報.ToolTipText = "メーカーや型番など購入のためのメモ"
+        Me.f_s製品情報.Width = 125
         '
         'f_s備考
         '
@@ -542,6 +552,7 @@ Partial Class frmBandType
     Friend WithEvents f_dバンド幅 As DataGridViewTextBoxColumn
     Friend WithEvents f_d底の厚さ As DataGridViewTextBoxColumn
     Friend WithEvents f_s長さと重さ As DataGridViewTextBoxColumn
+    Friend WithEvents ColumnBotton As DataGridViewButtonColumn
     Friend WithEvents f_d短い横ひも長のばらつき As DataGridViewTextBoxColumn
     Friend WithEvents f_d縦ひも間の最小間隔 As DataGridViewTextBoxColumn
     Friend WithEvents f_d垂直ひも加算初期値 As DataGridViewTextBoxColumn
@@ -561,6 +572,6 @@ Partial Class frmBandType
     Friend WithEvents f_d四つ畳みひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_d目と数える端の目 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色リスト As DataGridViewTextBoxColumn
-    Friend WithEvents ColumnBotton As DataGridViewButtonColumn
+    Friend WithEvents f_s製品情報 As DataGridViewTextBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
 End Class

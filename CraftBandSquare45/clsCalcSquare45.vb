@@ -1212,12 +1212,12 @@ Class clsCalcSquare45
         Dim row As tblOutputRow
         Dim order As String
 
+        output.OutBasics(_Data.p_row目標寸法) '空行で終わる
+
         row = output.NextNewRow
         row.f_sカテゴリー = text四角数()
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-        row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
-        row.f_s編みかた名 = IO.Path.GetFileNameWithoutExtension(output.FilePath) 'あれば名前
 
         '***底の縦横
         'このカテゴリーは先に行をつくる
@@ -1400,8 +1400,7 @@ Class clsCalcSquare45
         output.AddBlankLine()
 
         '集計値
-        output.OutSumList()
-        output.OutCutList()
+        output.OutSummery() '間に空行
 
         'メモがあれば追記
         Dim memo As String = _Data.p_row目標寸法.Value("f_sメモ")

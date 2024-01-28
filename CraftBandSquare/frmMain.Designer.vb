@@ -146,6 +146,8 @@ Partial Class frmMain
         Me.rad側面_下左 = New System.Windows.Forms.RadioButton()
         Me.rad側面_上右 = New System.Windows.Forms.RadioButton()
         Me.rad底 = New System.Windows.Forms.RadioButton()
+        Me.txtタイトル = New System.Windows.Forms.TextBox()
+        Me.txt作成者 = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -254,6 +256,8 @@ Partial Class frmMain
         Me.tpage追加品 = New System.Windows.Forms.TabPage()
         Me.editAddParts = New CraftBand.ctrAddParts()
         Me.tpageメモ他 = New System.Windows.Forms.TabPage()
+        Me.lbl作成者 = New System.Windows.Forms.Label()
+        Me.lblタイトル = New System.Windows.Forms.Label()
         Me.lblメモ = New System.Windows.Forms.Label()
         Me.tpageプレビュー = New System.Windows.Forms.TabPage()
         Me.picプレビュー = New System.Windows.Forms.PictureBox()
@@ -1184,11 +1188,11 @@ Partial Class frmMain
         Me.txtメモ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtメモ.Location = New System.Drawing.Point(24, 41)
+        Me.txtメモ.Location = New System.Drawing.Point(22, 144)
         Me.txtメモ.Multiline = True
         Me.txtメモ.Name = "txtメモ"
-        Me.txtメモ.Size = New System.Drawing.Size(794, 352)
-        Me.txtメモ.TabIndex = 0
+        Me.txtメモ.Size = New System.Drawing.Size(794, 249)
+        Me.txtメモ.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.txtメモ, "自由に記述できます")
         '
         'btnリセット_横
@@ -1290,7 +1294,7 @@ Partial Class frmMain
         Me.btn先と同じ.Size = New System.Drawing.Size(111, 46)
         Me.btn先と同じ.TabIndex = 3
         Me.btn先と同じ.Text = "先と同じ(&P)"
-        Me.ToolTip1.SetToolTip(Me.btn先と同じ, "上下図に登録されたパターンを読み取ります")
+        Me.ToolTip1.SetToolTip(Me.btn先と同じ, "左隣の対称面のパターンと同じにします")
         Me.btn先と同じ.UseVisualStyleBackColor = True
         '
         'rad側面_下左
@@ -1298,9 +1302,10 @@ Partial Class frmMain
         Me.rad側面_下左.AutoSize = True
         Me.rad側面_下左.Location = New System.Drawing.Point(205, 31)
         Me.rad側面_下左.Name = "rad側面_下左"
-        Me.rad側面_下左.Size = New System.Drawing.Size(100, 24)
+        Me.rad側面_下左.Size = New System.Drawing.Size(108, 24)
         Me.rad側面_下左.TabIndex = 2
-        Me.rad側面_下左.Text = "側面(下左)"
+        Me.rad側面_下左.Text = "側面(下・左)"
+        Me.ToolTip1.SetToolTip(Me.rad側面_下左, "下側面・左側面に適用されるパターンを編集します")
         Me.rad側面_下左.UseVisualStyleBackColor = True
         '
         'rad側面_上右
@@ -1311,6 +1316,7 @@ Partial Class frmMain
         Me.rad側面_上右.Size = New System.Drawing.Size(108, 24)
         Me.rad側面_上右.TabIndex = 1
         Me.rad側面_上右.Text = "側面(上・右)"
+        Me.ToolTip1.SetToolTip(Me.rad側面_上右, "上側面・右側面に適用されるパターンを編集します")
         Me.rad側面_上右.UseVisualStyleBackColor = True
         '
         'rad底
@@ -1323,7 +1329,30 @@ Partial Class frmMain
         Me.rad底.TabIndex = 0
         Me.rad底.TabStop = True
         Me.rad底.Text = "底"
+        Me.ToolTip1.SetToolTip(Me.rad底, "底に適用されるパターンを編集します")
         Me.rad底.UseVisualStyleBackColor = True
+        '
+        'txtタイトル
+        '
+        Me.txtタイトル.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtタイトル.Location = New System.Drawing.Point(126, 14)
+        Me.txtタイトル.Multiline = True
+        Me.txtタイトル.Name = "txtタイトル"
+        Me.txtタイトル.Size = New System.Drawing.Size(690, 49)
+        Me.txtタイトル.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.txtタイトル, "タイトル情報")
+        '
+        'txt作成者
+        '
+        Me.txt作成者.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt作成者.Location = New System.Drawing.Point(126, 78)
+        Me.txt作成者.Multiline = True
+        Me.txt作成者.Name = "txt作成者"
+        Me.txt作成者.Size = New System.Drawing.Size(690, 49)
+        Me.txt作成者.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.txt作成者, "作成者情報")
         '
         'MenuStrip1
         '
@@ -2379,7 +2408,7 @@ Partial Class frmMain
         Me.editUpDown.Location = New System.Drawing.Point(-3, -3)
         Me.editUpDown.Name = "editUpDown"
         Me.editUpDown.PanelSize = New System.Drawing.Size(800, 400)
-        Me.editUpDown.Size = New System.Drawing.Size(803, 403)
+        Me.editUpDown.Size = New System.Drawing.Size(806, 406)
         Me.editUpDown.TabIndex = 2
         '
         'tpage追加品
@@ -2405,6 +2434,10 @@ Partial Class frmMain
         '
         'tpageメモ他
         '
+        Me.tpageメモ他.Controls.Add(Me.txt作成者)
+        Me.tpageメモ他.Controls.Add(Me.txtタイトル)
+        Me.tpageメモ他.Controls.Add(Me.lbl作成者)
+        Me.tpageメモ他.Controls.Add(Me.lblタイトル)
         Me.tpageメモ他.Controls.Add(Me.lblメモ)
         Me.tpageメモ他.Controls.Add(Me.txtメモ)
         Me.tpageメモ他.Location = New System.Drawing.Point(4, 29)
@@ -2415,13 +2448,31 @@ Partial Class frmMain
         Me.tpageメモ他.Text = "メモ他"
         Me.tpageメモ他.UseVisualStyleBackColor = True
         '
+        'lbl作成者
+        '
+        Me.lbl作成者.AutoSize = True
+        Me.lbl作成者.Location = New System.Drawing.Point(24, 78)
+        Me.lbl作成者.Name = "lbl作成者"
+        Me.lbl作成者.Size = New System.Drawing.Size(54, 20)
+        Me.lbl作成者.TabIndex = 2
+        Me.lbl作成者.Text = "作成者"
+        '
+        'lblタイトル
+        '
+        Me.lblタイトル.AutoSize = True
+        Me.lblタイトル.Location = New System.Drawing.Point(24, 14)
+        Me.lblタイトル.Name = "lblタイトル"
+        Me.lblタイトル.Size = New System.Drawing.Size(53, 20)
+        Me.lblタイトル.TabIndex = 0
+        Me.lblタイトル.Text = "タイトル"
+        '
         'lblメモ
         '
         Me.lblメモ.AutoSize = True
-        Me.lblメモ.Location = New System.Drawing.Point(24, 13)
+        Me.lblメモ.Location = New System.Drawing.Point(24, 116)
         Me.lblメモ.Name = "lblメモ"
         Me.lblメモ.Size = New System.Drawing.Size(31, 20)
-        Me.lblメモ.TabIndex = 19
+        Me.lblメモ.TabIndex = 4
         Me.lblメモ.Text = "メモ"
         '
         'tpageプレビュー
@@ -3490,4 +3541,8 @@ Partial Class frmMain
     Friend WithEvents rad底 As RadioButton
     Friend WithEvents editUpDown As CraftBand.ctrEditUpDown
     Friend WithEvents editAddParts As CraftBand.ctrAddParts
+    Friend WithEvents txt作成者 As TextBox
+    Friend WithEvents txtタイトル As TextBox
+    Friend WithEvents lbl作成者 As Label
+    Friend WithEvents lblタイトル As Label
 End Class

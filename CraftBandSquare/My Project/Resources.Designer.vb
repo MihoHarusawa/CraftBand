@@ -251,6 +251,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ひも長係数が小さすぎます。通常1以上の値です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcSmallLengthRatio() As String
+            Get
+                Return ResourceManager.GetString("CalcSmallLengthRatio", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  規定値.xml に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property DefaultFileName() As String

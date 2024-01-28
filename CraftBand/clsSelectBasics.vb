@@ -21,6 +21,13 @@ Public Class clsSelectBasics
         End Get
     End Property
 
+    'リスト集計出力単位・桁数による文字列
+    Public ReadOnly Property p_sリスト集計出力長(ByVal d As Double) As String
+        Get
+            Return p_unit出力時の寸法単位.SumTextWithUnit(New Length(d), p_i小数点以下桁数)
+        End Get
+    End Property
+
     '指定されたtblバンドの種類
     Public ReadOnly Property p_i本幅 As Integer
         Get

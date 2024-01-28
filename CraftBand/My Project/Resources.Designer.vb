@@ -274,6 +274,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  単純計 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutLongest() As String
+            Get
+                Return ResourceManager.GetString("CalcOutLongest", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  最長 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutLonguest() As String

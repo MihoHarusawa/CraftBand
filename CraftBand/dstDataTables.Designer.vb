@@ -544,6 +544,10 @@ Namespace Tables
             
             Private columnf_sメモ As Global.System.Data.DataColumn
             
+            Private columnf_sタイトル As Global.System.Data.DataColumn
+            
+            Private columnf_s作成者 As Global.System.Data.DataColumn
+            
             Private columnf_sバージョン As Global.System.Data.DataColumn
             
             Private columnf_s単位 As Global.System.Data.DataColumn
@@ -651,6 +655,22 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sタイトルColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sタイトル
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s作成者Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s作成者
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_sバージョンColumn() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_sバージョン
@@ -710,9 +730,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl目標寸法Row(ByVal f_sバンドの種類名 As String, ByVal f_b内側区分 As Boolean, ByVal f_d横寸法 As Double, ByVal f_d縦寸法 As Double, ByVal f_d高さ寸法 As Double, ByVal f_s基本色 As String, ByVal f_i基本のひも幅 As Short, ByVal f_sメモ As String, ByVal f_sバージョン As String, ByVal f_s単位 As String, ByVal f_sEXE名 As String) As tbl目標寸法Row
+            Public Overloads Function Addtbl目標寸法Row(ByVal f_sバンドの種類名 As String, ByVal f_b内側区分 As Boolean, ByVal f_d横寸法 As Double, ByVal f_d縦寸法 As Double, ByVal f_d高さ寸法 As Double, ByVal f_s基本色 As String, ByVal f_i基本のひも幅 As Short, ByVal f_sメモ As String, ByVal f_sタイトル As String, ByVal f_s作成者 As String, ByVal f_sバージョン As String, ByVal f_s単位 As String, ByVal f_sEXE名 As String) As tbl目標寸法Row
                 Dim rowtbl目標寸法Row As tbl目標寸法Row = CType(Me.NewRow,tbl目標寸法Row)
-                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_b内側区分, f_d横寸法, f_d縦寸法, f_d高さ寸法, f_s基本色, f_i基本のひも幅, f_sメモ, f_sバージョン, f_s単位, f_sEXE名}
+                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_b内側区分, f_d横寸法, f_d縦寸法, f_d高さ寸法, f_s基本色, f_i基本のひも幅, f_sメモ, f_sタイトル, f_s作成者, f_sバージョン, f_s単位, f_sEXE名}
                 rowtbl目標寸法Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl目標寸法Row)
                 Return rowtbl目標寸法Row
@@ -743,6 +763,8 @@ Namespace Tables
                 Me.columnf_s基本色 = MyBase.Columns("f_s基本色")
                 Me.columnf_i基本のひも幅 = MyBase.Columns("f_i基本のひも幅")
                 Me.columnf_sメモ = MyBase.Columns("f_sメモ")
+                Me.columnf_sタイトル = MyBase.Columns("f_sタイトル")
+                Me.columnf_s作成者 = MyBase.Columns("f_s作成者")
                 Me.columnf_sバージョン = MyBase.Columns("f_sバージョン")
                 Me.columnf_s単位 = MyBase.Columns("f_s単位")
                 Me.columnf_sEXE名 = MyBase.Columns("f_sEXE名")
@@ -767,6 +789,10 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i基本のひも幅)
                 Me.columnf_sメモ = New Global.System.Data.DataColumn("f_sメモ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sメモ)
+                Me.columnf_sタイトル = New Global.System.Data.DataColumn("f_sタイトル", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sタイトル)
+                Me.columnf_s作成者 = New Global.System.Data.DataColumn("f_s作成者", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s作成者)
                 Me.columnf_sバージョン = New Global.System.Data.DataColumn("f_sバージョン", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sバージョン)
                 Me.columnf_s単位 = New Global.System.Data.DataColumn("f_s単位", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -781,7 +807,9 @@ Namespace Tables
                 Me.columnf_s基本色.DefaultValue = CType("",String)
                 Me.columnf_i基本のひも幅.DefaultValue = CType(0,Short)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.5.0",String)
+                Me.columnf_sタイトル.DefaultValue = CType("",String)
+                Me.columnf_s作成者.DefaultValue = CType("",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.6.0",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -4828,6 +4856,36 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sタイトル() As String
+                Get
+                    If Me.Isf_sタイトルNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl目標寸法.f_sタイトルColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl目標寸法.f_sタイトルColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s作成者() As String
+                Get
+                    If Me.Isf_s作成者Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl目標寸法.f_s作成者Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl目標寸法.f_s作成者Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_sバージョン() As String
                 Get
                     If Me.Isf_sバージョンNull Then
@@ -4965,6 +5023,30 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_sメモNull()
                 Me(Me.tabletbl目標寸法.f_sメモColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_sタイトルNull() As Boolean
+                Return Me.IsNull(Me.tabletbl目標寸法.f_sタイトルColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_sタイトルNull()
+                Me(Me.tabletbl目標寸法.f_sタイトルColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s作成者Null() As Boolean
+                Return Me.IsNull(Me.tabletbl目標寸法.f_s作成者Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s作成者Null()
+                Me(Me.tabletbl目標寸法.f_s作成者Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

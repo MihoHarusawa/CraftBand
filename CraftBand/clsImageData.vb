@@ -244,7 +244,16 @@ Public Class clsImageData
         Dim htmlFile As String = IO.Path.Combine(IO.Path.GetTempPath(), IO.Path.GetFileNameWithoutExtension(FilePath) & "_")
         htmlFile = IO.Path.ChangeExtension(htmlFile, ".html")
 
-        Dim title As String = IO.Path.GetFileNameWithoutExtension(FilePath)
+        Dim title As String = Nothing
+        If _clsOutput IsNot Nothing Then
+            title = _clsOutput.DataTitle
+            If Not String.IsNullOrWhiteSpace(_clsOutput.DataCreater) Then
+                title += "(" + _clsOutput.DataCreater + ")"
+            End If
+        End If
+        If String.IsNullOrWhiteSpace(title) Then
+            title = IO.Path.GetFileNameWithoutExtension(FilePath)
+        End If
         If Not makeHtmlPage(htmlFile, GifFilePath, title) Then
             'LastErrorあり
             Return False

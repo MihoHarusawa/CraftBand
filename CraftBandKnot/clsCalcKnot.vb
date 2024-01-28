@@ -2114,20 +2114,19 @@ Class clsCalcKnot
         Dim row As tblOutputRow
         Dim order As String
 
-        row = output.NextNewRow
-        row.f_s本幅 = g_clsSelectBasics.p_i本幅
-        row.f_s長さ = output.outLengthText(_dコマ間のすき間)
-        row.f_s高さ = output.outLengthText(_dコマの寸法)
-        row.f_sひも長 = output.outLengthText(_dコマの要尺)
-        row.f_s編みかた名 = IO.Path.GetFileNameWithoutExtension(output.FilePath) 'あれば名前
-        row.f_s編みひも名 = g_clsSelectBasics.p_s対象バンドの種類名
-        row.f_s色 = _Data.p_row目標寸法.Value("f_s基本色")
+        output.OutBasics(_Data.p_row目標寸法) '空行で終わる
 
         '底
         row = output.NextNewRow
         row.f_sカテゴリー = My.Resources.OutputTextBottom
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        '
+        If 0 < _dコマ間のすき間 Then
+            row.f_sタイプ = output.outLengthTextWithUnit(_dコマ間のすき間)
+        End If
+        row.f_s編みかた名 = text寸法() & output.outLengthTextWithUnit(_dコマの寸法)
+        row.f_s編みひも名 = text要尺() & output.outLengthTextWithUnit(_dコマの要尺)
 
         '***底
         'このカテゴリーは先に行をつくる
@@ -2392,8 +2391,7 @@ Class clsCalcKnot
 
 
         '集計値
-        output.OutSumList()
-        output.OutCutList()
+        output.OutSummery() '間に空行
 
         'メモがあれば追記
         Dim memo As String = _Data.p_row目標寸法.Value("f_sメモ")
@@ -2532,6 +2530,14 @@ Class clsCalcKnot
     Private Function textマイひも長係数() As String
         Dim tmp As New frmSelectBand
         Return tmp.lblマイひも長係数.Text
+    End Function
+
+    Private Function text寸法() As String
+        Return _frmMain.lbl寸法.Text
+    End Function
+
+    Private Function text要尺() As String
+        Return _frmMain.lbl要尺.Text
     End Function
 
 #End Region

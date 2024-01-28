@@ -208,6 +208,9 @@
   <data name="CalcOutLane" xml:space="preserve">
     <value>{0}幅</value>
   </data>
+  <data name="CalcOutLongest" xml:space="preserve">
+    <value>単純計</value>
+  </data>
   <data name="CalcOutLonguest" xml:space="preserve">
     <value>最長</value>
   </data>

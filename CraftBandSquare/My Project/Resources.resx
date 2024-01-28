@@ -189,6 +189,9 @@
   <data name="CalcOutTurn" xml:space="preserve">
     <value>折り返し</value>
   </data>
+  <data name="CalcSmallLengthRatio" xml:space="preserve">
+    <value>ひも長係数が小さすぎます。通常1以上の値です。</value>
+  </data>
   <data name="DefaultFileName" xml:space="preserve">
     <value>規定値.xml</value>
   </data>

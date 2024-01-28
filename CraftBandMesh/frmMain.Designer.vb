@@ -333,6 +333,10 @@ Partial Class frmMain
         Me.lbl計算寸法最大横 = New System.Windows.Forms.Label()
         Me.lbl底 = New System.Windows.Forms.Label()
         Me.lbl最大 = New System.Windows.Forms.Label()
+        Me.txt作成者 = New System.Windows.Forms.TextBox()
+        Me.txtタイトル = New System.Windows.Forms.TextBox()
+        Me.lbl作成者 = New System.Windows.Forms.Label()
+        Me.lblタイトル = New System.Windows.Forms.Label()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -805,7 +809,7 @@ Partial Class frmMain
         Me.chk楕円底個別設定.Location = New System.Drawing.Point(22, 16)
         Me.chk楕円底個別設定.Name = "chk楕円底個別設定"
         Me.chk楕円底個別設定.Size = New System.Drawing.Size(136, 24)
-        Me.chk楕円底個別設定.TabIndex = 1
+        Me.chk楕円底個別設定.TabIndex = 0
         Me.chk楕円底個別設定.Text = "楕円底個別設定"
         Me.ToolTip1.SetToolTip(Me.chk楕円底個別設定, "このデータ個別の値を設定する場合はチェックON")
         Me.chk楕円底個別設定.UseVisualStyleBackColor = True
@@ -815,22 +819,22 @@ Partial Class frmMain
         Me.nud楕円底円弧の半径加算.DecimalPlaces = 2
         Me.nud楕円底円弧の半径加算.Enabled = False
         Me.nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nud楕円底円弧の半径加算.Location = New System.Drawing.Point(213, 55)
+        Me.nud楕円底円弧の半径加算.Location = New System.Drawing.Point(368, 29)
         Me.nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         Me.nud楕円底円弧の半径加算.Minimum = New Decimal(New Integer() {99999, 0, 0, -2147483648})
         Me.nud楕円底円弧の半径加算.Name = "nud楕円底円弧の半径加算"
         Me.nud楕円底円弧の半径加算.Size = New System.Drawing.Size(68, 27)
-        Me.nud楕円底円弧の半径加算.TabIndex = 14
+        Me.nud楕円底円弧の半径加算.TabIndex = 2
         Me.nud楕円底円弧の半径加算.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.ToolTip1.SetToolTip(Me.nud楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
         '
         'lbl楕円底円弧の半径加算
         '
         Me.lbl楕円底円弧の半径加算.AutoSize = True
-        Me.lbl楕円底円弧の半径加算.Location = New System.Drawing.Point(47, 57)
+        Me.lbl楕円底円弧の半径加算.Location = New System.Drawing.Point(202, 33)
         Me.lbl楕円底円弧の半径加算.Name = "lbl楕円底円弧の半径加算"
         Me.lbl楕円底円弧の半径加算.Size = New System.Drawing.Size(156, 20)
-        Me.lbl楕円底円弧の半径加算.TabIndex = 13
+        Me.lbl楕円底円弧の半径加算.TabIndex = 1
         Me.lbl楕円底円弧の半径加算.Text = "楕円底円弧の半径加算"
         Me.ToolTip1.SetToolTip(Me.lbl楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
         '
@@ -839,22 +843,22 @@ Partial Class frmMain
         Me.nud楕円底周の加算.DecimalPlaces = 2
         Me.nud楕円底周の加算.Enabled = False
         Me.nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        Me.nud楕円底周の加算.Location = New System.Drawing.Point(213, 90)
+        Me.nud楕円底周の加算.Location = New System.Drawing.Point(654, 29)
         Me.nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         Me.nud楕円底周の加算.Minimum = New Decimal(New Integer() {99999, 0, 0, -2147483648})
         Me.nud楕円底周の加算.Name = "nud楕円底周の加算"
         Me.nud楕円底周の加算.Size = New System.Drawing.Size(68, 27)
-        Me.nud楕円底周の加算.TabIndex = 17
+        Me.nud楕円底周の加算.TabIndex = 5
         Me.nud楕円底周の加算.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.ToolTip1.SetToolTip(Me.nud楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
         '
         'lbl楕円底周の加算
         '
         Me.lbl楕円底周の加算.AutoSize = True
-        Me.lbl楕円底周の加算.Location = New System.Drawing.Point(47, 92)
+        Me.lbl楕円底周の加算.Location = New System.Drawing.Point(523, 33)
         Me.lbl楕円底周の加算.Name = "lbl楕円底周の加算"
         Me.lbl楕円底周の加算.Size = New System.Drawing.Size(111, 20)
-        Me.lbl楕円底周の加算.TabIndex = 16
+        Me.lbl楕円底周の加算.TabIndex = 4
         Me.lbl楕円底周の加算.Text = "楕円底周の加算"
         Me.ToolTip1.SetToolTip(Me.lbl楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
         '
@@ -1327,7 +1331,7 @@ Partial Class frmMain
         Me.TabControl.Name = "TabControl"
         Me.TabControl.SelectedIndex = 0
         Me.TabControl.Size = New System.Drawing.Size(848, 446)
-        Me.TabControl.TabIndex = 22
+        Me.TabControl.TabIndex = 0
         '
         'tpage底縦横
         '
@@ -2443,6 +2447,10 @@ Partial Class frmMain
         '
         'tpageメモ他
         '
+        Me.tpageメモ他.Controls.Add(Me.txt作成者)
+        Me.tpageメモ他.Controls.Add(Me.txtタイトル)
+        Me.tpageメモ他.Controls.Add(Me.lbl作成者)
+        Me.tpageメモ他.Controls.Add(Me.lblタイトル)
         Me.tpageメモ他.Controls.Add(Me.lblメモ)
         Me.tpageメモ他.Controls.Add(Me.nud楕円底周の加算)
         Me.tpageメモ他.Controls.Add(Me.lbl楕円底周の加算_単位)
@@ -2463,28 +2471,28 @@ Partial Class frmMain
         'lblメモ
         '
         Me.lblメモ.AutoSize = True
-        Me.lblメモ.Location = New System.Drawing.Point(24, 134)
+        Me.lblメモ.Location = New System.Drawing.Point(24, 190)
         Me.lblメモ.Name = "lblメモ"
         Me.lblメモ.Size = New System.Drawing.Size(31, 20)
-        Me.lblメモ.TabIndex = 19
+        Me.lblメモ.TabIndex = 11
         Me.lblメモ.Text = "メモ"
         '
         'lbl楕円底周の加算_単位
         '
         Me.lbl楕円底周の加算_単位.AutoSize = True
-        Me.lbl楕円底周の加算_単位.Location = New System.Drawing.Point(287, 94)
+        Me.lbl楕円底周の加算_単位.Location = New System.Drawing.Point(728, 33)
         Me.lbl楕円底周の加算_単位.Name = "lbl楕円底周の加算_単位"
         Me.lbl楕円底周の加算_単位.Size = New System.Drawing.Size(35, 20)
-        Me.lbl楕円底周の加算_単位.TabIndex = 18
+        Me.lbl楕円底周の加算_単位.TabIndex = 6
         Me.lbl楕円底周の加算_単位.Text = "mm"
         '
         'lbl楕円底円弧の半径加算_単位
         '
         Me.lbl楕円底円弧の半径加算_単位.AutoSize = True
-        Me.lbl楕円底円弧の半径加算_単位.Location = New System.Drawing.Point(287, 59)
+        Me.lbl楕円底円弧の半径加算_単位.Location = New System.Drawing.Point(442, 33)
         Me.lbl楕円底円弧の半径加算_単位.Name = "lbl楕円底円弧の半径加算_単位"
         Me.lbl楕円底円弧の半径加算_単位.Size = New System.Drawing.Size(35, 20)
-        Me.lbl楕円底円弧の半径加算_単位.TabIndex = 15
+        Me.lbl楕円底円弧の半径加算_単位.TabIndex = 3
         Me.lbl楕円底円弧の半径加算_単位.Text = "mm"
         '
         'txtメモ
@@ -2492,11 +2500,12 @@ Partial Class frmMain
         Me.txtメモ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtメモ.Location = New System.Drawing.Point(24, 166)
+        Me.txtメモ.Location = New System.Drawing.Point(24, 218)
         Me.txtメモ.Multiline = True
         Me.txtメモ.Name = "txtメモ"
-        Me.txtメモ.Size = New System.Drawing.Size(794, 227)
-        Me.txtメモ.TabIndex = 0
+        Me.txtメモ.Size = New System.Drawing.Size(794, 175)
+        Me.txtメモ.TabIndex = 12
+        Me.ToolTip1.SetToolTip(Me.txtメモ, "自由に記述できます")
         '
         'tpage底の横
         '
@@ -3162,6 +3171,46 @@ Partial Class frmMain
         Me.lbl最大.TabIndex = 60
         Me.lbl最大.Text = "(最大)"
         '
+        'txt作成者
+        '
+        Me.txt作成者.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt作成者.Location = New System.Drawing.Point(128, 152)
+        Me.txt作成者.Multiline = True
+        Me.txt作成者.Name = "txt作成者"
+        Me.txt作成者.Size = New System.Drawing.Size(690, 49)
+        Me.txt作成者.TabIndex = 10
+        Me.ToolTip1.SetToolTip(Me.txt作成者, "作成者情報")
+        '
+        'txtタイトル
+        '
+        Me.txtタイトル.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtタイトル.Location = New System.Drawing.Point(128, 88)
+        Me.txtタイトル.Multiline = True
+        Me.txtタイトル.Name = "txtタイトル"
+        Me.txtタイトル.Size = New System.Drawing.Size(690, 49)
+        Me.txtタイトル.TabIndex = 8
+        Me.ToolTip1.SetToolTip(Me.txtタイトル, "タイトル情報")
+        '
+        'lbl作成者
+        '
+        Me.lbl作成者.AutoSize = True
+        Me.lbl作成者.Location = New System.Drawing.Point(26, 152)
+        Me.lbl作成者.Name = "lbl作成者"
+        Me.lbl作成者.Size = New System.Drawing.Size(54, 20)
+        Me.lbl作成者.TabIndex = 9
+        Me.lbl作成者.Text = "作成者"
+        '
+        'lblタイトル
+        '
+        Me.lblタイトル.AutoSize = True
+        Me.lblタイトル.Location = New System.Drawing.Point(26, 88)
+        Me.lblタイトル.Name = "lblタイトル"
+        Me.lblタイトル.Size = New System.Drawing.Size(53, 20)
+        Me.lblタイトル.TabIndex = 7
+        Me.lblタイトル.Text = "タイトル"
+        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -3564,4 +3613,8 @@ Partial Class frmMain
     Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents editAddParts As CraftBand.ctrAddParts
+    Friend WithEvents txt作成者 As TextBox
+    Friend WithEvents txtタイトル As TextBox
+    Friend WithEvents lbl作成者 As Label
+    Friend WithEvents lblタイトル As Label
 End Class

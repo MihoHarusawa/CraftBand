@@ -362,6 +362,8 @@ Public Class frmMain
             cmb基本色.Text = .Value("f_s基本色")
 
             txtメモ.Text = .Value("f_sメモ")
+            txtタイトル.Text = .Value("f_sタイトル")
+            txt作成者.Text = .Value("f_s作成者")
         End With
     End Sub
 
@@ -502,6 +504,8 @@ Public Class frmMain
             .Value("f_i基本のひも幅") = nud基本のひも幅.Value
             .Value("f_s基本色") = cmb基本色.Text
             .Value("f_sメモ") = txtメモ.Text
+            .Value("f_sタイトル") = txtタイトル.Text
+            .Value("f_s作成者") = txt作成者.Text
         End With
         Return True
     End Function

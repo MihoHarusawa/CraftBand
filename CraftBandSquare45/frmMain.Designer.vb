@@ -112,6 +112,9 @@ Partial Class frmMain
         Me.chk横の辺 = New System.Windows.Forms.CheckBox()
         Me.nud垂直に = New System.Windows.Forms.NumericUpDown()
         Me.btn合わせる = New System.Windows.Forms.Button()
+        Me.txtメモ = New System.Windows.Forms.TextBox()
+        Me.txt作成者 = New System.Windows.Forms.TextBox()
+        Me.txtタイトル = New System.Windows.Forms.TextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.ToolStripMenuItemFile = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemFileNew = New System.Windows.Forms.ToolStripMenuItem()
@@ -137,6 +140,7 @@ Partial Class frmMain
         Me.ToolStripMenuItemSettingPattern = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemSettingOptions = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemSettingColor = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItemSettingUpDown = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripMenuItemSettingBasics = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemHelp = New System.Windows.Forms.ToolStripMenuItem()
@@ -190,8 +194,9 @@ Partial Class frmMain
         Me.tpage追加品 = New System.Windows.Forms.TabPage()
         Me.editAddParts = New CraftBand.ctrAddParts()
         Me.tpageメモ他 = New System.Windows.Forms.TabPage()
+        Me.lbl作成者 = New System.Windows.Forms.Label()
+        Me.lblタイトル = New System.Windows.Forms.Label()
         Me.lblメモ = New System.Windows.Forms.Label()
-        Me.txtメモ = New System.Windows.Forms.TextBox()
         Me.tpage横ひも = New System.Windows.Forms.TabPage()
         Me.btnリセット_横 = New System.Windows.Forms.Button()
         Me.lbl上から順に下へ = New System.Windows.Forms.Label()
@@ -257,7 +262,6 @@ Partial Class frmMain
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.lbl単位 = New System.Windows.Forms.Label()
         Me.btnDEBUG = New System.Windows.Forms.Button()
-        Me.ToolStripMenuItemSettingUpDown = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.nud基本のひも幅, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud横寸法, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nud縦寸法, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -941,6 +945,40 @@ Partial Class frmMain
         Me.ToolTip1.SetToolTip(Me.btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
         Me.btn合わせる.UseVisualStyleBackColor = True
         '
+        'txtメモ
+        '
+        Me.txtメモ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtメモ.Location = New System.Drawing.Point(22, 147)
+        Me.txtメモ.Multiline = True
+        Me.txtメモ.Name = "txtメモ"
+        Me.txtメモ.Size = New System.Drawing.Size(794, 246)
+        Me.txtメモ.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.txtメモ, "自由に記述できます")
+        '
+        'txt作成者
+        '
+        Me.txt作成者.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt作成者.Location = New System.Drawing.Point(126, 81)
+        Me.txt作成者.Multiline = True
+        Me.txt作成者.Name = "txt作成者"
+        Me.txt作成者.Size = New System.Drawing.Size(690, 49)
+        Me.txt作成者.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.txt作成者, "作成者情報")
+        '
+        'txtタイトル
+        '
+        Me.txtタイトル.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtタイトル.Location = New System.Drawing.Point(126, 17)
+        Me.txtタイトル.Multiline = True
+        Me.txtタイトル.Name = "txtタイトル"
+        Me.txtタイトル.Size = New System.Drawing.Size(690, 49)
+        Me.txtタイトル.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.txtタイトル, "タイトル情報")
+        '
         'MenuStrip1
         '
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
@@ -1073,36 +1111,42 @@ Partial Class frmMain
         'ToolStripMenuItemSettingBandType
         '
         Me.ToolStripMenuItemSettingBandType.Name = "ToolStripMenuItemSettingBandType"
-        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingBandType.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingBandType.Text = "バンドの種類(&T)"
         '
         'ToolStripMenuItemSettingPattern
         '
         Me.ToolStripMenuItemSettingPattern.Name = "ToolStripMenuItemSettingPattern"
-        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingPattern.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingPattern.Text = "編みかた(&P)"
         '
         'ToolStripMenuItemSettingOptions
         '
         Me.ToolStripMenuItemSettingOptions.Name = "ToolStripMenuItemSettingOptions"
-        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingOptions.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingOptions.Text = "付属品(&O)"
         '
         'ToolStripMenuItemSettingColor
         '
         Me.ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
-        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingColor.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingColor.Text = "描画色(&C)"
+        '
+        'ToolStripMenuItemSettingUpDown
+        '
+        Me.ToolStripMenuItemSettingUpDown.Name = "ToolStripMenuItemSettingUpDown"
+        Me.ToolStripMenuItemSettingUpDown.Size = New System.Drawing.Size(186, 26)
+        Me.ToolStripMenuItemSettingUpDown.Text = "上下図(&U)"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(221, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(183, 6)
         '
         'ToolStripMenuItemSettingBasics
         '
         Me.ToolStripMenuItemSettingBasics.Name = "ToolStripMenuItemSettingBasics"
-        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(224, 26)
+        Me.ToolStripMenuItemSettingBasics.Size = New System.Drawing.Size(186, 26)
         Me.ToolStripMenuItemSettingBasics.Text = "基本設定(&B)"
         '
         'ToolStripMenuItemHelp
@@ -1670,6 +1714,10 @@ Partial Class frmMain
         '
         'tpageメモ他
         '
+        Me.tpageメモ他.Controls.Add(Me.txt作成者)
+        Me.tpageメモ他.Controls.Add(Me.txtタイトル)
+        Me.tpageメモ他.Controls.Add(Me.lbl作成者)
+        Me.tpageメモ他.Controls.Add(Me.lblタイトル)
         Me.tpageメモ他.Controls.Add(Me.lblメモ)
         Me.tpageメモ他.Controls.Add(Me.txtメモ)
         Me.tpageメモ他.Location = New System.Drawing.Point(4, 29)
@@ -1680,25 +1728,32 @@ Partial Class frmMain
         Me.tpageメモ他.Text = "メモ他"
         Me.tpageメモ他.UseVisualStyleBackColor = True
         '
+        'lbl作成者
+        '
+        Me.lbl作成者.AutoSize = True
+        Me.lbl作成者.Location = New System.Drawing.Point(24, 81)
+        Me.lbl作成者.Name = "lbl作成者"
+        Me.lbl作成者.Size = New System.Drawing.Size(54, 20)
+        Me.lbl作成者.TabIndex = 2
+        Me.lbl作成者.Text = "作成者"
+        '
+        'lblタイトル
+        '
+        Me.lblタイトル.AutoSize = True
+        Me.lblタイトル.Location = New System.Drawing.Point(24, 17)
+        Me.lblタイトル.Name = "lblタイトル"
+        Me.lblタイトル.Size = New System.Drawing.Size(53, 20)
+        Me.lblタイトル.TabIndex = 0
+        Me.lblタイトル.Text = "タイトル"
+        '
         'lblメモ
         '
         Me.lblメモ.AutoSize = True
-        Me.lblメモ.Location = New System.Drawing.Point(26, 18)
+        Me.lblメモ.Location = New System.Drawing.Point(24, 120)
         Me.lblメモ.Name = "lblメモ"
         Me.lblメモ.Size = New System.Drawing.Size(31, 20)
-        Me.lblメモ.TabIndex = 19
+        Me.lblメモ.TabIndex = 4
         Me.lblメモ.Text = "メモ"
-        '
-        'txtメモ
-        '
-        Me.txtメモ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtメモ.Location = New System.Drawing.Point(24, 52)
-        Me.txtメモ.Multiline = True
-        Me.txtメモ.Name = "txtメモ"
-        Me.txtメモ.Size = New System.Drawing.Size(794, 341)
-        Me.txtメモ.TabIndex = 0
         '
         'tpage横ひも
         '
@@ -2376,12 +2431,6 @@ Partial Class frmMain
         Me.btnDEBUG.UseVisualStyleBackColor = True
         Me.btnDEBUG.Visible = False
         '
-        'ToolStripMenuItemSettingUpDown
-        '
-        Me.ToolStripMenuItemSettingUpDown.Name = "ToolStripMenuItemSettingUpDown"
-        Me.ToolStripMenuItemSettingUpDown.Size = New System.Drawing.Size(224, 26)
-        Me.ToolStripMenuItemSettingUpDown.Text = "上下図(&U)"
-        '
         'frmMain
         '
         Me.AllowDrop = True
@@ -2712,4 +2761,8 @@ Partial Class frmMain
     Friend WithEvents btn合わせる As Button
     Friend WithEvents editAddParts As ctrAddParts
     Friend WithEvents ToolStripMenuItemSettingUpDown As ToolStripMenuItem
+    Friend WithEvents txt作成者 As TextBox
+    Friend WithEvents txtタイトル As TextBox
+    Friend WithEvents lbl作成者 As Label
+    Friend WithEvents lblタイトル As Label
 End Class
