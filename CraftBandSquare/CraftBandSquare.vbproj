@@ -14,8 +14,8 @@
     <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
     <PackageIcon>IconSquare.ico</PackageIcon>
     <Authors>MihoHarusawa</Authors>
-    <AssemblyVersion>1.2.2.0</AssemblyVersion>
-    <FileVersion>1.2.2.0</FileVersion>
+    <AssemblyVersion>1.2.3.0</AssemblyVersion>
+    <FileVersion>1.2.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
