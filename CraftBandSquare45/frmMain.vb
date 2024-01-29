@@ -879,6 +879,11 @@ Public Class frmMain
             Exit Sub
         End If
 
+        '保存名確定
+        If String.IsNullOrEmpty(txtタイトル.Text) AndAlso String.IsNullOrEmpty(txt作成者.Text) Then
+            txtタイトル.Text = IO.Path.GetFileNameWithoutExtension(SaveFileDialog1.FileName)
+            txt作成者.Text = Environment.UserName
+        End If
         SaveTables(_clsDataTables)
         If _clsDataTables.Save(SaveFileDialog1.FileName) Then
             _sFilePath = SaveFileDialog1.FileName
