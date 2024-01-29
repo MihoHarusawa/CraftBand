@@ -246,10 +246,7 @@ Public Class clsImageData
 
         Dim title As String = Nothing
         If _clsOutput IsNot Nothing Then
-            title = _clsOutput.DataTitle
-            If Not String.IsNullOrWhiteSpace(_clsOutput.DataCreater) Then
-                title += "(" + _clsOutput.DataCreater + ")"
-            End If
+            title = _clsOutput.DataTitle & Parentheses(_clsOutput.DataCreater)
         End If
         If String.IsNullOrWhiteSpace(title) Then
             title = IO.Path.GetFileNameWithoutExtension(FilePath)

@@ -496,6 +496,18 @@
         End Try
     End Function
 
+    'カッコ付き文字列を返す、空でなければ
+    Public Function Parentheses(ByVal obj As Object) As String
+        If obj Is Nothing OrElse IsDBNull(obj) Then
+            Return ""
+        End If
+        Dim str As String = obj.ToString
+        If String.IsNullOrWhiteSpace(str) Then
+            Return str
+        End If
+        Return "(" & str & ")"
+    End Function
+
     'マイナスを許す剰余値 0～range-1 の値で返す
     Public Function Modulo(ByVal val As Integer, ByVal range As Integer) As Integer
         If range <= 0 Then

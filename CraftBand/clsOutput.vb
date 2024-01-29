@@ -300,11 +300,11 @@ Public Class clsOutput
             If 0 < sumlength Then
                 NextNewRow()
                 lines += 1
-                _CurrentRow.f_s本幅 = My.Resources.CalcOutLongest '単純計
+                _CurrentRow.f_s本幅 = Parentheses(My.Resources.CalcOutLongest) '単純計
                 _CurrentRow.f_sひも長 = outLengthText(sum)
                 _CurrentRow.f_s高さ = outLengthText(sumlength)
                 _CurrentRow.f_s長さ = outLengthText(maxmaxlen)
-                _CurrentRow.f_sひも本数 = "(" & outCountText(sumcount) & ")"
+                _CurrentRow.f_sひも本数 = Parentheses(outCountText(sumcount))
 
                 If Not String.IsNullOrWhiteSpace(color) Then
                     _CurrentRow.f_s色 = color
@@ -325,9 +325,9 @@ Public Class clsOutput
 
         If _RowSemmery IsNot Nothing Then
             _RowSemmery.f_sひも本数 = outCountText(sumcountAllColor)
-            _RowSemmery.f_s記号 = My.Resources.CalcOutLongest '単純計
+            _RowSemmery.f_s記号 = Parentheses(My.Resources.CalcOutLongest) '単純計
             _RowSemmery.f_sひも長 = g_clsSelectBasics.p_sリスト集計出力長(sumAllColor)
-            _RowSemmery.f_s編みかた名 = My.Resources.CalcOutShortest '面積長
+            _RowSemmery.f_s編みかた名 = Parentheses(My.Resources.CalcOutShortest) '面積長
             _RowSemmery.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlengthAllColor)
         End If
 
