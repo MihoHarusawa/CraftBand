@@ -537,6 +537,8 @@ Namespace Tables
             
             Private columnf_bCraftBandSquare As Global.System.Data.DataColumn
             
+            Private columnf_bCraftBandHexagon As Global.System.Data.DataColumn
+            
             Private columnf_s備考 As Global.System.Data.DataColumn
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -752,6 +754,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_bCraftBandHexagonColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_bCraftBandHexagon
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_s備考Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_s備考
@@ -818,9 +828,10 @@ Namespace Tables
                         ByVal f_bCraftBandSquare45 As Boolean,  _
                         ByVal f_bCraftBandKnot As Boolean,  _
                         ByVal f_bCraftBandSquare As Boolean,  _
+                        ByVal f_bCraftBandHexagon As Boolean,  _
                         ByVal f_s備考 As String) As tbl編みかたRow
                 Dim rowtbl編みかたRow As tbl編みかたRow = CType(Me.NewRow,tbl編みかたRow)
-                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも1幅係数1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも1幅係数1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
                 rowtbl編みかたRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl編みかたRow)
                 Return rowtbl編みかたRow
@@ -871,6 +882,7 @@ Namespace Tables
                 Me.columnf_bCraftBandSquare45 = MyBase.Columns("f_bCraftBandSquare45")
                 Me.columnf_bCraftBandKnot = MyBase.Columns("f_bCraftBandKnot")
                 Me.columnf_bCraftBandSquare = MyBase.Columns("f_bCraftBandSquare")
+                Me.columnf_bCraftBandHexagon = MyBase.Columns("f_bCraftBandHexagon")
                 Me.columnf_s備考 = MyBase.Columns("f_s備考")
             End Sub
             
@@ -921,6 +933,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_bCraftBandKnot)
                 Me.columnf_bCraftBandSquare = New Global.System.Data.DataColumn("f_bCraftBandSquare", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_bCraftBandSquare)
+                Me.columnf_bCraftBandHexagon = New Global.System.Data.DataColumn("f_bCraftBandHexagon", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_bCraftBandHexagon)
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tbl編みかたPKey", New Global.System.Data.DataColumn() {Me.columnf_s編みかた名, Me.columnf_iひも番号}, true))
@@ -950,6 +964,7 @@ Namespace Tables
                 Me.columnf_bCraftBandSquare45.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandKnot.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandSquare.DefaultValue = CType(true,Boolean)
+                Me.columnf_bCraftBandHexagon.DefaultValue = CType(true,Boolean)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -1760,6 +1775,8 @@ Namespace Tables
             
             Private columnf_bCraftBandSquare As Global.System.Data.DataColumn
             
+            Private columnf_bCraftBandHexagon As Global.System.Data.DataColumn
+            
             Private columnf_s備考 As Global.System.Data.DataColumn
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1935,6 +1952,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_bCraftBandHexagonColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_bCraftBandHexagon
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_s備考Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_s備考
@@ -1996,9 +2021,10 @@ Namespace Tables
                         ByVal f_bCraftBandSquare45 As Boolean,  _
                         ByVal f_bCraftBandKnot As Boolean,  _
                         ByVal f_bCraftBandSquare As Boolean,  _
+                        ByVal f_bCraftBandHexagon As Boolean,  _
                         ByVal f_s備考 As String) As tbl付属品Row
                 Dim rowtbl付属品Row As tbl付属品Row = CType(Me.NewRow,tbl付属品Row)
-                Dim columnValuesArray() As Object = New Object() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
                 rowtbl付属品Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl付属品Row)
                 Return rowtbl付属品Row
@@ -2044,6 +2070,7 @@ Namespace Tables
                 Me.columnf_bCraftBandSquare45 = MyBase.Columns("f_bCraftBandSquare45")
                 Me.columnf_bCraftBandKnot = MyBase.Columns("f_bCraftBandKnot")
                 Me.columnf_bCraftBandSquare = MyBase.Columns("f_bCraftBandSquare")
+                Me.columnf_bCraftBandHexagon = MyBase.Columns("f_bCraftBandHexagon")
                 Me.columnf_s備考 = MyBase.Columns("f_s備考")
             End Sub
             
@@ -2084,6 +2111,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_bCraftBandKnot)
                 Me.columnf_bCraftBandSquare = New Global.System.Data.DataColumn("f_bCraftBandSquare", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_bCraftBandSquare)
+                Me.columnf_bCraftBandHexagon = New Global.System.Data.DataColumn("f_bCraftBandHexagon", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_bCraftBandHexagon)
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.Constraints.Add(New Global.System.Data.UniqueConstraint("tbl付属品PKey", New Global.System.Data.DataColumn() {Me.columnf_s付属品名, Me.columnf_iひも番号}, true))
@@ -2107,6 +2136,7 @@ Namespace Tables
                 Me.columnf_bCraftBandSquare45.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandKnot.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandSquare.DefaultValue = CType(true,Boolean)
+                Me.columnf_bCraftBandHexagon.DefaultValue = CType(true,Boolean)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -2387,7 +2417,7 @@ Namespace Tables
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.7.0",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.8.0",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -3904,6 +3934,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_bCraftBandHexagon() As Boolean
+                Get
+                    If Me.Isf_bCraftBandHexagonNull Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl編みかた.f_bCraftBandHexagonColumn),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl編みかた.f_bCraftBandHexagonColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s備考() As String
                 Get
                     If Me.Isf_s備考Null Then
@@ -4143,6 +4188,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_bCraftBandSquareNull()
                 Me(Me.tabletbl編みかた.f_bCraftBandSquareColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_bCraftBandHexagonNull() As Boolean
+                Return Me.IsNull(Me.tabletbl編みかた.f_bCraftBandHexagonColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_bCraftBandHexagonNull()
+                Me(Me.tabletbl編みかた.f_bCraftBandHexagonColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -5120,6 +5177,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_bCraftBandHexagon() As Boolean
+                Get
+                    If Me.Isf_bCraftBandHexagonNull Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl付属品.f_bCraftBandHexagonColumn),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl付属品.f_bCraftBandHexagonColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s備考() As String
                 Get
                     If Me.Isf_s備考Null Then
@@ -5299,6 +5371,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_bCraftBandSquareNull()
                 Me(Me.tabletbl付属品.f_bCraftBandSquareColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_bCraftBandHexagonNull() As Boolean
+                Return Me.IsNull(Me.tabletbl付属品.f_bCraftBandHexagonColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_bCraftBandHexagonNull()
+                Me(Me.tabletbl付属品.f_bCraftBandHexagonColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

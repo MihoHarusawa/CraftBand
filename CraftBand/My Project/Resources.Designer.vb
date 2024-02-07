@@ -164,6 +164,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}をすべて初期状態に戻します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskResetExpanding() As String
+            Get
+                Return ResourceManager.GetString("AskResetExpanding", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  新しい{0}として&apos;{1}&apos;が指定されました。現在の設定をクリアしますか？
         '''(はい=ゼロから作り直す,いいえ=現設定維持) に類似しているローカライズされた文字列を検索します。
         '''</summary>

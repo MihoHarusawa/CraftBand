@@ -91,6 +91,8 @@ Public Class clsDataTables
         i_45度 = &H800
         i_315度 = &H1000
         i_側面 = &H2000
+        i_60度 = &H4000
+        i_120度 = &H8000
 
         i_長い = &H10
         i_短い = &H20
@@ -456,6 +458,8 @@ Public Class clsDataTables
 
 
 #Region "ワークテーブルとtbl縦横展開の転送"
+    '※キーはf_iひも種,f_iひも番号 [対象は、f_iひも種のbitを持つレコード]
+
     'ワークテーブルの編集フィールドにデータベース値をセットする
     '※iひも種はレコード参照には使わない
     Public Function ToTmpTable(ByVal iひも種 As Integer, ByVal tmptable As tbl縦横展開DataTable) As Integer
@@ -471,7 +475,7 @@ Public Class clsDataTables
                 Continue For
             End If
 
-            'f_dひも長加算, f_s色, f_sメモを取得
+            'f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
             tmp.f_dひも長加算 = row.f_dひも長加算
             tmp.f_dひも長加算2 = row.f_dひも長加算2
             If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then

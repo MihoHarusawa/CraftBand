@@ -71,6 +71,7 @@ Partial Class frmPattern
         Me.f_bCraftBandSquare45 = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_bCraftBandKnot = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_bCraftBandSquare = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.f_bCraftBandHexagon = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.f_s備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.BindingSource編みかた, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -86,7 +87,7 @@ Partial Class frmPattern
         Me.dgvData.AutoGenerateColumns = False
         Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_s編みかた名, Me.f_iひも番号, Me.f_s編みひも名, Me.f_b縁専用区分, Me.f_b底使用区分, Me.f_i周あたり段数, Me.f_iひも数, Me.f_i本幅初期値, Me.f_b周連続区分, Me.f_d高さ比率対ひも幅, Me.f_d垂直ひも長比率対ひも幅, Me.f_dひも長比率対周長, Me.f_dひも長加算1目あたり, Me.f_dひも長加算1周あたり, Me.f_dひも1幅係数1目あたり, Me.f_dひも長加算ひもあたり, Me.f_dひも長加算初期値, Me.f_d厚さ, Me.f_bCraftBandMesh, Me.f_bCraftBandSquare45, Me.f_bCraftBandKnot, Me.f_bCraftBandSquare, Me.f_s備考})
+        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.f_s編みかた名, Me.f_iひも番号, Me.f_s編みひも名, Me.f_b縁専用区分, Me.f_b底使用区分, Me.f_i周あたり段数, Me.f_iひも数, Me.f_i本幅初期値, Me.f_b周連続区分, Me.f_d高さ比率対ひも幅, Me.f_d垂直ひも長比率対ひも幅, Me.f_dひも長比率対周長, Me.f_dひも長加算1目あたり, Me.f_dひも長加算1周あたり, Me.f_dひも1幅係数1目あたり, Me.f_dひも長加算ひもあたり, Me.f_dひも長加算初期値, Me.f_d厚さ, Me.f_bCraftBandMesh, Me.f_bCraftBandSquare45, Me.f_bCraftBandKnot, Me.f_bCraftBandSquare, Me.f_bCraftBandHexagon, Me.f_s備考})
         Me.dgvData.DataSource = Me.BindingSource編みかた
         Me.dgvData.Location = New System.Drawing.Point(12, 32)
         Me.dgvData.Name = "dgvData"
@@ -416,6 +417,15 @@ Partial Class frmPattern
         Me.f_bCraftBandSquare.ToolTipText = "CraftBandSquareで使用する"
         Me.f_bCraftBandSquare.Width = 125
         '
+        'f_bCraftBandHexagon
+        '
+        Me.f_bCraftBandHexagon.DataPropertyName = "f_bCraftBandHexagon"
+        Me.f_bCraftBandHexagon.HeaderText = "Hexagon"
+        Me.f_bCraftBandHexagon.MinimumWidth = 6
+        Me.f_bCraftBandHexagon.Name = "f_bCraftBandHexagon"
+        Me.f_bCraftBandHexagon.ToolTipText = "CraftBandHexagonで使用する"
+        Me.f_bCraftBandHexagon.Width = 125
+        '
         'f_s備考
         '
         Me.f_s備考.DataPropertyName = "f_s備考"
@@ -483,5 +493,6 @@ Partial Class frmPattern
     Friend WithEvents f_bCraftBandSquare45 As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandKnot As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandSquare As DataGridViewCheckBoxColumn
+    Friend WithEvents f_bCraftBandHexagon As DataGridViewCheckBoxColumn
     Friend WithEvents f_s備考 As DataGridViewTextBoxColumn
 End Class

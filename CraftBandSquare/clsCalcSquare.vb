@@ -1394,7 +1394,6 @@ Class clsCalcSquare
     Function prepare縦横展開DataTable() As Boolean
         Try
             Dim yokotable As tbl縦横展開DataTable = get横展開DataTable()
-            _Data.FromTmpTable(enumひも種.i_横, yokotable)
             save横展開DataTable(True)
 
             Dim tatetable As tbl縦横展開DataTable = get縦展開DataTable()
@@ -1407,12 +1406,6 @@ Class clsCalcSquare
         End Try
     End Function
 
-
-    '更新処理が必要なフィールド名
-    Shared _fields縦横展開() As String = {"f_i何本幅", "f_dひも長加算"}
-    Shared Function IsDataPropertyName縦横展開(ByVal name As String) As Boolean
-        Return _fields縦横展開.Contains(name)
-    End Function
 
     '本幅変更と幅の合計を返す共通関数
     Private Function recalc_ひも展開(ByVal table As tbl縦横展開DataTable, ByVal filt As enumひも種, ByRef isChange As Boolean) As Double

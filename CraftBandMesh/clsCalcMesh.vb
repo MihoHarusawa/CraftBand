@@ -2077,7 +2077,7 @@ Class clsCalcMesh
         Dim tbl縦横展開 As New tbl縦横展開DataTable
         Dim row As tbl縦横展開Row
 
-        'f_dひも長加算,f_s色は初期値
+        'f_dひも長加算,f_dひも長加算2,f_s色は既定値
         With _Data.p_row底_縦横
             Dim posyoko As Integer = 1
 

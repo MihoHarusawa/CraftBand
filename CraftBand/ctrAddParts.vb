@@ -36,7 +36,7 @@ Public Class ctrAddParts
 
 
     '対象バンド・基本値の更新
-    Sub setBasics()
+    Private Sub setBasics()
         With g_clsSelectBasics
             lbl長さ_単位.Text = .p_unit設定時の寸法単位.Str
             nud長さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
@@ -45,7 +45,7 @@ Public Class ctrAddParts
     End Sub
 
     '付属品の変更
-    Sub setOptions()
+    Private Sub setOptions()
         cmb付属品名.Items.Clear()
         cmb付属品名.Items.AddRange(g_clsMasterTables.GetOptionNames())
     End Sub
@@ -54,7 +54,7 @@ Public Class ctrAddParts
 #Region "公開関数"
 
     'Load後に一度だけセットしてください
-    Sub SetNames(ByVal formcaption As String, tabname As String)
+    Sub SetNames(ByVal formcaption As String, ByVal tabname As String)
         _FormCaption = formcaption
         _Profile_追加品.FormCaption = formcaption
         _TabPageName = tabname
@@ -147,8 +147,6 @@ Public Class ctrAddParts
             )
 
     Private Sub ctrAddParts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        '_Profile_追加品.FormCaption = Me.Text
         dgv追加品.SetProfile(_Profile_追加品)
 
         '※フォームのデザイン時にもLoadされますので、グローバル参照値は参照できない

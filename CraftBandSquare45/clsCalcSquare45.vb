@@ -1074,6 +1074,7 @@ Class clsCalcSquare45
             row.f_dひも長 = 0 '別途計算
             row.f_i何本幅 = _I基本のひも幅
             row.f_dひも長加算 = 0
+            row.f_dひも長加算2 = 0 '使わない
             row.f_d出力ひも長 = 0 '別途計算
 
             tmptable.Rows.Add(row)
@@ -1093,6 +1094,7 @@ Class clsCalcSquare45
                 row.f_dひも長 = p_d四角ベース_横
                 row.f_i何本幅 = _I基本のひも幅
                 row.f_dひも長加算 = 0
+                row.f_dひも長加算2 = 0 '使わない
                 row.f_d出力ひも長 = row.f_dひも長
 
                 tmptable.Rows.Add(row)
@@ -1132,6 +1134,7 @@ Class clsCalcSquare45
             row.f_dひも長 = 0 '別途計算
             row.f_i何本幅 = _I基本のひも幅
             row.f_dひも長加算 = 0
+            row.f_dひも長加算2 = 0 '使わない
             row.f_d出力ひも長 = 0 '別途計算
 
             tmptable.Rows.Add(row)
@@ -1150,6 +1153,7 @@ Class clsCalcSquare45
                 row.f_dひも長 = p_d四角ベース_縦
                 row.f_i何本幅 = _I基本のひも幅
                 row.f_dひも長加算 = 0
+                row.f_dひも長加算2 = 0 '使わない
                 row.f_d出力ひも長 = row.f_dひも長
 
                 tmptable.Rows.Add(row)

@@ -167,7 +167,7 @@ Public Class frmPattern
             Exit Sub
         End If
 
-        If {"f_b縁専用区分", "f_b底使用区分", "f_bCraftBandMesh", "f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare"}.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
+        If {"f_b縁専用区分", "f_b底使用区分", "f_bCraftBandMesh", "f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare", "f_bCraftBandHexagon"}.Contains(dgv.Columns(e.ColumnIndex).DataPropertyName) Then
             '名前・Idx順にソートされており、Idx=1が変更された前提!
             Dim setval As Boolean = dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
             Dim name As String = dgv.Rows(e.RowIndex).Cells(_NameColumnIndex).Value

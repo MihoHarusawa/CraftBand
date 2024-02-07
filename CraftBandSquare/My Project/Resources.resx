@@ -192,6 +192,14 @@
   <data name="CalcSmallLengthRatio" xml:space="preserve">
     <value>ひも長係数が小さすぎます。通常1以上の値です。</value>
   </data>
+  <data name="CaptionExpand4To6" xml:space="preserve">
+    <value>左,右</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CaptionExpand8To2" xml:space="preserve">
+    <value>上,下</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="DefaultFileName" xml:space="preserve">
     <value>規定値.xml</value>
   </data>

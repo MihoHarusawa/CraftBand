@@ -16,11 +16,12 @@ Public Module mdlDllMain
         CraftBandSquare45
         CraftBandKnot
         CraftBandSquare
+        CraftBandHexagon
     End Enum
     Public g_enumExeName As enumExeName = enumExeName.Nodef
 
     '省略名
-    Dim _ShortNames() As String = {"", "Mesh", "Square45", "Knot", "Square"}
+    Dim _ShortNames() As String = {"", "Mesh", "Square45", "Knot", "Square", "Hexagon"}
     Public Function GetShortExeName(ByVal exename As enumExeName) As String
         Return _ShortNames(exename)
     End Function

@@ -165,6 +165,10 @@
     <value>実測値を全てクリアし規定値に戻します。よろしいですか？</value>
     <comment>frmGauge</comment>
   </data>
+  <data name="AskResetExpanding" xml:space="preserve">
+    <value>{0}をすべて初期状態に戻します。よろしいですか？</value>
+    <comment>ctrExpanding</comment>
+  </data>
   <data name="AskResetMasterDataFile" xml:space="preserve">
     <value>新しい{0}として'{1}'が指定されました。現在の設定をクリアしますか？
 (はい=ゼロから作り直す,いいえ=現設定維持)</value>

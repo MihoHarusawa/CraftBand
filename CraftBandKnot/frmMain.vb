@@ -28,11 +28,6 @@ Public Class frmMain
             Nothing,
             enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
             )
-    Dim _Profile_dgv縦横ひも As New CDataGridViewProfile(
-            (New tbl縦横展開DataTable),
-            Nothing,
-            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow
-            )
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'dgv側面と縁.RowTemplate.Height = cRowHeightIdxOne
@@ -41,11 +36,11 @@ Public Class frmMain
         _Profile_dgv側面と縁.FormCaption = Me.Text
         dgv側面と縁.SetProfile(_Profile_dgv側面と縁)
 
-        _Profile_dgv縦横ひも.FormCaption = Me.Text
-        dgv横ひも.SetProfile(_Profile_dgv縦横ひも)
-        dgv縦ひも.SetProfile(_Profile_dgv縦横ひも)
-
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
+
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, False, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, False, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
+
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -84,13 +79,6 @@ Public Class frmMain
         f_s色2.DisplayMember = "Display"
         f_s色2.ValueMember = "Value"
         '
-        f_s色4.DataSource = g_clsSelectBasics.p_tblColor
-        f_s色4.DisplayMember = "Display"
-        f_s色4.ValueMember = "Value"
-        f_s色5.DataSource = g_clsSelectBasics.p_tblColor
-        f_s色5.DisplayMember = "Display"
-        f_s色5.ValueMember = "Value"
-
         setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
         _isLoadingData = False 'Designer.vb描画完了
@@ -107,9 +95,9 @@ Public Class frmMain
             colwid = My.Settings.frmMainGridOptions
             Me.editAddParts.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridYoko
-            Me.dgv横ひも.SetColumnWidthFromString(colwid)
+            Me.expand横ひも.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridTate
-            Me.dgv縦ひも.SetColumnWidthFromString(colwid)
+            Me.expand縦ひも.SetColumnWidthFromString(colwid)
         End If
 
         setStartEditing()
@@ -126,8 +114,8 @@ Public Class frmMain
 
         My.Settings.frmMainGridSide = Me.dgv側面と縁.GetColumnWidthString()
         My.Settings.frmMainGridOptions = Me.editAddParts.GetColumnWidthString()
-        My.Settings.frmMainGridYoko = Me.dgv横ひも.GetColumnWidthString()
-        My.Settings.frmMainGridTate = Me.dgv縦ひも.GetColumnWidthString()
+        My.Settings.frmMainGridYoko = Me.expand横ひも.GetColumnWidthString()
+        My.Settings.frmMainGridTate = Me.expand縦ひも.GetColumnWidthString()
         My.Settings.frmMainSize = Me.Size
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv側面={0}", My.Settings.frmMainGridSide)
@@ -176,12 +164,6 @@ Public Class frmMain
             Me.f_d周長2.DefaultCellStyle.Format = format
             Me.f_dひも長2.DefaultCellStyle.Format = format
             Me.f_d連続ひも長2.DefaultCellStyle.Format = format
-
-            Me.f_d長さ4.DefaultCellStyle.Format = format
-            Me.f_dひも長4.DefaultCellStyle.Format = format
-
-            Me.f_d長さ5.DefaultCellStyle.Format = format
-            Me.f_dひも長5.DefaultCellStyle.Format = format
 
             'コマ寸法と要尺(ここではセットするだけ)
             _clsCalcKnot.SetBandName(.p_s対象バンドの種類名)
@@ -266,9 +248,9 @@ Public Class frmMain
             Case "tpageメモ他"
                 '
             Case "tpage横ひも"
-                Show底の横(works)
+                Show横ひも(works)
             Case "tpage縦ひも"
-                Show底の縦(works)
+                Show縦ひも(works)
             Case "tpageプレビュー"
                 Showプレビュー(works)
             Case Else ' "tpageメモ他"
@@ -324,9 +306,9 @@ Public Class frmMain
             Case "tpageメモ他"
                 '
             Case "tpage横ひも"
-                Hide底の横(_clsDataTables)
+                Hide横ひも(_clsDataTables)
             Case "tpage縦ひも"
-                Hide底の縦(_clsDataTables)
+                Hide縦ひも(_clsDataTables)
             Case "tpageプレビュー"
                 Hideプレビュー(_clsDataTables)
             Case Else ' 
@@ -494,12 +476,8 @@ Public Class frmMain
         works.CheckPoint(works.p_tbl側面)
         works.CheckPoint(works.p_tbl追加品)
 
-        If _CurrentTabControlName = "tpage横ひも" Then
-            works.FromTmpTable(enumひも種.i_横, BindingSource横ひも.DataSource)
-        End If
-        If _CurrentTabControlName = "tpage縦ひも" Then
-            works.FromTmpTable(enumひも種.i_縦, BindingSource縦ひも.DataSource)
-        End If
+        expand横ひも.Save(enumひも種.i_横, works)
+        expand縦ひも.Save(enumひも種.i_縦, works)
 
         Return True
     End Function
@@ -1218,80 +1196,68 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
+        expand横ひも.PanelSize = tpage横ひも.Size
+    End Sub
 
-    Sub Show底の横(ByVal works As clsDataTables)
-        BindingSource横ひも.Sort = Nothing
-        BindingSource横ひも.DataSource = Nothing
-        If works Is Nothing Then
-            Exit Sub
-        End If
+    Private Sub tpage縦ひも_Resize(sender As Object, e As EventArgs) Handles tpage縦ひも.Resize
+        expand縦ひも.PanelSize = tpage縦ひも.Size
+    End Sub
 
+    Sub Show横ひも(ByVal works As clsDataTables)
         'タブ切り替えタイミングのため、表示は更新済
         Saveコマ数(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcKnot.set横展開DataTable(True)
-
-        BindingSource横ひも.DataSource = tmptable
-        BindingSource横ひも.Sort = "f_iひも種,f_iひも番号"
-
-        dgv横ひも.Refresh()
+        expand横ひも.PanelSize = tpage横ひも.Size
+        expand横ひも.ShowGrid(_clsCalcKnot.set横展開DataTable(True))
     End Sub
 
-    Function Hide底の横(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = works.FromTmpTable(enumひも種.i_横, BindingSource横ひも.DataSource)
-        BindingSource横ひも.Sort = Nothing
-        BindingSource横ひも.DataSource = Nothing
-
-        dgv横ひも.Refresh()
-        Return 0 < change
+    Function Hide横ひも(ByVal works As clsDataTables) As Boolean
+        Return expand横ひも.HideGrid(enumひも種.i_横, works)
     End Function
 
-    Sub Show底の縦(ByVal works As clsDataTables)
-        BindingSource縦ひも.Sort = Nothing
-        BindingSource縦ひも.DataSource = Nothing
-        If works Is Nothing Then
-            Exit Sub
-        End If
-
+    Sub Show縦ひも(ByVal works As clsDataTables)
         'タブ切り替えタイミングのため、表示は更新済
         Saveコマ数(works.p_row底_縦横)
-        Dim tmptable As tbl縦横展開DataTable = _clsCalcKnot.set縦展開DataTable(True)
-
-        BindingSource縦ひも.DataSource = tmptable
-        BindingSource縦ひも.Sort = "f_iひも種,f_iひも番号"
-
-        dgv縦ひも.Refresh()
+        expand縦ひも.PanelSize = tpage縦ひも.Size
+        expand縦ひも.ShowGrid(_clsCalcKnot.set縦展開DataTable(True))
     End Sub
 
-    Function Hide底の縦(ByVal works As clsDataTables) As Boolean
-        Dim change As Integer = works.FromTmpTable(enumひも種.i_縦, BindingSource縦ひも.DataSource)
-        BindingSource縦ひも.Sort = Nothing
-        BindingSource縦ひも.DataSource = Nothing
-
-        dgv縦ひも.Refresh()
-        Return 0 < change
+    Function Hide縦ひも(ByVal works As clsDataTables) As Boolean
+        Return expand縦ひも.HideGrid(enumひも種.i_縦, works)
     End Function
 
-    Private Sub btnリセット_横_Click(sender As Object, e As EventArgs) Handles btnリセット_横.Click
-        'ひも長加算と色をすべてクリアします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetAddLengthColor, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
-        End If
-        BindingSource横ひも.DataSource = _clsCalcKnot.set横展開DataTable(False)
-        BindingSource横ひも.Sort = "f_iひも種,f_iひも番号"
-        dgv横ひも.Refresh()
+    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+
     End Sub
 
-    Private Sub btnリセット_縦_Click(sender As Object, e As EventArgs) Handles btnリセット_縦.Click
-        'ひも長加算と色をすべてクリアします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(My.Resources.AskResetAddLengthColor, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
-        End If
-        BindingSource縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(False)
-        BindingSource縦ひも.Sort = "f_iひも種,f_iひも番号"
-        dgv縦ひも.Refresh()
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+
     End Sub
+
+    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+
+    End Sub
+
+    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+        expand横ひも.DataSource = _clsCalcKnot.set横展開DataTable(False)
+    End Sub
+
+    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+
+    End Sub
+
+    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+
+    End Sub
+
+    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+
+    End Sub
+
+    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
+        expand縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(False)
+    End Sub
+
 #End Region
 
 #Region "プレビュー"
@@ -1353,8 +1319,9 @@ Public Class frmMain
         If Not bVisible Then
             setDgvColumnsVisible(dgv側面と縁)
             editAddParts.SetDgvColumnsVisible()
-            setDgvColumnsVisible(dgv横ひも)
-            setDgvColumnsVisible(dgv縦ひも)
+            expand横ひも.SetDgvColumnsVisible()
+            expand縦ひも.SetDgvColumnsVisible()
+
             bVisible = True
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())

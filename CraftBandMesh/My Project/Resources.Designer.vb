@@ -340,6 +340,42 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  左,右 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionExpand4To6() As String
+            Get
+                Return ResourceManager.GetString("CaptionExpand4To6", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  左,右 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionExpand4To61() As String
+            Get
+                Return ResourceManager.GetString("CaptionExpand4To61", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  上,下 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionExpand8To2() As String
+            Get
+                Return ResourceManager.GetString("CaptionExpand8To2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  上,下 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionExpand8To21() As String
+            Get
+                Return ResourceManager.GetString("CaptionExpand8To21", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  規定値.xml に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property DefaultFileName() As String
