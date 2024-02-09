@@ -1060,7 +1060,7 @@ Partial Class frmMain
         btn削除_側面.Size = New Size(111, 46)
         btn削除_側面.TabIndex = 3
         btn削除_側面.Text = "削除(&R)"
-        ToolTip1.SetToolTip(btn削除_側面, "縁を削除します")
+        ToolTip1.SetToolTip(btn削除_側面, "選択された編みひもを削除します")
         btn削除_側面.UseVisualStyleBackColor = True
         ' 
         ' btn追加_側面
@@ -1071,7 +1071,7 @@ Partial Class frmMain
         btn追加_側面.Size = New Size(111, 46)
         btn追加_側面.TabIndex = 7
         btn追加_側面.Text = "追加(&A)"
-        ToolTip1.SetToolTip(btn追加_側面, "縁の始末を追加/置換します")
+        ToolTip1.SetToolTip(btn追加_側面, "編みかたがが空の場合は編みひも、あれば縁の始末を追加/置換します")
         btn追加_側面.UseVisualStyleBackColor = True
         ' 
         ' cmb編みかた名_側面

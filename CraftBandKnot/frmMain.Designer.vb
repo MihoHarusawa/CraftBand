@@ -106,10 +106,11 @@ Partial Class frmMain
         lblひも長加算_側面 = New Label()
         lbl左から = New Label()
         lbl上から = New Label()
-        btn縁削除 = New Button()
+        btn削除_側面 = New Button()
         txtメモ = New TextBox()
         txt作成者 = New TextBox()
         txtタイトル = New TextBox()
+        btn追加_側面 = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -162,7 +163,6 @@ Partial Class frmMain
         lbl横のコマ数_単位 = New Label()
         tpage側面と縁 = New TabPage()
         lbl編みかた名_側面 = New Label()
-        btn追加_側面 = New Button()
         cmb編みかた名_側面 = New ComboBox()
         dgv側面と縁 = New CraftBand.ctrDataGridView()
         BindingSource側面と縁 = New BindingSource(components)
@@ -968,16 +968,16 @@ Partial Class frmMain
         lbl上から.Text = "上から"
         ToolTip1.SetToolTip(lbl上から, "縦のコマの開始位置")
         ' 
-        ' btn縁削除
+        ' btn削除_側面
         ' 
-        btn縁削除.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btn縁削除.Location = New Point(6, 357)
-        btn縁削除.Name = "btn縁削除"
-        btn縁削除.Size = New Size(111, 46)
-        btn縁削除.TabIndex = 1
-        btn縁削除.Text = "縁削除(&R)"
-        ToolTip1.SetToolTip(btn縁削除, "縁の始末の編みかたを削除します")
-        btn縁削除.UseVisualStyleBackColor = True
+        btn削除_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        btn削除_側面.Location = New Point(6, 357)
+        btn削除_側面.Name = "btn削除_側面"
+        btn削除_側面.Size = New Size(111, 46)
+        btn削除_側面.TabIndex = 1
+        btn削除_側面.Text = "削除(&R)"
+        ToolTip1.SetToolTip(btn削除_側面, "選択位置の編みかたを削除します")
+        btn削除_側面.UseVisualStyleBackColor = True
         ' 
         ' txtメモ
         ' 
@@ -1008,6 +1008,17 @@ Partial Class frmMain
         txtタイトル.Size = New Size(690, 49)
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
+        ' 
+        ' btn追加_側面
+        ' 
+        btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btn追加_側面.Location = New Point(721, 357)
+        btn追加_側面.Name = "btn追加_側面"
+        btn追加_側面.Size = New Size(111, 46)
+        btn追加_側面.TabIndex = 4
+        btn追加_側面.Text = "追加(&A)"
+        ToolTip1.SetToolTip(btn追加_側面, "縁が指定されていれば縁、空なら編みひもを追加します")
+        btn追加_側面.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1427,7 +1438,7 @@ Partial Class frmMain
         ' tpage側面と縁
         ' 
         tpage側面と縁.Controls.Add(lbl編みかた名_側面)
-        tpage側面と縁.Controls.Add(btn縁削除)
+        tpage側面と縁.Controls.Add(btn削除_側面)
         tpage側面と縁.Controls.Add(btn追加_側面)
         tpage側面と縁.Controls.Add(cmb編みかた名_側面)
         tpage側面と縁.Controls.Add(dgv側面と縁)
@@ -1448,16 +1459,6 @@ Partial Class frmMain
         lbl編みかた名_側面.Size = New Size(103, 20)
         lbl編みかた名_側面.TabIndex = 2
         lbl編みかた名_側面.Text = "縁の編みかた名"
-        ' 
-        ' btn追加_側面
-        ' 
-        btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn追加_側面.Location = New Point(721, 357)
-        btn追加_側面.Name = "btn追加_側面"
-        btn追加_側面.Size = New Size(111, 46)
-        btn追加_側面.TabIndex = 4
-        btn追加_側面.Text = "追加(&A)"
-        btn追加_側面.UseVisualStyleBackColor = True
         ' 
         ' cmb編みかた名_側面
         ' 
@@ -2032,6 +2033,7 @@ Partial Class frmMain
         f_dひも長加算2.HeaderText = "ひも長加算"
         f_dひも長加算2.MinimumWidth = 6
         f_dひも長加算2.Name = "f_dひも長加算2"
+        f_dひも長加算2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_dひも長加算2.ToolTipText = "出力時に加える余裕長"
         f_dひも長加算2.Width = 125
         ' 
@@ -2071,6 +2073,7 @@ Partial Class frmMain
         f_d厚さ2.MinimumWidth = 6
         f_d厚さ2.Name = "f_d厚さ2"
         f_d厚さ2.ReadOnly = True
+        f_d厚さ2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_d厚さ2.Width = 125
         ' 
         ' f_s記号2
@@ -2265,7 +2268,7 @@ Partial Class frmMain
     Friend WithEvents lbl計算寸法周 As Label
     Friend WithEvents btnひもリスト As Button
     Friend WithEvents btn終了 As Button
-    Friend WithEvents btn縁削除 As Button
+    Friend WithEvents btn削除_側面 As Button
     Friend WithEvents btn追加_側面 As Button
     Friend WithEvents cmb編みかた名_側面 As ComboBox
     Friend WithEvents tpage追加品 As TabPage

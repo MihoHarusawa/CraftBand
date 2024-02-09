@@ -722,8 +722,8 @@ Class clsCalcKnot
 #End Region
 
 #Region "側面と縁"
-    Const cIdxHeight As Integer = 1
-    Const cIdxFolding As Integer = 2
+    Friend Const cIdxHeight As Integer = 1
+    Friend Const cIdxFolding As Integer = 2
 
     '高さのコマ数+折り返しのコマ数をレコード化　※マイ係数未セット
     Function adjust_側面() As Boolean
@@ -824,6 +824,29 @@ Class clsCalcKnot
         End If
 
         Return True
+    End Function
+
+    Function Add側面HeightRow(Optional ByVal iひも番号 As Integer = 1) As tbl側面Row
+        Try
+            Dim row As tbl側面Row = _Data.p_tbl側面.Newtbl側面Row
+            row.f_i番号 = cIdxHeight
+            row.f_iひも番号 = iひも番号
+            row.f_s編みかた名 = text四つ畳み編み()
+            row.f_s編みひも名 = text高さのコマ()
+            row.f_iひも本数 = 1
+            row.f_i何本幅 = _I基本のひも幅
+            row.f_d高さ = _dコマベース寸法
+            row.f_d垂直ひも長 = _dコマベース要尺
+            row.f_d周長 = p_dコマベース_周
+            row.f_dひも長 = p_i垂直ひも数 * _dコマベース要尺 + _dひも長加算_側面
+            row.f_d厚さ = p_d四つ畳み編みの厚さ
+            _Data.p_tbl側面.Rows.Add(row)
+            Return row
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "clsCalcKnot.Add側面HeightRow")
+            Return Nothing
+        End Try
     End Function
 
     Function add_側面_縁(ByVal nameselect As String,
@@ -1014,6 +1037,175 @@ Class clsCalcKnot
         End If
 
     End Function
+
+    '追加ボタンによる側面の高さ追加
+    'Trueを返すと、高さ/折り返しのコマ数を+1
+    Function add_高さ(ByRef currow As tbl側面Row) As Boolean
+        Dim table As tbl側面DataTable = _Data.p_tbl側面
+
+        '各1レコードの時
+        If Not _Data.p_row底_縦横.Value("f_b展開区分") Then
+            If currow.f_i番号 = cIdxFolding OrElse currow.f_i番号 = cIdxHeight Then
+                currow.f_iひも本数 = currow.f_iひも本数 + 1
+            Else
+                '_i高さのコマ数をUP
+                If _i高さのコマ数 = 0 Then
+                    currow = Add側面HeightRow()
+                Else
+                    Dim row As tbl側面Row = clsDataTables.NumberSubRecord(table, cIdxHeight, 1)
+                    If row Is Nothing Then
+                        Return False '高さはあるので、レコードもあるはず
+                    End If
+                    row.f_iひも本数 = row.f_iひも本数 + 1
+                    currow = row
+                End If
+            End If
+
+            _Data.CheckPoint(table)
+            Return True 'UPする
+        End If
+
+        '複数レコードに展開された状態の時
+        If currow.f_i番号 = cIdxHeight OrElse currow.f_i番号 = cIdxFolding Then
+            '既存レコードの途中が指定されている
+
+            Dim bandnum As Integer = currow.f_iひも番号 '追加位置(高さ・折り返し)
+            Dim cond As String = String.Format("(f_i番号 = {0}) AND (f_iひも番号 >= {1})", currow.f_i番号, bandnum)
+            '追加位置のひも番号を空ける
+            Dim rows() As tbl側面Row = table.Select(cond, "f_iひも番号 DESC")
+            If rows IsNot Nothing AndAlso 0 < rows.Count Then
+                For Each row As tbl側面Row In rows
+                    row.f_iひも番号 = row.f_iひも番号 + 1
+                Next
+                _Data.CheckPoint(table)
+            End If
+            '
+            Dim add As tbl側面Row = table.Newtbl側面Row
+            add.f_i番号 = currow.f_i番号
+            add.f_iひも番号 = bandnum
+            add.f_s編みかた名 = currow.f_s編みかた名
+            add.f_s編みひも名 = currow.f_s編みひも名
+            add.f_iひも本数 = currow.f_iひも本数
+            add.f_i何本幅 = currow.f_i何本幅
+            add.f_d高さ = currow.f_d高さ
+            add.f_d垂直ひも長 = currow.f_d垂直ひも長
+            add.f_d周長 = currow.f_d周長
+            add.f_dひも長 = currow.f_dひも長
+            add.f_d厚さ = currow.f_d厚さ
+            table.Rows.Add(add)
+            currow = add
+            Return True
+
+        Else
+            '縁が選択されているが、高さをUP
+            currow = Add側面HeightRow(_i高さのコマ数 + 1)
+            Return (currow IsNot Nothing)
+
+        End If
+
+
+#If 0 Then
+
+
+
+        Dim bandnum As Integer = currow.f_iひも番号 '追加位置(高さ・折り返し)
+
+        'レコードを後ろに追加
+        Dim add As tbl側面Row = table.Newtbl側面Row
+        If currow.f_i番号 = cIdxFolding Then
+            add.f_i番号 = cIdxFolding
+            add.f_iひも番号 = _i折り返しコマ数 + 1
+        Else
+            add.f_i番号 = cIdxHeight
+            add.f_iひも番号 = _i高さのコマ数 + 1
+        End If
+        add.f_i何本幅 = _I基本のひも幅
+        table.Rows.Add(add)
+
+        currow = Nothing
+
+        '追加位置以降を後ろにシフト(高さUPによりrecalcされるので、レコードに保持される分のみ
+        Dim cond As String = String.Format("f_i番号 = {0}", add.f_i番号)
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 DESC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim lastrow As tbl側面Row = Nothing
+        For Each row As tbl側面Row In rows
+            If lastrow Is Nothing Then
+                lastrow = row
+                Continue For
+            End If
+            If row.f_iひも番号 < bandnum Then
+                Exit For '↓で処理済のはずだが
+            End If
+
+            lastrow.f_i何本幅 = row.f_i何本幅
+            lastrow.f_s色 = row.f_s色
+            lastrow.f_dひも長加算 = row.f_dひも長加算
+            lastrow.f_sメモ = row.f_sメモ
+            If row.f_iひも番号 = bandnum Then
+                currow = row
+                row.f_i何本幅 = _I基本のひも幅
+                row.f_s色 = ""
+                row.f_dひも長加算 = 0
+                row.f_sメモ = ""
+                Exit For
+            End If
+            lastrow = row
+        Next
+#End If
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_高さ currow={0}", New clsDataRow(currow).ToString)
+        Return True
+    End Function
+
+    '削除ボタンによる側面の高さ削除
+    'Trueを返すと、四角数のタブの高さを-1
+    Function del_高さ(ByRef currow As tbl側面Row) As Boolean
+        Dim table As tbl側面DataTable = _Data.p_tbl側面
+
+        '各1レコードの時
+        If Not _Data.p_row底_縦横.Value("f_b展開区分") Then
+            'レコードは1点
+            If 1 < currow.f_iひも本数 Then
+                currow.f_iひも本数 = currow.f_iひも本数 - 1
+            ElseIf 1 = currow.f_iひも本数 Then
+                currow.Delete()
+                currow = Nothing
+            Else
+                Return False
+            End If
+
+            _Data.CheckPoint(table)
+            Return True '高さをDOWNする
+        End If
+
+        '複数レコードに展開された状態の時
+        Dim bandnum As Integer = currow.f_iひも番号 '削除位置
+        Dim cond As String = String.Format("(f_i番号 = {0}) AND (f_iひも番号 > {1})", currow.f_i番号, bandnum)
+        currow.Delete()
+        _Data.CheckPoint(table)
+
+        '削除位置以降のひも番号を詰める
+        Dim rows() As tbl側面Row = table.Select(cond, "f_iひも番号 ASC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+
+        currow = Nothing
+        For Each row As tbl側面Row In rows
+            If currow Is Nothing Then
+                currow = row
+            End If
+            row.f_iひも番号 = bandnum
+            bandnum += 1
+        Next
+
+        _Data.CheckPoint(table)
+        Return True
+    End Function
+
 
 #End Region
 

@@ -26,7 +26,7 @@ Public Class frmMain
     Dim _Profile_dgv側面と縁 As New CDataGridViewProfile(
             (New tbl側面DataTable),
             Nothing,
-            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow
             )
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1099,39 +1099,98 @@ Public Class frmMain
     End Sub
 
     Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
-        Dim table As tbl側面DataTable = Nothing
-
-        Dim row As tbl側面Row = Nothing
-        If _clsCalcKnot.add_側面_縁(cmb編みかた名_側面.Text,
-                     nud基本のひも幅.Value,
-                      row) Then
-
-            'numberPositionsSelect(BindingSource側面と縁, row.f_i番号, dgv側面と縁)
-            dgv側面と縁.NumberPositionsSelect(row.f_i番号)
-            recalc(CalcCategory.Edge, row, "f_i周数")
-        Else
-            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        '編みかた名指定あり
+        If Not String.IsNullOrWhiteSpace(cmb編みかた名_側面.Text) Then
+            Dim row As tbl側面Row = Nothing
+            If _clsCalcKnot.add_側面_縁(cmb編みかた名_側面.Text, nud基本のひも幅.Value, row) Then
+                dgv側面と縁.NumberPositionsSelect(row.f_i番号)
+                recalc(CalcCategory.Edge, row, "f_i周数")
+            Else
+                MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+            Exit Sub
         End If
 
+        Dim table As tbl側面DataTable = Nothing
+        Dim currow As tbl側面Row = Nothing
+
+        'レコードなし
+        If _clsDataTables.p_tbl側面.Rows.Count = 0 Then
+            currow = _clsCalcKnot.Add側面HeightRow()
+            If currow IsNot Nothing Then
+                nud高さのコマ数.Value = nud高さのコマ数.Value + 1 '→recalc
+                dgv側面と縁.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+            End If
+            Exit Sub
+        End If
+
+        'レコードあり
+        If Not dgv側面と縁.GetTableAndRow(table, currow) Then
+            Exit Sub
+        End If
+        '編みかた名指定なし
+        If currow.f_i番号 = clsCalcKnot.cIdxFolding Then
+            '折り返しのコマ
+            If _clsCalcKnot.add_高さ(currow) Then
+                nud折り返しコマ数.Value = nud折り返しコマ数.Value + 1 '→recalc
+            Else
+                Exit Sub
+            End If
+
+        Else
+            '縁もしくは高さのコマ
+            If _clsCalcKnot.add_高さ(currow) Then
+                nud高さのコマ数.Value = nud高さのコマ数.Value + 1 '→recalc
+            Else
+                Exit Sub
+            End If
+
+        End If
+        If currow IsNot Nothing Then
+            dgv側面と縁.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+        End If
     End Sub
 
-    'Private Sub dgv側面_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgv側面と縁.DataError
-    '    dgv_DataErrorModify(sender, e)
-    'End Sub
+    Private Sub btn削除_側面_Click(sender As Object, e As EventArgs) Handles btn削除_側面.Click
+        If dgv側面と縁.Rows.Count = 0 Then
+            Exit Sub
+        End If
 
-    Private Sub btn縁削除_Click(sender As Object, e As EventArgs) Handles btn縁削除.Click
         Dim table As tbl側面DataTable = Nothing
-        Dim number As Integer = -1
-        'If Not getTableAndNumber(BindingSource側面と縁, table, number) Then
-        If Not dgv側面と縁.GetTableAndNumber(table, number) Then
-            Exit Sub
-        End If
-        If number < 0 Then
+        Dim currow As tbl側面Row = Nothing
+        If Not dgv側面と縁.GetTableAndRow(table, currow) Then
             Exit Sub
         End If
 
-        clsDataTables.RemoveNumberFromTable(table, cHemNumber)
-        recalc(CalcCategory.Edge, Nothing, Nothing)
+        If currow.f_i番号 = clsDataTables.cHemNumber Then
+            '縁を削除
+            clsDataTables.RemoveNumberFromTable(table, clsDataTables.cHemNumber)
+            Exit Sub
+
+        ElseIf currow.f_i番号 = clsCalcknot.cIdxFolding Then
+            '折り返しのコマ
+            If _clsCalcKnot.del_高さ(currow) Then
+                nud折り返しコマ数.Value = nud折り返しコマ数.Value - 1
+            Else
+                Exit Sub
+            End If
+
+        ElseIf currow.f_i番号 = clsCalcknot.cIdxHeight Then
+            '高さのコマ
+            If _clsCalcKnot.del_高さ(currow) Then
+                nud高さのコマ数.Value = nud高さのコマ数.Value - 1
+            Else
+                Exit Sub
+            End If
+
+        Else
+            Exit Sub
+        End If
+
+        recalc(CalcCategory.Edge, Nothing, Nothing) '計算寸法の再計算
+        If currow IsNot Nothing Then
+            dgv側面と縁.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+        End If
     End Sub
 
     'セル変更の再計算は縁に対してのみ
