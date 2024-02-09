@@ -1,4 +1,5 @@
-﻿Imports CraftBand.clsUpDown
+﻿Imports System.Windows.Forms
+Imports CraftBand.clsUpDown
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 
@@ -187,6 +188,8 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
                 p_row底_縦横.Value("f_dひも長加算_側面") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
                 p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
+
+            Case enumExeName.CraftBandHexagon
 
         End Select
 
@@ -459,6 +462,7 @@ Public Class clsDataTables
 
 #Region "ワークテーブルとtbl縦横展開の転送"
     '※キーはf_iひも種,f_iひも番号 [対象は、f_iひも種のbitを持つレコード]
+    '保持するのは入力値:  f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ   f_i何本幅は対応Exeのみ
 
     'ワークテーブルの編集フィールドにデータベース値をセットする
     '※iひも種はレコード参照には使わない
@@ -466,6 +470,10 @@ Public Class clsDataTables
         If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
             Return 0
         End If
+
+        'f_i何本幅は対応Exeのみ
+        Dim isLoad何本幅 As Boolean = g_enumExeName = enumExeName.CraftBandSquare OrElse
+                (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン"))
 
         Dim count As Integer = 0
         For Each tmp As tbl縦横展開Row In tmptable
@@ -475,7 +483,7 @@ Public Class clsDataTables
                 Continue For
             End If
 
-            'f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
+            '入力対象: f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
             tmp.f_dひも長加算 = row.f_dひも長加算
             tmp.f_dひも長加算2 = row.f_dひも長加算2
             If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
@@ -489,7 +497,7 @@ Public Class clsDataTables
             tmp.f_sメモ = row.f_sメモ
 
             'f_i何本幅は対応Exeのみ
-            If g_enumExeName = enumExeName.CraftBandSquare Then
+            If isLoad何本幅 Then
                 If row.f_i何本幅 < 0 Then
                     tmp.f_i何本幅 = 1
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", row.f_sひも名, row.f_iひも番号, row.f_i何本幅)
@@ -555,7 +563,7 @@ Public Class clsDataTables
         Return count
     End Function
 
-
+    '指定キーのレコード取得・追加も可能
     Public Shared Function Find縦横展開Row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As Integer, ByVal iひも番号 As Integer, ByVal addnew As Boolean) As tbl縦横展開Row
         Dim cond As String = String.Format("f_iひも種={0} AND f_iひも番号={1}", iひも種, iひも番号)
         Dim sels() As tbl縦横展開Row = table.Select(cond)
@@ -572,6 +580,7 @@ Public Class clsDataTables
         Return Nothing
     End Function
 
+    'iひも番号より大きいレコードがあれば削除する
     Public Shared Function SetMaxひも番号(ByVal table As tbl縦横展開DataTable, ByVal iひも番号 As Integer) As Integer
         Dim cond As String = String.Format("f_iひも番号 > {0}", iひも番号)
         Dim sels() As tbl縦横展開Row = table.Select(cond)
@@ -583,6 +592,136 @@ Public Class clsDataTables
         Next
         Return sels.Length
     End Function
+
+    'iひも番号位置にレコードを追加し、以降を後ろにシフトする
+    '追加位置のレコードを返す
+    Public Shared Function Insert縦横展開Row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal iひも番号 As Integer) As tbl縦横展開Row
+
+        Dim iMaxひも番号 As Integer = 0
+        Dim objMax As Object = table.Compute("MAX(f_iひも番号)", String.Format("f_iひも種 = {0}", CType(iひも種, Integer)))
+        If Not IsDBNull(objMax) AndAlso 0 < objMax Then
+            iMaxひも番号 = objMax
+        End If
+        If iMaxひも番号 = 0 Then
+            Return Nothing '既存がないと追加できません
+        End If
+
+
+        '追加位置
+        Dim bandnum As Integer = iひも番号
+        If bandnum < 1 Then
+            bandnum = 1 '最初の前
+        ElseIf iMaxひも番号 < bandnum Then
+            bandnum = iMaxひも番号 + 1  '最後の後
+        End If
+
+        'レコードを後ろに追加
+        Dim add As tbl縦横展開Row = Find縦横展開Row(table, iひも種, iMaxひも番号 + 1, True)
+        Dim rowmax As tbl縦横展開Row = Find縦横展開Row(table, iひも種, iMaxひも番号, False)
+        If rowmax Is Nothing Then
+            add.f_i何本幅 = 1 'あるはずだが
+        Else
+            add.f_i何本幅 = rowmax.f_i何本幅
+        End If
+        If iMaxひも番号 < bandnum Then
+            Return add
+        End If
+
+        Dim currow As tbl縦横展開Row = Nothing
+
+        '追加位置以降を後ろにシフト ※入力対象fieldのみ
+        Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 DESC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return add '追加分はあるはずだが
+        End If
+
+        Dim lastrow As tbl縦横展開Row = Nothing
+        For Each row As tbl縦横展開Row In rows
+            If lastrow Is Nothing Then
+                lastrow = row
+                Continue For
+            End If
+            If row.f_iひも番号 < bandnum Then
+                currow = row
+                Exit For '↓で処理済のはずだが
+            End If
+
+            lastrow.f_i何本幅 = row.f_i何本幅
+            lastrow.f_s色 = row.f_s色
+            lastrow.f_dひも長加算 = row.f_dひも長加算
+            lastrow.f_dひも長加算2 = row.f_dひも長加算2
+            lastrow.f_sメモ = row.f_sメモ
+            If row.f_iひも番号 = bandnum Then
+                currow = row
+                'f_i何本幅 は保持
+                row.f_s色 = ""
+                row.f_dひも長加算 = 0
+                row.f_dひも長加算2 = 0
+                row.f_sメモ = ""
+                Exit For
+            End If
+            lastrow = row
+        Next
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_row currow={0}", New clsDataRow(currow).ToString)
+        Return currow
+    End Function
+
+    'iひも番号位置のレコードを削除し、以降を前に詰める
+    '削除位置のレコードを返す
+    Public Shared Function Remove縦横展開Row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal iひも番号 As Integer) As tbl縦横展開Row
+
+        Dim iMaxひも番号 As Integer = 0
+        Dim objMax As Object = table.Compute("MAX(f_iひも番号)", String.Format("f_iひも種 = {0}", CType(iひも種, Integer)))
+        If Not IsDBNull(objMax) AndAlso 0 < objMax Then
+            iMaxひも番号 = objMax
+        End If
+        If iMaxひも番号 = 0 Then
+            Return Nothing '既存なし
+        End If
+
+        If iひも番号 < 1 OrElse iMaxひも番号 < iひも番号 Then
+            Return Nothing '対象外
+        End If
+
+        '最終レコードはシフト不要
+        If iMaxひも番号 = iひも番号 Then
+            Return Find縦横展開Row(table, iひも種, iMaxひも番号, False)
+        End If
+
+        Dim currow As tbl縦横展開Row = Nothing
+
+        '削除位置以降を前にシフトする ※入力対象fieldのみ
+        Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
+        Dim rows() As DataRow = table.Select(cond, "f_iひも番号 ASC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return Nothing 'あるはずだが
+        End If
+
+        Dim lastrow As tbl縦横展開Row = Nothing
+        For Each row As tbl縦横展開Row In rows
+            If row.f_iひも番号 <= iひも番号 Then
+                lastrow = row
+                Continue For
+            End If
+            If lastrow IsNot Nothing Then
+                lastrow.f_i何本幅 = row.f_i何本幅
+                lastrow.f_s色 = row.f_s色
+                lastrow.f_dひも長加算 = row.f_dひも長加算
+                lastrow.f_dひも長加算2 = row.f_dひも長加算2
+                lastrow.f_sメモ = row.f_sメモ
+                If currow Is Nothing Then
+                    currow = lastrow
+                End If
+            End If
+            lastrow = row
+        Next
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "del_row currow={0}", New clsDataRow(currow).ToString)
+        Return currow
+    End Function
+
 
 #End Region
 

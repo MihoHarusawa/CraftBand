@@ -1701,7 +1701,7 @@ Class clsCalcKnot
     End Function
 #End Region
 
-#Region "縦横展開と開始位置"
+#Region "縦横展開"
     '横ひもの展開テーブル作成 ※入力値ベース
     'OUT:   _ImageList横ひも
     Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
@@ -1806,8 +1806,41 @@ Class clsCalcKnot
         End Try
     End Function
 
+    '追加ボタン(縦横側面を展開時のみ)
+    Function add_縦横展開(ByVal table As tbl縦横展開DataTable, ByRef currow As tbl縦横展開Row) As Boolean
+        If currow Is Nothing OrElse
+            ((currow.f_iひも種 <> enumひも種.i_横) AndAlso (currow.f_iひも種 <> enumひも種.i_縦)) Then
+            Return False
+        End If
 
+        currow = clsDataTables.Insert縦横展開Row(table, currow.f_iひも種, currow.f_iひも番号)
+        If currow Is Nothing Then
+            Return False
+        End If
 
+        _Data.FromTmpTable(currow.f_iひも種, table)
+        Return True
+    End Function
+
+    '削除ボタン(縦横側面を展開時のみ)
+    Function del_縦横展開(ByVal table As tbl縦横展開DataTable, ByRef currow As tbl縦横展開Row) As Boolean
+        If currow Is Nothing OrElse
+            ((currow.f_iひも種 <> enumひも種.i_横) AndAlso (currow.f_iひも種 <> enumひも種.i_縦)) Then
+            Return False
+        End If
+
+        currow = clsDataTables.Remove縦横展開Row(table, currow.f_iひも種, currow.f_iひも番号)
+        If currow Is Nothing Then
+            Return False
+        End If
+
+        _Data.FromTmpTable(currow.f_iひも種, table)
+        Return True
+    End Function
+
+#End Region
+
+#Region "開始位置"
     '開始位置情報
     Private Class CStartInfo
         Dim _parent As clsCalcKnot  '親クラス

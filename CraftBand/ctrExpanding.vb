@@ -56,9 +56,16 @@ Public Class ctrExpanding
 
 #Region "公開関数"
 
+    <Flags()>
+    Public Enum enumVisible
+        i_None = 0
+        i_幅 = &H1
+        i_出力ひも長 = &H2
+    End Enum
+
     'Load後に一度だけセットしてください
     Sub SetNames(ByVal formcaption As String, ByVal tabname As String,
-                 ByVal isWidthChangeable As Boolean, ByVal isAddDeletable As Boolean,
+                 ByVal isWidthChangeable As Boolean, ByVal bit_visible As enumVisible,
                  ByVal directions As String, ByVal addLenNames As String)
 
         _FormCaption = formcaption
@@ -76,15 +83,11 @@ Public Class ctrExpanding
         '幅変更可能なら(デフォルトは不可)
         If isWidthChangeable Then
             f_i何本幅4.ReadOnly = False
-            f_d幅4.Visible = True
-            f_d出力ひも長4.Visible = True
         End If
 
-        '追加削除可能なら(デフォルトは不可)
-        If isAddDeletable Then
-            btn追加.Visible = True
-            btn削除.Visible = True
-        End If
+        '表示選択カラム
+        f_d幅4.Visible = bit_visible.HasFlag(enumVisible.i_幅)
+        f_d出力ひも長4.Visible = bit_visible.HasFlag(enumVisible.i_出力ひも長)
 
         '方向の表示
         Dim format As String = lblDirection.Text
@@ -145,9 +148,7 @@ Public Class ctrExpanding
     '指定位置の選択(f_iひも種", "f_iひも番号)
     Function PositionSelect(ByVal row As tbl縦横展開Row) As Boolean
         Try
-            If row IsNot Nothing Then
-                Return dgv展開.PositionSelect(row, {"f_iひも種", "f_iひも番号"})
-            End If
+            Return dgv展開.PositionSelect(row, {"f_iひも種", "f_iひも番号"})
         Catch ex As Exception
             g_clsLog.LogException(ex, "ctrExpanding.PositionSelect")
         End Try
@@ -263,9 +264,10 @@ Public Class ctrExpanding
         End If
         _EditChanged = True
 
+        '編集対象のカラム
         Dim dataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv展開_CellValueChanged({1},{2}){3}", Now, dataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If {"f_i何本幅", "f_dひも長加算", "f_dひも長加算2"}.Contains(dataPropertyName) Then
+        If {"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"}.Contains(dataPropertyName) Then
             RaiseEvent CellValueChanged(Me, New ExpandingEventArgs(current.Row, dataPropertyName))
         End If
     End Sub

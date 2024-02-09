@@ -45,8 +45,8 @@ Public Class frmMain
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
         editUpDown.FormCaption = Me.Text
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, True, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, True, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, Nothing)
 
 
 #If DEBUG Then
@@ -1213,6 +1213,12 @@ Public Class frmMain
             '縁を削除
             clsDataTables.RemoveNumberFromTable(table, clsDataTables.cHemNumber)
             recalc(CalcCategory.SideEdge, Nothing, Nothing)
+
+        ElseIf currow.f_i番号 = clsCalcSquare.cIdxSpace Then
+            '最下段を削除
+            nud最下段の目.Value = 0
+            recalc(CalcCategory.SideEdge, Nothing, Nothing)
+
         Else
             '高さを削除
             If _clsCalcSquare.del_高さ(currow) Then
@@ -1322,60 +1328,94 @@ Public Class frmMain
 
 
     Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
-        Dim currow As DataRow = e.Row
+        Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcSquare.add_横ひも(currow) Then
-            If currow IsNot Nothing Then
-                expand横ひも.PositionSelect(currow)
-            End If
             nud縦の目の数.Value = nud縦の目の数.Value + 1 'with recalc
+            expand横ひも.PositionSelect(currow)
         End If
     End Sub
 
     Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
-        Dim currow As DataRow = e.Row
-        If _clsCalcSquare.del_横ひも(currow) Then
-            If currow IsNot Nothing Then
-                expand横ひも.PositionSelect(currow)
+        Dim currow As tbl縦横展開Row = e.Row
+
+        '補強ひも/上端・下端
+        If currow IsNot Nothing Then
+            Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+            If (iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_すき間)) Then
+                _clsCalcSquare.save横展開DataTable()
+                If iひも種.HasFlag(enumひも種.i_補強) Then
+                    chk横の補強ひも.Checked = False
+                ElseIf iひも種.HasFlag(enumひも種.i_すき間) Then
+                    nud上端下端の目.Value = 0
+                End If
+                Save四角数(_clsDataTables.p_row底_縦横)
+                expand横ひも.DataSource = _clsCalcSquare.get横展開DataTable()
+                Exit Sub
             End If
+        End If
+
+        '横ひも
+        If _clsCalcSquare.del_横ひも(currow) Then
             nud縦の目の数.Value = nud縦の目の数.Value - 1 'with recalc
+            expand横ひも.PositionSelect(currow)
         End If
     End Sub
 
     Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
         recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
-        _clsDataTables.Removeひも種Rows(enumひも種.i_横)
         expand横ひも.DataSource = _clsCalcSquare.get横展開DataTable(True)
     End Sub
 
     Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
-        Dim currow As DataRow = e.Row
+        Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcSquare.add_縦ひも(currow) Then
-            If currow IsNot Nothing Then
-                expand縦ひも.PositionSelect(currow)
-            End If
             nud横の目の数.Value = nud横の目の数.Value + 1 'with recalc
+            expand縦ひも.PositionSelect(currow)
         End If
     End Sub
 
     Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
         recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
     End Sub
 
     Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
-        Dim currow As DataRow = e.Row
-        If _clsCalcSquare.del_縦ひも(currow) Then
-            If currow IsNot Nothing Then
-                expand縦ひも.PositionSelect(currow)
+        Dim currow As tbl縦横展開Row = e.Row
+
+        '補強ひも/左端・右端
+        If currow IsNot Nothing Then
+            Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+            If (iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_すき間)) Then
+                _clsCalcSquare.save縦展開DataTable()
+                If iひも種.HasFlag(enumひも種.i_補強) Then
+                    chk縦の補強ひも.Checked = False
+                ElseIf iひも種.HasFlag(enumひも種.i_すき間) Then
+                    nud左端右端の目.Value = 0
+                End If
+                Save四角数(_clsDataTables.p_row底_縦横)
+                expand縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable()
+                Exit Sub
             End If
+        End If
+
+        '縦ひも
+        If _clsCalcSquare.del_縦ひも(currow) Then
             nud横の目の数.Value = nud横の目の数.Value - 1 'with recalc
+            expand縦ひも.PositionSelect(currow)
         End If
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
-        _clsDataTables.Removeひも種Rows(enumひも種.i_縦)
         expand縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable(True)
     End Sub
 

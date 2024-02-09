@@ -30,16 +30,14 @@ Public Class frmMain
             )
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'dgv側面と縁.RowTemplate.Height = cRowHeightIdxOne
-        'dgv追加品.RowTemplate.Height = cRowHeightIdxOne
 
         _Profile_dgv側面と縁.FormCaption = Me.Text
         dgv側面と縁.SetProfile(_Profile_dgv側面と縁)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, False, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, False, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
 
 #If DEBUG Then
@@ -1227,15 +1225,23 @@ Public Class frmMain
     End Function
 
     Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
-
+        Dim currow As DataRow = e.Row
+        If _clsCalcKnot.add_縦横展開(expand横ひも.DataSource, currow) Then
+            nud縦のコマ数.Value = nud縦のコマ数.Value + 1 'with recalc
+            '
+            expand横ひも.DataSource = _clsCalcKnot.set横展開DataTable(True)
+            expand横ひも.PositionSelect(currow)
+        End If
     End Sub
 
     Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
-
-    End Sub
-
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
-
+        Dim currow As DataRow = e.Row
+        If _clsCalcKnot.del_縦横展開(expand横ひも.DataSource, currow) Then
+            nud縦のコマ数.Value = nud縦のコマ数.Value - 1 'with recalc
+            '
+            expand横ひも.DataSource = _clsCalcKnot.set横展開DataTable(True)
+            expand横ひも.PositionSelect(currow)
+        End If
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
@@ -1243,15 +1249,23 @@ Public Class frmMain
     End Sub
 
     Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
-
-    End Sub
-
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
-
+        Dim currow As DataRow = e.Row
+        If _clsCalcKnot.add_縦横展開(expand縦ひも.DataSource, currow) Then
+            nud横のコマ数.Value = nud横のコマ数.Value + 1 'with recalc
+            '
+            expand縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(True)
+            expand縦ひも.PositionSelect(currow)
+        End If
     End Sub
 
     Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
-
+        Dim currow As DataRow = e.Row
+        If _clsCalcKnot.del_縦横展開(expand縦ひも.DataSource, currow) Then
+            nud横のコマ数.Value = nud横のコマ数.Value - 1 'with recalc
+            '
+            expand縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(True)
+            expand縦ひも.PositionSelect(currow)
+        End If
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton

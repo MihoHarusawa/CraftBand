@@ -683,6 +683,10 @@ Public Class ctrDataGridView
     Function PositionSelect(ByVal row As DataRow, ByVal fldnames() As String) As Boolean
         Me.ClearSelection()
 
+        If row Is Nothing OrElse fldnames Is Nothing OrElse fldnames.Count = 0 Then
+            Return False
+        End If
+
         Dim bs As BindingSource = Me.DataSource
         If bs Is Nothing Then
             Return False

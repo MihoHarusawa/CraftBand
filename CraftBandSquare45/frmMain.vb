@@ -39,8 +39,8 @@ Public Class frmMain
         editUpDown.FormCaption = Me.Text
         editUpDown.IsSquare45 = True
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, False, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, False, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅, My.Resources.CaptionExpand8To2, Nothing)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅, My.Resources.CaptionExpand4To6, Nothing)
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -1123,7 +1123,7 @@ Public Class frmMain
         'タブ切り替えタイミングのため、表示は更新済
         Save四角数(works.p_row底_縦横)
         expand横ひも.PanelSize = tpage横ひも.Size
-        expand横ひも.ShowGrid(_clsCalcSquare45.set横展開DataTable(True))
+        expand横ひも.ShowGrid(_clsCalcSquare45.get横展開DataTable())
     End Sub
 
     Function Hide横ひも(ByVal works As clsDataTables) As Boolean
@@ -1134,7 +1134,7 @@ Public Class frmMain
         'タブ切り替えタイミングのため、表示は更新済
         Save四角数(works.p_row底_縦横)
         expand縦ひも.PanelSize = tpage縦ひも.Size
-        expand縦ひも.ShowGrid(_clsCalcSquare45.set縦展開DataTable(True))
+        expand縦ひも.ShowGrid(_clsCalcSquare45.get縦展開DataTable())
     End Sub
 
     Function Hide縦ひも(ByVal works As clsDataTables) As Boolean
@@ -1143,11 +1143,52 @@ Public Class frmMain
 
 
     Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも番号 As Integer = currow.f_iひも番号
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '補強ひもは後ろに追加
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            iひも番号 = Val(txt横ひもの本数.Text) + 1
+            iひも種 = enumひも種.i_横
+        End If
+        'その位置に追加
+        currow = clsDataTables.Insert縦横展開Row(expand横ひも.DataSource, iひも種, iひも番号)
+        _clsCalcSquare45.save横展開DataTable()
 
+        nud横の四角数.Value = nud横の四角数.Value + 1 'with recalc
+
+        expand横ひも.DataSource = _clsCalcSquare45.get横展開DataTable()
+        expand横ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '補強ひも
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            _clsCalcSquare45.save横展開DataTable()
+            chk横の補強ひも.Checked = False
+            Save四角数(_clsDataTables.p_row底_縦横)
+            expand横ひも.DataSource = _clsCalcSquare45.get横展開DataTable()
+            Exit Sub
+        End If
 
+        '横の四角数をマイナス
+        currow = clsDataTables.Remove縦横展開Row(expand横ひも.DataSource, iひも種, currow.f_iひも番号)
+        _clsCalcSquare45.save横展開DataTable()
+        If 0 < nud横の四角数.Value Then
+            nud横の四角数.Value = nud横の四角数.Value - 1 'with recalc
+        ElseIf 0 < nud縦の四角数.Value Then
+            nud縦の四角数.Value = nud縦の四角数.Value - 1
+        End If
+        expand横ひも.DataSource = _clsCalcSquare45.get横展開DataTable()
+        expand横ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
@@ -1155,11 +1196,29 @@ Public Class frmMain
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
-        expand横ひも.DataSource = _clsCalcSquare45.set横展開DataTable(False)
+        expand横ひも.DataSource = _clsCalcSquare45.get横展開DataTable(True)
     End Sub
 
     Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも番号 As Integer = currow.f_iひも番号
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '縦ひも以外は後ろに追加
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            iひも番号 = Val(txt縦ひもの本数.Text) + 1
+            iひも種 = enumひも種.i_縦
+        End If
+        'その位置に追加
+        currow = clsDataTables.Insert縦横展開Row(expand縦ひも.DataSource, iひも種, iひも番号)
+        _clsCalcSquare45.save縦展開DataTable()
 
+        nud縦の四角数.Value = nud縦の四角数.Value + 1 'with recalc
+
+        expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable()
+        expand縦ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
@@ -1167,11 +1226,34 @@ Public Class frmMain
     End Sub
 
     Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '補強ひも
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            _clsCalcSquare45.save縦展開DataTable()
+            chk縦の補強ひも.Checked = False
+            Save四角数(_clsDataTables.p_row底_縦横)
+            expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable()
+            Exit Sub
+        End If
 
+        '縦の四角数をマイナス
+        currow = clsDataTables.Remove縦横展開Row(expand縦ひも.DataSource, iひも種, currow.f_iひも番号)
+        _clsCalcSquare45.save縦展開DataTable()
+        If 0 < nud縦の四角数.Value Then
+            nud縦の四角数.Value = nud縦の四角数.Value - 1 'with recalc
+        ElseIf 0 < nud横の四角数.Value Then
+            nud横の四角数.Value = nud横の四角数.Value - 1
+        End If
+        expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable()
+        expand縦ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
-        expand縦ひも.DataSource = _clsCalcSquare45.set縦展開DataTable(False)
+        expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable(False)
     End Sub
 
 #End Region

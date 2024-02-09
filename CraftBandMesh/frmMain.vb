@@ -45,8 +45,8 @@ Public Class frmMain
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, False, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, False, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand8To2, Nothing)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand4To6, Nothing)
 
 
 #If DEBUG Then
@@ -1521,17 +1521,60 @@ Public Class frmMain
     End Function
 
 
-
     Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも番号 As Integer = currow.f_iひも番号
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '最上と最下は増やせない
+        If iひも種.HasFlag(enumひも種.i_最上と最下) Then
+            Exit Sub
+        End If
+        '補強ひもは後ろに追加
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            iひも番号 = nud長い横ひもの本数.Value + 1
+            iひも種 = enumひも種.i_横 Or enumひも種.i_短い
+        End If
+        'その位置に追加
+        currow = clsDataTables.Insert縦横展開Row(expand横ひも.DataSource, iひも種, iひも番号)
+        _clsDataTables.FromTmpTable(enumひも種.i_横, expand横ひも.DataSource)
 
+        nud長い横ひもの本数.Value = nud長い横ひもの本数.Value + 1 'with recalc
+
+        expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
+        expand横ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '補強ひも・最上と最下の短いひも
+        If iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_最上と最下) Then
+            _clsDataTables.FromTmpTable(enumひも種.i_横, expand横ひも.DataSource)
+            If iひも種.HasFlag(enumひも種.i_補強) Then
+                chk補強ひも.Checked = False
+            End If
+            If iひも種.HasFlag(enumひも種.i_最上と最下) Then
+                rad最上と最下の短いひも_なし.Checked = True
+            End If
+            Save底_縦横(_clsDataTables.p_row底_縦横)
+            expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
 
-    End Sub
+            Exit Sub
+        End If
 
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
-
+        '横ひも(長い,短い)を削除
+        currow = clsDataTables.Remove縦横展開Row(expand横ひも.DataSource, iひも種, currow.f_iひも番号)
+        _clsDataTables.FromTmpTable(enumひも種.i_横, expand横ひも.DataSource)
+        nud長い横ひもの本数.Value = nud長い横ひもの本数.Value - 1 'with recalc
+        '
+        expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
+        expand横ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
@@ -1539,21 +1582,59 @@ Public Class frmMain
     End Sub
 
     Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも番号 As Integer = currow.f_iひも番号
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '縦ひも以外は後ろに追加
+        If iひも種.HasFlag(enumひも種.i_補強) Then
+            iひも番号 = nud縦ひもの本数.Value + 1
+            iひも種 = enumひも種.i_縦
+        End If
+        'その位置に追加
+        currow = clsDataTables.Insert縦横展開Row(expand縦ひも.DataSource, iひも種, iひも番号)
+        _clsDataTables.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, expand縦ひも.DataSource)
 
-    End Sub
+        nud縦ひもの本数.Value = nud縦ひもの本数.Value + 1 'with recalc
 
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
-
+        expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+        expand縦ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow Is Nothing Then
+            Exit Sub
+        End If
+        Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
+        '始末ひも・斜めの補強ひも
+        If iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) OrElse iひも種 = (enumひも種.i_斜め Or enumひも種.i_補強) Then
+            _clsDataTables.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, expand縦ひも.DataSource)
+            If iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) Then
+                chk始末ひも.Checked = False
+            End If
+            If iひも種 = (enumひも種.i_斜め Or enumひも種.i_補強) Then
+                chk斜めの補強ひも.Checked = False
+            End If
+            Save底_縦横(_clsDataTables.p_row底_縦横)
+            expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+            Exit Sub
+        End If
 
+        '縦ひもを削除
+        currow = clsDataTables.Remove縦横展開Row(expand縦ひも.DataSource, iひも種, currow.f_iひも番号)
+        _clsDataTables.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, expand縦ひも.DataSource)
+        nud縦ひもの本数.Value = nud縦ひもの本数.Value - 1 'with recalc
+        '
+        expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+        expand縦ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(False)
     End Sub
-
 
 #End Region
 
@@ -1639,10 +1720,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
-
-
-
 
 #End Region
 
