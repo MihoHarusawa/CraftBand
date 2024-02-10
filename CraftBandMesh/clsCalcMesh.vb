@@ -2172,6 +2172,12 @@ Class clsCalcMesh
                 End If
             End If
 
+            '#48 長短セットで奇数
+            Dim shift As Integer = posyoko \ 2
+            For Each row In tbl縦横展開.Rows
+                row.f_i位置番号 -= shift
+            Next
+
             '以降は裏側
             posyoko = cBackPosition
             If .Value("f_b補強ひも区分") Then
@@ -2225,7 +2231,9 @@ Class clsCalcMesh
 
         'f_dひも長加算,f_s色は初期値
         With _Data.p_row底_縦横
-            Dim postate As Integer = 1
+            '#48 位置番号
+            Dim postate As Integer = - .Value("f_i縦ひもの本数") \ 2
+            Dim skipzero As Boolean = (.Value("f_i縦ひもの本数") Mod 2) = 0
             '.Value("f_i縦ひも") は1以上
             If 0 < .Value("f_i縦ひもの本数") Then
                 For idx As Integer = 1 To .Value("f_i縦ひもの本数")
@@ -2242,6 +2250,9 @@ Class clsCalcMesh
 
                     tbl縦横展開.Rows.Add(row)
                     postate += 1
+                    If skipzero AndAlso (postate = 0) Then
+                        postate += 1
+                    End If
                 Next
             End If
 
