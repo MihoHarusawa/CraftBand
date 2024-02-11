@@ -196,10 +196,10 @@ Public Class frmMain
             Return True
         End If
 
-        If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.BandWidth}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.Target_Band}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Square, CalcCategory.BandWidth}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Square_Gap, CalcCategory.Square_Yoko, CalcCategory.Square_Tate, CalcCategory.Square_Vert, CalcCategory.Square_Expand, CalcCategory.Target_Band}.Contains(category) Then
             Save四角数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -960,6 +960,7 @@ Public Class frmMain
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
         set底の縦横展開(chk縦横を展開する.Checked)
+        recalc(CalcCategory.Square_Expand, sender)
     End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
@@ -969,7 +970,7 @@ Public Class frmMain
         lbl基本のひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
         ShowDefaultTabControlPage(enumReason._Preview) '色と本幅数変更の可能性
 
-        recalc(CalcCategory.BandWidth, sender)
+        recalc(CalcCategory.Target_Band, sender)
     End Sub
 
     Private Sub rad目標寸法_CheckedChanged(sender As Object, e As EventArgs) Handles rad目標寸法_外側.CheckedChanged, rad目標寸法_内側.CheckedChanged
@@ -985,19 +986,19 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+        recalc(CalcCategory.Square_Gap, sender)
     End Sub
 
     Private Sub nudひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nudひも間のすき間.ValueChanged
-        recalc(CalcCategory.BandWidth, sender)
+        recalc(CalcCategory.Target_Band, sender)
     End Sub
 
     Private Sub nud縦の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+        recalc(CalcCategory.Square_Tate, sender)
     End Sub
 
     Private Sub nud高さの四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの四角数.ValueChanged
-        recalc(CalcCategory.Square, sender)
+        recalc(CalcCategory.Square_Vert, sender)
     End Sub
 
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged

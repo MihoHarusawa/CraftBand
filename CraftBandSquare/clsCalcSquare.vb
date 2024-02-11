@@ -1453,111 +1453,6 @@ Class clsCalcSquare
     End Function
 
 
-    'Function add_row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal i本数 As Integer, ByRef currow As tbl縦横展開Row) As Boolean
-
-    '    '追加位置
-    '    Dim bandnum As Integer = -1
-    '    If currow.f_iひも種 = iひも種 Then
-    '        bandnum = currow.f_iひも番号
-    '    Else
-    '        bandnum = i本数 + 1  '最後の後
-    '    End If
-    '    If bandnum < 0 Then
-    '        Return False
-    '    End If
-
-    '    'レコードを後ろに追加
-    '    Dim add As tbl縦横展開Row = Find縦横展開Row(table, iひも種, i本数 + 1, True)
-    '    add.f_i何本幅 = _I基本のひも幅
-
-    '    currow = Nothing
-    '    If i本数 < bandnum Then
-    '        currow = add
-    '        Return True
-    '    End If
-
-    '    '追加位置以降を後ろにシフト(recalcされるので、レコードに保持される分のみ
-    '    Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
-    '    Dim rows() As DataRow = table.Select(cond, "f_iひも番号 DESC")
-    '    If rows Is Nothing OrElse rows.Count = 0 Then
-    '        Return False
-    '    End If
-
-    '    Dim lastrow As tbl縦横展開Row = Nothing
-    '    For Each row As tbl縦横展開Row In rows
-    '        If lastrow Is Nothing Then
-    '            lastrow = row
-    '            Continue For
-    '        End If
-    '        If row.f_iひも番号 < bandnum Then
-    '            Exit For '↓で処理済のはずだが
-    '        End If
-
-    '        lastrow.f_i何本幅 = row.f_i何本幅
-    '        lastrow.f_s色 = row.f_s色
-    '        lastrow.f_dひも長加算 = row.f_dひも長加算
-    '        lastrow.f_sメモ = row.f_sメモ
-    '        If row.f_iひも番号 = bandnum Then
-    '            currow = row
-    '            row.f_i何本幅 = _I基本のひも幅
-    '            row.f_s色 = ""
-    '            row.f_dひも長加算 = 0
-    '            row.f_sメモ = ""
-    '            Exit For
-    '        End If
-    '        lastrow = row
-    '    Next
-
-    '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_row currow={0}", New clsDataRow(currow).ToString)
-    '    Return True
-    'End Function
-
-    ''削除ボタン(縦横側面を展開時のみ)
-    'Function del_row(ByVal table As tbl縦横展開DataTable, ByVal iひも種 As enumひも種, ByVal i本数 As Integer, ByRef currow As tbl縦横展開Row) As Boolean
-    '    If currow.f_iひも種 <> iひも種 Then    '補強ひもやすき間は除外
-    '        Return False
-    '    End If
-    '    If i本数 <= 1 Then
-    '        Return False
-    '    End If
-
-    '    '削除位置
-    '    Dim bandnum As Integer = currow.f_iひも番号
-    '    If bandnum < 1 OrElse i本数 < bandnum Then
-    '        Return False
-    '    End If
-    '    currow = Nothing
-
-    '    '現在位置以降を前にシフトする(recalcされるので、レコードに保持される分のみ)
-    '    Dim cond As String = String.Format("f_iひも種 = {0}", CType(iひも種, Integer))
-    '    Dim rows() As DataRow = table.Select(cond, "f_iひも番号 ASC")
-    '    If rows Is Nothing OrElse rows.Count = 0 Then
-    '        Return False
-    '    End If
-
-    '    Dim lastrow As tbl縦横展開Row = Nothing
-    '    For Each row As tbl縦横展開Row In rows
-    '        If row.f_iひも番号 < bandnum Then
-    '            Continue For
-    '        ElseIf row.f_iひも番号 = bandnum Then
-    '            currow = row
-    '            lastrow = row
-    '            Continue For
-    '        End If
-    '        If lastrow IsNot Nothing Then
-    '            lastrow.f_i何本幅 = row.f_i何本幅
-    '            lastrow.f_s色 = row.f_s色
-    '            lastrow.f_dひも長加算 = row.f_dひも長加算
-    '            lastrow.f_sメモ = row.f_sメモ
-    '        End If
-    '        lastrow = row
-    '    Next
-
-    '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "del_row currow={0}", New clsDataRow(currow).ToString)
-    '    Return True
-    'End Function
-
-
 #Region "横ひも"
     'CalcSizeからの呼び出し 対応した更新の後、再集計(_d四角ベース_縦計,_b横ひも本幅変更)
     'Expand_Yokoカテゴリの場合は、対応レコードの派生更新(画面で編集中のみ)   
@@ -1637,11 +1532,6 @@ Class clsCalcSquare
             Return False
         End If
 
-        'Dim ret As Boolean = add_row(_tbl縦横展開_横ひも, enumひも種.i_横, p_i横ひもの本数, currow)
-        'If Not ret Then
-        '    Return False
-        'End If
-
         save横展開DataTable(True)
         Return True
     End Function
@@ -1659,11 +1549,6 @@ Class clsCalcSquare
         If currow Is Nothing Then
             Return False
         End If
-
-        'Dim ret As Boolean = del_row(_tbl縦横展開_横ひも, enumひも種.i_横, p_i横ひもの本数, currow)
-        'If Not ret Then
-        '    Return False
-        'End If
 
         save横展開DataTable(True)
         Return True
@@ -1842,11 +1727,6 @@ Class clsCalcSquare
             Return False
         End If
 
-        'Dim ret As Boolean = add_row(_tbl縦横展開_縦ひも, enumひも種.i_縦, p_i縦ひもの本数, currow)
-        'If Not ret Then
-        '    Return False
-        'End If
-
         save縦展開DataTable(True)
         Return True
     End Function
@@ -1863,11 +1743,6 @@ Class clsCalcSquare
         If currow Is Nothing Then
             Return False
         End If
-
-        'Dim ret As Boolean = del_row(_tbl縦横展開_縦ひも, enumひも種.i_縦, p_i縦ひもの本数, currow)
-        'If Not ret Then
-        '    Return False
-        'End If
 
         save縦展開DataTable(True)
         Return True

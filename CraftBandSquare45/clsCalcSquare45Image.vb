@@ -9,14 +9,31 @@ Imports CraftBand.Tables.dstMasterTables
 Partial Public Class clsCalcSquare45
 
     '位置計算用
-    Class CBandPosition
+    Private Class CBandPosition
         Public idx As Integer
+
         Public m_a四隅 As S四隅
         Public m_rひも位置 As S領域
         Public m_dひも幅 As Double
         Public m_row縦横展開 As tbl縦横展開Row
 
-        Public Overrides Function ToString() As String
+        Sub New(ByVal i As Integer)
+            idx = i
+        End Sub
+
+        Function getNewImageItem() As clsImageItem
+            If m_row縦横展開 Is Nothing Then
+                Return Nothing
+            End If
+            Dim band As New clsImageItem(m_row縦横展開)
+            band.m_a四隅 = m_a四隅
+            band.m_rひも位置 = m_rひも位置
+            band.m_dひも幅 = m_dひも幅
+            Return band
+        End Function
+
+
+        Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("idx={0} ", idx)
             sb.AppendFormat("四隅:({0}) ", m_a四隅)
@@ -31,11 +48,47 @@ Partial Public Class clsCalcSquare45
         End Function
     End Class
 
-    '1～p_i縦ひもの本数=p_i横ひもの本数
-    Dim _BandPositions横ひも As New List(Of CBandPosition)
-    Dim _BandPositions縦ひも As New List(Of CBandPosition)
+    Private Class CBandPositionList
+        Inherits List(Of CBandPosition)
 
-    Private Function setBandPositions(ByVal _ひも種 As enumひも種, ByVal table As tbl縦横展開DataTable, ByVal bandPositionList As List(Of CBandPosition)) As Integer
+        'idx=0は使わない。1～サイズで使用する
+
+        Function SetSize(ByVal size As Integer) As Boolean
+
+            If (size + 1) < Me.Count Then
+                '多い
+                Do While Me.Count > (size + 1)
+                    Me.RemoveAt(Me.Count - 1)
+                Loop
+
+            ElseIf Me.Count < (size + 1) Then
+                '少ない
+                Do While Me.Count < (size + 1)
+                    Me.Add(New CBandPosition(Me.Count))
+                Loop
+
+            End If
+            Return True
+        End Function
+
+
+        Public Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            For Each band As CBandPosition In Me
+                sb.AppendLine(band.ToString)
+            Next
+            Return sb.ToString
+        End Function
+
+    End Class
+
+    '1～p_i縦ひもの本数=p_i横ひもの本数
+    Dim _BandPositions(cExpandCount - 1) As CBandPositionList
+
+    Private Function setBandPositions(ByVal _ひも種 As enumひも種, ByVal table As tbl縦横展開DataTable, ByVal blist As CBandPositionList) As Integer
+        'p_i縦ひもの本数=p_i横ひもの本数
+        blist.SetSize(p_i横ひもの本数)
+
         For Each row As tbl縦横展開Row In table
             If row.f_iひも種 <> _ひも種 Then
                 Continue For
@@ -44,24 +97,13 @@ Partial Public Class clsCalcSquare45
             If idx < 1 Then
                 Continue For
             End If
-            Do While bandPositionList.Count < idx + 1
-                bandPositionList.Add(New CBandPosition)
-            Loop
-            bandPositionList(idx).m_row縦横展開 = row
-            bandPositionList(idx).idx = idx
+            blist(idx).m_row縦横展開 = row
+            blist(idx).idx = idx
         Next
 
-        'p_i縦ひもの本数=p_i横ひもの本数
-        While bandPositionList.Count > p_i横ひもの本数 + 1
-            bandPositionList.RemoveAt(bandPositionList.Count - 1)
-        End While
-
-        Return bandPositionList.Count
+        Return blist.Count
     End Function
 
-
-    'Dim _ImageList横ひも As clsImageItemList
-    'Dim _ImageList縦ひも As clsImageItemList
 
     Private Function toPoint(ByVal x As Double, ByVal y As Double) As S実座標
         Return New S実座標(_d四角の一辺 * x, _d四角の一辺 * y)
@@ -81,33 +123,23 @@ Partial Public Class clsCalcSquare45
             Return False 'p_sメッセージあり
         End If
 
-        ''処理に伴い残されたイメージ情報
-        'If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
-        '    '処理に必要な情報がありません。
-        '    p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-        '    Return False
-        'End If
 
         Dim _ImageList横ひも As New clsImageItemList
         Dim _ImageList縦ひも As New clsImageItemList
         Try
-            For idx As Integer = 1 To p_i横ひもの本数
-                Dim bandposition As CBandPosition = _BandPositions横ひも(idx)
-                Dim band As New clsImageItem(bandposition.m_row縦横展開)
-                band.m_a四隅 = bandposition.m_a四隅
-                band.m_rひも位置 = bandposition.m_rひも位置
-                band.m_dひも幅 = bandposition.m_dひも幅
-                _ImageList横ひも.AddItem(band)
+            For Each bandposition As CBandPosition In _BandPositions(enumIdxExpand._Yoko)
+                Dim band As clsImageItem = bandposition.getNewImageItem()
+                If band IsNot Nothing Then
+                    _ImageList横ひも.AddItem(band)
+                End If
+            Next
+            For Each bandposition As CBandPosition In _BandPositions(enumIdxExpand._Tate)
+                Dim band As clsImageItem = bandposition.getNewImageItem()
+                If band IsNot Nothing Then
+                    _ImageList縦ひも.AddItem(band)
+                End If
             Next
 
-            For idx As Integer = 1 To p_i縦ひもの本数
-                Dim bandposition As CBandPosition = _BandPositions縦ひも(idx)
-                Dim band As New clsImageItem(bandposition.m_row縦横展開)
-                band.m_a四隅 = bandposition.m_a四隅
-                band.m_rひも位置 = bandposition.m_rひも位置
-                band.m_dひも幅 = bandposition.m_dひも幅
-                _ImageList縦ひも.AddItem(band)
-            Next
         Catch ex As Exception
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -182,9 +214,10 @@ Partial Public Class clsCalcSquare45
 
 
     Private Function setBandPositions横ひも() As Boolean
+        Dim _BandPositions横ひも As CBandPositionList = _BandPositions(enumIdxExpand._Yoko)
 
-        Dim delta225 As S差分 = Unit225 * _d四角の一辺 '／
-        Dim delta315 As S差分 = Unit315 * _d四角の一辺 '＼
+        'Dim delta225 As S差分 = Unit225 * _d四角の一辺 '／
+        'Dim delta315 As S差分 = Unit315 * _d四角の一辺 '＼
         Dim delta As S差分
 
         Dim updowncount As Integer
@@ -192,11 +225,11 @@ Partial Public Class clsCalcSquare45
         If _i縦の四角数 <= _i横の四角数 Then
             updowncount = _i縦の四角数
             samecount = _i横の四角数 - _i縦の四角数
-            delta = delta225 '／
+            delta = Unit225 '／
         Else
             updowncount = _i横の四角数
             samecount = _i縦の四角数 - _i横の四角数
-            delta = delta315 '＼
+            delta = Unit315 '＼
         End If
 
 
@@ -213,8 +246,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p右上 = _右上
             '
-            _左上 = _左上 + delta225 '／
-            _右上 = _右上 + delta315 '＼
+            _左上 = _左上 + Unit225 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間) 'delta225 '／
+            _右上 = _右上 + Unit315 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間) ' '＼
             band.m_a四隅.p左下 = _左上
             band.m_a四隅.p右下 = _右上
 
@@ -228,8 +261,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p右上 = _右上
             '
-            _左上 = _左上 + delta
-            _右上 = _右上 + delta
+            _左上 = _左上 + delta * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)
+            _右上 = _右上 + delta * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)
             band.m_a四隅.p左下 = _左上
             band.m_a四隅.p右下 = _右上
             idx += 1
@@ -242,8 +275,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p右上 = _右上
             '
-            _左上 = _左上 + delta315 '＼
-            _右上 = _右上 + delta225 '／
+            _左上 = _左上 + Unit315 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間) ' '＼
+            _右上 = _右上 + Unit225 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間) ' '／
             band.m_a四隅.p左下 = _左上
             band.m_a四隅.p右下 = _右上
 
@@ -255,9 +288,10 @@ Partial Public Class clsCalcSquare45
 
 
     Private Function setBandPositions縦ひも() As Boolean
+        Dim _BandPositions縦ひも As CBandPositionList = _BandPositions(enumIdxExpand._Tate)
 
-        Dim delta45 As S差分 = Unit45 * _d四角の一辺 '／
-        Dim delta315 As S差分 = Unit315 * _d四角の一辺 '＼
+        'Dim delta45 As S差分 = Unit45 * _d四角の一辺 '／
+        'Dim delta315 As S差分 = Unit315 * _d四角の一辺 '＼
         Dim delta As S差分
 
         Dim updowncount As Integer
@@ -265,11 +299,11 @@ Partial Public Class clsCalcSquare45
         If _i縦の四角数 <= _i横の四角数 Then
             updowncount = _i縦の四角数
             samecount = _i横の四角数 - _i縦の四角数
-            delta = delta45 '／
+            delta = Unit45 '／
         Else
             updowncount = _i横の四角数
             samecount = _i縦の四角数 - _i横の四角数
-            delta = delta315 '＼
+            delta = Unit315 '＼
 
         End If
 
@@ -287,8 +321,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p左下 = _左下
             '
-            _左上 = _左上 + delta45 '／
-            _左下 = _左下 + delta315 '＼
+            _左上 = _左上 + Unit45 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)  '／
+            _左下 = _左下 + Unit315 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)  '＼
             band.m_a四隅.p右上 = _左上
             band.m_a四隅.p右下 = _左下
 
@@ -302,8 +336,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p左下 = _左下
             '
-            _左上 = _左上 + delta
-            _左下 = _左下 + delta
+            _左上 = _左上 + delta * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)
+            _左下 = _左下 + delta * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)
             band.m_a四隅.p右上 = _左上
             band.m_a四隅.p右下 = _左下
 
@@ -317,8 +351,8 @@ Partial Public Class clsCalcSquare45
             band.m_a四隅.p左上 = _左上
             band.m_a四隅.p左下 = _左下
             '
-            _左上 = _左上 + delta315 '＼
-            _左下 = _左下 + delta45 '／
+            _左上 = _左上 + Unit315 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)  '＼
+            _左下 = _左下 + Unit45 * (g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅) + _dひも間のすき間)  '／
             band.m_a四隅.p右上 = _左上
             band.m_a四隅.p右下 = _左下
 
