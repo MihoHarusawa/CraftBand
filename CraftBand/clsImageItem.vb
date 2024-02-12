@@ -575,6 +575,26 @@ Public Class clsImageItem
             Me.Sort(AddressOf S領域.CompareToY)
         End Sub
 
+        Function CrossingX(ByVal x_from As Double, ByVal x_to As Double) As C領域リスト
+            Dim sublist As New C領域リスト
+            For Each rct As S領域 In Me
+                If rct.x最左 <= x_from AndAlso x_to <= rct.x最右 Then
+                    sublist.Add(rct)
+                End If
+            Next
+            Return sublist
+        End Function
+
+        Function CrossingY(ByVal y_from As Double, ByVal y_to As Double) As C領域リスト
+            Dim sublist As New C領域リスト
+            For Each rct As S領域 In Me
+                If rct.y最上 <= y_from AndAlso y_to <= rct.y最下 Then
+                    sublist.Add(rct)
+                End If
+            Next
+            Return sublist
+        End Function
+
         Public Overrides Function ToString() As String
             Dim sb As New StringBuilder
             For Each rct As S領域 In Me

@@ -364,49 +364,6 @@ Partial Public Class clsCalcSquare45
         Return True
     End Function
 
-    'Private Function bandPositions長さ計算(ByVal _ひもリスト As CBandPositionList, ByVal _ひも種 As enumひも種) As Boolean
-    '    If _ひもリスト Is Nothing Then
-    '        Return False
-    '    End If
-
-    '    For Each band As CBandPosition In _ひもリスト
-    '        If band.m_row縦横展開 Is Nothing OrElse band.m_row縦横展開.f_iひも種 <> _ひも種 Then
-    '            Continue For
-    '        End If
-
-    '        Dim p中央 As S実座標 = band.m_a四隅.p中央
-    '        Dim d加算分 As Double = (_dひも長加算 + _d縁の垂直ひも長) * 2
-
-    '        With band.m_row縦横展開
-    '            band.m_dひも幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅)
-    '            If _ひも種 = enumひも種.i_横 Then
-    '                .f_dひも長 = band.m_a四隅.x最右 - band.m_a四隅.x最左
-
-    '                '.f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + d加算分
-    '                Dim d出力ひも長 As Double = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + d加算分
-
-    '                band.m_rひも位置.y最上 = p中央.Y + band.m_dひも幅 / 2
-    '                band.m_rひも位置.y最下 = p中央.Y - band.m_dひも幅 / 2
-    '                band.m_rひも位置.x最右 = p中央.X + d出力ひも長 / 2
-    '                band.m_rひも位置.x最左 = p中央.X - d出力ひも長 / 2
-
-    '            ElseIf _ひも種 = enumひも種.i_縦 Then
-    '                .f_dひも長 = band.m_a四隅.y最上 - band.m_a四隅.y最下
-    '                '.f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + d加算分
-    '                Dim d出力ひも長 As Double = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + d加算分
-
-    '                band.m_rひも位置.x最右 = p中央.X + band.m_dひも幅 / 2
-    '                band.m_rひも位置.x最左 = p中央.X - band.m_dひも幅 / 2
-    '                band.m_rひも位置.y最上 = p中央.Y + d出力ひも長 / 2
-    '                band.m_rひも位置.y最下 = p中央.Y - d出力ひも長 / 2
-
-    '            End If
-    '        End With
-    '    Next
-    '    Return True
-    'End Function
-
-
     Private Function setBandPositions横ひも() As Boolean
         Dim _BandPositions横ひも As CBandPositionList = _BandPositions(enumExpandDirection._Yoko)
 
