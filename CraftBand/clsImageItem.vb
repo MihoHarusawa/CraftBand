@@ -33,6 +33,11 @@ Public Class clsImageItem
             Y = yy
         End Sub
 
+        Sub Zero()
+            X = 0
+            Y = 0
+        End Sub
+
         ReadOnly Property IsZero() As Boolean
             Get
                 Return X = 0 AndAlso Y = 0
@@ -97,6 +102,11 @@ Public Class clsImageItem
             dY = way.Y - base.Y
         End Sub
 
+        Sub Zero()
+            dX = 0
+            dY = 0
+        End Sub
+
         ReadOnly Property IsZero() As Boolean
             Get
                 Return dX = 0 AndAlso dY = 0
@@ -144,6 +154,11 @@ Public Class clsImageItem
                 Return p開始.IsZero AndAlso p終了.IsZero
             End Get
         End Property
+
+        Sub Empty()
+            p開始.Zero()
+            p終了.Zero()
+        End Sub
 
         '回転
         Function Rotate(ByVal center As S実座標, ByVal angle As Double) As S線分
@@ -229,6 +244,13 @@ Public Class clsImageItem
             p左下 = r.p左下
             p右上 = r.p右上
             p右下 = r.p右下
+        End Sub
+
+        Sub Empty()
+            p左上.Zero()
+            p左下.Zero()
+            p右上.Zero()
+            p右下.Zero()
         End Sub
 
         ReadOnly Property IsEmpty() As Boolean
@@ -357,6 +379,11 @@ Public Class clsImageItem
 
         Sub New(ByVal ref As S領域)
             Me.New(ref.p右上, ref.p左下)
+        End Sub
+
+        Sub Empty()
+            p右上.Zero()
+            p左下.Zero()
         End Sub
 
         ReadOnly Property IsEmpty() As Boolean

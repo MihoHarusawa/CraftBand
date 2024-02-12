@@ -199,7 +199,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.Target_Band}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Square_Gap, CalcCategory.Square_Yoko, CalcCategory.Square_Tate, CalcCategory.Square_Vert, CalcCategory.Square_Expand, CalcCategory.Target_Band}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Square_Gap, CalcCategory.Square_TateYoko, CalcCategory.Square_Vert, CalcCategory.Square_Expand, CalcCategory.Target_Band}.Contains(category) Then
             Save四角数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -392,6 +392,7 @@ Public Class frmMain
 
     Private Sub Disp計算結果(ByVal calc As clsCalcSquare45)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp計算結果 {0}", calc.dump())
         With calc
             '
             txt横ひもの本数.Text = .p_i横ひもの本数
@@ -986,7 +987,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の四角数.ValueChanged
-        recalc(CalcCategory.Square_Gap, sender)
+        recalc(CalcCategory.Square_TateYoko, sender)
     End Sub
 
     Private Sub nudひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nudひも間のすき間.ValueChanged
@@ -994,7 +995,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の四角数.ValueChanged
-        recalc(CalcCategory.Square_Tate, sender)
+        recalc(CalcCategory.Square_TateYoko, sender)
     End Sub
 
     Private Sub nud高さの四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの四角数.ValueChanged
@@ -1193,7 +1194,11 @@ Public Class frmMain
     End Sub
 
     Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
-
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
@@ -1223,7 +1228,11 @@ Public Class frmMain
     End Sub
 
     Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
-
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
     End Sub
 
     Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
@@ -1254,7 +1263,7 @@ Public Class frmMain
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
-        expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable(False)
+        expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable(True)
     End Sub
 
 #End Region
