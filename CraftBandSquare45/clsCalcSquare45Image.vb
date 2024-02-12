@@ -33,6 +33,22 @@ Partial Public Class clsCalcSquare45
     Private Property _b縦ひも本幅変更 As Boolean
 
 
+    ReadOnly Property p_i先の三角形の本幅の差 As Integer
+        Get
+            Return 1
+        End Get
+    End Property
+    ReadOnly Property p_i四辺形の本幅の差 As Integer
+        Get
+            Return 0
+        End Get
+    End Property
+    ReadOnly Property p_i後の三角形の本幅の差 As Integer
+        Get
+            Return -1
+        End Get
+    End Property
+
 
     Private Sub imageDataClear()
 

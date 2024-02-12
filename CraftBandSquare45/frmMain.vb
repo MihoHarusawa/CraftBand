@@ -427,6 +427,28 @@ Public Class frmMain
                 ToolStripStatusLabel1.Text = "NG"
                 ToolStripStatusLabel2.Text = .p_sメッセージ
             End If
+
+            lbl本幅の差.Visible = False
+            txt先の三角形の本幅の差.Visible = False
+            txt四辺形の本幅の差.Visible = False
+            txt後の三角形の本幅の差.Visible = False
+            If chk縦横を展開する.Checked Then
+                If .p_i先の三角形の本幅の差 <> 0 Then
+                    txt先の三角形の本幅の差.Text = .p_i先の三角形の本幅の差
+                    txt先の三角形の本幅の差.Visible = True
+                    lbl本幅の差.Visible = True
+                End If
+                If .p_i四辺形の本幅の差 <> 0 Then
+                    txt四辺形の本幅の差.Text = .p_i四辺形の本幅の差
+                    txt四辺形の本幅の差.Visible = True
+                    lbl本幅の差.Visible = True
+                End If
+                If .p_i後の三角形の本幅の差 <> 0 Then
+                    txt後の三角形の本幅の差.Text = .p_i後の三角形の本幅の差
+                    txt後の三角形の本幅の差.Visible = True
+                    lbl本幅の差.Visible = True
+                End If
+            End If
         End With
 
     End Sub

@@ -105,6 +105,10 @@ Partial Class frmMain
         txtメモ = New TextBox()
         txt作成者 = New TextBox()
         txtタイトル = New TextBox()
+        lbl本幅の差 = New Label()
+        txt先の三角形の本幅の差 = New TextBox()
+        txt四辺形の本幅の差 = New TextBox()
+        txt後の三角形の本幅の差 = New TextBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -376,7 +380,7 @@ Partial Class frmMain
         btnひもリスト.Location = New Point(756, 650)
         btnひもリスト.Name = "btnひもリスト"
         btnひもリスト.Size = New Size(111, 46)
-        btnひもリスト.TabIndex = 52
+        btnひもリスト.TabIndex = 56
         btnひもリスト.Text = "ひもリスト(&L)"
         ToolTip1.SetToolTip(btnひもリスト, "入力値に基づきひも幅と長さのリストを表示します")
         btnひもリスト.UseVisualStyleBackColor = True
@@ -385,7 +389,7 @@ Partial Class frmMain
         ' 
         lbl垂直ひも数.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl垂直ひも数.AutoSize = True
-        lbl垂直ひも数.Location = New Point(300, 625)
+        lbl垂直ひも数.Location = New Point(262, 625)
         lbl垂直ひも数.Name = "lbl垂直ひも数"
         lbl垂直ひも数.Size = New Size(77, 20)
         lbl垂直ひも数.TabIndex = 26
@@ -396,10 +400,10 @@ Partial Class frmMain
         ' 
         txt垂直ひも数.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt垂直ひも数.BorderStyle = BorderStyle.FixedSingle
-        txt垂直ひも数.Location = New Point(386, 623)
+        txt垂直ひも数.Location = New Point(348, 623)
         txt垂直ひも数.Name = "txt垂直ひも数"
         txt垂直ひも数.ReadOnly = True
-        txt垂直ひも数.Size = New Size(80, 27)
+        txt垂直ひも数.Size = New Size(67, 27)
         txt垂直ひも数.TabIndex = 27
         txt垂直ひも数.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt垂直ひも数, "垂直にたちあげるひも(長い横ひもと縦ひもの合計")
@@ -478,7 +482,7 @@ Partial Class frmMain
         txt四角ベース_横.Name = "txt四角ベース_横"
         txt四角ベース_横.ReadOnly = True
         txt四角ベース_横.Size = New Size(80, 27)
-        txt四角ベース_横.TabIndex = 41
+        txt四角ベース_横.TabIndex = 45
         txt四角ベース_横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_横, "四角(ひも幅+すき間)部分の横の長さ")
         ' 
@@ -489,7 +493,7 @@ Partial Class frmMain
         txt四角ベース_縦.Name = "txt四角ベース_縦"
         txt四角ベース_縦.ReadOnly = True
         txt四角ベース_縦.Size = New Size(80, 27)
-        txt四角ベース_縦.TabIndex = 44
+        txt四角ベース_縦.TabIndex = 48
         txt四角ベース_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_縦, "四角(ひも幅+すき間)部分の縦の長さ")
         ' 
@@ -500,7 +504,7 @@ Partial Class frmMain
         txt四角ベース_高さ.Name = "txt四角ベース_高さ"
         txt四角ベース_高さ.ReadOnly = True
         txt四角ベース_高さ.Size = New Size(80, 27)
-        txt四角ベース_高さ.TabIndex = 47
+        txt四角ベース_高さ.TabIndex = 51
         txt四角ベース_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_高さ, "四角(ひも幅+すき間)部分の高さ")
         ' 
@@ -511,7 +515,7 @@ Partial Class frmMain
         txt縁厚さプラス_横.Name = "txt縁厚さプラス_横"
         txt縁厚さプラス_横.ReadOnly = True
         txt縁厚さプラス_横.Size = New Size(80, 27)
-        txt縁厚さプラス_横.TabIndex = 42
+        txt縁厚さプラス_横.TabIndex = 46
         txt縁厚さプラス_横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_横, "四角ベースの長さに厚さを加えた横長")
         ' 
@@ -522,7 +526,7 @@ Partial Class frmMain
         txt縁厚さプラス_縦.Name = "txt縁厚さプラス_縦"
         txt縁厚さプラス_縦.ReadOnly = True
         txt縁厚さプラス_縦.Size = New Size(80, 27)
-        txt縁厚さプラス_縦.TabIndex = 45
+        txt縁厚さプラス_縦.TabIndex = 49
         txt縁厚さプラス_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_縦, "四角ベースの長さに厚さを加えた縦長")
         ' 
@@ -533,7 +537,7 @@ Partial Class frmMain
         txt縁厚さプラス_高さ.Name = "txt縁厚さプラス_高さ"
         txt縁厚さプラス_高さ.ReadOnly = True
         txt縁厚さプラス_高さ.Size = New Size(80, 27)
-        txt縁厚さプラス_高さ.TabIndex = 48
+        txt縁厚さプラス_高さ.TabIndex = 52
         txt縁厚さプラス_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_高さ, "四角ベースの高さに底厚さと縁を加えた高さ")
         ' 
@@ -544,7 +548,7 @@ Partial Class frmMain
         txt四角ベース_周.Name = "txt四角ベース_周"
         txt四角ベース_周.ReadOnly = True
         txt四角ベース_周.Size = New Size(80, 27)
-        txt四角ベース_周.TabIndex = 50
+        txt四角ベース_周.TabIndex = 54
         txt四角ベース_周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_周, "四角(ひも幅+すき間)部分の周の長さ")
         ' 
@@ -555,7 +559,7 @@ Partial Class frmMain
         txt縁厚さプラス_周.Name = "txt縁厚さプラス_周"
         txt縁厚さプラス_周.ReadOnly = True
         txt縁厚さプラス_周.Size = New Size(80, 27)
-        txt縁厚さプラス_周.TabIndex = 51
+        txt縁厚さプラス_周.TabIndex = 55
         txt縁厚さプラス_周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_周, "四角ベースの周に厚さを加えた外周")
         ' 
@@ -622,7 +626,7 @@ Partial Class frmMain
         lbl1つの辺.Location = New Point(24, 692)
         lbl1つの辺.Name = "lbl1つの辺"
         lbl1つの辺.Size = New Size(56, 20)
-        lbl1つの辺.TabIndex = 30
+        lbl1つの辺.TabIndex = 34
         lbl1つの辺.Text = "1つの辺"
         ToolTip1.SetToolTip(lbl1つの辺, "ひとつの四角の1辺")
         ' 
@@ -633,7 +637,7 @@ Partial Class frmMain
         lblひも幅.Location = New Point(101, 660)
         lblひも幅.Name = "lblひも幅"
         lblひも幅.Size = New Size(47, 20)
-        lblひも幅.TabIndex = 32
+        lblひも幅.TabIndex = 36
         lblひも幅.Text = "ひも幅"
         ToolTip1.SetToolTip(lblひも幅, "基本のひも幅の寸法")
         ' 
@@ -672,7 +676,7 @@ Partial Class frmMain
         lbl四角.Location = New Point(169, 660)
         lbl四角.Name = "lbl四角"
         lbl四角.Size = New Size(135, 20)
-        lbl四角.TabIndex = 35
+        lbl四角.TabIndex = 39
         lbl四角.Text = "四角(ひも幅+すき間)"
         ToolTip1.SetToolTip(lbl四角, "基本のひも幅にすき間をプラスした、四角の寸法")
         ' 
@@ -680,7 +684,7 @@ Partial Class frmMain
         ' 
         lbl厚さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl厚さ.AutoSize = True
-        lbl厚さ.Location = New Point(501, 625)
+        lbl厚さ.Location = New Point(427, 625)
         lbl厚さ.Name = "lbl厚さ"
         lbl厚さ.Size = New Size(34, 20)
         lbl厚さ.TabIndex = 28
@@ -691,10 +695,10 @@ Partial Class frmMain
         ' 
         txt厚さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt厚さ.BorderStyle = BorderStyle.FixedSingle
-        txt厚さ.Location = New Point(558, 623)
+        txt厚さ.Location = New Point(472, 623)
         txt厚さ.Name = "txt厚さ"
         txt厚さ.ReadOnly = True
-        txt厚さ.Size = New Size(80, 27)
+        txt厚さ.Size = New Size(69, 27)
         txt厚さ.TabIndex = 29
         txt厚さ.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt厚さ, "バンドの種類による厚さ・縁の厚さ")
@@ -818,7 +822,7 @@ Partial Class frmMain
         txt対角線_ひも幅.Name = "txt対角線_ひも幅"
         txt対角線_ひも幅.ReadOnly = True
         txt対角線_ひも幅.Size = New Size(80, 27)
-        txt対角線_ひも幅.TabIndex = 34
+        txt対角線_ひも幅.TabIndex = 38
         ToolTip1.SetToolTip(txt対角線_ひも幅, "ひも幅の四角の対角線")
         ' 
         ' txt1つの辺_ひも幅
@@ -828,7 +832,7 @@ Partial Class frmMain
         txt1つの辺_ひも幅.Name = "txt1つの辺_ひも幅"
         txt1つの辺_ひも幅.ReadOnly = True
         txt1つの辺_ひも幅.Size = New Size(80, 27)
-        txt1つの辺_ひも幅.TabIndex = 33
+        txt1つの辺_ひも幅.TabIndex = 37
         ToolTip1.SetToolTip(txt1つの辺_ひも幅, "ひも幅の四角の一辺")
         ' 
         ' lbl対角線
@@ -838,7 +842,7 @@ Partial Class frmMain
         lbl対角線.Location = New Point(24, 723)
         lbl対角線.Name = "lbl対角線"
         lbl対角線.Size = New Size(54, 20)
-        lbl対角線.TabIndex = 31
+        lbl対角線.TabIndex = 35
         lbl対角線.Text = "対角線"
         ToolTip1.SetToolTip(lbl対角線, "ひとつの四角の対角線")
         ' 
@@ -849,7 +853,7 @@ Partial Class frmMain
         txt対角線_四角.Name = "txt対角線_四角"
         txt対角線_四角.ReadOnly = True
         txt対角線_四角.Size = New Size(80, 27)
-        txt対角線_四角.TabIndex = 37
+        txt対角線_四角.TabIndex = 41
         ToolTip1.SetToolTip(txt対角線_四角, "ひも幅にすき間を加えた、単位となるの四角の対角線")
         ' 
         ' txt1つの辺_四角
@@ -859,7 +863,7 @@ Partial Class frmMain
         txt1つの辺_四角.Name = "txt1つの辺_四角"
         txt1つの辺_四角.ReadOnly = True
         txt1つの辺_四角.Size = New Size(80, 27)
-        txt1つの辺_四角.TabIndex = 36
+        txt1つの辺_四角.TabIndex = 40
         ToolTip1.SetToolTip(txt1つの辺_四角, "ひも幅にすき間を加えた、単位となるの四角の一辺")
         ' 
         ' nud底に
@@ -930,6 +934,57 @@ Partial Class frmMain
         txtタイトル.Size = New Size(690, 49)
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
+        ' 
+        ' lbl本幅の差
+        ' 
+        lbl本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl本幅の差.AutoSize = True
+        lbl本幅の差.Location = New Point(557, 627)
+        lbl本幅の差.Name = "lbl本幅の差"
+        lbl本幅の差.Size = New Size(66, 20)
+        lbl本幅の差.TabIndex = 30
+        lbl本幅の差.Text = "本幅の差"
+        ToolTip1.SetToolTip(lbl本幅の差, "縦ひも・横ひもの本幅合計値の差")
+        lbl本幅の差.Visible = False
+        ' 
+        ' txt先の三角形の本幅の差
+        ' 
+        txt先の三角形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt先の三角形の本幅の差.BorderStyle = BorderStyle.FixedSingle
+        txt先の三角形の本幅の差.Location = New Point(632, 623)
+        txt先の三角形の本幅の差.Name = "txt先の三角形の本幅の差"
+        txt先の三角形の本幅の差.ReadOnly = True
+        txt先の三角形の本幅の差.Size = New Size(35, 27)
+        txt先の三角形の本幅の差.TabIndex = 31
+        txt先の三角形の本幅の差.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txt先の三角形の本幅の差, "先の三角形の本幅の差")
+        txt先の三角形の本幅の差.Visible = False
+        ' 
+        ' txt四辺形の本幅の差
+        ' 
+        txt四辺形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt四辺形の本幅の差.BorderStyle = BorderStyle.FixedSingle
+        txt四辺形の本幅の差.Location = New Point(673, 623)
+        txt四辺形の本幅の差.Name = "txt四辺形の本幅の差"
+        txt四辺形の本幅の差.ReadOnly = True
+        txt四辺形の本幅の差.Size = New Size(35, 27)
+        txt四辺形の本幅の差.TabIndex = 32
+        txt四辺形の本幅の差.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txt四辺形の本幅の差, "四辺形部分の本幅の差")
+        txt四辺形の本幅の差.Visible = False
+        ' 
+        ' txt後の三角形の本幅の差
+        ' 
+        txt後の三角形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt後の三角形の本幅の差.BorderStyle = BorderStyle.FixedSingle
+        txt後の三角形の本幅の差.Location = New Point(714, 623)
+        txt後の三角形の本幅の差.Name = "txt後の三角形の本幅の差"
+        txt後の三角形の本幅の差.ReadOnly = True
+        txt後の三角形の本幅の差.Size = New Size(35, 27)
+        txt後の三角形の本幅の差.TabIndex = 33
+        txt後の三角形の本幅の差.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txt後の三角形の本幅の差, "後の三角形の本幅の差")
+        txt後の三角形の本幅の差.Visible = False
         ' 
         ' MenuStrip1
         ' 
@@ -1140,7 +1195,7 @@ Partial Class frmMain
         TabControl.Name = "TabControl"
         TabControl.SelectedIndex = 0
         TabControl.Size = New Size(848, 446)
-        TabControl.TabIndex = 0
+        TabControl.TabIndex = 22
         ' 
         ' tpage四角数
         ' 
@@ -1579,7 +1634,7 @@ Partial Class frmMain
         lbl四角ベース.Location = New Point(291, 692)
         lbl四角ベース.Name = "lbl四角ベース"
         lbl四角ベース.Size = New Size(72, 20)
-        lbl四角ベース.TabIndex = 38
+        lbl四角ベース.TabIndex = 42
         lbl四角ベース.Text = "四角ベース"
         ' 
         ' lbl計算寸法
@@ -1599,7 +1654,7 @@ Partial Class frmMain
         lbl計算寸法縦.Location = New Point(501, 660)
         lbl計算寸法縦.Name = "lbl計算寸法縦"
         lbl計算寸法縦.Size = New Size(24, 20)
-        lbl計算寸法縦.TabIndex = 43
+        lbl計算寸法縦.TabIndex = 47
         lbl計算寸法縦.Text = "縦"
         ' 
         ' lbl計算寸法高さ
@@ -1609,7 +1664,7 @@ Partial Class frmMain
         lbl計算寸法高さ.Location = New Point(579, 660)
         lbl計算寸法高さ.Name = "lbl計算寸法高さ"
         lbl計算寸法高さ.Size = New Size(34, 20)
-        lbl計算寸法高さ.TabIndex = 46
+        lbl計算寸法高さ.TabIndex = 50
         lbl計算寸法高さ.Text = "高さ"
         ' 
         ' lbl計算寸法_単位
@@ -1629,7 +1684,7 @@ Partial Class frmMain
         lbl縁厚さプラス.Location = New Point(291, 723)
         lbl縁厚さプラス.Name = "lbl縁厚さプラス"
         lbl縁厚さプラス.Size = New Size(89, 20)
-        lbl縁厚さプラス.TabIndex = 39
+        lbl縁厚さプラス.TabIndex = 43
         lbl縁厚さプラス.Text = "縁・厚さプラス"
         ' 
         ' lbl計算寸法横
@@ -1639,7 +1694,7 @@ Partial Class frmMain
         lbl計算寸法横.Location = New Point(412, 660)
         lbl計算寸法横.Name = "lbl計算寸法横"
         lbl計算寸法横.Size = New Size(24, 20)
-        lbl計算寸法横.TabIndex = 40
+        lbl計算寸法横.TabIndex = 44
         lbl計算寸法横.Text = "横"
         ' 
         ' lbl計算寸法周
@@ -1649,7 +1704,7 @@ Partial Class frmMain
         lbl計算寸法周.Location = New Point(674, 660)
         lbl計算寸法周.Name = "lbl計算寸法周"
         lbl計算寸法周.Size = New Size(24, 20)
-        lbl計算寸法周.TabIndex = 49
+        lbl計算寸法周.TabIndex = 53
         lbl計算寸法周.Text = "周"
         ' 
         ' btn終了
@@ -1658,7 +1713,7 @@ Partial Class frmMain
         btn終了.Location = New Point(756, 702)
         btn終了.Name = "btn終了"
         btn終了.Size = New Size(111, 46)
-        btn終了.TabIndex = 53
+        btn終了.TabIndex = 57
         btn終了.Text = "終了(&X)"
         btn終了.UseVisualStyleBackColor = True
         ' 
@@ -1742,7 +1797,7 @@ Partial Class frmMain
         StatusStrip1.Location = New Point(0, 757)
         StatusStrip1.Name = "StatusStrip1"
         StatusStrip1.Size = New Size(886, 26)
-        StatusStrip1.TabIndex = 57
+        StatusStrip1.TabIndex = 58
         StatusStrip1.Text = "StatusStrip1"
         ' 
         ' ToolStripStatusLabel1
@@ -1773,7 +1828,7 @@ Partial Class frmMain
         btnDEBUG.Location = New Point(758, 619)
         btnDEBUG.Name = "btnDEBUG"
         btnDEBUG.Size = New Size(81, 27)
-        btnDEBUG.TabIndex = 54
+        btnDEBUG.TabIndex = 59
         btnDEBUG.Text = "DEBUG"
         btnDEBUG.UseVisualStyleBackColor = True
         btnDEBUG.Visible = False
@@ -2050,6 +2105,10 @@ Partial Class frmMain
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(886, 783)
+        Controls.Add(txt後の三角形の本幅の差)
+        Controls.Add(txt四辺形の本幅の差)
+        Controls.Add(lbl本幅の差)
+        Controls.Add(txt先の三角形の本幅の差)
         Controls.Add(lbl厚さ)
         Controls.Add(txt厚さ)
         Controls.Add(lbl四角)
@@ -2319,6 +2378,10 @@ Partial Class frmMain
     Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As ctrExpanding
     Friend WithEvents expand縦ひも As ctrExpanding
+    Friend WithEvents lbl本幅の差 As Label
+    Friend WithEvents txt先の三角形の本幅の差 As TextBox
+    Friend WithEvents txt四辺形の本幅の差 As TextBox
+    Friend WithEvents txt後の三角形の本幅の差 As TextBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
