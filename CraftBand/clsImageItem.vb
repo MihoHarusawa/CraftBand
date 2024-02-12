@@ -1057,7 +1057,9 @@ Public Class clsImageItemList
 
     '要素追加
     Sub AddItem(ByVal item As clsImageItem)
-        MyBase.Add(item)
+        If item IsNot Nothing Then
+            MyBase.Add(item)
+        End If
     End Sub
 
     'リストの要素を移動

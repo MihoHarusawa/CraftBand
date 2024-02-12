@@ -19,7 +19,6 @@ Public Class frmMain
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
-    Dim _isChangingByCode As Boolean = False
 
 
 #Region "基本的な画面処理"
@@ -39,8 +38,8 @@ Public Class frmMain
         editUpDown.FormCaption = Me.Text
         editUpDown.IsSquare45 = True
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, Nothing)
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -199,7 +198,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.Target_Band}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Square_Gap, CalcCategory.Square_TateYoko, CalcCategory.Square_Vert, CalcCategory.Square_Expand, CalcCategory.Target_Band}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Square_Add, CalcCategory.Square_TateYokoGap, CalcCategory.Square_Vert, CalcCategory.Square_Expand, CalcCategory.Target_Band}.Contains(category) Then
             Save四角数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -1009,19 +1008,35 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の四角数.ValueChanged
-        recalc(CalcCategory.Square_TateYoko, sender)
+        recalc(CalcCategory.Square_TateYokoGap, sender)
     End Sub
 
     Private Sub nudひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nudひも間のすき間.ValueChanged
-        recalc(CalcCategory.Target_Band, sender)
+        recalc(CalcCategory.Square_TateYokoGap, sender)
     End Sub
 
     Private Sub nud縦の四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の四角数.ValueChanged
-        recalc(CalcCategory.Square_TateYoko, sender)
+        recalc(CalcCategory.Square_TateYokoGap, sender)
     End Sub
 
     Private Sub nud高さの四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの四角数.ValueChanged
         recalc(CalcCategory.Square_Vert, sender)
+    End Sub
+
+    Private Sub nudひも長係数_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長係数.ValueChanged
+        recalc(CalcCategory.Square_Add, sender)
+    End Sub
+
+    Private Sub nudひも長加算_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算.ValueChanged
+        recalc(CalcCategory.Square_Add, sender)
+    End Sub
+
+    Private Sub chk縦の補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦の補強ひも.CheckedChanged
+        recalc(CalcCategory.Square_TateYokoGap, sender)
+    End Sub
+
+    Private Sub chk横の補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横の補強ひも.CheckedChanged
+        recalc(CalcCategory.Square_TateYokoGap, sender)
     End Sub
 
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
@@ -1414,8 +1429,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
-
 
 #End Region
 
