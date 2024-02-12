@@ -588,7 +588,7 @@ Public Class clsImageItem
         Function CrossingY(ByVal y_from As Double, ByVal y_to As Double) As C領域リスト
             Dim sublist As New C領域リスト
             For Each rct As S領域 In Me
-                If rct.y最上 <= y_from AndAlso y_to <= rct.y最下 Then
+                If rct.y最下 <= y_from AndAlso y_to <= rct.y最上 Then
                     sublist.Add(rct)
                 End If
             Next
