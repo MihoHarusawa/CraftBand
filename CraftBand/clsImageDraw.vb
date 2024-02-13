@@ -376,6 +376,7 @@ Public Class CImageDraw
         If colset Is Nothing Then
             Return False
         End If
+        'Debug.Print("{0} {1}", isVirtical, item.m_row縦横展開.f_s記号)
         Dim ret As Boolean = True
         Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
         If (isVirtical And (0 < rect.Height)) OrElse (Not isVirtical And (0 < rect.Width)) Then
@@ -402,7 +403,7 @@ Public Class CImageDraw
                         For Each r As S領域 In sublist
                             If r.y最下 < YStart Then
                                 '範囲より下なのでスルー
-                            ElseIf YEnd < r.y最下 Then
+                            ElseIf YEnd < r.y最上 Then
                                 '範囲より上なので終わり
                                 Exit For
                             Else
@@ -411,8 +412,8 @@ Public Class CImageDraw
                                 ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
                                                       widraw, item.m_row縦横展開.f_i何本幅, borderひも)
                                 part_r.y最下 = r.y最上
+                                borderひも = borderひも And Not (DirectionEnum._下)
                             End If
-                            borderひも = borderひも And Not (DirectionEnum._下)
                         Next
                         '
                         borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._上))
@@ -425,7 +426,7 @@ Public Class CImageDraw
                     End If
                 Else
                     '横ひも
-                    Dim sublist As C領域リスト = item.m_regionList.CrossingY(item.m_rひも位置.y最上, item.m_rひも位置.y最下)
+                    Dim sublist As C領域リスト = item.m_regionList.CrossingY(item.m_rひも位置.y最下, item.m_rひも位置.y最上)
                     If 0 < sublist.Count Then
                         sublist.SortByX()
                         'Debug.Print(sublist.ToString)
@@ -437,7 +438,7 @@ Public Class CImageDraw
                         For Each r As S領域 In sublist
                             If r.x最左 < XStart Then
                                 '範囲より左なのでスルー
-                            ElseIf XEnd < r.x最左 Then
+                            ElseIf XEnd < r.x最右 Then
                                 '範囲より右なので終わり
                                 Exit For
                             Else
@@ -446,8 +447,8 @@ Public Class CImageDraw
                                 ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
                                                       widraw, item.m_row縦横展開.f_i何本幅, borderひも)
                                 part_r.x最左 = r.x最右
+                                borderひも = borderひも And Not (DirectionEnum._左)
                             End If
-                            borderひも = borderひも And Not (DirectionEnum._左)
                         Next
                         '
                         borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._右))
