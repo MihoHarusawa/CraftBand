@@ -226,4 +226,7 @@
     <value>上,下</value>
     <comment>frmMain</comment>
   </data>
+  <data name="CalcNoRectanble" xml:space="preserve">
+    <value>底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1})</value>
+  </data>
 </root>

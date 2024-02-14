@@ -214,6 +214,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoRectanble() As String
+            Get
+                Return ResourceManager.GetString("CalcNoRectanble", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}を指定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoSelect() As String

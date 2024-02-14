@@ -421,7 +421,7 @@ Public Class frmMain
 
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
-                ToolStripStatusLabel2.Text = ""
+                ToolStripStatusLabel2.Text = .p_s警告
             Else
                 ToolStripStatusLabel1.Text = "NG"
                 ToolStripStatusLabel2.Text = .p_sメッセージ
@@ -645,8 +645,14 @@ Public Class frmMain
         SaveTables(_clsDataTables)
         _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing)
 
+        Dim msg As String = Nothing
         If Not _clsCalcSquare45.p_b有効 Then
-            Dim msg As String = _clsCalcSquare45.p_sメッセージ & vbCrLf
+            msg = _clsCalcSquare45.p_sメッセージ
+        ElseIf Not String.IsNullOrEmpty(_clsCalcSquare45.p_s警告) Then
+            msg = _clsCalcSquare45.p_s警告
+        End If
+        If Not String.IsNullOrEmpty(msg) Then
+            msg += vbCrLf
             'このままリスト出力を行いますか？
             msg += My.Resources.AskOutput
             Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)

@@ -45,6 +45,7 @@ Class clsCalcSquare45
 
     Public Property p_b有効 As Boolean
     Public Property p_sメッセージ As String 'p_b有効でない場合のみ参照
+    Public Property p_s警告 As String '位置と長さ計算
 
     '目標
     Private Property _b内側区分 As Boolean
@@ -76,6 +77,7 @@ Class clsCalcSquare45
     Public Sub Clear()
         p_b有効 = False
         p_sメッセージ = Nothing
+        p_s警告 = Nothing
 
         _b内側区分 = False
         _d横_目標 = -1
@@ -175,13 +177,21 @@ Class clsCalcSquare45
 
     ReadOnly Property p_d四角ベース_横 As Double
         Get
-            Return _d四角の対角線 * _i横の四角数
+            'Return _d四角の対角線 * _i横の四角数
+            If p_b長方形である Then
+                Return p_d底の横長
+            End If
+            Return -1
         End Get
     End Property
 
     ReadOnly Property p_d四角ベース_縦 As Double
         Get
-            Return _d四角の対角線 * _i縦の四角数
+            'Return _d四角の対角線 * _i縦の四角数
+            If p_b長方形である Then
+                Return p_d底の縦長
+            End If
+            Return -1
         End Get
     End Property
 
@@ -193,6 +203,9 @@ Class clsCalcSquare45
 
     ReadOnly Property p_d四角ベース_周 As Double
         Get
+            If p_d四角ベース_横 < 0 OrElse p_d四角ベース_縦 < 0 Then
+                Return -1
+            End If
             Return 2 * (p_d四角ベース_横 + p_d四角ベース_縦)
         End Get
     End Property
@@ -477,6 +490,7 @@ Class clsCalcSquare45
     Function CalcSize(ByVal category As CalcCategory, ByVal ctr As Object, ByVal key As Object) As Boolean
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CalcSize {0} {1} {2}", category, ctr, key)
 
+        p_s警告 = Nothing
         Dim ret As Boolean = True
         Select Case category
             Case CalcCategory.NewData, CalcCategory.BsMaster
@@ -1569,14 +1583,28 @@ Class clsCalcSquare45
         row = output.NextNewRow
         row.f_s色 = text横寸法()
         row.f_s本幅 = _i横の四角数
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_横)
-        row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_横)
+        If 0 <= p_d四角ベース_横 Then
+            row.f_sひも本数 = output.outLengthText(p_d四角ベース_横)
+            row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_横)
+        Else
+            row.f_s編みかた名 = output.outLengthText(p_d底の横長)
+            row.f_s編みひも名 = output.outLengthText(p_d底の横長(True))
+            row.f_i周数 = p_d底の角度(DirectionEnum._上)
+            row.f_i段数 = p_d底の角度(DirectionEnum._左)
+        End If
 
         row = output.NextNewRow
         row.f_s色 = text縦寸法()
         row.f_s本幅 = _i縦の四角数
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_縦)
-        row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_縦)
+        If 0 <= p_d四角ベース_縦 Then
+            row.f_sひも本数 = output.outLengthText(p_d四角ベース_縦)
+            row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_縦)
+        Else
+            row.f_s編みかた名 = output.outLengthText(p_d底の縦長)
+            row.f_s編みひも名 = output.outLengthText(p_d底の縦長(True))
+            row.f_i周数 = p_d底の角度(DirectionEnum._下)
+            row.f_i段数 = p_d底の角度(DirectionEnum._右)
+        End If
 
         row = output.NextNewRow
         row.f_s色 = text高さ寸法()

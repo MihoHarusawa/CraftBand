@@ -8,7 +8,6 @@ Partial Public Class clsCalcSquare45
 
     '1～p_iひもの本数
     Dim _BandPositions(cExpandCount - 1) As CBandPositionList
-
     '底の形状
     Dim _a底領域 As S四隅
 
@@ -31,7 +30,7 @@ Partial Public Class clsCalcSquare45
     ReadOnly Property p_b本幅変更あり As Boolean
         Get
             If _b縦横を展開する Then
-                Return _BandPositions(emExp._Yoko)._本幅変更あり AndAlso
+                Return _BandPositions(emExp._Yoko)._本幅変更あり OrElse
                  _BandPositions(emExp._Tate)._本幅変更あり
             Else
                 Return False
@@ -248,6 +247,13 @@ Partial Public Class clsCalcSquare45
             '315度は縦
             _BandPositions(emExp._Tate).Set補強ひも長(1, BC.Length)
             _BandPositions(emExp._Tate).Set補強ひも長(2, AD.Length)
+
+            '
+            If Not p_b長方形である Then
+                '底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1})
+                p_s警告 = String.Format(My.Resources.CalcNoRectanble,
+                        p_d底の横長, p_d底の横長(True), p_d底の縦長, p_d底の縦長(True))
+            End If
 
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList={0}", _BandPositions(emExp._Yoko).ToString)
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList={0}", _BandPositions(emExp._Tate).ToString)
