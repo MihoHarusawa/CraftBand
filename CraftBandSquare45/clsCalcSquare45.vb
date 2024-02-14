@@ -502,6 +502,7 @@ Class clsCalcSquare45
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
                 ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
                 If ret Then
                     p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
                     If Not String.IsNullOrEmpty(p_sメッセージ) Then
@@ -518,33 +519,38 @@ Class clsCalcSquare45
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
                 ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
         '四角数のタブ内
             Case CalcCategory.Square_Add     'ひも長係数,ひも長加算
                 ret = ret And set_四角数()
                 ret = ret AndAlso calc_位置と長さ計算(False)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
             Case CalcCategory.Square_TateYokoGap 'ひも間のすき間・横の四角数・縦の四角数
                 ret = ret And set_四角数()
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
                 ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
             Case CalcCategory.Square_Vert '四角数タブ高さ
                 ret = ret And set_四角数()
                 ret = ret AndAlso calc_位置と長さ計算(False)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
             Case CalcCategory.Square_Expand '四角数タブ縦横展開
                 ret = ret And set_四角数()
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
                 ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
         '以下、row指定がある場合は、そのタブが表示された状態
             Case CalcCategory.Edge  '縁の始末
                 Dim row As tbl側面Row = CType(ctr, tbl側面Row)
                 ret = ret And calc_側面(category, row, key)
-                ret = ret AndAlso calc_位置と長さ計算(False)
+                ret = ret AndAlso calc_位置と長さ計算(False) '縁
 
             Case CalcCategory.UpDown 'ひも上下
                 '(ひも上下は計算寸法変更なし)
@@ -561,12 +567,14 @@ Class clsCalcSquare45
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
                 If adjust_ひも(row, key) Then
                     ret = ret And calc_位置と長さ計算(True)
+                    ret = ret And calc_側面(category, Nothing, Nothing) '周長
                 End If
 
             Case CalcCategory.Expand_Tate  '縦ひも展開のセル編集
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
                 If adjust_ひも(row, key) Then
                     ret = ret And calc_位置と長さ計算(True)
+                    ret = ret And calc_側面(category, Nothing, Nothing) '周長
                 End If
 
             Case Else
@@ -951,7 +959,11 @@ Class clsCalcSquare45
 
         'マスタ参照なし
         For Each drow As clsDataRow In groupRow
-            drow.Value("f_d周長") = p_d四角ベース_周 * drow.Value("f_d周長比率対底の周")
+            If p_d四角ベース_周 < 0 Then
+                drow.Value("f_d周長") = 0
+            Else
+                drow.Value("f_d周長") = p_d四角ベース_周 * drow.Value("f_d周長比率対底の周")
+            End If
         Next
 
         'tbl編みかたRow
