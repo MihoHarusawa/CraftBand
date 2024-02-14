@@ -319,7 +319,7 @@ Public Class CImageDraw
                     ret = ret And draw底枠(item)
 
                 Case ImageTypeEnum._全体枠
-                    'ret = ret And draw全体枠(item)
+                    ret = ret And draw全体枠(item)
 
                 Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
                     ret = ret And draw側面(item)
@@ -590,7 +590,7 @@ Public Class CImageDraw
 
     Function draw全体枠(ByVal item As clsImageItem) As Boolean
         Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        _Graphic.DrawLines(_Pen_black_thin, points)
+        _Graphic.DrawLines(_Pen_black_dot, points)
         Return True
     End Function
 

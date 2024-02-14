@@ -3,6 +3,7 @@
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
@@ -99,10 +100,14 @@ Class clsCalcSquare45
         _d縁の垂直ひも長 = 0
         _d縁の厚さ = 0
 
-        imageDataClear()
-
         _tbl縦横展開(emExp._Yoko).Clear()
         _tbl縦横展開(emExp._Tate).Clear()
+
+        'clsCalcSquare45Image.vb
+        _BandPositions(emExp._Yoko).Clear()
+        _BandPositions(emExp._Tate).Clear()
+        _a底領域.Empty()
+
     End Sub
 
 #Region "プロパティ値"
@@ -434,9 +439,16 @@ Class clsCalcSquare45
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("{0}({1}){2}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ).AppendLine()
         sb.AppendFormat("Target:({0},{1},{2}) Lane({3})", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅).AppendLine()
-        sb.AppendFormat("Unit: band({0}/{1}) square({2}/{3})", _dひも幅の一辺, _dひも幅の対角線, _d四角の一辺, _d四角の対角線).AppendLine()
-        sb.AppendFormat("Square: W({0},{1}) D({2},{3}) H({4},{5}) ", _i横の四角数, p_d四角ベース_横, _i縦の四角数, p_d四角ベース_縦, _d高さの四角数, p_d四角ベース_高さ).AppendLine()
+        sb.AppendFormat("Unit: band({0:f3}/{1:f3}) square({2:f3}/{3:f3})", _dひも幅の一辺, _dひも幅の対角線, _d四角の一辺, _d四角の対角線).AppendLine()
+        sb.AppendFormat("Square: W({0:f3}, {1:f3}) D({2:f3}, {3:f3}) H({4:f3}, {5:f3}) ", _i横の四角数, p_d四角ベース_横, _i縦の四角数, p_d四角ベース_縦, _d高さの四角数, p_d四角ベース_高さ).AppendLine()
         sb.AppendFormat("Edge:H({0}) VerticalLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
+
+        sb.AppendFormat("WidthChange({0}) IsRectangle({1}) {2}", p_b本幅変更あり, p_b長方形である, _a底領域).AppendLine()
+        sb.AppendFormat("Up{0:f3}° Left{1:f3}° Bottom{2:f3}° Right{3:f3}°",
+                        p_d底の角度(DirectionEnum._上), p_d底の角度(DirectionEnum._左),
+                        p_d底の角度(DirectionEnum._下), p_d底の角度(DirectionEnum._右)).AppendLine()
+        sb.AppendFormat("Bottom H:{0:f3} {1:f3}  D:{2:f3} {3:f3}", p_d底の横長, p_d底の横長(True), p_d底の縦長, p_d底の縦長(True))
+
         Return sb.ToString
     End Function
 
@@ -1271,6 +1283,8 @@ Class clsCalcSquare45
         End If
 
         '本幅の変更、もしくは再計算
+        'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
+        'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
         With row
             .f_d幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間
             If is補強ひも(row) Then
@@ -1329,7 +1343,7 @@ Class clsCalcSquare45
             row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _dひも間のすき間
 
         Next
-        '以降は裏側, ひも長は未展開値
+        '以降は裏側
         Dim pos As Integer = cBackPosition
         If _Data.p_row底_縦横.Value(_補強フィールド名(dir)) Then
             For idx As Integer = 1 To 2
@@ -1339,15 +1353,10 @@ Class clsCalcSquare45
                 row.f_sひも名 = text縦の補強ひも()
                 If dir = emExp._Yoko Then
                     row.f_sひも名 = text横の補強ひも()
-                    row.f_d長さ = p_d四角ベース_横
-                    row.f_dひも長 = p_d四角ベース_横
                 ElseIf dir = emExp._Tate Then
                     row.f_sひも名 = text縦の補強ひも()
-                    row.f_d長さ = p_d四角ベース_縦
-                    row.f_dひも長 = p_d四角ベース_縦
                 End If
                 row.f_i何本幅 = _I基本のひも幅
-                row.f_d出力ひも長 = row.f_dひも長
 
                 pos += 1
             Next
@@ -1368,7 +1377,7 @@ Class clsCalcSquare45
             _Data.ToTmpTable(_保存のひも種(dir), table)
         End If
 
-        Return _BandPositions(dir).SetTable(table, p_iひもの本数, p_i縦横四角数の小さい方, p_i縦横四角数の差, p_b横の四角数が縦以上)
+        Return _BandPositions(dir).SetTable(table, p_iひもの本数)
     End Function
 
 

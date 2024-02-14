@@ -121,6 +121,41 @@ Public Class clsImageItem
             Return New S差分(x, y)
         End Function
 
+        '長さ
+        Property Length() As Double
+            Get
+                If IsZero Then
+                    Return 0
+                End If
+                Return Math.Sqrt(dX * dX + dY * dY)
+            End Get
+            Set(value As Double)
+                If value = 0 Then
+                    Zero()
+                ElseIf IsZero Then
+                    '方向が決まらないが、単位化しておく
+                    dX = value
+                ElseIf dX = 0 Then
+                    dY = IIf(0 < dY, value, -value)
+                ElseIf dY = 0 Then
+                    dX = IIf(0 < dX, value, -value)
+                Else
+                    Dim ratio As Double = value / Math.Sqrt(dX * dX + dY * dY)
+                    dX *= ratio
+                    dY *= ratio
+                End If
+            End Set
+        End Property
+
+        'X軸からの角度
+        Function Angle() As Double
+            If IsZero Then
+                Return 0
+            End If
+            Dim angleRad As Double = System.Math.Atan2(dY, dX)
+            Return angleRad * (180 / System.Math.PI)
+        End Function
+
         '単項-演算子(マイナス符号)
         Shared Operator -(ByVal c As S差分) As S差分
             Return New S差分(-c.dX, -c.dY)
