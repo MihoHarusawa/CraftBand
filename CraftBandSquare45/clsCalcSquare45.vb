@@ -1,13 +1,9 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Reflection.Metadata.Ecma335
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
-Imports CraftBand.ctrEditUpDown
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -16,7 +12,7 @@ Class clsCalcSquare45
     Const ROOT2 As Double = 1.41421356237
 
     '横と縦の展開
-    Enum enumExpandDirection
+    Enum emExp
         _Yoko = 0
         _Tate = 1
     End Enum
@@ -105,8 +101,8 @@ Class clsCalcSquare45
 
         imageDataClear()
 
-        _tbl縦横展開(enumExpandDirection._Yoko).Clear()
-        _tbl縦横展開(enumExpandDirection._Tate).Clear()
+        _tbl縦横展開(emExp._Yoko).Clear()
+        _tbl縦横展開(emExp._Tate).Clear()
     End Sub
 
 #Region "プロパティ値"
@@ -427,9 +423,9 @@ Class clsCalcSquare45
         Next
 
         sb.AppendLine("_BandPositions:_Yoko")
-        sb.AppendLine(_BandPositions(enumExpandDirection._Yoko).ToString)
+        sb.AppendLine(_BandPositions(emExp._Yoko).ToString)
         sb.AppendLine("_BandPositions:_Tate")
-        sb.AppendLine(_BandPositions(enumExpandDirection._Tate).ToString)
+        sb.AppendLine(_BandPositions(emExp._Tate).ToString)
 
         Return sb.ToString
     End Function
@@ -456,12 +452,12 @@ Class clsCalcSquare45
         _frmMain = frm
 
         '最初に1点だけ作っておく。以降は存在が前提
-        _tbl縦横展開(enumExpandDirection._Yoko) = New tbl縦横展開DataTable
-        _tbl縦横展開(enumExpandDirection._Tate) = New tbl縦横展開DataTable
+        _tbl縦横展開(emExp._Yoko) = New tbl縦横展開DataTable
+        _tbl縦横展開(emExp._Tate) = New tbl縦横展開DataTable
 
         'clsCalcSquare45Image
-        _BandPositions(enumExpandDirection._Yoko) = New CBandPositionList(enumExpandDirection._Yoko)
-        _BandPositions(enumExpandDirection._Tate) = New CBandPositionList(enumExpandDirection._Tate)
+        _BandPositions(emExp._Yoko) = New CBandPositionList(emExp._Yoko)
+        _BandPositions(emExp._Tate) = New CBandPositionList(emExp._Tate)
 
         Clear()
     End Sub
@@ -479,7 +475,7 @@ Class clsCalcSquare45
                 ret = ret And calc_側面(category, Nothing, Nothing) '縁の始末
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
-                ret = ret And calc_位置と長さ計算(True)
+                ret = ret AndAlso calc_位置と長さ計算(True)
                 If ret Then
                     p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
                     If Not String.IsNullOrEmpty(p_sメッセージ) Then
@@ -495,34 +491,34 @@ Class clsCalcSquare45
                 ret = set_目標寸法(False)
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
-                ret = ret And calc_位置と長さ計算(True)
+                ret = ret AndAlso calc_位置と長さ計算(True)
 
         '四角数のタブ内
             Case CalcCategory.Square_Add     'ひも長係数,ひも長加算
                 ret = ret And set_四角数()
-                ret = ret And calc_位置と長さ計算(False)
+                ret = ret AndAlso calc_位置と長さ計算(False)
 
             Case CalcCategory.Square_TateYokoGap 'ひも間のすき間・横の四角数・縦の四角数
                 ret = ret And set_四角数()
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
-                ret = ret And calc_位置と長さ計算(True)
+                ret = ret AndAlso calc_位置と長さ計算(True)
 
             Case CalcCategory.Square_Vert '四角数タブ高さ
                 ret = ret And set_四角数()
-                ret = ret And calc_位置と長さ計算(False)
+                ret = ret AndAlso calc_位置と長さ計算(False)
 
             Case CalcCategory.Square_Expand '四角数タブ縦横展開
                 ret = ret And set_四角数()
                 ret = ret And renew_横ひも展開(category)
                 ret = ret And renew_縦ひも展開(category)
-                ret = ret And calc_位置と長さ計算(True)
+                ret = ret AndAlso calc_位置と長さ計算(True)
 
         '以下、row指定がある場合は、そのタブが表示された状態
             Case CalcCategory.Edge  '縁の始末
                 Dim row As tbl側面Row = CType(ctr, tbl側面Row)
                 ret = ret And calc_側面(category, row, key)
-                ret = ret And calc_位置と長さ計算(False)
+                ret = ret AndAlso calc_位置と長さ計算(False)
 
             Case CalcCategory.UpDown 'ひも上下
                 '(ひも上下は計算寸法変更なし)
@@ -1179,15 +1175,15 @@ Class clsCalcSquare45
 
     '横ひもの_tbl縦横展開 を取得。isReset=Trueでリセット
     Function get横展開DataTable(Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
-        Return get展開DataTable(enumExpandDirection._Yoko, isReset)
+        Return get展開DataTable(emExp._Yoko, isReset)
     End Function
 
     '縦ひもの_tbl縦横展開 を取得。isReset=Trueでリセット
     Function get縦展開DataTable(Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
-        Return get展開DataTable(enumExpandDirection._Tate, isReset)
+        Return get展開DataTable(emExp._Tate, isReset)
     End Function
 
-    Private Function get展開DataTable(ByVal dir As enumExpandDirection, ByVal isReset As Boolean) As tbl縦横展開DataTable
+    Private Function get展開DataTable(ByVal dir As emExp, ByVal isReset As Boolean) As tbl縦横展開DataTable
         If isReset Then
             _Data.Removeひも種Rows(_保存のひも種(dir))
             renew展開DataTable(dir, False) '既存反映なし・サイズは同じ
@@ -1199,15 +1195,15 @@ Class clsCalcSquare45
 
     '横ひもの編集完了,_tbl縦横展開_横ひもを_Dataに反映
     Function save横展開DataTable(Optional ByVal always As Boolean = False) As Boolean
-        Return save展開DataTable(enumExpandDirection._Yoko, always)
+        Return save展開DataTable(emExp._Yoko, always)
     End Function
 
     '縦ひもの編集完了,_tbl縦横展開_縦ひもを_Dataに反映
     Function save縦展開DataTable(Optional ByVal always As Boolean = False) As Boolean
-        Return save展開DataTable(enumExpandDirection._Tate, always)
+        Return save展開DataTable(emExp._Tate, always)
     End Function
 
-    Private Function save展開DataTable(ByVal dir As enumExpandDirection, ByVal always As Boolean) As Boolean
+    Private Function save展開DataTable(ByVal dir As emExp, ByVal always As Boolean) As Boolean
         Try
             If always OrElse _tbl縦横展開(dir).GetChanges IsNot Nothing Then
                 Dim change As Integer = _Data.FromTmpTable(_保存のひも種(dir), _tbl縦横展開(dir))
@@ -1224,7 +1220,7 @@ Class clsCalcSquare45
     '縦横を展開したtbl縦横展開DataTableのレコードの初期化(なければ作成)
     Function prepare縦横展開DataTable() As Boolean
         Try
-            For Each dir As enumExpandDirection In [Enum].GetValues(GetType(enumExpandDirection))
+            For Each dir As emExp In [Enum].GetValues(GetType(emExp))
                 Dim table As tbl縦横展開DataTable = _tbl縦横展開(dir)
                 _Data.FromTmpTable(_保存のひも種(dir), table)
             Next
@@ -1240,7 +1236,7 @@ Class clsCalcSquare45
     'IN:_b縦横側面を展開する
     'OUT:_tbl縦横展開(横ひも)の縦横四角数に合わせたサイズ確定・長さは未セット
     Function renew_横ひも展開(ByVal category As CalcCategory) As Boolean
-        Return renew展開DataTable(enumExpandDirection._Yoko, _b縦横を展開する)
+        Return renew展開DataTable(emExp._Yoko, _b縦横を展開する)
     End Function
 
 
@@ -1248,7 +1244,7 @@ Class clsCalcSquare45
     'IN:_b縦横側面を展開する
     'OUT:_tbl縦横展開(縦ひも)の縦横四角数に合わせたサイズ確定・長さは未セット
     Function renew_縦ひも展開(ByVal category As CalcCategory) As Boolean
-        Return renew展開DataTable(enumExpandDirection._Tate, _b縦横を展開する)
+        Return renew展開DataTable(emExp._Tate, _b縦横を展開する)
     End Function
 
 
@@ -1307,7 +1303,7 @@ Class clsCalcSquare45
     '要計算:f_d長さ
     '入力値:f_s色,f_dひも長加算,f_i何本幅,f_dひも長加算2(使わない)
     '入力・計算後に再セット:f_d幅,f_dひも長,f_d出力ひも長
-    Function renew展開DataTable(ByVal dir As enumExpandDirection, ByVal isRefSaved As Boolean) As Boolean
+    Function renew展開DataTable(ByVal dir As emExp, ByVal isRefSaved As Boolean) As Boolean
         Dim table As tbl縦横展開DataTable = _tbl縦横展開(dir)
 
         If Not isRefSaved Then
@@ -1324,9 +1320,9 @@ Class clsCalcSquare45
             row = Find縦横展開Row(table, _処理のひも種(dir), idx, True)
 
             row.f_i位置番号 = p_i位置番号(idx)
-            If dir = enumExpandDirection._Yoko Then
+            If dir = emExp._Yoko Then
                 row.f_sひも名 = text横ひも()
-            ElseIf dir = enumExpandDirection._Tate Then
+            ElseIf dir = emExp._Tate Then
                 row.f_sひも名 = text縦ひも()
             End If
             row.f_i何本幅 = _I基本のひも幅   '保存対象
@@ -1341,11 +1337,11 @@ Class clsCalcSquare45
 
                 row.f_i位置番号 = pos
                 row.f_sひも名 = text縦の補強ひも()
-                If dir = enumExpandDirection._Yoko Then
+                If dir = emExp._Yoko Then
                     row.f_sひも名 = text横の補強ひも()
                     row.f_d長さ = p_d四角ベース_横
                     row.f_dひも長 = p_d四角ベース_横
-                ElseIf dir = enumExpandDirection._Tate Then
+                ElseIf dir = emExp._Tate Then
                     row.f_sひも名 = text縦の補強ひも()
                     row.f_d長さ = p_d四角ベース_縦
                     row.f_dひも長 = p_d四角ベース_縦
@@ -1372,7 +1368,7 @@ Class clsCalcSquare45
             _Data.ToTmpTable(_保存のひも種(dir), table)
         End If
 
-        Return _BandPositions(dir).SetTable(table, p_iひもの本数)
+        Return _BandPositions(dir).SetTable(table, p_iひもの本数, p_i縦横四角数の小さい方, p_i縦横四角数の差, p_b横の四角数が縦以上)
     End Function
 
 

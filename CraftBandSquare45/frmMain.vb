@@ -391,7 +391,7 @@ Public Class frmMain
 
     Private Sub Disp計算結果(ByVal calc As clsCalcSquare45)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp計算結果 {0}", calc.dump())
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp計算結果 {0}", calc.dump())
         With calc
             '
             txt横ひもの本数.Text = .p_i横ひもの本数
