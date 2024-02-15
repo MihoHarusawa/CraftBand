@@ -234,11 +234,12 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
+        grp楕円底個別設定 = New GroupBox()
+        lbl楕円底周の加算_単位 = New Label()
+        lbl楕円底円弧の半径加算_単位 = New Label()
         lbl作成者 = New Label()
         lblタイトル = New Label()
         lblメモ = New Label()
-        lbl楕円底周の加算_単位 = New Label()
-        lbl楕円底円弧の半径加算_単位 = New Label()
         tpage横ひも = New TabPage()
         expand横ひも = New CraftBand.ctrExpanding()
         tpage縦ひも = New TabPage()
@@ -328,6 +329,7 @@ Partial Class frmMain
         CType(BindingSource側面, ComponentModel.ISupportInitialize).BeginInit()
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
+        grp楕円底個別設定.SuspendLayout()
         tpage横ひも.SuspendLayout()
         tpage縦ひも.SuspendLayout()
         tpageプレビュー.SuspendLayout()
@@ -762,7 +764,7 @@ Partial Class frmMain
         ' chk楕円底個別設定
         ' 
         chk楕円底個別設定.AutoSize = True
-        chk楕円底個別設定.Location = New Point(22, 16)
+        chk楕円底個別設定.Location = New Point(102, 24)
         chk楕円底個別設定.Name = "chk楕円底個別設定"
         chk楕円底個別設定.Size = New Size(136, 24)
         chk楕円底個別設定.TabIndex = 0
@@ -775,7 +777,7 @@ Partial Class frmMain
         nud楕円底円弧の半径加算.DecimalPlaces = 2
         nud楕円底円弧の半径加算.Enabled = False
         nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底円弧の半径加算.Location = New Point(368, 29)
+        nud楕円底円弧の半径加算.Location = New Point(413, 23)
         nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud楕円底円弧の半径加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nud楕円底円弧の半径加算.Name = "nud楕円底円弧の半径加算"
@@ -787,7 +789,7 @@ Partial Class frmMain
         ' lbl楕円底円弧の半径加算
         ' 
         lbl楕円底円弧の半径加算.AutoSize = True
-        lbl楕円底円弧の半径加算.Location = New Point(202, 33)
+        lbl楕円底円弧の半径加算.Location = New Point(247, 27)
         lbl楕円底円弧の半径加算.Name = "lbl楕円底円弧の半径加算"
         lbl楕円底円弧の半径加算.Size = New Size(156, 20)
         lbl楕円底円弧の半径加算.TabIndex = 1
@@ -799,7 +801,7 @@ Partial Class frmMain
         nud楕円底周の加算.DecimalPlaces = 2
         nud楕円底周の加算.Enabled = False
         nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底周の加算.Location = New Point(654, 29)
+        nud楕円底周の加算.Location = New Point(664, 23)
         nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud楕円底周の加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nud楕円底周の加算.Name = "nud楕円底周の加算"
@@ -811,7 +813,7 @@ Partial Class frmMain
         ' lbl楕円底周の加算
         ' 
         lbl楕円底周の加算.AutoSize = True
-        lbl楕円底周の加算.Location = New Point(523, 33)
+        lbl楕円底周の加算.Location = New Point(533, 27)
         lbl楕円底周の加算.Name = "lbl楕円底周の加算"
         lbl楕円底周の加算.Size = New Size(111, 20)
         lbl楕円底周の加算.TabIndex = 4
@@ -1052,31 +1054,31 @@ Partial Class frmMain
         ' txtメモ
         ' 
         txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(24, 218)
+        txtメモ.Location = New Point(24, 148)
         txtメモ.Multiline = True
         txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 175)
-        txtメモ.TabIndex = 12
+        txtメモ.Size = New Size(794, 185)
+        txtメモ.TabIndex = 5
         ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
         ' 
         ' txt作成者
         ' 
         txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(128, 152)
+        txt作成者.Location = New Point(128, 82)
         txt作成者.Multiline = True
         txt作成者.Name = "txt作成者"
         txt作成者.Size = New Size(690, 49)
-        txt作成者.TabIndex = 10
+        txt作成者.TabIndex = 3
         ToolTip1.SetToolTip(txt作成者, "作成者情報")
         ' 
         ' txtタイトル
         ' 
         txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(128, 88)
+        txtタイトル.Location = New Point(128, 18)
         txtタイトル.Multiline = True
         txtタイトル.Name = "txtタイトル"
         txtタイトル.Size = New Size(690, 49)
-        txtタイトル.TabIndex = 8
+        txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
         ' MenuStrip1
@@ -2165,18 +2167,12 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
+        tpageメモ他.Controls.Add(grp楕円底個別設定)
         tpageメモ他.Controls.Add(txt作成者)
         tpageメモ他.Controls.Add(txtタイトル)
         tpageメモ他.Controls.Add(lbl作成者)
         tpageメモ他.Controls.Add(lblタイトル)
         tpageメモ他.Controls.Add(lblメモ)
-        tpageメモ他.Controls.Add(nud楕円底周の加算)
-        tpageメモ他.Controls.Add(lbl楕円底周の加算_単位)
-        tpageメモ他.Controls.Add(lbl楕円底周の加算)
-        tpageメモ他.Controls.Add(nud楕円底円弧の半径加算)
-        tpageメモ他.Controls.Add(lbl楕円底円弧の半径加算_単位)
-        tpageメモ他.Controls.Add(lbl楕円底円弧の半径加算)
-        tpageメモ他.Controls.Add(chk楕円底個別設定)
         tpageメモ他.Controls.Add(txtメモ)
         tpageメモ他.Location = New Point(4, 29)
         tpageメモ他.Name = "tpageメモ他"
@@ -2186,37 +2182,27 @@ Partial Class frmMain
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
         ' 
-        ' lbl作成者
+        ' grp楕円底個別設定
         ' 
-        lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(26, 152)
-        lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(54, 20)
-        lbl作成者.TabIndex = 9
-        lbl作成者.Text = "作成者"
-        ' 
-        ' lblタイトル
-        ' 
-        lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(26, 88)
-        lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(53, 20)
-        lblタイトル.TabIndex = 7
-        lblタイトル.Text = "タイトル"
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 190)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(31, 20)
-        lblメモ.TabIndex = 11
-        lblメモ.Text = "メモ"
+        grp楕円底個別設定.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        grp楕円底個別設定.Controls.Add(nud楕円底周の加算)
+        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算_単位)
+        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算)
+        grp楕円底個別設定.Controls.Add(nud楕円底円弧の半径加算)
+        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算_単位)
+        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算)
+        grp楕円底個別設定.Controls.Add(chk楕円底個別設定)
+        grp楕円底個別設定.Location = New Point(26, 339)
+        grp楕円底個別設定.Name = "grp楕円底個別設定"
+        grp楕円底個別設定.Size = New Size(792, 61)
+        grp楕円底個別設定.TabIndex = 6
+        grp楕円底個別設定.TabStop = False
+        grp楕円底個別設定.Text = "楕円底"
         ' 
         ' lbl楕円底周の加算_単位
         ' 
         lbl楕円底周の加算_単位.AutoSize = True
-        lbl楕円底周の加算_単位.Location = New Point(728, 33)
+        lbl楕円底周の加算_単位.Location = New Point(738, 27)
         lbl楕円底周の加算_単位.Name = "lbl楕円底周の加算_単位"
         lbl楕円底周の加算_単位.Size = New Size(35, 20)
         lbl楕円底周の加算_単位.TabIndex = 6
@@ -2225,11 +2211,38 @@ Partial Class frmMain
         ' lbl楕円底円弧の半径加算_単位
         ' 
         lbl楕円底円弧の半径加算_単位.AutoSize = True
-        lbl楕円底円弧の半径加算_単位.Location = New Point(442, 33)
+        lbl楕円底円弧の半径加算_単位.Location = New Point(487, 27)
         lbl楕円底円弧の半径加算_単位.Name = "lbl楕円底円弧の半径加算_単位"
         lbl楕円底円弧の半径加算_単位.Size = New Size(35, 20)
         lbl楕円底円弧の半径加算_単位.TabIndex = 3
         lbl楕円底円弧の半径加算_単位.Text = "mm"
+        ' 
+        ' lbl作成者
+        ' 
+        lbl作成者.AutoSize = True
+        lbl作成者.Location = New Point(26, 82)
+        lbl作成者.Name = "lbl作成者"
+        lbl作成者.Size = New Size(54, 20)
+        lbl作成者.TabIndex = 2
+        lbl作成者.Text = "作成者"
+        ' 
+        ' lblタイトル
+        ' 
+        lblタイトル.AutoSize = True
+        lblタイトル.Location = New Point(26, 18)
+        lblタイトル.Name = "lblタイトル"
+        lblタイトル.Size = New Size(53, 20)
+        lblタイトル.TabIndex = 0
+        lblタイトル.Text = "タイトル"
+        ' 
+        ' lblメモ
+        ' 
+        lblメモ.AutoSize = True
+        lblメモ.Location = New Point(24, 120)
+        lblメモ.Name = "lblメモ"
+        lblメモ.Size = New Size(31, 20)
+        lblメモ.TabIndex = 4
+        lblメモ.Text = "メモ"
         ' 
         ' tpage横ひも
         ' 
@@ -2933,6 +2946,8 @@ Partial Class frmMain
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
         tpageメモ他.PerformLayout()
+        grp楕円底個別設定.ResumeLayout(False)
+        grp楕円底個別設定.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage縦ひも.ResumeLayout(False)
         tpageプレビュー.ResumeLayout(False)
@@ -3168,6 +3183,7 @@ Partial Class frmMain
     Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
+    Friend WithEvents grp楕円底個別設定 As GroupBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

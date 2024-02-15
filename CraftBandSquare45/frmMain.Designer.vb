@@ -1485,7 +1485,7 @@ Partial Class frmMain
         ' lblメモ
         ' 
         lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 120)
+        lblメモ.Location = New Point(24, 119)
         lblメモ.Name = "lblメモ"
         lblメモ.Size = New Size(31, 20)
         lblメモ.TabIndex = 4
