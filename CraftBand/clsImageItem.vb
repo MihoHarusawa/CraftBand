@@ -1096,20 +1096,6 @@ Public Class clsImageItemList
         Next
     End Sub
 
-    ''ワークテーブルを生成する
-    'Function NewTmpTable() As tbl縦横展開DataTable
-    '    'ワークテーブル作成
-    '    Dim tmptable As New tbl縦横展開DataTable
-    '    'レコード追加
-    '    For Each band As clsImageItem In Me
-    '        If band.m_row縦横展開 Is Nothing Then
-    '            Continue For
-    '        End If
-    '        tmptable.ImportRow(band.m_row縦横展開)
-    '    Next
-    '    Return tmptable
-    'End Function
-
     '要素追加
     Sub AddItem(ByVal item As clsImageItem)
         If item IsNot Nothing Then
