@@ -363,6 +363,7 @@ Partial Class frmOptions
         Me.f_bCraftBandHexagon.MinimumWidth = 6
         Me.f_bCraftBandHexagon.Name = "f_bCraftBandHexagon"
         Me.f_bCraftBandHexagon.ToolTipText = "CraftBandHexagonで使用する"
+        Me.f_bCraftBandHexagon.Visible = False
         Me.f_bCraftBandHexagon.Width = 125
         '
         'f_s備考
