@@ -610,7 +610,7 @@ Partial Public Class clsCalcSquare45
         '基本のひも幅と基本色
         imgData.setBasics(_dひも幅の一辺, _Data.p_row目標寸法.Value("f_s基本色"))
 
-        If _Data.p_row底_縦横.Value("f_b展開区分") Then
+        If _b縦横を展開する Then
             '描画用のデータ追加
             regionUpDown底(_ImageList横ひも, _ImageList縦ひも)
         End If

@@ -434,7 +434,10 @@ Partial Public Class clsCalcMesh
         '描画用のデータ追加
         imageList横ひも()
         imageList縦ひも()
-        regionUpDown底(_ImageList横ひも, _ImageList縦ひも)
+        If _Data.p_row底_縦横.Value("f_b展開区分") Then
+            '描画用のデータ追加
+            regionUpDown底(_ImageList横ひも, _ImageList縦ひも)
+        End If
 
         _imageList側面編みかた = imageList側面編みかた(dひも幅)
         _ImageList描画要素 = imageList底と側面枠(dひも幅)
