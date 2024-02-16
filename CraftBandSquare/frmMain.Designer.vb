@@ -289,6 +289,8 @@ Partial Class frmMain
         CType(nud上端下端の目, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud最下段の目, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud編みひもの本数, ComponentModel.ISupportInitialize).BeginInit()
+        radおもて = New RadioButton()
+        radうら = New RadioButton()
         GroupBox1.SuspendLayout()
         MenuStrip1.SuspendLayout()
         grp目標寸法.SuspendLayout()
@@ -725,13 +727,37 @@ Partial Class frmMain
         txt縦横_目.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縦横_目, "縦横方向の目(すき間)")
         ' 
+        ' radおもて
+        ' 
+        radおもて.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        radおもて.AutoSize = True
+        radおもて.Checked = True
+        radおもて.Location = New Point(23, 372)
+        radおもて.Name = "radおもて"
+        radおもて.Size = New Size(64, 24)
+        radおもて.TabIndex = 0
+        radおもて.TabStop = True
+        radおもて.Text = "おもて"
+        radおもて.UseVisualStyleBackColor = True
+        ' 
+        ' radうら
+        ' 
+        radうら.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        radうら.AutoSize = True
+        radうら.Location = New Point(109, 372)
+        radうら.Name = "radうら"
+        radうら.Size = New Size(51, 24)
+        radうら.TabIndex = 1
+        radうら.Text = "うら"
+        radうら.UseVisualStyleBackColor = True
+        ' 
         ' btn画像ファイル
         ' 
         btn画像ファイル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         btn画像ファイル.Location = New Point(607, 361)
         btn画像ファイル.Name = "btn画像ファイル"
         btn画像ファイル.Size = New Size(111, 46)
-        btn画像ファイル.TabIndex = 0
+        btn画像ファイル.TabIndex = 2
         btn画像ファイル.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
         btn画像ファイル.UseVisualStyleBackColor = True
@@ -742,7 +768,7 @@ Partial Class frmMain
         btnブラウザ.Location = New Point(724, 361)
         btnブラウザ.Name = "btnブラウザ"
         btnブラウザ.Size = New Size(111, 46)
-        btnブラウザ.TabIndex = 1
+        btnブラウザ.TabIndex = 3
         btnブラウザ.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
         btnブラウザ.UseVisualStyleBackColor = True
@@ -1964,6 +1990,8 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
+        tpageプレビュー.Controls.Add(radうら)
+        tpageプレビュー.Controls.Add(radおもて)
         tpageプレビュー.Controls.Add(btn画像ファイル)
         tpageプレビュー.Controls.Add(btnブラウザ)
         tpageプレビュー.Controls.Add(picプレビュー)
@@ -2657,7 +2685,7 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleDimensions = New SizeF(8.0F, 20.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(886, 783)
         Controls.Add(lblひも本幅変更)
@@ -3012,4 +3040,6 @@ Partial Class frmMain
     Friend WithEvents f_s無効理由1 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
     Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
+    Friend WithEvents radうら As RadioButton
+    Friend WithEvents radおもて As RadioButton
 End Class

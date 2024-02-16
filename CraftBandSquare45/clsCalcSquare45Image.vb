@@ -577,7 +577,7 @@ Partial Public Class clsCalcSquare45
 
 
     'プレビュー処理
-    Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
+    Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -612,7 +612,7 @@ Partial Public Class clsCalcSquare45
 
         If _b縦横を展開する Then
             '描画用のデータ追加
-            regionUpDown底(_ImageList横ひも, _ImageList縦ひも)
+            regionUpDown底(_ImageList横ひも, _ImageList縦ひも, isBackFace)
         End If
 
         '中身を移動
@@ -745,7 +745,7 @@ Partial Public Class clsCalcSquare45
     Dim _CUpDown As New clsUpDown   'CheckBoxTableは使わない
 
     '底の上下をm_regionListにセット
-    Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList) As Boolean
+    Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList, ByVal isBackFace As Boolean) As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
             Return False
         End If
@@ -757,6 +757,10 @@ Partial Public Class clsCalcSquare45
         If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
             Return False
         End If
+        Dim revRange As Integer = -1
+        If isBackFace Then
+            revRange = p_i縦ひもの本数
+        End If
 
         For iTate As Integer = 1 To p_i縦ひもの本数
             Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
@@ -766,7 +770,7 @@ Partial Public Class clsCalcSquare45
             If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
 
             For iYoko As Integer = 1 To p_i横ひもの本数
-                If _CUpDown.GetIsDown(iTate, iYoko) Then
+                If _CUpDown.GetIsDown(iTate, iYoko, revRange) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
                     If itemYoko IsNot Nothing Then
                         itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
@@ -784,7 +788,7 @@ Partial Public Class clsCalcSquare45
             If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
 
             For iTate As Integer = 1 To p_i縦ひもの本数
-                If _CUpDown.GetIsUp(iTate, iYoko) Then
+                If _CUpDown.GetIsUp(iTate, iYoko, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
                     If itemTate IsNot Nothing Then
                         itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)

@@ -253,7 +253,7 @@ Public Class frmMain
             Case "tpage縦ひも"
                 Show縦ひも(works)
             Case "tpageプレビュー"
-                Showプレビュー(works)
+                Showプレビュー()
             Case "tpageひも上下"
                 Showひも上下(works)
             Case Else ' "tpageメモ他"
@@ -307,7 +307,7 @@ Public Class frmMain
             Case "tpage縦ひも"
                 Hide縦ひも(_clsDataTables)
             Case "tpageプレビュー"
-                Hideプレビュー(_clsDataTables)
+                Hideプレビュー()
             Case "tpageひも上下"
                 Hideひも上下(_clsDataTables)
             Case Else ' 
@@ -1356,7 +1356,7 @@ Public Class frmMain
 
 #Region "プレビュー"
     Dim _clsImageData As clsImageData
-    Private Sub Showプレビュー(works As clsDataTables)
+    Private Sub Showプレビュー()
         picプレビュー.Image = Nothing
         _clsImageData = Nothing
 
@@ -1367,19 +1367,30 @@ Public Class frmMain
             Return
         End If
 
+        Dim data As clsDataTables = _clsDataTables
+        Dim calc As clsCalcSquare45 = _clsCalcSquare45
+        Dim isBackFace As Boolean = False
+        If radうら.Checked Then
+            data = _clsDataTables.LeftSideRightData()
+            calc = New clsCalcSquare45(data, Me)
+            isBackFace = True
+            If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+                Return  '先にOKならOKのはずだが
+            End If
+        End If
         Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
-        ret = _clsCalcSquare45.CalcImage(_clsImageData)
+        ret = calc.CalcImage(_clsImageData, isBackFace)
         Cursor.Current = Cursors.Default
 
-        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcSquare45.p_sメッセージ) Then
-            MessageBox.Show(_clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
+            MessageBox.Show(calc.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
     End Sub
 
-    Private Sub Hideプレビュー(clsDataTables As clsDataTables)
+    Private Sub Hideプレビュー()
         picプレビュー.Image = Nothing
         If _clsImageData IsNot Nothing Then
             _clsImageData.Clear()
@@ -1391,7 +1402,7 @@ Public Class frmMain
         If _clsImageData Is Nothing Then
             Return
         End If
-        If Not _clsImageData.ImgBrowserOpen() Then
+        If Not _clsImageData.ImgBrowserOpen(radうら.Checked) Then
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
@@ -1404,6 +1415,14 @@ Public Class frmMain
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
+
+    Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged, radうら.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        Showプレビュー()
+    End Sub
+
 #End Region
 
 

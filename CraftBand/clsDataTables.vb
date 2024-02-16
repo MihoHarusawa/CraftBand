@@ -375,7 +375,68 @@ Public Class clsDataTables
         'tbl縦横展開は転送時に処理
     End Sub
 
+    '左右を反転したデータ
+    Public Function LeftSideRightData() As clsDataTables
+        Dim turn As New clsDataTables(Me)
 
+        '横に並ぶ縦ひもの数
+        Dim WCount As Integer = 0
+        Dim bExpand As Boolean
+
+        With p_row底_縦横
+            bExpand = .Value("f_b展開区分")
+
+            Select Case g_enumExeName
+                Case enumExeName.CraftBandMesh
+                    WCount = .Value("f_i縦ひもの本数")
+
+                Case enumExeName.CraftBandSquare45
+                    WCount = .Value("f_i横の四角数") + .Value("f_i縦の四角数")
+                    turn.p_row底_縦横.Value("f_i横の四角数") = .Value("f_i縦の四角数")
+                    turn.p_row底_縦横.Value("f_i縦の四角数") = .Value("f_i横の四角数")
+
+                Case enumExeName.CraftBandKnot
+                    WCount = .Value("f_i縦の四角数")
+
+                Case enumExeName.CraftBandSquare
+                    WCount = p_row底_縦横.Value("f_i縦ひもの本数")
+
+                Case enumExeName.CraftBandHexagon
+
+            End Select
+
+        End With
+
+        If WCount = 0 OrElse Not bExpand Then
+            Return turn
+        End If
+
+        '縦ひものみを入れ替えます(補強ひもは描かないので除外)
+        turn.p_tbl縦横展開.Clear()
+        For Each row As tbl縦横展開Row In p_tbl縦横展開
+            If row.f_iひも種 = enumひも種.i_縦 AndAlso
+                 0 <= row.f_iひも番号 AndAlso row.f_iひも番号 <= WCount Then
+
+                '番号を逆順にする
+                Dim tmp As tbl縦横展開Row = turn.p_tbl縦横展開.Newtbl縦横展開Row
+                tmp.f_iひも種 = enumひも種.i_縦
+                tmp.f_iひも番号 = WCount - row.f_iひも番号 + 1
+                '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
+                tmp.f_dひも長加算 = row.f_dひも長加算
+                tmp.f_dひも長加算2 = row.f_dひも長加算2
+                tmp.f_s色 = row.f_s色
+                tmp.f_sメモ = row.f_sメモ
+                tmp.f_i何本幅 = row.f_i何本幅
+                turn.p_tbl縦横展開.Rows.Add(tmp)
+            Else
+                'そのまま
+                turn.p_tbl縦横展開.ImportRow(row)
+            End If
+        Next
+        turn.p_tbl縦横展開.AcceptChanges()
+
+        Return turn
+    End Function
 
 
 #Region "編集による更新状態"

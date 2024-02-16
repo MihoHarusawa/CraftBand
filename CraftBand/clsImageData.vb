@@ -233,7 +233,7 @@ Public Class clsImageData
 
 
     'ブラウザで開く
-    Public Function ImgBrowserOpen() As Boolean
+    Public Function ImgBrowserOpen(Optional ByVal isBackFace As Boolean = False) As Boolean
         If String.IsNullOrWhiteSpace(GifFilePath) OrElse Not IO.File.Exists(GifFilePath) Then
             '画像ファイルが作られていません。
             _LastError = String.Format(My.Resources.ErrNoGifFile)
@@ -250,6 +250,9 @@ Public Class clsImageData
         End If
         If String.IsNullOrWhiteSpace(title) Then
             title = IO.Path.GetFileNameWithoutExtension(FilePath)
+        End If
+        If isBackFace Then
+            title = String.Format(My.Resources.TitleBackFace, title)
         End If
         If Not makeHtmlPage(htmlFile, GifFilePath, title) Then
             'LastErrorあり

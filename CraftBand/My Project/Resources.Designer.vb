@@ -958,6 +958,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  裏面 : {0} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property TitleBackFace() As String
+            Get
+                Return ResourceManager.GetString("TitleBackFace", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  上下図の登録 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property UpDownAppend() As String

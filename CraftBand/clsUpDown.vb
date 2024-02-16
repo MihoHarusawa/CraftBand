@@ -786,20 +786,40 @@ Public Class clsUpDown
     '※マトリクス部分のみを処理します
 
     '上値を取得 Idx は各、1～描画領域Count  ※HorizontalCount,VerticalCountの剰余値の値
-    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer, Optional upval As Boolean = True) As Boolean
+    'RangeRevertが1以上であれば、裏面としての値を返す(1～RangeRevertは逆位置)
+    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer,
+                     Optional ByVal RangeRevert1 As Integer = -1, Optional ByVal RangeRevert2 As Integer = -1) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
             Return False
         End If
-        'Dim hIdx As Integer = ((horzIdx - 1) Mod HorizontalCount) + 1
-        Dim hIdx As Integer = Modulo((horzIdx - 1), HorizontalCount) + 1
-        'Dim vIdx As Integer = ((vertIdx - 1) Mod VerticalCount) + 1
+        '縦方向はmod値
         Dim vIdx As Integer = Modulo((vertIdx - 1), VerticalCount) + 1
-        Return (_Matrix(hIdx, vIdx) = upval)
+
+        '横方向は、範囲指定があれば、範囲内は逆の位置
+        Dim hIdx As Integer
+        If 0 < RangeRevert1 Then
+            '位置を入れ替え、値を反転するか
+            If 1 <= horzIdx AndAlso horzIdx <= RangeRevert1 Then
+                '1番目の範囲内
+                hIdx = RangeRevert1 - horzIdx + 1
+            ElseIf RangeRevert1 + 1 <= horzIdx AndAlso horzIdx <= (RangeRevert1 + RangeRevert2) Then
+                '2番目の範囲内(RangeRevert2が1上でなければ含まれない
+                hIdx = (RangeRevert2 - (horzIdx - RangeRevert1) + 1) + RangeRevert1
+            Else
+                hIdx = horzIdx
+            End If
+            hIdx = Modulo((hIdx - 1), HorizontalCount) + 1
+            Return Not _Matrix(hIdx, vIdx)
+        Else
+            hIdx = Modulo((horzIdx - 1), HorizontalCount) + 1
+            Return _Matrix(hIdx, vIdx)
+        End If
     End Function
 
     '下値を取得
-    Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
-        Return GetIsUp(horzIdx, vertIdx, False)
+    Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer,
+                       Optional ByVal RangeRevert1 As Integer = -1, Optional ByVal RangeRevert2 As Integer = -1) As Boolean
+        Return Not GetIsUp(horzIdx, vertIdx, RangeRevert1, RangeRevert2)
     End Function
 
     '上値をセット 範囲内のIdxであること

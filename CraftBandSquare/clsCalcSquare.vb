@@ -898,9 +898,12 @@ Class clsCalcSquare
             RemoveNumberFromTable(table, cIdxSpace)
         End If
 
+
         If 0 < p_i側面ひもの本数 Then
+            Dim colnum1 As String = Nothing
+            Dim colafterempty As Boolean = True
+
             '「編みひも+目」のセット
-            Dim colprv As String = ""
             For i As Integer = 1 To p_i側面ひもの本数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -911,17 +914,15 @@ Class clsCalcSquare
                         row.f_i何本幅 = _I基本のひも幅
                         table.Rows.Add(row)
                     ElseIf i = 1 Then
-                        colprv = row.f_s色
+                        colnum1 = row.f_s色
                     End If
                     row.f_s編みかた名 = String.Format(My.Resources.FormCaption, "")
                     row.f_s編みひも名 = text側面の編みひも()
                     If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                         row.f_i周数 = 1
-                        If String.IsNullOrWhiteSpace(row.f_s色) Then
-                            row.f_s色 = colprv
-                        Else
-                            colprv = row.f_s色
+                        If 1 < i AndAlso Not String.IsNullOrWhiteSpace(row.f_s色) Then
+                            colafterempty = False
                         End If
                     Else
                         row.f_i何本幅 = _I基本のひも幅
@@ -944,6 +945,15 @@ Class clsCalcSquare
                     table.Rows.Remove(row)
                 End If
             Next
+
+            '_b縦横側面を展開する かつ ひも番号1のみに色がセットされている時は同色に
+            If _b縦横側面を展開する AndAlso Not String.IsNullOrWhiteSpace(colnum1) AndAlso colafterempty Then
+                For Each row In table
+                    If row.f_i番号 = cIdxHeight AndAlso String.IsNullOrWhiteSpace(row.f_s色) Then
+                        row.f_s色 = colnum1
+                    End If
+                Next
+            End If
 
         Else
             RemoveNumberFromTable(table, cIdxHeight)

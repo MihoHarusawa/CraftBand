@@ -505,6 +505,10 @@
     <value>列</value>
     <comment>clsUpDown</comment>
   </data>
+  <data name="TitleBackFace" xml:space="preserve">
+    <value>裏面 : {0}</value>
+    <comment>clsImageData</comment>
+  </data>
   <data name="UpDownAppend" xml:space="preserve">
     <value>上下図の登録</value>
     <comment>frmUpDownSetting</comment>
