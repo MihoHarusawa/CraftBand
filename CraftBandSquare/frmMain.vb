@@ -831,6 +831,8 @@ Public Class frmMain
         If showTabBase Then
             ShowDefaultTabControlPage(enumReason._Always)
         End If
+        '表面プレビュー
+        radおもて.Checked = True
     End Sub
 
     '新規作成

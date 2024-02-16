@@ -346,15 +346,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CraftBandInstaller"
-        "ProductCode" = "8:{D709982B-9A47-469F-82E8-E2521E393EA9}"
-        "PackageCode" = "8:{854F5941-EBFF-4663-9718-6235DA9B29C1}"
+        "ProductCode" = "8:{B8407974-9A62-499C-BF55-918856A91547}"
+        "PackageCode" = "8:{484261A0-EA87-4A7F-AF98-2667412F756F}"
         "UpgradeCode" = "8:{D3635BD8-65C1-4B9B-8056-CE5BCBA2A48B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.7.3"
+        "ProductVersion" = "8:1.7.4"
         "Manufacturer" = "8:LaboHarusawa"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://labo.com/CraftBand/"
@@ -924,7 +924,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1385C3F547C7477584B00EBE1D4EDE8A"
             {
-            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandSquare45\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -952,7 +952,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_78A87C30B2AE4895AF0A89109E0238A0"
             {
-            "SourcePath" = "8:..\\CraftBandSquare\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandSquare\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -980,7 +980,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D57943060661491BA0A72F1DB3F51124"
             {
-            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
@@ -1008,7 +1008,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E635C9954B404CD8982AC179860A9752"
             {
-            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\CraftBandKnot\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
