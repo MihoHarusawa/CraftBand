@@ -240,23 +240,23 @@ Public Class frmMain
 
         'タブページ名
         Select Case TabControl.SelectedTab.Name
-            Case "tpage四角数"
+            Case tpage四角数.Name
                 '
-            Case "tpage縁の始末"
+            Case tpage縁の始末.Name
                 Show側面(works)
-            Case "tpage追加品"
+            Case tpage追加品.Name
                 Show追加品(works)
-            Case "tpageメモ他"
+            Case tpageメモ他.Name
                 '
-            Case "tpage横ひも"
+            Case tpage横ひも.Name
                 Show横ひも(works)
-            Case "tpage縦ひも"
+            Case tpage縦ひも.Name
                 Show縦ひも(works)
-            Case "tpageプレビュー"
+            Case tpageプレビュー.Name
                 Showプレビュー()
-            Case "tpageひも上下"
+            Case tpageひも上下.Name
                 Showひも上下(works)
-            Case Else ' "tpageメモ他"
+            Case Else ' 
 
         End Select
         _CurrentTabControlName = TabControl.SelectedTab.Name
@@ -270,19 +270,22 @@ Public Class frmMain
         _Always = &H100 '#41
     End Enum
     Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
+        If _isLoadingData Then
+            Exit Sub
+        End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If reason.HasFlag(enumReason._GridDropdown) Then
-            If {"tpage縁の始末", "tpage追加品", "tpage横ひも", "tpage縦ひも"}.Contains(_CurrentTabControlName) Then
+            If {tpage縁の始末.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If reason.HasFlag(enumReason._Preview) Then
-            If {"tpageプレビュー", "tpageひも上下"}.Contains(_CurrentTabControlName) Then
+            If {tpageプレビュー.Name, tpageひも上下.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If needreset Then
-            TabControl.SelectTab("tpage四角数")
+            TabControl.SelectTab(tpage四角数.Name)
         End If
     End Sub
 
@@ -294,21 +297,21 @@ Public Class frmMain
 
         '先のページ名
         Select Case _CurrentTabControlName
-            Case "tpage四角数"
+            Case tpage四角数.Name
                 '
-            Case "tpage縁の始末"
+            Case tpage縁の始末.Name
                 Hide側面(_clsDataTables)
-            Case "tpage追加品"
+            Case tpage追加品.Name
                 Hide追加品(_clsDataTables)
-            Case "tpageメモ他"
+            Case tpageメモ他.Name
                 '
-            Case "tpage横ひも"
+            Case tpage横ひも.Name
                 Hide横ひも(_clsDataTables)
-            Case "tpage縦ひも"
+            Case tpage縦ひも.Name
                 Hide縦ひも(_clsDataTables)
-            Case "tpageプレビュー"
+            Case tpageプレビュー.Name
                 Hideプレビュー()
-            Case "tpageひも上下"
+            Case tpageひも上下.Name
                 Hideひも上下(_clsDataTables)
             Case Else ' 
                 '
@@ -485,7 +488,7 @@ Public Class frmMain
         expand横ひも.Save(enumひも種.i_横 Or enumひも種.i_45度, works)
         expand縦ひも.Save(enumひも種.i_縦 Or enumひも種.i_315度, works)
 
-        If _CurrentTabControlName = "tpageひも上下" Then
+        If _CurrentTabControlName = tpageひも上下.Name Then
             saveひも上下(works, False)
         End If
 

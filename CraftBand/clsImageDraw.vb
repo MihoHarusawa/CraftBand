@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Imaging
+Imports System.Security.Cryptography
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -312,11 +313,17 @@ Public Class CImageDraw
                 Case ImageTypeEnum._縦バンド
                     ret = ret And draw縦バンド(item)
 
+                Case ImageTypeEnum._バンド
+                    ret = ret And drawバンド(item)
+
                 Case ImageTypeEnum._コマ
                     ret = ret And drawコマ(item)
 
                 Case ImageTypeEnum._底枠
                     ret = ret And draw底枠(item)
+
+                Case ImageTypeEnum._底枠2
+                    ret = ret And draw底枠2(item)
 
                 Case ImageTypeEnum._全体枠
                     ret = ret And draw全体枠(item)
@@ -541,6 +548,58 @@ Public Class CImageDraw
         Return True
     End Function
 
+    Function drawバンド(ByVal item As clsImageItem) As Boolean
+        If item.m_row縦横展開 Is Nothing Then
+            Return False
+        End If
+        Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        If colset Is Nothing Then
+            Return False
+        End If
+
+        Dim ret As Boolean = True
+        'ひもの領域
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        If colset.BrushAlfa IsNot Nothing Then
+            _Graphic.FillPolygon(colset.BrushAlfa, points)
+        End If
+        _Graphic.DrawLines(colset.PenBand, points)
+
+        'バンド幅
+        Dim i何本幅 As Integer = item.m_row縦横展開.f_i何本幅
+
+        '本幅線
+        Dim dx As Single = (points(3).X - points(0).X) / i何本幅
+        Dim dy As Single = (points(3).Y - points(0).Y) / i何本幅
+        If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
+            Dim pStart As PointF = points(0)
+            Dim pEnd As PointF = points(1)
+            For i As Integer = 1 To i何本幅 - 1
+                pStart.X += dx
+                pStart.Y += dy
+                pEnd.X += dx
+                pEnd.Y += dy
+                _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
+            Next
+        End If
+
+        'バンド枠
+        If colset.PenBand IsNot Nothing Then
+            _Graphic.DrawLines(colset.PenBand, points)
+        End If
+
+        '記号
+        If Not item.m_bNoMark Then
+            If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                Dim pMark As New PointF(rect.X + 2, rect.Y - _FontSize * 1.5)
+                _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+            End If
+        End If
+        Return True
+    End Function
+
+
     Private Sub subコマ(colset As CPenBrush, a As S四隅, l As S線分)
         Dim polygon As PointF() = pixcel_lines(a)
         '塗りつぶし
@@ -579,11 +638,19 @@ Public Class CImageDraw
         subコマ(colsetTate, item.m_knot.a右下四角, item.m_knot.l右下線)
         Return True
     End Function
+
     Function draw底枠(ByVal item As clsImageItem) As Boolean
         Dim points() As PointF = pixcel_lines(item.m_a四隅)
         _Graphic.DrawLines(_Pen_black_thick, points)
         For Each line As S線分 In item.m_lineList
             _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        Next
+        Return True
+    End Function
+
+    Function draw底枠2(ByVal item As clsImageItem) As Boolean
+        For Each line As S線分 In item.m_lineList
+            _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
         Next
         Return True
     End Function

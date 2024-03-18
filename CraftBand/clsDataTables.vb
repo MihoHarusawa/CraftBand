@@ -92,8 +92,9 @@ Public Class clsDataTables
         i_45度 = &H800
         i_315度 = &H1000
         i_側面 = &H2000
-        i_60度 = &H4000
-        i_120度 = &H8000
+
+        i_60度 = &H800   'ビット兼用
+        i_120度 = &H1000 'ビット兼用
 
         i_長い = &H10
         i_短い = &H20
@@ -112,9 +113,23 @@ Public Class clsDataTables
 
     Public Enum enum角度
         i_0度 = 0
-        i_45度 = 1
+
+        '四角
+        i_45度 = 1   '1/1系
         i_90度 = 2
         i_135度 = 3
+
+        i_18度 = 4   '1/3系
+        i_72度 = 5
+        i_108度 = 6
+        i_162度 = 7
+
+        '六角
+        i_30度h = 1
+        i_60度h = 2
+        i_90度h = 3
+        i_120度h = 4
+        i_150度h = 5
     End Enum
 
     Public Enum enum中心点
@@ -190,6 +205,11 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
 
             Case enumExeName.CraftBandHexagon
+                p_row底_縦横.Value("f_b斜め同数区分") = True
+                p_row底_縦横.Value("f_dひも間のすき間") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも間のすき間初期値")
+                p_row底_縦横.Value("f_d垂直ひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d垂直ひも加算初期値")
+                p_row底_縦横.Value("f_dひも長加算_側面") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
+                p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
 
         End Select
 
@@ -533,8 +553,9 @@ Public Class clsDataTables
         End If
 
         'f_i何本幅は対応Exeのみ
-        Dim isLoad何本幅 As Boolean = g_enumExeName = enumExeName.CraftBandSquare OrElse
-                (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン"))
+        Dim isLoad何本幅 As Boolean = (g_enumExeName = enumExeName.CraftBandSquare) OrElse
+                (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
+                (g_enumExeName = enumExeName.CraftBandHexagon)
 
         Dim count As Integer = 0
         For Each tmp As tbl縦横展開Row In tmptable
@@ -725,7 +746,7 @@ Public Class clsDataTables
             lastrow = row
         Next
 
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_row currow={0}", New clsDataRow(currow).ToString)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Insert縦横展開Row currow={0}", New clsDataRow(currow).ToString)
         Return currow
     End Function
 
@@ -779,7 +800,7 @@ Public Class clsDataTables
             lastrow = row
         Next
 
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "del_row currow={0}", New clsDataRow(currow).ToString)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Remove縦横展開Row currow={0}", New clsDataRow(currow).ToString)
         Return currow
     End Function
 

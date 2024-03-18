@@ -169,6 +169,11 @@ Public Class ctrExpanding
         Return True
     End Function
 
+    '削除ボタンと追加ボタンの表示
+    Sub AddDeleteButtonVisible(ByVal visible As Boolean)
+        btn削除.Visible = visible
+        btn追加.Visible = visible
+    End Sub
 
     '編集完了、非表示にする
     Function HideGrid(ByVal btype As enumひも種, ByVal works As clsDataTables) As Boolean

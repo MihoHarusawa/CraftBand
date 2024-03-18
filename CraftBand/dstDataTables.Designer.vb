@@ -809,7 +809,7 @@ Namespace Tables
                 Me.columnf_sメモ.DefaultValue = CType("",String)
                 Me.columnf_sタイトル.DefaultValue = CType("",String)
                 Me.columnf_s作成者.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.6.0",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.6.1",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -967,6 +967,8 @@ Namespace Tables
             
             Private columnf_b斜めの補強ひも区分 As Global.System.Data.DataColumn
             
+            Private columnf_b斜めの補強ひも2区分 As Global.System.Data.DataColumn
+            
             Private columnf_d垂直ひも長加算 As Global.System.Data.DataColumn
             
             Private columnf_i縦ひも As Global.System.Data.DataColumn
@@ -1016,6 +1018,12 @@ Namespace Tables
             Private columnf_d上端下端の目 As Global.System.Data.DataColumn
             
             Private columnf_d最下段の目 As Global.System.Data.DataColumn
+            
+            Private columnf_i斜め60度ひも本数 As Global.System.Data.DataColumn
+            
+            Private columnf_i斜め120度ひも本数 As Global.System.Data.DataColumn
+            
+            Private columnf_b斜め同数区分 As Global.System.Data.DataColumn
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -1121,6 +1129,14 @@ Namespace Tables
             Public ReadOnly Property f_b斜めの補強ひも区分Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_b斜めの補強ひも区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b斜めの補強ひも2区分Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b斜めの補強ひも2区分
                 End Get
             End Property
             
@@ -1325,6 +1341,30 @@ Namespace Tables
             End Property
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i斜め60度ひも本数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i斜め60度ひも本数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i斜め120度ひも本数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i斜め120度ひも本数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b斜め同数区分Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b斜め同数区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
              Global.System.ComponentModel.Browsable(false)>  _
             Public ReadOnly Property Count() As Integer
@@ -1371,6 +1411,7 @@ Namespace Tables
                         ByVal f_b補強ひも区分 As Boolean,  _
                         ByVal f_s横ひものメモ As String,  _
                         ByVal f_b斜めの補強ひも区分 As Boolean,  _
+                        ByVal f_b斜めの補強ひも2区分 As Boolean,  _
                         ByVal f_d垂直ひも長加算 As Double,  _
                         ByVal f_i縦ひも As Short,  _
                         ByVal f_i縦ひもの本数 As Short,  _
@@ -1395,9 +1436,12 @@ Namespace Tables
                         ByVal f_dひも長加算_側面 As Double,  _
                         ByVal f_d左端右端の目 As Double,  _
                         ByVal f_d上端下端の目 As Double,  _
-                        ByVal f_d最下段の目 As Double) As tbl底_縦横Row
+                        ByVal f_d最下段の目 As Double,  _
+                        ByVal f_i斜め60度ひも本数 As Short,  _
+                        ByVal f_i斜め120度ひも本数 As Short,  _
+                        ByVal f_b斜め同数区分 As Boolean) As tbl底_縦横Row
                 Dim rowtbl底_縦横Row As tbl底_縦横Row = CType(Me.NewRow,tbl底_縦横Row)
-                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算, f_iコマ上側の縦ひも, f_i左から何番目, f_i上から何番目, f_i高さのコマ数, f_i折り返しコマ数, f_dひも長加算_側面, f_d左端右端の目, f_d上端下端の目, f_d最下段の目}
+                Dim columnValuesArray() As Object = New Object() {f_i長い横ひもの本数, f_i長い横ひも, f_i短い横ひも, f_i最上と最下の短いひも, f_i最上と最下の短いひもの幅, f_d横ひも間のすき間, f_b補強ひも区分, f_s横ひものメモ, f_b斜めの補強ひも区分, f_b斜めの補強ひも2区分, f_d垂直ひも長加算, f_i縦ひも, f_i縦ひもの本数, f_dひとつのすき間の寸法, f_b始末ひも区分, f_s縦ひものメモ, f_b楕円底個別設定, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_b展開区分, f_i横の四角数, f_i縦の四角数, f_d高さの四角数, f_dひも間のすき間, f_dひも長係数, f_dひも長加算, f_iコマ上側の縦ひも, f_i左から何番目, f_i上から何番目, f_i高さのコマ数, f_i折り返しコマ数, f_dひも長加算_側面, f_d左端右端の目, f_d上端下端の目, f_d最下段の目, f_i斜め60度ひも本数, f_i斜め120度ひも本数, f_b斜め同数区分}
                 rowtbl底_縦横Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl底_縦横Row)
                 Return rowtbl底_縦横Row
@@ -1429,6 +1473,7 @@ Namespace Tables
                 Me.columnf_b補強ひも区分 = MyBase.Columns("f_b補強ひも区分")
                 Me.columnf_s横ひものメモ = MyBase.Columns("f_s横ひものメモ")
                 Me.columnf_b斜めの補強ひも区分 = MyBase.Columns("f_b斜めの補強ひも区分")
+                Me.columnf_b斜めの補強ひも2区分 = MyBase.Columns("f_b斜めの補強ひも2区分")
                 Me.columnf_d垂直ひも長加算 = MyBase.Columns("f_d垂直ひも長加算")
                 Me.columnf_i縦ひも = MyBase.Columns("f_i縦ひも")
                 Me.columnf_i縦ひもの本数 = MyBase.Columns("f_i縦ひもの本数")
@@ -1454,6 +1499,9 @@ Namespace Tables
                 Me.columnf_d左端右端の目 = MyBase.Columns("f_d左端右端の目")
                 Me.columnf_d上端下端の目 = MyBase.Columns("f_d上端下端の目")
                 Me.columnf_d最下段の目 = MyBase.Columns("f_d最下段の目")
+                Me.columnf_i斜め60度ひも本数 = MyBase.Columns("f_i斜め60度ひも本数")
+                Me.columnf_i斜め120度ひも本数 = MyBase.Columns("f_i斜め120度ひも本数")
+                Me.columnf_b斜め同数区分 = MyBase.Columns("f_b斜め同数区分")
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1477,6 +1525,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s横ひものメモ)
                 Me.columnf_b斜めの補強ひも区分 = New Global.System.Data.DataColumn("f_b斜めの補強ひも区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_b斜めの補強ひも区分)
+                Me.columnf_b斜めの補強ひも2区分 = New Global.System.Data.DataColumn("f_b斜めの補強ひも2区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b斜めの補強ひも2区分)
                 Me.columnf_d垂直ひも長加算 = New Global.System.Data.DataColumn("f_d垂直ひも長加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d垂直ひも長加算)
                 Me.columnf_i縦ひも = New Global.System.Data.DataColumn("f_i縦ひも", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
@@ -1527,6 +1577,12 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_d上端下端の目)
                 Me.columnf_d最下段の目 = New Global.System.Data.DataColumn("f_d最下段の目", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d最下段の目)
+                Me.columnf_i斜め60度ひも本数 = New Global.System.Data.DataColumn("f_i斜め60度ひも本数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i斜め60度ひも本数)
+                Me.columnf_i斜め120度ひも本数 = New Global.System.Data.DataColumn("f_i斜め120度ひも本数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i斜め120度ひも本数)
+                Me.columnf_b斜め同数区分 = New Global.System.Data.DataColumn("f_b斜め同数区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b斜め同数区分)
                 Me.columnf_i長い横ひもの本数.DefaultValue = CType(0,Short)
                 Me.columnf_i長い横ひも.DefaultValue = CType(0,Short)
                 Me.columnf_i短い横ひも.DefaultValue = CType(0,Short)
@@ -1536,6 +1592,7 @@ Namespace Tables
                 Me.columnf_b補強ひも区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_s横ひものメモ.DefaultValue = CType("",String)
                 Me.columnf_b斜めの補強ひも区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_b斜めの補強ひも2区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_d垂直ひも長加算.DefaultValue = CType(0R,Double)
                 Me.columnf_i縦ひも.DefaultValue = CType(0,Short)
                 Me.columnf_i縦ひもの本数.DefaultValue = CType(0,Short)
@@ -1561,6 +1618,9 @@ Namespace Tables
                 Me.columnf_d左端右端の目.DefaultValue = CType(0R,Double)
                 Me.columnf_d上端下端の目.DefaultValue = CType(0R,Double)
                 Me.columnf_d最下段の目.DefaultValue = CType(1R,Double)
+                Me.columnf_i斜め60度ひも本数.DefaultValue = CType(0,Short)
+                Me.columnf_i斜め120度ひも本数.DefaultValue = CType(0,Short)
+                Me.columnf_b斜め同数区分.DefaultValue = CType(true,Boolean)
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -4257,6 +4317,10 @@ Namespace Tables
             
             Private columnf_i何本ごと As Global.System.Data.DataColumn
             
+            Private columnf_i同位置数 As Global.System.Data.DataColumn
+            
+            Private columnf_i同位置順 As Global.System.Data.DataColumn
+            
             Private columnf_dひも長 As Global.System.Data.DataColumn
             
             Private columnf_dひも長加算 As Global.System.Data.DataColumn
@@ -4380,6 +4444,22 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i同位置数Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i同位置数
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i同位置順Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i同位置順
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_dひも長Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dひも長
@@ -4481,6 +4561,8 @@ Namespace Tables
                         ByVal f_s色 As String,  _
                         ByVal f_i開始位置 As Integer,  _
                         ByVal f_i何本ごと As Integer,  _
+                        ByVal f_i同位置数 As Short,  _
+                        ByVal f_i同位置順 As Short,  _
                         ByVal f_dひも長 As Double,  _
                         ByVal f_dひも長加算 As Double,  _
                         ByVal f_d出力ひも長 As Double,  _
@@ -4489,7 +4571,7 @@ Namespace Tables
                         ByVal f_s無効理由 As String,  _
                         ByVal f_sメモ As String) As tbl差しひもRow
                 Dim rowtbl差しひもRow As tbl差しひもRow = CType(Me.NewRow,tbl差しひもRow)
-                Dim columnValuesArray() As Object = New Object() {f_i番号, f_b有効区分, f_i配置面, f_i角度, f_i中心点, f_i何本幅, f_s色, f_i開始位置, f_i何本ごと, f_dひも長, f_dひも長加算, f_d出力ひも長, f_iひも本数, f_s記号, f_s無効理由, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_i番号, f_b有効区分, f_i配置面, f_i角度, f_i中心点, f_i何本幅, f_s色, f_i開始位置, f_i何本ごと, f_i同位置数, f_i同位置順, f_dひも長, f_dひも長加算, f_d出力ひも長, f_iひも本数, f_s記号, f_s無効理由, f_sメモ}
                 rowtbl差しひもRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl差しひもRow)
                 Return rowtbl差しひもRow
@@ -4527,6 +4609,8 @@ Namespace Tables
                 Me.columnf_s色 = MyBase.Columns("f_s色")
                 Me.columnf_i開始位置 = MyBase.Columns("f_i開始位置")
                 Me.columnf_i何本ごと = MyBase.Columns("f_i何本ごと")
+                Me.columnf_i同位置数 = MyBase.Columns("f_i同位置数")
+                Me.columnf_i同位置順 = MyBase.Columns("f_i同位置順")
                 Me.columnf_dひも長 = MyBase.Columns("f_dひも長")
                 Me.columnf_dひも長加算 = MyBase.Columns("f_dひも長加算")
                 Me.columnf_d出力ひも長 = MyBase.Columns("f_d出力ひも長")
@@ -4557,6 +4641,10 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i開始位置)
                 Me.columnf_i何本ごと = New Global.System.Data.DataColumn("f_i何本ごと", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i何本ごと)
+                Me.columnf_i同位置数 = New Global.System.Data.DataColumn("f_i同位置数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i同位置数)
+                Me.columnf_i同位置順 = New Global.System.Data.DataColumn("f_i同位置順", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i同位置順)
                 Me.columnf_dひも長 = New Global.System.Data.DataColumn("f_dひも長", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長)
                 Me.columnf_dひも長加算 = New Global.System.Data.DataColumn("f_dひも長加算", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -4583,6 +4671,8 @@ Namespace Tables
                 Me.columnf_s色.DefaultValue = CType("",String)
                 Me.columnf_i開始位置.DefaultValue = CType(1,Integer)
                 Me.columnf_i何本ごと.DefaultValue = CType(1,Integer)
+                Me.columnf_i同位置数.DefaultValue = CType(0,Short)
+                Me.columnf_i同位置順.DefaultValue = CType(0,Short)
                 Me.columnf_dひも長.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算.DefaultValue = CType(0R,Double)
                 Me.columnf_d出力ひも長.DefaultValue = CType(0R,Double)
@@ -5238,6 +5328,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b斜めの補強ひも2区分() As Boolean
+                Get
+                    If Me.Isf_b斜めの補強ひも2区分Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_b斜めの補強ひも2区分Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_b斜めの補強ひも2区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d垂直ひも長加算() As Double
                 Get
                     If Me.Isf_d垂直ひも長加算Null Then
@@ -5613,6 +5718,51 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i斜め60度ひも本数() As Short
+                Get
+                    If Me.Isf_i斜め60度ひも本数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i斜め60度ひも本数Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i斜め60度ひも本数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i斜め120度ひも本数() As Short
+                Get
+                    If Me.Isf_i斜め120度ひも本数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_i斜め120度ひも本数Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_i斜め120度ひも本数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b斜め同数区分() As Boolean
+                Get
+                    If Me.Isf_b斜め同数区分Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl底_縦横.f_b斜め同数区分Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_縦横.f_b斜め同数区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_i長い横ひもの本数Null() As Boolean
                 Return Me.IsNull(Me.tabletbl底_縦横.f_i長い横ひもの本数Column)
             End Function
@@ -5717,6 +5867,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_b斜めの補強ひも区分Null()
                 Me(Me.tabletbl底_縦横.f_b斜めの補強ひも区分Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b斜めの補強ひも2区分Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_b斜めの補強ひも2区分Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b斜めの補強ひも2区分Null()
+                Me(Me.tabletbl底_縦横.f_b斜めの補強ひも2区分Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -6017,6 +6179,42 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_d最下段の目Null()
                 Me(Me.tabletbl底_縦横.f_d最下段の目Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i斜め60度ひも本数Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i斜め60度ひも本数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i斜め60度ひも本数Null()
+                Me(Me.tabletbl底_縦横.f_i斜め60度ひも本数Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i斜め120度ひも本数Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_i斜め120度ひも本数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i斜め120度ひも本数Null()
+                Me(Me.tabletbl底_縦横.f_i斜め120度ひも本数Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b斜め同数区分Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_縦横.f_b斜め同数区分Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b斜め同数区分Null()
+                Me(Me.tabletbl底_縦横.f_b斜め同数区分Column) = Global.System.Convert.DBNull
             End Sub
         End Class
         
@@ -8582,6 +8780,36 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i同位置数() As Short
+                Get
+                    If Me.Isf_i同位置数Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl差しひも.f_i同位置数Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl差しひも.f_i同位置数Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i同位置順() As Short
+                Get
+                    If Me.Isf_i同位置順Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl差しひも.f_i同位置順Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl差しひも.f_i同位置順Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_dひも長() As Double
                 Get
                     If Me.Isf_dひも長Null Then
@@ -8779,6 +9007,30 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i何本ごとNull()
                 Me(Me.tabletbl差しひも.f_i何本ごとColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i同位置数Null() As Boolean
+                Return Me.IsNull(Me.tabletbl差しひも.f_i同位置数Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i同位置数Null()
+                Me(Me.tabletbl差しひも.f_i同位置数Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i同位置順Null() As Boolean
+                Return Me.IsNull(Me.tabletbl差しひも.f_i同位置順Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i同位置順Null()
+                Me(Me.tabletbl差しひも.f_i同位置順Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

@@ -237,21 +237,21 @@ Public Class frmMain
 
         'タブページ名
         Select Case TabControl.SelectedTab.Name
-            Case "tpageコマ数"
+            Case tpageコマ数.Name
                 '
-            Case "tpage側面と縁"
+            Case tpage側面と縁.Name
                 Show側面(works)
-            Case "tpage追加品"
+            Case tpage追加品.Name
                 Show追加品(works)
-            Case "tpageメモ他"
+            Case tpageメモ他.Name
                 '
-            Case "tpage横ひも"
+            Case tpage横ひも.Name
                 Show横ひも(works)
-            Case "tpage縦ひも"
+            Case tpage縦ひも.Name
                 Show縦ひも(works)
-            Case "tpageプレビュー"
+            Case tpageプレビュー.Name
                 Showプレビュー(works)
-            Case Else ' "tpageメモ他"
+            Case Else ' 
 
         End Select
         _CurrentTabControlName = TabControl.SelectedTab.Name
@@ -266,24 +266,27 @@ Public Class frmMain
         _Always = &H100
     End Enum
     Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
+        If _isLoadingData Then
+            Exit Sub
+        End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If reason.HasFlag(enumReason._GridDropdown) Then
-            If {"tpage側面と縁", "tpage追加品", "tpage横ひも", "tpage縦ひも"}.Contains(_CurrentTabControlName) Then
+            If {tpage側面と縁.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If reason.HasFlag(enumReason._Preview) Then
-            If {"tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+            If {tpageプレビュー.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If reason.HasFlag(enumReason._Gauge) Then
-            If {"tpage側面と縁", "tpage横ひも", "tpage縦ひも", "tpageプレビュー"}.Contains(_CurrentTabControlName) Then
+            If {tpage側面と縁.Name, tpage横ひも.Name, tpage縦ひも.Name, tpageプレビュー.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If needreset Then
-            TabControl.SelectTab("tpageコマ数")
+            TabControl.SelectTab(tpageコマ数.Name)
         End If
     End Sub
 
@@ -295,19 +298,19 @@ Public Class frmMain
 
         '先のページ名
         Select Case _CurrentTabControlName
-            Case "tpageコマ数"
+            Case tpageコマ数.Name
                 '
-            Case "tpage側面と縁"
+            Case tpage側面と縁.Name
                 Hide側面(_clsDataTables)
-            Case "tpage追加品"
+            Case tpage追加品.Name
                 Hide追加品(_clsDataTables)
-            Case "tpageメモ他"
+            Case tpageメモ他.Name
                 '
-            Case "tpage横ひも"
+            Case tpage横ひも.Name
                 Hide横ひも(_clsDataTables)
-            Case "tpage縦ひも"
+            Case tpage縦ひも.Name
                 Hide縦ひも(_clsDataTables)
-            Case "tpageプレビュー"
+            Case tpageプレビュー.Name
                 Hideプレビュー(_clsDataTables)
             Case Else ' 
                 '

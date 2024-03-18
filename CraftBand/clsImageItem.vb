@@ -1,5 +1,6 @@
 ﻿Imports System.Text
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsImageItem
@@ -100,6 +101,13 @@ Public Class clsImageItem
         Sub New(ByVal base As S実座標, ByVal way As S実座標)
             dX = way.X - base.X
             dY = way.Y - base.Y
+        End Sub
+
+        '角度(度)の単位(長さ1)
+        Sub New(ByVal degrees As Double)
+            Dim radians As Double = degrees * Math.PI / 180
+            dX = Math.Cos(radians)
+            dY = Math.Sin(radians)
         End Sub
 
         Sub Zero()
@@ -228,6 +236,35 @@ Public Class clsImageItem
                 Return r
             End Get
         End Property
+
+        '線分上の点か
+        Function IsOn(ByVal p As S実座標) As Boolean
+            If Not r外接領域.isInner(p) Then
+                Return False
+            End If
+            Dim fn As New S直線式(Me)
+            Return fn.IsOn(p)
+        End Function
+
+        '交点の座標　※平行線を指定しないように!!
+        Shared Function p交点(ByVal line1 As S線分, ByVal line2 As S線分) As S実座標
+            Dim fn1 As New S直線式(line1)
+            Dim fn2 As New S直線式(line2)
+            Return S直線式.p交点(fn1, fn2)
+        End Function
+        Function p交点(ByVal line As S線分) As S実座標
+            Return p交点(Me, line)
+        End Function
+
+        '平行
+        Shared Function is平行(ByVal line1 As S線分, ByVal line2 As S線分) As Boolean
+            Dim fn1 As New S直線式(line1)
+            Dim fn2 As New S直線式(line2)
+            Return S直線式.is平行(fn1, fn2)
+        End Function
+        Function is平行(ByVal line As S線分) As Boolean
+            Return is平行(Me, line)
+        End Function
 
         Public Overrides Function ToString() As String
             Return String.Format("S線分<{0}-{1}> range:{2}", p開始, p終了, r外接領域)
@@ -546,6 +583,12 @@ Public Class clsImageItem
             Return large
         End Function
 
+        '領域内の点か？
+        Function isInner(ByVal p As S実座標) As Boolean
+            Return x最左 <= p.X AndAlso p.X <= x最右 AndAlso
+                y最下 <= p.Y AndAlso p.Y <= y最上
+        End Function
+
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("S領域<最左X({0:f1})最上Y({1:f1}) 最右X({2:f1})最下Y({3:f1})>", x最左, y最上, x最右, y最下)
@@ -640,7 +683,93 @@ Public Class clsImageItem
         End Function
     End Class
 
+    'fn:y=ax+b
+    Structure S直線式
+        Public a As Double
+        Public b As Double
+        Sub New(ByVal aa As Double, ByVal bb As Double)
+            a = aa
+            b = bb
+        End Sub
 
+        Sub New(ByVal p1 As S実座標, ByVal p2 As S実座標)
+            by2points(p1, p2)
+        End Sub
+
+        Sub New(ByVal line As S線分)
+            by2points(line.p開始, line.p終了)
+        End Sub
+
+        Private Sub by2points(ByVal p1 As S実座標, ByVal p2 As S実座標)
+            a = (p1.Y - p2.Y) / (p1.X - p2.X)
+            b = p1.Y - a * p1.X
+        End Sub
+
+        Sub New(ByVal degrees As Double, ByVal p As S実座標)
+            Dim radians As Double = degrees * Math.PI / 180
+            a = Math.Tan(radians)
+            b = p.Y - a * p.X
+        End Sub
+
+        '直線上の点か
+        Function IsOn(ByVal p As S実座標) As Boolean
+            Dim yy As Double = Y(p.X)
+            If yy = p.Y Then
+                Return True '一致
+            End If
+            Dim mm As Integer = 1 '小数点以下1桁
+            Return Math.Round(yy, mm) = Math.Round(p.Y, mm)
+        End Function
+
+        '傾きの角度
+        Function Angle() As Double
+            Dim angleRad As Double = System.Math.Atan2(a, 1)
+            Return angleRad * (180 / System.Math.PI)
+        End Function
+
+        'xからy
+        Function Y(ByVal x As Double) As Double
+            Return a * x + b
+        End Function
+
+        'yからx
+        Function X(ByVal y As Double) As Double
+            Return (y - b) / a
+        End Function
+
+        '交点
+        Shared Function p交点(ByVal fn1 As S直線式, ByVal fn2 As S直線式) As S実座標
+            If fn1.a = 0 Then
+                Return New S実座標(fn2.X(fn1.b), fn1.b)
+            End If
+            If fn2.a = 0 Then
+                Return New S実座標(fn1.X(fn2.b), fn2.b)
+            End If
+            'y=a1*x+b1, y=a2*x+b2 の交点
+            Dim xx As Double = (fn2.b - fn1.b) / (fn1.a - fn2.a)
+            Dim yy As Double = fn1.Y(xx)
+            Return New S実座標(xx, yy)
+        End Function
+        Function p交点(ByVal fn As S直線式) As S実座標
+            Return p交点(Me, fn)
+        End Function
+
+        '平行
+        Shared Function is平行(ByVal fn1 As S直線式, ByVal fn2 As S直線式) As Boolean
+            If fn1.a = fn2.a Then
+                Return True
+            End If
+            Dim mm As Integer = 1 '小数点以下1桁
+            Return Math.Round(fn1.a, mm) = Math.Round(fn2.a, mm)
+        End Function
+        Function is平行(ByVal fn As S直線式) As Boolean
+            Return is平行(Me, fn)
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return String.Format("S直線式: y={0:f1}x+{1:f1}", a, b)
+        End Function
+    End Structure
 #End Region
 
     '四つ畳み編み
@@ -746,11 +875,11 @@ Public Class clsImageItem
     Public m_rowData As clsDataRow = Nothing 'Squareの差しひも
 
     '領域の四隅(左<=右, 下<=上)
-    Public m_a四隅 As S四隅
+    Public m_a四隅 As S四隅     'バンド
 
     'ひもの配置
     Public m_dひも幅 As Double
-    Public m_rひも位置 As S領域
+    Public m_rひも位置 As S領域   'バンドの記号位置
     Public m_bNoMark As Boolean = False '記号なし
     Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
     Public m_regionList As C領域リスト 'クロス表示用
@@ -775,6 +904,8 @@ Public Class clsImageItem
         _縦バンド   'm_row縦横展開,m_a四隅,m_rひも位置
         _横バンド   'm_row縦横展開,m_a四隅,m_rひも位置
 
+        _バンド   'm_row縦横展開,m_a四隅,m_rひも位置
+
         _コマ     'm_row縦横展開,m_row縦横展開2,m_p中心,m_rひも位置,m_knot
         _編みかた   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
         _付属品   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
@@ -784,6 +915,9 @@ Public Class clsImageItem
         _縦の側面   'm_a四隅,m_lineList
         _四隅領域 'm_a四隅,m_lineList
         _全体枠    'm_a四隅
+
+        _底枠2     'm_lineList        (Hexagonの底)
+
 
         _底楕円    'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
         _差しひも    'm_groupRow,m_a四隅,m_p位置,m_rひも位置           (Meshの底)
@@ -833,7 +967,7 @@ Public Class clsImageItem
                 'Meshの場合
                 m_ImageType = ImageTypeEnum._横バンド
             Else
-                '他は描画対象外
+                '他は別途指定
             End If
             Return True
         Else
@@ -963,19 +1097,13 @@ Public Class clsImageItem
     Public Function Get描画領域() As S領域
         Dim r描画領域 As S領域
         Select Case Me.m_ImageType
-            Case ImageTypeEnum._横バンド
-                '四隅から余裕分左右へ
-                r描画領域.y最下 = m_a四隅.y最下
-                r描画領域.y最上 = m_a四隅.y最上
-                r描画領域.x最左 = m_rひも位置.x最左
-                r描画領域.x最右 = m_rひも位置.x最右
+            Case ImageTypeEnum._横バンド, ImageTypeEnum._縦バンド
+                r描画領域 = m_a四隅.r外接領域
+                r描画領域 = r描画領域.get拡大領域(m_rひも位置)
 
-            Case ImageTypeEnum._縦バンド
-                '四隅から余裕分上下へ
-                r描画領域.x最左 = m_a四隅.x最左
-                r描画領域.x最右 = m_a四隅.x最右
-                r描画領域.y最下 = m_rひも位置.y最下
-                r描画領域.y最上 = m_rひも位置.y最上
+            Case ImageTypeEnum._バンド
+                r描画領域 = m_a四隅.r外接領域
+                r描画領域 = r描画領域.get拡大領域(m_rひも位置)
 
             Case ImageTypeEnum._コマ
                 r描画領域 = m_rひも位置
@@ -999,7 +1127,7 @@ Public Class clsImageItem
                 r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._底の中央線
+            Case ImageTypeEnum._底の中央線, ImageTypeEnum._底枠2
                 r描画領域 = m_lineList.Get描画領域()
 
             Case ImageTypeEnum._折り返し線

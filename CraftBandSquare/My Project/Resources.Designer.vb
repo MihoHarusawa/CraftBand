@@ -287,7 +287,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  0度(水平・横),45度(右斜め),90度(垂直・縦),135度(左斜め) に類似しているローカライズされた文字列を検索します。
+        '''  0度(水平・横),45度(右斜め),90度(垂直・縦),135度(左斜め),18度(右3個の上),72度(上3個の右),108度(上3個の左),162度(左3個の上) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringAngle() As String
             Get

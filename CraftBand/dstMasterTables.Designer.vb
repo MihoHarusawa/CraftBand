@@ -2417,7 +2417,7 @@ Namespace Tables
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.8.0",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.8.1",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -2572,6 +2572,8 @@ Namespace Tables
             
             Private columnf_i透明度 As Global.System.Data.DataColumn
             
+            Private columnf_s線色 As Global.System.Data.DataColumn
+            
             Private columnf_s中線色 As Global.System.Data.DataColumn
             
             Private columnf_s製品情報 As Global.System.Data.DataColumn
@@ -2679,6 +2681,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s線色Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s線色
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_s中線色Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_s中線色
@@ -2738,9 +2748,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl描画色Row(ByVal f_s色 As String, ByVal f_sバンドの種類名 As String, ByVal f_i赤 As Short, ByVal f_i緑 As Short, ByVal f_i青 As Short, ByVal f_d線幅 As Double, ByVal f_d中線幅 As Double, ByVal f_i透明度 As Short, ByVal f_s中線色 As String, ByVal f_s製品情報 As String, ByVal f_s備考 As String) As tbl描画色Row
+            Public Overloads Function Addtbl描画色Row(ByVal f_s色 As String, ByVal f_sバンドの種類名 As String, ByVal f_i赤 As Short, ByVal f_i緑 As Short, ByVal f_i青 As Short, ByVal f_d線幅 As Double, ByVal f_d中線幅 As Double, ByVal f_i透明度 As Short, ByVal f_s線色 As String, ByVal f_s中線色 As String, ByVal f_s製品情報 As String, ByVal f_s備考 As String) As tbl描画色Row
                 Dim rowtbl描画色Row As tbl描画色Row = CType(Me.NewRow,tbl描画色Row)
-                Dim columnValuesArray() As Object = New Object() {f_s色, f_sバンドの種類名, f_i赤, f_i緑, f_i青, f_d線幅, f_d中線幅, f_i透明度, f_s中線色, f_s製品情報, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s色, f_sバンドの種類名, f_i赤, f_i緑, f_i青, f_d線幅, f_d中線幅, f_i透明度, f_s線色, f_s中線色, f_s製品情報, f_s備考}
                 rowtbl描画色Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl描画色Row)
                 Return rowtbl描画色Row
@@ -2777,6 +2787,7 @@ Namespace Tables
                 Me.columnf_d線幅 = MyBase.Columns("f_d線幅")
                 Me.columnf_d中線幅 = MyBase.Columns("f_d中線幅")
                 Me.columnf_i透明度 = MyBase.Columns("f_i透明度")
+                Me.columnf_s線色 = MyBase.Columns("f_s線色")
                 Me.columnf_s中線色 = MyBase.Columns("f_s中線色")
                 Me.columnf_s製品情報 = MyBase.Columns("f_s製品情報")
                 Me.columnf_s備考 = MyBase.Columns("f_s備考")
@@ -2801,6 +2812,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_d中線幅)
                 Me.columnf_i透明度 = New Global.System.Data.DataColumn("f_i透明度", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i透明度)
+                Me.columnf_s線色 = New Global.System.Data.DataColumn("f_s線色", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s線色)
                 Me.columnf_s中線色 = New Global.System.Data.DataColumn("f_s中線色", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s中線色)
                 Me.columnf_s製品情報 = New Global.System.Data.DataColumn("f_s製品情報", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -2817,6 +2830,7 @@ Namespace Tables
                 Me.columnf_d線幅.DefaultValue = CType(1R,Double)
                 Me.columnf_d中線幅.DefaultValue = CType(0R,Double)
                 Me.columnf_i透明度.DefaultValue = CType(255,Short)
+                Me.columnf_s線色.DefaultValue = CType("",String)
                 Me.columnf_s中線色.DefaultValue = CType("",String)
                 Me.columnf_s製品情報.DefaultValue = CType("",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
@@ -5624,6 +5638,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s線色() As String
+                Get
+                    If Me.Isf_s線色Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl描画色.f_s線色Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl描画色.f_s線色Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s中線色() As String
                 Get
                     If Me.Isf_s中線色Null Then
@@ -5737,6 +5766,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i透明度Null()
                 Me(Me.tabletbl描画色.f_i透明度Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s線色Null() As Boolean
+                Return Me.IsNull(Me.tabletbl描画色.f_s線色Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s線色Null()
+                Me(Me.tabletbl描画色.f_s線色Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

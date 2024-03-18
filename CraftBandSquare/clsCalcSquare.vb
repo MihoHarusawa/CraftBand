@@ -1434,8 +1434,8 @@ Class clsCalcSquare
     '本幅変更と幅の合計を返す共通関数
     Private Function recalc_ひも展開(ByVal table As tbl縦横展開DataTable, ByVal filt As enumひも種, ByRef isChange As Boolean) As Double
         Dim dSum幅 As Double = 0
-        Dim iMax何本幅 As Integer = 0
-        Dim iMin何本幅 As Integer = 0
+        Dim iMax何本幅 As Integer = _I基本のひも幅
+        Dim iMin何本幅 As Integer = _I基本のひも幅
         isChange = False
         If table Is Nothing OrElse table.Rows.Count = 0 Then
             Return dSum幅
