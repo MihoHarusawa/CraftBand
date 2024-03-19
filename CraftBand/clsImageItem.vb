@@ -25,6 +25,15 @@ Public Class clsImageItem
     Public Const cDirectionEnumAll As DirectionEnum = DirectionEnum._上 Or DirectionEnum._左 Or DirectionEnum._右 Or DirectionEnum._下
 
 #Region "配置構造体"
+
+    Shared Function NearlyEqual(ByVal d1 As Double, ByVal d2 As Double) As Boolean
+        If d2 = d1 Then
+            Return True '一致
+        End If
+        Dim mm As Integer = 1 '小数点以下1桁
+        Return Math.Round(d2, mm) = Math.Round(d1, mm)
+    End Function
+
     'point:点
     Structure S実座標
         Public X As Double
@@ -713,12 +722,7 @@ Public Class clsImageItem
 
         '直線上の点か
         Function IsOn(ByVal p As S実座標) As Boolean
-            Dim yy As Double = Y(p.X)
-            If yy = p.Y Then
-                Return True '一致
-            End If
-            Dim mm As Integer = 1 '小数点以下1桁
-            Return Math.Round(yy, mm) = Math.Round(p.Y, mm)
+            Return NearlyEqual(Y(p.X), p.Y)
         End Function
 
         '傾きの角度
@@ -756,11 +760,7 @@ Public Class clsImageItem
 
         '平行
         Shared Function is平行(ByVal fn1 As S直線式, ByVal fn2 As S直線式) As Boolean
-            If fn1.a = fn2.a Then
-                Return True
-            End If
-            Dim mm As Integer = 1 '小数点以下1桁
-            Return Math.Round(fn1.a, mm) = Math.Round(fn2.a, mm)
+            Return NearlyEqual(fn1.a, fn2.a)
         End Function
         Function is平行(ByVal fn As S直線式) As Boolean
             Return is平行(Me, fn)

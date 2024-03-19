@@ -1,18 +1,19 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
-Imports CraftBand.ctrInsertBand
 Imports CraftBand.ctrDataGridView
+Imports CraftBand.ctrExpanding
+Imports CraftBand.ctrInsertBand
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandSquare.clsCalcSquare
+Imports CraftBandHexagon.clsCalcHexagon
 
 Public Class frmMain
 
     '画面編集用のワーク
     Dim _clsDataTables As New clsDataTables
     '計算用のワーク
-    Dim _clsCalcSquare As New clsCalcSquare(_clsDataTables, Me)
+    Dim _clsCalcHexagon As New clsCalcHexagon(_clsDataTables, Me)
 
     '編集中のファイルパス
     Friend _sFilePath As String = Nothing '起動時引数があればセット(issue#8)
@@ -29,6 +30,11 @@ Public Class frmMain
             enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow
             )
 
+    '展開対応
+    Dim _tabPages(cAngleCount - 1) As TabPage
+    Dim _ctrExpandings(cAngleCount - 1) As ctrExpanding
+
+
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         _Profile_dgv側面.FormCaption = Me.Text
@@ -36,12 +42,11 @@ Public Class frmMain
 
         editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter)
 
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
+        expand斜め60度.SetNames(Me.Text, tpage斜め60度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand7to3, Nothing)
+        expand斜め120度.SetNames(Me.Text, tpage斜め120度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand1to9, Nothing)
+
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
-        editUpDown.FormCaption = Me.Text
-
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, Nothing)
-
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -67,9 +72,10 @@ Public Class frmMain
 
         End If
 
-        'プレビューを先にするため一旦削除
+        '一旦削除
+        TabControl.TabPages.Remove(tpage斜め60度)
         TabControl.TabPages.Remove(tpage横ひも)
-        TabControl.TabPages.Remove(tpage縦ひも)
+        TabControl.TabPages.Remove(tpage斜め120度)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅2.DataSource = g_clsSelectBasics.p_tblLane
@@ -80,6 +86,14 @@ Public Class frmMain
         f_s色2.DisplayMember = "Display"
         f_s色2.ValueMember = "Value"
         '
+        '展開対応
+        _tabPages(idx(AngleIndex.idx_0)) = tpage横ひも
+        _tabPages(idx(AngleIndex.idx_60)) = tpage斜め60度
+        _tabPages(idx(AngleIndex.idx_120)) = tpage斜め120度
+        _ctrExpandings(idx(AngleIndex.idx_0)) = expand横ひも
+        _ctrExpandings(idx(AngleIndex.idx_60)) = expand斜め60度
+        _ctrExpandings(idx(AngleIndex.idx_120)) = expand斜め120度
+
         setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
 
@@ -98,10 +112,12 @@ Public Class frmMain
             Me.editInsertBand.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridOptions
             Me.editAddParts.SetColumnWidthFromString(colwid)
+            colwid = My.Settings.frmMainGridNaname120
+            Me.expand斜め120度.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridYoko
             Me.expand横ひも.SetColumnWidthFromString(colwid)
-            colwid = My.Settings.frmMainGridTate
-            Me.expand縦ひも.SetColumnWidthFromString(colwid)
+            colwid = My.Settings.frmMainGridNaname60
+            Me.expand斜め60度.SetColumnWidthFromString(colwid)
         End If
 
         setStartEditing()
@@ -120,14 +136,16 @@ Public Class frmMain
         My.Settings.frmMainGridInsertBand = Me.editInsertBand.GetColumnWidthString()
         My.Settings.frmMainGridOptions = Me.editAddParts.GetColumnWidthString()
         My.Settings.frmMainGridYoko = Me.expand横ひも.GetColumnWidthString()
-        My.Settings.frmMainGridTate = Me.expand縦ひも.GetColumnWidthString()
+        My.Settings.frmMainGridNaname120 = Me.expand斜め120度.GetColumnWidthString()
+        My.Settings.frmMainGridNaname60 = Me.expand斜め60度.GetColumnWidthString()
         My.Settings.frmMainSize = Me.Size
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv側面={0}", My.Settings.frmMainGridSide)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv差しひも={0}", My.Settings.frmMainGridInsertBand)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv追加品={0}", My.Settings.frmMainGridOptions)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の横={0}", My.Settings.frmMainGridYoko)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の縦={0}", My.Settings.frmMainGridTate)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "横ひも={0}", My.Settings.frmMainGridYoko)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "斜め120={0}", My.Settings.frmMainGridNaname120)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "斜め60={0}", My.Settings.frmMainGridNaname60)
     End Sub
 
 
@@ -151,7 +169,7 @@ Public Class frmMain
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
-            nud目_ひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
+            nud六つ目の高さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nudひも長加算_縦横端.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nudひも長加算_側面.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
@@ -206,13 +224,13 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.BsMaster, CalcCategory.Target, CalcCategory.Target_Band}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.BsMaster, CalcCategory.Square_Gap, CalcCategory.Square_Yoko, CalcCategory.Square_Tate, CalcCategory.Square_Vert, CalcCategory.Square_Expand}.Contains(category) Then
-            Save四角数(_clsDataTables.p_row底_縦横)
+        If {CalcCategory.NewData, CalcCategory.BsMaster, CalcCategory.Hex_Gap, CalcCategory.Hex_Yoko, CalcCategory.Hex_60120, CalcCategory.Hex_Vert, CalcCategory.Hex_Expand}.Contains(category) Then
+            Save配置数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
 
-        Dim ret = _clsCalcSquare.CalcSize(category, ctr, key)
-        Disp計算結果(_clsCalcSquare) 'NGはToolStripに表示
+        Dim ret = _clsCalcHexagon.CalcSize(category, ctr, key)
+        Disp計算結果(_clsCalcHexagon) 'NGはToolStripに表示
 
         Return ret
     End Function
@@ -228,7 +246,7 @@ Public Class frmMain
 
             If works IsNot Nothing Then
                 Disp目標寸法(works.p_row目標寸法)
-                Disp四角数(works.p_row底_縦横)
+                Disp配置数(works.p_row底_縦横)
             End If
 
             ShowGridSelected(works)
@@ -255,17 +273,20 @@ Public Class frmMain
             Case tpage差しひも.Name
                 Show差しひも(works)
             Case tpageひも上下.Name
-                Showひも上下(works)
+                '
             Case tpage追加品.Name
                 Show追加品(works)
             Case tpageメモ他.Name
                 '
             Case tpage横ひも.Name
-                Show横ひも(works)
-            Case tpage縦ひも.Name
-                Show縦ひも(works)
+                Show展開ひも(AngleIndex.idx_0, works)
+            Case tpage斜め120度.Name
+                Show展開ひも(AngleIndex.idx_120, works)
+            Case tpage斜め60度.Name
+                Show展開ひも(AngleIndex.idx_60, works)
             Case tpageプレビュー.Name
-                Showプレビュー()
+
+                Showプレビュー(works)
             Case Else ' 
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ShowGridSelected TabName={0}", TabControl.SelectedTab.Name)
         End Select
@@ -285,7 +306,7 @@ Public Class frmMain
         End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If reason.HasFlag(enumReason._GridDropdown) Then
-            If {tpage側面と縁.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
+            If {tpage側面と縁.Name, tpage追加品.Name, tpage横ひも.Name, tpage斜め120度.Name, tpage斜め60度.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -314,17 +335,19 @@ Public Class frmMain
             Case tpage差しひも.Name
                 Hide差しひも(_clsDataTables)
             Case tpageひも上下.Name
-                Hideひも上下(_clsDataTables)
+                '
             Case tpage追加品.Name
                 Hide追加品(_clsDataTables)
             Case tpageメモ他.Name
                 '
             Case tpage横ひも.Name
-                Hide横ひも(_clsDataTables)
-            Case tpage縦ひも.Name
-                Hide縦ひも(_clsDataTables)
+                Hide展開ひも(AngleIndex.idx_0, _clsDataTables)
+            Case tpage斜め120度.Name
+                Hide展開ひも(AngleIndex.idx_120, _clsDataTables)
+            Case tpage斜め60度.Name
+                Hide展開ひも(AngleIndex.idx_60, _clsDataTables)
             Case tpageプレビュー.Name
-                Hideプレビュー()
+                Hideプレビュー(_clsDataTables)
             Case Else ' 
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "TabControl_SelectedIndexChanged TabName={0}", TabControl.SelectedTab.Name)
         End Select
@@ -362,35 +385,38 @@ Public Class frmMain
     End Sub
 
 
-    Sub Disp四角数(ByVal row底_縦横 As clsDataRow)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp四角数 {0}", row底_縦横.ToString)
+    Sub Disp配置数(ByVal row底_縦横 As clsDataRow)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp配置数 {0}", row底_縦横.ToString)
         With row底_縦横
             chk縦横側面を展開する.Checked = .Value("f_b展開区分")
             set底の縦横展開(.Value("f_b展開区分"))
 
-            nud横の目の数.Value = .Value("f_i横の四角数")
-            nud縦の目の数.Value = .Value("f_i縦の四角数")
-            nud高さの目の数.Value = Int(.Value("f_d高さの四角数"))  'double
-
             nud横ひもの本数.Value = .Value("f_i長い横ひもの本数")
-            nud縦ひもの本数.Value = .Value("f_i縦ひもの本数")
-            'nud編みひもの本数.Value = nud高さの目の数.Value
+            nud斜めひも本数60度.Value = .Value("f_i斜め60度ひも本数")
+            nud斜めひも本数120度.Value = .Value("f_i斜め120度ひも本数")
+            nud編みひもの本数.Value = Int(.Value("f_d高さの四角数"))  'double
+            'nud高さの六つ目数.Value = nud編みひもの本数.Value
 
-            dispValidValueNud(nud目_ひも間のすき間, .Value("f_dひも間のすき間"))
+            nud上から何個目.Value = .Value("f_i縦の四角数")
+            nud左から何個目.Value = .Value("f_i横の四角数")
+
+            dispValidValueNud(nud六つ目の高さ, .Value("f_dひも間のすき間"))
             nudひも長係数.Value = .Value("f_dひも長係数")
             nudひも長加算_縦横端.Value = .Value("f_d垂直ひも長加算")   'マイナス可
             nudひも長加算_側面.Value = .Value("f_dひも長加算_側面")   'マイナス可
 
             chk横の補強ひも.Checked = .Value("f_b補強ひも区分")
-            chk縦の補強ひも.Checked = .Value("f_b始末ひも区分")
+            chk斜めの補強ひも.Checked = .Value("f_b斜めの補強ひも区分")
+            chk斜めの補強ひも_120度.Checked = .Value("f_b斜めの補強ひも2区分")
 
             txt横ひものメモ.Text = .Value("f_s横ひものメモ")
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
-            nud左端右端の目.Value = .Value("f_d左端右端の目")
+            nud斜め左端右端の目.Value = .Value("f_d左端右端の目")
             nud上端下端の目.Value = .Value("f_d上端下端の目")
             nud最下段の目.Value = .Value("f_d最下段の目")
 
+            chk斜め同数.Checked = .Value("f_b斜め同数区分")
         End With
     End Sub
 
@@ -413,7 +439,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub Disp計算結果(ByVal calc As clsCalcSquare)
+    Private Sub Disp計算結果(ByVal calc As clsCalcHexagon)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
         With calc
             '
@@ -438,10 +464,11 @@ Public Class frmMain
             lbl縦寸法の差.Text = .p_s縦寸法の差
             lbl高さ寸法の差.Text = .p_s高さ寸法の差
 
-            lbl横ひも本幅変更.Visible = .p_b横ひも本幅変更
-            lbl縦ひも本幅変更.Visible = .p_b縦ひも本幅変更
+            lbl横ひも本幅変更.Visible = .p_bひも本幅変更(AngleIndex.idx_0)
+            lbl60度本幅変更.Visible = .p_bひも本幅変更(AngleIndex.idx_60)
+            lbl120度本幅変更.Visible = .p_bひも本幅変更(AngleIndex.idx_120)
             lbl側面ひも本幅変更.Visible = .p_b側面ひも本幅変更
-            lblひも本幅変更.Visible = .p_b横ひも本幅変更 OrElse .p_b縦ひも本幅変更 OrElse .p_b側面ひも本幅変更
+            lblひも本幅変更.Visible = .p_bひも本幅変更(AngleIndex.idx_0) OrElse .p_bひも本幅変更(AngleIndex.idx_60) OrElse .p_bひも本幅変更(AngleIndex.idx_120) OrElse .p_b側面ひも本幅変更
 
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
@@ -456,18 +483,15 @@ Public Class frmMain
 
     Function SaveTables(ByVal works As clsDataTables) As Boolean
         Save目標寸法(works.p_row目標寸法)
-        Save四角数(works.p_row底_縦横)
+        Save配置数(works.p_row底_縦横)
 
         works.CheckPoint(works.p_tbl側面)
         works.CheckPoint(works.p_tbl追加品)
 
         editInsertBand.Save(works)
-        expand横ひも.Save(enumひも種.i_横, works)
-        expand縦ひも.Save(enumひも種.i_縦, works)
-
-        If _CurrentTabControlName = tpageひも上下.Name Then
-            saveひも上下(works, False)
-        End If
+        expand横ひも.Save(idxひも種(AngleIndex.idx_0), works)
+        expand斜め60度.Save(idxひも種(AngleIndex.idx_60), works)
+        expand斜め120度.Save(idxひも種(AngleIndex.idx_120), works)
 
         Return True
     End Function
@@ -488,34 +512,40 @@ Public Class frmMain
         Return True
     End Function
 
-    Function Save四角数(ByVal row底_縦横 As clsDataRow) As Boolean
+    Function Save配置数(ByVal row底_縦横 As clsDataRow) As Boolean
         With row底_縦横
             .Value("f_b展開区分") = chk縦横側面を展開する.Checked
 
-            .Value("f_i横の四角数") = nud横の目の数.Value
-            .Value("f_i縦の四角数") = nud縦の目の数.Value
-            .Value("f_d高さの四角数") = nud高さの目の数.Value 'double
+            .Value("f_d高さの四角数") = nud高さの六つ目数.Value 'double
 
-            '読み取りますが四角数と合わなければ調整されます
             .Value("f_i長い横ひもの本数") = nud横ひもの本数.Value
-            .Value("f_i縦ひもの本数") = nud縦ひもの本数.Value
-            '読み取りなし　nud高さの目の数.Value 
+            .Value("f_i斜め60度ひも本数") = nud斜めひも本数60度.Value
+            .Value("f_b斜めの補強ひも区分") = chk斜めの補強ひも.Checked
+            If chk斜め同数.Checked Then
+                .Value("f_b斜め同数区分") = True
+                .Value("f_i斜め120度ひも本数") = nud斜めひも本数60度.Value
+                .Value("f_b斜めの補強ひも2区分") = chk斜めの補強ひも.Checked
+            Else
+                .Value("f_b斜め同数区分") = False
+                .Value("f_i斜め120度ひも本数") = nud斜めひも本数120度.Value
+                .Value("f_b斜めの補強ひも2区分") = chk斜めの補強ひも_120度.Checked
+            End If
+            .Value("f_b補強ひも区分") = chk横の補強ひも.Checked
 
-            .Value("f_dひも間のすき間") = nud目_ひも間のすき間.Value
+            .Value("f_i上から何番目") = nud上から何個目.Value
+            .Value("f_i左から何番目") = nud左から何個目.Value
+
+            .Value("f_dひも間のすき間") = nud六つ目の高さ.Value
             .Value("f_dひも長係数") = nudひも長係数.Value
             .Value("f_d垂直ひも長加算") = nudひも長加算_縦横端.Value   'マイナス可
             .Value("f_dひも長加算_側面") = nudひも長加算_側面.Value 'マイナス可
 
-            .Value("f_b補強ひも区分") = chk横の補強ひも.Checked
-            .Value("f_b始末ひも区分") = chk縦の補強ひも.Checked
-
-            .Value("f_s横ひものメモ") = txt横ひものメモ.Text
-            .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
-
-            .Value("f_d左端右端の目") = nud左端右端の目.Value
+            .Value("f_d左端右端の目") = nud斜め左端右端の目.Value
             .Value("f_d上端下端の目") = nud上端下端の目.Value
             .Value("f_d最下段の目") = nud最下段の目.Value
 
+            .Value("f_s横ひものメモ") = txt横ひものメモ.Text
+            .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
         End With
         Return True
     End Function
@@ -542,9 +572,9 @@ Public Class frmMain
 
         '#40:縦横のレコード数
         If chk縦横側面を展開する.Checked Then
-            _clsCalcSquare.prepare縦横展開DataTable()
+            _clsCalcHexagon.prepare展開DataTable()
         End If
-        _clsCalcSquare.adjust_側面()
+        _clsCalcHexagon.adjust_側面()
 
         Dim dlg As New frmColorChange
         dlg.SetDataAndExpand(_clsDataTables, chk縦横側面を展開する.Checked)
@@ -554,7 +584,7 @@ Public Class frmMain
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
         Dim r As DialogResult
-        If _clsCalcSquare.IsValidInput() Then '#22
+        If _clsCalcHexagon.IsValidInput() Then '#22
             '目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
             '(はいで全てリセット、いいえで目(ひも間のすき間)を保持)
             r = MessageBox.Show(My.Resources.AskResetInput, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
@@ -562,7 +592,7 @@ Public Class frmMain
                 Exit Sub
             End If
         End If
-        Dim d目 As Double = nud目_ひも間のすき間.Value
+        Dim d目 As Double = nud六つ目の高さ.Value
 
         _clsDataTables.Clear()
         _clsDataTables.SetInitialValue()
@@ -571,7 +601,7 @@ Public Class frmMain
         _clsDataTables.p_row底_縦横.Value("f_i短い横ひも") = nud基本のひも幅.Value
         _clsDataTables.p_row底_縦横.Value("f_i縦ひも") = nud基本のひも幅.Value
         If r = DialogResult.No Then
-            _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") = nud目_ひも間のすき間.Value
+            _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") = nud六つ目の高さ.Value
         End If
 
         DispTables(_clsDataTables)
@@ -591,7 +621,7 @@ Public Class frmMain
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
-        If _clsCalcSquare.IsValidInput() Then
+        If _clsCalcHexagon.IsValidInput() Then
             '規定値をロードします。よろしいですか？
             Dim r As DialogResult = MessageBox.Show(My.Resources.AskLoadDefault, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
             If r <> DialogResult.OK Then
@@ -610,7 +640,7 @@ Public Class frmMain
         SaveTables(_clsDataTables)
         '実行前のチェック
         Dim message As String = Nothing
-        If _clsCalcSquare.CheckTarget(message) Then
+        If _clsCalcHexagon.CheckTarget(message) Then
             If String.IsNullOrWhiteSpace(message) Then
                 'そのまま進めてOK
             Else
@@ -622,20 +652,20 @@ Public Class frmMain
             End If
         Else
             '実行不可
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Exit Sub
         End If
 
         '実行する
-        If _clsCalcSquare.CalcTarget() Then
+        If _clsCalcHexagon.CalcTarget() Then
             _isLoadingData = True
             '計算結果の縦横値
-            Disp四角数(_clsDataTables.p_row底_縦横)
+            Disp配置数(_clsDataTables.p_row底_縦横)
             '(側面のテーブルも変更されている)
             _isLoadingData = False
         Else
             'エラーあり
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
 
         recalc(CalcCategory.NewData)
@@ -645,10 +675,10 @@ Public Class frmMain
     Private Sub ToolStripMenuItemEditList_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditList.Click
         SaveTables(_clsDataTables)
         '_clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
-        _clsCalcSquare.CalcSize(CalcCategory.FixLength, Nothing, Nothing)
+        _clsCalcHexagon.CalcSize(CalcCategory.FixLength, Nothing, Nothing)
 
-        If Not _clsCalcSquare.p_b有効 Then
-            Dim msg As String = _clsCalcSquare.p_sメッセージ & vbCrLf
+        If Not _clsCalcHexagon.p_b有効 Then
+            Dim msg As String = _clsCalcHexagon.p_sメッセージ & vbCrLf
             'このままリスト出力を行いますか？
             msg += My.Resources.AskOutput
             Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
@@ -658,8 +688,8 @@ Public Class frmMain
         End If
 
         Dim output As New clsOutput(_sFilePath)
-        If Not _clsCalcSquare.CalcOutput(output) Then
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        If Not _clsCalcHexagon.CalcOutput(output) Then
+            MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
@@ -809,7 +839,7 @@ Public Class frmMain
     Private Sub setStartEditing(Optional ByVal showTabBase As Boolean = False)
         '表示後の編集開始
         Save目標寸法(_clsDataTables.p_row目標寸法)
-        Save四角数(_clsDataTables.p_row底_縦横)
+        Save配置数(_clsDataTables.p_row底_縦横)
 
         _clsDataTables.ResetStartPoint()
 
@@ -819,8 +849,6 @@ Public Class frmMain
         If showTabBase Then
             ShowDefaultTabControlPage(enumReason._Always)
         End If
-        '表面プレビュー
-        radおもて.Checked = True
     End Sub
 
     '新規作成
@@ -861,11 +889,11 @@ Public Class frmMain
         If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
             '目標寸法が空ならセット(#19)
             If nud横寸法.Value = 0 AndAlso nud縦寸法.Value = 0 AndAlso nud高さ寸法.Value = 0 AndAlso
-                0 < _clsCalcSquare.p_d四角ベース_横 AndAlso 0 < _clsCalcSquare.p_d四角ベース_縦 Then
-                nud横寸法.Value = _clsCalcSquare.p_d四角ベース_横
-                nud縦寸法.Value = _clsCalcSquare.p_d四角ベース_縦
+                0 < _clsCalcHexagon.p_d四角ベース_横 AndAlso 0 < _clsCalcHexagon.p_d四角ベース_縦 Then
+                nud横寸法.Value = _clsCalcHexagon.p_d四角ベース_横
+                nud縦寸法.Value = _clsCalcHexagon.p_d四角ベース_縦
                 nud高さ寸法.Value = 1 '空の解除
-                nud高さ寸法.Value = _clsCalcSquare.p_d四角ベース_高さ
+                nud高さ寸法.Value = _clsCalcHexagon.p_d四角ベース_高さ
             End If
             'Mesh(本幅)横-縦-高さ
             Dim defname As String
@@ -983,11 +1011,11 @@ Public Class frmMain
     End Sub
 #End Region
 
-#Region "目標・四角数のコントロール"
+#Region "目標・配置数のコントロール"
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横側面を展開する.CheckedChanged
         set底の縦横展開(chk縦横側面を展開する.Checked)
-        recalc(CalcCategory.Square_Expand, sender)
+        recalc(CalcCategory.Hex_Expand, sender)
     End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
@@ -1020,85 +1048,143 @@ Public Class frmMain
         recalc(CalcCategory.Target, sender)
     End Sub
 
-    Private Sub nud編みひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud編みひもの本数.ValueChanged
-        nud高さの目の数.Value = nud編みひもの本数.Value
-        'recalc(CalcCategory.Square_Vert, sender)
-    End Sub
-
-    Private Sub nud高さの目の数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの目の数.ValueChanged
-        nud編みひもの本数.Value = nud高さの目の数.Value
-        recalc(CalcCategory.Square_Vert, sender)
-    End Sub
-
-    Private Sub nud左端右端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud左端右端の目.ValueChanged
-        recalc(CalcCategory.Square_Yoko, sender)
-    End Sub
-
-    Private Sub nud上端下端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud上端下端の目.ValueChanged
-        recalc(CalcCategory.Square_Tate, sender)
-    End Sub
-
-    Private Sub nud最下段の目_ValueChanged(sender As Object, e As EventArgs) Handles nud最下段の目.ValueChanged
-        recalc(CalcCategory.Square_Vert, sender)
-    End Sub
+    '横置き
     Private Sub nud横ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud横ひもの本数.ValueChanged
-        '奇数推奨
-        If nud横ひもの本数.Value Mod 2 = 1 Then
+        '偶数推奨
+        If nud横ひもの本数.Value Mod 2 = 0 Then
             nud横ひもの本数.Increment = 2
         Else
             nud横ひもの本数.Increment = 1
         End If
+        'マーク位置
         If 1 < nud横ひもの本数.Value Then
-            nud縦の目の数.Value = nud横ひもの本数.Value - 1
+            nud上から何個目.Value = nud横ひもの本数.Value \ 2
         Else
-            nud縦の目の数.Value = 0
+            nud上から何個目.Value = 0
         End If
-        recalc(CalcCategory.Square_Tate, sender)
+        recalc(CalcCategory.Hex_Yoko, sender)
+    End Sub
+    'マーク位置
+    Private Sub nud上から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何個目.ValueChanged
+        '横ひもの本数-1以下
+        If nud横ひもの本数.Value - 1 <= nud上から何個目.Value Then
+            If 1 < nud横ひもの本数.Value Then
+                nud上から何個目.Value = nud横ひもの本数.Value - 1
+            Else
+                nud上から何個目.Value = 0
+            End If
+        End If
+        recalc(CalcCategory.Hex_Yoko, sender)
+    End Sub
+    Private Sub nud上端下端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud上端下端の目.ValueChanged
+        recalc(CalcCategory.Hex_Yoko, sender)
+    End Sub
+    Private Sub chk横の補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横の補強ひも.CheckedChanged
+        recalc(CalcCategory.Hex_Yoko, sender)
     End Sub
 
-    Private Sub nud縦の目の数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦の目の数.ValueChanged
+
+    '斜め置き
+    Private Sub nud斜めひも本数60度_ValueChanged(sender As Object, e As EventArgs) Handles nud斜めひも本数60度.ValueChanged
         '偶数推奨
-        If nud縦の目の数.Value Mod 2 = 1 Then
-            nud縦の目の数.Increment = 1
+        If nud斜めひも本数60度.Value Mod 2 = 0 Then
+            nud斜めひも本数60度.Increment = 2
         Else
-            nud縦の目の数.Increment = 2
+            nud斜めひも本数60度.Increment = 1
         End If
-        nud横ひもの本数.Value = nud縦の目の数.Value + 1 'recalc
-        'recalc(CalcCategory.Square_Tate, sender)
+        If 1 < nud斜めひも本数60度.Value Then
+            nud左から何個目.Value = nud斜めひも本数60度.Value \ 2
+        Else
+            nud左から何個目.Value = 0
+        End If
+        If chk斜め同数.Checked Then
+            nud斜めひも本数120度.Value = nud斜めひも本数60度.Value
+        End If
+        recalc(CalcCategory.Hex_60120, sender)
+    End Sub
+    'マーク位置
+    Private Sub nud左から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何個目.ValueChanged
+        '斜めひも本数-1以下
+        If nud斜めひも本数60度.Value - 1 <= nud左から何個目.Value Then
+            If 1 < nud斜めひも本数60度.Value Then
+                nud左から何個目.Value = nud斜めひも本数60度.Value - 1
+            Else
+                nud左から何個目.Value = 0
+            End If
+        End If
+        If Not chk斜め同数.Checked AndAlso
+            nud斜めひも本数120度.Value - 1 <= nud左から何個目.Value Then
+            If 1 < nud斜めひも本数120度.Value Then
+                nud左から何個目.Value = nud斜めひも本数120度.Value - 1
+            Else
+                nud左から何個目.Value = 0
+            End If
+        End If
+        recalc(CalcCategory.Hex_Yoko, sender)
+    End Sub
+    Private Sub chk斜めの補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも.CheckedChanged
+        recalc(CalcCategory.Hex_60120, sender)
+    End Sub
+    Private Sub nud斜め左端右端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud斜め左端右端の目.ValueChanged
+        recalc(CalcCategory.Hex_60120, sender)
     End Sub
 
-    Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
-        '奇数推奨
-        If nud縦ひもの本数.Value Mod 2 = 1 Then
-            nud縦ひもの本数.Increment = 2
-        Else
-            nud縦ひもの本数.Increment = 1
-        End If
-        If 1 < nud縦ひもの本数.Value Then
-            nud横の目の数.Value = nud縦ひもの本数.Value - 1
-        Else
-            nud横の目の数.Value = 0
-        End If
-        recalc(CalcCategory.Square_Yoko, sender)
+    '斜め同数
+    Private Sub chk斜め同数_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜め同数.CheckedChanged
+        Dim visible As Boolean = Not chk斜め同数.Checked
+        lbl60度.Visible = visible
+        lbl120度.Visible = visible
+        nud斜めひも本数120度.Visible = visible
+        lbl120度ひも本数_単位.Visible = visible
+        lblchk60度.Visible = visible
+        chk斜めの補強ひも_120度.Visible = visible
+        expand斜め120度.AddDeleteButtonVisible(visible)
+
+        recalc(CalcCategory.Hex_60120, sender)
     End Sub
 
-    Private Sub nud横の目の数_ValueChanged(sender As Object, e As EventArgs) Handles nud横の目の数.ValueChanged
+    Private Sub nud斜めひも本数120度_ValueChanged(sender As Object, e As EventArgs) Handles nud斜めひも本数120度.ValueChanged
         '偶数推奨
-        If nud横の目の数.Value Mod 2 = 1 Then
-            nud横の目の数.Increment = 1
+        If nud斜めひも本数120度.Value Mod 2 = 0 Then
+            nud斜めひも本数120度.Increment = 2
         Else
-            nud横の目の数.Increment = 2
+            nud斜めひも本数120度.Increment = 1
         End If
-        nud縦ひもの本数.Value = nud横の目の数.Value + 1 'recalc
-        'recalc(CalcCategory.Square_Yoko, sender)
+        If nud斜めひも本数120度.Value - 1 <= nud左から何個目.Value Then
+            If 1 < nud斜めひも本数120度.Value Then
+                nud左から何個目.Value = nud斜めひも本数120度.Value - 1
+            Else
+                nud左から何個目.Value = 0
+            End If
+        End If
+        recalc(CalcCategory.Hex_60120, sender)
     End Sub
 
-    Private Sub 目_ひも間のすき間_ValueChanged(sender As Object, e As EventArgs) Handles nud目_ひも間のすき間.ValueChanged
-        If 0 < nud目_ひも間のすき間.Value Then
-            txt目_本幅分.Text = New Length(nud目_ひも間のすき間.Value).ByLaneText
-            txt目対角線_本幅分.Text = New Length(nud目_ひも間のすき間.Value * ROOT2).ByLaneText
+    Private Sub chk斜めの補強ひも_120度_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも_120度.CheckedChanged
+        recalc(CalcCategory.Hex_60120, sender)
+    End Sub
+
+
+    '側面
+    Private Sub nud編みひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud編みひもの本数.ValueChanged
+        nud高さの六つ目数.Value = nud編みひもの本数.Value
+        recalc(CalcCategory.Hex_Vert, sender)
+    End Sub
+    'read only
+    Private Sub nud高さの六つ目数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの六つ目数.ValueChanged
+        nud編みひもの本数.Value = nud高さの六つ目数.Value
+    End Sub
+    Private Sub nud最下段の目_ValueChanged(sender As Object, e As EventArgs) Handles nud最下段の目.ValueChanged
+        recalc(CalcCategory.Hex_Vert, sender)
+    End Sub
+
+
+    Private Sub nud六つ目の高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud六つ目の高さ.ValueChanged
+        If 0 < nud六つ目の高さ.Value Then
+            txt目_本幅分.Text = New Length(nud六つ目の高さ.Value).ByLaneText
+            txt目対角線_本幅分.Text = New Length(nud六つ目の高さ.Value * 2 / Math.Sqrt(3)).ByLaneText
             If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
-                txtひも幅比.Text = (nud目_ひも間のすき間.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
+                txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
             Else
                 txtひも幅比.Text = ""
             End If
@@ -1106,19 +1192,19 @@ Public Class frmMain
             txt目_本幅分.Text = ""
         End If
 
-        recalc(CalcCategory.Square_Gap, sender)
+        recalc(CalcCategory.Hex_Gap, sender)
     End Sub
 
     Private Sub nudひも長係数_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長係数.ValueChanged
-        recalc(CalcCategory.Square_Gap, sender)
+        recalc(CalcCategory.Hex_Gap, sender)
     End Sub
 
     Private Sub nudひも長加算_縦横端_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_縦横端.ValueChanged
-        recalc(CalcCategory.Square_Gap, sender)
+        recalc(CalcCategory.Hex_Gap, sender)
     End Sub
 
     Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
-        recalc(CalcCategory.Square_Vert, sender)
+        recalc(CalcCategory.Hex_Vert, sender)
     End Sub
 #End Region
 
@@ -1131,9 +1217,9 @@ Public Class frmMain
             Exit Sub
         End If
 
-        Save四角数(works.p_row底_縦横) '縦横側面展開値
-        If Not _clsCalcSquare.CalcSize(CalcCategory.SideEdge, Nothing, Nothing) Then '側面と縁
-            MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        Save配置数(works.p_row底_縦横) '縦横側面展開値
+        If Not _clsCalcHexagon.CalcSize(CalcCategory.SideEdge, Nothing, Nothing) Then '側面と縁
+            MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
@@ -1158,7 +1244,7 @@ Public Class frmMain
 
     Private Sub btn追加_側面_Click(sender As Object, e As EventArgs) Handles btn追加_側面.Click
         If dgv側面.Rows.Count = 0 Then
-            nud高さの目の数.Value = nud高さの目の数.Value + 1
+            nud高さの六つ目数.Value = nud高さの六つ目数.Value + 1
             Exit Sub
         End If
 
@@ -1170,20 +1256,20 @@ Public Class frmMain
 
         If String.IsNullOrWhiteSpace(cmb編みかた名_側面.Text) Then
             '編みかた名指定なし
-            If _clsCalcSquare.add_高さ(currow) Then
+            If _clsCalcHexagon.add_高さ(currow) Then
                 If currow IsNot Nothing Then
                     dgv側面.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
                 End If
-                nud高さの目の数.Value = nud高さの目の数.Value + 1 '→recalc
+                nud高さの六つ目数.Value = nud高さの六つ目数.Value + 1 '→recalc
             End If
         Else
             '編みかた名指定あり
             Dim row As tbl側面Row = Nothing
-            If _clsCalcSquare.add_縁(cmb編みかた名_側面.Text, nud基本のひも幅.Value, row) Then
+            If _clsCalcHexagon.add_縁(cmb編みかた名_側面.Text, nud基本のひも幅.Value, row) Then
                 dgv側面.NumberPositionsSelect(row.f_i番号)
                 recalc(CalcCategory.SideEdge, row, "f_i周数")
             Else
-                MessageBox.Show(_clsCalcSquare.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         End If
     End Sub
@@ -1203,19 +1289,13 @@ Public Class frmMain
             '縁を削除
             clsDataTables.RemoveNumberFromTable(table, clsDataTables.cHemNumber)
             recalc(CalcCategory.SideEdge, Nothing, Nothing)
-
-        ElseIf currow.f_i番号 = clsCalcSquare.cIdxSpace Then
-            '最下段を削除
-            nud最下段の目.Value = 0
-            recalc(CalcCategory.SideEdge, Nothing, Nothing)
-
         Else
             '高さを削除
-            If _clsCalcSquare.del_高さ(currow) Then
+            If _clsCalcHexagon.del_高さ(currow) Then
                 If currow IsNot Nothing Then
                     dgv側面.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
                 End If
-                nud高さの目の数.Value = nud高さの目の数.Value - 1 '→recalc
+                nud高さの六つ目数.Value = nud高さの六つ目数.Value - 1 '→recalc
             End If
         End If
     End Sub
@@ -1268,147 +1348,163 @@ Public Class frmMain
 
 #End Region
 
-#Region "縦横展開"
+#Region "斜めと横展開"
+    '_tabPages,_ctrExpandings参照
+
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
-            If Not TabControl.TabPages.Contains(tpage縦ひも) Then
-                TabControl.TabPages.Add(tpage縦ひも)
-            End If
-            If Not TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Add(tpage横ひも)
-            End If
-        Else
-            If TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Remove(tpage横ひも)
-            End If
-            If TabControl.TabPages.Contains(tpage縦ひも) Then
-                TabControl.TabPages.Remove(tpage縦ひも)
-            End If
-        End If
-    End Sub
-    Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
-        expand横ひも.PanelSize = tpage横ひも.Size
-    End Sub
-
-    Private Sub tpage縦ひも_Resize(sender As Object, e As EventArgs) Handles tpage縦ひも.Resize
-        expand縦ひも.PanelSize = tpage縦ひも.Size
-    End Sub
-
-
-    Sub Show横ひも(ByVal works As clsDataTables)
-        Save四角数(works.p_row底_縦横) '補強ひも・キャッシュなし
-        expand横ひも.PanelSize = tpage横ひも.Size
-        expand横ひも.ShowGrid(_clsCalcSquare.get横展開DataTable())
-    End Sub
-
-    Function Hide横ひも(ByVal works As clsDataTables) As Boolean
-        Return expand横ひも.HideGrid(enumひも種.i_横, works)
-    End Function
-
-    Sub Show縦ひも(ByVal works As clsDataTables)
-        Save四角数(works.p_row底_縦横) '補強ひも・キャッシュなし
-        expand縦ひも.PanelSize = tpage縦ひも.Size
-        expand縦ひも.ShowGrid(_clsCalcSquare.get縦展開DataTable())
-    End Sub
-
-    Function Hide縦ひも(ByVal works As clsDataTables) As Boolean
-        Return expand縦ひも.HideGrid(enumひも種.i_縦, works)
-    End Function
-
-
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
-        Dim currow As tbl縦横展開Row = e.Row
-        If _clsCalcSquare.add_横ひも(currow) Then
-            nud縦の目の数.Value = nud縦の目の数.Value + 1 'with recalc
-            expand横ひも.PositionSelect(currow)
-        End If
-    End Sub
-
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
-        Dim currow As tbl縦横展開Row = e.Row
-
-        '補強ひも/上端・下端
-        If currow IsNot Nothing Then
-            Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
-            If (iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_すき間)) Then
-                _clsCalcSquare.save横展開DataTable()
-                If iひも種.HasFlag(enumひも種.i_補強) Then
-                    chk横の補強ひも.Checked = False
-                ElseIf iひも種.HasFlag(enumひも種.i_すき間) Then
-                    nud上端下端の目.Value = 0
+            For Each tpage As TabPage In _tabPages
+                If Not TabControl.TabPages.Contains(tpage) Then
+                    TabControl.TabPages.Add(tpage)
                 End If
-                Save四角数(_clsDataTables.p_row底_縦横)
-                expand横ひも.DataSource = _clsCalcSquare.get横展開DataTable()
-                Exit Sub
-            End If
-        End If
+            Next
 
-        '横ひも
-        If _clsCalcSquare.del_横ひも(currow) Then
-            nud縦の目の数.Value = nud縦の目の数.Value - 1 'with recalc
-            expand横ひも.PositionSelect(currow)
+        Else
+            For Each tpage As TabPage In _tabPages
+                If TabControl.TabPages.Contains(tpage) Then
+                    TabControl.TabPages.Remove(tpage)
+                End If
+            Next
+
         End If
     End Sub
+
+    Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
+        If _tabPages(idx(AngleIndex.idx_0)) IsNot Nothing AndAlso _ctrExpandings(idx(AngleIndex.idx_0)) IsNot Nothing Then
+            _ctrExpandings(idx(AngleIndex.idx_0)).PanelSize = _tabPages(idx(AngleIndex.idx_0)).Size
+        End If
+    End Sub
+    Private Sub tpage斜め120度_Resize(sender As Object, e As EventArgs) Handles tpage斜め120度.Resize
+        If _tabPages(idx(AngleIndex.idx_120)) IsNot Nothing AndAlso _ctrExpandings(idx(AngleIndex.idx_120)) IsNot Nothing Then
+            _ctrExpandings(idx(AngleIndex.idx_120)).PanelSize = _tabPages(idx(AngleIndex.idx_120)).Size
+        End If
+    End Sub
+    Private Sub tpage斜め60度_Resize(sender As Object, e As EventArgs) Handles tpage斜め60度.Resize
+        If _tabPages(idx(AngleIndex.idx_60)) IsNot Nothing AndAlso _ctrExpandings(idx(AngleIndex.idx_60)) IsNot Nothing Then
+            _ctrExpandings(idx(AngleIndex.idx_60)).PanelSize = _tabPages(idx(AngleIndex.idx_60)).Size
+        End If
+    End Sub
+
+
+    Private Sub Show展開ひも(ByVal aidx As AngleIndex, ByVal works As clsDataTables)
+        Save配置数(works.p_row底_縦横) '補強ひも・キャッシュなし
+        _ctrExpandings(idx(aidx)).PanelSize = _tabPages(idx(aidx)).Size
+        _ctrExpandings(idx(aidx)).ShowGrid(_clsCalcHexagon.get展開DataTable(aidx))
+    End Sub
+
+    Private Function Hide展開ひも(ByVal aidx As AngleIndex, ByVal works As clsDataTables) As Boolean
+        Return _ctrExpandings(idx(aidx)).HideGrid(idxひも種(aidx), works)
+    End Function
+
+
 
     Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
-        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
-        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
-            Exit Sub
-        End If
-        recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
+        recalc(CalcCategory.Expand_0, e.Row, e.DataPropertyName)
     End Sub
-
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
-        expand横ひも.DataSource = _clsCalcSquare.get横展開DataTable(True)
+        _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex.idx_0))
+        expand横ひも.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex.idx_0, True)
     End Sub
-
-    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
-        If _clsCalcSquare.add_縦ひも(currow) Then
-            nud横の目の数.Value = nud横の目の数.Value + 1 'with recalc
-            expand縦ひも.PositionSelect(currow)
+        If _clsCalcHexagon.add_ひも(AngleIndex.idx_0, currow) Then
+            nud横ひもの本数.Value = nud横ひもの本数.Value + 1 'with recalc
+            If currow IsNot Nothing Then
+                expand横ひも.PositionSelect(currow)
+            End If
         End If
     End Sub
-
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
-        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
-        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
-            Exit Sub
-        End If
-        recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
-    End Sub
-
-    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
-
-        '補強ひも/左端・右端
         If currow IsNot Nothing Then
-            Dim iひも種 As enumひも種 = CType(currow.f_iひも種, enumひも種)
-            If (iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_すき間)) Then
-                _clsCalcSquare.save縦展開DataTable()
-                If iひも種.HasFlag(enumひも種.i_補強) Then
-                    chk縦の補強ひも.Checked = False
-                ElseIf iひも種.HasFlag(enumひも種.i_すき間) Then
-                    nud左端右端の目.Value = 0
-                End If
-                Save四角数(_clsDataTables.p_row底_縦横)
-                expand縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable()
+            If is_idx補強(AngleIndex.idx_0, currow.f_iひも種) Then
+                chk横の補強ひも.Checked = False 'with recalc
+                Exit Sub
+            ElseIf is_idxすき間(AngleIndex.idx_0, currow.f_iひも種) Then
+                nud上端下端の目.Value = 0 'with recalc
                 Exit Sub
             End If
         End If
-
-        '縦ひも
-        If _clsCalcSquare.del_縦ひも(currow) Then
-            nud横の目の数.Value = nud横の目の数.Value - 1 'with recalc
-            expand縦ひも.PositionSelect(currow)
+        If _clsCalcHexagon.del_ひも(AngleIndex.idx_0, currow) Then
+            nud横ひもの本数.Value = nud横ひもの本数.Value - 1 'with recalc
+            If currow IsNot Nothing Then
+                expand横ひも.PositionSelect(currow)
+            End If
         End If
     End Sub
 
-    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
-        expand縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable(True)
+
+    Private Sub expand斜め60度_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.CellValueChanged
+        recalc(CalcCategory.Expand_60, e.Row, e.DataPropertyName)
+    End Sub
+    Private Sub expand斜め60度_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.ResetButton
+        _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex.idx_60))
+        expand斜め60度.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex.idx_60, True)
+    End Sub
+    Private Sub expand斜め60度_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If _clsCalcHexagon.add_ひも(AngleIndex.idx_60, currow) Then
+            nud斜めひも本数60度.Value = nud斜めひも本数60度.Value + 1 'with recalc
+            If currow IsNot Nothing Then
+                expand斜め60度.PositionSelect(currow)
+            End If
+        End If
+    End Sub
+    Private Sub expand斜め60度_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow IsNot Nothing Then
+            If is_idx補強(AngleIndex.idx_60, currow.f_iひも種) Then
+                chk斜めの補強ひも.Checked = False 'with recalc
+                Exit Sub
+            ElseIf is_idxすき間(AngleIndex.idx_60, currow.f_iひも種) Then
+                nud斜め左端右端の目.Value = 0 '共用・with recalc
+                Exit Sub
+            End If
+        End If
+        If _clsCalcHexagon.del_ひも(AngleIndex.idx_60, currow) Then
+            nud斜めひも本数60度.Value = nud斜めひも本数60度.Value - 1 'with recalc
+            If currow IsNot Nothing Then
+                expand斜め60度.PositionSelect(currow)
+            End If
+        End If
     End Sub
 
+    Private Sub expand斜め120度_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.CellValueChanged
+        recalc(CalcCategory.Expand_120, e.Row, e.DataPropertyName)
+    End Sub
+    Private Sub expand斜め120度_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.ResetButton
+        _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex.idx_120))
+        expand斜め120度.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex.idx_120, True)
+    End Sub
+    '追加・削除ボタンは、同数でない場合のみ表示される
+    Private Sub expand斜め120度_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.AddButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If _clsCalcHexagon.add_ひも(AngleIndex.idx_120, currow) Then
+            nud斜めひも本数120度.Value = nud斜めひも本数120度.Value + 1 'with recalc
+            If currow IsNot Nothing Then
+                expand斜め120度.PositionSelect(currow)
+            End If
+        End If
+    End Sub
+    Private Sub expand斜め120度_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.DeleteButton
+        Dim currow As tbl縦横展開Row = e.Row
+        If currow IsNot Nothing Then
+            If is_idx補強(AngleIndex.idx_120, currow.f_iひも種) Then
+                chk斜めの補強ひも_120度.Checked = False 'with recalc
+                Exit Sub
+            ElseIf is_idxすき間(AngleIndex.idx_120, currow.f_iひも種) Then
+                nud斜め左端右端の目.Value = 0 '共用・with recalc
+                Exit Sub
+            End If
+        End If
+        If _clsCalcHexagon.del_ひも(AngleIndex.idx_120, currow) Then
+            nud斜めひも本数120度.Value = nud斜めひも本数120度.Value - 1 'with recalc
+            If currow IsNot Nothing Then
+                expand斜め120度.PositionSelect(currow)
+            End If
+        End If
+    End Sub
 
 #End Region
 
@@ -1435,143 +1531,36 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellValueChanged({1}){2}", Now, DataPropertyName, New clsDataRow(row).ToString)
         recalc(CalcCategory.Inserted, row, DataPropertyName)
     End Sub
-
-    Private Sub editInsertBand_InnerPositionsSet(sender As Object, e As InsertBandEventArgs) Handles editInsertBand.InnerPositionsSet
-        recalc(CalcCategory.Inserted, Nothing, Nothing)
-    End Sub
-#End Region
-
-#Region "ひも上下"
-    Dim _CurrentTargetFace As enumTargetFace
-
-
-    Sub Showひも上下(ByVal works As clsDataTables)
-        If works Is Nothing Then
-            Exit Sub
-        End If
-
-        editUpDown.Is側面_下から上へ = rad下から上へ.Checked '側面のタブ
-        editUpDown.I上右側面本数 = _clsCalcSquare.p_i垂直ひも半数 '下左側面の開始パターン取得用
-
-        _CurrentTargetFace = enumTargetFace.NoDef
-        If rad側面_上右.Checked Then
-            _CurrentTargetFace = enumTargetFace.Side12
-            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i垂直ひも半数
-            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i側面ひもの本数
-
-        ElseIf rad側面_下左.Checked Then
-            _CurrentTargetFace = enumTargetFace.Side34
-            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i垂直ひも半数
-            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i側面ひもの本数
-
-        ElseIf rad底.Checked Then
-            _CurrentTargetFace = enumTargetFace.Bottom
-            editUpDown.I水平領域四角数 = _clsCalcSquare.p_i縦ひもの本数
-            editUpDown.I垂直領域四角数 = _clsCalcSquare.p_i横ひもの本数
-        Else
-            Exit Sub
-        End If
-
-        editUpDown.PanelSize = tpageひも上下.Size
-        editUpDown.ShowGrid(works, _CurrentTargetFace)
-    End Sub
-
-    Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
-        Return editUpDown.Save(works, isMsg)
-    End Function
-
-    Function Hideひも上下(ByVal works As clsDataTables) As Boolean
-        Return editUpDown.HideGrid(works)
-    End Function
-
-    Private Sub rad底側面_CheckedChanged(sender As Object, e As EventArgs) Handles rad底.CheckedChanged, rad側面_上右.CheckedChanged, rad側面_下左.CheckedChanged
-        Dim target As enumTargetFace = enumTargetFace.Bottom
-        If rad側面_上右.Checked Then
-            target = enumTargetFace.Side12
-        ElseIf rad側面_下左.Checked Then
-            target = enumTargetFace.Side34
-        End If
-
-        If _CurrentTargetFace <> target Then
-            editUpDown.Save(_clsDataTables, True)
-            Showひも上下(_clsDataTables)
-        End If
-    End Sub
-
-    Private Sub btn先と同じ_Click(sender As Object, e As EventArgs) Handles btn先と同じ.Click
-        Dim prvS As String
-        Dim prv As enumTargetFace
-        Select Case _CurrentTargetFace
-            Case enumTargetFace.Side12
-                prv = enumTargetFace.Bottom
-                prvS = rad底.Text
-            Case enumTargetFace.Side34
-                prv = enumTargetFace.Side12
-                prvS = rad側面_上右.Text
-            Case Else 'bottom
-                prv = enumTargetFace.Side34
-                prvS = rad側面_下左.Text
-        End Select
-        '現編集内容を破棄し{0}と同じにします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(String.Format(My.Resources.AskLoadSameAs, prvS),
-                                                Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
-        End If
-
-        Dim updown As New clsUpDown(prv)
-        If _clsDataTables.ToClsUpDown(updown) Then
-            editUpDown.Replace(updown)
-        Else
-            '{0}のデータを表示できませんでした。
-            MessageBox.Show(String.Format(My.Resources.MessageReplaceError, prvS),
-                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
-
-    Private Sub tpageひも上下_Resize(sender As Object, e As EventArgs) Handles tpageひも上下.Resize
-        editUpDown.PanelSize = tpageひも上下.Size
-    End Sub
-
 #End Region
 
 #Region "プレビュー"
     Dim _clsImageData As clsImageData
-    Private Sub Showプレビュー()
+    Private Sub Showプレビュー(works As clsDataTables)
         picプレビュー.Image = Nothing
         _clsImageData = Nothing
 
         SaveTables(_clsDataTables)
-        Dim ret As Boolean = _clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
-        Disp計算結果(_clsCalcSquare) 'NGはToolStripに表示
+        Dim ret As Boolean = _clsCalcHexagon.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        Disp計算結果(_clsCalcHexagon) 'NGはToolStripに表示
         If Not ret Then
             Return
         End If
 
-        Dim data As clsDataTables = _clsDataTables
-        Dim calc As clsCalcSquare = _clsCalcSquare
-        Dim isBackFace As Boolean = False
-        If radうら.Checked Then
-            data = _clsDataTables.LeftSideRightData()
-            calc = New clsCalcSquare(data, Me)
-            isBackFace = True
-            If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
-                Return  '先にOKならOKのはずだが
-            End If
-        End If
         Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
-        ret = calc.CalcImage(_clsImageData, isBackFace)
+        ret = _clsCalcHexagon.CalcImage(_clsImageData)
         Cursor.Current = Cursors.Default
 
-        If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
-            MessageBox.Show(calc.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        If Not ret Then
+            If Not String.IsNullOrWhiteSpace(_clsCalcHexagon.p_sメッセージ) Then
+                MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
             Exit Sub
         End If
         picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
     End Sub
 
-    Private Sub Hideプレビュー()
+    Private Sub Hideプレビュー(clsDataTables As clsDataTables)
         picプレビュー.Image = Nothing
         If _clsImageData IsNot Nothing Then
             _clsImageData.Clear()
@@ -1583,7 +1572,7 @@ Public Class frmMain
         If _clsImageData Is Nothing Then
             Return
         End If
-        If Not _clsImageData.ImgBrowserOpen(radうら.Checked) Then
+        If Not _clsImageData.ImgBrowserOpen() Then
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
@@ -1596,14 +1585,6 @@ Public Class frmMain
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
-
-    Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged, radうら.CheckedChanged
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        Showプレビュー()
-    End Sub
-
 #End Region
 
 
@@ -1612,17 +1593,17 @@ Public Class frmMain
     Private Sub btnDEBUG_Click(sender As Object, e As EventArgs) Handles btnDEBUG.Click
         If Not bVisible Then
             setDgvColumnsVisible(dgv側面)
-            editInsertBand.SetDgvColumnsVisible()
             editAddParts.SetDgvColumnsVisible()
+            expand斜め120度.SetDgvColumnsVisible()
             expand横ひも.SetDgvColumnsVisible()
-            expand縦ひも.SetDgvColumnsVisible()
-            expand縦ひも.SetDgvColumnsVisible()
+            expand斜め60度.SetDgvColumnsVisible()
+            editInsertBand.SetDgvColumnsVisible()
             bVisible = True
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row目標寸法.dump())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsDataTables.p_row底_縦横.dump())
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsCalcSquare.dump())
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", _clsCalcHexagon.dump())
         '
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl側面).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl追加品).ToString())
@@ -1638,6 +1619,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 #End Region
 
 End Class

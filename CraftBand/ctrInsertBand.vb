@@ -1,13 +1,11 @@
 ﻿Imports CraftBand.clsDataTables
-Imports CraftBand.clsMasterTables
 Imports CraftBand.ctrDataGridView
-Imports CraftBand.ctrExpanding
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports System.Drawing
 Imports System.Windows.Forms
 
-Public Class ctrAdditionalBand
+Public Class ctrInsertBand
 
     'Panelを置き、各ControlはPanelにAnchorし、Panelをコードでリサイズする
     '※ユーザーコントロールとしてのサイズでは制御できない・表示がずれる
@@ -25,19 +23,23 @@ Public Class ctrAdditionalBand
     End Property
 
     'イベント
-    Public Class AdditionalBandEventArgs
+    Public Class InsertBandEventArgs
         Inherits EventArgs
 
-        Public Property Row As tbl縦横展開Row = Nothing
+        Public Property Row As tbl差しひもRow = Nothing
         Public Property DataPropertyName As String
 
-        Public Sub New(ByVal r As tbl縦横展開Row, Optional pname As String = Nothing)
+        Public Sub New(ByVal r As tbl差しひもRow, Optional pname As String = Nothing)
             Me.Row = r
             DataPropertyName = pname
         End Sub
     End Class
 
-    Public Event CellValueChanged As EventHandler(Of AdditionalBandEventArgs)
+    'セルの変更通知
+    Public Event CellValueChanged As EventHandler(Of InsertBandEventArgs)
+    Public Event InnerPositionsSet As EventHandler(Of InsertBandEventArgs)
+    '追加・削除・移動はコントロール内で完結
+
 
     '対象バンド・基本値の更新
     Private Sub setBasics()
@@ -49,13 +51,6 @@ Public Class ctrAdditionalBand
     End Sub
 
 #Region "公開関数"
-
-    <Flags()>
-    Public Enum enumVisible
-        i_None = 0
-        i_幅 = &H1
-        i_出力ひも長 = &H2
-    End Enum
 
     'Load後に一度だけセットしてください
     Sub SetNames(ByVal formcaption As String, ByVal tabname As String,
@@ -137,8 +132,19 @@ Public Class ctrAdditionalBand
         End If
 
         '非表示の間の変更を反映
-        _i基本のひも幅 = works.p_row目標寸法.Value("f_i基本のひも幅")
         setBasics()
+
+        Dim _i基本のひも幅 As Integer = works.p_row目標寸法.Value("f_i基本のひも幅")
+        If 2 < _i基本のひも幅 Then
+            _i何本幅 = _i基本のひも幅 \ 2
+        Else
+            _i何本幅 = 1
+        End If
+        If g_clsSelectBasics.p_d指定本幅(_i何本幅) < works.p_row底_縦横.Value("f_dひも間のすき間") Then
+            _i中心点 = enum中心点.i_目の中央
+        Else
+            _i中心点 = enum中心点.i_ひも中央
+        End If
 
         BindingSource差しひも.DataSource = works.p_tbl差しひも
         BindingSource差しひも.Sort = "f_i番号"
@@ -150,7 +156,7 @@ Public Class ctrAdditionalBand
     End Function
 
     '表示中で編集されていればデータ保存する
-    Function Save(ByVal btype As enumひも種, ByVal works As clsDataTables) As Boolean
+    Function Save(ByVal works As clsDataTables) As Boolean
         If BindingSource差しひも.DataSource Is Nothing OrElse Not Panel.Enabled OrElse works Is Nothing Then
             Return False
         End If
@@ -158,14 +164,14 @@ Public Class ctrAdditionalBand
             Return False
         End If
 
-        works.FromTmpTable(btype, BindingSource差しひも.DataSource)
+        Dim ret As Boolean = works.CheckPoint(BindingSource差しひも.DataSource)
         _EditChanged = False
-        Return True
+        Return ret
     End Function
 
     '編集完了、非表示にする
     Function HideGrid(ByVal works As clsDataTables) As Boolean
-        Dim ret As Boolean = works.CheckPoint(BindingSource差しひも.DataSource)
+        Dim ret As Boolean = Save(works)
 
         BindingSource差しひも.Sort = Nothing
         BindingSource差しひも.DataSource = Nothing
@@ -173,6 +179,68 @@ Public Class ctrAdditionalBand
         Panel.Enabled = False
         Return ret
     End Function
+
+    'enum文字列
+    Public ReadOnly Property PlateString(ByVal plate As enum配置面) As String
+        Get
+            Try
+                Return CType(_PlateTable.Rows(CType(plate, Integer)), dstWork.tblEnumRow).Display
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
+    Public ReadOnly Property AngleString(ByVal angle As enum角度) As String
+        Get
+            Try
+                Return CType(_AngleTable.Rows(CType(angle, Integer)), dstWork.tblEnumRow).Display
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
+    Public ReadOnly Property CenterString(ByVal center As enum中心点) As String
+        Get
+            Try
+                Return CType(_CenterTable.Rows(CType(center, Integer)), dstWork.tblEnumRow).Display
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
+    'ヘッダー文字列
+    Public ReadOnly Property text配置面() As String
+        Get
+            Return f_i配置面1.HeaderText
+        End Get
+    End Property
+
+    Public ReadOnly Property text角度() As String
+        Get
+            Return f_i角度1.HeaderText
+        End Get
+    End Property
+
+    Public ReadOnly Property text開始位置() As String
+        Get
+            Return f_i開始位置1.HeaderText
+        End Get
+    End Property
+
+    Public ReadOnly Property text何本ごと() As String
+        Get
+            Return f_i何本ごと1.HeaderText
+        End Get
+    End Property
+
+    Public ReadOnly Property text何本幅() As String
+        Get
+            Return f_i何本幅1.HeaderText
+        End Get
+    End Property
 
     'カラム幅を文字列に保存
     Public ReadOnly Property GetColumnWidthString() As String
@@ -200,15 +268,17 @@ Public Class ctrAdditionalBand
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
     Dim _FormCaption As String
     Dim _TabPageName As String
-    Dim _EditChanged As Boolean = False
-    Dim _i基本のひも幅 As Integer
 
     'ドロップダウン選択肢
     Dim _PlateTable As dstWork.tblEnumDataTable
     Dim _AngleTable As dstWork.tblEnumDataTable
     Dim _CenterTable As dstWork.tblEnumDataTable
 
+    '追加の初期値
+    Dim _i何本幅 As Integer
+    Dim _i中心点 As Integer
 
+    Dim _EditChanged As Boolean = False
 
 
     Dim _Profile_dgv差しひも As New CDataGridViewProfile(
@@ -217,7 +287,7 @@ Public Class ctrAdditionalBand
             enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow
             )
 
-    Private Sub ctrAdditionalBand_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub ctrInsertBand_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dgv差しひも.SetProfile(_Profile_dgv差しひも)
 
         '※フォームのデザイン時にもLoadされますので、グローバル参照値は参照できない
@@ -225,12 +295,13 @@ Public Class ctrAdditionalBand
         _isLoadingData = False 'Designer.vb描画完了
     End Sub
 
-    Private Sub btn追加_差しひも_Click(sender As Object, e As EventArgs) Handles btn追加_差しひも.Click
+    Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
         Dim table As tbl差しひもDataTable = Nothing
         Dim number As Integer = -1
         If Not dgv差しひも.GetTableAndNumber(table, number) Then
             Exit Sub
         End If
+        _EditChanged = True
 
         Dim addNumber As Integer = clsDataTables.AddNumber(table)
         If addNumber < 0 Then
@@ -241,18 +312,19 @@ Public Class ctrAdditionalBand
         End If
 
         'tbl差しひものレコード
-        Dim row As tbl差しひもRow = table.Newtbl差しひもRow
+        Dim row As tbl差しひもRow = table.Newtbl差しひもRow '配置面なし
         row.f_i番号 = addNumber
-        If 2 < _i基本のひも幅 Then
-            row.f_i何本幅 = _i基本のひも幅 \ 2
-        Else
-            row.f_i何本幅 = 1
-        End If
+        row.f_i何本幅 = _i何本幅
+        row.f_i中心点 = _i中心点
+        row.Setf_i同位置数Null()
+        row.Setf_i同位置順Null()
         row.f_dひも長加算 = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d差しひも長加算初期値")
+
+        table.Rows.Add(row)
         dgv差しひも.NumberPositionsSelect(row.f_i番号)
     End Sub
 
-    Private Sub btn上へ_差しひも_Click(sender As Object, e As EventArgs) Handles btn上へ_差しひも.Click
+    Private Sub btn上へ_Click(sender As Object, e As EventArgs) Handles btn上へ.Click
         Dim table As tbl差しひもDataTable = Nothing
         Dim number As Integer = -1
         If Not dgv差しひも.GetTableAndNumber(table, number) Then
@@ -261,6 +333,7 @@ Public Class ctrAdditionalBand
         If number < 0 Then
             Exit Sub
         End If
+        _EditChanged = True
 
         Dim nextup As Integer = clsDataTables.SmallerNumber(table, number)
         If nextup < 0 Then
@@ -271,7 +344,7 @@ Public Class ctrAdditionalBand
         dgv差しひも.NumberPositionsSelect(nextup)
     End Sub
 
-    Private Sub btn下へ_差しひも_Click(sender As Object, e As EventArgs) Handles btn下へ_差しひも.Click
+    Private Sub btn下へ_Click(sender As Object, e As EventArgs) Handles btn下へ.Click
         Dim table As tbl差しひもDataTable = Nothing
         Dim number As Integer = -1
         If Not dgv差しひも.GetTableAndNumber(table, number) Then
@@ -280,6 +353,7 @@ Public Class ctrAdditionalBand
         If number < 0 Then
             Exit Sub
         End If
+        _EditChanged = True
 
         Dim nextdown As Integer = clsDataTables.LargerNumber(table, number)
         If nextdown < 0 Then
@@ -290,7 +364,7 @@ Public Class ctrAdditionalBand
         dgv差しひも.NumberPositionsSelect(nextdown)
     End Sub
 
-    Private Sub btn削除_差しひも_Click(sender As Object, e As EventArgs) Handles btn削除_差しひも.Click
+    Private Sub btn削除_Click(sender As Object, e As EventArgs) Handles btn削除.Click
         Dim table As tbl差しひもDataTable = Nothing
         Dim number As Integer = -1
         If Not dgv差しひも.GetTableAndNumber(table, number) Then
@@ -299,6 +373,7 @@ Public Class ctrAdditionalBand
         If number < 0 Then
             Exit Sub
         End If
+        _EditChanged = True
 
         clsDataTables.RemoveNumberFromTable(table, number)
         clsDataTables.FillNumber(table) '#16
@@ -311,13 +386,105 @@ Public Class ctrAdditionalBand
             OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
             Exit Sub
         End If
+        _EditChanged = True
+
+        Dim row As tbl差しひもRow = current.Row
+        If IsInvalidRow(row) Then
+            '無効
+            row.f_b有効区分 = False
+            row.Setf_iひも本数Null()
+            row.Setf_dひも長Null()
+            row.Setf_d出力ひも長Null()
+            Exit Sub
+        End If
 
         Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv差しひも_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         '編集対象のカラム
-        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算"}.Contains(DataPropertyName) Then
-            RaiseEvent CellValueChanged(Me, New AdditionalBandEventArgs(current.Row, DataPropertyName))
+        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順"}.Contains(DataPropertyName) Then
+            RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, DataPropertyName))
         End If
     End Sub
+
+    Private Function IsInvalidRow(ByVal row As tbl差しひもRow) As Boolean
+        If row Is Nothing Then
+            Return True 'InValid
+        End If
+
+        '開始位置は1以上、何本ごとはゼロ以上
+        If row.f_i開始位置 < 1 Then
+            row.f_s無効理由 = text開始位置()
+            Return True '無効
+        End If
+        If row.f_i何本ごと < 0 Then
+            row.f_s無効理由 = text何本ごと()
+            Return True '無効
+        End If
+
+        '選択が有効
+        If row.f_i配置面 = enum配置面.i_なし Then
+            row.f_s無効理由 = text配置面()
+            Return True '無効
+        End If
+
+        '同位置
+        Dim i同位置数 As Integer = IIf(row.Isf_i同位置数Null(), 0, row.f_i同位置数)
+        Dim i同位置順 As Integer = IIf(row.Isf_i同位置順Null(), 0, row.f_i同位置順)
+        If i同位置数 < 0 OrElse (i同位置数 = 0 AndAlso 0 < i同位置順) Then
+            row.f_s無効理由 = f_i同位置数1.HeaderText
+            Return True '無効
+        End If
+        If i同位置順 < 0 OrElse (i同位置順 = 0 AndAlso 0 < i同位置数) Then
+            row.f_s無効理由 = f_i同位置順1.HeaderText
+            Return True '無効
+        End If
+        If 0 < i同位置数 AndAlso (i同位置順 = 0 OrElse i同位置数 < i同位置順) Then
+            row.f_s無効理由 = f_i同位置数1.HeaderText
+            Return True '無効
+        End If
+
+        Return False 'メイン側で追加チェック
+    End Function
+
+    '配置面・角度・中心点・開始位置・何本ごと　が同じ数
+    Private Sub btn同位置_Click(sender As Object, e As EventArgs) Handles btn同位置.Click
+        Dim table As tbl差しひもDataTable = BindingSource差しひも.DataSource
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Exit Sub
+        End If
+
+        Dim match_key_count As New Dictionary(Of String, Integer)
+        For Each row As tbl差しひもRow In table.Rows
+            row.Setf_i同位置数Null()
+            row.Setf_i同位置順Null()
+            Dim mkey As String = match_key(row)
+            If match_key_count.ContainsKey(mkey) Then
+                match_key_count(mkey) += 1
+            Else
+                match_key_count(mkey) = 1
+            End If
+        Next
+        For Each key As String In match_key_count.Keys
+            If 1 < match_key_count(key) Then
+                Dim odr As Integer = 1
+                For Each row As tbl差しひもRow In table.Rows
+                    If match_key(row) = key Then
+                        row.f_i同位置数 = match_key_count(key)
+                        row.f_i同位置順 = odr
+                        odr += 1
+                    End If
+                Next
+            End If
+        Next
+        RaiseEvent InnerPositionsSet(Me, New InsertBandEventArgs(Nothing, Nothing))
+    End Sub
+
+    Private Function match_key(ByVal row As tbl差しひもRow) As String
+        If row Is Nothing Then
+            Return ""
+        End If
+        Return String.Format("{0}:{1}:{2}:{3}:{4}",
+                             row.f_i配置面, row.f_i角度, row.f_i中心点, row.f_i開始位置, row.f_i何本ごと)
+    End Function
 
 End Class
