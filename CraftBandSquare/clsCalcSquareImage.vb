@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsMasterTables
 Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 
@@ -1962,6 +1963,17 @@ Partial Public Class clsCalcSquare
 #Region "ひも上下"
     Dim _CUpDown As New clsUpDown   'CheckBoxTableは使わない
 
+    '#52 描画しない色
+    Private Function isDrawingItem(ByVal item As clsImageItem) As Boolean
+        If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
+            Return False
+        End If
+        If g_clsSelectBasics.IsNoDrawingColor(item.m_row縦横展開.f_s色) Then
+            Return False
+        End If
+        Return True
+    End Function
+
     '底の上下をm_regionListにセット
     Private Function regionUpDown底(ByVal isBackFace As Boolean) As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
@@ -1990,7 +2002,7 @@ Partial Public Class clsCalcSquare
             For iYoko As Integer = 1 To p_i横ひもの本数
                 If _CUpDown.GetIsDown(iTate, iYoko, revRange) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
+                    If isDrawingItem(itemYoko) Then
                         itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
                     End If
                 End If
@@ -2008,7 +2020,7 @@ Partial Public Class clsCalcSquare
             For iTate As Integer = 1 To p_i縦ひもの本数
                 If _CUpDown.GetIsUp(iTate, iYoko, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
+                    If isDrawingItem(itemTate) Then
                         itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
                     End If
                 End If
@@ -2051,7 +2063,7 @@ Partial Public Class clsCalcSquare
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(iTate + horzDif, iTakasa, revRange) Then
                     Dim itemUSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemUSide IsNot Nothing Then
+                    If isDrawingItem(itemUSide) Then
                         itemTate.m_regionList.Add領域(itemUSide.m_rひも位置)
                     End If
                 End If
@@ -2069,7 +2081,7 @@ Partial Public Class clsCalcSquare
             For iTate As Integer = 1 To p_i縦ひもの本数
                 If _CUpDown.GetIsUp(iTate + horzDif, iTakasa, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
+                    If isDrawingItem(itemTate) Then
                         itemUSide.m_regionList.Add領域(itemTate.m_rひも位置)
                     End If
                 End If
@@ -2121,7 +2133,7 @@ Partial Public Class clsCalcSquare
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(iYoko + horzDif, iTakasa, revRange, revRange2) Then
                     Dim itemRSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemRSide IsNot Nothing Then
+                    If isDrawingItem(itemRSide) Then
                         itemYoko.m_regionList.Add領域(itemRSide.m_rひも位置)
                     End If
                 End If
@@ -2139,7 +2151,7 @@ Partial Public Class clsCalcSquare
             For iYoko As Integer = 1 To p_i横ひもの本数
                 If _CUpDown.GetIsUp(iYoko + horzDif, iTakasa, revRange, revRange2) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
+                    If isDrawingItem(itemYoko) Then
                         itemRSide.m_regionList.Add領域(itemYoko.m_rひも位置)
                     End If
                 End If
@@ -2182,7 +2194,7 @@ Partial Public Class clsCalcSquare
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(horzIdx, iTakasa, revRange) Then
                     Dim itemDSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemDSide IsNot Nothing Then
+                    If isDrawingItem(itemDSide) Then
                         itemTate.m_regionList.Add領域(itemDSide.m_rひも位置)
                     End If
                 End If
@@ -2201,7 +2213,7 @@ Partial Public Class clsCalcSquare
                 Dim horzIdx As Integer = p_i縦ひもの本数 - iTate + 1 + horzDif
                 If _CUpDown.GetIsUp(horzIdx, iTakasa, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
-                    If itemTate IsNot Nothing Then
+                    If isDrawingItem(itemTate) Then
                         itemDSide.m_regionList.Add領域(itemTate.m_rひも位置)
                     End If
                 End If
@@ -2252,7 +2264,7 @@ Partial Public Class clsCalcSquare
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(horzIdx, iTakasa, revRange, revRange2) Then
                     Dim itemLSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, iTakasa)
-                    If itemLSide IsNot Nothing Then
+                    If isDrawingItem(itemLSide) Then
                         itemYoko.m_regionList.Add領域(itemLSide.m_rひも位置)
                     End If
                 End If
@@ -2271,7 +2283,7 @@ Partial Public Class clsCalcSquare
                 Dim horzIdx As Integer = p_i横ひもの本数 - iYoko + 1 + horzDif
                 If _CUpDown.GetIsUp(horzIdx, iTakasa, revRange, revRange2) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
-                    If itemYoko IsNot Nothing Then
+                    If isDrawingItem(itemYoko) Then
                         itemLSide.m_regionList.Add領域(itemYoko.m_rひも位置)
                     End If
                 End If

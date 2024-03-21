@@ -236,14 +236,6 @@
     <value>長さと重さの換算 &lt;{0}&gt;</value>
     <comment>frmBandTypeWeight</comment>
   </data>
-  <data name="CaptionBottomOval" xml:space="preserve">
-    <value>底(楕円)</value>
-    <comment>frmChangeColor</comment>
-  </data>
-  <data name="CaptionInsertBand" xml:space="preserve">
-    <value>差しひも</value>
-    <comment>frmChangeColor</comment>
-  </data>
   <data name="ErrAddRecord" xml:space="preserve">
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>
@@ -444,6 +436,18 @@
   <data name="MessageCheckOK" xml:space="preserve">
     <value>チェックOKです。</value>
     <comment>ctrEditUpDown</comment>
+  </data>
+  <data name="MessageColorChanged" xml:space="preserve">
+    <value>{0}点を変更しました。</value>
+    <comment>frmColorChange,frmColorRepeat</comment>
+  </data>
+  <data name="MessageColorNoChange" xml:space="preserve">
+    <value>変更はありませんでした。</value>
+    <comment>frmColorChange,frmColorRepeat</comment>
+  </data>
+  <data name="MessageColorSet" xml:space="preserve">
+    <value>少なくとも1点の変更を指定してください。</value>
+    <comment>frmColorRepeat</comment>
   </data>
   <data name="MessageNoMore" xml:space="preserve">
     <value>これ以上増やせません。</value>

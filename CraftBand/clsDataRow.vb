@@ -33,6 +33,7 @@ Public Class clsDataRow
         Return copy
     End Function
 
+    '指定名のfield値・Nullは返さない
     Public Property Value(ByVal name As String) As Object
         Get
             If String.IsNullOrWhiteSpace(name) OrElse Not IsValid Then
@@ -109,6 +110,20 @@ Public Class clsDataRow
         End Set
 
 
+    End Property
+
+    'True:存在する名前で値がNullの時
+    Public ReadOnly Property IsNull(ByVal name As String) As Boolean
+        Get
+            If String.IsNullOrWhiteSpace(name) OrElse Not IsValid Then
+                Return False 'Never
+            End If
+            If _DataRow.Table.Columns.Contains(name) Then
+                Return IsDBNull(_DataRow(name))
+            Else
+                Return False
+            End If
+        End Get
     End Property
 
     Public ReadOnly Property ContainsName(ByVal name As String) As Boolean

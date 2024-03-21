@@ -94,6 +94,10 @@ Public Class frmMain
         '
         setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
+
+        initColorChange() '色変更の初期化
+        initColorRepeat() '色と幅の繰り返しの初期化(#51)
+
         _isLoadingData = False 'Designer.vb描画完了
 
         DispTables(_clsDataTables) 'バンドの種類変更対応含む
@@ -211,9 +215,7 @@ Public Class frmMain
         '#42
         If isCheckUndef Then
             '未定義色の変更確認
-            Dim dlg As New frmColorChange
-            dlg.SetDataAndExpand(_clsDataTables, True) '縦横展開を含める
-            dlg.ShowDialogForUndef()
+            ShowColorChangeFormForUndef(_clsDataTables, True) '縦横展開を含める
 
             '未参照を排除
             _clsDataTables.ModifySelected()
@@ -629,6 +631,24 @@ Public Class frmMain
         End If
     End Sub
 
+    '色変更の初期化
+    Private Function initColorChange() As Boolean
+        Const fmt3 As String = "(f_iひも種={0}) or (f_iひも種={1}) or (f_iひも種={2})"
+        Const fmt4 As String = "(f_iひも種={0}) or (f_iひも種={1}) or (f_iひも種={2}) or (f_iひも種={3})"
+        Dim cond_yoko As String = String.Format(fmt4, CType(enumひも種.i_横 Or enumひも種.i_長い, Integer), CType(enumひも種.i_横 Or enumひも種.i_短い, Integer),
+                    CType(enumひも種.i_横 Or enumひも種.i_最上と最下, Integer), CType(enumひも種.i_横 Or enumひも種.i_補強, Integer))
+        Dim cond_tate As String = String.Format(fmt3, CType(enumひも種.i_縦, Integer), CType(enumひも種.i_縦 Or enumひも種.i_補強, Integer),
+                    CType(enumひも種.i_斜め Or enumひも種.i_補強, Integer))
+
+        Dim _ColorChangeSettings() As CColorChangeSetting = {
+           New CColorChangeSetting(tpage底楕円.Text, enumDataID._tbl底_楕円, Nothing, False),
+           New CColorChangeSetting(tpage側面.Text, enumDataID._tbl側面, Nothing, False),
+           New CColorChangeSetting(tpage追加品.Text, enumDataID._tbl追加品, Nothing, False),
+           New CColorChangeSetting(tpage横ひも.Text, enumDataID._tbl縦横展開, cond_yoko, True),
+           New CColorChangeSetting(tpage縦ひも.Text, enumDataID._tbl縦横展開, cond_tate, True)}
+
+        Return CreateColorChangeForm(_ColorChangeSettings)
+    End Function
     '色変更
     Private Sub ToolStripMenuItemEditColorChange_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditColorChange.Click
         SaveTables(_clsDataTables)
@@ -639,9 +659,31 @@ Public Class frmMain
             _clsCalcMesh.prepare縦横展開DataTable()
         End If
 
-        Dim dlg As New frmColorChange
-        dlg.SetDataAndExpand(_clsDataTables, chk縦横を展開する.Checked)
-        dlg.ShowDialog()
+        ShowColorChangeForm(_clsDataTables)
+    End Sub
+
+    '色と幅の繰り返しの初期化(#51)
+    Private Function initColorRepeat() As Boolean
+        Dim cond_short As String = String.Format("(f_iひも種={0}) or (f_iひも種={1})",
+                                                 CType(enumひも種.i_横 Or enumひも種.i_短い, Integer), CType(enumひも種.i_横 Or enumひも種.i_最上と最下, Integer))
+
+        Dim _ColorRepeatSettings() As CColorRepeatSetting = {
+        New CColorRepeatSetting(lbl長い横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_長い, Integer)), "f_iひも番号 ASC", False, True),
+        New CColorRepeatSetting(lbl短い横ひも.Text, enumDataID._tbl縦横展開, cond_short, "f_i位置番号 ASC", False, True),
+        New CColorRepeatSetting(lbl縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), "f_iひも番号 ASC", False, True)}
+
+        Return CreateColorRepeatForm(_ColorRepeatSettings)
+    End Function
+    '色と幅の繰り返し
+    Private Sub ToolStripMenuItemEditColorRepeat_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditColorRepeat.Click
+        SaveTables(_clsDataTables)
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色変更
+
+        If chk縦横を展開する.Checked Then
+            _clsCalcMesh.prepare縦横展開DataTable()
+        End If
+
+        ShowColorRepeatForm(_clsDataTables)
     End Sub
 
     'リセット

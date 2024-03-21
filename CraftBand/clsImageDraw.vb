@@ -90,20 +90,20 @@ Public Class CImageDraw
     Private Class CPenBrush
         Implements IDisposable
 
-        Friend PenBand As Pen = Nothing 'ひもの外形
-        Friend PenLane As Pen = Nothing '本幅線
-        Friend BrushSolid As SolidBrush = Nothing '記号
-        Friend BrushAlfa As SolidBrush = Nothing '内部塗りつぶし
+        Friend PenBand As Pen = Nothing '外枠線
+        Friend PenLane As Pen = Nothing '中線
+        Friend BrushSolid As SolidBrush = Nothing '記号色
+        Friend BrushAlfa As SolidBrush = Nothing '内部塗りつぶし色
         Friend PenWidth As Single = 0 'ペンの幅
 
         Sub New(ByVal drcol As clsColorRecordSet)
             If drcol IsNot Nothing Then
-                If Not drcol.PenColor.IsEmpty Then
-                    If 0 < drcol.PenWidth Then
-                        PenBand = New Pen(drcol.PenColor, drcol.PenWidth)
-                        PenWidth = drcol.PenWidth
-                    End If
-                    BrushSolid = New SolidBrush(drcol.PenColor)
+                If Not drcol.BaseColor.IsEmpty Then
+                    BrushSolid = New SolidBrush(drcol.BaseColor)
+                End If
+                If 0 < drcol.FramePenWidth AndAlso Not drcol.FramePenColor.IsEmpty Then
+                    PenBand = New Pen(drcol.FramePenColor, drcol.FramePenWidth)
+                    PenWidth = drcol.FramePenWidth
                 End If
                 If 0 < drcol.LanePenWidth AndAlso Not drcol.LanePenColor.IsEmpty Then
                     PenLane = New Pen(drcol.LanePenColor, drcol.LanePenWidth)
@@ -117,9 +117,16 @@ Public Class CImageDraw
                 PenWidth = cThickPenWidth
                 PenLane = New Pen(Color.Gray, cThinPenWidth)
                 BrushSolid = New SolidBrush(Color.Black)
-                'BrushAlfa = New SolidBrush(Color.FromArgb(50, Color.LightGray))
             End If
         End Sub
+
+        '描画されない値(#52)
+        Public ReadOnly Property IsNoDrawing
+            Get
+                Return PenBand Is Nothing AndAlso PenLane Is Nothing AndAlso BrushAlfa Is Nothing AndAlso
+                    (BrushSolid Is Nothing OrElse (BrushSolid.Color.R = MaxRgbValue AndAlso BrushSolid.Color.G = MaxRgbValue AndAlso BrushSolid.Color.B = MaxRgbValue))
+            End Get
+        End Property
 
         Private disposedValue As Boolean
         Protected Overridable Sub Dispose(disposing As Boolean)
@@ -380,7 +387,7 @@ Public Class CImageDraw
             Return False
         End If
         Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         'Debug.Print("{0} {1}", isVirtical, item.m_row縦横展開.f_s記号)
@@ -553,7 +560,7 @@ Public Class CImageDraw
             Return False
         End If
         Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
 
@@ -632,10 +639,14 @@ Public Class CImageDraw
             Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
             _Graphic.DrawRectangle(_Pen_black_dot, rect.X, rect.Y, rect.Width, rect.Height)
         End If
-        subコマ(colsetYoko, item.m_knot.a右上四角, item.m_knot.l右上線)
-        subコマ(colsetTate, item.m_knot.a左上四角, item.m_knot.l左上線)
-        subコマ(colsetYoko, item.m_knot.a左下四角, item.m_knot.l左下線)
-        subコマ(colsetTate, item.m_knot.a右下四角, item.m_knot.l右下線)
+        If Not colsetYoko.IsNoDrawing Then
+            subコマ(colsetYoko, item.m_knot.a右上四角, item.m_knot.l右上線)
+            subコマ(colsetYoko, item.m_knot.a左下四角, item.m_knot.l左下線)
+        End If
+        If Not colsetTate.IsNoDrawing Then
+            subコマ(colsetTate, item.m_knot.a左上四角, item.m_knot.l左上線)
+            subコマ(colsetTate, item.m_knot.a右下四角, item.m_knot.l右下線)
+        End If
         Return True
     End Function
 
@@ -708,7 +719,7 @@ Public Class CImageDraw
         'ひも番号1の色
         Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
         Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         '同じ編みかたの領域
@@ -741,7 +752,7 @@ Public Class CImageDraw
         'ひも番号1の色
         Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
         Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         '周の線
@@ -778,10 +789,10 @@ Public Class CImageDraw
         If item.m_groupRow Is Nothing Then
             Return False
         End If
-        'ひも番号1の色
-        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        'グループの色
+        Dim color As String = item.m_groupRow.GetNameValue("f_s色")
         Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         'ひもの領域
@@ -809,7 +820,7 @@ Public Class CImageDraw
         'ひもの色
         Dim color As String = item.m_rowData.Value("f_s色")
         Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         'ひもの領域
@@ -837,7 +848,7 @@ Public Class CImageDraw
         'ひも番号1の色
         Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
         Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing Then
+        If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
         '付属品の領域

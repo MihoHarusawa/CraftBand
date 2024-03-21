@@ -1,4 +1,5 @@
-﻿Imports CraftBand.Tables
+﻿Imports CraftBand.clsMasterTables
+Imports CraftBand.Tables
 
 ''' <summary>
 ''' バンドの種類選択＆基本設定
@@ -58,6 +59,13 @@ Public Class clsSelectBasics
         End If
         Return _dstWork.Tables("tblColor").Rows.Contains(color)
     End Function
+    '描画しない色か？
+    Function IsNoDrawingColor(ByVal color As String) As Boolean
+        If String.IsNullOrEmpty(color) OrElse _NoDrawingColors Is Nothing Then
+            Return False
+        End If
+        Return _NoDrawingColors.Contains(color)
+    End Function
     '色フィールド値を文字列化(空は"")
     Shared Function ColorString(ByVal col_obj As Object) As String
         If col_obj Is Nothing OrElse IsDBNull(col_obj) Then
@@ -90,7 +98,7 @@ Public Class clsSelectBasics
     Dim _row選択中バンドの種類 As clsDataRow 'tblバンドの種類Row
 
     Dim _dstWork As dstWork
-
+    Dim _NoDrawingColors() As String
 
 
     Sub New(ByVal sListOutMark As String)
@@ -160,7 +168,17 @@ Public Class clsSelectBasics
 
         '色リストの選択肢
         ToColorTable(_dstWork.Tables("tblColor"), str, True)
-
+        'うち描画しない色#52
+        Dim noDwgColors As New List(Of String)
+        For Each r As dstWork.tblColorRow In _dstWork.Tables("tblColor").Rows
+            If Not String.IsNullOrWhiteSpace(r.Display) Then
+                Dim drcol As clsColorRecordSet = g_clsMasterTables.GetColorRecordSet(r.Display, p_s対象バンドの種類名, False)
+                If drcol IsNot Nothing AndAlso drcol.IsNoDrawing Then
+                    noDwgColors.Add(r.Display)
+                End If
+            End If
+        Next
+        _NoDrawingColors = noDwgColors.ToArray
 
         'n本幅の選択肢
         Dim _LaneTable As dstWork.tblLaneDataTable = _dstWork.Tables("tblLane")

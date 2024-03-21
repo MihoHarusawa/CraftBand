@@ -67,6 +67,37 @@ Public Class clsDataTables
         End Get
     End Property
 
+    'テーブル識別値(任意レコード数タイプ)
+    Public Enum enumDataID
+        _tbl底_楕円 = 0
+        _tbl側面 = 1
+        _tbl追加品 = 2
+        _tbl縦横展開 = 3
+        _tbl差しひも = 4
+        _tblひも上下 = 5
+    End Enum
+    Const enumDataIdCount As Integer = 6
+
+    Public ReadOnly Property p_tbl(ByVal id As enumDataID) As DataTable
+        Get
+            Select Case id
+                Case enumDataID._tbl底_楕円
+                    Return p_tbl底_楕円
+                Case enumDataID._tbl側面
+                    Return p_tbl側面
+                Case enumDataID._tbl追加品
+                    Return p_tbl追加品
+                Case enumDataID._tbl縦横展開
+                    Return p_tbl縦横展開
+                Case enumDataID._tbl差しひも
+                    Return p_tbl差しひも
+                Case enumDataID._tblひも上下
+                    Return p_tblひも上下
+                Case Else
+                    Return Nothing
+            End Select
+        End Get
+    End Property
 
     '*フィールド値
     'tbl底_縦横
@@ -291,104 +322,88 @@ Public Class clsDataTables
         End Try
     End Function
 
+    '各テーブルの参照状況
+    Private Class tblFeature
+        Friend isLane As Boolean 'f_i何本幅 がある
+        Friend isColor As Boolean    'f_s色 がある
+        Friend isExpandOnly As Boolean '展開時のみ
+        Sub New(ByVal lane As Boolean, ByVal color As Boolean, ByVal expand As Boolean)
+            isLane = lane
+            isColor = color
+            isExpandOnly = expand
+        End Sub
+        ReadOnly Property isLaneColor As Boolean
+            Get
+                Return isLane OrElse isColor
+            End Get
+        End Property
+    End Class
+
+    Private Shared _Features() As tblFeature = {
+        New tblFeature(True, True, False),  '_tbl底_楕円 
+        New tblFeature(True, True, False),  '_tbl側面
+        New tblFeature(True, True, False),  '_tbl追加品
+        New tblFeature(True, True, True),  '_tbl縦横展開
+        New tblFeature(True, True, False),  '_tbl差しひも
+        New tblFeature(False, False, False)}  '_tblひも上下
+
+
     '未定義色をリストアップ(#42)
     Public Function GetUndefColors(ByVal is縦横展開 As Boolean) As String
         Dim colors As New List(Of String)
 
-        For Each row As tbl底_楕円Row In p_tbl底_楕円
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                If Not colors.Contains(row.f_s色) Then
-                    colors.Add(row.f_s色)
-                End If
-            End If
-        Next
-
-        For Each row As tbl側面Row In p_tbl側面
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                If Not colors.Contains(row.f_s色) Then
-                    colors.Add(row.f_s色)
-                End If
-            End If
-        Next
-
-        For Each row As tbl追加品Row In p_tbl追加品
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                If Not colors.Contains(row.f_s色) Then
-                    colors.Add(row.f_s色)
-                End If
-            End If
-        Next
-
-        For Each row As tbl差しひもRow In p_tbl差しひも
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                If Not colors.Contains(row.f_s色) Then
-                    colors.Add(row.f_s色)
-                End If
-            End If
-        Next
-
-        If is縦横展開 Then
-            For Each row As tbl縦横展開Row In p_tbl縦横展開
-                If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                    If Not colors.Contains(row.f_s色) Then
-                        colors.Add(row.f_s色)
+        '色フィールドを持つテーブル
+        For Each id As enumDataID In [Enum].GetValues(GetType(enumDataID))
+            If _Features(CType(id, Integer)).isColor AndAlso
+                (is縦横展開 OrElse Not _Features(CType(id, Integer)).isExpandOnly) Then
+                '未定義色
+                For Each row As DataRow In p_tbl(id).Rows
+                    Dim coler As String = New clsDataRow(row).Value("f_s色")
+                    If Not g_clsSelectBasics.IsExistColor(coler) Then
+                        If Not colors.Contains(coler) Then
+                            colors.Add(coler)
+                        End If
                     End If
-                End If
-            Next
-        End If
+                Next
+            End If
+        Next
 
         Return String.Join(",", colors.ToArray)
     End Function
 
-
     '参照値のチェックと更新(マスタやバンドの種類が変わった時用)
     Public Sub ModifySelected()
+        Dim currentMaxLane As Integer = g_clsSelectBasics.p_i本幅
 
-        For Each row As tbl底_楕円Row In p_tbl底_楕円
-            '何本幅
-            If row.f_i何本幅 < 0 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl底_楕円Row({0}).f_i何本幅={1} -> 1", row.f_i番号, row.f_i何本幅)
-                row.f_i何本幅 = 1
-            ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl底_楕円Row({0}).f_i何本幅={1} -> {2}", row.f_i番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
-                row.f_i何本幅 = g_clsSelectBasics.p_i本幅
-            End If
-            '色
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl底_楕円Row({0}).f_s色={1} -> ''", row.f_i番号, row.f_s色)
-                row.f_s色 = ""
-            End If
-        Next
+        For Each id As enumDataID In [Enum].GetValues(GetType(enumDataID))
+            Dim ttype As tblFeature = _Features(CType(id, Integer))
 
-        For Each row As tbl側面Row In p_tbl側面
-            '何本幅
-            If row.f_i何本幅 < 0 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl側面Row({0}).f_i何本幅={1} -> 1", row.f_i番号, row.f_i何本幅)
-                row.f_i何本幅 = 1
-            ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl側面Row({0}).f_i何本幅={1} -> {2}", row.f_i番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
-                row.f_i何本幅 = g_clsSelectBasics.p_i本幅
-            End If
-            '色
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl側面Row({0}).f_s色={1} -> ''", row.f_i番号, row.f_s色)
-                row.f_s色 = ""
-            End If
-        Next
-
-        For Each row As tbl追加品Row In p_tbl追加品
-            '何本幅
-            If row.f_i何本幅 < 0 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl追加品Row({0}).f_i何本幅={1} -> 1", row.f_i番号, row.f_i何本幅)
-                row.f_i何本幅 = 1
-            ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl追加品Row({0}).f_i何本幅={1} -> {2}", row.f_i番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
-                row.f_i何本幅 = g_clsSelectBasics.p_i本幅
-            End If
-            '色
-            If Not g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "tbl追加品Row({0}).f_s色={1} -> ''", row.f_i番号, row.f_s色)
-                row.f_s色 = ""
+            '色/何本幅フィールドを持ち、展開によらないテーブル
+            If ttype.isLaneColor AndAlso Not ttype.isExpandOnly Then
+                '
+                For Each row As DataRow In p_tbl(id).Rows
+                    Dim drow As New clsDataRow(row)
+                    '何本幅
+                    If ttype.isLane AndAlso Not drow.IsNull("f_i何本幅") Then
+                        Dim lane As Integer = drow.Value("f_i何本幅")
+                        If lane < 0 Then
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "{0}Row f_i番号({1}) f_i何本幅={2} -> 1", p_tbl(id).TableName, drow.Value("f_i番号"), lane)
+                            drow.Value("f_i何本幅") = 1
+                        ElseIf currentMaxLane < lane Then
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "{0}Row f_i番号({1}) f_i何本幅={2} -> {3}", p_tbl(id).TableName, drow.Value("f_i番号"), lane, currentMaxLane)
+                            drow.Value("f_i何本幅") = currentMaxLane
+                        ElseIf lane = 0 Then
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "{0}Row f_i番号({1}) f_i何本幅=0", p_tbl(id).TableName, drow.Value("f_i番号"))
+                        End If
+                    End If
+                    '色
+                    If ttype.isColor AndAlso Not drow.IsNull("f_s色") Then
+                        If Not g_clsSelectBasics.IsExistColor(drow.Value("f_s色")) Then
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "{0}Row f_i番号({1}) f_s色={2} -> ''", p_tbl(id).TableName, drow.Value("f_i番号"), drow.Value("f_s色"))
+                            drow.Value("f_s色") = ""
+                        End If
+                    End If
+                Next
             End If
         Next
 
@@ -458,6 +473,16 @@ Public Class clsDataTables
         Return turn
     End Function
 
+    'テーブル参照
+    Function GetTableRows(ByVal id As enumDataID, Optional ByVal cond As String = Nothing, Optional ByVal order As String = Nothing) As DataRow()
+        Try
+            Return p_tbl(id).Select(cond, order)
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "clsDataTables.GetTableRows", id, cond, order)
+            Return Nothing
+        End Try
+    End Function
+
 
 #Region "編集による更新状態"
 
@@ -466,13 +491,7 @@ Public Class clsDataTables
     Dim _row底_縦横Start As clsDataRow 'tbl底_縦横Row
 
     'テーブル更新状態
-    Dim _b底_楕円Changed As Boolean = False
-    Dim _b側面Changed As Boolean = False
-    Dim _b追加品Changed As Boolean = False
-    Dim _b縦横展開Changed As Boolean = False
-    Dim _b差しひもChanged As Boolean = False
-    Dim _bひも上下Changed As Boolean = False
-
+    Dim _bDataTableChanged(enumDataIdCount - 1) As Boolean
 
     Public Sub ResetStartPoint()
 
@@ -484,25 +503,18 @@ Public Class clsDataTables
         _row底_縦横Start = Nothing
         _row底_縦横Start = p_row底_縦横.Clone
 
-        p_tbl底_楕円.AcceptChanges()
-        p_tbl側面.AcceptChanges()
-        p_tbl追加品.AcceptChanges()
-        p_tbl縦横展開.AcceptChanges()
-        p_tbl差しひも.AcceptChanges()
-        p_tblひも上下.AcceptChanges()
-
-        _b底_楕円Changed = False
-        _b側面Changed = False
-        _b追加品Changed = False
-        _b縦横展開Changed = False
-        _b差しひもChanged = False
-        _bひも上下Changed = False
+        For Each id As enumDataID In [Enum].GetValues(GetType(enumDataID))
+            p_tbl(id).AcceptChanges()
+            _bDataTableChanged(CType(id, Integer)) = False
+        Next
     End Sub
 
     Public Function IsChangedFromStartPoint()
-        If _b側面Changed OrElse _b底_楕円Changed OrElse _b追加品Changed OrElse _b縦横展開Changed OrElse _b差しひもChanged OrElse _bひも上下Changed Then
-            Return True
-        End If
+        For Each id As enumDataID In [Enum].GetValues(GetType(enumDataID))
+            If _bDataTableChanged(CType(id, Integer)) Then
+                Return True
+            End If
+        Next
         If Not p_row目標寸法.Equals(_row目標寸法Start) Then
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Start {0}", _row目標寸法Start.ToString)
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Change{0}", p_row目標寸法.ToString)
@@ -521,23 +533,17 @@ Public Class clsDataTables
         If table Is Nothing OrElse table.GetChanges Is Nothing Then
             Return False
         End If
-        If table.TableName = "tbl底_楕円" Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl底_楕円 Changes={0}", table.GetChanges.Rows.Count)
-            _b底_楕円Changed = True
-        ElseIf table.TableName = "tbl側面" Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl側面 Changes={0}", table.GetChanges.Rows.Count)
-            _b側面Changed = True
-        ElseIf table.TableName = "tbl追加品" Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl追加品 Changes={0}", table.GetChanges.Rows.Count)
-            _b追加品Changed = True
-        ElseIf table.TableName = "tbl差しひも" Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "tbl差しひも Changes={0}", table.GetChanges.Rows.Count)
-            _b差しひもChanged = True
-        Else
-            Return False
-        End If
-        table.AcceptChanges()
-        Return True
+
+        '対応するテーブルのフラグに変換
+        For Each id As enumDataID In [Enum].GetValues(GetType(enumDataID))
+            If p_tbl(id).TableName = table.TableName Then
+                _bDataTableChanged(CType(id, Integer)) = True
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "{0} Changes={1}", table.TableName, table.GetChanges.Rows.Count)
+                table.AcceptChanges()
+                Return True
+            End If
+        Next
+        Return False
     End Function
 
 
@@ -614,7 +620,7 @@ Public Class clsDataTables
         For Each tmp As tbl縦横展開Row In tmptable
             p_tbl縦横展開.ImportRow(tmp)
             count += 1
-            _b縦横展開Changed = True
+            _bDataTableChanged(CType(enumDataID._tbl縦横展開, Integer)) = True
         Next
         p_tbl縦横展開.AcceptChanges()
         tmptable.AcceptChanges()
@@ -638,7 +644,7 @@ Public Class clsDataTables
             count -= 1
         Next
         If count <> 0 Then
-            _b縦横展開Changed = True
+            _bDataTableChanged(CType(enumDataID._tbl縦横展開, Integer)) = True
             p_tbl縦横展開.AcceptChanges()
         End If
 
@@ -869,7 +875,7 @@ Public Class clsDataTables
         Dim ret As Boolean = updown.ToRecord(row)
 
         p_tblひも上下.AcceptChanges()
-        _bひも上下Changed = True
+        _bDataTableChanged(CType(enumDataID._tblひも上下, Integer)) = True
 
         Return ret
     End Function
@@ -1075,5 +1081,6 @@ Public Class clsDataTables
     End Function
 
 #End Region
+
 
 End Class

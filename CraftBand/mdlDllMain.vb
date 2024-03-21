@@ -239,6 +239,9 @@ Public Module mdlDllMain
         g_clsSelectBasics = Nothing
         g_clsMasterTables = Nothing
 
+        _frmColorRepeat = Nothing
+        _frmColorChange = Nothing
+
         'g_clsLogはexe側
         Return ret
     End Function

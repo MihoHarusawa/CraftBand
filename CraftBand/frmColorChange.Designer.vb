@@ -24,13 +24,8 @@ Partial Class frmColorChange
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        chk側面と縁 = New Windows.Forms.CheckBox()
-        chk横ひも = New Windows.Forms.CheckBox()
-        chk縦ひも = New Windows.Forms.CheckBox()
-        chk追加品 = New Windows.Forms.CheckBox()
-        chk個別 = New Windows.Forms.CheckBox()
         btn使用色 = New Windows.Forms.Button()
-        btnOK = New Windows.Forms.Button()
+        btn閉じる = New Windows.Forms.Button()
         btn変更実行 = New Windows.Forms.Button()
         dgvColorChange = New ctrDataGridView()
         BeforeDataGridViewColumn = New Windows.Forms.DataGridViewTextBoxColumn()
@@ -39,101 +34,45 @@ Partial Class frmColorChange
         AfterDataGridViewColumn = New Windows.Forms.DataGridViewComboBoxColumn()
         BindingSourceColorChange = New System.Windows.Forms.BindingSource(components)
         ToolTip1 = New System.Windows.Forms.ToolTip(components)
-        chk60度 = New Windows.Forms.CheckBox()
+        CheckBox0 = New Windows.Forms.CheckBox()
+        CheckBox3 = New Windows.Forms.CheckBox()
+        CheckBox2 = New Windows.Forms.CheckBox()
+        CheckBox1 = New Windows.Forms.CheckBox()
+        CheckBox4 = New Windows.Forms.CheckBox()
+        CheckBox5 = New Windows.Forms.CheckBox()
         CType(dgvColorChange, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSourceColorChange, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
-        ' chk側面と縁
-        ' 
-        chk側面と縁.AutoSize = True
-        chk側面と縁.Checked = True
-        chk側面と縁.CheckState = Windows.Forms.CheckState.Checked
-        chk側面と縁.Location = New System.Drawing.Point(37, 29)
-        chk側面と縁.Name = "chk側面と縁"
-        chk側面と縁.Size = New System.Drawing.Size(87, 24)
-        chk側面と縁.TabIndex = 0
-        chk側面と縁.Text = "側面と縁"
-        chk側面と縁.UseVisualStyleBackColor = True
-        ' 
-        ' chk横ひも
-        ' 
-        chk横ひも.AutoSize = True
-        chk横ひも.Checked = True
-        chk横ひも.CheckState = Windows.Forms.CheckState.Checked
-        chk横ひも.Location = New System.Drawing.Point(151, 29)
-        chk横ひも.Name = "chk横ひも"
-        chk横ひも.Size = New System.Drawing.Size(69, 24)
-        chk横ひも.TabIndex = 1
-        chk横ひも.Text = "横ひも"
-        chk横ひも.UseVisualStyleBackColor = True
-        ' 
-        ' chk縦ひも
-        ' 
-        chk縦ひも.AutoSize = True
-        chk縦ひも.Checked = True
-        chk縦ひも.CheckState = Windows.Forms.CheckState.Checked
-        chk縦ひも.Location = New System.Drawing.Point(247, 29)
-        chk縦ひも.Name = "chk縦ひも"
-        chk縦ひも.Size = New System.Drawing.Size(69, 24)
-        chk縦ひも.TabIndex = 2
-        chk縦ひも.Text = "縦ひも"
-        chk縦ひも.UseVisualStyleBackColor = True
-        ' 
-        ' chk追加品
-        ' 
-        chk追加品.AutoSize = True
-        chk追加品.Checked = True
-        chk追加品.CheckState = Windows.Forms.CheckState.Checked
-        chk追加品.Location = New System.Drawing.Point(432, 29)
-        chk追加品.Name = "chk追加品"
-        chk追加品.Size = New System.Drawing.Size(76, 24)
-        chk追加品.TabIndex = 3
-        chk追加品.Text = "追加品"
-        chk追加品.UseVisualStyleBackColor = True
-        ' 
-        ' chk個別
-        ' 
-        chk個別.AutoSize = True
-        chk個別.Checked = True
-        chk個別.CheckState = Windows.Forms.CheckState.Checked
-        chk個別.Location = New System.Drawing.Point(535, 29)
-        chk個別.Name = "chk個別"
-        chk個別.Size = New System.Drawing.Size(71, 24)
-        chk個別.TabIndex = 4
-        chk個別.Text = "(個別)"
-        chk個別.UseVisualStyleBackColor = True
-        ' 
         ' btn使用色
         ' 
         btn使用色.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Right
-        btn使用色.Location = New System.Drawing.Point(555, 63)
+        btn使用色.Location = New System.Drawing.Point(559, 54)
         btn使用色.Name = "btn使用色"
         btn使用色.Size = New System.Drawing.Size(111, 46)
-        btn使用色.TabIndex = 6
+        btn使用色.TabIndex = 7
         btn使用色.Text = "使用色(&P)"
         ToolTip1.SetToolTip(btn使用色, "使われている色をピックアップします")
         btn使用色.UseVisualStyleBackColor = True
         ' 
-        ' btnOK
+        ' btn閉じる
         ' 
-        btnOK.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btnOK.DialogResult = Windows.Forms.DialogResult.OK
-        btnOK.Location = New System.Drawing.Point(555, 197)
-        btnOK.Name = "btnOK"
-        btnOK.Size = New System.Drawing.Size(111, 46)
-        btnOK.TabIndex = 8
-        btnOK.Text = "OK(&O)"
-        ToolTip1.SetToolTip(btnOK, "画面を閉じます")
-        btnOK.UseVisualStyleBackColor = True
+        btn閉じる.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btn閉じる.Location = New System.Drawing.Point(559, 207)
+        btn閉じる.Name = "btn閉じる"
+        btn閉じる.Size = New System.Drawing.Size(111, 46)
+        btn閉じる.TabIndex = 9
+        btn閉じる.Text = "閉じる(&C)"
+        ToolTip1.SetToolTip(btn閉じる, "この画面を閉じます")
+        btn閉じる.UseVisualStyleBackColor = True
         ' 
         ' btn変更実行
         ' 
         btn変更実行.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn変更実行.Location = New System.Drawing.Point(555, 134)
+        btn変更実行.Location = New System.Drawing.Point(559, 146)
         btn変更実行.Name = "btn変更実行"
         btn変更実行.Size = New System.Drawing.Size(111, 46)
-        btn変更実行.TabIndex = 7
+        btn変更実行.TabIndex = 8
         btn変更実行.Text = "変更実行(&E)"
         ToolTip1.SetToolTip(btn変更実行, "色の変更を実行します")
         btn変更実行.UseVisualStyleBackColor = True
@@ -148,12 +87,12 @@ Partial Class frmColorChange
         dgvColorChange.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgvColorChange.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {BeforeDataGridViewColumn, Count, IsTargetDataGridViewCheckBoxColumn, AfterDataGridViewColumn})
         dgvColorChange.DataSource = BindingSourceColorChange
-        dgvColorChange.Location = New System.Drawing.Point(38, 63)
+        dgvColorChange.Location = New System.Drawing.Point(12, 54)
         dgvColorChange.Name = "dgvColorChange"
         dgvColorChange.RowHeadersWidth = 30
         dgvColorChange.RowTemplate.Height = 29
-        dgvColorChange.Size = New System.Drawing.Size(494, 180)
-        dgvColorChange.TabIndex = 5
+        dgvColorChange.Size = New System.Drawing.Size(526, 199)
+        dgvColorChange.TabIndex = 6
         ToolTip1.SetToolTip(dgvColorChange, "何色を何色に変更するか")
         ' 
         ' BeforeDataGridViewColumn
@@ -202,34 +141,99 @@ Partial Class frmColorChange
         BindingSourceColorChange.DataMember = "tblColorChange"
         BindingSourceColorChange.DataSource = GetType(Tables.dstWork)
         ' 
-        ' chk60度
+        ' CheckBox0
         ' 
-        chk60度.AutoSize = True
-        chk60度.Checked = True
-        chk60度.CheckState = Windows.Forms.CheckState.Checked
-        chk60度.Location = New System.Drawing.Point(343, 29)
-        chk60度.Name = "chk60度"
-        chk60度.Size = New System.Drawing.Size(62, 24)
-        chk60度.TabIndex = 2
-        chk60度.Text = "60度"
-        chk60度.UseVisualStyleBackColor = True
-        chk60度.Visible = False
+        CheckBox0.AutoSize = True
+        CheckBox0.Checked = True
+        CheckBox0.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox0.Location = New System.Drawing.Point(11, 12)
+        CheckBox0.Name = "CheckBox0"
+        CheckBox0.Size = New System.Drawing.Size(103, 24)
+        CheckBox0.TabIndex = 0
+        CheckBox0.Text = "CheckBox0"
+        CheckBox0.UseVisualStyleBackColor = True
+        CheckBox0.Visible = False
+        ' 
+        ' CheckBox3
+        ' 
+        CheckBox3.AutoSize = True
+        CheckBox3.Checked = True
+        CheckBox3.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox3.Location = New System.Drawing.Point(347, 12)
+        CheckBox3.Name = "CheckBox3"
+        CheckBox3.Size = New System.Drawing.Size(103, 24)
+        CheckBox3.TabIndex = 3
+        CheckBox3.Text = "CheckBox3"
+        CheckBox3.UseVisualStyleBackColor = True
+        CheckBox3.Visible = False
+        ' 
+        ' CheckBox2
+        ' 
+        CheckBox2.AutoSize = True
+        CheckBox2.Checked = True
+        CheckBox2.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox2.Location = New System.Drawing.Point(235, 12)
+        CheckBox2.Name = "CheckBox2"
+        CheckBox2.Size = New System.Drawing.Size(103, 24)
+        CheckBox2.TabIndex = 2
+        CheckBox2.Text = "CheckBox2"
+        CheckBox2.UseVisualStyleBackColor = True
+        CheckBox2.Visible = False
+        ' 
+        ' CheckBox1
+        ' 
+        CheckBox1.AutoSize = True
+        CheckBox1.Checked = True
+        CheckBox1.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox1.Location = New System.Drawing.Point(123, 12)
+        CheckBox1.Name = "CheckBox1"
+        CheckBox1.Size = New System.Drawing.Size(103, 24)
+        CheckBox1.TabIndex = 1
+        CheckBox1.Text = "CheckBox1"
+        CheckBox1.UseVisualStyleBackColor = True
+        CheckBox1.Visible = False
+        ' 
+        ' CheckBox4
+        ' 
+        CheckBox4.AutoSize = True
+        CheckBox4.Checked = True
+        CheckBox4.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox4.Location = New System.Drawing.Point(459, 12)
+        CheckBox4.Name = "CheckBox4"
+        CheckBox4.Size = New System.Drawing.Size(103, 24)
+        CheckBox4.TabIndex = 4
+        CheckBox4.Text = "CheckBox4"
+        CheckBox4.UseVisualStyleBackColor = True
+        CheckBox4.Visible = False
+        ' 
+        ' CheckBox5
+        ' 
+        CheckBox5.AutoSize = True
+        CheckBox5.Checked = True
+        CheckBox5.CheckState = Windows.Forms.CheckState.Checked
+        CheckBox5.Location = New System.Drawing.Point(571, 12)
+        CheckBox5.Name = "CheckBox5"
+        CheckBox5.Size = New System.Drawing.Size(103, 24)
+        CheckBox5.TabIndex = 5
+        CheckBox5.Text = "CheckBox5"
+        CheckBox5.UseVisualStyleBackColor = True
+        CheckBox5.Visible = False
         ' 
         ' frmColorChange
         ' 
         AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
         ClientSize = New System.Drawing.Size(682, 265)
+        Controls.Add(CheckBox5)
+        Controls.Add(CheckBox4)
+        Controls.Add(CheckBox0)
+        Controls.Add(CheckBox3)
+        Controls.Add(CheckBox2)
+        Controls.Add(CheckBox1)
         Controls.Add(dgvColorChange)
         Controls.Add(btn変更実行)
         Controls.Add(btn使用色)
-        Controls.Add(btnOK)
-        Controls.Add(chk個別)
-        Controls.Add(chk追加品)
-        Controls.Add(chk60度)
-        Controls.Add(chk縦ひも)
-        Controls.Add(chk横ひも)
-        Controls.Add(chk側面と縁)
+        Controls.Add(btn閉じる)
         MaximizeBox = False
         MinimizeBox = False
         MinimumSize = New System.Drawing.Size(700, 312)
@@ -241,13 +245,8 @@ Partial Class frmColorChange
         PerformLayout()
 
     End Sub
-    Friend WithEvents chk側面と縁 As Windows.Forms.CheckBox
-    Friend WithEvents chk横ひも As Windows.Forms.CheckBox
-    Friend WithEvents chk縦ひも As Windows.Forms.CheckBox
-    Friend WithEvents chk追加品 As Windows.Forms.CheckBox
-    Friend WithEvents chk個別 As Windows.Forms.CheckBox
     Friend WithEvents btn使用色 As Windows.Forms.Button
-    Friend WithEvents btnOK As Windows.Forms.Button
+    Friend WithEvents btn閉じる As Windows.Forms.Button
     Friend WithEvents btn変更実行 As Windows.Forms.Button
     Friend WithEvents dgvColorChange As ctrDataGridView
     Friend WithEvents BindingSourceColorChange As Windows.Forms.BindingSource
@@ -257,5 +256,9 @@ Partial Class frmColorChange
     Friend WithEvents IsTargetDataGridViewCheckBoxColumn As Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents AfterDataGridViewColumn As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents CheckBox1 As Windows.Forms.CheckBox
-    Friend WithEvents chk60度 As Windows.Forms.CheckBox
+    Friend WithEvents CheckBox0 As Windows.Forms.CheckBox
+    Friend WithEvents CheckBox3 As Windows.Forms.CheckBox
+    Friend WithEvents CheckBox2 As Windows.Forms.CheckBox
+    Friend WithEvents CheckBox4 As Windows.Forms.CheckBox
+    Friend WithEvents CheckBox5 As Windows.Forms.CheckBox
 End Class

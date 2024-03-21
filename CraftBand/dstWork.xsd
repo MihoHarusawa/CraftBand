@@ -168,6 +168,15 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="tblColorRepeat" msprop:Generator_RowEvHandlerName="tblColorRepeatRowChangeEventHandler" msprop:Generator_RowDeletedName="tblColorRepeatRowDeleted" msprop:Generator_RowDeletingName="tblColorRepeatRowDeleting" msprop:Generator_RowEvArgName="tblColorRepeatRowChangeEvent" msprop:Generator_TablePropName="tblColorRepeat" msprop:Generator_RowChangedName="tblColorRepeatRowChanged" msprop:Generator_RowChangingName="tblColorRepeatRowChanging" msprop:Generator_TableClassName="tblColorRepeatDataTable" msprop:Generator_RowClassName="tblColorRepeatRow" msprop:Generator_TableVarName="tabletblColorRepeat" msprop:Generator_UserTableName="tblColorRepeat">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Index" msprop:Generator_ColumnPropNameInTable="IndexColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Index" msprop:Generator_UserColumnName="Index" msprop:Generator_ColumnVarNameInTable="columnIndex" type="xs:short" default="0" minOccurs="0" />
+              <xs:element name="Color" msprop:Generator_ColumnPropNameInTable="ColorColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Color" msprop:Generator_UserColumnName="Color" msprop:Generator_ColumnVarNameInTable="columnColor" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Lane" msprop:Generator_ColumnPropNameInTable="LaneColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Lane" msprop:Generator_UserColumnName="Lane" msprop:Generator_ColumnVarNameInTable="columnLane" type="xs:short" default="0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">

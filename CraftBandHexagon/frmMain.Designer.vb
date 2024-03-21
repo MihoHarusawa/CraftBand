@@ -229,7 +229,7 @@ Partial Class frmMain
         FsメモDataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
         BindingSource側面 = New BindingSource(components)
         tpage差しひも = New TabPage()
-        BindingSource差しひも = New BindingSource(components)
+        editInsertBand = New CraftBand.ctrInsertBand()
         tpageひも上下 = New TabPage()
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
@@ -245,6 +245,7 @@ Partial Class frmMain
         expand横ひも = New CraftBand.ctrExpanding()
         tpage斜め60度 = New TabPage()
         expand斜め60度 = New CraftBand.ctrExpanding()
+        BindingSource差しひも = New BindingSource(components)
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl縦横 = New Label()
         lbl計算寸法 = New Label()
@@ -273,7 +274,7 @@ Partial Class frmMain
         lbl四角ベース = New Label()
         lblひも本幅変更 = New Label()
         lbl60度本幅変更 = New Label()
-        editInsertBand = New CraftBand.ctrInsertBand()
+        ToolStripMenuItemEditColorRepeat = New ToolStripMenuItem()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -302,7 +303,6 @@ Partial Class frmMain
         CType(dgv側面, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSource側面, ComponentModel.ISupportInitialize).BeginInit()
         tpage差しひも.SuspendLayout()
-        CType(BindingSource差しひも, ComponentModel.ISupportInitialize).BeginInit()
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
         tpageプレビュー.SuspendLayout()
@@ -310,6 +310,7 @@ Partial Class frmMain
         tpage斜め120度.SuspendLayout()
         tpage横ひも.SuspendLayout()
         tpage斜め60度.SuspendLayout()
+        CType(BindingSource差しひも, ComponentModel.ISupportInitialize).BeginInit()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
         ' 
@@ -1233,7 +1234,7 @@ Partial Class frmMain
         ' 
         ' ToolStripMenuItemEdit
         ' 
-        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
+        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
         ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
         ToolStripMenuItemEdit.Size = New Size(71, 24)
         ToolStripMenuItemEdit.Text = "編集(&E)"
@@ -1276,7 +1277,7 @@ Partial Class frmMain
         ' 
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
         ToolStripMenuItemEditColorChange.Size = New Size(216, 26)
-        ToolStripMenuItemEditColorChange.Text = "色の変更(&I)"
+        ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
         ' 
         ' ToolStripSeparator1
         ' 
@@ -2239,10 +2240,15 @@ Partial Class frmMain
         tpage差しひも.Text = "差しひも"
         tpage差しひも.UseVisualStyleBackColor = True
         ' 
-        ' BindingSource差しひも
+        ' editInsertBand
         ' 
-        BindingSource差しひも.DataMember = "tbl差しひも"
-        BindingSource差しひも.DataSource = GetType(CraftBand.Tables.dstDataTables)
+        editInsertBand.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editInsertBand.AutoSizeMode = AutoSizeMode.GrowAndShrink
+        editInsertBand.Location = New Point(-3, -3)
+        editInsertBand.Name = "editInsertBand"
+        editInsertBand.PanelSize = New Size(840, 413)
+        editInsertBand.Size = New Size(920, 420)
+        editInsertBand.TabIndex = 0
         ' 
         ' tpageひも上下
         ' 
@@ -2403,6 +2409,11 @@ Partial Class frmMain
         expand斜め60度.PanelSize = New Size(840, 413)
         expand斜め60度.Size = New Size(920, 420)
         expand斜め60度.TabIndex = 10
+        ' 
+        ' BindingSource差しひも
+        ' 
+        BindingSource差しひも.DataMember = "tbl差しひも"
+        BindingSource差しひも.DataSource = GetType(CraftBand.Tables.dstDataTables)
         ' 
         ' f_i段数2
         ' 
@@ -2660,15 +2671,11 @@ Partial Class frmMain
         lbl60度本幅変更.Text = "60"
         lbl60度本幅変更.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' editInsertBand
+        ' ToolStripMenuItemEditColorRepeat
         ' 
-        editInsertBand.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        editInsertBand.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        editInsertBand.Location = New Point(-3, -3)
-        editInsertBand.Name = "editInsertBand"
-        editInsertBand.PanelSize = New Size(840, 413)
-        editInsertBand.Size = New Size(920, 420)
-        editInsertBand.TabIndex = 0
+        ToolStripMenuItemEditColorRepeat.Name = "ToolStripMenuItemEditColorRepeat"
+        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
         ' 
         ' frmMain
         ' 
@@ -2776,7 +2783,6 @@ Partial Class frmMain
         CType(dgv側面, ComponentModel.ISupportInitialize).EndInit()
         CType(BindingSource側面, ComponentModel.ISupportInitialize).EndInit()
         tpage差しひも.ResumeLayout(False)
-        CType(BindingSource差しひも, ComponentModel.ISupportInitialize).EndInit()
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
@@ -2786,6 +2792,7 @@ Partial Class frmMain
         tpage斜め120度.ResumeLayout(False)
         tpage横ひも.ResumeLayout(False)
         tpage斜め60度.ResumeLayout(False)
+        CType(BindingSource差しひも, ComponentModel.ISupportInitialize).EndInit()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
         ResumeLayout(False)
@@ -3035,4 +3042,5 @@ Partial Class frmMain
     Friend WithEvents lblchk60度 As Label
     Friend WithEvents lbl60度本幅変更 As Label
     Friend WithEvents editInsertBand As CraftBand.ctrInsertBand
+    Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
 End Class

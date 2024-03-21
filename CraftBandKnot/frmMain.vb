@@ -79,6 +79,10 @@ Public Class frmMain
         '
         setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
+
+        initColorChange() '色変更の初期化
+        initColorRepeat() '色と幅の繰り返しの初期化(#51)
+
         _isLoadingData = False 'Designer.vb描画完了
 
         DispTables(_clsDataTables) 'バンドの種類変更対応含む
@@ -170,9 +174,7 @@ Public Class frmMain
         '#42
         If isCheckUndef Then
             '未定義色の変更確認
-            Dim dlg As New frmColorChange
-            dlg.SetDataAndExpand(_clsDataTables, True) '縦横展開を含める
-            dlg.ShowDialogForUndef()
+            ShowColorChangeFormForUndef(_clsDataTables, True) '縦横展開を含める
 
             '未参照を排除
             _clsDataTables.ModifySelected()
@@ -550,6 +552,17 @@ Public Class frmMain
         End If
     End Sub
 
+    '色変更の初期化
+    Private Function initColorChange() As Boolean
+
+        Dim _ColorChangeSettings() As CColorChangeSetting = {
+           New CColorChangeSetting(tpage側面と縁.Text, enumDataID._tbl側面, Nothing, False),
+           New CColorChangeSetting(tpage追加品.Text, enumDataID._tbl追加品, Nothing, False),
+           New CColorChangeSetting(tpage横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横, Integer)), True),
+           New CColorChangeSetting(tpage縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), True)}
+
+        Return CreateColorChangeForm(_ColorChangeSettings)
+    End Function
     '色変更
     Private Sub ToolStripMenuItemEditColorChange_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditColorChange.Click
         SaveTables(_clsDataTables)
@@ -561,11 +574,31 @@ Public Class frmMain
         End If
         _clsCalcKnot.adjust_側面()
 
-        Dim dlg As New frmColorChange
-        dlg.SetDataAndExpand(_clsDataTables, chk縦横側面を展開する.Checked)
-        dlg.ShowDialog()
+        ShowColorChangeForm(_clsDataTables)
     End Sub
 
+    '色と幅の繰り返しの初期化(#51)
+    Private Function initColorRepeat() As Boolean
+
+        Dim _ColorRepeatSettings() As CColorRepeatSetting = {
+        New CColorRepeatSetting(lbl編みひも.Text, enumDataID._tbl側面, String.Format("f_i番号<{0}", cHemNumber), "f_i番号,f_iひも番号 ASC", False, True),
+        New CColorRepeatSetting(lbl横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横, Integer)), "f_iひも番号 ASC", False, True),
+        New CColorRepeatSetting(lbl縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), "f_iひも番号 ASC", False, True)}
+
+        Return CreateColorRepeatForm(_ColorRepeatSettings)
+    End Function
+    '色と幅の繰り返し
+    Private Sub ToolStripMenuItemEditColorRepeat_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditColorRepeat.Click
+        SaveTables(_clsDataTables)
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色変更
+
+        If chk縦横側面を展開する.Checked Then
+            _clsCalcKnot.prepare縦横展開DataTable()
+        End If
+        _clsCalcKnot.adjust_側面()
+
+        ShowColorRepeatForm(_clsDataTables)
+    End Sub
 
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
@@ -1067,10 +1100,12 @@ Public Class frmMain
     End Sub
 
     Private Sub nud高さのコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さのコマ数.ValueChanged
+        txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
         recalc(CalcCategory.Knot, sender)
     End Sub
 
     Private Sub nud折り返しコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud折り返しコマ数.ValueChanged
+        txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
         recalc(CalcCategory.Knot, sender)
     End Sub
 

@@ -1172,14 +1172,16 @@ Public Class clsMasterTables
 
     Class clsColorRecordSet
 
+        Private Const AlfaFrameDefault As Integer = 255 'Solid
         Private Const AlfaLaneDefault As Integer = 100 '少し薄い色
 
-        Public PenColor As Drawing.Color = Color.Empty  '描画色・Solid塗りつぶし色
-        Public LanePenColor As Drawing.Color = Color.Empty '本幅描画色
+        Public BaseColor As Drawing.Color = Color.Empty  '描画色　(省略値と記号)
+        Public FramePenColor As Drawing.Color = Color.Empty  '線色(外枠)
+        Public LanePenColor As Drawing.Color = Color.Empty '中線色
         Public BrushAlfaColor As Drawing.Color = Color.Empty 'Alfa塗りつぶし色
 
-        Public PenWidth As Single = 0  'ペンの幅
-        Public LanePenWidth As Single = 0  '本幅ペンの幅
+        Public FramePenWidth As Single = 0  '外枠ペンの幅
+        Public LanePenWidth As Single = 0  '中線ペンの幅
 
         'レコード値の保持
         Public Name As String '色名
@@ -1200,22 +1202,32 @@ Public Class clsMasterTables
             BandTypeName = row.f_sバンドの種類名
             Product = row.f_s製品情報
 
-            PenColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
+            '基本色と塗りつぶし色
+            BaseColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
             If Not row.Isf_i透明度Null AndAlso 0 < row.f_i透明度 Then
                 BrushAlfaColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青, row.f_i透明度)
             End If
+
+            '線幅・中線幅
             If row.Isf_d線幅Null Then
-                PenWidth = 1 'デフォルト1
+                FramePenWidth = 1 'デフォルト1
             ElseIf row.f_d線幅 <= 0 Then
-                PenWidth = 0
+                FramePenWidth = 0 '明示的にゼロ指定
             Else
-                PenWidth = row.f_d線幅
+                FramePenWidth = row.f_d線幅
             End If
             If Not row.Isf_d中線幅Null AndAlso 0 < row.f_d中線幅 Then
                 LanePenWidth = row.f_d中線幅
             End If
 
-            '本幅描画色
+            '線色
+            If IsDBNull(row.f_s線色) Then
+                FramePenColorString = Nothing
+            Else
+                FramePenColorString = row.f_s中線色.ToString
+            End If
+
+            '中線色
             If IsDBNull(row.f_s中線色) Then
                 LanePenColorString = Nothing
             Else
@@ -1227,11 +1239,12 @@ Public Class clsMasterTables
             If row Is Nothing Then
                 Return False
             End If
-            row.f_i赤 = PenColor.R
-            row.f_i緑 = PenColor.G
-            row.f_i青 = PenColor.B
+            row.f_i赤 = BaseColor.R
+            row.f_i緑 = BaseColor.G
+            row.f_i青 = BaseColor.B
             row.f_i透明度 = BrushAlfaColor.A
-            row.f_d線幅 = PenWidth
+            row.f_d線幅 = FramePenWidth
+            row.f_s線色 = FramePenColorString
             row.f_d中線幅 = LanePenWidth
             row.f_s中線色 = LanePenColorString
 
@@ -1242,10 +1255,46 @@ Public Class clsMasterTables
             Return True
         End Function
 
-        '本幅描画色文字列 ※描画色セット後使用可
+        '外枠描画色文字列 ※描画色セット後使用可
+        Private Property FramePenColorString As String
+            Get
+                If BaseColor.R = FramePenColor.R AndAlso BaseColor.G = FramePenColor.G AndAlso BaseColor.B = FramePenColor.B Then
+                    If FramePenColor.A = AlfaFrameDefault Then
+                        Return String.Empty
+                    Else
+                        Return FramePenColor.A.ToString
+                    End If
+                End If
+                Return String.Format("{0},{1},{2},{3}", FramePenColor.A, FramePenColor.R, FramePenColor.G, FramePenColor.B)
+            End Get
+            Set(value As String)
+                FramePenColor = Color.FromArgb(AlfaFrameDefault, BaseColor)
+                If String.IsNullOrWhiteSpace(value) Then Exit Property
+
+                Dim ary() As String = value.Split(",")
+                If ary.Length < 1 Then Exit Property
+                Dim alfa As Integer
+                If Not Integer.TryParse(ary(0), alfa) OrElse alfa < 0 OrElse MaxRgbValue < alfa Then Exit Property
+                If ary.Length = 1 Then
+                    FramePenColor = Color.FromArgb(alfa, BaseColor)
+                    Exit Property
+                ElseIf ary.Length <> 4 Then
+                    Exit Property
+                End If
+                Dim r As Integer
+                If Not Integer.TryParse(ary(1), r) OrElse r < 0 OrElse MaxRgbValue < r Then Exit Property
+                Dim g As Integer
+                If Not Integer.TryParse(ary(2), g) OrElse g < 0 OrElse MaxRgbValue < g Then Exit Property
+                Dim b As Integer
+                If Not Integer.TryParse(ary(3), b) OrElse b < 0 OrElse MaxRgbValue < b Then Exit Property
+                FramePenColor = Color.FromArgb(alfa, r, g, b)
+            End Set
+        End Property
+
+        '中線描画色文字列 ※描画色セット後使用可
         Private Property LanePenColorString As String
             Get
-                If PenColor.R = LanePenColor.R AndAlso PenColor.G = LanePenColor.G AndAlso PenColor.B = LanePenColor.B Then
+                If BaseColor.R = LanePenColor.R AndAlso BaseColor.G = LanePenColor.G AndAlso BaseColor.B = LanePenColor.B Then
                     If LanePenColor.A = AlfaLaneDefault Then
                         Return String.Empty
                     Else
@@ -1255,7 +1304,7 @@ Public Class clsMasterTables
                 Return String.Format("{0},{1},{2},{3}", LanePenColor.A, LanePenColor.R, LanePenColor.G, LanePenColor.B)
             End Get
             Set(value As String)
-                LanePenColor = Color.FromArgb(AlfaLaneDefault, PenColor)
+                LanePenColor = Color.FromArgb(AlfaLaneDefault, BaseColor)
                 If String.IsNullOrWhiteSpace(value) Then Exit Property
 
                 Dim ary() As String = value.Split(",")
@@ -1263,7 +1312,7 @@ Public Class clsMasterTables
                 Dim alfa As Integer
                 If Not Integer.TryParse(ary(0), alfa) OrElse alfa < 0 OrElse MaxRgbValue < alfa Then Exit Property
                 If ary.Length = 1 Then
-                    LanePenColor = Color.FromArgb(alfa, PenColor)
+                    LanePenColor = Color.FromArgb(alfa, BaseColor)
                     Exit Property
                 ElseIf ary.Length <> 4 Then
                     Exit Property
@@ -1278,10 +1327,20 @@ Public Class clsMasterTables
             End Set
         End Property
 
+        '描画されない値(#52)
+        Public ReadOnly Property IsNoDrawing
+            Get
+                Return BrushAlfaColor = Color.Empty AndAlso
+                    FramePenWidth = 0 AndAlso LanePenWidth = 0 AndAlso
+                    BaseColor.R = MaxRgbValue AndAlso BaseColor.G = MaxRgbValue AndAlso BaseColor.B = MaxRgbValue
+            End Get
+        End Property
+
         '色の値のみを比較
         Public Function IsSameColor(other As clsColorRecordSet) As Boolean
             Return BrushAlfaColor = other.BrushAlfaColor AndAlso LanePenColor = other.LanePenColor AndAlso
-                PenWidth = other.PenWidth AndAlso LanePenWidth = other.LanePenWidth
+                FramePenColor = other.FramePenColor AndAlso BaseColor = other.BaseColor AndAlso
+            FramePenWidth = other.FramePenWidth AndAlso LanePenWidth = other.LanePenWidth
         End Function
 
         '色名とバンドの種類以外を比較
@@ -1290,9 +1349,10 @@ Public Class clsMasterTables
         End Function
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}({1}):R({2}) G({3}) B({4}) Alfa({5}) Width({6}) Lane({7}:{8}) [{9}]{10}",
-                                 Name, BandTypeName, PenColor.R, PenColor.G, PenColor.B, BrushAlfaColor.A, PenWidth,
-                                 LanePenWidth, LanePenColorString, Product, Appendix)
+            Return String.Format("{0}{1}({2}):R({3}) G({4}) B({5}) Alfa({6}) Frame({7}:{8}) Lane({9}:{10}) [{11}]{12}",
+                                 IIf(IsNoDrawing, "-", "+"),
+                                 Name, BandTypeName, BaseColor.R, BaseColor.G, BaseColor.B, BrushAlfaColor.A,
+                                 FramePenWidth, FramePenColorString, LanePenWidth, LanePenColorString, Product, Appendix)
         End Function
     End Class
 

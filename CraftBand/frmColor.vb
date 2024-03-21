@@ -99,6 +99,7 @@ Public Class frmColor
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         If g_clsMasterTables.UpdateColorTable(_table) Then
+            g_clsSelectBasics.UpdateTargetBandType() 'Update ColorTable
             Me.DialogResult = DialogResult.OK 'Changed, Need Update
         Else
             Me.DialogResult = DialogResult.Cancel 'No Change

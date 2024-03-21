@@ -134,6 +134,7 @@ Partial Class frmMain
         ToolStripMenuItemEditCalc = New ToolStripMenuItem()
         ToolStripSeparator5 = New ToolStripSeparator()
         ToolStripMenuItemEditColorChange = New ToolStripMenuItem()
+        ToolStripMenuItemEditColorRepeat = New ToolStripMenuItem()
         ToolStripSeparator1 = New ToolStripSeparator()
         ToolStripMenuItemEditList = New ToolStripMenuItem()
         ToolStripMenuItemEditDefaultFile = New ToolStripMenuItem()
@@ -1217,7 +1218,7 @@ Partial Class frmMain
         ' 
         ' ToolStripMenuItemEdit
         ' 
-        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
+        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
         ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
         ToolStripMenuItemEdit.Size = New Size(71, 24)
         ToolStripMenuItemEdit.Text = "編集(&E)"
@@ -1260,7 +1261,13 @@ Partial Class frmMain
         ' 
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
         ToolStripMenuItemEditColorChange.Size = New Size(216, 26)
-        ToolStripMenuItemEditColorChange.Text = "色の変更(&I)"
+        ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
+        ' 
+        ' ToolStripMenuItemEditColorRepeat
+        ' 
+        ToolStripMenuItemEditColorRepeat.Name = "ToolStripMenuItemEditColorRepeat"
+        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
         ' 
         ' ToolStripSeparator1
         ' 
@@ -2739,6 +2746,7 @@ Partial Class frmMain
     Friend WithEvents radうら As RadioButton
     Friend WithEvents radおもて As RadioButton
     Friend WithEvents editInsertBand As CraftBand.ctrInsertBand
+    Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

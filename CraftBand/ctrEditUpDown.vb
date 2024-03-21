@@ -380,9 +380,9 @@ Public Class ctrEditUpDown
             Exit Sub
         End If
 
-        setDataSourceUpDownNothing()
+        'setDataSourceUpDownNothing()#53
 
-        Dim updown As clsUpDown = _Calc.updownサイズ変更(nud水平に.Value, nud垂直に.Value, False)
+        Dim updown As clsUpDown = _Calc.updownサイズ変更(nud水平に.Value, nud垂直に.Value, True)
         '処理結果のUpDownを表示
         setDataSourceUpDownResult(sender, updown)
     End Sub

@@ -275,6 +275,7 @@ Partial Class frmMain
         lbl計算寸法最大横 = New Label()
         lbl底 = New Label()
         lbl最大 = New Label()
+        ToolStripMenuItemEditColorRepeat = New ToolStripMenuItem()
         f_i番号2 = New DataGridViewTextBoxColumn()
         f_s編みかた名2 = New DataGridViewTextBoxColumn()
         f_s編みひも名2 = New DataGridViewTextBoxColumn()
@@ -1141,7 +1142,7 @@ Partial Class frmMain
         ' 
         ' ToolStripMenuItemEdit
         ' 
-        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
+        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
         ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
         ToolStripMenuItemEdit.Size = New Size(71, 24)
         ToolStripMenuItemEdit.Text = "編集(&E)"
@@ -1184,7 +1185,7 @@ Partial Class frmMain
         ' 
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
         ToolStripMenuItemEditColorChange.Size = New Size(216, 26)
-        ToolStripMenuItemEditColorChange.Text = "色の変更(&I)"
+        ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
         ' 
         ' ToolStripSeparator1
         ' 
@@ -2574,6 +2575,12 @@ Partial Class frmMain
         lbl最大.TabIndex = 60
         lbl最大.Text = "(最大)"
         ' 
+        ' ToolStripMenuItemEditColorRepeat
+        ' 
+        ToolStripMenuItemEditColorRepeat.Name = "色の繰り返しEToolStripMenuItem"
+        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
+        ' 
         ' f_i番号2
         ' 
         f_i番号2.DataPropertyName = "f_i番号"
@@ -3184,6 +3191,7 @@ Partial Class frmMain
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
     Friend WithEvents grp楕円底個別設定 As GroupBox
+    Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

@@ -346,24 +346,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  底(楕円) に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CaptionBottomOval() As String
-            Get
-                Return ResourceManager.GetString("CaptionBottomOval", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  差しひも に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CaptionInsertBand() As String
-            Get
-                Return ResourceManager.GetString("CaptionInsertBand", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  レコードを追加できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrAddRecord() As String
@@ -819,6 +801,33 @@ Namespace My.Resources
         Friend ReadOnly Property MessageCheckOK() As String
             Get
                 Return ResourceManager.GetString("MessageCheckOK", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}点を変更しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageColorChanged() As String
+            Get
+                Return ResourceManager.GetString("MessageColorChanged", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  変更はありませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageColorNoChange() As String
+            Get
+                Return ResourceManager.GetString("MessageColorNoChange", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  少なくとも1点の変更を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MessageColorSet() As String
+            Get
+                Return ResourceManager.GetString("MessageColorSet", resourceCulture)
             End Get
         End Property
         

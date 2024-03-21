@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsMasterTables
 Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
 
@@ -164,6 +165,17 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
+    '#52 描画しない色
+    Private Function isDrawingItem(ByVal item As clsImageItem) As Boolean
+        If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
+            Return False
+        End If
+        If g_clsSelectBasics.IsNoDrawingColor(item.m_row縦横展開.f_s色) Then
+            Return False
+        End If
+        Return True
+    End Function
+
     '底の上下をm_regionListにセット
     Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList) As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
@@ -187,7 +199,7 @@ Partial Public Class clsCalcMesh
             iYoko = 0
             For Each itemYoko As clsImageItem In _ImageList横ひも
                 iYoko += 1
-                If _CUpDown.GetIsDown(iTate, iYoko) Then
+                If isDrawingItem(itemYoko) AndAlso _CUpDown.GetIsDown(iTate, iYoko) Then
                     itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
                 End If
             Next
@@ -202,7 +214,7 @@ Partial Public Class clsCalcMesh
             iTate = 0
             For Each itemTate As clsImageItem In _ImageList縦ひも
                 iTate += 1
-                If _CUpDown.GetIsUp(iTate, iYoko) Then
+                If isDrawingItem(itemTate) AndAlso _CUpDown.GetIsUp(iTate, iYoko) Then
                     itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
                 End If
             Next
