@@ -121,10 +121,11 @@ Public Class CImageDraw
         End Sub
 
         '描画されない値(#52)
-        Public ReadOnly Property IsNoDrawing
+        Public ReadOnly Property IsNoDrawing As Boolean
             Get
+                'Debug.Print("{0},{1},{2}", BrushSolid.Color.R, BrushSolid.Color.G, BrushSolid.Color.B)
                 Return PenBand Is Nothing AndAlso PenLane Is Nothing AndAlso BrushAlfa Is Nothing AndAlso
-                    (BrushSolid Is Nothing OrElse (BrushSolid.Color.R = MaxRgbValue AndAlso BrushSolid.Color.G = MaxRgbValue AndAlso BrushSolid.Color.B = MaxRgbValue))
+                    ((BrushSolid Is Nothing) OrElse (BrushSolid.Color.R = MaxRgbValue AndAlso BrushSolid.Color.G = MaxRgbValue AndAlso BrushSolid.Color.B = MaxRgbValue))
             End Get
         End Property
 
@@ -306,6 +307,17 @@ Public Class CImageDraw
         '_Graphic.DrawRectangle(_Pen_black_thin, 0, 0, width - 1, height - 1)
     End Sub
 
+    Public Class DrawException
+        Inherits Exception
+
+        Public Property ErrorItem As clsImageItem
+
+        Public Sub New(ByVal ex As Exception, ByVal item As clsImageItem, ByVal msg As String)
+            MyBase.New(msg, ex)
+            Me.ErrorItem = item
+        End Sub
+    End Class
+
     '描画
     Function Draw(ByVal imglist As clsImageItemList) As Boolean
         If Canvas Is Nothing Then
@@ -313,66 +325,78 @@ Public Class CImageDraw
         End If
         Dim ret As Boolean = True
         For Each item As clsImageItem In imglist
-            Select Case item.m_ImageType
-                Case ImageTypeEnum._横バンド
-                    ret = ret And draw横バンド(item)
-
-                Case ImageTypeEnum._縦バンド
-                    ret = ret And draw縦バンド(item)
-
-                Case ImageTypeEnum._バンド
-                    ret = ret And drawバンド(item)
-
-                Case ImageTypeEnum._コマ
-                    ret = ret And drawコマ(item)
-
-                Case ImageTypeEnum._底枠
-                    ret = ret And draw底枠(item)
-
-                Case ImageTypeEnum._底枠2
-                    ret = ret And draw底枠2(item)
-
-                Case ImageTypeEnum._全体枠
-                    ret = ret And draw全体枠(item)
-
-                Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
-                    ret = ret And draw側面(item)
-
-                Case ImageTypeEnum._底の中央線
-                    ret = ret And draw底の中央線(item)
-
-                Case ImageTypeEnum._折り返し線
-                    ret = ret And draw折り返し線(item)
-
-                Case ImageTypeEnum._文字列
-                    ret = ret And draw文字列(item)
-
-                Case ImageTypeEnum._編みかた
-                    ret = ret And draw編みかた(item)
-
-                Case ImageTypeEnum._底楕円
-                    ret = ret And draw底楕円(item)
-
-                Case ImageTypeEnum._差しひも
-                    ret = ret And draw差しひも(item)
-
-                Case ImageTypeEnum._ひも領域
-                    ret = ret And drawひも領域(item)
-
-                Case ImageTypeEnum._付属品
-                    ret = ret And draw付属品(item)
-
-                Case ImageTypeEnum._横軸線
-                    ret = ret And draw軸線(item)
-
-                Case ImageTypeEnum._縦軸線
-                    ret = ret And draw軸線(item)
-
-            End Select
+            Try
+                If Not DrawItem(item) Then
+                    ret = False
+                End If
+            Catch ex As Exception
+                Throw New DrawException(ex, item, "Please provide this information along with your data to the developer.")
+            End Try
         Next
         Return ret
     End Function
 
+    Function DrawItem(ByVal item As clsImageItem) As Boolean
+        Select Case item.m_ImageType
+            Case ImageTypeEnum._横バンド
+                Return draw横バンド(item)
+
+            Case ImageTypeEnum._縦バンド
+                Return draw縦バンド(item)
+
+            Case ImageTypeEnum._バンド
+                Return drawバンド(item)
+
+            Case ImageTypeEnum._コマ
+                Return drawコマ(item)
+
+            Case ImageTypeEnum._底枠
+                Return draw底枠(item)
+
+            Case ImageTypeEnum._底枠2
+                Return draw底枠2(item)
+
+            Case ImageTypeEnum._全体枠
+                Return draw全体枠(item)
+
+            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
+                Return draw側面(item)
+
+            Case ImageTypeEnum._底の中央線
+                Return draw底の中央線(item)
+
+            Case ImageTypeEnum._折り返し線
+                Return draw折り返し線(item)
+
+            Case ImageTypeEnum._文字列
+                Return draw文字列(item)
+
+            Case ImageTypeEnum._編みかた
+                Return draw編みかた(item)
+
+            Case ImageTypeEnum._底楕円
+                Return draw底楕円(item)
+
+            Case ImageTypeEnum._差しひも
+                Return draw差しひも(item)
+
+            Case ImageTypeEnum._ひも領域
+                Return drawひも領域(item)
+
+            Case ImageTypeEnum._付属品
+                Return draw付属品(item)
+
+            Case ImageTypeEnum._横軸線
+                Return draw軸線(item)
+
+            Case ImageTypeEnum._縦軸線
+                Return draw軸線(item)
+
+            Case Else
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "CImageDraw.DrawItem:No Def({0}:{1})", item.m_ImageType, item)
+                Return False
+        End Select
+    End Function
 
     Function draw横バンド(ByVal item As clsImageItem) As Boolean
         Return subバンド(item, False)
@@ -800,7 +824,9 @@ Public Class CImageDraw
         If colset.BrushAlfa IsNot Nothing Then
             _Graphic.FillPolygon(colset.BrushAlfa, points)
         End If
-        _Graphic.DrawLines(colset.PenBand, points)
+        If colset.PenBand IsNot Nothing Then
+            _Graphic.DrawLines(colset.PenBand, points)
+        End If
 
         '編みかた名
         If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
@@ -828,7 +854,9 @@ Public Class CImageDraw
         If colset.BrushAlfa IsNot Nothing Then
             _Graphic.FillPolygon(colset.BrushAlfa, points)
         End If
-        _Graphic.DrawLines(colset.PenBand, points)
+        If colset.PenBand IsNot Nothing Then
+            _Graphic.DrawLines(colset.PenBand, points)
+        End If
 
         '記号
         If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then

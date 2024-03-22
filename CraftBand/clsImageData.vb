@@ -1,4 +1,5 @@
-﻿Imports CraftBand.clsImageItem
+﻿Imports CraftBand.CImageDraw
+Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 ''' <summary>
 ''' イメージ処理データ(1枚の絵のデータ要素の配置)
@@ -116,9 +117,16 @@ Public Class clsImageData
                 ret = True
             End If
 
+        Catch ex As DrawException
+            g_clsLog.LogException(ex, "clsImageData.DrawException")
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ErrorItem={0}", ex.ErrorItem)
+            'イメージ生成時に例外が発生しました。{0}{1}
+            _LastError = String.Format(My.Resources.ImageDrawException, ex.ErrorItem, ex.Message)
+
         Catch ex As Exception
             g_clsLog.LogException(ex, "clsImageData.MakeImage")
-            _LastError = ex.Message
+            'イメージ生成時に例外が発生しました。{0}{1}
+            _LastError = String.Format(My.Resources.ImageDrawException, ex.Message, Nothing)
         Finally
             imgdraw.Dispose()
 

@@ -368,6 +368,12 @@
     <value>長さを入力して[→] / 重さを入力して[←]</value>
     <comment>frmBandTypeWeight</comment>
   </data>
+  <data name="ImageDrawException" xml:space="preserve">
+    <value>イメージ生成時に例外が発生しました。
+
+{0}{1}</value>
+    <comment>clsImageData</comment>
+  </data>
   <data name="LeftLower" xml:space="preserve">
     <value>左下</value>
     <comment>ctrEditUpDown</comment>

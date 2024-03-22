@@ -643,6 +643,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  イメージ生成時に例外が発生しました。
+        '''
+        '''{0}{1} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ImageDrawException() As String
+            Get
+                Return ResourceManager.GetString("ImageDrawException", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  左下 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property LeftLower() As String

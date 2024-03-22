@@ -1224,7 +1224,7 @@ Public Class clsMasterTables
             If IsDBNull(row.f_s線色) Then
                 FramePenColorString = Nothing
             Else
-                FramePenColorString = row.f_s中線色.ToString
+                FramePenColorString = row.f_s線色.ToString
             End If
 
             '中線色
