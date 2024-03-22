@@ -438,7 +438,7 @@
     <comment>ctrEditUpDown</comment>
   </data>
   <data name="MessageColorChanged" xml:space="preserve">
-    <value>{0}点を変更しました。</value>
+    <value>{0}点を変更しました。{1}</value>
     <comment>frmColorChange,frmColorRepeat</comment>
   </data>
   <data name="MessageColorNoChange" xml:space="preserve">

@@ -444,19 +444,19 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
         With calc
             '
-            txt四角ベース_横.Text = .p_s四角ベース_横
+            txt六つ目ベース_横.Text = .p_s四角ベース_横
             txt縁厚さプラス_横.Text = .p_s縁厚さプラス_横
-            txt四角ベース_縦.Text = .p_s四角ベース_縦
+            txt六つ目ベース_縦.Text = .p_s四角ベース_縦
             txt縁厚さプラス_縦.Text = .p_s縁厚さプラス_縦
-            txt四角ベース_高さ.Text = .p_s四角ベース_高さ
+            txt六つ目ベース_高さ.Text = .p_s四角ベース_高さ
             txt縁厚さプラス_高さ.Text = .p_s縁厚さプラス_高さ
-            txt四角ベース_周.Text = .p_s四角ベース_周
+            txt六つ目ベース_周.Text = .p_s四角ベース_周
             txt縁厚さプラス_周.Text = .p_s縁厚さプラス_周
 
-            txt縦横_目.Text = .p_s縦横_目
+            txtひもに垂直_目.Text = .p_s縦横_目
             txt対角線_目.Text = .p_s対角線_目
-            txt縦横_四角.Text = .p_s縦横_四角
-            txt対角線_四角.Text = .p_s対角線_四角
+            txtひもに垂直_ひも幅プラス.Text = .p_s縦横_四角
+            txt対角線_ひも幅プラス.Text = .p_s対角線_四角
 
             txt垂直ひも数.Text = .p_i垂直ひも数
             txt厚さ.Text = .p_s厚さ

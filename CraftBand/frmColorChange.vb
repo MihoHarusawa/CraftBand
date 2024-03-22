@@ -339,8 +339,8 @@ Friend Class frmColorChange
             '変更はありませんでした。
             MessageBox.Show(My.Resources.MessageColorNoChange, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            '{0}点を変更しました。
-            MessageBox.Show(String.Format(My.Resources.MessageColorChanged, changed), Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            '{0}点を変更しました。{1}
+            MessageBox.Show(String.Format(My.Resources.MessageColorChanged, changed, Nothing), Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             _ChangeCount += changed
         End If
 

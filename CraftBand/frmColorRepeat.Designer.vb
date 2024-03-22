@@ -56,7 +56,7 @@ Partial Class frmColorRepeat
         dgvColorRepeat.Name = "dgvColorRepeat"
         dgvColorRepeat.RowHeadersWidth = 30
         dgvColorRepeat.RowTemplate.Height = 29
-        dgvColorRepeat.Size = New System.Drawing.Size(374, 156)
+        dgvColorRepeat.Size = New System.Drawing.Size(374, 159)
         dgvColorRepeat.TabIndex = 4
         ' 
         ' DataGridViewColumnIndex
@@ -149,7 +149,7 @@ Partial Class frmColorRepeat
         ' btn変更実行
         ' 
         btn変更実行.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn変更実行.Location = New System.Drawing.Point(405, 166)
+        btn変更実行.Location = New System.Drawing.Point(405, 169)
         btn変更実行.Name = "btn変更実行"
         btn変更実行.Size = New System.Drawing.Size(111, 46)
         btn変更実行.TabIndex = 7
@@ -160,7 +160,7 @@ Partial Class frmColorRepeat
         ' btn削除
         ' 
         btn削除.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn削除.Location = New System.Drawing.Point(12, 225)
+        btn削除.Location = New System.Drawing.Point(12, 231)
         btn削除.Name = "btn削除"
         btn削除.Size = New System.Drawing.Size(111, 46)
         btn削除.TabIndex = 5
@@ -171,7 +171,7 @@ Partial Class frmColorRepeat
         ' btn閉じる
         ' 
         btn閉じる.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn閉じる.Location = New System.Drawing.Point(405, 225)
+        btn閉じる.Location = New System.Drawing.Point(405, 231)
         btn閉じる.Name = "btn閉じる"
         btn閉じる.Size = New System.Drawing.Size(111, 46)
         btn閉じる.TabIndex = 8
@@ -182,7 +182,7 @@ Partial Class frmColorRepeat
         ' btn追加
         ' 
         btn追加.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn追加.Location = New System.Drawing.Point(275, 225)
+        btn追加.Location = New System.Drawing.Point(275, 231)
         btn追加.Name = "btn追加"
         btn追加.Size = New System.Drawing.Size(111, 46)
         btn追加.TabIndex = 6
@@ -194,7 +194,7 @@ Partial Class frmColorRepeat
         ' 
         AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
-        ClientSize = New System.Drawing.Size(528, 276)
+        ClientSize = New System.Drawing.Size(528, 288)
         Controls.Add(btn変更実行)
         Controls.Add(btn追加)
         Controls.Add(btn削除)

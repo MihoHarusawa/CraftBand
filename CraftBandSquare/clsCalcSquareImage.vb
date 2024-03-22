@@ -633,7 +633,7 @@ Partial Public Class clsCalcSquare
             Dim dInnerPosition As Double = 0.5
             If Not row.Isf_i同位置数Null AndAlso Not row.Isf_i同位置順Null AndAlso
                 1 < row.f_i同位置数 AndAlso 0 < row.f_i同位置順 Then
-                dInnerPosition = row.f_i同位置順 / (row.f_i同位置数 + 1)
+                dInnerPosition = (2 * row.f_i同位置順 - 1) / (2 * row.f_i同位置数)
             End If
 
             Select Case row.f_i配置面

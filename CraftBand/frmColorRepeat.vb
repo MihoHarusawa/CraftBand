@@ -226,7 +226,8 @@ Friend Class frmColorRepeat
             Exit Sub
         End If
 
-        Dim changed As Integer = 0
+        Dim color_changed As Integer = 0
+        Dim lane_changed As Integer = 0
         For idx As Integer = 0 To _Settings.Length - 1
             Dim chdIdx As CheckBox = findCheckBox(idx)
             If chdIdx Is Nothing OrElse Not chdIdx.Enabled OrElse Not chdIdx.Checked Then
@@ -243,20 +244,41 @@ Friend Class frmColorRepeat
                 Dim record As dstWork.tblColorRepeatRow = next_record()
                 If Not record.IsColorNull AndAlso Not String.IsNullOrWhiteSpace(record.Color) Then
                     row("f_s色") = record.Color
-                    changed += 1
+                    color_changed += 1
                 End If
                 If _Settings(idx).AdjustableLane AndAlso
                  Not record.IsLaneNull AndAlso 0 < record.Lane Then
                     row("f_i何本幅") = record.Lane
+                    lane_changed += 1
                 End If
             Next
         Next
-        If changed = 0 Then
+        If color_changed = 0 AndAlso lane_changed = 0 Then
             '変更はありませんでした。
             MessageBox.Show(My.Resources.MessageColorNoChange, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            '{0}点を変更しました。
-            MessageBox.Show(String.Format(My.Resources.MessageColorChanged, changed), Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Dim changed As Integer
+            Dim addmsg As String = Nothing
+            If color_changed = lane_changed Then
+                changed = color_changed
+
+            ElseIf 0 < color_changed Then
+                If color_changed < lane_changed Then
+                    changed = lane_changed
+                    addmsg = String.Format("({0},{1})", lane_changed, color_changed)
+                ElseIf 0 < lane_changed Then
+                    changed = color_changed
+                    addmsg = String.Format("({0},{1})", lane_changed, color_changed)
+                Else 'lane_changed=0
+                    changed = color_changed
+                End If
+
+            ElseIf 0 < lane_changed Then 'lane_changed=0
+                changed = lane_changed
+
+            End If
+            '{0}点を変更しました。{1}
+            MessageBox.Show(String.Format(My.Resources.MessageColorChanged, changed, addmsg), Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
             _ChangeCount += changed
         End If
     End Sub

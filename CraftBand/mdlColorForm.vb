@@ -34,7 +34,7 @@ Public Module mdlColorForm
     End Function
 
     '戻り値:マイナス=エラー 0以上:変更レコード数
-    Public Function ShowColorChangeForm(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Boolean
+    Public Function ShowColorChangeForm(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Integer
         If _frmColorChange Is Nothing OrElse Not _frmColorChange.IsInitialized Then
             Return -1
         End If
@@ -46,7 +46,7 @@ Public Module mdlColorForm
         Return _frmColorChange.ChangeCount
     End Function
 
-    Public Function ShowColorChangeFormForUndef(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Boolean
+    Public Function ShowColorChangeFormForUndef(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Integer
         If _frmColorChange Is Nothing OrElse Not _frmColorChange.IsInitialized Then
             Return -1
         End If
@@ -97,7 +97,7 @@ Public Module mdlColorForm
     End Function
 
     '戻り値:マイナス=エラー 0以上:変更レコード数
-    Public Function ShowColorRepeatForm(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Boolean
+    Public Function ShowColorRepeatForm(ByVal data As clsDataTables, Optional ByVal isAlwaysExpand As Boolean = False) As Integer
         If _frmColorRepeat Is Nothing OrElse Not _frmColorRepeat.IsInitialized Then
             Return -1
         End If

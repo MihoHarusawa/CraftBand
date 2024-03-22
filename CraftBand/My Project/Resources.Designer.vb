@@ -805,7 +805,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}点を変更しました。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}点を変更しました。{1} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MessageColorChanged() As String
             Get

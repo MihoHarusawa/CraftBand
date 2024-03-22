@@ -294,8 +294,8 @@ Class clsCalcHexagon
     End Property
     Public ReadOnly Property p_s対角線_目 As String
         Get
-            If 0 < _d六つ目の高さ Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の高さ * ROOT2)
+            If 0 < _d六つ目の対角線 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の対角線)
             End If
             Return ""
         End Get
@@ -2238,7 +2238,7 @@ Class clsCalcHexagon
     End Function
 
     Private Function text四角ベース() As String
-        Return _frmMain.lbl四角ベース.Text
+        Return _frmMain.lbl六つ目ベース.Text
     End Function
 
     Private Function text縁厚さプラス() As String

@@ -573,7 +573,9 @@ Public Class frmMain
             _clsCalcSquare45.prepare縦横展開DataTable()
         End If
 
-        ShowColorChangeForm(_clsDataTables)
+        If 0 < ShowColorChangeForm(_clsDataTables) Then
+            recalc(CalcCategory.BandColor)
+        End If
     End Sub
 
     '色と幅の繰り返しの初期化(#51)
@@ -594,7 +596,9 @@ Public Class frmMain
             _clsCalcSquare45.prepare縦横展開DataTable()
         End If
 
-        ShowColorRepeatForm(_clsDataTables)
+        If 0 < ShowColorRepeatForm(_clsDataTables) Then
+            recalc(CalcCategory.BandColor)
+        End If
     End Sub
 
     'リセット

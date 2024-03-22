@@ -41,6 +41,8 @@ Class clsCalcSquare45
 
         Expand_Yoko '横ひも展開のセル編集
         Expand_Tate '縦ひも展開のセル編集
+
+        BandColor   '色の変更
     End Enum
 
     Public Property p_b有効 As Boolean
@@ -576,6 +578,12 @@ Class clsCalcSquare45
                     ret = ret And calc_位置と長さ計算(True)
                     ret = ret And calc_側面(category, Nothing, Nothing) '周長
                 End If
+
+            Case CalcCategory.BandColor '色の変更
+                ret = ret And renew_横ひも展開(category)
+                ret = ret And renew_縦ひも展開(category)
+                ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面(category, Nothing, Nothing) '周長
 
             Case Else
                 '未定義のカテゴリー'{0}'が参照されました。
