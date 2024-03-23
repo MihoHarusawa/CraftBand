@@ -570,7 +570,7 @@ Public Class frmMain
     Private Function initColorRepeat() As Boolean
 
         Dim _ColorRepeatSettings() As CColorRepeatSetting = {
-        New CColorRepeatSetting(lbl側面の編みひも.Text, enumDataID._tbl側面, "f_i番号=1", "f_iひも番号 ASC", False, True),
+        New CColorRepeatSetting(lbl側面の編みひも.Text, enumDataID._tbl側面, "f_i番号=1", "f_iひも番号 ASC", True, False),
         New CColorRepeatSetting(tpage縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), "f_iひも番号 ASC", True, True),
         New CColorRepeatSetting(tpage横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横, Integer)), "f_iひも番号 ASC", True, True)}
 
