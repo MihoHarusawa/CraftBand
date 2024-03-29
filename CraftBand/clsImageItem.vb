@@ -283,6 +283,13 @@ Public Class clsImageItem
             Return fn.IsOn(p)
         End Function
 
+        '長さ
+        ReadOnly Property Length As Double
+            Get
+                Return Math.Sqrt((p終了.X - p開始.X) ^ 2 + (p終了.Y - p開始.Y) ^ 2)
+            End Get
+        End Property
+
         '差分
         Shared Function s差分(ByVal line As S線分) As S差分
             Return New S差分(line.p開始, line.p終了)
@@ -295,7 +302,7 @@ Public Class clsImageItem
         Shared Function p交点(ByVal line1 As S線分, ByVal line2 As S線分) As S実座標
             Dim fn2 As New S直線式(line2)
             Dim p As S実座標 = p交点(line1, fn2)
-            If Not p.IsZero AndAlso line1.IsOn(p) Then
+            If Not p.IsZero AndAlso line1.r外接領域.isInner(p) Then
                 Return p
             Else
                 p.Zero()
@@ -309,7 +316,7 @@ Public Class clsImageItem
         Shared Function p交点(ByVal line1 As S線分, ByVal fn2 As S直線式) As S実座標
             Dim fn1 As New S直線式(line1)
             Dim p As S実座標 = S直線式.p交点(fn1, fn2)
-            If Not p.IsZero AndAlso line1.IsOn(p) Then
+            If Not p.IsZero AndAlso line1.r外接領域.isInner(p) Then
                 Return p
             Else
                 p.Zero()
@@ -675,8 +682,19 @@ Public Class clsImageItem
 
         '領域内の点か？
         Function isInner(ByVal p As S実座標) As Boolean
-            Return x最左 <= p.X AndAlso p.X <= x最右 AndAlso
-                y最下 <= p.Y AndAlso p.Y <= y最上
+            If p.X < x最左 AndAlso Not NearlyEqual(x最左, p.X) Then
+                Return False
+            End If
+            If x最右 < p.X AndAlso Not NearlyEqual(x最右, p.X) Then
+                Return False
+            End If
+            If p.Y < y最下 AndAlso Not NearlyEqual(y最下, p.Y) Then
+                Return False
+            End If
+            If y最上 < p.Y AndAlso Not NearlyEqual(y最上, p.Y) Then
+                Return False
+            End If
+            Return True
         End Function
 
         Public Overrides Function ToString() As String

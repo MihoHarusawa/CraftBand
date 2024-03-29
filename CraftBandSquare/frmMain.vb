@@ -1033,6 +1033,11 @@ Public Class frmMain
             nud基本のひも幅.Value = g_clsSelectBasics.p_i本幅
         End If
         lbl基本のひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
+        If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
+            txtひも幅比.Text = (nud目_ひも間のすき間.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
+        Else
+            txtひも幅比.Text = ""
+        End If
 
         ShowDefaultTabControlPage(enumReason._Preview)
         recalc(CalcCategory.Target_Band, sender)

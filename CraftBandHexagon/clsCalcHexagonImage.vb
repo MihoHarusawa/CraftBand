@@ -88,6 +88,12 @@ Partial Public Class clsCalcHexagon
         Return _BandPositions(cIdxAngle0)._底領域幅
     End Function
 
+    Private Function get底の六角計の周() As Double
+        '仮の値
+        Return (get六角ベース_横() + get六角ベース_縦()) * 2
+    End Function
+
+
     '底の配置領域に立ち上げ増分をプラス, = p_d四角ベース_周
     Private Function get側面の周長() As Double
         Return 2 * (get六角ベース_横() + get六角ベース_縦()) _
@@ -135,7 +141,6 @@ Partial Public Class clsCalcHexagon
 
 
             '底位置
-
             _hex底の辺 = New CHex(
             _BandPositions(cIdxAngle0)._底の辺,
             _BandPositions(cIdxAngle60)._底の辺,
@@ -161,9 +166,10 @@ Partial Public Class clsCalcHexagon
                 p_s警告 = My.Resources.CalcBadBottom
             End If
 
+            '底とクロスする位置・その長さ
             Dim p1 As S実座標
             Dim p2 As S実座標
-            For idx As Integer = 0 To 2
+            For idx As Integer = 0 To cAngleCount - 1
                 For ax As Integer = 1 To _BandPositions(idx)._iひもの本数
                     Dim band As CBandPosition = _BandPositions(idx).ByAxis(ax)
                     p1.Zero()
@@ -171,7 +177,7 @@ Partial Public Class clsCalcHexagon
 
                     For i = 0 To 5
                         If CHex.hex_aidx(i) = idx Then
-                            Continue For
+                            Continue For '同方向は除外
                         End If
                         If p1.IsZero Then
                             p1 = _hex底の辺.辺(i).p交点(band.fnひも中心線)
@@ -194,13 +200,24 @@ Partial Public Class clsCalcHexagon
 
                     If p1.IsZero OrElse p2.IsZero Then
                         '長さを計算できないひもがあります。{0} {1}
-                        p_s警告 = String.Format(My.Resources.CalcErrorBandLength, aidx(idx), ax)
+                        p_s警告 = String.Format(My.Resources.CalcErrorBandLength, aidx(idx), band._iひも番号)
                         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, p_s警告)
                     Else
                         band.m_底の長さ = New S差分(p1, p2).Length
                         band.m_row縦横展開.f_d長さ = band.m_底の長さ
+                        band.m_row縦横展開.f_iVal1 = band.m_底の交点HexIndex(0)
+                        band.m_row縦横展開.f_iVal2 = band.m_底の交点HexIndex(1)
                     End If
                 Next
+                '補強ひも
+                If _BandPositions(idx)._row補強ひも(0) IsNot Nothing Then
+                    _BandPositions(idx)._row補強ひも(0).f_d長さ =
+                    _hex底の辺.辺(CHex.hexidx(idx, 1)).Length
+                End If
+                If _BandPositions(idx)._row補強ひも(1) IsNot Nothing Then
+                    _BandPositions(idx)._row補強ひも(1).f_d長さ =
+                    _hex底の辺.辺(CHex.hexidx(idx, 0)).Length
+                End If
             Next
 
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(0)={0}", _BandPositions(cIdxAngle0.ToString))
@@ -298,6 +315,11 @@ Partial Public Class clsCalcHexagon
                 Return hexidx Mod 3
             End Get
         End Property
+        Shared ReadOnly Property hexidx(ByVal aidx As Integer, ByVal line As Integer) As Integer
+            Get
+                Return line * 3 + aidx
+            End Get
+        End Property
 
 
         ReadOnly Property IsValidHexagon() As Boolean
@@ -388,7 +410,7 @@ Partial Public Class clsCalcHexagon
 
     Friend Class CBandPosition
         Dim _parent As CBandPositionList    '方向
-        Dim _iひも番号 As Integer
+        Friend _iひも番号 As Integer
 
         Friend m_row縦横展開 As tbl縦横展開Row
         Friend m_dひも幅 As Double
@@ -497,7 +519,7 @@ Partial Public Class clsCalcHexagon
         'ひも番号順
         Dim _BandList As New List(Of CBandPosition)
 
-        Dim _row補強ひも(1) As tbl縦横展開Row 'idx1→0, idx2=1
+        Friend _row補強ひも(1) As tbl縦横展開Row 'idx1→0, idx2=1
 
 
 

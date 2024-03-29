@@ -173,6 +173,7 @@ Public Class frmMain
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nud六つ目の高さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
+            nud三角の中.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nudひも長加算_縦横端.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nudひも長加算_側面.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
@@ -445,12 +446,12 @@ Public Class frmMain
         With calc
             '
             txt六つ目ベース_横.Text = .p_s六つ目ベース_横
-            txt縁厚さプラス_横.Text = .p_s縁厚さプラス_横
             txt六つ目ベース_縦.Text = .p_s六つ目ベース_縦
-            txt縁厚さプラス_縦.Text = .p_s縁厚さプラス_縦
             txt六つ目ベース_高さ.Text = .p_s六つ目ベース_高さ
-            txt縁厚さプラス_高さ.Text = .p_s縁厚さプラス_高さ
             txt六つ目ベース_周.Text = .p_s六つ目ベース_周
+            txt縁厚さプラス_横.Text = .p_s縁厚さプラス_横
+            txt縁厚さプラス_縦.Text = .p_s縁厚さプラス_縦
+            txt縁厚さプラス_高さ.Text = .p_s縁厚さプラス_高さ
             txt縁厚さプラス_周.Text = .p_s縁厚さプラス_周
 
             txtひもに垂直_目.Text = .p_sひもに垂直_目
@@ -629,8 +630,8 @@ Public Class frmMain
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
         Dim r As DialogResult
         If _clsCalcHexagon.IsValidInput() Then '#22
-            '目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
-            '(はいで全てリセット、いいえで目(ひも間のすき間)を保持)
+            '目標寸法以外をリセットします。六つ目の高さもリセットしてよろしいですか？
+            '(はいで全てリセット、いいえで六つ目の高さを保持)
             r = MessageBox.Show(My.Resources.AskResetInput, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
             If r <> DialogResult.Yes AndAlso r <> DialogResult.No Then
                 Exit Sub
@@ -1074,6 +1075,17 @@ Public Class frmMain
         End If
         lbl基本のひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
 
+        _TriangleChangeByCode = True
+        If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
+            txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
+            nud三角の中.Value = (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
+        Else
+            txtひも幅比.Text = ""
+            nud三角の中.Value = 0
+            nud三角の中.ResetText()
+        End If
+        _TriangleChangeByCode = False
+
         ShowDefaultTabControlPage(enumReason._Preview)
         recalc(CalcCategory.Target_Band, sender)
     End Sub
@@ -1114,7 +1126,7 @@ Public Class frmMain
         End If
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
-    '中心位置
+    '合わせる位置
     Private Sub nud上から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何個目.ValueChanged
         '横ひもの本数-1以下
         If nud横ひもの本数.Value - 1 <= nud上から何個目.Value Then
@@ -1228,21 +1240,28 @@ Public Class frmMain
         recalc(CalcCategory.Hex_Vert, sender)
     End Sub
 
-
-    Private Sub nud六つ目の高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud六つ目の高さ.ValueChanged
-        If 0 < nud六つ目の高さ.Value Then
-            txt目_本幅分.Text = New Length(nud六つ目の高さ.Value).ByLaneText
-            txt目対角線_本幅分.Text = New Length(nud六つ目の高さ.Value / SIN60).ByLaneText
-            If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
-                txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
-            Else
-                txtひも幅比.Text = ""
-            End If
+    Private _TriangleChangeByCode As Boolean = False
+    Sub nud六つ目の高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud六つ目の高さ.ValueChanged
+        _TriangleChangeByCode = True
+        txt目_本幅分.Text = New Length(nud六つ目の高さ.Value).ByLaneText
+        txt目対角線_本幅分.Text = New Length(nud六つ目の高さ.Value / SIN60).ByLaneText
+        If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
+            txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
+            nud三角の中.Value = (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
         Else
-            txt目_本幅分.Text = ""
+            txtひも幅比.Text = ""
+            nud三角の中.Value = 0
+            nud三角の中.ResetText()
         End If
+        _TriangleChangeByCode = True = False
 
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+    End Sub
+
+    Private Sub num三角の中_ValueChanged(sender As Object, e As EventArgs) Handles nud三角の中.ValueChanged
+        If Not _TriangleChangeByCode = True Then
+            nud六つ目の高さ.Value = (nud三角の中.Value + g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)) * 2
+        End If
     End Sub
 
     Private Sub nudひも長係数_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長係数.ValueChanged
@@ -1669,6 +1688,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 #End Region
 

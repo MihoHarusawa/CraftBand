@@ -204,7 +204,7 @@ Class clsCalcHexagon
     End Property
 
     'ひも幅+すき間
-    Public ReadOnly Property p_dひもに垂直_ひも幅プラス As Double
+    Public ReadOnly Property p_d六つ目プラスひも幅 As Double
         Get
             If 0 <= _d六つ目の高さ AndAlso 0 < _d基本のひも幅 Then
                 Return _d六つ目の高さ + _d基本のひも幅
@@ -255,8 +255,8 @@ Class clsCalcHexagon
 #Region "表示用(計算には使わない)"
     ReadOnly Property p_d六つ目ベース_周 As Double '底の配置領域に立ち上げ増分をプラス
         Get
-            If 0 <= p_d六つ目ベース_横 AndAlso 0 <= p_d六つ目ベース_縦 Then
-                Return 2 * (p_d六つ目ベース_横 + p_d六つ目ベース_縦) _
+            If 0 <= get底の六角計の周() Then
+                Return get底の六角計の周() _
                 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分")
             Else
                 Return 0
@@ -267,7 +267,7 @@ Class clsCalcHexagon
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
             If 0 <= p_d六つ目ベース_周 Then
-                Return p_d六つ目ベース_周 + 8 * p_d厚さ
+                Return p_d六つ目ベース_周 + 6 * p_d厚さ * SIN60
             End If
             Return 0
         End Get
@@ -284,8 +284,8 @@ Class clsCalcHexagon
     End Property
     Public ReadOnly Property p_sひもに垂直_ひも幅プラス As String
         Get
-            If 0 < p_dひもに垂直_ひも幅プラス Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_dひもに垂直_ひも幅プラス)
+            If 0 < p_d六つ目プラスひも幅 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目プラスひも幅)
             End If
             Return ""
         End Get
@@ -300,8 +300,8 @@ Class clsCalcHexagon
     End Property
     Public ReadOnly Property p_s対角線_ひも幅プラス As String
         Get
-            If 0 < p_dひもに垂直_ひも幅プラス Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_dひもに垂直_ひも幅プラス) / SIN60)
+            If 0 < p_d六つ目プラスひも幅 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_d六つ目プラスひも幅) / SIN60)
             End If
             Return ""
         End Get
@@ -471,14 +471,14 @@ Class clsCalcHexagon
 
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
-        sb.AppendFormat("{0}({1}){2}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ).AppendLine()
+        sb.AppendFormat("{0}({1}){2}/{3}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ, p_s警告).AppendLine()
         sb.AppendFormat("Target:({0},{1},{2}) Lane({3}){4}", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅, _d基本のひも幅).AppendLine()
         sb.AppendFormat("  0:({0},mark({1}),end({2}),add({3}))", _iひもの本数(0), _i何個目位置(0), _d端の目(0), _b補強ひも(0)).AppendLine()
         sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1)).AppendLine()
         sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2)).AppendLine()
-        'sb.AppendFormat("Depth:({0},{1}) Periphery:{2}", _i縦の目の数, _d四角ベース_縦計, p_d四角ベース_周).AppendLine()
-        sb.AppendFormat("Height:({0},{1})", _i側面の編みひも数, _d六角ベース_高さ計).AppendLine()
-        sb.AppendFormat("Edge({0}) VerticalLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
+        sb.AppendFormat("Height:({0},bottom({1})) Sum={2}", _i側面の編みひも数, _d最下段の目, _d六角ベース_高さ計).AppendLine()
+        sb.AppendFormat("Edge({0}) SlantLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
+        sb.Append(ToStringImageData())
         Return sb.ToString
     End Function
 
@@ -768,7 +768,7 @@ Class clsCalcHexagon
             Return False
         End If
 
-        '目標に基づき横・縦・高さのひも(目)数を再計算します。よろしいですか？
+        '目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？
         message = My.Resources.CalcConfirmRecalc
 
         Return True
@@ -804,7 +804,7 @@ Class clsCalcHexagon
 
     '目標寸法→横・縦・高さの四角数
     Private Function calc_Target() As Boolean
-        If p_dひもに垂直_ひも幅プラス <= 0 Then
+        If p_d六つ目プラスひも幅 <= 0 Then
             Return False
         End If
 
@@ -817,7 +817,7 @@ Class clsCalcHexagon
 
     '横寸法から横に並ぶ四角数・偶数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_dひもに垂直_ひも幅プラス) '#22
+        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_d六つ目プラスひも幅) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i横の四角数 Mod 2 <> 0 Then
@@ -825,7 +825,7 @@ Class clsCalcHexagon
             End If
         Else
             '外側
-            Do While i横の四角数 * p_dひもに垂直_ひも幅プラス < (_d横_目標 - _d基本のひも幅)
+            Do While i横の四角数 * p_d六つ目プラスひも幅 < (_d横_目標 - _d基本のひも幅)
                 i横の四角数 += 1
             Loop
             If i横の四角数 Mod 2 <> 0 Then
@@ -846,14 +846,14 @@ Class clsCalcHexagon
 
     '縦寸法から縦に並ぶ四角数・偶数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_dひもに垂直_ひも幅プラス) '#22
+        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_d六つ目プラスひも幅) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i縦の四角数 Mod 2 <> 0 Then
                 i縦の四角数 -= 1
             End If
         Else
-            Do While i縦の四角数 * p_dひもに垂直_ひも幅プラス < (_d縦_目標 - _d基本のひも幅)
+            Do While i縦の四角数 * p_d六つ目プラスひも幅 < (_d縦_目標 - _d基本のひも幅)
                 i縦の四角数 += 1
             Loop
             If i縦の四角数 Mod 2 <> 0 Then
@@ -873,9 +873,9 @@ Class clsCalcHexagon
 
     '高さ寸法から高さの四角数
     Private Function calc_Target_高さ()
-        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d六つ目の高さ) / p_dひもに垂直_ひも幅プラス)
+        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d六つ目の高さ) / p_d六つ目プラスひも幅)
         If Not _Data.p_row目標寸法.Value("f_b内側区分") Then
-            Do While i高さの四角数 * p_dひもに垂直_ひも幅プラス < (_d高さ_目標 - _d六つ目の高さ)
+            Do While i高さの四角数 * p_d六つ目プラスひも幅 < (_d高さ_目標 - _d六つ目の高さ)
                 i高さの四角数 += 1
             Loop
         End If

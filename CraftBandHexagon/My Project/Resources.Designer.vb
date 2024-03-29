@@ -106,8 +106,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
-        '''(はいで全てリセット、いいえで目(ひも間のすき間)を保持) に類似しているローカライズされた文字列を検索します。
+        '''  目標寸法以外をリセットします。六つ目の高さもリセットしてよろしいですか？
+        '''(はいで全てリセット、いいえで六つ目の高さを保持) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskResetInput() As String
             Get
@@ -170,7 +170,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  目標に基づき横・縦・高さのひも(目)数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcConfirmRecalc() As String
             Get

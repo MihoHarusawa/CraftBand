@@ -138,8 +138,8 @@
     <comment>frmMain</comment>
   </data>
   <data name="AskResetInput" xml:space="preserve">
-    <value>目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
-(はいで全てリセット、いいえで目(ひも間のすき間)を保持)</value>
+    <value>目標寸法以外をリセットします。六つ目の高さもリセットしてよろしいですか？
+(はいで全てリセット、いいえで六つ目の高さを保持)</value>
     <comment>frmMain</comment>
   </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">
@@ -163,7 +163,7 @@
     <value>六つ目を作るために、各ひも2本以上にしてください。</value>
   </data>
   <data name="CalcConfirmRecalc" xml:space="preserve">
-    <value>目標に基づき横・縦・高さのひも(目)数を再計算します。よろしいですか？</value>
+    <value>目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？</value>
   </data>
   <data name="CalcErrorBandLength" xml:space="preserve">
     <value>長さを計算できないひもがあります。{0} {1}</value>
