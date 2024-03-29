@@ -150,6 +150,12 @@
     <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
+  <data name="CalcBadBottom" xml:space="preserve">
+    <value>立ち上げ可能な底を作れません。</value>
+  </data>
+  <data name="CalcBadCenterPosition" xml:space="preserve">
+    <value>中心の目の位置は、ひもの本数より小さくしてください。</value>
+  </data>
   <data name="CalcBadRecord" xml:space="preserve">
     <value>無効レコード(番号={0})</value>
   </data>
@@ -158,6 +164,9 @@
   </data>
   <data name="CalcConfirmRecalc" xml:space="preserve">
     <value>目標に基づき横・縦・高さのひも(目)数を再計算します。よろしいですか？</value>
+  </data>
+  <data name="CalcErrorBandLength" xml:space="preserve">
+    <value>長さを計算できないひもがあります。{0} {1}</value>
   </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
     <value>{0}追加用の番号がとれません。</value>

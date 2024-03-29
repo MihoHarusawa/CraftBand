@@ -9,18 +9,24 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
 Class clsCalcHexagon
-    Public Const ROOT2 As Double = 1.41421356237
+    Public Shared SIN60 As Double = Math.Sqrt(3) / 2
 
 #Region "底の展開データ識別値"
     Enum AngleIndex
-        idx_0 = 0    '横
-        idx_60 = 60   '斜め60度
-        idx_120 = 120  '斜め120度
+        _0deg = 0    '横
+        _60deg = 60   '斜め60度
+        _120deg = 120  '斜め120度
     End Enum
     Friend Const cAngleCount As Integer = 3
+    Friend Const cIdxAngle0 As Integer = 0
+    Friend Const cIdxAngle60 As Integer = 1
+    Friend Const cIdxAngle120 As Integer = 2
 
     Shared Function idx(ByVal aidx As AngleIndex) As Integer
         Return CType(aidx, Integer) / 60
+    End Function
+    Shared Function aidx(ByVal idx As Integer) As AngleIndex
+        Return CType(idx * 60, AngleIndex)
     End Function
 
     'ベースのひも種
@@ -49,13 +55,18 @@ Class clsCalcHexagon
     Shared Function is_idxすき間(ByVal aidx As AngleIndex, ByVal val As Integer) As Boolean
         Return val = idxひも種すき間(aidx)
     End Function
+
+    'テーブルSelect条件式
+    Shared Function condひも種(ByVal aidx As AngleIndex) As String
+        Return String.Format("f_iひも種 = {0}", idxひも種(aidx))
+    End Function
+
+    Shared Function condひも種とすき間(ByVal aidx As AngleIndex) As String
+        Return String.Format("(f_iひも種 = {0}) OR (f_iひも種 = {1})", idxひも種(aidx), idxひも種すき間(aidx))
+    End Function
+
 #End Region
 
-
-
-
-
-    Dim _ExpandCategory() As CalcCategory = {CalcCategory.Expand_0, CalcCategory.Expand_60, CalcCategory.Expand_120}
 
     '処理のカテゴリー
     Public Enum CalcCategory
@@ -69,9 +80,8 @@ Class clsCalcHexagon
         Target_Band '基本のひも幅
 
         '配置数
-        Hex_Gap  '目(ひも間のすき間)
-        Hex_Yoko '横置き
-        Hex_60120 '斜め置き
+        Hex_Add     'ひも長係数,ひも長加算
+        Hex_0_60_120_Gap  '各配置本数・開始位置・目
         Hex_Vert '高さ
         Hex_Expand '縦横展開
 
@@ -80,17 +90,20 @@ Class clsCalcHexagon
         Inserted '差しひも 
         UpDown  '編み目
         Options  '追加品
-        Expand_0 '横
-        Expand_60 '斜め60度
-        Expand_120 '斜め120度
+
+        Expand_0 '横展開のセル編集
+        Expand_60 '斜め60度展開のセル編集
+        Expand_120 '斜め120度展開のセル編集
 
         '相互参照値のFix
         FixLength   '長さ確定
+        BandColor   '色の変更
 
     End Enum
 
     Public Property p_b有効 As Boolean
     Public Property p_sメッセージ As String 'p_b有効でない場合のみ参照
+    Public Property p_s警告 As String 'p_b有効でない場合のみ参照
 
     '目標値キャッシュ
     Private Property _d横_目標 As Double
@@ -104,13 +117,11 @@ Class clsCalcHexagon
     Dim _i何個目位置(cAngleCount - 1) As Integer
     Dim _d端の目(cAngleCount - 1) As Double '0～1
     Dim _b補強ひも(cAngleCount - 1) As Boolean '
-    Dim _bひも本幅変更(cAngleCount - 1) As Boolean
 
     Private Property _i側面の編みひも数 As Integer '=高さの六つ目数
     Private Property _d最下段の目 As Double '0～1
 
     Private Property _d六つ目の高さ As Double
-    Private Property _d六つ目の対角線 As Double
     Private Property _dひも長係数 As Double
     Private Property _dひも長加算_上端 As Double
     Private Property _dひも長加算_側面 As Double
@@ -118,16 +129,10 @@ Class clsCalcHexagon
     Private Property _b縦横側面を展開する As Boolean
 
 
-    '計算結果の保持
-    Dim _d六角ベース計(cAngleCount - 1) As Double '目の数,端の目,ひも幅計,すき間
-    Dim _d六角ベース中(cAngleCount - 1) As Double '真ん中の目の中央まで
-
+    '側面と縁: _Data.p_tbl側面の集計結果
     Private Property _d六角ベース_高さ計 As Double '高さの目数,最下段の目,編みひも幅計,すき間　(縁は含まない)
-
-
-    '※タブ表示時に編集、Hide時に保存、非表示時にも目の数を合わせる
-    '側面と縁: _Data.p_tbl側面
     Private Property _b側面ひも本幅変更 As Boolean
+    '縁のみ(垂直ひもについては/SIN60値)
     Private Property _d縁の高さ As Double '縁の合計値,ゼロ以上
     Private Property _d縁の垂直ひも長 As Double '縁の合計値,ゼロ以上
     Private Property _d縁の厚さ As Double '縁の最大値,ゼロ以上
@@ -154,6 +159,7 @@ Class clsCalcHexagon
     Public Sub Clear()
         p_b有効 = False
         p_sメッセージ = Nothing
+        p_s警告 = Nothing
 
         _d横_目標 = -1
         _d縦_目標 = -1
@@ -166,16 +172,13 @@ Class clsCalcHexagon
             _i何個目位置(idx) = -1
             _b補強ひも(idx) = False
             _d端の目(idx) = -1
-            _d六角ベース計(idx) = -1
-            _d六角ベース中(idx) = -1
-            _bひも本幅変更(idx) = False
-            _tbl縦横展開(idx).Clear()
+
+            __tbl縦横展開(idx).Clear()
         Next
         _i側面の編みひも数 = -1
         _d最下段の目 = -1
 
         _d六つ目の高さ = -1
-        _d六つ目の対角線 = -1
 
         _dひも長係数 = -1
         _dひも長加算_上端 = -1
@@ -190,23 +193,18 @@ Class clsCalcHexagon
         _d縁の垂直ひも長 = 0
         _d縁の厚さ = 0
 
+        ClearImageData()
     End Sub
 
 #Region "プロパティ値"
-    Public ReadOnly Property p_iひもの本数(ByVal idx As AngleIndex) As Integer
+    Public ReadOnly Property p_iひもの本数(ByVal aidx As AngleIndex) As Integer
         Get
-            Return _iひもの本数(idx)
-        End Get
-    End Property
-
-    Public ReadOnly Property p_i側面ひもの本数 As Integer
-        Get
-            Return _i側面の編みひも数
+            Return _iひもの本数(idx(aidx))
         End Get
     End Property
 
     'ひも幅+すき間
-    Public ReadOnly Property p_d縦横_四角 As Double
+    Public ReadOnly Property p_dひもに垂直_ひも幅プラス As Double
         Get
             If 0 <= _d六つ目の高さ AndAlso 0 < _d基本のひも幅 Then
                 Return _d六つ目の高さ + _d基本のひも幅
@@ -226,17 +224,17 @@ Class clsCalcHexagon
         End Get
     End Property
 
-    Public ReadOnly Property p_d四角ベース_横 As Double '底ひもが配置される領域
+    Public ReadOnly Property p_d六つ目ベース_横 As Double '底ひもが配置される領域
         Get
-            Return _d六角ベース計(0)
+            Return get六角ベース_横()
         End Get
     End Property
-    Public ReadOnly Property p_d四角ベース_縦 As Double '底ひもが配置される領域
+    Public ReadOnly Property p_d六つ目ベース_縦 As Double '底ひもが配置される領域
         Get
-            Return _d六角ベース計(1)
+            Return get六角ベース_縦()
         End Get
     End Property
-    Public ReadOnly Property p_d四角ベース_高さ As Double '側面ひもが配置される高さ
+    Public ReadOnly Property p_d六つ目ベース_高さ As Double '側面ひもが配置される高さ
         Get
             Return _d六角ベース_高さ計
         End Get
@@ -244,7 +242,7 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_bひも本幅変更(ByVal aidx As AngleIndex) As Boolean
         Get
-            Return _bひも本幅変更(idx(aidx))
+            Return get本幅変更あり(aidx)
         End Get
     End Property
 
@@ -255,10 +253,10 @@ Class clsCalcHexagon
     End Property
 
 #Region "表示用(計算には使わない)"
-    ReadOnly Property p_d四角ベース_周 As Double '底の配置領域に立ち上げ増分をプラス
+    ReadOnly Property p_d六つ目ベース_周 As Double '底の配置領域に立ち上げ増分をプラス
         Get
-            If 0 <= p_d四角ベース_横 AndAlso 0 <= p_d四角ベース_縦 Then
-                Return 2 * (p_d四角ベース_横 + p_d四角ベース_縦) _
+            If 0 <= p_d六つ目ベース_横 AndAlso 0 <= p_d六つ目ベース_縦 Then
+                Return 2 * (p_d六つ目ベース_横 + p_d六つ目ベース_縦) _
                 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分")
             Else
                 Return 0
@@ -268,15 +266,15 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
-            If 0 <= p_d四角ベース_周 Then
-                Return p_d四角ベース_周 + 8 * p_d厚さ
+            If 0 <= p_d六つ目ベース_周 Then
+                Return p_d六つ目ベース_周 + 8 * p_d厚さ
             End If
             Return 0
         End Get
     End Property
 
     '表示文字列
-    Public ReadOnly Property p_s縦横_目 As String
+    Public ReadOnly Property p_sひもに垂直_目 As String
         Get
             If 0 < _d六つ目の高さ Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の高さ)
@@ -284,59 +282,59 @@ Class clsCalcHexagon
             Return ""
         End Get
     End Property
-    Public ReadOnly Property p_s縦横_四角 As String
+    Public ReadOnly Property p_sひもに垂直_ひも幅プラス As String
         Get
-            If 0 < p_d縦横_四角 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縦横_四角)
+            If 0 < p_dひもに垂直_ひも幅プラス Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_dひもに垂直_ひも幅プラス)
             End If
             Return ""
         End Get
     End Property
     Public ReadOnly Property p_s対角線_目 As String
         Get
-            If 0 < _d六つ目の対角線 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の対角線)
+            If 0 < _d六つ目の高さ Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の高さ / SIN60)
             End If
             Return ""
         End Get
     End Property
-    Public ReadOnly Property p_s対角線_四角 As String
+    Public ReadOnly Property p_s対角線_ひも幅プラス As String
         Get
-            If 0 < p_d縦横_四角 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_d縦横_四角) * ROOT2)
+            If 0 < p_dひもに垂直_ひも幅プラス Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_dひもに垂直_ひも幅プラス) / SIN60)
             End If
             Return ""
         End Get
     End Property
 
-    Public ReadOnly Property p_s四角ベース_横 As String
+    Public ReadOnly Property p_s六つ目ベース_横 As String
         Get
-            If 0 <= p_d四角ベース_横 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_横)
+            If 0 <= p_d六つ目ベース_横 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目ベース_横)
             End If
             Return ""
         End Get
     End Property
-    Public ReadOnly Property p_s四角ベース_縦 As String
+    Public ReadOnly Property p_s六つ目ベース_縦 As String
         Get
-            If 0 <= p_d四角ベース_縦 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_縦)
+            If 0 <= p_d六つ目ベース_縦 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目ベース_縦)
             End If
             Return ""
         End Get
     End Property
-    Public ReadOnly Property p_s四角ベース_高さ As String
+    Public ReadOnly Property p_s六つ目ベース_高さ As String
         Get
-            If 0 <= p_d四角ベース_高さ Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_高さ)
+            If 0 <= p_d六つ目ベース_高さ Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目ベース_高さ)
             End If
             Return ""
         End Get
     End Property
-    Public ReadOnly Property p_s四角ベース_周 As String
+    Public ReadOnly Property p_s六つ目ベース_周 As String
         Get
-            If 0 < p_d四角ベース_周 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d四角ベース_周)
+            If 0 < p_d六つ目ベース_周 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目ベース_周)
             End If
             Return ""
         End Get
@@ -344,8 +342,8 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
-            If 0 <= p_d四角ベース_横 Then
-                Return p_d四角ベース_横 + p_d厚さ * 2
+            If 0 <= p_d六つ目ベース_横 Then
+                Return p_d六つ目ベース_横 + p_d厚さ * 2
             End If
             Return 0
         End Get
@@ -361,8 +359,8 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_d縁厚さプラス_縦 As Double
         Get
-            If 0 <= p_d四角ベース_縦 Then
-                Return p_d四角ベース_縦 + p_d厚さ * 2
+            If 0 <= p_d六つ目ベース_縦 Then
+                Return p_d六つ目ベース_縦 + p_d厚さ * 2
             End If
             Return 0
         End Get
@@ -406,19 +404,19 @@ Class clsCalcHexagon
         End Get
     End Property
 
-    '計算寸法と目標寸法の差(四角ベースの差)
+    '計算寸法と目標寸法の差(六角ベースの差)
     Public ReadOnly Property p_s横寸法の差 As String
         Get
-            If (0 < _d横_目標) AndAlso (0 < _d六角ベース計(0)) Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(_d六角ベース計(0) - _d横_目標, True)
+            If (0 < _d横_目標) AndAlso (0 < get六角ベース_横()) Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(get六角ベース_横() - _d横_目標, True)
             End If
             Return ""
         End Get
     End Property
     Public ReadOnly Property p_s縦寸法の差 As String
         Get
-            If (0 < _d縦_目標) AndAlso (0 < _d六角ベース計(1)) Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(_d六角ベース計(1) - _d縦_目標, True)
+            If (0 < _d縦_目標) AndAlso (0 < get六角ベース_縦()) Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(get六角ベース_縦() - _d縦_目標, True)
             End If
             Return ""
         End Get
@@ -435,17 +433,13 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_i垂直ひも数 As Integer
         Get
-            'If 0 < _i横の目の数 AndAlso 0 < _i縦の目の数 Then
-            Return 2 * (p_iひもの本数(0) + p_iひもの本数(1) + p_iひもの本数(2))
-            'Else
-            '    Return 0
-            'End If
+            Return 2 * p_i垂直ひも半数
         End Get
     End Property
 
     Public ReadOnly Property p_i垂直ひも半数 As Integer
         Get
-            Return p_iひもの本数(0) + p_iひもの本数(1) + p_iひもの本数(2)
+            Return p_iひもの本数(AngleIndex._0deg) + p_iひもの本数(AngleIndex._60deg) + p_iひもの本数(AngleIndex._120deg)
         End Get
     End Property
 
@@ -479,9 +473,9 @@ Class clsCalcHexagon
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("{0}({1}){2}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ).AppendLine()
         sb.AppendFormat("Target:({0},{1},{2}) Lane({3}){4}", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅, _d基本のひも幅).AppendLine()
-        sb.AppendFormat("  0:({0},mark({1}),end({2}),add({3}),change({4}))", _iひもの本数(0), _i何個目位置(0), _d端の目(0), _b補強ひも(0), _bひも本幅変更(0)).AppendLine()
-        sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}),change({4}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1), _bひも本幅変更(1)).AppendLine()
-        sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}),change({4}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2), _bひも本幅変更(2)).AppendLine()
+        sb.AppendFormat("  0:({0},mark({1}),end({2}),add({3}))", _iひもの本数(0), _i何個目位置(0), _d端の目(0), _b補強ひも(0)).AppendLine()
+        sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1)).AppendLine()
+        sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2)).AppendLine()
         'sb.AppendFormat("Depth:({0},{1}) Periphery:{2}", _i縦の目の数, _d四角ベース_縦計, p_d四角ベース_周).AppendLine()
         sb.AppendFormat("Height:({0},{1})", _i側面の編みひも数, _d六角ベース_高さ計).AppendLine()
         sb.AppendFormat("Edge({0}) VerticalLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
@@ -500,16 +494,18 @@ Class clsCalcHexagon
         _frmMain = frm
 
         '最初に1点だけ作っておく。以降は存在が前提
-        _tbl縦横展開(idx(AngleIndex.idx_0)) = New tbl縦横展開DataTable
-        _tbl縦横展開(idx(AngleIndex.idx_60)) = New tbl縦横展開DataTable
-        _tbl縦横展開(idx(AngleIndex.idx_120)) = New tbl縦横展開DataTable
+        For i As Integer = 0 To cAngleCount - 1
+            __tbl縦横展開(i) = New tbl縦横展開DataTable
+        Next
 
+        NewImageData()
         Clear()
     End Sub
 
     Function CalcSize(ByVal category As CalcCategory, ByVal ctr As Object, ByVal key As Object) As Boolean
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CalcSize {0} {1} {2}", category, ctr, key)
 
+        p_s警告 = Nothing
         Dim ret As Boolean = True
         Select Case category
             Case CalcCategory.NewData, CalcCategory.BsMaster
@@ -519,10 +515,9 @@ Class clsCalcHexagon
                 ret = ret And set_配置数()
                 '
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)     '高さ系
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
-
+                ret = ret And renew_ひも展開(category)
+                ret = ret And calc_位置と長さ計算(True)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)     '周長
                 ret = ret And calc_差しひも(category, Nothing, Nothing)
                 If ret Then
                     p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
@@ -539,42 +534,31 @@ Class clsCalcHexagon
                 ret = ret And set_目標寸法(False)
                 '
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
+                ret = ret And renew_ひも展開(category)
+                ret = ret And calc_位置と長さ計算(True)
 
-        '四角数のタブ内
-            Case CalcCategory.Hex_Gap     '目(ひも間のすき間),ひも長係数,ひも長加算
+        '配置数のタブ内
+            Case CalcCategory.Hex_Add     'ひも長係数,ひも長加算
                 ret = ret And set_配置数()
-                '
-                ret = ret And calc_側面と縁(category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
+                ret = ret And calc_位置と長さ計算(True)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)     '周長
 
-            Case CalcCategory.Hex_Yoko '四角数タブ(横の目の数)縦ひもの本数
+            Case CalcCategory.Hex_0_60_120_Gap '各配置本数・開始位置・目
                 ret = ret And set_配置数()
-                '
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
+                ret = ret And renew_ひも展開(category)
+                ret = ret And calc_位置と長さ計算(True)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)     '周長
 
-            Case CalcCategory.Hex_60120 '四角数タブ(縦の目の数)横ひもの本数
+            Case CalcCategory.Hex_Vert '高さ
                 ret = ret And set_配置数()
-                '
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
-
-            Case CalcCategory.Hex_Vert '四角数タブ高さ
-                ret = ret And set_配置数()
-                '
+                ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
 
-            Case CalcCategory.Hex_Expand '四角数タブ縦横展開
+            Case CalcCategory.Hex_Expand '縦横展開
                 ret = ret And set_配置数()
-                '何本幅かを変更していた場合の影響
+                ret = ret And renew_ひも展開(category)
+                ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
 
         '以下、row指定がある場合は、そのタブが表示された状態
             Case CalcCategory.SideEdge  '側面と縁
@@ -599,22 +583,34 @@ Class clsCalcHexagon
 
             Case CalcCategory.Expand_0  '横ひも展開
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, row, key)
+                If adjust_展開ひも(AngleIndex._0deg, row, key) Then
+                    ret = ret And calc_位置と長さ計算(True)
+                    ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                End If
 
             Case CalcCategory.Expand_60  '斜め60度
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, row, key)
+                If adjust_展開ひも(AngleIndex._60deg, row, key) Then
+                    ret = ret And calc_位置と長さ計算(True)
+                    ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                End If
 
             Case CalcCategory.Expand_120  '斜め120度
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, row, key)
+                If adjust_展開ひも(AngleIndex._120deg, row, key) Then
+                    ret = ret And calc_位置と長さ計算(True)
+                    ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                End If
 
-            '相互参照値のFix(1Pass値は得られている前提)
+            Case CalcCategory.BandColor '色の変更
+                ret = ret And renew_ひも展開(category)
+                ret = ret AndAlso calc_位置と長さ計算(True)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)
+
+                    '相互参照値のFix(1Pass値は得られている前提)
             Case CalcCategory.FixLength
-                ret = ret And calc_側面と縁(category, Nothing, Nothing)     '高さ系
-                ret = ret And calc_ひも展開(AngleIndex.idx_0, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_60, category, Nothing, Nothing)
-                ret = ret And calc_ひも展開(AngleIndex.idx_120, category, Nothing, Nothing)
+                ret = ret And calc_位置と長さ計算(False)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)
                 ret = ret And calc_差しひも(category, Nothing, Nothing)
 
             Case Else
@@ -653,13 +649,13 @@ Class clsCalcHexagon
     Function set_配置数() As Boolean
 
         With _Data.p_row底_縦横
-            _iひもの本数(idx(AngleIndex.idx_0)) = .Value("f_i長い横ひもの本数")
-            _iひもの本数(idx(AngleIndex.idx_60)) = .Value("f_i斜め60度ひも本数")
-            _iひもの本数(idx(AngleIndex.idx_120)) = .Value("f_i斜め120度ひも本数")
+            _iひもの本数(cIdxAngle0) = .Value("f_i長い横ひもの本数")
+            _iひもの本数(cIdxAngle60) = .Value("f_i斜め60度ひも本数")
+            _iひもの本数(cIdxAngle120) = .Value("f_i斜め120度ひも本数")
 
-            _i何個目位置(idx(AngleIndex.idx_0)) = .Value("f_i上から何番目")
-            _i何個目位置(idx(AngleIndex.idx_60)) = .Value("f_i左から何番目")
-            _i何個目位置(idx(AngleIndex.idx_120)) = .Value("f_i左から何番目") '兼用
+            _i何個目位置(cIdxAngle0) = .Value("f_i上から何番目")
+            _i何個目位置(cIdxAngle60) = .Value("f_i左から何番目")
+            _i何個目位置(cIdxAngle120) = .Value("f_i左から何番目") '兼用
 
             _i側面の編みひも数 = .Value("f_d高さの四角数")
 
@@ -671,15 +667,13 @@ Class clsCalcHexagon
             _b縦横側面を展開する = .Value("f_b展開区分")
             _d最下段の目 = .Value("f_d最下段の目")
 
-            _b補強ひも(idx(AngleIndex.idx_0)) = .Value("f_b補強ひも区分")
-            _b補強ひも(idx(AngleIndex.idx_60)) = .Value("f_b斜めの補強ひも区分")
-            _b補強ひも(idx(AngleIndex.idx_120)) = .Value("f_b斜めの補強ひも2区分")
+            _b補強ひも(cIdxAngle0) = .Value("f_b補強ひも区分")
+            _b補強ひも(cIdxAngle60) = .Value("f_b斜めの補強ひも区分")
+            _b補強ひも(cIdxAngle120) = .Value("f_b斜めの補強ひも2区分")
 
-            _d端の目(idx(AngleIndex.idx_0)) = .Value("f_d上端下端の目")
-            _d端の目(idx(AngleIndex.idx_60)) = .Value("f_d左端右端の目")
-            _d端の目(idx(AngleIndex.idx_120)) = .Value("f_d左端右端の目") '兼用
-
-            _d六つ目の対角線 = _d六つ目の高さ * 2 / Math.Sqrt(3)
+            _d端の目(cIdxAngle0) = .Value("f_d上端下端の目")
+            _d端の目(cIdxAngle60) = .Value("f_d左端右端の目")
+            _d端の目(cIdxAngle120) = .Value("f_d左端右端の目") '兼用
 
         End With
 
@@ -723,9 +717,9 @@ Class clsCalcHexagon
                 p_sメッセージ = My.Resources.CalcBandCountAtLeast
                 Return False
             ElseIf _iひもの本数(idx) <= _i何個目位置(idx) Then '六つ目数=本数-1
-                'ひもの本数をセットしてください。
-                p_sメッセージ = My.Resources.CalcNoCountSet
-                Return False    '回避されているはずなので仮メッセージ
+                '中心の目の位置は、ひもの本数より小さくしてください。
+                p_sメッセージ = My.Resources.CalcBadCenterPosition
+                Return False
             End If
         Next
         If _i側面の編みひも数 < 0 Then
@@ -766,9 +760,9 @@ Class clsCalcHexagon
         '有効な入力がある場合
 
         '概算不要か？
-        If isNear(p_d四角ベース_横, _d横_目標) _
-            AndAlso isNear(p_d四角ベース_縦, _d縦_目標) _
-            AndAlso isNear(p_d四角ベース_高さ, _d高さ_目標) Then
+        If isNear(p_d六つ目ベース_横, _d横_目標) _
+            AndAlso isNear(p_d六つ目ベース_縦, _d縦_目標) _
+            AndAlso isNear(p_d六つ目ベース_高さ, _d高さ_目標) Then
             'ほぼ目標のサイズになっています。やり直す場合はリセットしてください。
             p_sメッセージ = My.Resources.CalcNoMoreChange
             Return False
@@ -810,7 +804,7 @@ Class clsCalcHexagon
 
     '目標寸法→横・縦・高さの四角数
     Private Function calc_Target() As Boolean
-        If p_d縦横_四角 <= 0 Then
+        If p_dひもに垂直_ひも幅プラス <= 0 Then
             Return False
         End If
 
@@ -823,7 +817,7 @@ Class clsCalcHexagon
 
     '横寸法から横に並ぶ四角数・偶数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
+        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_dひもに垂直_ひも幅プラス) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i横の四角数 Mod 2 <> 0 Then
@@ -831,7 +825,7 @@ Class clsCalcHexagon
             End If
         Else
             '外側
-            Do While i横の四角数 * p_d縦横_四角 < (_d横_目標 - _d基本のひも幅)
+            Do While i横の四角数 * p_dひもに垂直_ひも幅プラス < (_d横_目標 - _d基本のひも幅)
                 i横の四角数 += 1
             Loop
             If i横の四角数 Mod 2 <> 0 Then
@@ -843,7 +837,8 @@ Class clsCalcHexagon
         End If
 
         _Data.p_row底_縦横.Value("f_i横の四角数") = i横の四角数
-        _Data.p_row底_縦横.Value("f_i縦ひもの本数") = i横の四角数 + 1
+        _Data.p_row底_縦横.Value("f_i斜め60度ひも本数") = i横の四角数 + 1
+        _Data.p_row底_縦横.Value("f_i斜め120度ひも本数") = i横の四角数 + 1
         _Data.p_row底_縦横.Value("f_d左端右端の目") = 0
 
         Return True
@@ -851,14 +846,14 @@ Class clsCalcHexagon
 
     '縦寸法から縦に並ぶ四角数・偶数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
+        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_dひもに垂直_ひも幅プラス) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i縦の四角数 Mod 2 <> 0 Then
                 i縦の四角数 -= 1
             End If
         Else
-            Do While i縦の四角数 * p_d縦横_四角 < (_d縦_目標 - _d基本のひも幅)
+            Do While i縦の四角数 * p_dひもに垂直_ひも幅プラス < (_d縦_目標 - _d基本のひも幅)
                 i縦の四角数 += 1
             Loop
             If i縦の四角数 Mod 2 <> 0 Then
@@ -878,9 +873,9 @@ Class clsCalcHexagon
 
     '高さ寸法から高さの四角数
     Private Function calc_Target_高さ()
-        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d六つ目の高さ) / p_d縦横_四角)
+        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d六つ目の高さ) / p_dひもに垂直_ひも幅プラス)
         If Not _Data.p_row目標寸法.Value("f_b内側区分") Then
-            Do While i高さの四角数 * p_d縦横_四角 < (_d高さ_目標 - _d六つ目の高さ)
+            Do While i高さの四角数 * p_dひもに垂直_ひも幅プラス < (_d高さ_目標 - _d六つ目の高さ)
                 i高さの四角数 += 1
             Loop
         End If
@@ -925,27 +920,26 @@ Class clsCalcHexagon
                 row = table.Newtbl側面Row
                 row.f_i番号 = cIdxSpace
                 row.f_iひも番号 = 1
-                row.f_i何本幅 = _I基本のひも幅
                 table.Rows.Add(row)
             End If
             row.f_s編みかた名 = text最下段()
             row.f_s編みひも名 = text高さの目の数()
             row.f_iひも本数 = 0
             row.f_d高さ = _d最下段の目 * _d六つ目の高さ
-            row.f_d垂直ひも長 = _d最下段の目 * _d六つ目の高さ
-            row.f_d周長 = 0
-            row.f_dひも長 = 0
-            row.f_d厚さ = 0
-            row.f_i周数 = 0
-            row.f_s色 = ""
+            row.f_d垂直ひも長 = row.f_d高さ / SIN60
+            row.Setf_d周長Null()
+            row.Setf_dひも長Null()
+            row.Setf_d厚さNull()
+            row.Setf_i周数Null()
+            ret = ret And adjust_側面(row, Nothing)
         Else
             RemoveNumberFromTable(table, cIdxSpace)
         End If
 
-        If 0 < p_i側面ひもの本数 Then
+        If 0 < _i側面の編みひも数 Then
             '「編みひも+目」のセット
             Dim colprv As String = ""
-            For i As Integer = 1 To p_i側面ひもの本数
+            For i As Integer = 1 To _i側面の編みひも数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
                     If row Is Nothing Then
@@ -969,10 +963,10 @@ Class clsCalcHexagon
                         End If
                     Else
                         row.f_i何本幅 = _I基本のひも幅
-                        row.f_iひも本数 = p_i側面ひもの本数
-                        row.f_i周数 = p_i側面ひもの本数
+                        row.f_iひも本数 = _i側面の編みひも数
+                        row.f_i周数 = _i側面の編みひも数
                     End If
-                    ret = ret And adjust_側面(row)
+                    ret = ret And adjust_側面(row, Nothing)
                 Else
                     If row IsNot Nothing Then
                         table.Rows.Remove(row)
@@ -982,7 +976,7 @@ Class clsCalcHexagon
 
             '以降はあれば削除
             Dim submax As Integer = clsDataTables.NumberSubMax(table, cIdxHeight)
-            For i As Integer = p_i側面ひもの本数 + 1 To submax
+            For i As Integer = _i側面の編みひも数 + 1 To submax
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If row IsNot Nothing Then
                     table.Rows.Remove(row)
@@ -996,28 +990,43 @@ Class clsCalcHexagon
         Return ret
     End Function
 
-    'cIdxHeightレコード対象、高さと垂直ひも長の計算
+    'cIdxHeight,cIdxSpaceレコード対象、高さと垂直ひも長の計算　※垂直ひも長は/SIN60
     'IN:    p_d縁厚さプラス_周,_dひも長係数,_dひも長加算_側面,f_d底の厚さ,f_d連続ひも長
     'OUT:   各、f_d高さ,f_d垂直ひも長
-    Private Function adjust_側面(ByVal row As tbl側面Row) As Boolean
-        If 0 < row.f_iひも本数 Then
-            row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d六つ目の高さ)
-            row.f_d垂直ひも長 = row.f_d高さ
-        Else
-            row.Setf_d高さNull()
-            row.Setf_d垂直ひも長Null()
+    Private Function adjust_側面(ByVal row As tbl側面Row, ByVal dataPropertyName As String) As Boolean
+        If Not String.IsNullOrEmpty(dataPropertyName) Then
+            'セル編集操作時
+            If dataPropertyName = "f_s色" Then
+                If row.f_i番号 = cIdxSpace Then
+                    row.Setf_s色Null()
+                End If
+                Return True
+            End If
         End If
-        row.f_d周長 = get側面の周長()
-        row.f_dひも長 = row.f_d周長 * _dひも長係数
-        row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
-        row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
 
+        If row.f_i番号 = cIdxSpace Then
+            row.Setf_s色Null()
+            row.Setf_i何本幅Null()
+            row.Setf_dひも長加算Null()
+        Else
+            If 0 < row.f_iひも本数 Then
+                row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d六つ目の高さ)
+                row.f_d垂直ひも長 = row.f_d高さ / SIN60
+            Else
+                row.Setf_d高さNull()
+                row.Setf_d垂直ひも長Null()
+            End If
+            row.f_d周長 = get側面の周長()
+            row.f_dひも長 = row.f_d周長 * _dひも長係数
+            row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
+            row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        End If
         Return True
     End Function
 
-    '縁を含まない高さ(四角ベース_高さ)を計算
+    '縁を含まない高さ(_d六角ベース_高さ計)を計算
     'IN:    
-    'OUT:   _d四角ベース_高さ計,_b側面ひも本幅変更
+    'OUT:   _d六角ベース_高さ計,_b側面ひも本幅変更
     Private Function calc_側面計() As Boolean
         '高さの合計
         Dim cond As String = String.Format("(f_i番号 = {0}) OR (f_i番号 = {1})", cIdxSpace, cIdxHeight)
@@ -1104,7 +1113,7 @@ Class clsCalcHexagon
     '追加ボタンによる側面の高さ追加
     'Trueを返すと、四角数のタブの高さを+1
     Function add_高さ(ByRef currow As tbl側面Row) As Boolean
-        If Not _b縦横側面を展開する OrElse p_i側面ひもの本数 = 0 Then
+        If Not _b縦横側面を展開する OrElse _i側面の編みひも数 = 0 Then
             Return True '高さをUPするだけ
         End If
 
@@ -1115,7 +1124,7 @@ Class clsCalcHexagon
         ElseIf currow.f_i番号 = cIdxSpace Then
             bandnum = 1 '最初
         ElseIf currow.f_i番号 = cHemNumber Then
-            bandnum = p_i側面ひもの本数 + 1  '最後の後
+            bandnum = _i側面の編みひも数 + 1  '最後の後
         End If
         If bandnum < 0 Then
             Return False
@@ -1125,12 +1134,12 @@ Class clsCalcHexagon
         Dim table As tbl側面DataTable = _Data.p_tbl側面
         Dim add As tbl側面Row = table.Newtbl側面Row
         add.f_i番号 = cIdxHeight
-        add.f_iひも番号 = p_i側面ひもの本数 + 1
+        add.f_iひも番号 = _i側面の編みひも数 + 1
         add.f_i何本幅 = _I基本のひも幅
         table.Rows.Add(add)
 
         currow = Nothing
-        If p_i側面ひもの本数 < bandnum Then
+        If _i側面の編みひも数 < bandnum Then
             currow = add
             Return True
         End If
@@ -1218,7 +1227,7 @@ Class clsCalcHexagon
 
 
     '更新処理が必要なフィールド名
-    Shared _fields側面と縁() As String = {"f_i何本幅", "f_i周数", "f_dひも長加算"}
+    Shared _fields側面と縁() As String = {"f_i何本幅", "f_s色", "f_dひも長加算"}
     Shared Function IsDataPropertyName側面と縁(ByVal name As String) As Boolean
         Return _fields側面と縁.Contains(name)
     End Function
@@ -1247,11 +1256,11 @@ Class clsCalcHexagon
                     ret = ret And set_groupRow編みかた(groupRow)
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "縁の変更: {0}", groupRow.ToString)
 
-                ElseIf row.f_i番号 = cIdxHeight Then
-                    '側面の編みひも
-                    ret = ret And adjust_側面(row)
+                ElseIf (row.f_i番号 = cIdxHeight) OrElse (row.f_i番号 = cIdxSpace) Then
+                    '側面の編みひも・最下段
+                    ret = ret And adjust_側面(row, dataPropertyName)
 
-                End If '最下段はスキップ
+                End If
             End If
         End If
 
@@ -1274,7 +1283,7 @@ Class clsCalcHexagon
             _d縁の高さ = obj
         End If
 
-        '垂直ひもの合計
+        '垂直ひもの合計(各、/SIN60された値)
         Dim obj2 As Object = _Data.p_tbl側面.Compute("SUM(f_d垂直ひも長)", cond)
         If IsDBNull(obj2) OrElse obj2 < 0 Then
             _d縁の垂直ひも長 = 0
@@ -1304,7 +1313,7 @@ Class clsCalcHexagon
         End If
     End Function
 
-    '縁のレコードにマスタ参照値をセットする
+    '縁のレコードにマスタ参照値をセットする ※垂直ひも長は/SIN60
     'IN:    p_i垂直ひも数,p_d縁厚さプラス_周
     'OUT:   f_d高さ,f_d垂直ひも長,f_dひも長,f_iひも本数,f_d厚さ
     Private Function set_groupRow編みかた(ByVal groupRow As clsGroupDataRow) As Boolean
@@ -1340,7 +1349,7 @@ Class clsCalcHexagon
                 If mst IsNot Nothing AndAlso mst.IsValid Then
 
                     drow.Value("f_d高さ") = i周数 * mst.GetHeight(drow.Value("f_i何本幅"))
-                    drow.Value("f_d垂直ひも長") = i周数 * mst.GetBandLength(drow.Value("f_i何本幅"))
+                    drow.Value("f_d垂直ひも長") = i周数 * mst.GetBandLength(drow.Value("f_i何本幅")) / SIN60
                     drow.Value("f_d厚さ") = mst.Value("f_d厚さ")
                     drow.Value("f_dひも長") = mst.GetBandLength(nひも1何本幅, drow.Value("f_d周長"), p_i垂直ひも数)
                     drow.Value("f_iひも本数") = i周数 * mst.Value("f_iひも数")
@@ -1370,7 +1379,12 @@ Class clsCalcHexagon
 #End Region
 
 #Region "底のひも展開"
-    Dim _tbl縦横展開(cAngleCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
+    Dim __tbl縦横展開(cAngleCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
+    Private ReadOnly Property p_tbl縦横展開(ByVal aidx As AngleIndex) As tbl縦横展開DataTable
+        Get
+            Return __tbl縦横展開(idx(aidx))
+        End Get
+    End Property
 
 
 
@@ -1384,25 +1398,23 @@ Class clsCalcHexagon
 
     Friend Function get展開DataTable(ByVal aidx As AngleIndex, Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
         If isReset Then
-            'calc_縦ひも展開のコード抜粋
-            renew展開DataTable(aidx, False)
-            recalc_ひも展開(aidx)
-        Else
-            calc_ひも展開(aidx, _ExpandCategory(idx(aidx)), Nothing, Nothing)
+            _Data.Removeひも種Rows(idxひも種(aidx))
+            renew展開DataTable(aidx, False) '既存反映なし・サイズは同じ
+            calc_位置と長さ計算(True)
         End If
-        Return _tbl縦横展開(idx(aidx))
+        Return p_tbl縦横展開(aidx)
     End Function
 
     '底の横ひもの編集完了,_tbl縦横展開_横ひもを_Dataに反映
     Friend Function save展開DataTable(ByVal aidx As AngleIndex, Optional ByVal always As Boolean = False) As Boolean
         Try
-            If always OrElse _tbl縦横展開(idx(aidx)).GetChanges IsNot Nothing Then
-                Dim change As Integer = _Data.FromTmpTable(idxひも種(aidx), _tbl縦横展開(idx(aidx)))
+            If always OrElse p_tbl縦横展開(aidx).GetChanges IsNot Nothing Then
+                Dim change As Integer = _Data.FromTmpTable(idxひも種(aidx), p_tbl縦横展開(aidx))
             End If
             Return True
 
         Catch ex As Exception
-            g_clsLog.LogException(ex, "save展開DataTable")
+            g_clsLog.LogException(ex, "save展開DataTable", aidx)
             Return False
         End Try
     End Function
@@ -1413,7 +1425,7 @@ Class clsCalcHexagon
             For Each aidx As AngleIndex In enumExeName.GetValues(GetType(AngleIndex))
                 Dim table As tbl縦横展開DataTable = get展開DataTable(aidx)
                 _Data.FromTmpTable(idxひも種(aidx), table)
-                save展開DataTable(aidx, True)
+                'save展開DataTable(aidx, True)
             Next
             Return True
         Catch ex As Exception
@@ -1422,113 +1434,68 @@ Class clsCalcHexagon
         End Try
     End Function
 
-
-    '更新処理が必要なフィールド名
-    Shared _fields縦横展開() As String = {"f_i何本幅", "f_dひも長加算"}
-    Shared Function IsDataPropertyName縦横展開(ByVal name As String) As Boolean
-        Return _fields縦横展開.Contains(name)
-    End Function
-
-
-    Private Function condひも種(ByVal aidx As AngleIndex) As String
-        Return String.Format("f_iひも種 = {0}", idxひも種(aidx))
-    End Function
-
-    Private Function condひも種とすき間(ByVal aidx As AngleIndex) As String
-        Return String.Format("(f_iひも種 = {0}) OR (f_iひも種 = {1})", idxひも種(aidx), idxひも種すき間(aidx))
-    End Function
-
-    '本幅変更と幅の合計
-    '※各レコードの位置番号・幅はセットされている
-    Private Function recalc_ひも展開(ByVal aidx As AngleIndex) As Boolean
-        Dim table As tbl縦横展開DataTable = _tbl縦横展開(idx(aidx))
-        _d六角ベース計(idx(aidx)) = 0
-        _d六角ベース中(idx(aidx)) = 0
-        _bひも本幅変更(idx(aidx)) = False
-        If table Is Nothing OrElse table.Rows.Count = 0 Then
-            Return True
-        End If
-
-        Dim rows() As tbl縦横展開Row = table.Select(condひも種とすき間(aidx), "f_i位置番号 ASC")
-        If rows Is Nothing OrElse rows.Count = 0 Then
-            Return True
-        End If
-
-        '位置番号順
-        Dim accum As Double = 0
-        For Each row As tbl縦横展開Row In rows
-            accum += row.f_d幅
-            If is_idxひも種(aidx, row.f_iひも種) AndAlso row.f_i何本幅 <> _I基本のひも幅 Then
-                _bひも本幅変更(idx(aidx)) = True
-            End If
-            '累積位置
-            row.f_dVal1 = accum
-            '半分の位置
-            If row.f_iひも番号 = _i何個目位置(idx(aidx)) Then
-                _d六角ベース中(idx(aidx)) = accum - (_d六つ目の高さ / 2)
-            End If
+    '長さ確定後のひも長・出力ひも長計算
+    Function adjust_展開ひも(ByVal aidx As AngleIndex) As Boolean
+        For Each row As tbl縦横展開Row In p_tbl縦横展開(aidx)
+            adjust_展開ひも(aidx, row, Nothing)
         Next
-
-        _d六角ベース計(idx(aidx)) = accum
         Return True
     End Function
 
-
-    'CalcSizeからの呼び出し 対応した更新の後、再集計(_d四角ベース_縦計,_b横ひも本幅変更)
-    'Expand_Yokoカテゴリの場合は、対応レコードの派生更新(画面で編集中のみ)   
-    '以外は、set横展開DataTable()  により _tbl縦横展開_横ひも 更新
-    'IN:    _b縦横側面を展開する
-    'OUT:   _d四角ベース_縦計 _b横ひも本幅変更
-    Function calc_ひも展開(ByVal aidx As AngleIndex, ByVal category As CalcCategory, ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
-        Dim ret As Boolean = True
-        If category = _ExpandCategory(idx(aidx)) AndAlso row IsNot Nothing Then
-            'テーブル編集中
-            ret = adjust_展開ひも(aidx, row, p_iひもの本数(idx(aidx)))
-
-        Else
-            '_tbl縦横展開_横ひもを再セット
-            ret = renew展開DataTable(aidx, _b縦横側面を展開する)
-
+    '指定レコードの幅と出力ひも長を計算
+    'IN:.f_d長さ  _dひも間のすき間,_d高さの四角数,_dひも長係数,_dひも長加算,_d縁の垂直ひも長
+    'OUT:.f_dひも長,.f_d出力ひも長
+    'フィールド名指定がある場合は、再計算が必要な時Trueを返す
+    Friend Function adjust_展開ひも(ByVal aidx As AngleIndex, ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
+        Dim isNeedRecalc As Boolean = False
+        'セル編集操作時
+        If Not String.IsNullOrEmpty(dataPropertyName) Then
+            Select Case dataPropertyName
+                Case "f_s色"
+                    Return False
+                Case "f_dひも長加算2"
+                    row.f_dひも長加算2 = 0 '使わない
+                    Return False
+                Case "f_dひも長加算"
+                    '再計算は不要
+                Case "f_i何本幅"
+                    '長さの再計算
+                    isNeedRecalc = True
+            End Select
         End If
 
-        'f_i何本幅の設定状態
-        recalc_ひも展開(aidx)
+        '本幅の変更、もしくは再計算
+        'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
+        'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
+        With row
+            If is_idxひも種(aidx, .f_iひも種) Then
+                If .f_iひも番号 = p_iひもの本数(aidx) Then
+                    .f_d幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _d端の目(idx(aidx)) * _d六つ目の高さ
+                Else
+                    .f_d幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _d六つ目の高さ
+                End If
+                row.f_dひも長 = .f_d長さ + get側面ひも長(2)
+                row.f_d出力ひも長 = .f_dひも長 * _dひも長係数 +
+                    2 * (_dひも長加算_上端 + _d縁の垂直ひも長) +
+                    row.f_dひも長加算
 
-        Return ret
-    End Function
+            ElseIf is_idxすき間(aidx, row.f_iひも種) Then
+                row.Setf_i何本幅Null()
+                row.Setf_dひも長加算Null()
+                row.Setf_s色Null()
 
-    '横ひもの指定レコードの幅と長さを計算
-    'IN:    _d四角ベース_横計,_d四角ベース_高さ計,_d縁の垂直ひも長,_dひも長加算_縦横端,_dひも長係数
-    'OUT:   各レコードのf_d長さ,f_dひも長,f_d出力ひも長
-    Friend Function adjust_展開ひも(ByVal aidx As AngleIndex, ByVal row As tbl縦横展開Row, ByVal lastひも番号 As Integer) As Boolean
-        If is_idxひも種(aidx, row.f_iひも種) Then
-            If row.f_iひも番号 = lastひも番号 Then
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d端の目(idx(aidx)) * _d六つ目の高さ
-            Else
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d六つ目の高さ
+            ElseIf is_idx補強(aidx, row.f_iひも種) Then
+                .f_dひも長 = .f_d長さ
+                row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算
+
             End If
-            row.f_d長さ = get周の横() + get側面高(2)
-            row.f_dひも長 = (get周の横() + get側面高(2)) * _dひも長係数
-            row.f_d出力ひも長 = row.f_dひも長 +
-                2 * (_dひも長加算_上端 + _d縁の垂直ひも長) +
-                row.f_dひも長加算
-
-        ElseIf is_idxすき間(aidx, row.f_iひも種) Then
-            row.Setf_i何本幅Null()
-            row.Setf_dひも長加算Null()
-            row.Setf_s色Null()
-
-        ElseIf is_idx補強(aidx, row.f_iひも種) Then
-            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算
-
-        End If
-
-        Return True
+        End With
+        Return isNeedRecalc
     End Function
 
     '追加ボタン(縦横側面を展開時のみ)
     Friend Function add_ひも(ByVal aidx As AngleIndex, ByRef currow As tbl縦横展開Row) As Boolean
-        currow = Insert縦横展開Row(_tbl縦横展開(idx(aidx)), currow.f_iひも種, currow.f_iひも番号)
+        currow = Insert縦横展開Row(p_tbl縦横展開(aidx), currow.f_iひも種, currow.f_iひも番号)
         If currow Is Nothing Then
             Return False
         End If
@@ -1539,7 +1506,7 @@ Class clsCalcHexagon
 
     '削除ボタン(縦横側面を展開時のみ)
     Friend Function del_ひも(ByVal aidx As AngleIndex, ByRef currow As tbl縦横展開Row) As Boolean
-        currow = Remove縦横展開Row(_tbl縦横展開(idx(aidx)), currow.f_iひも種, currow.f_iひも番号)
+        currow = Remove縦横展開Row(p_tbl縦横展開(aidx), currow.f_iひも種, currow.f_iひも番号)
         If currow Is Nothing Then
             Return False
         End If
@@ -1548,22 +1515,35 @@ Class clsCalcHexagon
         Return True
     End Function
 
-    '底の横ひもの再展開       ※adjust_横ひも()呼び出し
-    'IN:    p_i横ひもの本数,_d上端下端の目,_d目_ひも間のすき間,_d四角ベース_横計
-    'OUT:   _tbl縦横展開_横ひも
+    'CalcSizeからの呼び出し 
+    'IN:_b縦横側面を展開する
+    'OUT:_tbl縦横展開の各ひも数・目・補強ひもに合わせたサイズ確定・長さは未セット
+    Function renew_ひも展開(ByVal category As CalcCategory) As Boolean
+        Dim ret As Boolean = True
+        For Each aidx As AngleIndex In [Enum].GetValues(GetType(AngleIndex))
+            ret = ret Or renew展開DataTable(aidx, _b縦横側面を展開する)
+        Next
+        Return ret
+    End Function
+
+    '展開テーブルを作り直す レコード数増減＆Fix
+    '固定: f_iひも種,f_iひも番号,f_i位置番号,f_sひも名,[f_i何本幅,f_d幅]
+    '要計算:f_d長さ
+    '入力値:f_s色,f_dひも長加算,f_i何本幅,f_dひも長加算2(使わない)
+    '入力・計算後に再セット:f_d幅,f_dひも長,f_d出力ひも長
     Private Function renew展開DataTable(ByVal aidx As AngleIndex, ByVal isRefSaved As Boolean) As Boolean
         If Not isRefSaved Then
-            _tbl縦横展開(idx(aidx)).Clear()
+            p_tbl縦横展開(aidx).Clear()
         End If
-        _tbl縦横展開(idx(aidx)).AcceptChanges()
+        p_tbl縦横展開(aidx).AcceptChanges()
 
         '上から下へ
-        Dim pos As Integer = -(p_iひもの本数(idx(aidx)) \ 2)
-        Dim zero As Integer = p_iひもの本数(idx(aidx)) Mod 2
+        Dim pos As Integer = -(p_iひもの本数(aidx) \ 2)
+        Dim zero As Integer = p_iひもの本数(aidx) Mod 2
         Dim row As tbl縦横展開Row
 
         If 0 < _d端の目(idx(aidx)) * _d六つ目の高さ Then
-            row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種すき間(aidx), 0, True)
+            row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種すき間(aidx), 0, True)
             row.f_i位置番号 = pos - 1
             row.f_sひも名 = text端の目(aidx)
             row.Setf_i何本幅Null()
@@ -1573,21 +1553,21 @@ Class clsCalcHexagon
             row.f_d出力ひも長 = 0
             row.Setf_s色Null()
         Else
-            row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種すき間(aidx), 0, False)
+            row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種すき間(aidx), 0, False)
             If row IsNot Nothing Then
                 row.Delete()
             End If
         End If
 
-        SetMaxひも番号(_tbl縦横展開(idx(aidx)), p_iひもの本数(idx(aidx)))
-        If 0 < p_iひもの本数(idx(aidx)) Then
-            For i As Integer = 1 To p_iひもの本数(idx(aidx))
-                row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種(aidx), i, True)
+        SetMaxひも番号(p_tbl縦横展開(aidx), p_iひもの本数(aidx))
+        If 0 < p_iひもの本数(aidx) Then
+            For i As Integer = 1 To p_iひもの本数(aidx)
+                row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種(aidx), i, True)
 
                 row.f_i位置番号 = pos
                 row.f_sひも名 = text配置ひも(aidx)
                 row.f_i何本幅 = _I基本のひも幅
-                adjust_展開ひも(aidx, row, p_iひもの本数(idx(aidx)))
+                'adjust_展開ひも(aidx, row, p_iひもの本数(aidx))
 
                 pos += 1
                 If pos = 0 AndAlso zero = 0 Then
@@ -1600,35 +1580,35 @@ Class clsCalcHexagon
         Dim posyoko As Integer = cBackPosition
         If _b補強ひも(idx(aidx)) Then
             For i As Integer = 1 To 2
-                row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種補強(aidx), i, True)
+                row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種補強(aidx), i, True)
                 row.f_i位置番号 = posyoko
                 row.f_sひも名 = text補強ひも(aidx)
                 row.f_i何本幅 = _I基本のひも幅
                 row.Setf_d幅Null()
 
-                row.f_d長さ = p_d四角ベース_横
-                row.f_dひも長 = p_d四角ベース_横
+                row.f_d長さ = p_d六つ目ベース_横
+                row.f_dひも長 = p_d六つ目ベース_横
                 row.f_d出力ひも長 = row.f_dひも長
 
                 posyoko += 1
             Next
         Else
-            row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種補強(aidx), 1, False)
+            row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種補強(aidx), 1, False)
             If row IsNot Nothing Then
                 row.Delete()
             End If
-            row = Find縦横展開Row(_tbl縦横展開(idx(aidx)), idxひも種補強(aidx), 2, False)
+            row = Find縦横展開Row(p_tbl縦横展開(aidx), idxひも種補強(aidx), 2, False)
             If row IsNot Nothing Then
                 row.Delete()
             End If
         End If
-        _tbl縦横展開(idx(aidx)).AcceptChanges()
+        p_tbl縦横展開(aidx).AcceptChanges()
 
         '指定があれば既存情報反映
         If isRefSaved Then
-            _Data.ToTmpTable(idxひも種(aidx), _tbl縦横展開(idx(aidx)))
-            For Each row In _tbl縦横展開(idx(aidx))
-                adjust_展開ひも(aidx, row, p_iひもの本数(idx(aidx)))
+            _Data.ToTmpTable(idxひも種(aidx), p_tbl縦横展開(aidx))
+            For Each row In p_tbl縦横展開(aidx)
+                'adjust_展開ひも(aidx, row, p_iひもの本数(aidx))
                 '本幅・色なし
                 If row.f_iひも種 And enumひも種.i_すき間 Then
                     row.Setf_s色Null()
@@ -1637,7 +1617,7 @@ Class clsCalcHexagon
             Next
         End If
 
-        _tbl縦横展開(idx(aidx)).AcceptChanges()
+        p_tbl縦横展開(aidx).AcceptChanges()
         Return True
     End Function
 
@@ -1802,10 +1782,10 @@ Class clsCalcHexagon
             Dim tmpTable As tbl縦横展開DataTable = get展開DataTable(aidx)
             Dim sbMemo As New Text.StringBuilder
 
-            If aidx = AngleIndex.idx_0 Then
+            If aidx = AngleIndex._0deg Then
                 row.f_sタイプ = text横置き()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
-            ElseIf aidx = AngleIndex.idx_60 Then
+            ElseIf aidx = AngleIndex._60deg Then
                 row.f_sタイプ = text斜め置き()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
             Else
@@ -1872,7 +1852,7 @@ Class clsCalcHexagon
                         Else
                             row.f_s編みひも名 = String.Format("{0} - {1}", lasttmp.f_iひも番号, lasttmp.f_iひも番号 + contcount - 1)
                         End If
-                        row.f_s編みひも名 = String.Format("[{0}] {1}", p_iひもの本数(idx(aidx)), row.f_s編みひも名)
+                        row.f_s編みひも名 = String.Format("[{0}] {1}", p_iひもの本数(aidx), row.f_s編みひも名)
                     End If
                     row = output.NextNewRow
 
@@ -2056,28 +2036,28 @@ Class clsCalcHexagon
 
         row = output.NextNewRow
         row.f_s色 = text横寸法()
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_横)
+        row.f_sひも本数 = output.outLengthText(p_d六つ目ベース_横)
         row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_横)
         row.f_sメモ = text厚さ()
         row.f_s長さ = output.outLengthText(p_d厚さ)
 
         row = output.NextNewRow
         row.f_s色 = text縦寸法()
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_縦)
+        row.f_sひも本数 = output.outLengthText(p_d六つ目ベース_縦)
         row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_縦)
         row.f_sメモ = text垂直ひも数()
         row.f_s長さ = p_i垂直ひも数
 
         row = output.NextNewRow
         row.f_s色 = text高さ寸法()
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_高さ)
+        row.f_sひも本数 = output.outLengthText(p_d六つ目ベース_高さ)
         row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_高さ)
         row.f_sメモ = text垂直ひも長()
         row.f_s長さ = output.outLengthText(_d六角ベース_高さ計 + _d縁の垂直ひも長 + _dひも長加算_上端)
 
         row = output.NextNewRow
         row.f_s色 = text周()
-        row.f_sひも本数 = output.outLengthText(p_d四角ベース_周)
+        row.f_sひも本数 = output.outLengthText(p_d六つ目ベース_周)
         row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_周)
         row.f_sメモ = My.Resources.CalcOutTurn '折り返し
         row.f_s長さ = output.outLengthText(_d縁の垂直ひも長 + _dひも長加算_上端 - _d縁の高さ)
@@ -2109,7 +2089,7 @@ Class clsCalcHexagon
     End Function
 
     Private Function text四角数() As String
-        Return _frmMain.tpage四角数.Text
+        Return _frmMain.tpage配置数.Text
     End Function
 
     Private Function text側面と縁() As String
@@ -2141,11 +2121,11 @@ Class clsCalcHexagon
     End Function
 
     Private Function text配置ひも(ByVal aidx As AngleIndex) As String
-        If aidx = AngleIndex.idx_0 Then
+        If aidx = AngleIndex._0deg Then
             Return _frmMain.tpage横ひも.Text
-        ElseIf aidx = AngleIndex.idx_60 Then
+        ElseIf aidx = AngleIndex._60deg Then
             Return _frmMain.tpage斜め60度.Text
-        ElseIf aidx = AngleIndex.idx_120 Then
+        ElseIf aidx = AngleIndex._120deg Then
             Return _frmMain.tpage斜め120度.Text
         Else
             Return Nothing
@@ -2154,11 +2134,11 @@ Class clsCalcHexagon
 
 
     Private Function text端の目(ByVal idx As AngleIndex) As String
-        If idx = AngleIndex.idx_0 Then
+        If idx = AngleIndex._0deg Then
             Return _frmMain.lbl上端下端.Text
-        ElseIf idx = AngleIndex.idx_60 Then
+        ElseIf idx = AngleIndex._60deg Then
             Return _frmMain.lbl斜め左端右端.Text & _frmMain.lbl60度.Text
-        ElseIf idx = AngleIndex.idx_120 Then
+        ElseIf idx = AngleIndex._120deg Then
             Return _frmMain.lbl斜め左端右端.Text & _frmMain.lbl120度.Text
         Else
             Return Nothing
@@ -2166,11 +2146,11 @@ Class clsCalcHexagon
     End Function
 
     Private Function text補強ひも(ByVal idx As AngleIndex) As String
-        If idx = AngleIndex.idx_0 Then
+        If idx = AngleIndex._0deg Then
             Return _frmMain.chk横の補強ひも.Text
-        ElseIf idx = AngleIndex.idx_60 Then
+        ElseIf idx = AngleIndex._60deg Then
             Return _frmMain.chk斜めの補強ひも.Text & _frmMain.lblchk60度.Text
-        ElseIf idx = AngleIndex.idx_120 Then
+        ElseIf idx = AngleIndex._120deg Then
             Return _frmMain.chk斜めの補強ひも_120度.Text
         Else
             Return Nothing

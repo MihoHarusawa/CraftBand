@@ -962,7 +962,7 @@ Class clsCalcSquare
         Return ret
     End Function
 
-    'cIdxHeightレコード対象、高さと垂直ひも長の計算
+    'cIdxHeight,cIdxSpaceレコード対象、高さと垂直ひも長の計算
     'IN:    p_d縁厚さプラス_周,_dひも長係数,_dひも長加算_側面,f_d底の厚さ,f_d連続ひも長
     'OUT:   各、f_d高さ,f_d垂直ひも長
     Private Function adjust_側面(ByVal row As tbl側面Row, ByVal dataPropertyName As String) As Boolean

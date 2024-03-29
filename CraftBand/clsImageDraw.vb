@@ -580,7 +580,7 @@ Public Class CImageDraw
     End Function
 
     Function drawバンド(ByVal item As clsImageItem) As Boolean
-        If item.m_row縦横展開 Is Nothing Then
+        If item.m_row縦横展開 Is Nothing OrElse item.m_band Is Nothing Then
             Return False
         End If
         Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
@@ -590,7 +590,7 @@ Public Class CImageDraw
 
         Dim ret As Boolean = True
         'ひもの領域
-        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        Dim points() As PointF = pixcel_lines(item.m_band.aバンド位置)
         If colset.BrushAlfa IsNot Nothing Then
             _Graphic.FillPolygon(colset.BrushAlfa, points)
         End If
@@ -620,12 +620,10 @@ Public Class CImageDraw
         End If
 
         '記号
-        If Not item.m_bNoMark Then
-            If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
-                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
-                Dim pMark As New PointF(rect.X + 2, rect.Y - _FontSize * 1.5)
-                _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
-            End If
+        If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(item.m_band.p文字位置)
+            Dim pMark As New PointF(p.X + 2, p.Y - _FontSize * 1.5)
+            _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
         End If
         Return True
     End Function

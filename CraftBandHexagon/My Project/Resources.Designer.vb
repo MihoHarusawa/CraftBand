@@ -134,6 +134,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  立ち上げ可能な底を作れません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcBadBottom() As String
+            Get
+                Return ResourceManager.GetString("CalcBadBottom", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  中心の目の位置は、ひもの本数より小さくしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcBadCenterPosition() As String
+            Get
+                Return ResourceManager.GetString("CalcBadCenterPosition", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  無効レコード(番号={0}) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcBadRecord() As String
@@ -157,6 +175,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcConfirmRecalc() As String
             Get
                 Return ResourceManager.GetString("CalcConfirmRecalc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  長さを計算できないひもがあります。{0} {1} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcErrorBandLength() As String
+            Get
+                Return ResourceManager.GetString("CalcErrorBandLength", resourceCulture)
             End Get
         End Property
         

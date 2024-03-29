@@ -152,7 +152,7 @@ Partial Class frmMain
         rad目標寸法_外側 = New RadioButton()
         lbl目標寸法_単位 = New Label()
         TabControl = New TabControl()
-        tpage四角数 = New TabPage()
+        tpage配置数 = New TabPage()
         Label1 = New Label()
         lblひも幅比 = New Label()
         lbl目対角線_本幅分 = New Label()
@@ -273,7 +273,7 @@ Partial Class frmMain
         MenuStrip1.SuspendLayout()
         grp目標寸法.SuspendLayout()
         TabControl.SuspendLayout()
-        tpage四角数.SuspendLayout()
+        tpage配置数.SuspendLayout()
         grp斜め置き.SuspendLayout()
         grp横置き.SuspendLayout()
         tpage側面と縁.SuspendLayout()
@@ -866,9 +866,9 @@ Partial Class frmMain
         lbl上から何個目.AutoSize = True
         lbl上から何個目.Location = New Point(136, 74)
         lbl上から何個目.Name = "lbl上から何個目"
-        lbl上から何個目.Size = New Size(117, 20)
+        lbl上から何個目.Size = New Size(112, 20)
         lbl上から何個目.TabIndex = 4
-        lbl上から何個目.Text = "マーク位置・上から"
+        lbl上から何個目.Text = "中心の目・上から"
         ToolTip1.SetToolTip(lbl上から何個目, "底の縦ひもの間にできる目の数")
         ' 
         ' lbl上端下端
@@ -886,9 +886,9 @@ Partial Class frmMain
         lbl左から何個目.AutoSize = True
         lbl左から何個目.Location = New Point(138, 78)
         lbl左から何個目.Name = "lbl左から何個目"
-        lbl左から何個目.Size = New Size(117, 20)
+        lbl左から何個目.Size = New Size(112, 20)
         lbl左から何個目.TabIndex = 5
-        lbl左から何個目.Text = "マーク位置・左から"
+        lbl左から何個目.Text = "中心の目・左から"
         ToolTip1.SetToolTip(lbl左から何個目, "底の横ひもの間にできる目の数")
         ' 
         ' nud斜め左端右端の目
@@ -1387,7 +1387,7 @@ Partial Class frmMain
         ' TabControl
         ' 
         TabControl.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        TabControl.Controls.Add(tpage四角数)
+        TabControl.Controls.Add(tpage配置数)
         TabControl.Controls.Add(tpage側面と縁)
         TabControl.Controls.Add(tpage差しひも)
         TabControl.Controls.Add(tpageひも上下)
@@ -1403,47 +1403,47 @@ Partial Class frmMain
         TabControl.Size = New Size(928, 453)
         TabControl.TabIndex = 22
         ' 
-        ' tpage四角数
+        ' tpage配置数
         ' 
-        tpage四角数.Controls.Add(Label1)
-        tpage四角数.Controls.Add(TextBox1)
-        tpage四角数.Controls.Add(lblひも幅比)
-        tpage四角数.Controls.Add(txtひも幅比)
-        tpage四角数.Controls.Add(lbl目対角線_本幅分)
-        tpage四角数.Controls.Add(txt目対角線_本幅分)
-        tpage四角数.Controls.Add(lbl編みひもの本数_単位)
-        tpage四角数.Controls.Add(lbl側面の編みひも)
-        tpage四角数.Controls.Add(nud編みひもの本数)
-        tpage四角数.Controls.Add(lbl編みひも縁間)
-        tpage四角数.Controls.Add(lbl最下段)
-        tpage四角数.Controls.Add(lbl最下段_単位)
-        tpage四角数.Controls.Add(nud最下段の目)
-        tpage四角数.Controls.Add(nudひも長係数)
-        tpage四角数.Controls.Add(lblひも長係数)
-        tpage四角数.Controls.Add(nudひも長加算_側面)
-        tpage四角数.Controls.Add(lblひも長加算_側面_単位)
-        tpage四角数.Controls.Add(lblひも長加算_側面)
-        tpage四角数.Controls.Add(lbl高さの四角数_単位)
-        tpage四角数.Controls.Add(lbl高さの六つ目数)
-        tpage四角数.Controls.Add(nud高さの六つ目数)
-        tpage四角数.Controls.Add(chk縦横側面を展開する)
-        tpage四角数.Controls.Add(nudひも長加算_縦横端)
-        tpage四角数.Controls.Add(lblひも長加算_縦横端_単位)
-        tpage四角数.Controls.Add(lblひも長加算_上端)
-        tpage四角数.Controls.Add(nud六つ目の高さ)
-        tpage四角数.Controls.Add(grp斜め置き)
-        tpage四角数.Controls.Add(txt目_本幅分)
-        tpage四角数.Controls.Add(grp横置き)
-        tpage四角数.Controls.Add(lbl目_本幅分)
-        tpage四角数.Controls.Add(lbl六つ目の高さ)
-        tpage四角数.Controls.Add(lbl目_ひも間のすき間_単位)
-        tpage四角数.Location = New Point(4, 29)
-        tpage四角数.Name = "tpage四角数"
-        tpage四角数.Padding = New Padding(3)
-        tpage四角数.Size = New Size(920, 420)
-        tpage四角数.TabIndex = 0
-        tpage四角数.Text = "配置数"
-        tpage四角数.UseVisualStyleBackColor = True
+        tpage配置数.Controls.Add(Label1)
+        tpage配置数.Controls.Add(TextBox1)
+        tpage配置数.Controls.Add(lblひも幅比)
+        tpage配置数.Controls.Add(txtひも幅比)
+        tpage配置数.Controls.Add(lbl目対角線_本幅分)
+        tpage配置数.Controls.Add(txt目対角線_本幅分)
+        tpage配置数.Controls.Add(lbl編みひもの本数_単位)
+        tpage配置数.Controls.Add(lbl側面の編みひも)
+        tpage配置数.Controls.Add(nud編みひもの本数)
+        tpage配置数.Controls.Add(lbl編みひも縁間)
+        tpage配置数.Controls.Add(lbl最下段)
+        tpage配置数.Controls.Add(lbl最下段_単位)
+        tpage配置数.Controls.Add(nud最下段の目)
+        tpage配置数.Controls.Add(nudひも長係数)
+        tpage配置数.Controls.Add(lblひも長係数)
+        tpage配置数.Controls.Add(nudひも長加算_側面)
+        tpage配置数.Controls.Add(lblひも長加算_側面_単位)
+        tpage配置数.Controls.Add(lblひも長加算_側面)
+        tpage配置数.Controls.Add(lbl高さの四角数_単位)
+        tpage配置数.Controls.Add(lbl高さの六つ目数)
+        tpage配置数.Controls.Add(nud高さの六つ目数)
+        tpage配置数.Controls.Add(chk縦横側面を展開する)
+        tpage配置数.Controls.Add(nudひも長加算_縦横端)
+        tpage配置数.Controls.Add(lblひも長加算_縦横端_単位)
+        tpage配置数.Controls.Add(lblひも長加算_上端)
+        tpage配置数.Controls.Add(nud六つ目の高さ)
+        tpage配置数.Controls.Add(grp斜め置き)
+        tpage配置数.Controls.Add(txt目_本幅分)
+        tpage配置数.Controls.Add(grp横置き)
+        tpage配置数.Controls.Add(lbl目_本幅分)
+        tpage配置数.Controls.Add(lbl六つ目の高さ)
+        tpage配置数.Controls.Add(lbl目_ひも間のすき間_単位)
+        tpage配置数.Location = New Point(4, 29)
+        tpage配置数.Name = "tpage配置数"
+        tpage配置数.Padding = New Padding(3)
+        tpage配置数.Size = New Size(920, 420)
+        tpage配置数.TabIndex = 0
+        tpage配置数.Text = "配置数"
+        tpage配置数.UseVisualStyleBackColor = True
         ' 
         ' Label1
         ' 
@@ -2565,8 +2565,8 @@ Partial Class frmMain
         grp目標寸法.ResumeLayout(False)
         grp目標寸法.PerformLayout()
         TabControl.ResumeLayout(False)
-        tpage四角数.ResumeLayout(False)
-        tpage四角数.PerformLayout()
+        tpage配置数.ResumeLayout(False)
+        tpage配置数.PerformLayout()
         grp斜め置き.ResumeLayout(False)
         grp斜め置き.PerformLayout()
         grp横置き.ResumeLayout(False)
@@ -2621,7 +2621,7 @@ Partial Class frmMain
     Friend WithEvents lbl目標寸法_単位 As Label
     Friend WithEvents btn概算 As Button
     Friend WithEvents TabControl As TabControl
-    Friend WithEvents tpage四角数 As TabPage
+    Friend WithEvents tpage配置数 As TabPage
     Friend WithEvents grp斜め置き As GroupBox
     Friend WithEvents txt目_本幅分 As TextBox
     Friend WithEvents lbl目_本幅分 As Label
