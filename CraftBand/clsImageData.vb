@@ -52,6 +52,12 @@ Public Class clsImageData
         End If
     End Sub
 
+    Sub AddItem(ByVal item As clsImageItem)
+        If item IsNot Nothing Then
+            _ImageList.Add(item)
+        End If
+    End Sub
+
     Sub Clear()
         _ImageList.Clear()
         If _clsOutput IsNot Nothing Then

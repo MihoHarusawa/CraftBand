@@ -1,4 +1,6 @@
-﻿Imports System.Text
+﻿Imports System.Drawing
+Imports System.Text
+Imports System.Windows.Forms
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
@@ -396,6 +398,13 @@ Public Class clsImageItem
             pD = d
         End Sub
 
+        Sub New(a As S四隅)
+            p左上 = a.p左上
+            p左下 = a.p左下
+            p右上 = a.p右上
+            p右下 = a.p右下
+        End Sub
+
         Sub New(r As S領域)
             p左上 = r.p左上
             p左下 = r.p左下
@@ -470,6 +479,34 @@ Public Class clsImageItem
             End Get
             Set(value As S実座標)
                 p右下 = value
+            End Set
+        End Property
+
+        '描画時に配列化する時の順
+        Property Point(ByVal i As Integer) As S実座標
+            Get
+                Select Case i Mod 4
+                    Case 0
+                        Return p右上 'A
+                    Case 1
+                        Return p左上 'B
+                    Case 2
+                        Return p左下 'C
+                    Case 3
+                        Return p右下 'D
+                End Select
+            End Get
+            Set(value As S実座標)
+                Select Case i Mod 4
+                    Case 0
+                        p右上 = value 'A
+                    Case 1
+                        p左上 = value 'B
+                    Case 2
+                        p左下 = value 'C
+                    Case 3
+                        p右下 = value 'D
+                End Select
             End Set
         End Property
 
@@ -1040,19 +1077,84 @@ Public Class clsImageItem
 
     'バンド
     Class CBand
+        '始点→終点 バンドの方向角
+        'F→T　軸方向(幅方向)=バンドの方向角+90
+        Public Const i_始点F As Integer = 0
+        Public Const i_終点F As Integer = 1
+        Public Const i_終点T As Integer = 2
+        Public Const i_始点T As Integer = 3
+
         Public aバンド位置 As S四隅
+        Public is始点FT線 As Boolean = True
+        Public is終点FT線 As Boolean = True
         Public p文字位置 As S実座標
 
-        Sub New()
+        '描画に必要な情報
+        Public _i何本幅 As Integer
+        Public _s色 As String
+        Public _s記号 As String
 
+        Sub New(ByVal ref As CBand)
+            aバンド位置 = ref.aバンド位置
+            is始点FT線 = ref.is始点FT線
+            is終点FT線 = ref.is終点FT線
+            p文字位置 = ref.p文字位置
+            _i何本幅 = ref._i何本幅
+            _s色 = ref._s色
+            _s記号 = ref._s記号
+        End Sub
+
+        Sub New(ByVal row As tbl縦横展開Row)
+            _i何本幅 = row.f_i何本幅
+            _s色 = row.f_s色
+            _s記号 = row.f_s記号
+        End Sub
+
+        Sub New(ByVal row As tbl側面Row)
+            _i何本幅 = row.f_i何本幅
+            _s色 = row.f_s色
+            _s記号 = row.f_s記号
         End Sub
 
         Function Get描画領域() As S領域
             Dim r描画領域 As S領域 = aバンド位置.r外接領域
-            r描画領域 = r描画領域.get拡大領域(p文字位置)
+            If Not p文字位置.IsZero AndAlso Not String.IsNullOrEmpty(_s記号) Then
+                Dim delta As New S差分(s_BasicFontSize + 1, s_BasicFontSize * 2)
+                r描画領域.get拡大領域(New S領域(p文字位置, p文字位置 + delta))
+            End If
             Return r描画領域
         End Function
 
+        Public Overrides Function ToString() As String
+            Dim sb As New StringBuilder
+            sb.AppendFormat("aバンド位置{0} is始点FT線={1} is終点FT線={2} ", aバンド位置, is始点FT線, is終点FT線)
+            sb.AppendFormat("_i何本幅{0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
+            Return sb.ToString
+        End Function
+    End Class
+
+    Class CBandList
+        Inherits List(Of CBand)
+
+        Function Get描画領域() As S領域
+            If Me.Count = 0 Then
+                Return Nothing 'ゼロ
+            End If
+            Dim r描画領域 As S領域 = Me(0).Get描画領域
+            For i As Integer = 1 To Count - 1
+                r描画領域 = r描画領域.get拡大領域(Me(i).Get描画領域)
+            Next
+            Return r描画領域
+        End Function
+
+        Public Overrides Function ToString() As String
+            Dim sb As New StringBuilder
+            sb.AppendFormat("CBandList Count={0} ", Me.Count).AppendLine()
+            For Each band As CBand In Me
+                sb.Append(band.ToString).AppendLine()
+            Next
+            Return sb.ToString
+        End Function
     End Class
 
 
@@ -1069,17 +1171,19 @@ Public Class clsImageItem
     Public Shared Unit270 As New S差分(0, -1) '↓
 
     'レコード情報
-    Public m_row縦横展開 As tbl縦横展開Row = Nothing 'バンド指定の時・コマの横
+    Public m_row縦横展開 As tbl縦横展開Row = Nothing '縦バンド・横バンド・コマの横
     Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
     Public m_groupRow As clsGroupDataRow = Nothing 'Meshの側面,付属品("f_s記号","f_s編みかた名","f_s色"))
-    Public m_rowData As clsDataRow = Nothing 'Squareの差しひも
+    Public m_rowData As clsDataRow = Nothing 'Squareの差しひも/f_s色,f_i何本幅,f_s記号
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
 
-    '縦バンド・横バンド
+    '縦バンド・横バンド・コマ
     Public m_dひも幅 As Double
     Public m_rひも位置 As S領域
+
+    '縦バンド・横バンド
     Public m_bNoMark As Boolean = False '記号なし
     Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
     Public m_regionList As C領域リスト 'クロス表示用
@@ -1090,13 +1194,15 @@ Public Class clsImageItem
     '文字列配列
     Public m_aryString() As String
     Public m_sizeFont As Double
-    Dim _p文字位置 As S実座標
+    Dim _p文字位置 As S実座標  '文字表示を伴う場合共有
+    Dim _r文字領域 As S領域   '〃
 
     '四つ畳み編みのコマ
     Public m_knot As CKnot = Nothing
 
-    'バンド
-    Public m_band As CBand = Nothing
+    '_バンドセット
+    Public m_bandList As CBandList = Nothing
+    Public m_clipList As CBandList = Nothing
 
 
     '描画タイプ(描画順)
@@ -1106,31 +1212,29 @@ Public Class clsImageItem
         _縦バンド   'm_row縦横展開,m_a四隅,m_rひも位置
         _横バンド   'm_row縦横展開,m_a四隅,m_rひも位置
 
-        _バンド   'm_row縦横展開,m_a四隅,m_rひも位置
+        _バンドセット   'm_bandList
 
-        _コマ     'm_row縦横展開,m_row縦横展開2,m_p中心,m_rひも位置,m_knot
-        _編みかた   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
-        _付属品   'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
+        _コマ     'm_row縦横展開,m_row縦横展開2,m_rひも位置,m_knot
+        _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
+        _付属品   'm_groupRow,m_a四隅,m_lineList,_r文字領域
 
         _底枠     'm_a四隅,m_lineList
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
         _四隅領域 'm_a四隅,m_lineList
         _全体枠    'm_a四隅
-
         _底枠2     'm_lineList        (Hexagonの底)
 
 
-        _底楕円    'm_groupRow,m_a四隅,m_lineList,m_p位置,m_rひも位置
-        _差しひも    'm_groupRow,m_a四隅,m_p位置,m_rひも位置           (Meshの底)
-
-        _ひも領域   'm_rowData,m_a四隅,m_p位置                       (Squareの差しひも)
+        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域
+        _差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
+        _ひも領域   'm_rowData,m_a四隅,_r文字領域             (Squareの差しひも)
 
         _底の中央線  'm_listLine
 
-        _折り返し線 'm_rひも位置
+        _折り返し線 'm_listLine
 
-        _文字列 'm_p位置,m_rひも位置
+        _文字列 'm_p位置,_r文字領域
 
         _横軸線 'm_listLine
         _縦軸線 'm_listLine
@@ -1159,6 +1263,7 @@ Public Class clsImageItem
         m_row縦横展開 = row
         If m_row縦横展開 IsNot Nothing Then
             m_Index = m_row縦横展開.f_iひも番号
+
             If m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
                 m_ImageType = ImageTypeEnum._横バンド
             ElseIf m_row縦横展開.f_iひも種 = enumひも種.i_縦 Then
@@ -1233,10 +1338,40 @@ Public Class clsImageItem
             Return
         End If
 
-        'm_rひも位置におおよその領域をセット
+        '_r文字領域セット
         p_p文字位置 = p
 
     End Sub
+
+    'バンドセット
+    Sub New(ByVal bandlist As CBandList, ByVal idx1 As Integer, ByVal idx2 As Integer)
+        m_ImageType = ImageTypeEnum._バンドセット
+        m_Index = idx1
+        m_Index2 = idx2
+        m_bandList = bandlist
+    End Sub
+    Sub New(ByVal band As CBand, ByVal idx1 As Integer, ByVal idx2 As Integer)
+        m_ImageType = ImageTypeEnum._バンドセット
+        m_Index = idx1
+        m_Index2 = idx2
+        m_bandList = New CBandList
+        m_bandList.Add(band)
+    End Sub
+    Sub AddClip(ByVal bandlist As CBandList)
+        'm_ImageType = ImageTypeEnum._バンドセット の想定
+        If m_clipList Is Nothing Then
+            m_clipList = New CBandList
+        End If
+        m_clipList.AddRange(bandlist)
+    End Sub
+    Sub AddClip(ByVal band As CBand)
+        'm_ImageType = ImageTypeEnum._バンドセット の想定
+        If m_clipList Is Nothing Then
+            m_clipList = New CBandList
+        End If
+        m_clipList.Add(band)
+    End Sub
+
 
     '文字位置
     Public Property p_p文字位置 As S実座標
@@ -1246,7 +1381,7 @@ Public Class clsImageItem
         Set(value As S実座標)
             _p文字位置 = value
 
-            'm_rひも位置におおよその領域をセット
+            '_r文字領域におおよその領域をセット
             Dim chars As Integer = 0
             Dim line As Integer = 0
             Dim siz As Double = s_BasicFontSize
@@ -1285,11 +1420,12 @@ Public Class clsImageItem
                                 siz = m_sizeFont
                             End If
                         End If
+
                 End Select
 
                 If 0 < line AndAlso 0 < chars Then
                     Dim delta As New S差分(chars * siz, line * siz * 2)
-                    m_rひも位置 = New S領域(p_p文字位置, p_p文字位置 + delta)
+                    _r文字領域 = New S領域(p_p文字位置, p_p文字位置 + delta)
                 End If
             End If
         End Set
@@ -1303,8 +1439,8 @@ Public Class clsImageItem
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_rひも位置)
 
-            Case ImageTypeEnum._バンド
-                r描画領域 = m_band.Get描画領域()
+            Case ImageTypeEnum._バンドセット
+                r描画領域 = m_bandList.Get描画領域()
 
             Case ImageTypeEnum._コマ
                 r描画領域 = m_rひも位置
@@ -1312,7 +1448,7 @@ Public Class clsImageItem
 
             Case ImageTypeEnum._編みかた, ImageTypeEnum._付属品
                 r描画領域 = m_a四隅.r外接領域
-                r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
+                r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠
@@ -1325,7 +1461,7 @@ Public Class clsImageItem
 
             Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも, ImageTypeEnum._ひも領域
                 r描画領域 = m_a四隅.r外接領域
-                r描画領域 = r描画領域.get拡大領域(m_rひも位置) 'm_p位置を含む
+                r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._底の中央線, ImageTypeEnum._底枠2
@@ -1334,8 +1470,8 @@ Public Class clsImageItem
             Case ImageTypeEnum._折り返し線
                 r描画領域 = m_lineList.Get描画領域()
 
-            Case ImageTypeEnum._文字列
-                r描画領域 = m_rひも位置
+            Case ImageTypeEnum._文字列 'm_p文字位置を含む
+                r描画領域 = _r文字領域
 
             Case ImageTypeEnum._横軸線, ImageTypeEnum._横軸線
                 '描画領域の後に作成されるが一応

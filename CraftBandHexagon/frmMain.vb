@@ -42,9 +42,9 @@ Public Class frmMain
 
         editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter)
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
-        expand斜め60度.SetNames(Me.Text, tpage斜め60度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand7to3, Nothing)
-        expand斜め120度.SetNames(Me.Text, tpage斜め120度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand1to9, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand斜め60度.SetNames(Me.Text, tpage斜め60度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand7to3, My.Resources.CaptionExpand1to9)
+        expand斜め120度.SetNames(Me.Text, tpage斜め120度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand1to9, My.Resources.CaptionExpand7to3)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
 
@@ -72,6 +72,9 @@ Public Class frmMain
 
         End If
 
+
+        '未実装
+        TabControl.TabPages.Remove(tpage差しひも)
         '一旦削除
         TabControl.TabPages.Remove(tpage斜め60度)
         TabControl.TabPages.Remove(tpage横ひも)
@@ -275,7 +278,7 @@ Public Class frmMain
             Case tpage差しひも.Name
                 Show差しひも(works)
             Case tpageひも上下.Name
-                '
+                Showひも上下()
             Case tpage追加品.Name
                 Show追加品(works)
             Case tpageメモ他.Name
@@ -419,6 +422,15 @@ Public Class frmMain
             nud最下段の目.Value = .Value("f_d最下段の目")
 
             chk斜め同数.Checked = .Value("f_b斜め同数区分")
+
+            Select Case .Value("f_iコマ上側の縦ひも")
+                Case enumコマ上側の縦ひも.i_左側
+                    rad左綾.Checked = True
+                Case enumコマ上側の縦ひも.i_右側
+                    rad右綾.Checked = True
+                Case Else
+                    radなし.Checked = True
+            End Select
         End With
     End Sub
 
@@ -548,6 +560,14 @@ Public Class frmMain
 
             .Value("f_s横ひものメモ") = txt横ひものメモ.Text
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
+
+            If rad左綾.Checked Then
+                .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
+            ElseIf rad右綾.Checked Then
+                .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側
+            Else
+                .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
+            End If
         End With
         Return True
     End Function
@@ -604,7 +624,7 @@ Public Class frmMain
     Private Function initColorRepeat() As Boolean
 
         Dim _ColorRepeatSettings() As CColorRepeatSetting = {
-        New CColorRepeatSetting(lbl側面の編みひも.Text, enumDataID._tbl側面, "f_i番号=1", "f_iひも番号 ASC", False, True),
+        New CColorRepeatSetting(lbl側面の編みひも.Text, enumDataID._tbl側面, "f_i番号=1", "f_iひも番号 ASC", True, False),
         New CColorRepeatSetting(tpage横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", idxひも種(AngleIndex._0deg)), "f_iひも番号 ASC", True, True),
         New CColorRepeatSetting(tpage斜め60度.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", idxひも種(AngleIndex._60deg)), "f_iひも番号 ASC", True, True),
         New CColorRepeatSetting(tpage斜め120度.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", idxひも種(AngleIndex._120deg)), "f_iひも番号 ASC", True, True)}
@@ -1247,7 +1267,7 @@ Public Class frmMain
         txt目対角線_本幅分.Text = New Length(nud六つ目の高さ.Value / SIN60).ByLaneText
         If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
             txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
-            nud三角の中.Value = (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
+            nud三角の中.Value = get三角の中値()
         Else
             txtひも幅比.Text = ""
             nud三角の中.Value = 0
@@ -1275,6 +1295,19 @@ Public Class frmMain
     Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
         recalc(CalcCategory.Hex_Vert, sender)
     End Sub
+
+    Private Sub rad綾の方向_CheckedChanged(sender As Object, e As EventArgs) Handles rad左綾.CheckedChanged, rad右綾.CheckedChanged, radなし.CheckedChanged
+        If Not _isLoadingData Then
+            If rad左綾.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
+            ElseIf rad右綾.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側
+            Else
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
+            End If
+        End If
+    End Sub
+
 #End Region
 
 #Region "側面"
@@ -1440,19 +1473,13 @@ Public Class frmMain
     End Sub
 
     Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
-        If _tabPages(cIdxAngle0) IsNot Nothing AndAlso _ctrExpandings(cIdxAngle0) IsNot Nothing Then
-            _ctrExpandings(cIdxAngle0).PanelSize = _tabPages(cIdxAngle0).Size
-        End If
+        expand横ひも.PanelSize = tpage横ひも.Size
     End Sub
     Private Sub tpage斜め120度_Resize(sender As Object, e As EventArgs) Handles tpage斜め120度.Resize
-        If _tabPages(cIdxAngle120) IsNot Nothing AndAlso _ctrExpandings(cIdxAngle120) IsNot Nothing Then
-            _ctrExpandings(cIdxAngle120).PanelSize = _tabPages(cIdxAngle120).Size
-        End If
+        expand斜め120度.PanelSize = tpage斜め120度.Size
     End Sub
     Private Sub tpage斜め60度_Resize(sender As Object, e As EventArgs) Handles tpage斜め60度.Resize
-        If _tabPages(cIdxAngle60) IsNot Nothing AndAlso _ctrExpandings(cIdxAngle60) IsNot Nothing Then
-            _ctrExpandings(cIdxAngle60).PanelSize = _tabPages(cIdxAngle60).Size
-        End If
+        expand斜め60度.PanelSize = tpage斜め60度.Size
     End Sub
 
 
@@ -1600,6 +1627,19 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellValueChanged({1}){2}", Now, DataPropertyName, New clsDataRow(row).ToString)
         recalc(CalcCategory.Inserted, row, DataPropertyName)
     End Sub
+#End Region
+
+#Region "ひも上下"
+
+    '三角の中の値
+    Public Function get三角の中値() As Double
+        Return (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
+    End Function
+
+    Sub Showひも上下()
+        grp綾方向.Enabled = (0 <= get三角の中値())
+    End Sub
+
 #End Region
 
 #Region "プレビュー"

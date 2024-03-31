@@ -1,6 +1,8 @@
 ﻿Imports System.Drawing
+Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Security.Cryptography
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -220,20 +222,12 @@ Public Class CImageDraw
 
     '四隅の4点の配列
     Function pixcel_lines(sqare As S四隅) As PointF()
-        Dim point As PointF
         Dim lst As New List(Of PointF)
-
-        point = New PointF(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
-        lst.Add(point)
-        point = New PointF(pixcel_X(sqare.p左上.X), pixcel_Y(sqare.p左上.Y))
-        lst.Add(point)
-        point = New PointF(pixcel_X(sqare.p左下.X), pixcel_Y(sqare.p左下.Y))
-        lst.Add(point)
-        point = New PointF(pixcel_X(sqare.p右下.X), pixcel_Y(sqare.p右下.Y))
-        lst.Add(point)
-        point = New PointF(pixcel_X(sqare.p右上.X), pixcel_Y(sqare.p右上.Y))
-        lst.Add(point)
-
+        For i As Integer = 0 To 4
+            Dim ii As Integer = i Mod 4 '閉ループ
+            Dim point As PointF = New PointF(pixcel_X(sqare.Point(ii).X), pixcel_Y(sqare.Point(ii).Y))
+            lst.Add(point)
+        Next
         Return lst.ToArray
     End Function
 
@@ -344,8 +338,8 @@ Public Class CImageDraw
             Case ImageTypeEnum._縦バンド
                 Return draw縦バンド(item)
 
-            Case ImageTypeEnum._バンド
-                Return drawバンド(item)
+            Case ImageTypeEnum._バンドセット
+                Return drawバンドセット(item)
 
             Case ImageTypeEnum._コマ
                 Return drawコマ(item)
@@ -579,32 +573,87 @@ Public Class CImageDraw
         Return True
     End Function
 
-    Function drawバンド(ByVal item As clsImageItem) As Boolean
-        If item.m_row縦横展開 Is Nothing OrElse item.m_band Is Nothing Then
+    Function drawバンドセット(ByVal item As clsImageItem) As Boolean
+
+        'クリップ領域
+        Dim combinedPath As New GraphicsPath()
+        If item.m_clipList IsNot Nothing AndAlso 0 < item.m_clipList.Count Then
+            For Each clip As CBand In item.m_clipList
+                Dim colset As CPenBrush = GetBandPenBrush(clip._s色)
+                If colset Is Nothing OrElse colset.IsNoDrawing Then
+                    Continue For
+                End If
+                'ひもの領域
+                Dim points() As PointF = pixcel_lines(clip.aバンド位置)
+                Dim path As New GraphicsPath()
+                path.AddPolygon(points)
+
+                combinedPath.AddPath(path, False)
+            Next
+        End If
+
+        If 0 < combinedPath.PointCount Then
+            ' クリップ領域を反転するための新たな領域を作成
+            Dim invertedClip As New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
+            invertedClip.Exclude(combinedPath)
+
+            ' クリップ領域を新たな領域に設定（反転）
+            _Graphic.Clip = invertedClip
+        End If
+
+        'ひも描画
+        Dim ret As Boolean = True
+        If item.m_bandList IsNot Nothing AndAlso 0 < item.m_bandList.Count Then
+            For Each band As CBand In item.m_bandList
+                ret = ret And drawバンド(band)
+            Next
+        End If
+
+        ' クリップ領域を解除する
+        _Graphic.ResetClip()
+
+        Return ret
+    End Function
+
+    Function drawバンド(ByVal band As CBand) As Boolean
+        If band Is Nothing Then
             Return False
         End If
-        Dim colset As CPenBrush = GetBandPenBrush(item.m_row縦横展開.f_s色)
+        Dim colset As CPenBrush = GetBandPenBrush(band._s色)
         If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
 
         Dim ret As Boolean = True
         'ひもの領域
-        Dim points() As PointF = pixcel_lines(item.m_band.aバンド位置)
+        Dim points() As PointF = pixcel_lines(band.aバンド位置)
         If colset.BrushAlfa IsNot Nothing Then
             _Graphic.FillPolygon(colset.BrushAlfa, points)
         End If
-        _Graphic.DrawLines(colset.PenBand, points)
 
-        'バンド幅
-        Dim i何本幅 As Integer = item.m_row縦横展開.f_i何本幅
+        Dim p始点F As PointF = points(CBand.i_始点F)
+        Dim p始点T As PointF = points(CBand.i_始点T)
+        Dim p終点F As PointF
+        Dim p終点T As PointF
+
+        'バンドの枠線幅 ※pixcel変換により角度が変わるので再計算
+        Dim ftlen As Single = Math.Sqrt((p始点T.X - p始点F.X) ^ 2 + (p始点T.Y - p始点F.Y) ^ 2)
+        Dim wid_dx As Single = colset.PenWidth * (p始点T.X - p始点F.X) / ftlen
+        Dim wid_dy As Single = colset.PenWidth * (p始点T.Y - p始点F.Y) / ftlen
+
+        'バンド方向に、枠線幅分内側に入ったライン
+        p始点F = New PointF(points(CBand.i_始点F).X + wid_dx, points(CBand.i_始点F).Y + wid_dy)
+        p始点T = New PointF(points(CBand.i_始点T).X - wid_dx, points(CBand.i_始点T).Y - wid_dy)
+        p終点F = New PointF(points(CBand.i_終点F).X + wid_dx, points(CBand.i_終点F).Y + wid_dy)
+        'p終点T = New PointF(points(CBand.i_終点T).X - wid_dx, points(CBand.i_終点T).Y - wid_dy)
 
         '本幅線
-        Dim dx As Single = (points(3).X - points(0).X) / i何本幅
-        Dim dy As Single = (points(3).Y - points(0).Y) / i何本幅
+        Dim i何本幅 As Integer = band._i何本幅
         If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
-            Dim pStart As PointF = points(0)
-            Dim pEnd As PointF = points(1)
+            Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
+            Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
+            Dim pStart As PointF = p始点F
+            Dim pEnd As PointF = p終点F
             For i As Integer = 1 To i何本幅 - 1
                 pStart.X += dx
                 pStart.Y += dy
@@ -616,16 +665,33 @@ Public Class CImageDraw
 
         'バンド枠
         If colset.PenBand IsNot Nothing Then
-            _Graphic.DrawLines(colset.PenBand, points)
+            Dim wid_half_dx As Single = wid_dx / 2
+            Dim wid_half_dy As Single = wid_dy / 2
+            'バンド方向に、1/2枠線幅分内側に入ったライン
+            p始点F = New PointF(points(CBand.i_始点F).X + wid_half_dx, points(CBand.i_始点F).Y + wid_half_dy)
+            p始点T = New PointF(points(CBand.i_始点T).X - wid_half_dx, points(CBand.i_始点T).Y - wid_half_dy)
+            p終点F = New PointF(points(CBand.i_終点F).X + wid_half_dx, points(CBand.i_終点F).Y + wid_half_dy)
+            p終点T = New PointF(points(CBand.i_終点T).X - wid_half_dx, points(CBand.i_終点T).Y - wid_half_dy)
+            _Graphic.DrawLine(colset.PenBand, p始点F, p終点F)
+            _Graphic.DrawLine(colset.PenBand, p始点T, p終点T)
+
+            If band.is始点FT線 Then
+                _Graphic.DrawLine(colset.PenBand, points(CBand.i_始点F), points(CBand.i_始点T))
+            End If
+            If band.is終点FT線 Then
+                _Graphic.DrawLine(colset.PenBand, points(CBand.i_終点F), points(CBand.i_終点T))
+            End If
         End If
 
         '記号
-        If Not String.IsNullOrWhiteSpace(item.m_row縦横展開.f_s記号) AndAlso colset.BrushSolid IsNot Nothing Then
-            Dim p As PointF = pixcel_point(item.m_band.p文字位置)
+        If Not band.p文字位置.IsZero AndAlso
+            Not String.IsNullOrWhiteSpace(band._s記号) AndAlso
+            colset.BrushSolid IsNot Nothing Then
+            Dim p As PointF = pixcel_point(band.p文字位置)
             Dim pMark As New PointF(p.X + 2, p.Y - _FontSize * 1.5)
-            _Graphic.DrawString(item.m_row縦横展開.f_s記号, _Font, colset.BrushSolid, pMark)
+            _Graphic.DrawString(band._s記号, _Font, colset.BrushSolid, pMark)
         End If
-        Return True
+        Return ret
     End Function
 
 

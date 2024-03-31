@@ -208,6 +208,9 @@
     <value>左下,右上</value>
     <comment>frmMain</comment>
   </data>
+  <data name="CaptionExpand4To6" xml:space="preserve">
+    <value>左,右</value>
+  </data>
   <data name="CaptionExpand7to3" xml:space="preserve">
     <value>左上,右下</value>
     <comment>frmMain</comment>

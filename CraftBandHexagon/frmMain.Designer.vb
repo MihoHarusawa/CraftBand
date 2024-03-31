@@ -117,6 +117,9 @@ Partial Class frmMain
         chk斜めの補強ひも_120度 = New CheckBox()
         lbl120度 = New Label()
         nud三角の中 = New NumericUpDown()
+        rad右綾 = New RadioButton()
+        rad左綾 = New RadioButton()
+        radなし = New RadioButton()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -191,6 +194,8 @@ Partial Class frmMain
         tpage差しひも = New TabPage()
         editInsertBand = New CraftBand.ctrInsertBand()
         tpageひも上下 = New TabPage()
+        grp綾方向 = New GroupBox()
+        Label1 = New Label()
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
@@ -281,6 +286,8 @@ Partial Class frmMain
         CType(dgv側面, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSource側面, ComponentModel.ISupportInitialize).BeginInit()
         tpage差しひも.SuspendLayout()
+        tpageひも上下.SuspendLayout()
+        grp綾方向.SuspendLayout()
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
         tpageプレビュー.SuspendLayout()
@@ -581,7 +588,7 @@ Partial Class frmMain
         txt六つ目ベース_横.Size = New Size(80, 27)
         txt六つ目ベース_横.TabIndex = 41
         txt六つ目ベース_横.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt六つ目ベース_横, "四角ベースの横寸法")
+        ToolTip1.SetToolTip(txt六つ目ベース_横, "六つ目ベースの横寸法")
         ' 
         ' txt六つ目ベース_縦
         ' 
@@ -592,7 +599,7 @@ Partial Class frmMain
         txt六つ目ベース_縦.Size = New Size(80, 27)
         txt六つ目ベース_縦.TabIndex = 44
         txt六つ目ベース_縦.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt六つ目ベース_縦, "四角ベースの縦寸法")
+        ToolTip1.SetToolTip(txt六つ目ベース_縦, "六つ目ベースの縦寸法")
         ' 
         ' txt六つ目ベース_高さ
         ' 
@@ -603,7 +610,7 @@ Partial Class frmMain
         txt六つ目ベース_高さ.Size = New Size(80, 27)
         txt六つ目ベース_高さ.TabIndex = 47
         txt六つ目ベース_高さ.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt六つ目ベース_高さ, "四角ベースの高さ")
+        ToolTip1.SetToolTip(txt六つ目ベース_高さ, "六つ目ベースの高さ")
         ' 
         ' txt縁厚さプラス_横
         ' 
@@ -647,7 +654,7 @@ Partial Class frmMain
         txt六つ目ベース_周.Size = New Size(80, 27)
         txt六つ目ベース_周.TabIndex = 50
         txt六つ目ベース_周.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt六つ目ベース_周, "加算を加えた四角ベースの周")
+        ToolTip1.SetToolTip(txt六つ目ベース_周, "加算を加えた底の六角形の周")
         ' 
         ' txt縁厚さプラス_周
         ' 
@@ -1165,6 +1172,42 @@ Partial Class frmMain
         nud三角の中.TabIndex = 10
         nud三角の中.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nud三角の中, "3本のひもで作られる三角形のすき間の高さ" & vbCrLf & "マイナス値は重なりを示します")
+        ' 
+        ' rad右綾
+        ' 
+        rad右綾.AutoSize = True
+        rad右綾.Location = New Point(118, 33)
+        rad右綾.Name = "rad右綾"
+        rad右綾.Size = New Size(60, 24)
+        rad右綾.TabIndex = 1
+        rad右綾.TabStop = True
+        rad右綾.Text = "右綾"
+        ToolTip1.SetToolTip(rad右綾, "右綾の六つ目図を作ります")
+        rad右綾.UseVisualStyleBackColor = True
+        ' 
+        ' rad左綾
+        ' 
+        rad左綾.AutoSize = True
+        rad左綾.Location = New Point(41, 33)
+        rad左綾.Name = "rad左綾"
+        rad左綾.Size = New Size(60, 24)
+        rad左綾.TabIndex = 0
+        rad左綾.TabStop = True
+        rad左綾.Text = "左綾"
+        ToolTip1.SetToolTip(rad左綾, "左綾の六つ目図を作ります")
+        rad左綾.UseVisualStyleBackColor = True
+        ' 
+        ' radなし
+        ' 
+        radなし.AutoSize = True
+        radなし.Location = New Point(195, 33)
+        radなし.Name = "radなし"
+        radなし.Size = New Size(53, 24)
+        radなし.TabIndex = 2
+        radなし.TabStop = True
+        radなし.Text = "なし"
+        ToolTip1.SetToolTip(radなし, "綾は描画しません")
+        radなし.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1846,6 +1889,8 @@ Partial Class frmMain
         ' 
         ' tpageひも上下
         ' 
+        tpageひも上下.Controls.Add(grp綾方向)
+        tpageひも上下.Controls.Add(Label1)
         tpageひも上下.Location = New Point(4, 29)
         tpageひも上下.Name = "tpageひも上下"
         tpageひも上下.Padding = New Padding(3)
@@ -1853,6 +1898,27 @@ Partial Class frmMain
         tpageひも上下.TabIndex = 9
         tpageひも上下.Text = "ひも上下"
         tpageひも上下.UseVisualStyleBackColor = True
+        ' 
+        ' grp綾方向
+        ' 
+        grp綾方向.Controls.Add(radなし)
+        grp綾方向.Controls.Add(rad右綾)
+        grp綾方向.Controls.Add(rad左綾)
+        grp綾方向.Location = New Point(84, 67)
+        grp綾方向.Name = "grp綾方向"
+        grp綾方向.Size = New Size(292, 75)
+        grp綾方向.TabIndex = 1
+        grp綾方向.TabStop = False
+        grp綾方向.Text = "綾方向"
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(37, 28)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(314, 20)
+        Label1.TabIndex = 0
+        Label1.Text = "六つ目の脇に三角が作られる場合のみ指定できます"
         ' 
         ' tpage追加品
         ' 
@@ -2218,7 +2284,7 @@ Partial Class frmMain
         ' 
         lbl目.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl目.AutoSize = True
-        lbl目.Location = New Point(118, 672)
+        lbl目.Location = New Point(118, 670)
         lbl目.Name = "lbl目"
         lbl目.Size = New Size(51, 20)
         lbl目.TabIndex = 32
@@ -2582,6 +2648,10 @@ Partial Class frmMain
         CType(dgv側面, ComponentModel.ISupportInitialize).EndInit()
         CType(BindingSource側面, ComponentModel.ISupportInitialize).EndInit()
         tpage差しひも.ResumeLayout(False)
+        tpageひも上下.ResumeLayout(False)
+        tpageひも上下.PerformLayout()
+        grp綾方向.ResumeLayout(False)
+        grp綾方向.PerformLayout()
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
@@ -2801,6 +2871,11 @@ Partial Class frmMain
     Friend WithEvents editInsertBand As CraftBand.ctrInsertBand
     Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents nud三角の中 As NumericUpDown
+    Friend WithEvents grp綾方向 As GroupBox
+    Friend WithEvents rad右綾 As RadioButton
+    Friend WithEvents rad左綾 As RadioButton
+    Friend WithEvents Label1 As Label
+    Friend WithEvents radなし As RadioButton
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

@@ -1453,10 +1453,7 @@ Class clsCalcHexagon
             Select Case dataPropertyName
                 Case "f_s色"
                     Return False
-                Case "f_dひも長加算2"
-                    row.f_dひも長加算2 = 0 '使わない
-                    Return False
-                Case "f_dひも長加算"
+                Case "f_dひも長加算", "f_dひも長加算2"
                     '再計算は不要
                 Case "f_i何本幅"
                     '長さの再計算
@@ -1467,6 +1464,7 @@ Class clsCalcHexagon
         '本幅の変更、もしくは再計算
         'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
         'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
+        'f_dVal1,f_dVal2 に、各側面分の長さ
         With row
             If is_idxひも種(aidx, .f_iひも種) Then
                 If .f_iひも番号 = p_iひもの本数(aidx) Then
@@ -1477,7 +1475,11 @@ Class clsCalcHexagon
                 row.f_dひも長 = .f_d長さ + get側面ひも長(2)
                 row.f_d出力ひも長 = .f_dひも長 * _dひも長係数 +
                     2 * (_dひも長加算_上端 + _d縁の垂直ひも長) +
-                    row.f_dひも長加算
+                    row.f_dひも長加算 + row.f_dひも長加算2
+                '底にプラスする長さ(AddImageItemToList描画用)
+                Dim d As Double = (.f_d長さ / 2) * (_dひも長係数 - 1) + get側面ひも長(1) * _dひも長係数
+                row.f_dVal1 = d + (_dひも長加算_上端 + _d縁の垂直ひも長) + row.f_dひも長加算
+                row.f_dVal2 = d + (_dひも長加算_上端 + _d縁の垂直ひも長) + row.f_dひも長加算2
 
             ElseIf is_idxすき間(aidx, row.f_iひも種) Then
                 row.Setf_i何本幅Null()
@@ -1486,7 +1488,7 @@ Class clsCalcHexagon
 
             ElseIf is_idx補強(aidx, row.f_iひも種) Then
                 .f_dひも長 = .f_d長さ
-                row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算
+                row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
 
             End If
         End With
