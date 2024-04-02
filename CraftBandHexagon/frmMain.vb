@@ -391,7 +391,7 @@ Public Class frmMain
 
 
     Sub Disp配置数(ByVal row底_縦横 As clsDataRow)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp配置数 {0}", row底_縦横.ToString)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp配置数 {0}", row底_縦横.dump)
         With row底_縦横
             chk縦横側面を展開する.Checked = .Value("f_b展開区分")
             set底の縦横展開(.Value("f_b展開区分"))
@@ -422,6 +422,9 @@ Public Class frmMain
             nud最下段の目.Value = .Value("f_d最下段の目")
 
             chk斜め同数.Checked = .Value("f_b斜め同数区分")
+
+            chkクロスひも.Checked = .Value("f_bクロスひも区分")
+            chk高さの六つ目に反映.Checked = .Value("f_b高さ調整区分")
 
             Select Case .Value("f_iコマ上側の縦ひも")
                 Case enumコマ上側の縦ひも.i_左側
@@ -483,6 +486,8 @@ Public Class frmMain
             lbl120度本幅変更.Visible = .p_bひも本幅変更(AngleIndex._120deg)
             lbl側面ひも本幅変更.Visible = .p_b側面ひも本幅変更
             lblひも本幅変更.Visible = .p_bひも本幅変更(AngleIndex._0deg) OrElse .p_bひも本幅変更(AngleIndex._60deg) OrElse .p_bひも本幅変更(AngleIndex._120deg) OrElse .p_b側面ひも本幅変更
+
+            txt側面周比率対底.Text = .p_s側面周比率対底
 
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
@@ -560,6 +565,9 @@ Public Class frmMain
 
             .Value("f_s横ひものメモ") = txt横ひものメモ.Text
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
+
+            .Value("f_bクロスひも区分") = chkクロスひも.Checked
+            .Value("f_b高さ調整区分") = chk高さの六つ目に反映.Checked
 
             If rad左綾.Checked Then
                 .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
@@ -648,7 +656,7 @@ Public Class frmMain
 
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
-        Dim r As DialogResult
+        Dim r As DialogResult = DialogResult.Yes
         If _clsCalcHexagon.IsValidInput() Then '#22
             '目標寸法以外をリセットします。六つ目の高さもリセットしてよろしいですか？
             '(はいで全てリセット、いいえで六つ目の高さを保持)
@@ -661,12 +669,12 @@ Public Class frmMain
 
         _clsDataTables.Clear()
         _clsDataTables.SetInitialValue()
-        Save目標寸法(_clsDataTables.p_row目標寸法) '画面値
-        _clsDataTables.p_row底_縦横.Value("f_i長い横ひも") = nud基本のひも幅.Value
-        _clsDataTables.p_row底_縦横.Value("f_i短い横ひも") = nud基本のひも幅.Value
-        _clsDataTables.p_row底_縦横.Value("f_i縦ひも") = nud基本のひも幅.Value
+        Save目標寸法(_clsDataTables.p_row目標寸法) '画面値で上書き
         If r = DialogResult.No Then
             _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") = nud六つ目の高さ.Value
+        Else
+            _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") =
+                get幅from三角(_clsDataTables.p_row底_縦横.Value("f_dひも間のすき間"), nud基本のひも幅.Value)
         End If
 
         DispTables(_clsDataTables)
@@ -930,6 +938,8 @@ Public Class frmMain
 
         _clsDataTables.Clear()
         _clsDataTables.SetInitialValue()
+        '調整値
+        _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") = get幅from三角(_clsDataTables.p_row底_縦横.Value("f_dひも間のすき間"), g_clsSelectBasics.p_i本幅)
         DispTables(_clsDataTables)
 
         _sFilePath = Nothing
@@ -1098,7 +1108,7 @@ Public Class frmMain
         _TriangleChangeByCode = True
         If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
             txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
-            nud三角の中.Value = (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
+            nud三角の中.Value = get三角from幅(nud六つ目の高さ.Value, nud基本のひも幅.Value)
         Else
             txtひも幅比.Text = ""
             nud三角の中.Value = 0
@@ -1267,20 +1277,20 @@ Public Class frmMain
         txt目対角線_本幅分.Text = New Length(nud六つ目の高さ.Value / SIN60).ByLaneText
         If 0 < g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value) Then
             txtひも幅比.Text = (nud六つ目の高さ.Value / g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).ToString("F2")
-            nud三角の中.Value = get三角の中値()
+            nud三角の中.Value = get三角from幅(nud六つ目の高さ.Value, nud基本のひも幅.Value)
         Else
             txtひも幅比.Text = ""
             nud三角の中.Value = 0
             nud三角の中.ResetText()
         End If
-        _TriangleChangeByCode = True = False
+        _TriangleChangeByCode = False
 
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
 
-    Private Sub num三角の中_ValueChanged(sender As Object, e As EventArgs) Handles nud三角の中.ValueChanged
-        If Not _TriangleChangeByCode = True Then
-            nud六つ目の高さ.Value = (nud三角の中.Value + g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)) * 2
+    Private Sub nud三角の中_ValueChanged(sender As Object, e As EventArgs) Handles nud三角の中.ValueChanged
+        If Not _TriangleChangeByCode AndAlso Not _isLoadingData Then
+            nud六つ目の高さ.Value = get幅from三角(nud三角の中.Value, nud基本のひも幅.Value)
         End If
     End Sub
 
@@ -1306,6 +1316,14 @@ Public Class frmMain
                 _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
             End If
         End If
+    End Sub
+
+    Private Sub chkクロスひも_CheckedChanged(sender As Object, e As EventArgs) Handles chkクロスひも.CheckedChanged
+        recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+    End Sub
+
+    Private Sub chk高さの六つ目に反映_CheckedChanged(sender As Object, e As EventArgs) Handles chk高さの六つ目に反映.CheckedChanged
+        recalc(CalcCategory.Hex_Vert, sender)
     End Sub
 
 #End Region
@@ -1515,7 +1533,11 @@ Public Class frmMain
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._0deg, currow.f_iひも種) Then
-                chk横の補強ひも.Checked = False 'with recalc
+                If currow.f_iひも番号 = ciひも番号_クロス Then
+                    chkクロスひも.Checked = False 'with recalc
+                Else
+                    chk横の補強ひも.Checked = False 'with recalc
+                End If
                 Exit Sub
             ElseIf is_idxすき間(AngleIndex._0deg, currow.f_iひも種) Then
                 nud上端下端の目.Value = 0 'with recalc
@@ -1551,7 +1573,11 @@ Public Class frmMain
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._60deg, currow.f_iひも種) Then
-                chk斜めの補強ひも.Checked = False 'with recalc
+                If currow.f_iひも番号 = ciひも番号_クロス Then
+                    chkクロスひも.Checked = False 'with recalc
+                Else
+                    chk斜めの補強ひも.Checked = False 'with recalc
+                End If
                 Exit Sub
             ElseIf is_idxすき間(AngleIndex._60deg, currow.f_iひも種) Then
                 nud斜め左端右端の目.Value = 0 '共用・with recalc
@@ -1587,7 +1613,11 @@ Public Class frmMain
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._120deg, currow.f_iひも種) Then
-                chk斜めの補強ひも_120度.Checked = False 'with recalc
+                If currow.f_iひも番号 = ciひも番号_クロス Then
+                    chkクロスひも.Checked = False 'with recalc
+                Else
+                    chk斜めの補強ひも_120度.Checked = False 'with recalc
+                End If
                 Exit Sub
             ElseIf is_idxすき間(AngleIndex._120deg, currow.f_iひも種) Then
                 nud斜め左端右端の目.Value = 0 '共用・with recalc
@@ -1631,13 +1661,18 @@ Public Class frmMain
 
 #Region "ひも上下"
 
-    '三角の中の値
-    Public Function get三角の中値() As Double
-        Return (nud六つ目の高さ.Value / 2) - g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)
+    '三角の中の値←幅
+    Public Function get三角from幅(d六つ目の高さ As Double, iひも幅 As Integer) As Double
+        Return (d六つ目の高さ / 2) - g_clsSelectBasics.p_d指定本幅(iひも幅)
+    End Function
+
+    '幅←三角の中の値
+    Public Function get幅from三角(d三角の中 As Double, iひも幅 As Integer) As Double
+        Return (d三角の中 + g_clsSelectBasics.p_d指定本幅(iひも幅)) * 2
     End Function
 
     Sub Showひも上下()
-        grp綾方向.Enabled = (0 <= get三角の中値())
+        grp綾方向.Enabled = (0 <= nud三角の中.Value)
     End Sub
 
 #End Region

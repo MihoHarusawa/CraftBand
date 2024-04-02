@@ -591,7 +591,7 @@ Public Class frmMain
 
     'リセット
     Private Sub ToolStripMenuItemEditReset_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditReset.Click
-        Dim r As DialogResult
+        Dim r As DialogResult = DialogResult.Yes
         If _clsCalcSquare.IsValidInput() Then '#22
             '目標寸法以外をリセットします。目(ひも間のすき間)もリセットしてよろしいですか？
             '(はいで全てリセット、いいえで目(ひも間のすき間)を保持)
@@ -604,10 +604,7 @@ Public Class frmMain
 
         _clsDataTables.Clear()
         _clsDataTables.SetInitialValue()
-        Save目標寸法(_clsDataTables.p_row目標寸法) '画面値
-        _clsDataTables.p_row底_縦横.Value("f_i長い横ひも") = nud基本のひも幅.Value
-        _clsDataTables.p_row底_縦横.Value("f_i短い横ひも") = nud基本のひも幅.Value
-        _clsDataTables.p_row底_縦横.Value("f_i縦ひも") = nud基本のひも幅.Value
+        Save目標寸法(_clsDataTables.p_row目標寸法) '画面値で上書き
         If r = DialogResult.No Then
             _clsDataTables.p_row底_縦横.Value("f_dひも間のすき間") = nud目_ひも間のすき間.Value
         End If
