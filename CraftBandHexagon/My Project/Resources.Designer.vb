@@ -179,7 +179,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  長さを計算できないひもがあります。{0} {1} に類似しているローカライズされた文字列を検索します。
+        '''  長さを計算できないひもがあります-{0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcErrorBandLength() As String
             Get

@@ -666,6 +666,7 @@ Public Class frmMain
             End If
         End If
         Dim d目 As Double = nud六つ目の高さ.Value
+        ShowDefaultTabControlPage(enumReason._Always)
 
         _clsDataTables.Clear()
         _clsDataTables.SetInitialValue()
@@ -702,6 +703,7 @@ Public Class frmMain
             End If
         End If
         If _clsDataTables.Load(My.Settings.DefaultFilePath) Then
+            ShowDefaultTabControlPage(enumReason._Always)
             DispTables(_clsDataTables)
         Else
             MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -730,6 +732,7 @@ Public Class frmMain
         End If
 
         '実行する
+        ShowDefaultTabControlPage(enumReason._Always)
         If _clsCalcHexagon.CalcTarget() Then
             _isLoadingData = True
             '計算結果の縦横値

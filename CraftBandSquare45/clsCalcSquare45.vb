@@ -753,6 +753,7 @@ Class clsCalcSquare45
         End If
 
         Dim ret As Boolean = True
+        _Data.p_row底_縦横.Value("f_b展開区分") = False
         ret = ret And calc_Target_横()
         ret = ret And calc_Target_縦()
         ret = ret And calc_Target_高さ()

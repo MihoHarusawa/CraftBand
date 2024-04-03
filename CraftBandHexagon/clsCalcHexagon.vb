@@ -216,10 +216,19 @@ Class clsCalcHexagon
         End Get
     End Property
 
+    Shared ReadOnly Property p_d底の厚さ As Double
+        Get
+            Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        End Get
+    End Property
+
+
+
+    '計算結果の値
     ReadOnly Property p_d厚さ As Double
         Get
-            If _d縁の厚さ < g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ") Then
-                Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            If _d縁の厚さ < p_d底の厚さ Then
+                Return p_d底の厚さ
             Else
                 Return _d縁の厚さ
             End If
@@ -378,8 +387,7 @@ Class clsCalcHexagon
 
     Public ReadOnly Property p_d縁厚さプラス_高さ As Double
         Get
-            Return p_d六つ目ベース_高さ + _d縁の高さ +
-                g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            Return p_d六つ目ベース_高さ + _d縁の高さ + p_d底の厚さ
         End Get
     End Property
     Public ReadOnly Property p_s縁厚さプラス_高さ As String
@@ -823,6 +831,7 @@ Class clsCalcHexagon
         End If
 
         Dim ret As Boolean = True
+        _Data.p_row底_縦横.Value("f_b展開区分") = False
         ret = ret And calc_Target_横()
         ret = ret And calc_Target_斜め()
         ret = ret And calc_Target_高さ()
@@ -849,7 +858,7 @@ Class clsCalcHexagon
                 i六つ目数 += 1
             End If
         End If
-        i何番目 = Int(i六つ目数 / 2)
+        i何番目 = Int((i六つ目数 + 1) / 2)
         If i六つ目数 < 1 Then
             i六つ目数 = 1
             i何番目 = 1
@@ -881,7 +890,7 @@ Class clsCalcHexagon
                 i六つ目数 += 1
             End If
         End If
-        i何番目 = Int(i六つ目数 / 2)
+        i何番目 = Int((i六つ目数 + 1) / 2)
         If i六つ目数 < 1 Then
             i六つ目数 = 1
             i何番目 = 1
@@ -1016,7 +1025,7 @@ Class clsCalcHexagon
     End Function
 
     'cIdxHeight,cIdxSpaceレコード対象、高さと垂直ひも長の計算　※垂直ひも長は/SIN60
-    'IN:    p_d縁厚さプラス_周,_dひも長係数,_dひも長加算_側面,f_d底の厚さ,f_d連続ひも長
+    'IN:    p_d縁厚さプラス_周,_dひも長係数,_dひも長加算_側面,p_d底の厚さ,f_d連続ひも長
     'OUT:   各、f_d高さ,f_d垂直ひも長
     Private Function adjust_側面(ByVal row As tbl側面Row, ByVal dataPropertyName As String) As Boolean
         If Not String.IsNullOrEmpty(dataPropertyName) Then
@@ -1046,48 +1055,29 @@ Class clsCalcHexagon
             row.f_dひも長 = row.f_d周長 * _dひも長係数
             '「出力ひも長」
             row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
-            row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            row.f_d厚さ = p_d底の厚さ
         End If
         Return True
     End Function
 
-    '縁を含まない高さ(_d六角ベース_高さ計)を計算
+    'ひも幅の合計を計算(縁・端を含まない)
     'IN:    
-    'OUT:   _d六角ベース_高さ計,_b側面ひも本幅変更
+    'OUT:   _d側面ひも幅計,_b側面ひも本幅変更
     Private Function calc_側面計() As Boolean
 
         'i何本幅の合計
-        Dim i何本幅計 As Integer = 0
+        _d側面ひも幅計 = 0
+        _b側面ひも本幅変更 = False
 
         'スペース(f_i番号=cIdxSpace) 縁(f_i番号=cHemNumber)は対象外
         Dim cond As String = String.Format("f_i番号 = {0}", cIdxHeight)
-        Dim obj As Object = _Data.p_tbl側面.Compute("SUM(f_i何本幅)", cond)
-        If Not IsDBNull(obj) Then
-            i何本幅計 = CType(obj, Integer)
-        End If
-        If i何本幅計 = 0 Then
-            _d側面ひも幅計 = 0
-            _b側面ひも本幅変更 = False
-            Return True
-        End If
-
-        _d側面ひも幅計 = g_clsSelectBasics.p_d指定本幅(i何本幅計)
-
-        '幅が変更されているか
-        Dim iMax何本幅 As Integer = 0
-        obj = _Data.p_tbl側面.Compute("MAX(f_i何本幅)", cond)
-        If Not IsDBNull(obj) AndAlso 0 < obj Then
-            iMax何本幅 = obj
-        End If
-
-        Dim iMin何本幅 As Integer = 0
-        obj = _Data.p_tbl側面.Compute("MIN(f_i何本幅)", cond)
-        If Not IsDBNull(obj) AndAlso 0 < obj Then
-            iMin何本幅 = obj
-        End If
-
-        _b側面ひも本幅変更 = _I基本のひも幅 <> iMax何本幅 OrElse _I基本のひも幅 <> iMin何本幅
-
+        Dim rows() As tbl側面Row = _Data.p_tbl側面.Select(cond)
+        For Each row As tbl側面Row In rows
+            _d側面ひも幅計 += g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) * row.f_iひも本数
+            If _I基本のひも幅 <> row.f_i何本幅 Then
+                _b側面ひも本幅変更 = True
+            End If
+        Next
         Return True
     End Function
 

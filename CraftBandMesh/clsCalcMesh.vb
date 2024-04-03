@@ -815,12 +815,14 @@ Class clsCalcMesh
         Dim d基本のひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
 
         Dim ret As Boolean = True
+        '_Data.p_row底_縦横.Value("f_b展開区分") = False  幅変更不可のため保持
+
 
         If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
-            ret = ret And calc_Target_横(d基本のひも幅)
+            ret = ret And calc_Target_縦(d基本のひも幅)
         End If
         If Not isValid計算_縦 OrElse Not isNear(p_d内側_縦, _d縦_目標) Then
-            ret = ret And calc_Target_縦(d基本のひも幅)
+            ret = ret And calc_Target_横(d基本のひも幅)
         End If
         If Not isValid計算_高さ OrElse Not isNear(p_d内側_高さ, _d高さ_目標) Then
             ret = ret And calc_Target_高さ()

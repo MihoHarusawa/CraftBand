@@ -166,7 +166,7 @@
     <value>目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？</value>
   </data>
   <data name="CalcErrorBandLength" xml:space="preserve">
-    <value>長さを計算できないひもがあります。{0} {1}</value>
+    <value>長さを計算できないひもがあります-{0}</value>
   </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
     <value>{0}追加用の番号がとれません。</value>

@@ -847,7 +847,7 @@ Partial Class frmMain
         chk横の補強ひも.Size = New Size(111, 24)
         chk横の補強ひも.TabIndex = 10
         chk横の補強ひも.Text = "横の補強ひも"
-        ToolTip1.SetToolTip(chk横の補強ひも, "底の横ひものに貼るひもを置く場合はチェックON")
+        ToolTip1.SetToolTip(chk横の補強ひも, "底の横ひもの裏の端に貼るひもを置く場合はチェックON")
         chk横の補強ひも.UseVisualStyleBackColor = True
         ' 
         ' chk斜めの補強ひも
@@ -858,7 +858,7 @@ Partial Class frmMain
         chk斜めの補強ひも.Size = New Size(123, 24)
         chk斜めの補強ひも.TabIndex = 16
         chk斜めの補強ひも.Text = "斜めの補強ひも"
-        ToolTip1.SetToolTip(chk斜めの補強ひも, "底の斜め方向に貼るひもを置く場合はチェックON")
+        ToolTip1.SetToolTip(chk斜めの補強ひも, "底の斜め方向の裏の端に貼るひもを置く場合はチェックON")
         chk斜めの補強ひも.UseVisualStyleBackColor = True
         ' 
         ' nud上端下端の目
