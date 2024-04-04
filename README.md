@@ -22,8 +22,11 @@
 ひも幅や色を個別に変えたり、底や側面の交差の上下パターンを指定してプレビューすれば、模様をデザインできます。
 
 # CraftBandHexagon / CraftBandHexagon.exe
-六つ目を組み、ひもに沿って立ち上げるタイプのかごをデザインするアプリです。
-現在開発中。
+60度ごと3方向にひもを組み、ひもに沿って立ち上げるタイプのかごをデザインするアプリです。
+ひも幅・六つ目のサイズの他、六つ目の脇に作られる三角形のサイズから計算させることができます。
+側面の六つ目のサイズを立ち上げ位置に合わせて調整できます。
+六つ目の型紙を作るのに便利です。
+
 
 # CraftBand / CraftBand.dll
 xmlによるデータベース、編集用フォームなどの共通ライブラリです
@@ -61,13 +64,13 @@ With this series, you can easily create your own original recipes, and by saving
 
 # Current Binary Version
 
-Installer         1.7.5.0
-CraftBand.dll     1.7.5.0  
-CraftBandMesh     1.7.5.0
-CraftBandSqare45  1.4.5.0  
-CraftBandKnot     1.3.5.0
-CraftBandSquare   1.2.5.0
-CraftBandHexagon
+Installer         1.8.0.0
+CraftBand.dll     1.8.0.0 
+CraftBandMesh     1.8.0.0
+CraftBandSqare45  1.5.0.0  
+CraftBandKnot     1.4.0.0
+CraftBandSquare   1.3.0.0
+CraftBandHexagon  1.0.0.0
 
 # Usage
 
