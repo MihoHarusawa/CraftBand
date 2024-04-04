@@ -143,11 +143,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  中心の目の位置は、ひもの本数より小さくしてください。 に類似しているローカライズされた文字列を検索します。
+        '''  合わせ目の位置は、ひもの本数より小さくしてください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
-        Friend ReadOnly Property CalcBadCenterPosition() As String
+        Friend ReadOnly Property CalcBadMarkPosition() As String
             Get
-                Return ResourceManager.GetString("CalcBadCenterPosition", resourceCulture)
+                Return ResourceManager.GetString("CalcBadMarkPosition", resourceCulture)
             End Get
         End Property
         
@@ -184,6 +184,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcErrorBandLength() As String
             Get
                 Return ResourceManager.GetString("CalcErrorBandLength", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  合わせ目の位置は1以上にしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcMarkPositionPlus() As String
+            Get
+                Return ResourceManager.GetString("CalcMarkPositionPlus", resourceCulture)
             End Get
         End Property
         

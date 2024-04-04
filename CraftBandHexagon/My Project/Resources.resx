@@ -153,8 +153,8 @@
   <data name="CalcBadBottom" xml:space="preserve">
     <value>立ち上げ可能な底を作れません。</value>
   </data>
-  <data name="CalcBadCenterPosition" xml:space="preserve">
-    <value>中心の目の位置は、ひもの本数より小さくしてください。</value>
+  <data name="CalcBadMarkPosition" xml:space="preserve">
+    <value>合わせ目の位置は、ひもの本数より小さくしてください。</value>
   </data>
   <data name="CalcBadRecord" xml:space="preserve">
     <value>無効レコード(番号={0})</value>
@@ -167,6 +167,9 @@
   </data>
   <data name="CalcErrorBandLength" xml:space="preserve">
     <value>長さを計算できないひもがあります-{0}</value>
+  </data>
+  <data name="CalcMarkPositionPlus" xml:space="preserve">
+    <value>合わせ目の位置は1以上にしてください。</value>
   </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
     <value>{0}追加用の番号がとれません。</value>
