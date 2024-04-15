@@ -593,10 +593,10 @@ Partial Public Class clsCalcHexagon
             Dim pB As S実座標 = m_底の交点_EN + _parent.DeltaBandDirection * m_row縦横展開.f_dVal2
 
             'バンド描画位置
-            band.aバンド位置.Point(CBand.i_始点F) = pA + _parent.DeltaAxisDirection * (-m_dひも幅 / 2)
-            band.aバンド位置.Point(CBand.i_終点F) = pB + _parent.DeltaAxisDirection * (-m_dひも幅 / 2)
-            band.aバンド位置.Point(CBand.i_始点T) = pA + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
-            band.aバンド位置.Point(CBand.i_終点T) = pB + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
+            band.p始点F = pA + _parent.DeltaAxisDirection * (-m_dひも幅 / 2)
+            band.p終点F = pB + _parent.DeltaAxisDirection * (-m_dひも幅 / 2)
+            band.p始点T = pA + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
+            band.p終点T = pB + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
 
             '記号描画位置(現物合わせ)
             If _parent.BandAngleDegree = 120 Then
@@ -921,14 +921,14 @@ Partial Public Class clsCalcHexagon
                     Dim dバンド幅 As Double = g_clsSelectBasics.p_d指定本幅(r.f_i何本幅)
 
                     Dim band As New CBand(r)
-                    band.aバンド位置.Point(CBand.i_始点F) = line.p開始
-                    band.aバンド位置.Point(CBand.i_終点F) = line.p終了
-                    band.aバンド位置.Point(CBand.i_始点T) = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
-                    band.aバンド位置.Point(CBand.i_終点T) = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
-
+                    band.p始点F = line.p開始
+                    band.p終点F = line.p終了
+                    band.p始点T = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
+                    band.p終点T = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
+                    band.SetLengthRatio(r.f_d周長比率対底の周)
                     '文字は上側面(コード固定)
                     If hexidx = 3 Then
-                        band.p文字位置 = band.aバンド位置.Point(CBand.i_始点F)
+                        band.p文字位置 = band.p始点F
                     End If
                     band.is始点FT線 = False
                     band.is終点FT線 = False
@@ -946,17 +946,21 @@ Partial Public Class clsCalcHexagon
 
             Dim d高さ As Double = groupRow.GetNameValueSum("f_d高さ")
             Dim nひも本数 As Integer = groupRow.GetNameValueSum("f_iひも本数")
+            Dim d周長比率対底の周 As Double = groupRow.GetNameValueMax("f_d周長比率対底の周")
             If 0 < nひも本数 Then
 
-                Dim item As New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
-                item.m_a四隅.Point(CBand.i_始点F) = line.p開始
-                item.m_a四隅.Point(CBand.i_終点F) = line.p終了
-                item.m_a四隅.Point(CBand.i_始点T) = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * d高さ
-                item.m_a四隅.Point(CBand.i_終点T) = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * d高さ
+                Dim band As New CBand '一時値
+                band.p始点F = line.p開始
+                band.p終点F = line.p終了
+                band.p始点T = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * d高さ
+                band.p終点T = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * d高さ
+                band.SetLengthRatio(d周長比率対底の周)
 
+                Dim item As New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
+                item.m_a四隅 = band.aバンド位置
                 '文字は上側面(コード固定)
                 If hexidx = 3 Then
-                    item.p_p文字位置 = item.m_a四隅.Point(CBand.i_始点T) '領域処理を伴う
+                    item.p_p文字位置 = band.p始点F '領域処理を伴う
                 End If
 
                 imglist.AddItem(item)

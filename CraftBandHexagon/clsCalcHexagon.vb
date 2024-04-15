@@ -980,6 +980,7 @@ Class clsCalcHexagon
         If 0 < _i側面の編みひも数 Then
             '「編みひも+目」のセット
             Dim colprv As String = ""
+            Dim ratioprv As Double = 1
             For i As Integer = 1 To _i側面の編みひも数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -988,19 +989,23 @@ Class clsCalcHexagon
                         row.f_i番号 = cIdxHeight
                         row.f_iひも番号 = i
                         row.f_i何本幅 = _I基本のひも幅
+                        row.f_d周長比率対底の周 = 1
                         table.Rows.Add(row)
                     ElseIf i = 1 Then
                         colprv = row.f_s色
+                        ratioprv = row.f_d周長比率対底の周
                     End If
                     row.f_s編みかた名 = String.Format(My.Resources.FormCaption, "")
                     row.f_s編みひも名 = text側面の編みひも()
                     If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                         row.f_i周数 = 1
-                        If String.IsNullOrWhiteSpace(row.f_s色) Then
+                        If String.IsNullOrWhiteSpace(row.f_s色) Then '先のレコードがない時
                             row.f_s色 = colprv
+                            row.f_d周長比率対底の周 = ratioprv
                         Else
                             colprv = row.f_s色
+                            ratioprv = row.f_d周長比率対底の周
                         End If
                     Else
                         row.f_i何本幅 = _I基本のひも幅
@@ -1049,6 +1054,7 @@ Class clsCalcHexagon
             row.Setf_s色Null()
             row.Setf_i何本幅Null()
             row.Setf_dひも長加算Null()
+            row.Setf_d周長比率対底の周Null()
         Else
             If 0 < row.f_iひも本数 Then
                 '計算後の_側面周比率対底に基づく値
@@ -1059,7 +1065,7 @@ Class clsCalcHexagon
                 row.Setf_d高さNull()
                 row.Setf_d垂直ひも長Null()
             End If
-            row.f_d周長 = get側面の周長()
+            row.f_d周長 = get側面の周長() * row.f_d周長比率対底の周
             row.f_dひも長 = row.f_d周長 * _dひも長係数
             '「出力ひも長」
             row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
@@ -1162,6 +1168,7 @@ Class clsCalcHexagon
         add.f_i番号 = cIdxHeight
         add.f_iひも番号 = _i側面の編みひも数 + 1
         add.f_i何本幅 = _I基本のひも幅
+        add.f_d周長比率対底の周 = currow.f_d周長比率対底の周
         table.Rows.Add(add)
 
         currow = Nothing
@@ -1190,6 +1197,7 @@ Class clsCalcHexagon
             lastrow.f_i何本幅 = row.f_i何本幅
             lastrow.f_s色 = row.f_s色
             lastrow.f_dひも長加算 = row.f_dひも長加算
+            lastrow.f_d周長比率対底の周 = row.f_d周長比率対底の周
             lastrow.f_sメモ = row.f_sメモ
             If row.f_iひも番号 = bandnum Then
                 currow = row
@@ -1197,6 +1205,7 @@ Class clsCalcHexagon
                 row.f_s色 = ""
                 row.f_dひも長加算 = 0
                 row.f_sメモ = ""
+                'f_d周長比率対底の周は保持
                 Exit For
             End If
             lastrow = row
@@ -1243,6 +1252,7 @@ Class clsCalcHexagon
                 lastrow.f_i何本幅 = row.f_i何本幅
                 lastrow.f_s色 = row.f_s色
                 lastrow.f_dひも長加算 = row.f_dひも長加算
+                lastrow.f_d周長比率対底の周 = row.f_d周長比率対底の周
                 lastrow.f_sメモ = row.f_sメモ
             End If
             lastrow = row
@@ -1253,7 +1263,7 @@ Class clsCalcHexagon
 
 
     '更新処理が必要なフィールド名
-    Shared _fields側面と縁() As String = {"f_i何本幅", "f_s色", "f_dひも長加算"}
+    Shared _fields側面と縁() As String = {"f_i何本幅", "f_s色", "f_dひも長加算", "f_d周長比率対底の周"}
     Shared Function IsDataPropertyName側面と縁(ByVal name As String) As Boolean
         Return _fields側面と縁.Contains(name)
     End Function
@@ -1295,7 +1305,7 @@ Class clsCalcHexagon
         Return ret
     End Function
 
-    '縁の集計値計算
+    '縁の集計値計算(垂直方向)
     'IN:    
     'OUT:   _d縁の高さ  _d縁の垂直ひも長   _d縁の厚さ
     Private Function calc_縁計() As Boolean
@@ -1345,8 +1355,10 @@ Class clsCalcHexagon
     Private Function set_groupRow編みかた(ByVal groupRow As clsGroupDataRow) As Boolean
         '周数は一致項目
         Dim i周数 As Integer = groupRow.GetNameValue("f_i周数")
-        '周長は固定
-        groupRow.SetNameValue("f_d周長", get側面の周長())
+        '周長
+        For Each drow As clsDataRow In groupRow
+            drow.Value("f_d周長") = get側面の周長() * drow.Value("f_d周長比率対底の周")
+        Next
 
         'tbl編みかたRow
         Dim grpMst As clsGroupDataRow = g_clsMasterTables.GetPatternRecordGroup(groupRow.GetNameValue("f_s編みかた名"))

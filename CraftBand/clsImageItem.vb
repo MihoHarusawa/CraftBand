@@ -1079,10 +1079,10 @@ Public Class clsImageItem
     Class CBand
         '始点→終点 バンドの方向角
         'F→T　軸方向(幅方向)=バンドの方向角+90
-        Public Const i_始点F As Integer = 0
-        Public Const i_終点F As Integer = 1
-        Public Const i_終点T As Integer = 2
-        Public Const i_始点T As Integer = 3
+        Friend Const i_始点F As Integer = 0
+        Friend Const i_終点F As Integer = 1
+        Friend Const i_終点T As Integer = 2
+        Friend Const i_始点T As Integer = 3
 
         Public aバンド位置 As S四隅
         Public is始点FT線 As Boolean = True
@@ -1104,6 +1104,12 @@ Public Class clsImageItem
             _s記号 = ref._s記号
         End Sub
 
+        Sub New()
+            _i何本幅 = 1
+            _s色 = ""
+            _s記号 = ""
+        End Sub
+
         Sub New(ByVal row As tbl縦横展開Row)
             _i何本幅 = row.f_i何本幅
             _s色 = row.f_s色
@@ -1115,6 +1121,61 @@ Public Class clsImageItem
             _s色 = row.f_s色
             _s記号 = row.f_s記号
         End Sub
+
+        Property p始点F As S実座標
+            Get
+                Return aバンド位置.Point(i_始点F)
+            End Get
+            Set(value As S実座標)
+                aバンド位置.Point(i_始点F) = value
+            End Set
+        End Property
+
+        Property p終点F As S実座標
+            Get
+                Return aバンド位置.Point(i_終点F)
+            End Get
+            Set(value As S実座標)
+                aバンド位置.Point(i_終点F) = value
+            End Set
+        End Property
+
+        Property p始点T As S実座標
+            Get
+                Return aバンド位置.Point(i_始点T)
+            End Get
+            Set(value As S実座標)
+                aバンド位置.Point(i_始点T) = value
+            End Set
+        End Property
+
+        Property p終点T As S実座標
+            Get
+                Return aバンド位置.Point(i_終点T)
+            End Get
+            Set(value As S実座標)
+                aバンド位置.Point(i_終点T) = value
+            End Set
+        End Property
+
+        Function SetLengthRatio(ByVal ratio As Double) As Boolean
+            If ratio = 1 Then
+                Return True
+            End If
+            Dim p中点F As New S実座標((p始点F.X + p終点F.X) / 2, (p始点F.Y + p終点F.Y) / 2)
+            Dim delta始点F As S差分 = (New S差分(p中点F, p始点F)) * ratio
+            Dim delta終点F As S差分 = (New S差分(p中点F, p終点F)) * ratio
+            p始点F = p中点F + delta始点F
+            p終点F = p中点F + delta終点F
+
+            Dim p中点T As New S実座標((p始点T.X + p終点T.X) / 2, (p始点T.Y + p終点T.Y) / 2)
+            Dim delta始点T As S差分 = (New S差分(p中点T, p始点T)) * ratio
+            Dim delta終点T As S差分 = (New S差分(p中点T, p終点T)) * ratio
+            p始点T = p中点T + delta始点T
+            p終点T = p中点T + delta終点T
+
+            Return True
+        End Function
 
         Function Get描画領域() As S領域
             Dim r描画領域 As S領域 = aバンド位置.r外接領域
