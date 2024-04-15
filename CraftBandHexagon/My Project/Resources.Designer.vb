@@ -170,6 +170,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcBottomSpaceValue() As String
+            Get
+                Return ResourceManager.GetString("CalcBottomSpaceValue", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcConfirmRecalc() As String

@@ -162,6 +162,9 @@
   <data name="CalcBandCountAtLeast" xml:space="preserve">
     <value>六つ目を作るために、各ひも2本以上にしてください。</value>
   </data>
+  <data name="CalcBottomSpaceValue" xml:space="preserve">
+    <value>上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。</value>
+  </data>
   <data name="CalcConfirmRecalc" xml:space="preserve">
     <value>目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？</value>
   </data>

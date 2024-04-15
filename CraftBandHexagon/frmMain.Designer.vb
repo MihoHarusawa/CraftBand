@@ -35,6 +35,7 @@ Partial Class frmMain
         Dim DataGridViewCellStyle10 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         ToolTip1 = New ToolTip(components)
         nud基本のひも幅 = New NumericUpDown()
@@ -253,6 +254,7 @@ Partial Class frmMain
         f_s色2 = New DataGridViewComboBoxColumn()
         f_d高さ2 = New DataGridViewTextBoxColumn()
         f_d垂直ひも長2 = New DataGridViewTextBoxColumn()
+        Fd周長比率対底の周DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
         f_d周長2 = New DataGridViewTextBoxColumn()
         f_dひも長2 = New DataGridViewTextBoxColumn()
         f_dひも長加算2 = New DataGridViewTextBoxColumn()
@@ -1902,7 +1904,7 @@ Partial Class frmMain
         dgv側面.AutoGenerateColumns = False
         dgv側面.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, Fd周長比率対底の周DataGridViewTextBoxColumn, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
         dgv側面.DataSource = BindingSource側面
         dgv側面.Location = New Point(6, 36)
         dgv側面.Name = "dgv側面"
@@ -2158,11 +2160,11 @@ Partial Class frmMain
         ' 
         lbl計算寸法縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法縦.AutoSize = True
-        lbl計算寸法縦.Location = New Point(487, 701)
+        lbl計算寸法縦.Location = New Point(465, 701)
         lbl計算寸法縦.Name = "lbl計算寸法縦"
-        lbl計算寸法縦.Size = New Size(24, 20)
+        lbl計算寸法縦.Size = New Size(64, 20)
         lbl計算寸法縦.TabIndex = 43
-        lbl計算寸法縦.Text = "縦"
+        lbl計算寸法縦.Text = "縦(平行)"
         ' 
         ' lbl計算寸法高さ
         ' 
@@ -2188,21 +2190,21 @@ Partial Class frmMain
         ' 
         lbl計算寸法横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法横.AutoSize = True
-        lbl計算寸法横.Location = New Point(398, 701)
+        lbl計算寸法横.Location = New Point(382, 701)
         lbl計算寸法横.Name = "lbl計算寸法横"
-        lbl計算寸法横.Size = New Size(24, 20)
+        lbl計算寸法横.Size = New Size(64, 20)
         lbl計算寸法横.TabIndex = 40
-        lbl計算寸法横.Text = "横"
+        lbl計算寸法横.Text = "横(対角)"
         ' 
         ' lbl計算寸法の周
         ' 
         lbl計算寸法の周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法の周.AutoSize = True
-        lbl計算寸法の周.Location = New Point(659, 701)
+        lbl計算寸法の周.Location = New Point(630, 701)
         lbl計算寸法の周.Name = "lbl計算寸法の周"
-        lbl計算寸法の周.Size = New Size(24, 20)
+        lbl計算寸法の周.Size = New Size(79, 20)
         lbl計算寸法の周.TabIndex = 49
-        lbl計算寸法の周.Text = "周"
+        lbl計算寸法の周.Text = "周(六角形)"
         ' 
         ' OpenFileDialog1
         ' 
@@ -2499,13 +2501,25 @@ Partial Class frmMain
         f_d垂直ひも長2.ToolTipText = "高さ分のひも長、縁については折り返し分が含まれる"
         f_d垂直ひも長2.Width = 125
         ' 
+        ' Fd周長比率対底の周DataGridViewTextBoxColumn
+        ' 
+        Fd周長比率対底の周DataGridViewTextBoxColumn.DataPropertyName = "f_d周長比率対底の周"
+        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
+        Fd周長比率対底の周DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle8
+        Fd周長比率対底の周DataGridViewTextBoxColumn.HeaderText = "周長比率対底の周"
+        Fd周長比率対底の周DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fd周長比率対底の周DataGridViewTextBoxColumn.Name = "Fd周長比率対底の周DataGridViewTextBoxColumn"
+        Fd周長比率対底の周DataGridViewTextBoxColumn.SortMode = DataGridViewColumnSortMode.NotSortable
+        Fd周長比率対底の周DataGridViewTextBoxColumn.ToolTipText = "底の周長に対する比率"
+        Fd周長比率対底の周DataGridViewTextBoxColumn.Width = 125
+        ' 
         ' f_d周長2
         ' 
         f_d周長2.DataPropertyName = "f_d周長"
-        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle8.Format = "N2"
-        DataGridViewCellStyle8.NullValue = Nothing
-        f_d周長2.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle9.Format = "N2"
+        DataGridViewCellStyle9.NullValue = Nothing
+        f_d周長2.DefaultCellStyle = DataGridViewCellStyle9
         f_d周長2.HeaderText = "周長"
         f_d周長2.MinimumWidth = 6
         f_d周長2.Name = "f_d周長2"
@@ -2516,10 +2530,10 @@ Partial Class frmMain
         ' f_dひも長2
         ' 
         f_dひも長2.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle9.Format = "N2"
-        DataGridViewCellStyle9.NullValue = Nothing
-        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle10.Format = "N2"
+        DataGridViewCellStyle10.NullValue = Nothing
+        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle10
         f_dひも長2.HeaderText = "ひも長"
         f_dひも長2.MinimumWidth = 6
         f_dひも長2.Name = "f_dひも長2"
@@ -2531,8 +2545,8 @@ Partial Class frmMain
         ' f_dひも長加算2
         ' 
         f_dひも長加算2.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle11
         f_dひも長加算2.HeaderText = "ひも長加算"
         f_dひも長加算2.MinimumWidth = 6
         f_dひも長加算2.Name = "f_dひも長加算2"
@@ -2542,10 +2556,10 @@ Partial Class frmMain
         ' f_d連続ひも長2
         ' 
         f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
-        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle11.Format = "N2"
-        DataGridViewCellStyle11.NullValue = Nothing
-        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle12.Format = "N2"
+        DataGridViewCellStyle12.NullValue = Nothing
+        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle12
         f_d連続ひも長2.HeaderText = "出力ひも長"
         f_d連続ひも長2.MinimumWidth = 6
         f_d連続ひも長2.Name = "f_d連続ひも長2"
@@ -2556,8 +2570,8 @@ Partial Class frmMain
         ' f_d厚さ2
         ' 
         f_d厚さ2.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle13
         f_d厚さ2.HeaderText = "厚さ"
         f_d厚さ2.MinimumWidth = 6
         f_d厚さ2.Name = "f_d厚さ2"
@@ -2940,6 +2954,7 @@ Partial Class frmMain
     Friend WithEvents f_s色2 As DataGridViewComboBoxColumn
     Friend WithEvents f_d高さ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_d垂直ひも長2 As DataGridViewTextBoxColumn
+    Friend WithEvents Fd周長比率対底の周DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
     Friend WithEvents f_d周長2 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長2 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算2 As DataGridViewTextBoxColumn

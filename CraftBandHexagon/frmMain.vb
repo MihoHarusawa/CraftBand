@@ -396,14 +396,13 @@ Public Class frmMain
             chk縦横側面を展開する.Checked = .Value("f_b展開区分")
             set底の縦横展開(.Value("f_b展開区分"))
 
-            nud横ひもの本数.Value = .Value("f_i長い横ひもの本数")
-            nud斜めひも本数60度.Value = .Value("f_i斜め60度ひも本数")
-            nud斜めひも本数120度.Value = .Value("f_i斜め120度ひも本数")
-            nud編みひもの本数.Value = Int(.Value("f_d高さの四角数"))  'double
-            'nud高さの六つ目数.Value = nud編みひもの本数.Value
+            dispValidValueNud(nud横ひもの本数, .Value("f_i長い横ひもの本数"))
+            dispValidValueNud(nud斜めひも本数60度, .Value("f_i斜め60度ひも本数"))
+            dispValidValueNud(nud斜めひも本数120度, .Value("f_i斜め120度ひも本数"))
+            dispValidValueNud(nud編みひもの本数, Int(.Value("f_d高さの四角数")))  'double
 
-            nud上から何個目.Value = .Value("f_i上から何番目")
-            nud左から何個目.Value = .Value("f_i左から何番目")
+            dispValidValueNud(nud上から何個目, .Value("f_i上から何番目"))
+            dispValidValueNud(nud左から何個目, .Value("f_i左から何番目"))
 
             dispValidValueNud(nud六つ目の高さ, .Value("f_dひも間のすき間"))
             nudひも長係数.Value = .Value("f_dひも長係数")

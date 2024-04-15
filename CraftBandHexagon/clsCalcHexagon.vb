@@ -759,6 +759,13 @@ Class clsCalcHexagon
             p_sメッセージ = My.Resources.CalcSmallLengthRatio
             Return False
         End If
+        '#56
+        Dim d端の目 As Double = Min(_d端の目(cIdxAngle0), _d端の目(cIdxAngle60)) '60と120は同じ
+        If (_d最下段の目 + d端の目) < g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") Then
+            '上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。
+            p_sメッセージ = My.Resources.CalcBottomSpaceValue
+            Return False
+        End If
 
         Return True
     End Function
