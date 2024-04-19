@@ -403,6 +403,7 @@ Public Class frmMain
 
             dispValidValueNud(nud上から何個目, .Value("f_i上から何番目"))
             dispValidValueNud(nud左から何個目, .Value("f_i左から何番目"))
+            dispValidValueNud(nud左から何個目120, .Value("f_i左から何番目2"))
 
             dispValidValueNud(nud六つ目の高さ, .Value("f_dひも間のすき間"))
             nudひも長係数.Value = .Value("f_dひも長係数")
@@ -417,6 +418,7 @@ Public Class frmMain
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
             nud斜め左端右端の目.Value = .Value("f_d左端右端の目")
+            nud斜め左端右端の目120.Value = .Value("f_d左端右端の目2")
             nud上端下端の目.Value = .Value("f_d上端下端の目")
             nud最下段の目.Value = .Value("f_d最下段の目")
 
@@ -543,10 +545,14 @@ Public Class frmMain
                 .Value("f_b斜め同数区分") = True
                 .Value("f_i斜め120度ひも本数") = nud斜めひも本数60度.Value
                 .Value("f_b斜めの補強ひも2区分") = chk斜めの補強ひも.Checked
+                .Value("f_i左から何番目2") = nud左から何個目.Value
+                .Value("f_d左端右端の目2") = nud斜め左端右端の目.Value
             Else
                 .Value("f_b斜め同数区分") = False
                 .Value("f_i斜め120度ひも本数") = nud斜めひも本数120度.Value
                 .Value("f_b斜めの補強ひも2区分") = chk斜めの補強ひも_120度.Checked
+                .Value("f_i左から何番目2") = nud左から何個目120.Value
+                .Value("f_d左端右端の目2") = nud斜め左端右端の目120.Value
             End If
             .Value("f_b補強ひも区分") = chk横の補強ひも.Checked
 
@@ -1193,10 +1199,11 @@ Public Class frmMain
         End If
         If chk斜め同数.Checked Then
             nud斜めひも本数120度.Value = nud斜めひも本数60度.Value
+            nud左から何個目120.Value = nud左から何個目.Value
         End If
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
-    '中心位置
+    '合わせ目
     Private Sub nud左から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何個目.ValueChanged
         '斜めひも本数-1以下
         If nud斜めひも本数60度.Value - 1 <= nud左から何個目.Value Then
@@ -1206,13 +1213,8 @@ Public Class frmMain
                 nud左から何個目.Value = 0
             End If
         End If
-        If Not chk斜め同数.Checked AndAlso
-            nud斜めひも本数120度.Value - 1 <= nud左から何個目.Value Then
-            If 1 < nud斜めひも本数120度.Value Then
-                nud左から何個目.Value = nud斜めひも本数120度.Value - 1
-            Else
-                nud左から何個目.Value = 0
-            End If
+        If chk斜め同数.Checked Then
+            nud左から何個目120.Value = nud左から何個目.Value
         End If
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
@@ -1220,6 +1222,9 @@ Public Class frmMain
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
     Private Sub nud斜め左端右端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud斜め左端右端の目.ValueChanged
+        If chk斜め同数.Checked Then
+            nud斜め左端右端の目120.Value = nud斜め左端右端の目.Value
+        End If
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
 
@@ -1233,10 +1238,17 @@ Public Class frmMain
         lblchk60度.Visible = visible
         chk斜めの補強ひも_120度.Visible = visible
         expand斜め120度.AddDeleteButtonVisible(visible)
+        lbl六つ目60度.Visible = visible
+        nud左から何個目120.Visible = visible
+        lbl左合わせ目120_単位.Visible = visible
+        nud斜め左端右端の目120.Visible = visible
+        lbl六つ目120度.Visible = visible
+        lbl斜め左端右端120_単位.Visible = visible
 
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
 
+#Region "同数ではない時のみ"
     Private Sub nud斜めひも本数120度_ValueChanged(sender As Object, e As EventArgs) Handles nud斜めひも本数120度.ValueChanged
         '偶数推奨
         If nud斜めひも本数120度.Value Mod 2 = 0 Then
@@ -1244,20 +1256,31 @@ Public Class frmMain
         Else
             nud斜めひも本数120度.Increment = 1
         End If
-        If nud斜めひも本数120度.Value - 1 <= nud左から何個目.Value Then
-            If 1 < nud斜めひも本数120度.Value Then
-                nud左から何個目.Value = nud斜めひも本数120度.Value - 1
-            Else
-                nud左から何個目.Value = 0
-            End If
+        If 1 < nud斜めひも本数120度.Value Then
+            nud左から何個目120.Value = nud斜めひも本数120度.Value \ 2
+        Else
+            nud左から何個目120.Value = 0
         End If
-        recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+        If nud斜めひも本数120度.Visible Then
+            recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+        End If
     End Sub
 
     Private Sub chk斜めの補強ひも_120度_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも_120度.CheckedChanged
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
 
+    Private Sub nud左から何個目120_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何個目120.ValueChanged
+        If nud左から何個目120.Visible Then
+            recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+        End If
+    End Sub
+
+    Private Sub nud斜め左端右端の目120_ValueChanged(sender As Object, e As EventArgs) Handles nud斜め左端右端の目120.ValueChanged
+        recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+    End Sub
+
+#End Region
 
     '側面
     Private Sub nud編みひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud編みひもの本数.ValueChanged
@@ -1582,7 +1605,7 @@ Public Class frmMain
                 End If
                 Exit Sub
             ElseIf is_idxすき間(AngleIndex._60deg, currow.f_iひも種) Then
-                nud斜め左端右端の目.Value = 0 '共用・with recalc
+                nud斜め左端右端の目.Value = 0 'with recalc
                 Exit Sub
             End If
         End If
@@ -1622,7 +1645,7 @@ Public Class frmMain
                 End If
                 Exit Sub
             ElseIf is_idxすき間(AngleIndex._120deg, currow.f_iひも種) Then
-                nud斜め左端右端の目.Value = 0 '共用・with recalc
+                nud斜め左端右端の目120.Value = 0 'with recalc
                 Exit Sub
             End If
         End If
@@ -1765,7 +1788,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 
 #End Region
 

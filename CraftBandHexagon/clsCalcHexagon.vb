@@ -675,7 +675,7 @@ Class clsCalcHexagon
 
             _i何個目位置(cIdxAngle0) = .Value("f_i上から何番目")
             _i何個目位置(cIdxAngle60) = .Value("f_i左から何番目")
-            _i何個目位置(cIdxAngle120) = .Value("f_i左から何番目") '兼用
+            _i何個目位置(cIdxAngle120) = .Value("f_i左から何番目2")
 
             _i側面の編みひも数 = .Value("f_d高さの四角数")
 
@@ -693,7 +693,7 @@ Class clsCalcHexagon
 
             _d端の目(cIdxAngle0) = .Value("f_d上端下端の目")
             _d端の目(cIdxAngle60) = .Value("f_d左端右端の目")
-            _d端の目(cIdxAngle120) = .Value("f_d左端右端の目") '兼用
+            _d端の目(cIdxAngle120) = .Value("f_d左端右端の目2")
 
             _bクロスひも = .Value("f_bクロスひも区分")
             _b高さの六つ目に反映 = .Value("f_b高さ調整区分")
@@ -760,7 +760,8 @@ Class clsCalcHexagon
             Return False
         End If
         '#56
-        Dim d端の目 As Double = Min(_d端の目(cIdxAngle0), _d端の目(cIdxAngle60)) '60と120は同じ
+        Dim d端の目 As Double = Min(_d端の目(cIdxAngle0), _d端の目(cIdxAngle60))
+        d端の目 = Min(d端の目, _d端の目(cIdxAngle120))
         If (_d最下段の目 + d端の目) < g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") Then
             '上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。
             p_sメッセージ = My.Resources.CalcBottomSpaceValue
