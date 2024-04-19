@@ -1733,6 +1733,84 @@
     <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
     <f_s備考>このひもを置かないケース兼用</f_s備考>
   </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>縁ひもを置き2回巻き付けて差し込む</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>くるまれる編みひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>1</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>1</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>10</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>4</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>false</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>縁ひもを置き2回巻き付けて差し込む</f_s編みかた名>
+    <f_iひも番号>2</f_iひも番号>
+    <f_s編みひも名>外側の縁ひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>1</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>0</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>false</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>縁ひもを置き2回巻き付けて差し込む</f_s編みかた名>
+    <f_iひも番号>3</f_iひも番号>
+    <f_s編みひも名>内側の縁ひも</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>1</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>0</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_d厚さ>0</f_d厚さ>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>false</f_bCraftBandKnot>
+    <f_bCraftBandSquare>false</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl編みかた>
   <tblバンドの種類>
     <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
     <f_i本幅>12</f_i本幅>

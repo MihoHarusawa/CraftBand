@@ -2445,11 +2445,11 @@ Partial Class frmMain
         ' 
         lbl計算寸法縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法縦.AutoSize = True
-        lbl計算寸法縦.Location = New Point(465, 701)
+        lbl計算寸法縦.Location = New Point(462, 701)
         lbl計算寸法縦.Name = "lbl計算寸法縦"
         lbl計算寸法縦.Size = New Size(64, 20)
         lbl計算寸法縦.TabIndex = 43
-        lbl計算寸法縦.Text = "縦(平行)"
+        lbl計算寸法縦.Text = "縦(ひもに垂直)"
         ' 
         ' lbl計算寸法高さ
         ' 

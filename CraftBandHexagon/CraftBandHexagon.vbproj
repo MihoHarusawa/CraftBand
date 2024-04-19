@@ -14,6 +14,8 @@
     <Description>クラフトバンド・六つ目の計算</Description>
     <Copyright>Copyright © LaboHarusawa 2024</Copyright>
     <PackageIcon>IconHexagon.ico</PackageIcon>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
