@@ -30,6 +30,7 @@ Public Class clsDataTables
             Return _dstDataTables.Tables("tbl側面")
         End Get
     End Property
+    '"f_d周長比率対底の周" 定義ミスでstringになっています。使用注意。
 
     'tbl底_楕円
     Public ReadOnly Property p_tbl底_楕円 As tbl底_楕円DataTable

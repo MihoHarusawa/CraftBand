@@ -981,7 +981,6 @@ Class clsCalcHexagon
         If 0 < _i側面の編みひも数 Then
             '「編みひも+目」のセット
             Dim colprv As String = ""
-            Dim ratioprv As Double = 1
             For i As Integer = 1 To _i側面の編みひも数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -994,19 +993,16 @@ Class clsCalcHexagon
                         table.Rows.Add(row)
                     ElseIf i = 1 Then
                         colprv = row.f_s色
-                        ratioprv = row.f_d周長比率対底の周
                     End If
                     row.f_s編みかた名 = String.Format(My.Resources.FormCaption, "")
                     row.f_s編みひも名 = text側面の編みひも()
                     If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                         row.f_i周数 = 1
-                        If String.IsNullOrWhiteSpace(row.f_s色) Then '先のレコードがない時
+                        If String.IsNullOrWhiteSpace(row.f_s色) Then '先のレコードがない・色設定がない
                             row.f_s色 = colprv
-                            row.f_d周長比率対底の周 = ratioprv
                         Else
                             colprv = row.f_s色
-                            ratioprv = row.f_d周長比率対底の周
                         End If
                     Else
                         row.f_i何本幅 = _I基本のひも幅
@@ -1066,7 +1062,7 @@ Class clsCalcHexagon
                 row.Setf_d高さNull()
                 row.Setf_d垂直ひも長Null()
             End If
-            row.f_d周長 = get側面の周長() * row.f_d周長比率対底の周
+            row.f_d周長 = get側面の周長() * Val(row.f_d周長比率対底の周)
             row.f_dひも長 = row.f_d周長 * _dひも長係数
             '「出力ひも長」
             row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
@@ -1358,7 +1354,7 @@ Class clsCalcHexagon
         Dim i周数 As Integer = groupRow.GetNameValue("f_i周数")
         '周長
         For Each drow As clsDataRow In groupRow
-            drow.Value("f_d周長") = get側面の周長() * drow.Value("f_d周長比率対底の周")
+            drow.Value("f_d周長") = get側面の周長() * Val(drow.Value("f_d周長比率対底の周"))
         Next
 
         'tbl編みかたRow
