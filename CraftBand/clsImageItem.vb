@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Text
 Imports System.Windows.Forms
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
@@ -1194,6 +1195,7 @@ Public Class clsImageItem
         End Function
     End Class
 
+    'バンドのリスト(※位置合わせのためnothingを含む可能性があります)
     Class CBandList
         Inherits List(Of CBand)
 
@@ -1201,18 +1203,36 @@ Public Class clsImageItem
             If Me.Count = 0 Then
                 Return Nothing 'ゼロ
             End If
-            Dim r描画領域 As S領域 = Me(0).Get描画領域
-            For i As Integer = 1 To Count - 1
-                r描画領域 = r描画領域.get拡大領域(Me(i).Get描画領域)
+            Dim r描画領域 As New S領域
+            For Each band As CBand In Me
+                If band IsNot Nothing Then
+                    r描画領域 = r描画領域.get拡大領域(band.Get描画領域)
+                End If
             Next
             Return r描画領域
+        End Function
+
+        Function AddAt(ByVal band As CBand, ByVal idx As Integer) As Boolean
+            If Count < idx Then
+                Do While Count < idx
+                    Add(Nothing)
+                Loop
+            End If
+            If Count = idx Then
+                Add(band)
+            ElseIf idx < Count Then
+                Me(idx) = band
+            End If
+            Return True
         End Function
 
         Public Overrides Function ToString() As String
             Dim sb As New StringBuilder
             sb.AppendFormat("CBandList Count={0} ", Me.Count).AppendLine()
             For Each band As CBand In Me
-                sb.Append(band.ToString).AppendLine()
+                If band IsNot Nothing Then
+                    sb.Append(band.ToString).AppendLine()
+                End If
             Next
             Return sb.ToString
         End Function
@@ -1409,28 +1429,38 @@ Public Class clsImageItem
         m_ImageType = ImageTypeEnum._バンドセット
         m_Index = idx1
         m_Index2 = idx2
-        m_bandList = bandlist
+        If bandlist Is Nothing Then
+            m_bandList = New CBandList
+        Else
+            m_bandList = bandlist
+        End If
     End Sub
     Sub New(ByVal band As CBand, ByVal idx1 As Integer, ByVal idx2 As Integer)
         m_ImageType = ImageTypeEnum._バンドセット
         m_Index = idx1
         m_Index2 = idx2
         m_bandList = New CBandList
-        m_bandList.Add(band)
+        If band IsNot Nothing Then
+            m_bandList.Add(band)
+        End If
     End Sub
     Sub AddClip(ByVal bandlist As CBandList)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
             m_clipList = New CBandList
         End If
-        m_clipList.AddRange(bandlist)
+        If bandlist IsNot Nothing Then
+            m_clipList.AddRange(bandlist)
+        End If
     End Sub
     Sub AddClip(ByVal band As CBand)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
             m_clipList = New CBandList
         End If
-        m_clipList.Add(band)
+        If band IsNot Nothing Then
+            m_clipList.Add(band)
+        End If
     End Sub
 
 
@@ -1626,6 +1656,20 @@ Public Class clsImageItemList
     Sub AddItem(ByVal item As clsImageItem)
         If item IsNot Nothing Then
             MyBase.Add(item)
+        End If
+    End Sub
+
+    '位置を指定して追加
+    Sub AddItem(ByVal item As clsImageItem, ByVal ix As Integer)
+        If Count < ix Then
+            Do While Count < ix
+                MyBase.Add(Nothing)
+            Loop
+        End If
+        If Count = ix Then
+            MyBase.Add(item) 'nothingもあり
+        ElseIf ix < Count Then
+            Me(ix) = item
         End If
     End Sub
 

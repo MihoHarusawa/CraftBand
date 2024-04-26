@@ -1697,7 +1697,7 @@ Public Class frmMain
     End Function
 
     Sub Showひも上下()
-        grp綾方向.Enabled = (0 <= nud三角の中.Value)
+        'grp綾方向.Enabled = (0 <= nud三角の中.Value)
     End Sub
 
 #End Region
@@ -1715,18 +1715,35 @@ Public Class frmMain
             Return
         End If
 
-        Cursor.Current = Cursors.WaitCursor
-        _clsImageData = New clsImageData(_sFilePath)
-        ret = _clsCalcHexagon.CalcImage(_clsImageData)
-        Cursor.Current = Cursors.Default
+        CalcImageData()
+    End Sub
 
-        If Not ret Then
-            If Not String.IsNullOrWhiteSpace(_clsCalcHexagon.p_sメッセージ) Then
-                MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    Private Sub CalcImageData()
+        If ToolStripStatusLabel1.Text = "OK" Then
+
+            Dim checked(cAngleCount) As Boolean
+            checked(cIdxAngle0) = chk横ひも.Checked
+            checked(cIdxAngle60) = chk斜め60度.Checked
+            checked(cIdxAngle120) = chk斜め120度.Checked
+            checked(cAngleCount) = chk側面.Checked
+
+            Cursor.Current = Cursors.WaitCursor
+            _clsImageData = New clsImageData(_sFilePath)
+            Dim ret As Boolean = _clsCalcHexagon.CalcImage(_clsImageData, checked)
+            Cursor.Current = Cursors.Default
+
+            If Not ret Then
+                If Not String.IsNullOrWhiteSpace(_clsCalcHexagon.p_sメッセージ) Then
+                    MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                End If
+                Exit Sub
             End If
-            Exit Sub
+            picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
         End If
-        picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+    End Sub
+
+    Private Sub chkひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横ひも.CheckedChanged, chk斜め60度.CheckedChanged, chk斜め120度.CheckedChanged, chk側面.CheckedChanged
+        CalcImageData()
     End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)

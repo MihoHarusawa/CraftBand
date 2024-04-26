@@ -1036,6 +1036,7 @@ Class clsCalcHexagon
     'cIdxHeight,cIdxSpaceレコード対象、高さと垂直ひも長の計算　※垂直ひも長は/SIN60
     'IN:    get側面の六つ目の高さ(),get側面の周長(),_dひも長係数,_dひも長加算_側面,p_d底の厚さ
     'OUT:   各、f_d高さ,f_d垂直ひも長,f_dひも長,f_d連続ひも長,p_d底の厚さ
+    '※"f_d周長比率対底の周"はdoubleであるべきところミスでstringになっています
     Private Function adjust_側面(ByVal row As tbl側面Row, ByVal dataPropertyName As String) As Boolean
         If Not String.IsNullOrEmpty(dataPropertyName) Then
             'セル編集操作時

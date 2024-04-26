@@ -575,10 +575,14 @@ Public Class CImageDraw
 
     Function drawバンドセット(ByVal item As clsImageItem) As Boolean
 
-        'クリップ領域
-        Dim combinedPath As New GraphicsPath()
+        '描かない領域を反転するための新たな領域を作成
+        Dim invertedClip As New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
+
         If item.m_clipList IsNot Nothing AndAlso 0 < item.m_clipList.Count Then
             For Each clip As CBand In item.m_clipList
+                If clip Is Nothing Then
+                    Continue For
+                End If
                 Dim colset As CPenBrush = GetBandPenBrush(clip._s色)
                 If colset Is Nothing OrElse colset.IsNoDrawing Then
                     Continue For
@@ -588,18 +592,13 @@ Public Class CImageDraw
                 Dim path As New GraphicsPath()
                 path.AddPolygon(points)
 
-                combinedPath.AddPath(path, False)
+                '反転領域から除外する
+                invertedClip.Exclude(path)
             Next
         End If
 
-        If 0 < combinedPath.PointCount Then
-            ' クリップ領域を反転するための新たな領域を作成
-            Dim invertedClip As New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
-            invertedClip.Exclude(combinedPath)
-
-            ' クリップ領域を新たな領域に設定（反転）
-            _Graphic.Clip = invertedClip
-        End If
+        ' クリップ領域を新たな領域に設定
+        _Graphic.Clip = invertedClip
 
         'ひも描画
         Dim ret As Boolean = True
