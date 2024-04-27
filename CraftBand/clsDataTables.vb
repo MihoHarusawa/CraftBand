@@ -114,6 +114,12 @@ Public Class clsDataTables
         i_右側 = 2
     End Enum
 
+    Public Enum enum織りタイプ
+        i_巴_3すくみ = 0
+        i_鉄線_3軸織り = 1
+        i_本麻の葉編み = 2
+    End Enum
+
     'tbl縦横展開
     'カテゴリー出力順
     <Flags()>

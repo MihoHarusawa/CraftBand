@@ -426,6 +426,7 @@ Public Class frmMain
 
             chkクロスひも.Checked = .Value("f_bクロスひも区分")
             chk高さの六つ目に反映.Checked = .Value("f_b高さ調整区分")
+            chkひも中心合わせ.Checked = .Value("f_bひも中心区分")
 
             Select Case .Value("f_iコマ上側の縦ひも")
                 Case enumコマ上側の縦ひも.i_左側
@@ -435,6 +436,16 @@ Public Class frmMain
                 Case Else
                     radなし.Checked = True
             End Select
+
+            Select Case .Value("f_i織りタイプ")
+                Case enum織りタイプ.i_鉄線_3軸織り
+                    rad鉄線_3軸織り.Checked = True
+                Case enum織りタイプ.i_本麻の葉編み
+                    rad本麻の葉編み.Checked = True
+                Case Else
+                    rad巴_3すくみ.Checked = True
+            End Select
+
         End With
     End Sub
 
@@ -573,6 +584,7 @@ Public Class frmMain
 
             .Value("f_bクロスひも区分") = chkクロスひも.Checked
             .Value("f_b高さ調整区分") = chk高さの六つ目に反映.Checked
+            .Value("f_bひも中心区分") = chkひも中心合わせ.Checked
 
             If rad左綾.Checked Then
                 .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
@@ -581,6 +593,15 @@ Public Class frmMain
             Else
                 .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
             End If
+
+            If rad鉄線_3軸織り.Checked Then
+                .Value("f_i織りタイプ") = enum織りタイプ.i_鉄線_3軸織り
+            ElseIf rad本麻の葉編み.Checked Then
+                .Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉編み
+            Else
+                .Value("f_i織りタイプ") = enum織りタイプ.i_巴_3すくみ
+            End If
+
         End With
         Return True
     End Function
@@ -1128,6 +1149,12 @@ Public Class frmMain
         recalc(CalcCategory.Target_Band, sender)
     End Sub
 
+    Private Sub chkひも中心合わせ_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも中心合わせ.CheckedChanged
+        nud三角の中.Visible = Not chkひも中心合わせ.Checked
+        lbl三角の中.Visible = Not chkひも中心合わせ.Checked
+        recalc(CalcCategory.Hex_0_60_120_Gap, sender)
+    End Sub
+
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
         ShowDefaultTabControlPage(enumReason._Preview)
     End Sub
@@ -1164,16 +1191,18 @@ Public Class frmMain
         End If
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
+
     '合わせる位置
     Private Sub nud上から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何個目.ValueChanged
-        '横ひもの本数-1以下
-        If nud横ひもの本数.Value - 1 <= nud上から何個目.Value Then
+        '横ひもの本数以下
+        If nud横ひもの本数.Value < nud上から何個目.Value Then
             If 1 < nud横ひもの本数.Value Then
-                nud上から何個目.Value = nud横ひもの本数.Value - 1
+                nud上から何個目.Value = nud横ひもの本数.Value - 1 'デフォルトは目
             Else
                 nud上から何個目.Value = 0
             End If
         End If
+        '目で合わせる場合は、横ひもの本数-1をチェックします
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
     Private Sub nud上端下端の目_ValueChanged(sender As Object, e As EventArgs) Handles nud上端下端の目.ValueChanged
@@ -1206,9 +1235,9 @@ Public Class frmMain
     '合わせ目
     Private Sub nud左から何個目_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何個目.ValueChanged
         '斜めひも本数-1以下
-        If nud斜めひも本数60度.Value - 1 <= nud左から何個目.Value Then
+        If nud斜めひも本数60度.Value < nud左から何個目.Value Then
             If 1 < nud斜めひも本数60度.Value Then
-                nud左から何個目.Value = nud斜めひも本数60度.Value - 1
+                nud左から何個目.Value = nud斜めひも本数60度.Value - 1 'デフォルトは目
             Else
                 nud左から何個目.Value = 0
             End If
@@ -1216,6 +1245,7 @@ Public Class frmMain
         If chk斜め同数.Checked Then
             nud左から何個目120.Value = nud左から何個目.Value
         End If
+        '目で合わせる場合は、斜めひも本数-1をチェックします
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
     Private Sub chk斜めの補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも.CheckedChanged
@@ -1271,6 +1301,13 @@ Public Class frmMain
     End Sub
 
     Private Sub nud左から何個目120_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何個目120.ValueChanged
+        If nud斜めひも本数120度.Value < nud左から何個目120.Value Then
+            If 1 < nud斜めひも本数120度.Value Then
+                nud左から何個目120.Value = nud斜めひも本数120度.Value - 1 'デフォルトは目
+            Else
+                nud左から何個目120.Value = 0
+            End If
+        End If
         If nud左から何個目120.Visible Then
             recalc(CalcCategory.Hex_0_60_120_Gap, sender)
         End If
@@ -1329,18 +1366,6 @@ Public Class frmMain
 
     Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
         recalc(CalcCategory.Hex_Vert, sender)
-    End Sub
-
-    Private Sub rad綾の方向_CheckedChanged(sender As Object, e As EventArgs) Handles rad左綾.CheckedChanged, rad右綾.CheckedChanged, radなし.CheckedChanged
-        If Not _isLoadingData Then
-            If rad左綾.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
-            ElseIf rad右綾.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側
-            Else
-                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
-            End If
-        End If
     End Sub
 
     Private Sub chkクロスひも_CheckedChanged(sender As Object, e As EventArgs) Handles chkクロスひも.CheckedChanged
@@ -1685,7 +1710,6 @@ Public Class frmMain
 #End Region
 
 #Region "ひも上下"
-
     '三角の中の値←幅
     Public Function get三角from幅(d六つ目の高さ As Double, iひも幅 As Integer) As Double
         Return (d六つ目の高さ / 2) - g_clsSelectBasics.p_d指定本幅(iひも幅)
@@ -1697,7 +1721,32 @@ Public Class frmMain
     End Function
 
     Sub Showひも上下()
-        'grp綾方向.Enabled = (0 <= nud三角の中.Value)
+        lb巴_3すくみ.Visible = (nud三角の中.Value < 0)
+    End Sub
+
+    Private Sub rad綾の方向_CheckedChanged(sender As Object, e As EventArgs) Handles rad左綾.CheckedChanged, rad右綾.CheckedChanged, radなし.CheckedChanged
+        If Not _isLoadingData Then
+            If rad左綾.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側
+            ElseIf rad右綾.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側
+            Else
+                _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
+            End If
+        End If
+        grp織りタイプ.Enabled = (rad左綾.Checked OrElse rad右綾.Checked)
+    End Sub
+
+    Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad本麻の葉編み.CheckedChanged, rad鉄線_3軸織り.CheckedChanged
+        If Not _isLoadingData Then
+            If rad鉄線_3軸織り.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_鉄線_3軸織り
+            ElseIf rad本麻の葉編み.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉編み
+            Else
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_巴_3すくみ
+            End If
+        End If
     End Sub
 
 #End Region
@@ -1805,6 +1854,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 #End Region
 

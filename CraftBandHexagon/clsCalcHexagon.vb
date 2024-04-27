@@ -128,6 +128,7 @@ Class clsCalcHexagon
 
     Private Property _bクロスひも As Boolean
     Private Property _b高さの六つ目に反映 As Boolean
+    Private Property _bひも中心合わせ As Boolean
 
     Private Property _b縦横側面を展開する As Boolean
 
@@ -185,6 +186,7 @@ Class clsCalcHexagon
 
         _bクロスひも = False
         _b高さの六つ目に反映 = False
+        _bひも中心合わせ = False
 
         _b縦横側面を展開する = False
         _b側面ひも本幅変更 = False
@@ -697,6 +699,7 @@ Class clsCalcHexagon
 
             _bクロスひも = .Value("f_bクロスひも区分")
             _b高さの六つ目に反映 = .Value("f_b高さ調整区分")
+            _bひも中心合わせ = .Value("f_bひも中心区分")
         End With
 
         Return IsValidInput()
@@ -738,10 +741,18 @@ Class clsCalcHexagon
                 '合わせ目の位置は1以上にしてください。
                 p_sメッセージ = My.Resources.CalcMarkPositionPlus
                 Return False
-            ElseIf _iひもの本数(idx) <= _i何個目位置(idx) Then '六つ目数=本数-1
+            ElseIf _iひもの本数(idx) < _i何個目位置(idx) Then '本数以下
                 '合わせ目の位置は、ひもの本数より小さくしてください。
                 p_sメッセージ = My.Resources.CalcBadMarkPosition
                 Return False
+            End If
+
+            If Not _bひも中心合わせ Then
+                If _iひもの本数(idx) <= _i何個目位置(idx) Then '六つ目数=本数-1
+                    '合わせ目の位置は、ひもの本数より小さくしてください。
+                    p_sメッセージ = My.Resources.CalcBadMarkPosition
+                    Return False
+                End If
             End If
         Next
         If _i側面の編みひも数 < 0 Then

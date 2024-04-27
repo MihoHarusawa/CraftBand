@@ -1441,7 +1441,7 @@ Public Class clsImageItem
         m_Index2 = idx2
         m_bandList = New CBandList
         If band IsNot Nothing Then
-            m_bandList.Add(band)
+            m_bandList.Add(band) '有効なバンドのみ
         End If
     End Sub
     Sub AddClip(ByVal bandlist As CBandList)
@@ -1460,6 +1460,15 @@ Public Class clsImageItem
         End If
         If band IsNot Nothing Then
             m_clipList.Add(band)
+        End If
+    End Sub
+    Sub AddClip(ByVal item As clsImageItem)
+        'm_ImageType = ImageTypeEnum._バンドセット の想定
+        If m_clipList Is Nothing Then
+            m_clipList = New CBandList
+        End If
+        If item IsNot Nothing AndAlso item.m_bandList IsNot Nothing Then
+            m_clipList.AddRange(item.m_bandList)
         End If
     End Sub
 

@@ -127,6 +127,14 @@ Partial Class frmMain
         chk高さの六つ目に反映 = New CheckBox()
         nud斜め左端右端の目120 = New NumericUpDown()
         nud左から何個目120 = New NumericUpDown()
+        chk側面 = New CheckBox()
+        chk斜め120度 = New CheckBox()
+        chk斜め60度 = New CheckBox()
+        chk横ひも = New CheckBox()
+        chkひも中心合わせ = New CheckBox()
+        rad鉄線_3軸織り = New RadioButton()
+        rad巴_3すくみ = New RadioButton()
+        rad本麻の葉編み = New RadioButton()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -223,8 +231,9 @@ Partial Class frmMain
         tpage差しひも = New TabPage()
         editInsertBand = New CraftBand.ctrInsertBand()
         tpageひも上下 = New TabPage()
+        grp織りタイプ = New GroupBox()
         grp綾方向 = New GroupBox()
-        Label1 = New Label()
+        lb巴_3すくみ = New Label()
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
@@ -232,10 +241,6 @@ Partial Class frmMain
         lblタイトル = New Label()
         lblメモ = New Label()
         tpageプレビュー = New TabPage()
-        chk側面 = New CheckBox()
-        chk斜め120度 = New CheckBox()
-        chk斜め60度 = New CheckBox()
-        chk横ひも = New CheckBox()
         picプレビュー = New PictureBox()
         tpage斜め120度 = New TabPage()
         expand斜め120度 = New CraftBand.ctrExpanding()
@@ -304,6 +309,7 @@ Partial Class frmMain
         CType(BindingSource側面, ComponentModel.ISupportInitialize).BeginInit()
         tpage差しひも.SuspendLayout()
         tpageひも上下.SuspendLayout()
+        grp織りタイプ.SuspendLayout()
         grp綾方向.SuspendLayout()
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
@@ -1292,6 +1298,109 @@ Partial Class frmMain
         ToolTip1.SetToolTip(nud左から何個目120, "横ひもと合わせる目の位置")
         nud左から何個目120.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
+        ' chk側面
+        ' 
+        chk側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk側面.AutoSize = True
+        chk側面.Checked = True
+        chk側面.CheckState = CheckState.Checked
+        chk側面.Location = New Point(286, 411)
+        chk側面.Name = "chk側面"
+        chk側面.Size = New Size(61, 24)
+        chk側面.TabIndex = 3
+        chk側面.Text = "側面"
+        ToolTip1.SetToolTip(chk側面, "チェックオフにすると非表示になります")
+        chk側面.UseVisualStyleBackColor = True
+        ' 
+        ' chk斜め120度
+        ' 
+        chk斜め120度.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk斜め120度.AutoSize = True
+        chk斜め120度.Checked = True
+        chk斜め120度.CheckState = CheckState.Checked
+        chk斜め120度.Location = New Point(183, 411)
+        chk斜め120度.Name = "chk斜め120度"
+        chk斜め120度.Size = New Size(97, 24)
+        chk斜め120度.TabIndex = 2
+        chk斜め120度.Text = "斜め120度"
+        ToolTip1.SetToolTip(chk斜め120度, "チェックオフにすると非表示になります")
+        chk斜め120度.UseVisualStyleBackColor = True
+        ' 
+        ' chk斜め60度
+        ' 
+        chk斜め60度.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk斜め60度.AutoSize = True
+        chk斜め60度.Checked = True
+        chk斜め60度.CheckState = CheckState.Checked
+        chk斜め60度.Location = New Point(88, 411)
+        chk斜め60度.Name = "chk斜め60度"
+        chk斜め60度.Size = New Size(89, 24)
+        chk斜め60度.TabIndex = 1
+        chk斜め60度.Text = "斜め60度"
+        ToolTip1.SetToolTip(chk斜め60度, "チェックオフにすると非表示になります")
+        chk斜め60度.UseVisualStyleBackColor = True
+        ' 
+        ' chk横ひも
+        ' 
+        chk横ひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk横ひも.AutoSize = True
+        chk横ひも.Checked = True
+        chk横ひも.CheckState = CheckState.Checked
+        chk横ひも.Location = New Point(13, 411)
+        chk横ひも.Name = "chk横ひも"
+        chk横ひも.Size = New Size(69, 24)
+        chk横ひも.TabIndex = 0
+        chk横ひも.Text = "横ひも"
+        ToolTip1.SetToolTip(chk横ひも, "チェックオフにすると非表示になります")
+        chk横ひも.UseVisualStyleBackColor = True
+        ' 
+        ' chkひも中心合わせ
+        ' 
+        chkひも中心合わせ.AutoSize = True
+        chkひも中心合わせ.Location = New Point(735, 176)
+        chkひも中心合わせ.Name = "chkひも中心合わせ"
+        chkひも中心合わせ.Size = New Size(125, 24)
+        chkひも中心合わせ.TabIndex = 34
+        chkひも中心合わせ.Text = "ひも中心合わせ"
+        ToolTip1.SetToolTip(chkひも中心合わせ, "ひも間のすき間ではなく、ひもの中心を重ねる時にON")
+        chkひも中心合わせ.UseVisualStyleBackColor = True
+        ' 
+        ' rad鉄線_3軸織り
+        ' 
+        rad鉄線_3軸織り.AutoSize = True
+        rad鉄線_3軸織り.Location = New Point(41, 76)
+        rad鉄線_3軸織り.Name = "rad鉄線_3軸織り"
+        rad鉄線_3軸織り.Size = New Size(118, 24)
+        rad鉄線_3軸織り.TabIndex = 1
+        rad鉄線_3軸織り.TabStop = True
+        rad鉄線_3軸織り.Text = "鉄線(3軸織り)"
+        ToolTip1.SetToolTip(rad鉄線_3軸織り, "3軸織りの図を作ります")
+        rad鉄線_3軸織り.UseVisualStyleBackColor = True
+        ' 
+        ' rad巴_3すくみ
+        ' 
+        rad巴_3すくみ.AutoSize = True
+        rad巴_3すくみ.Location = New Point(41, 35)
+        rad巴_3すくみ.Name = "rad巴_3すくみ"
+        rad巴_3すくみ.Size = New Size(97, 24)
+        rad巴_3すくみ.TabIndex = 0
+        rad巴_3すくみ.TabStop = True
+        rad巴_3すくみ.Text = "巴(3すくみ)"
+        ToolTip1.SetToolTip(rad巴_3すくみ, "3すくみの図を作ります")
+        rad巴_3すくみ.UseVisualStyleBackColor = True
+        ' 
+        ' rad本麻の葉編み
+        ' 
+        rad本麻の葉編み.AutoSize = True
+        rad本麻の葉編み.Location = New Point(41, 117)
+        rad本麻の葉編み.Name = "rad本麻の葉編み"
+        rad本麻の葉編み.Size = New Size(115, 24)
+        rad本麻の葉編み.TabIndex = 2
+        rad本麻の葉編み.TabStop = True
+        rad本麻の葉編み.Text = "本麻の葉編み"
+        ToolTip1.SetToolTip(rad本麻の葉編み, "本麻の葉編みの図を作ります")
+        rad本麻の葉編み.UseVisualStyleBackColor = True
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1546,6 +1655,7 @@ Partial Class frmMain
         ' 
         ' tpage配置数
         ' 
+        tpage配置数.Controls.Add(chkひも中心合わせ)
         tpage配置数.Controls.Add(chk高さの六つ目に反映)
         tpage配置数.Controls.Add(lbl側面周比率対底)
         tpage配置数.Controls.Add(txt側面周比率対底)
@@ -2230,8 +2340,9 @@ Partial Class frmMain
         ' 
         ' tpageひも上下
         ' 
+        tpageひも上下.Controls.Add(grp織りタイプ)
         tpageひも上下.Controls.Add(grp綾方向)
-        tpageひも上下.Controls.Add(Label1)
+        tpageひも上下.Controls.Add(lb巴_3すくみ)
         tpageひも上下.Location = New Point(4, 29)
         tpageひも上下.Name = "tpageひも上下"
         tpageひも上下.Padding = New Padding(3)
@@ -2240,26 +2351,38 @@ Partial Class frmMain
         tpageひも上下.Text = "ひも上下"
         tpageひも上下.UseVisualStyleBackColor = True
         ' 
+        ' grp織りタイプ
+        ' 
+        grp織りタイプ.Controls.Add(rad本麻の葉編み)
+        grp織りタイプ.Controls.Add(rad鉄線_3軸織り)
+        grp織りタイプ.Controls.Add(rad巴_3すくみ)
+        grp織りタイプ.Location = New Point(34, 134)
+        grp織りタイプ.Name = "grp織りタイプ"
+        grp織りタイプ.Size = New Size(292, 168)
+        grp織りタイプ.TabIndex = 1
+        grp織りタイプ.TabStop = False
+        grp織りタイプ.Text = "織りタイプ"
+        ' 
         ' grp綾方向
         ' 
         grp綾方向.Controls.Add(radなし)
         grp綾方向.Controls.Add(rad右綾)
         grp綾方向.Controls.Add(rad左綾)
-        grp綾方向.Location = New Point(84, 67)
+        grp綾方向.Location = New Point(34, 31)
         grp綾方向.Name = "grp綾方向"
         grp綾方向.Size = New Size(292, 75)
-        grp綾方向.TabIndex = 1
+        grp綾方向.TabIndex = 0
         grp綾方向.TabStop = False
         grp綾方向.Text = "綾方向"
         ' 
-        ' Label1
+        ' lb巴_3すくみ
         ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(37, 28)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(314, 20)
-        Label1.TabIndex = 0
-        Label1.Text = "六つ目の脇に三角が作られる場合のみ指定できます"
+        lb巴_3すくみ.AutoSize = True
+        lb巴_3すくみ.Location = New Point(34, 317)
+        lb巴_3すくみ.Name = "lb巴_3すくみ"
+        lb巴_3すくみ.Size = New Size(398, 20)
+        lb巴_3すくみ.TabIndex = 2
+        lb巴_3すくみ.Text = "巴(3すくみ)は「三角の中」の値がゼロ以上の場合のみ描画できます"
         ' 
         ' tpage追加品
         ' 
@@ -2341,62 +2464,6 @@ Partial Class frmMain
         tpageプレビュー.TabIndex = 7
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
-        ' 
-        ' chk側面
-        ' 
-        chk側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk側面.AutoSize = True
-        chk側面.Checked = True
-        chk側面.CheckState = CheckState.Checked
-        chk側面.Location = New Point(286, 411)
-        chk側面.Name = "chk側面"
-        chk側面.Size = New Size(61, 24)
-        chk側面.TabIndex = 3
-        chk側面.Text = "側面"
-        ToolTip1.SetToolTip(chk側面, "チェックオフにすると非表示になります")
-        chk側面.UseVisualStyleBackColor = True
-        ' 
-        ' chk斜め120度
-        ' 
-        chk斜め120度.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk斜め120度.AutoSize = True
-        chk斜め120度.Checked = True
-        chk斜め120度.CheckState = CheckState.Checked
-        chk斜め120度.Location = New Point(183, 411)
-        chk斜め120度.Name = "chk斜め120度"
-        chk斜め120度.Size = New Size(97, 24)
-        chk斜め120度.TabIndex = 2
-        chk斜め120度.Text = "斜め120度"
-        ToolTip1.SetToolTip(chk斜め120度, "チェックオフにすると非表示になります")
-        chk斜め120度.UseVisualStyleBackColor = True
-        ' 
-        ' chk斜め60度
-        ' 
-        chk斜め60度.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk斜め60度.AutoSize = True
-        chk斜め60度.Checked = True
-        chk斜め60度.CheckState = CheckState.Checked
-        chk斜め60度.Location = New Point(88, 411)
-        chk斜め60度.Name = "chk斜め60度"
-        chk斜め60度.Size = New Size(89, 24)
-        chk斜め60度.TabIndex = 1
-        chk斜め60度.Text = "斜め60度"
-        ToolTip1.SetToolTip(chk斜め60度, "チェックオフにすると非表示になります")
-        chk斜め60度.UseVisualStyleBackColor = True
-        ' 
-        ' chk横ひも
-        ' 
-        chk横ひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk横ひも.AutoSize = True
-        chk横ひも.Checked = True
-        chk横ひも.CheckState = CheckState.Checked
-        chk横ひも.Location = New Point(13, 411)
-        chk横ひも.Name = "chk横ひも"
-        chk横ひも.Size = New Size(69, 24)
-        chk横ひも.TabIndex = 0
-        chk横ひも.Text = "横ひも"
-        ToolTip1.SetToolTip(chk横ひも, "チェックオフにすると非表示になります")
-        chk横ひも.UseVisualStyleBackColor = True
         ' 
         ' picプレビュー
         ' 
@@ -2843,6 +2910,8 @@ Partial Class frmMain
         tpage差しひも.ResumeLayout(False)
         tpageひも上下.ResumeLayout(False)
         tpageひも上下.PerformLayout()
+        grp織りタイプ.ResumeLayout(False)
+        grp織りタイプ.PerformLayout()
         grp綾方向.ResumeLayout(False)
         grp綾方向.PerformLayout()
         tpage追加品.ResumeLayout(False)
@@ -3067,7 +3136,7 @@ Partial Class frmMain
     Friend WithEvents grp綾方向 As GroupBox
     Friend WithEvents rad右綾 As RadioButton
     Friend WithEvents rad左綾 As RadioButton
-    Friend WithEvents Label1 As Label
+    Friend WithEvents lb巴_3すくみ As Label
     Friend WithEvents radなし As RadioButton
     Friend WithEvents chkクロスひも As CheckBox
     Friend WithEvents lbl側面周比率対底 As Label
@@ -3102,4 +3171,9 @@ Partial Class frmMain
     Friend WithEvents chk斜め60度 As CheckBox
     Friend WithEvents chk横ひも As CheckBox
     Friend WithEvents chk側面 As CheckBox
+    Friend WithEvents chkひも中心合わせ As CheckBox
+    Friend WithEvents grp織りタイプ As GroupBox
+    Friend WithEvents rad鉄線_3軸織り As RadioButton
+    Friend WithEvents rad巴_3すくみ As RadioButton
+    Friend WithEvents rad本麻の葉編み As RadioButton
 End Class
