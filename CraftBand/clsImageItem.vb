@@ -78,6 +78,19 @@ Public Class clsImageItem
             End Get
         End Property
 
+        '近傍にある
+        Function Near(ByVal other As S実座標, Optional ByVal distance As Double = 0) As Boolean
+            If NearlyEqual(X, other.X) AndAlso NearlyEqual(Y, other.Y) Then
+                Return True
+            End If
+            If 0 < distance Then
+                Dim delta As New S差分(other, Me)
+                Return (delta.Length <= distance)
+            Else
+                Return False
+            End If
+        End Function
+
         '左右反転
         Function VertLeft() As S実座標
             Return New S実座標(-X, Y)

@@ -21,6 +21,9 @@ Class clsCalcHexagon
     Friend Const cIdxAngle0 As Integer = 0
     Friend Const cIdxAngle60 As Integer = 1
     Friend Const cIdxAngle120 As Integer = 2
+    Shared Function IdxNext(ByVal idx As Integer) As Integer
+        Return (idx + 1) Mod 3
+    End Function
 
     Shared Function idx(ByVal aidx As AngleIndex) As Integer
         Return CType(aidx, Integer) / 60

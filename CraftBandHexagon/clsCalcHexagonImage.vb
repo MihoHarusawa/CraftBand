@@ -556,6 +556,12 @@ Partial Public Class clsCalcHexagon
                 Return True
 
             ElseIf m_交点HexIndex_EN < 0 Then
+                If m_底の交点_ST.Near(p) Then
+                    '同一点(角度がとれない)はskip
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near Skip{1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, hexidx, p)
+                    Return True
+                End If
+
                 '2点目
                 Dim delta As New S差分(m_底の交点_ST, p)
                 If SameAngle(delta.Angle, _parent.BandAngleDegree) Then
@@ -569,16 +575,39 @@ Partial Public Class clsCalcHexagon
                 End If
                 m_底の交点間長 = delta.Length
                 '
-                If m_row縦横展開 IsNot Nothing Then
-                    m_row縦横展開.f_d長さ = m_底の交点間長
-                    m_row縦横展開.f_iVal1 = m_交点HexIndex_ST
-                    m_row縦横展開.f_iVal2 = m_交点HexIndex_EN
-                End If
-                Return True
-
             Else
-                Return False '2点以上はNG
+                '2点以上の場合、同じひも範囲内は同一とみなす
+                If m_底の交点_ST.Near(p, m_dひも幅 / 2) Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, hexidx, p)
+                    Return True
+                ElseIf m_底の交点_EN.Near(p, m_dひも幅 / 2) Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_EN.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_EN, m_底の交点_EN, hexidx, p)
+                    Return True
+                ElseIf m_底の交点_ST.Near(m_底の交点_EN, m_dひも幅 / 2) Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, m_交点HexIndex_EN, m_底の交点_EN)
+
+                    Dim delta As New S差分(m_底の交点_ST, p)
+                    If SameAngle(delta.Angle, _parent.BandAngleDegree) Then
+                        m_底の交点_EN = p
+                        m_交点HexIndex_EN = hexidx
+                    Else
+                        m_底の交点_ST = p
+                        m_交点HexIndex_ST = hexidx
+                    End If
+                    m_底の交点間長 = delta.Length
+                Else
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:3点目の認識できない交点 {1}:{2}", Ident, hexidx, p)
+                    Return False
+                End If
             End If
+
+            'save
+            If m_row縦横展開 IsNot Nothing Then
+                m_row縦横展開.f_d長さ = m_底の交点間長
+                m_row縦横展開.f_iVal1 = m_交点HexIndex_ST
+                m_row縦横展開.f_iVal2 = m_交点HexIndex_EN
+            End If
+            Return True
         End Function
 
         Function ToBand() As CBand
@@ -792,7 +821,7 @@ Partial Public Class clsCalcHexagon
             Dim d端の目幅 As Double = d六つ目の高さ * d端の目
             Dim i合わせAxisIdx As Integer = AxisIdx(i何個目位置)
 
-            '目の中心で合わせる場合
+            '目の中心で合わせる場合(bひも中心合わせ=False)
             '       ひも番号      本数  本数-1    ▽合わせ位置         2     1  
             '       軸方向          1     2       ▽合わせ位置       本数-1 本数
             '                <-----|+|---|+|---      --|+|--       ---|+|---|+|------>
@@ -802,9 +831,10 @@ Partial Public Class clsCalcHexagon
             '     合わせ位置からの幅(マイナス) ← | → 合わせ位置からの幅(プラス)
             '
 
-            'ひも中心で合わせる場合
-            '       ひも番号      本数  本数-1     ▽合わせ位置         2     1  
-            '       軸方向          1     2        ▽合わせ位置       本数-1 本数
+            'ひも中心で合わせる場合(bひも中心合わせ=True)
+            '       ひも番号      本数  本数-1     ▽             2     1
+            '                                   合わせ位置
+            '       軸方向          1     2        ▽           本数-1 本数
             '                <-----|+|---|+|--   -|+|--       ---|+|---|+|------>
             '                端の目 紐 目 紐 目    紐 目       目 紐 目 紐 端の目
             ' d端からの長さ  |→　  +     +        +              +     +     →|d幅の計
@@ -824,8 +854,14 @@ Partial Public Class clsCalcHexagon
 
                 '合わせ位置
                 If axis = i合わせAxisIdx Then
-                    'ひも番号に対して逆方向なのでマイナスする
-                    d端から合わせ位置まで = d幅の計 - (d六つ目の高さ / 2)
+                    If bひも中心合わせ Then
+                        'ひもの真ん中
+                        d端から合わせ位置まで = d端からの長さ(axis)
+                    Else
+                        '目の真ん中: ひも番号に対して逆方向なのでマイナスする
+                        d端から合わせ位置まで = d幅の計 - (d六つ目の高さ / 2)
+                    End If
+
                 End If
 
                 d幅の計 += band.m_dひも幅
@@ -835,10 +871,9 @@ Partial Public Class clsCalcHexagon
             Next
             d幅の計 += d端の目幅
 
-
+            '合わせ位置との差分
             _d底領域幅 = d幅の計
             _d合わせ位置までの幅 = d端から合わせ位置まで
-
             Dim p底の辺の中心1 As S実座標 = pOrigin + DeltaAxisDirection * -d端から合わせ位置まで
             For axis As Integer = 1 To _iひもの本数
                 Dim band As CBandPosition = ByAxis(axis)
@@ -918,10 +953,15 @@ Partial Public Class clsCalcHexagon
 
     '3本組の位置識別
     Private Function OneOfThree(ByVal idx As Integer) As Integer
-        Return Modulo(idx, cAngleCount)
+        Return Modulo(idx, 3)
     End Function
 
-    '次の回転方向
+    '2本組の位置識別
+    Private Function OneOfTow(ByVal idx As Integer) As Integer
+        Return Modulo(idx, 2)
+    End Function
+
+    '綾を考慮した次の方向
     Private Function NextDirection(Optional ByVal idx As Integer = 0) As Integer
         If _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側 Then
             'マイナス60度方向 cIdxAngle0-cIdxAngle120
@@ -1092,6 +1132,49 @@ Partial Public Class clsCalcHexagon
     Function imageListバンドセット鉄線(ByVal checked() As Boolean) As clsImageItemList
         Dim _ImageListバンドと縁 As New clsImageItemList
 
+        '3方向の描画リスト
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
+            Return Nothing
+        End If
+
+        '3軸描画
+        ThreeAxisBasic(imageItemBandLists)
+
+        '3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageItemBandLists(idx) = Nothing
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
+    '本麻の葉
+    Function imageListバンドセット本麻の葉(ByVal checked() As Boolean) As clsImageItemList
+        Dim _ImageListバンドと縁 As New clsImageItemList
+
+        '3方向の描画リスト
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
+            Return Nothing
+        End If
+
+        '麻の葉描画
+        TwoRepeatBasic(imageItemBandLists)
+
+        '3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageItemBandLists(idx) = Nothing
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
+    '側面のバンドを加えた3方向の描画リストを返す
+    Private Function imageItemListBandSet(ByVal imglist As clsImageItemList, ByVal checked() As Boolean) As clsImageItemList()
+
         '*1 checkedを反映した個別バンドを作る
         '　いずれも、(0は空,1～ひも本数,Countはひも本数+1)
 
@@ -1106,7 +1189,7 @@ Partial Public Class clsCalcHexagon
         Next
 
         '6側面のバンドセット, 縁のみ描画リストに追加
-        Dim bandListSide() As CBandList = bandList側面(_ImageListバンドと縁, checked(cAngleCount))
+        Dim bandListSide() As CBandList = bandList側面(imglist, checked(cAngleCount))
         If bandListSide.Count <> CHex.cHexCount Then
             Return Nothing
         End If
@@ -1116,24 +1199,24 @@ Partial Public Class clsCalcHexagon
         '側面のバンド(1～高さ) → 底のバンド(1～本数) → 側面のバンド(1～高さ)
 
         '3方向の描画リスト
-        Dim imageItemBandList(cAngleCount - 1) As clsImageItemList
+        Dim imageItemBandLists(cAngleCount - 1) As clsImageItemList
 
         For idx As Integer = 0 To cAngleCount - 1
-            imageItemBandList(idx) = New clsImageItemList
+            imageItemBandLists(idx) = New clsImageItemList
             Dim num As Integer = 0
 
             Dim hexidx_1st As Integer = CHex.hexidx(idx, lineIdx.i_1st)
             For i As Integer = _i側面の編みひも数 To 1 Step -1
                 Dim band As CBand = bandListSide(hexidx_1st)(i)
                 Dim item As New clsImageItem(band, num, idx)
-                imageItemBandList(idx).AddItem(item)
+                imageItemBandLists(idx).AddItem(item)
                 num += 1
             Next
 
             For ax As Integer = 1 To _iひもの本数(idx)
                 Dim band As CBand = bandListBottom(idx)(ax)
                 Dim item As New clsImageItem(band, num, idx)
-                imageItemBandList(idx).AddItem(item)
+                imageItemBandLists(idx).AddItem(item)
                 num += 1
             Next
 
@@ -1141,14 +1224,16 @@ Partial Public Class clsCalcHexagon
             For i As Integer = 1 To _i側面の編みひも数
                 Dim band As CBand = bandListSide(hexidx_2nd)(i)
                 Dim item As New clsImageItem(band, num, idx)
-                imageItemBandList(idx).AddItem(item)
+                imageItemBandLists(idx).AddItem(item)
                 num += 1
             Next
         Next
 
+        Return imageItemBandLists
+    End Function
 
-        '*3 3軸描画
-
+    '3軸描画(綾指定あり)
+    Private Function ThreeAxisBasic(ByVal imageItemBandList() As clsImageItemList) As Boolean
         Dim ax合わせ前(cAngleCount - 1) As Integer
         For idx As Integer = 0 To cAngleCount - 1
             '合わせ目の前後のひも、前側
@@ -1160,13 +1245,13 @@ Partial Public Class clsCalcHexagon
         For idx As Integer = 0 To cAngleCount - 1
             '±60度方向
             Dim ax_angle As Integer = cBandAngleDegree(idx) + 90 '軸角度
-            Dim iNest As Integer = NextDirection(idx)
+            Dim iNext As Integer = NextDirection(idx)
 
             For idx2 As Integer = 0 To cAngleCount - 1
                 If idx = idx2 Then
                     Continue For
                 End If
-                If idx2 = iNest Then
+                If idx2 = iNext Then
                     '±60度方向 が最上・下になるのでclip(1本分)
 
                     Dim shift_type As Boolean '2択
@@ -1223,24 +1308,137 @@ Partial Public Class clsCalcHexagon
                 End If
             Next
         Next
-
-        '3方向のバンドセット追加
-        For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.MoveList(imageItemBandList(idx))
-            imageItemBandList(idx) = Nothing
-        Next
-
-        Return _ImageListバンドと縁
+        Return True
     End Function
 
-    '本麻の葉
-    Function imageListバンドセット本麻の葉(ByVal checked() As Boolean) As clsImageItemList
+    '本麻の葉(綾指定あり)
+    Private Function TwoRepeatBasic(ByVal imageItemBandList() As clsImageItemList) As Boolean
+        Dim ax合わせ位置(cAngleCount - 1) As Integer
+        For idx As Integer = 0 To cAngleCount - 1
+            '合わせ位置のひも
+            ax合わせ位置(idx) = _BandPositions(idx).i合わせ位置AxisIdx
+            '側面分をプラス、1を0に詰めた分をマイナス
+            ax合わせ位置(idx) = ax合わせ位置(idx) + _i側面の編みひも数 - 1
+        Next
 
-        Return Nothing
+        '特異的な方向: 0度 ひもの間を通る
+        '斜め60,120度: 各、全上・全下の繰り返し
+        '右綾・左綾とも同じ編み方(中心とみなす位置が変わるだけ)
+        Dim shift As Integer = 0 '右綾
+        If NextDirection(1) < 1 Then
+            '左綾
+            shift = 1
+        End If
+
+        '0度
+        Dim iAngle As Integer = cIdxAngle0
+        For idx As Integer = iAngle To iAngle
+            '+60度方向
+            Dim iNext As Integer = IdxNext(idx)
+            For idx2 As Integer = 0 To cAngleCount - 1
+                If idx = idx2 Then
+                    Continue For
+                End If
+                If idx2 = iNext Then
+                    '+60度方向 : 交互に、全てのひもに対して上になる/もしくは下になる
+                    Dim kClip As Integer = OneOfTow(ax合わせ位置(idx) + 1 + shift)
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        If kClip = OneOfTow(k) Then
+                            For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            Next
+                        End If
+                    Next
+
+                Else
+                    '+120度方向 : 交互に、全てのひもに対して上になる/もしくは下になる
+                    Dim kClip As Integer = OneOfTow(ax合わせ位置(idx) + shift)
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        If kClip = OneOfTow(k) Then
+                            For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            Next
+                        End If
+                    Next
+
+                End If
+            Next
+        Next
+
+        '60度
+        iAngle = IdxNext(iAngle)
+        For idx As Integer = iAngle To iAngle
+            Dim iNext As Integer = IdxNext(idx)
+            For idx2 As Integer = 0 To cAngleCount - 1
+                If idx = idx2 Then
+                    Continue For
+                End If
+                If idx2 = iNext Then
+                    '+60度方向 : 各ひもに対して上/下交互, ひも交互
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        Dim jClip As Integer = OneOfTow(ax合わせ位置(idx2) + (k - ax合わせ位置(idx)) + shift)
+                        For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                            If jClip = OneOfTow(j) Then
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            End If
+                        Next
+                    Next
+
+                Else
+                    '+120度方向 : 各ひもに対して上/下交互, 全ひも同じ
+                    Dim jClip As Integer = OneOfTow(ax合わせ位置(idx2) + shift)
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                            If jClip = OneOfTow(j) Then
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            End If
+                        Next
+                    Next
+                End If
+            Next
+        Next
+
+        '120度
+        iAngle = IdxNext(iAngle)
+        For idx As Integer = iAngle To iAngle
+            Dim iNext As Integer = IdxNext(idx)
+            For idx2 As Integer = 0 To cAngleCount - 1
+                If idx = idx2 Then
+                    Continue For
+                End If
+                If idx2 = iNext Then
+                    '+60度方向 : 各ひもに対して上/下交互, 全ひも同じ
+                    Dim jClip As Integer = OneOfTow(ax合わせ位置(idx2) + 1 + shift)
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                            If jClip = OneOfTow(j) Then
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            End If
+                        Next
+                    Next
+
+                Else
+                    '+120度方向 : 各ひもに対して上/下交互, ひも交互
+                    For k As Integer = 0 To imageItemBandList(idx).Count - 1
+                        Dim jClip As Integer = OneOfTow(ax合わせ位置(idx2) + 1 + k - ax合わせ位置(idx) + shift)
+                        For j As Integer = 0 To imageItemBandList(idx2).Count - 1
+                            If jClip = OneOfTow(j) Then
+                                imageItemBandList(idx)(k).AddClip(imageItemBandList(idx2)(j))
+                            End If
+                        Next
+                    Next
+                End If
+            Next
+
+        Next
+
+
+
+        Return True
     End Function
 
     '底と側面枠
-    Function imageList底と側面枠() As clsImageItemList
+    Function imageList底と側面枠(ByVal bひも中心合わせ As Boolean) As clsImageItemList
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
         Dim line As S線分
@@ -1257,7 +1455,15 @@ Partial Public Class clsCalcHexagon
         If 1 < _iひもの本数(0) AndAlso 1 < _iひもの本数(1) AndAlso 1 < _iひもの本数(2) Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
 
-            Dim dRadius As Double = _d六つ目の高さ / SIN60 / 2
+            Dim dRadius As Double
+            If bひも中心合わせ Then
+                '基本のひも幅の対角線
+                dRadius = _d基本のひも幅 / SIN60 / 2
+            Else
+                '目の対角線
+                dRadius = _d六つ目の高さ / SIN60 / 2
+            End If
+
             Dim p12 As S実座標 = pOrigin + New S差分(0) * dRadius
             Dim p23 As S実座標 = pOrigin + New S差分(60) * dRadius
             Dim p34 As S実座標 = pOrigin + New S差分(120) * dRadius
@@ -1362,7 +1568,7 @@ Partial Public Class clsCalcHexagon
         End If
 
         '底と側面
-        Dim _ImageList描画要素 As clsImageItemList = imageList底と側面枠()
+        Dim _ImageList描画要素 As clsImageItemList = imageList底と側面枠(_bひも中心合わせ)
 
 
 

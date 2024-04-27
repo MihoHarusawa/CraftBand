@@ -1178,14 +1178,18 @@ Public Class frmMain
     '横置き
     Private Sub nud横ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud横ひもの本数.ValueChanged
         '偶数推奨
-        If nud横ひもの本数.Value Mod 2 = 0 Then
+        If nud横ひもの本数.Value Mod 2 = 0 AndAlso Not chkひも中心合わせ.Checked Then
             nud横ひもの本数.Increment = 2
         Else
             nud横ひもの本数.Increment = 1
         End If
-        'マーク位置
+        '合わせ位置
         If 1 < nud横ひもの本数.Value Then
-            nud上から何個目.Value = nud横ひもの本数.Value \ 2
+            If chkひも中心合わせ.Checked Then
+                nud上から何個目.Value = (nud横ひもの本数.Value + 1) \ 2
+            Else
+                nud上から何個目.Value = nud横ひもの本数.Value \ 2
+            End If
         Else
             nud上から何個目.Value = 0
         End If
@@ -1216,13 +1220,17 @@ Public Class frmMain
     '斜め置き
     Private Sub nud斜めひも本数60度_ValueChanged(sender As Object, e As EventArgs) Handles nud斜めひも本数60度.ValueChanged
         '偶数推奨
-        If nud斜めひも本数60度.Value Mod 2 = 0 Then
+        If nud斜めひも本数60度.Value Mod 2 = 0 AndAlso Not chkひも中心合わせ.Checked Then
             nud斜めひも本数60度.Increment = 2
         Else
             nud斜めひも本数60度.Increment = 1
         End If
         If 1 < nud斜めひも本数60度.Value Then
-            nud左から何個目.Value = nud斜めひも本数60度.Value \ 2
+            If chkひも中心合わせ.Checked Then
+                nud左から何個目.Value = (nud斜めひも本数60度.Value + 1) \ 2
+            Else
+                nud左から何個目.Value = nud斜めひも本数60度.Value \ 2
+            End If
         Else
             nud左から何個目.Value = 0
         End If
@@ -1281,13 +1289,17 @@ Public Class frmMain
 #Region "同数ではない時のみ"
     Private Sub nud斜めひも本数120度_ValueChanged(sender As Object, e As EventArgs) Handles nud斜めひも本数120度.ValueChanged
         '偶数推奨
-        If nud斜めひも本数120度.Value Mod 2 = 0 Then
+        If nud斜めひも本数120度.Value Mod 2 = 0 AndAlso Not chkひも中心合わせ.Checked Then
             nud斜めひも本数120度.Increment = 2
         Else
             nud斜めひも本数120度.Increment = 1
         End If
         If 1 < nud斜めひも本数120度.Value Then
-            nud左から何個目120.Value = nud斜めひも本数120度.Value \ 2
+            If chkひも中心合わせ.Checked Then
+                nud左から何個目120.Value = (nud斜めひも本数120度.Value + 1) \ 2
+            Else
+                nud左から何個目120.Value = nud斜めひも本数120度.Value \ 2
+            End If
         Else
             nud左から何個目120.Value = 0
         End If
