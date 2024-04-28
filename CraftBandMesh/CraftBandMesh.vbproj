@@ -9,13 +9,13 @@
     <Product>CraftBand</Product>
     <Company>LaboHarusawa</Company>
     <Authors>MihoHarusawa</Authors>
-    <Title>クラフトバンド・四角底と楕円底の計算</Title>
+    <Title>四角底と楕円底かごのデザイン</Title>
     <Copyright>Copyright © LaboHarusawa 2022-2024</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.8.1.0</FileVersion>
-    <AssemblyVersion>1.8.1.0</AssemblyVersion>
-    <Description>クラフトバンド・四角底と楕円底の計算</Description>
+    <FileVersion>1.8.2.0</FileVersion>
+    <AssemblyVersion>1.8.2.0</AssemblyVersion>
+    <Description>四角底と楕円底かごのデザインとサイズ計算</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -25,7 +25,7 @@
 60度ごと3方向にひもを組み、ひもに沿って立ち上げるタイプのかごをデザインするアプリです。
 ひも幅・六つ目のサイズの他、六つ目の脇に作られる三角形のサイズから計算させることができます。
 側面の六つ目のサイズを立ち上げ位置に合わせて調整できます。
-六つ目の型紙を作るのに便利です。
+六つ目の型紙を作るのに便利です。右綾/左綾や、3軸織り模様を描画できます。
 
 
 # CraftBand / CraftBand.dll
@@ -64,12 +64,12 @@ With this series, you can easily create your own original recipes, and by saving
 
 # Current Binary Version
 
-Installer         1.8.1.0
-CraftBand.dll     1.8.1.0 
-CraftBandMesh     1.8.1.0
-CraftBandSqare45  1.5.1.0  
-CraftBandKnot     1.4.1.0
-CraftBandSquare   1.3.1.0
+Installer         1.8.2.0
+CraftBand.dll     1.8.2.0 
+CraftBandMesh     1.8.2.0
+CraftBandSqare45  1.5.2.0  
+CraftBandKnot     1.4.2.0
+CraftBandSquare   1.3.2.0
 CraftBandHexagon  1.0.1.0
 
 # Usage

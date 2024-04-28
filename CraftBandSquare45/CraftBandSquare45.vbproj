@@ -7,15 +7,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <ApplicationIcon>IconSquare45.ico</ApplicationIcon>
-    <Title>クラフトバンド・斜め45度に配置する四角ベースの計算</Title>
+    <Title>斜めに立ち上げる四角ベースかごのデザイン</Title>
     <Authors>MihoHarusawa</Authors>
     <Company>LaboHarusawa</Company>
     <Product>CraftBand</Product>
-    <Description>クラフトバンド・斜め45度に配置する四角ベースの計算</Description>
+    <Description>斜めに立ち上げる四角ベースかごのデザインとサイズ計算</Description>
     <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
     <PackageIcon>IconSquare45.ico</PackageIcon>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
-    <FileVersion>1.5.1.0</FileVersion>
+    <AssemblyVersion>1.5.2.0</AssemblyVersion>
+    <FileVersion>1.5.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
