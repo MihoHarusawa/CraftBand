@@ -198,6 +198,21 @@
   <data name="CalcNoMoreChange" xml:space="preserve">
     <value>ほぼ目標のサイズになっています。やり直す場合はリセットしてください。</value>
   </data>
+  <data name="CalcNoPattern" xml:space="preserve">
+    <value>織りタイプは指定されていません。</value>
+  </data>
+  <data name="CalcNoPatternBandCenter" xml:space="preserve">
+    <value>「ひも中心合わせ」をオフにしてください。</value>
+  </data>
+  <data name="CalcNoPatternLeftRight" xml:space="preserve">
+    <value>右綾/左綾を指定してください。</value>
+  </data>
+  <data name="CalcNoPatternSpace" xml:space="preserve">
+    <value>「六つ目の高さ」の値を {0} 以上に設定してください。</value>
+  </data>
+  <data name="CalcNoPatternTriangle" xml:space="preserve">
+    <value>「三角の中」の値がゼロ以上になるよう設定してください。</value>
+  </data>
   <data name="CalcNoSelect" xml:space="preserve">
     <value>{0}を指定してください。</value>
   </data>

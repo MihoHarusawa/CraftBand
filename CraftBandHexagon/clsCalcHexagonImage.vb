@@ -32,6 +32,8 @@ Partial Public Class clsCalcHexagon
     Shared cDeltaBandDirection() As S差分 = {New S差分(0), New S差分(60), New S差分(120)}
     'バンドの軸方向
     Shared cDeltaAxisDirection() As S差分 = {New S差分(90), New S差分(150), New S差分(210)}
+    'ひも長加算→ひも長加算2　の設定方向とバンドの方向角が同じ時True
+    Shared cSameDirectionAddLength() As Boolean = {True, True, False} '左→右,左下→右上,左上→右下
 
 
     '                                           i_1st         i_2nd
@@ -617,9 +619,16 @@ Partial Public Class clsCalcHexagon
 
             Dim band = New CBand(m_row縦横展開)
 
-            'f_dVal1に加算の側、f_dVal2に加算2の側(_SameDirection=Falseの前提・adjust_展開ひも)
-            Dim pA As S実座標 = m_底の交点_ST + _parent.DeltaBandDirection * -m_row縦横展開.f_dVal1
-            Dim pB As S実座標 = m_底の交点_EN + _parent.DeltaBandDirection * m_row縦横展開.f_dVal2
+            'f_dVal1に加算の側、f_dVal2に加算2の側(by adjust_展開ひも)
+            Dim pA As S実座標 = m_底の交点_ST
+            Dim pB As S実座標 = m_底の交点_EN
+            If _parent.SameDirectionAddLength Then
+                pA = pA + _parent.DeltaBandDirection * -m_row縦横展開.f_dVal1
+                pB = pB + _parent.DeltaBandDirection * m_row縦横展開.f_dVal2
+            Else
+                pA = pA + _parent.DeltaBandDirection * -m_row縦横展開.f_dVal2
+                pB = pB + _parent.DeltaBandDirection * m_row縦横展開.f_dVal1
+            End If
 
             'バンド描画位置
             band.p始点F = pA + _parent.DeltaAxisDirection * (-m_dひも幅 / 2)
@@ -671,7 +680,7 @@ Partial Public Class clsCalcHexagon
         Friend BandAngleDegree As AngleIndex 'バンドの方向角
         Friend DeltaBandDirection As S差分 'バンドの方向
         Friend DeltaAxisDirection As S差分 'バンドの軸方向
-
+        Friend SameDirectionAddLength As Boolean 'ひも長加算とバンドの方向角
 
 
         'ひも番号順のリスト
@@ -735,6 +744,7 @@ Partial Public Class clsCalcHexagon
             BandAngleDegree = CType(aidx, Integer) 'cBandAngleDegree(idx(aidx))
             DeltaBandDirection = cDeltaBandDirection(idx(aidx))
             DeltaAxisDirection = cDeltaAxisDirection(idx(aidx))
+            SameDirectionAddLength = cSameDirectionAddLength(idx(aidx))
 
             _hln最外ひもの2辺 = New CHexLine(Me)
             _hln底の2辺 = New CHexLine(Me)
@@ -951,6 +961,8 @@ Partial Public Class clsCalcHexagon
     End Class
 #End Region
 
+#Region "バンドと模様の描画"
+
     '3本組の位置識別
     Private Function OneOfThree(ByVal idx As Integer) As Integer
         Return Modulo(idx, 3)
@@ -976,7 +988,7 @@ Partial Public Class clsCalcHexagon
 
 
     '6側面のバンドセット, 縁はimglistに追加
-    Function bandList側面(ByVal imglist As clsImageItemList, ByVal isDraw As Boolean) As CBandList()
+    Private Function bandList側面(ByVal imglist As clsImageItemList, ByVal isDraw As Boolean) As CBandList()
         Dim bandlists As New List(Of CBandList)
 
         '6側面
@@ -1060,118 +1072,6 @@ Partial Public Class clsCalcHexagon
         Return bandlists.ToArray
     End Function
 
-    '巴(3すくみ)(指定なしを含む)の描画
-    Function imageListバンドセット巴(ByVal d三角の中値 As Double, ByVal checked() As Boolean) As clsImageItemList
-        Dim _ImageListバンドと縁 As New clsImageItemList
-
-        '底の3方向のバンドセット
-        Dim bandListBottom(cAngleCount - 1) As CBandList
-        '底の3方向のバンドセット描画
-        Dim imageItemBandBottom(cAngleCount - 1) As clsImageItem
-
-        For idx As Integer = 0 To cAngleCount - 1
-            bandListBottom(idx) = Nothing
-            If checked(idx) Then
-                bandListBottom(idx) = _BandPositions(idx).ConvertToBandList()
-            End If
-            imageItemBandBottom(idx) = New clsImageItem(bandListBottom(idx), 1, idx)
-        Next
-
-
-        '6側面のバンドセット
-        Dim bandListSide() As CBandList = bandList側面(_ImageListバンドと縁, checked(cAngleCount))
-        If bandListSide.Count <> CHex.cHexCount Then
-            Return Nothing
-        End If
-
-        '6側面のバンドセット描画
-        Dim imageItemBandSide(CHex.cHexCount - 1) As clsImageItem
-        For hexidx As Integer = 0 To CHex.cHexCount - 1
-            imageItemBandSide(hexidx) = New clsImageItem(bandListSide(hexidx), 2, hexidx)
-        Next
-
-        '綾指定があれば領域をクリップ
-        If 0 <= NextDirection() Then
-            If 0 <= d三角の中値 Then
-                Dim is側面の三角形(cAngleCount - 1) As Boolean
-                For idx As Integer = 0 To cAngleCount - 1
-                    Dim d As Double = (_d端の目(idx) + _d最下段の目 - 1) * _d六つ目の高さ +
-                        (get側面の六つ目の高さ() - _d六つ目の高さ) * _i側面の編みひも数
-                    is側面の三角形(idx) = (Abs(d) <= d三角の中値)
-                Next
-
-                For idx As Integer = 0 To cAngleCount - 1
-                    Dim iNext As Integer = NextDirection(idx)
-                    imageItemBandBottom(idx).AddClip(bandListBottom(iNext))
-
-                    If is側面の三角形(idx) Then
-                        imageItemBandSide(CHex.hexidx(idx, CHexLine.lineIdx.i_1st)).AddClip(bandListBottom(iNext))
-                        imageItemBandSide(CHex.hexidx(idx, CHexLine.lineIdx.i_2nd)).AddClip(bandListBottom(iNext))
-                    End If
-                    If is側面の三角形(iNext) Then
-                        imageItemBandBottom(idx).AddClip(bandListSide(CHex.hexidx(iNext, CHexLine.lineIdx.i_1st)))
-                        imageItemBandBottom(idx).AddClip(bandListSide(CHex.hexidx(iNext, CHexLine.lineIdx.i_2nd)))
-                    End If
-                Next
-            End If
-        End If
-
-        '底の3方向のバンドセット追加
-        For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.AddItem(imageItemBandBottom(idx))
-        Next
-        '6側面のバンドセット追加
-        For hexidx As Integer = 0 To CHex.cHexCount - 1
-            _ImageListバンドと縁.AddItem(imageItemBandSide(hexidx))
-        Next
-
-        Return _ImageListバンドと縁
-    End Function
-
-    '鉄線の描画
-    Function imageListバンドセット鉄線(ByVal checked() As Boolean) As clsImageItemList
-        Dim _ImageListバンドと縁 As New clsImageItemList
-
-        '3方向の描画リスト
-        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
-        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
-            Return Nothing
-        End If
-
-        '3軸描画
-        ThreeAxisBasic(imageItemBandLists)
-
-        '3方向のバンドセット追加
-        For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
-            imageItemBandLists(idx) = Nothing
-        Next
-
-        Return _ImageListバンドと縁
-    End Function
-
-    '本麻の葉
-    Function imageListバンドセット本麻の葉(ByVal checked() As Boolean) As clsImageItemList
-        Dim _ImageListバンドと縁 As New clsImageItemList
-
-        '3方向の描画リスト
-        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
-        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
-            Return Nothing
-        End If
-
-        '麻の葉描画
-        TwoRepeatBasic(imageItemBandLists)
-
-        '3方向のバンドセット追加
-        For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
-            imageItemBandLists(idx) = Nothing
-        Next
-
-        Return _ImageListバンドと縁
-    End Function
-
     '側面のバンドを加えた3方向の描画リストを返す
     Private Function imageItemListBandSet(ByVal imglist As clsImageItemList, ByVal checked() As Boolean) As clsImageItemList()
 
@@ -1231,6 +1131,204 @@ Partial Public Class clsCalcHexagon
 
         Return imageItemBandLists
     End Function
+
+    '織り指定がない・描けない場合
+    Function imageListバンドセット(ByVal checked() As Boolean) As clsImageItemList
+        Dim _ImageListバンドと縁 As New clsImageItemList
+
+        '3方向の描画リスト
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
+            Return Nothing
+        End If
+
+        '3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageItemBandLists(idx) = Nothing
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
+    '描ければNothing,NGなら理由を返す
+    Function Check3すくみ() As String
+        If Not (_frmMain.rad右綾.Checked Or _frmMain.rad左綾.Checked) Then
+            '右綾/左綾を指定してください。
+            Return My.Resources.CalcNoPatternLeftRight
+        End If
+        If _bひも中心合わせ Then
+            '「ひも中心合わせ」をオフにしてください。
+            Return My.Resources.CalcNoPatternBandCenter
+        Else
+            If _frmMain.nud三角の中.Value < 0 Then
+                '「三角の中」の値がゼロ以上になるよう設定してください。
+                Return My.Resources.CalcNoPatternTriangle
+            End If
+        End If
+        Return Nothing
+
+    End Function
+
+    '巴(3すくみ)の描画
+    Function imageListバンドセット3すくみ(ByVal checked() As Boolean) As clsImageItemList
+        If Check3すくみ() IsNot Nothing Then
+            Return Nothing
+        End If
+        Dim _ImageListバンドと縁 As New clsImageItemList
+
+        '底の3方向のバンドセット
+        Dim bandListBottom(cAngleCount - 1) As CBandList
+        '底の3方向のバンドセット描画
+        Dim imageItemBandBottom(cAngleCount - 1) As clsImageItem
+
+        For idx As Integer = 0 To cAngleCount - 1
+            bandListBottom(idx) = Nothing
+            If checked(idx) Then
+                bandListBottom(idx) = _BandPositions(idx).ConvertToBandList()
+            End If
+            imageItemBandBottom(idx) = New clsImageItem(bandListBottom(idx), 1, idx)
+        Next
+
+
+        '6側面のバンドセット
+        Dim bandListSide() As CBandList = bandList側面(_ImageListバンドと縁, checked(cAngleCount))
+        If bandListSide.Count <> CHex.cHexCount Then
+            Return Nothing
+        End If
+
+        '6側面のバンドセット描画
+        Dim imageItemBandSide(CHex.cHexCount - 1) As clsImageItem
+        For hexidx As Integer = 0 To CHex.cHexCount - 1
+            imageItemBandSide(hexidx) = New clsImageItem(bandListSide(hexidx), 2, hexidx)
+        Next
+
+        '綾指定があれば領域をクリップ
+        Dim d三角の中値 As Double = _frmMain.nud三角の中.Value
+        If 0 <= NextDirection() Then
+            If 0 <= d三角の中値 Then
+                Dim is側面の三角形(cAngleCount - 1) As Boolean
+                For idx As Integer = 0 To cAngleCount - 1
+                    Dim d As Double = (_d端の目(idx) + _d最下段の目 - 1) * _d六つ目の高さ +
+                        (get側面の六つ目の高さ() - _d六つ目の高さ) * _i側面の編みひも数
+                    is側面の三角形(idx) = (Abs(d) <= d三角の中値)
+                Next
+
+                For idx As Integer = 0 To cAngleCount - 1
+                    Dim iNext As Integer = NextDirection(idx)
+                    imageItemBandBottom(idx).AddClip(bandListBottom(iNext))
+
+                    If is側面の三角形(idx) Then
+                        imageItemBandSide(CHex.hexidx(idx, CHexLine.lineIdx.i_1st)).AddClip(bandListBottom(iNext))
+                        imageItemBandSide(CHex.hexidx(idx, CHexLine.lineIdx.i_2nd)).AddClip(bandListBottom(iNext))
+                    End If
+                    If is側面の三角形(iNext) Then
+                        imageItemBandBottom(idx).AddClip(bandListSide(CHex.hexidx(iNext, CHexLine.lineIdx.i_1st)))
+                        imageItemBandBottom(idx).AddClip(bandListSide(CHex.hexidx(iNext, CHexLine.lineIdx.i_2nd)))
+                    End If
+                Next
+            End If
+        End If
+
+        '底の3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.AddItem(imageItemBandBottom(idx))
+        Next
+        '6側面のバンドセット追加
+        For hexidx As Integer = 0 To CHex.cHexCount - 1
+            _ImageListバンドと縁.AddItem(imageItemBandSide(hexidx))
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
+    '描ければNothing,NGなら理由を返す
+    Function Check3軸織() As String
+        If Not (_frmMain.rad右綾.Checked Or _frmMain.rad左綾.Checked) Then
+            '右綾/左綾を指定してください。
+            Return My.Resources.CalcNoPatternLeftRight
+        End If
+        If _bひも中心合わせ Then
+            If _d六つ目の高さ < (_d基本のひも幅 / 2) Then
+                '「六つ目の高さ」の値を {0} 以上に設定してください。
+                Return String.Format(My.Resources.CalcNoPatternSpace, _d基本のひも幅 / 2)
+            End If
+        Else
+            '目合わせならゼロでもよい
+        End If
+        Return Nothing
+    End Function
+
+    '3軸織り(鉄線)の描画
+    Function imageListバンドセット3軸織(ByVal checked() As Boolean) As clsImageItemList
+        If Check3軸織() IsNot Nothing Then
+            Return Nothing
+        End If
+        Dim _ImageListバンドと縁 As New clsImageItemList
+
+        '3方向の描画リスト
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
+            Return Nothing
+        End If
+
+        '3軸描画
+        ThreeAxisBasic(imageItemBandLists)
+
+        '3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageItemBandLists(idx) = Nothing
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
+    '描ければNothing,NGなら理由を返す
+    Function Check本麻の葉() As String
+        If Not (_frmMain.rad右綾.Checked Or _frmMain.rad左綾.Checked) Then
+            '右綾/左綾を指定してください。
+            Return My.Resources.CalcNoPatternLeftRight
+        End If
+        If _bひも中心合わせ Then
+            If _d六つ目の高さ < (_d基本のひも幅 / 2) Then
+                '「六つ目の高さ」の値を {0} 以上に設定してください。
+                Return String.Format(My.Resources.CalcNoPatternSpace, _d基本のひも幅 / 2)
+            End If
+        Else
+            If _frmMain.nud三角の中.Value < 0 Then
+                '「三角の中」の値がゼロ以上になるよう設定してください。
+                Return My.Resources.CalcNoPatternTriangle
+            End If
+        End If
+        Return Nothing
+    End Function
+
+    '本麻の葉
+    Function imageListバンドセット本麻の葉(ByVal checked() As Boolean) As clsImageItemList
+        If Check本麻の葉() IsNot Nothing Then
+            Return Nothing
+        End If
+        Dim _ImageListバンドと縁 As New clsImageItemList
+
+        '3方向の描画リスト
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
+            Return Nothing
+        End If
+
+        '麻の葉描画
+        TwoRepeatBasic(imageItemBandLists)
+
+        '3方向のバンドセット追加
+        For idx As Integer = 0 To cAngleCount - 1
+            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageItemBandLists(idx) = Nothing
+        Next
+
+        Return _ImageListバンドと縁
+    End Function
+
 
     '3軸描画(綾指定あり)
     Private Function ThreeAxisBasic(ByVal imageItemBandList() As clsImageItemList) As Boolean
@@ -1432,10 +1530,9 @@ Partial Public Class clsCalcHexagon
 
         Next
 
-
-
         Return True
     End Function
+#End Region
 
     '底と側面枠
     Function imageList底と側面枠(ByVal bひも中心合わせ As Boolean) As clsImageItemList
@@ -1550,17 +1647,24 @@ Partial Public Class clsCalcHexagon
         'バンドセット
         Dim _ImageListバンドセット As clsImageItemList = Nothing
 
-        If NextDirection() < 0 OrElse _frmMain.rad巴_3すくみ.Checked Then
-            '綾指定がないか、3すくみ指定
-            _ImageListバンドセット = imageListバンドセット巴(_frmMain.nud三角の中.Value, checked)
-        ElseIf _frmMain.rad鉄線_3軸織り.Checked Then
-            '綾指定があり、鉄線
-            _ImageListバンドセット = imageListバンドセット鉄線(checked)
-        ElseIf _frmMain.rad本麻の葉編み.Checked Then
-            '綾指定があり、鉄線
-            _ImageListバンドセット = imageListバンドセット本麻の葉(checked)
+        If 0 <= NextDirection() Then
+            '綾指定あり
+            If _frmMain.rad巴_3すくみ.Checked Then
+                '3すくみ指定
+                _ImageListバンドセット = imageListバンドセット3すくみ(checked)
+            ElseIf _frmMain.rad鉄線_3軸織り.Checked Then
+                '鉄線_3軸織り
+                _ImageListバンドセット = imageListバンドセット3軸織(checked)
+            ElseIf _frmMain.rad本麻の葉編み.Checked Then
+                '本麻の葉編み
+                _ImageListバンドセット = imageListバンドセット本麻の葉(checked)
+            End If
         End If
 
+        '綾指定がない・描けない
+        If _ImageListバンドセット Is Nothing Then
+            _ImageListバンドセット = imageListバンドセット(checked)
+        End If
         If _ImageListバンドセット Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -1569,7 +1673,6 @@ Partial Public Class clsCalcHexagon
 
         '底と側面
         Dim _ImageList描画要素 As clsImageItemList = imageList底と側面枠(_bひも中心合わせ)
-
 
 
         imgData.MoveList(_ImageListバンドセット)

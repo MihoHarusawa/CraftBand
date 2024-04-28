@@ -438,12 +438,14 @@ Public Class frmMain
             End Select
 
             Select Case .Value("f_i織りタイプ")
-                Case enum織りタイプ.i_鉄線_3軸織り
+                Case enum織りタイプ.i_3軸織り
                     rad鉄線_3軸織り.Checked = True
-                Case enum織りタイプ.i_本麻の葉編み
+                Case enum織りタイプ.i_本麻の葉
                     rad本麻の葉編み.Checked = True
+                Case enum織りタイプ.i_なし
+                    rad織りなし.Checked = True
                 Case Else
-                    rad巴_3すくみ.Checked = True
+                    rad巴_3すくみ.Checked = True 'デフォルト
             End Select
 
         End With
@@ -595,11 +597,13 @@ Public Class frmMain
             End If
 
             If rad鉄線_3軸織り.Checked Then
-                .Value("f_i織りタイプ") = enum織りタイプ.i_鉄線_3軸織り
+                .Value("f_i織りタイプ") = enum織りタイプ.i_3軸織り
             ElseIf rad本麻の葉編み.Checked Then
-                .Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉編み
+                .Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉
+            ElseIf rad巴_3すくみ.Checked Then
+                .Value("f_i織りタイプ") = enum織りタイプ.i_3すくみ
             Else
-                .Value("f_i織りタイプ") = enum織りタイプ.i_巴_3すくみ
+                .Value("f_i織りタイプ") = enum織りタイプ.i_なし
             End If
 
         End With
@@ -1733,7 +1737,7 @@ Public Class frmMain
     End Function
 
     Sub Showひも上下()
-        lb巴_3すくみ.Visible = (nud三角の中.Value < 0)
+        show織りCheck()
     End Sub
 
     Private Sub rad綾の方向_CheckedChanged(sender As Object, e As EventArgs) Handles rad左綾.CheckedChanged, rad右綾.CheckedChanged, radなし.CheckedChanged
@@ -1745,20 +1749,38 @@ Public Class frmMain
             Else
                 _clsDataTables.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
             End If
+            show織りCheck()
         End If
-        grp織りタイプ.Enabled = (rad左綾.Checked OrElse rad右綾.Checked)
     End Sub
 
     Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad本麻の葉編み.CheckedChanged, rad鉄線_3軸織り.CheckedChanged
         If Not _isLoadingData Then
             If rad鉄線_3軸織り.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_鉄線_3軸織り
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3軸織り
             ElseIf rad本麻の葉編み.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉編み
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉
+            ElseIf rad巴_3すくみ.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3すくみ
             Else
-                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_巴_3すくみ
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_なし
             End If
+            show織りCheck()
         End If
+    End Sub
+
+    Private Sub show織りCheck()
+        Dim msg As String = Nothing
+        If rad鉄線_3軸織り.Checked Then
+            msg = _clsCalcHexagon.Check3軸織()
+        ElseIf rad本麻の葉編み.Checked Then
+            msg = _clsCalcHexagon.Check本麻の葉()
+        ElseIf rad巴_3すくみ.Checked Then
+            msg = _clsCalcHexagon.Check3すくみ()
+        Else
+            '織りタイプは指定されていません。
+            msg = My.Resources.CalcNoPattern
+        End If
+        lblMessagePattern.Text = msg
     End Sub
 
 #End Region

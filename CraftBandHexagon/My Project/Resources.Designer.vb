@@ -278,6 +278,51 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  織りタイプは指定されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPattern() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPattern", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  「ひも中心合わせ」をオフにしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPatternBandCenter() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPatternBandCenter", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  右綾/左綾を指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPatternLeftRight() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPatternLeftRight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  「六つ目の高さ」の値を {0} 以上に設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPatternSpace() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPatternSpace", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  「三角の中」の値がゼロ以上になるよう設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoPatternTriangle() As String
+            Get
+                Return ResourceManager.GetString("CalcNoPatternTriangle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}を指定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoSelect() As String

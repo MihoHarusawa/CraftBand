@@ -135,6 +135,7 @@ Partial Class frmMain
         rad鉄線_3軸織り = New RadioButton()
         rad巴_3すくみ = New RadioButton()
         rad本麻の葉編み = New RadioButton()
+        rad織りなし = New RadioButton()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -233,7 +234,7 @@ Partial Class frmMain
         tpageひも上下 = New TabPage()
         grp織りタイプ = New GroupBox()
         grp綾方向 = New GroupBox()
-        lb巴_3すくみ = New Label()
+        lblMessagePattern = New Label()
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
@@ -1199,6 +1200,7 @@ Partial Class frmMain
         ' rad右綾
         ' 
         rad右綾.AutoSize = True
+        rad右綾.Checked = True
         rad右綾.Location = New Point(118, 33)
         rad右綾.Name = "rad右綾"
         rad右綾.Size = New Size(60, 24)
@@ -1215,7 +1217,6 @@ Partial Class frmMain
         rad左綾.Name = "rad左綾"
         rad左綾.Size = New Size(60, 24)
         rad左綾.TabIndex = 0
-        rad左綾.TabStop = True
         rad左綾.Text = "左綾"
         ToolTip1.SetToolTip(rad左綾, "左綾の六つ目図を作ります")
         rad左綾.UseVisualStyleBackColor = True
@@ -1227,7 +1228,6 @@ Partial Class frmMain
         radなし.Name = "radなし"
         radなし.Size = New Size(53, 24)
         radなし.TabIndex = 2
-        radなし.TabStop = True
         radなし.Text = "なし"
         ToolTip1.SetToolTip(radなし, "綾は描画しません")
         radなし.UseVisualStyleBackColor = True
@@ -1368,11 +1368,10 @@ Partial Class frmMain
         ' rad鉄線_3軸織り
         ' 
         rad鉄線_3軸織り.AutoSize = True
-        rad鉄線_3軸織り.Location = New Point(41, 76)
+        rad鉄線_3軸織り.Location = New Point(41, 102)
         rad鉄線_3軸織り.Name = "rad鉄線_3軸織り"
         rad鉄線_3軸織り.Size = New Size(118, 24)
-        rad鉄線_3軸織り.TabIndex = 1
-        rad鉄線_3軸織り.TabStop = True
+        rad鉄線_3軸織り.TabIndex = 2
         rad鉄線_3軸織り.Text = "鉄線(3軸織り)"
         ToolTip1.SetToolTip(rad鉄線_3軸織り, "3軸織りの図を作ります")
         rad鉄線_3軸織り.UseVisualStyleBackColor = True
@@ -1380,10 +1379,11 @@ Partial Class frmMain
         ' rad巴_3すくみ
         ' 
         rad巴_3すくみ.AutoSize = True
-        rad巴_3すくみ.Location = New Point(41, 35)
+        rad巴_3すくみ.Checked = True
+        rad巴_3すくみ.Location = New Point(41, 69)
         rad巴_3すくみ.Name = "rad巴_3すくみ"
         rad巴_3すくみ.Size = New Size(97, 24)
-        rad巴_3すくみ.TabIndex = 0
+        rad巴_3すくみ.TabIndex = 1
         rad巴_3すくみ.TabStop = True
         rad巴_3すくみ.Text = "巴(3すくみ)"
         ToolTip1.SetToolTip(rad巴_3すくみ, "3すくみの図を作ります")
@@ -1392,14 +1392,24 @@ Partial Class frmMain
         ' rad本麻の葉編み
         ' 
         rad本麻の葉編み.AutoSize = True
-        rad本麻の葉編み.Location = New Point(41, 117)
+        rad本麻の葉編み.Location = New Point(41, 135)
         rad本麻の葉編み.Name = "rad本麻の葉編み"
         rad本麻の葉編み.Size = New Size(115, 24)
-        rad本麻の葉編み.TabIndex = 2
-        rad本麻の葉編み.TabStop = True
+        rad本麻の葉編み.TabIndex = 3
         rad本麻の葉編み.Text = "本麻の葉編み"
         ToolTip1.SetToolTip(rad本麻の葉編み, "本麻の葉編みの図を作ります")
         rad本麻の葉編み.UseVisualStyleBackColor = True
+        ' 
+        ' rad織りなし
+        ' 
+        rad織りなし.AutoSize = True
+        rad織りなし.Location = New Point(41, 36)
+        rad織りなし.Name = "rad織りなし"
+        rad織りなし.Size = New Size(78, 24)
+        rad織りなし.TabIndex = 0
+        rad織りなし.Text = "織りなし"
+        ToolTip1.SetToolTip(rad織りなし, "ひも上下を指定しません")
+        rad織りなし.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -2342,7 +2352,7 @@ Partial Class frmMain
         ' 
         tpageひも上下.Controls.Add(grp織りタイプ)
         tpageひも上下.Controls.Add(grp綾方向)
-        tpageひも上下.Controls.Add(lb巴_3すくみ)
+        tpageひも上下.Controls.Add(lblMessagePattern)
         tpageひも上下.Location = New Point(4, 29)
         tpageひも上下.Name = "tpageひも上下"
         tpageひも上下.Padding = New Padding(3)
@@ -2353,15 +2363,16 @@ Partial Class frmMain
         ' 
         ' grp織りタイプ
         ' 
+        grp織りタイプ.Controls.Add(rad織りなし)
         grp織りタイプ.Controls.Add(rad本麻の葉編み)
         grp織りタイプ.Controls.Add(rad鉄線_3軸織り)
         grp織りタイプ.Controls.Add(rad巴_3すくみ)
         grp織りタイプ.Location = New Point(34, 134)
         grp織りタイプ.Name = "grp織りタイプ"
-        grp織りタイプ.Size = New Size(292, 168)
+        grp織りタイプ.Size = New Size(292, 180)
         grp織りタイプ.TabIndex = 1
         grp織りタイプ.TabStop = False
-        grp織りタイプ.Text = "織りタイプ"
+        grp織りタイプ.Text = "織りタイプ(底ベースのみ)"
         ' 
         ' grp綾方向
         ' 
@@ -2375,14 +2386,14 @@ Partial Class frmMain
         grp綾方向.TabStop = False
         grp綾方向.Text = "綾方向"
         ' 
-        ' lb巴_3すくみ
+        ' lblMessagePattern
         ' 
-        lb巴_3すくみ.AutoSize = True
-        lb巴_3すくみ.Location = New Point(34, 317)
-        lb巴_3すくみ.Name = "lb巴_3すくみ"
-        lb巴_3すくみ.Size = New Size(398, 20)
-        lb巴_3すくみ.TabIndex = 2
-        lb巴_3すくみ.Text = "巴(3すくみ)は「三角の中」の値がゼロ以上の場合のみ描画できます"
+        lblMessagePattern.AutoSize = True
+        lblMessagePattern.Location = New Point(34, 317)
+        lblMessagePattern.Name = "lblMessagePattern"
+        lblMessagePattern.Size = New Size(114, 20)
+        lblMessagePattern.TabIndex = 2
+        lblMessagePattern.Text = "MessagePattern"
         ' 
         ' tpage追加品
         ' 
@@ -3136,7 +3147,7 @@ Partial Class frmMain
     Friend WithEvents grp綾方向 As GroupBox
     Friend WithEvents rad右綾 As RadioButton
     Friend WithEvents rad左綾 As RadioButton
-    Friend WithEvents lb巴_3すくみ As Label
+    Friend WithEvents lblMessagePattern As Label
     Friend WithEvents radなし As RadioButton
     Friend WithEvents chkクロスひも As CheckBox
     Friend WithEvents lbl側面周比率対底 As Label
@@ -3176,4 +3187,5 @@ Partial Class frmMain
     Friend WithEvents rad鉄線_3軸織り As RadioButton
     Friend WithEvents rad巴_3すくみ As RadioButton
     Friend WithEvents rad本麻の葉編み As RadioButton
+    Friend WithEvents rad織りなし As RadioButton
 End Class
