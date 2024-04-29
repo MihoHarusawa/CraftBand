@@ -57,9 +57,9 @@ Partial Class frmVirsion
         lblDescription.AutoSize = True
         lblDescription.Location = New Point(116, 49)
         lblDescription.Name = "lblDescription"
-        lblDescription.Size = New Size(224, 20)
+        lblDescription.Size = New Size(132, 20)
         lblDescription.TabIndex = 28
-        lblDescription.Text = "クラフトバンド / 紙バンドのサイズ計算"
+        lblDescription.Text = "六つ目かごのデザイン"
         ' 
         ' txtDescription
         ' 
