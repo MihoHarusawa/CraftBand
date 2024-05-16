@@ -147,10 +147,14 @@ Public Class clsOutput
 
 #Region "カットリストテーブル"
     Private Function markStr(ByVal i As Integer) As String
-        If String.IsNullOrWhiteSpace(_ListOutMark) OrElse i < 1 Then
+        '#60
+        If i < 1 Then
             Return ""
+        ElseIf String.IsNullOrWhiteSpace(_ListOutMark) Then
+            Return i.ToString
+        Else
+            Return ChrW(AscW(_ListOutMark) + i - 1)
         End If
-        Return ChrW(AscW(_ListOutMark) + i - 1)
     End Function
 
     'ひもの属性からマークを得る(なければ新規マーク・あれば既存マーク)

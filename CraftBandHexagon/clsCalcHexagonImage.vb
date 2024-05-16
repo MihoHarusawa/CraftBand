@@ -636,24 +636,25 @@ Partial Public Class clsCalcHexagon
             band.p始点T = pA + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
             band.p終点T = pB + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
 
-            '記号描画位置(現物合わせ)
-            If _parent.BandAngleDegree = 120 Then
-                band.p文字位置 = pB +
+            '記号描画位置(現物合わせ) #60
+            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                If _parent.BandAngleDegree = 120 Then
+                    band.p文字位置 = pB +
                   _parent.DeltaBandDirection * (m_dひも幅 / 2) +
                   _parent.DeltaAxisDirection * (m_dひも幅 / 2)
-            ElseIf _parent.BandAngleDegree = 60 Then
-                band.p文字位置 = pA +
+                ElseIf _parent.BandAngleDegree = 60 Then
+                    band.p文字位置 = pA +
                     _parent.DeltaBandDirection * -m_dひも幅 +
                     _parent.DeltaAxisDirection * (m_dひも幅 / 3)
-            ElseIf _parent.BandAngleDegree = 0 Then
-                band.p文字位置 = pA +
+                ElseIf _parent.BandAngleDegree = 0 Then
+                    band.p文字位置 = pA +
                     _parent.DeltaBandDirection * -m_dひも幅 +
                     _parent.DeltaAxisDirection * -(m_dひも幅 / 2)
+                End If
             End If
 
             Return band
         End Function
-
 
 
         Overrides Function ToString() As String
@@ -1024,9 +1025,11 @@ Partial Public Class clsCalcHexagon
                         band.p始点T = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
                         band.p終点T = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
                         band.SetLengthRatio(r.f_d周長比率対底の周)
-                        '文字は上側面(コード固定)
-                        If hexidx = 3 Then
-                            band.p文字位置 = band.p始点F
+                        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                            '文字は上側面(コード固定) #60
+                            If hexidx = 3 Then
+                                band.p文字位置 = band.p始点F
+                            End If
                         End If
                         band.is始点FT線 = False
                         band.is終点FT線 = False
@@ -1059,9 +1062,11 @@ Partial Public Class clsCalcHexagon
 
                 Dim item As New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
                 item.m_a四隅 = band.aバンド位置
-                '文字は上側面(コード固定)
-                If hexidx = 3 Then
-                    item.p_p文字位置 = band.p始点F '領域処理を伴う
+                If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                    '文字は上側面(コード固定) #60
+                    If hexidx = 3 Then
+                        item.p_p文字位置 = band.p始点F '領域処理を伴う
+                    End If
                 End If
 
                 imglist.AddItem(item)

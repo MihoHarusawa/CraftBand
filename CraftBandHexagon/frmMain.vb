@@ -1889,6 +1889,13 @@ Public Class frmMain
         Next
     End Sub
 
+    Private Sub radおもて_CheckedChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged
+
+    End Sub
+
+    Private Sub radうら_CheckedChanged(sender As Object, e As EventArgs) Handles radうら.CheckedChanged
+
+    End Sub
 
 #End Region
 
