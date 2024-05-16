@@ -117,8 +117,8 @@ Public Class clsDataTables
     Public Enum enum織りタイプ
         i_なし = -1
         i_3すくみ = 0
-        i_3軸織り = 1
-        i_本麻の葉 = 2
+        i_3軸織 = 1
+        i_単麻の葉 = 2
     End Enum
 
     'tbl縦横展開

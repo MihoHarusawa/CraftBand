@@ -438,10 +438,10 @@ Public Class frmMain
             End Select
 
             Select Case .Value("f_i織りタイプ")
-                Case enum織りタイプ.i_3軸織り
+                Case enum織りタイプ.i_3軸織
                     rad鉄線_3軸織り.Checked = True
-                Case enum織りタイプ.i_本麻の葉
-                    rad本麻の葉編み.Checked = True
+                Case enum織りタイプ.i_単麻の葉
+                    rad麻の葉_単方向.Checked = True
                 Case enum織りタイプ.i_なし
                     rad織りなし.Checked = True
                 Case Else
@@ -597,9 +597,9 @@ Public Class frmMain
             End If
 
             If rad鉄線_3軸織り.Checked Then
-                .Value("f_i織りタイプ") = enum織りタイプ.i_3軸織り
-            ElseIf rad本麻の葉編み.Checked Then
-                .Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉
+                .Value("f_i織りタイプ") = enum織りタイプ.i_3軸織
+            ElseIf rad麻の葉_単方向.Checked Then
+                .Value("f_i織りタイプ") = enum織りタイプ.i_単麻の葉
             ElseIf rad巴_3すくみ.Checked Then
                 .Value("f_i織りタイプ") = enum織りタイプ.i_3すくみ
             Else
@@ -1753,12 +1753,12 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad本麻の葉編み.CheckedChanged, rad鉄線_3軸織り.CheckedChanged
+    Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad麻の葉_単方向.CheckedChanged, rad鉄線_3軸織り.CheckedChanged
         If Not _isLoadingData Then
             If rad鉄線_3軸織り.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3軸織り
-            ElseIf rad本麻の葉編み.Checked Then
-                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_本麻の葉
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3軸織
+            ElseIf rad麻の葉_単方向.Checked Then
+                _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_単麻の葉
             ElseIf rad巴_3すくみ.Checked Then
                 _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3すくみ
             Else
@@ -1772,8 +1772,8 @@ Public Class frmMain
         Dim msg As String = Nothing
         If rad鉄線_3軸織り.Checked Then
             msg = _clsCalcHexagon.Check3軸織()
-        ElseIf rad本麻の葉編み.Checked Then
-            msg = _clsCalcHexagon.Check本麻の葉()
+        ElseIf rad麻の葉_単方向.Checked Then
+            msg = _clsCalcHexagon.Check単麻の葉()
         ElseIf rad巴_3すくみ.Checked Then
             msg = _clsCalcHexagon.Check3すくみ()
         Else

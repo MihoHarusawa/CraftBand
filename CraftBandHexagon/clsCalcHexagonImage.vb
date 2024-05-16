@@ -1285,7 +1285,7 @@ Partial Public Class clsCalcHexagon
     End Function
 
     '描ければNothing,NGなら理由を返す
-    Function Check本麻の葉() As String
+    Function Check単麻の葉() As String
         If Not (_frmMain.rad右綾.Checked Or _frmMain.rad左綾.Checked) Then
             '右綾/左綾を指定してください。
             Return My.Resources.CalcNoPatternLeftRight
@@ -1304,9 +1304,9 @@ Partial Public Class clsCalcHexagon
         Return Nothing
     End Function
 
-    '本麻の葉
-    Function imageListバンドセット本麻の葉(ByVal checked() As Boolean) As clsImageItemList
-        If Check本麻の葉() IsNot Nothing Then
+    '単麻の葉
+    Function imageListバンドセット単麻の葉(ByVal checked() As Boolean) As clsImageItemList
+        If Check単麻の葉() IsNot Nothing Then
             Return Nothing
         End If
         Dim _ImageListバンドと縁 As New clsImageItemList
@@ -1409,7 +1409,7 @@ Partial Public Class clsCalcHexagon
         Return True
     End Function
 
-    '本麻の葉(綾指定あり)
+    '単麻の葉(綾指定あり)
     Private Function TwoRepeatBasic(ByVal imageItemBandList() As clsImageItemList) As Boolean
         Dim ax合わせ位置(cAngleCount - 1) As Integer
         For idx As Integer = 0 To cAngleCount - 1
@@ -1655,9 +1655,9 @@ Partial Public Class clsCalcHexagon
             ElseIf _frmMain.rad鉄線_3軸織り.Checked Then
                 '鉄線_3軸織り
                 _ImageListバンドセット = imageListバンドセット3軸織(checked)
-            ElseIf _frmMain.rad本麻の葉編み.Checked Then
-                '本麻の葉編み
-                _ImageListバンドセット = imageListバンドセット本麻の葉(checked)
+            ElseIf _frmMain.rad麻の葉_単方向.Checked Then
+                '単麻の葉編み
+                _ImageListバンドセット = imageListバンドセット単麻の葉(checked)
             End If
         End If
 
