@@ -114,4 +114,10 @@ Public Class frmSelectBand
     Private Sub frmSelectBand_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         __paras.SetLastData("frmSelectBand", Me.Size)
     End Sub
+
+    Private Sub txtリスト出力記号_TextChanged(sender As Object, e As EventArgs) Handles txtリスト出力記号.TextChanged
+        If 1 < txtリスト出力記号.Text.Length Then
+            txtリスト出力記号.Text = txtリスト出力記号.Text.Substring(0, 1)
+        End If
+    End Sub
 End Class

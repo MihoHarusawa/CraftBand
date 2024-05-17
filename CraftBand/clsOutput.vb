@@ -150,7 +150,7 @@ Public Class clsOutput
         '#60
         If i < 1 Then
             Return ""
-        ElseIf String.IsNullOrWhiteSpace(_ListOutMark) Then
+        ElseIf String.IsNullOrWhiteSpace(_ListOutMark) OrElse _ListOutMark = "1" Then
             Return i.ToString
         Else
             Return ChrW(AscW(_ListOutMark) + i - 1)

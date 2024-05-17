@@ -1640,7 +1640,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged, radうら.CheckedChanged
+    Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged ', radうら.CheckedChanged
         If _clsImageData Is Nothing Then
             Return
         End If

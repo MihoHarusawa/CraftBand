@@ -1594,8 +1594,14 @@ Class clsCalcHexagon
         End If
         p_tbl縦横展開(aidx).AcceptChanges()
 
+        '#61
+        Dim isCenterBand As Boolean = _Data.p_row底_縦横.Value("f_bひも中心区分")
+
         '位置番号
         Dim pos As Integer = -(_i何個目位置(idx(aidx)) + 0)
+        If isCenterBand Then
+            pos += 1
+        End If
 
         Dim row As tbl縦横展開Row
         '端の目があればスペース
@@ -1628,7 +1634,7 @@ Class clsCalcHexagon
                 'adjust_展開ひも(aidx, row, p_iひもの本数(aidx))
 
                 pos += 1
-                If pos = 0 Then 'skip Zero
+                If Not isCenterBand AndAlso pos = 0 Then 'skip Zero
                     pos = 1
                 End If
             Next

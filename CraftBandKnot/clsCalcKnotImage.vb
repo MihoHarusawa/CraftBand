@@ -184,7 +184,7 @@ Partial Public Class clsCalcKnot
         Next
 
         '以降参照するのでここでセットする
-        _imageList側面ひも = New clsImageItemList(tmptable)
+        _imageList側面ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
 
         '側面いっぱい

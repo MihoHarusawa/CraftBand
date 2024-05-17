@@ -1249,7 +1249,7 @@ Class clsCalcKnot
             _Data.ToTmpTable(enumひも種.i_横, tmptable) '出力ひも長も加算
         End If
         _ImageList横ひも = Nothing
-        _ImageList横ひも = New clsImageItemList(tmptable)
+        _ImageList横ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
         'image計算結果は不要
         Return tmptable
@@ -1293,7 +1293,7 @@ Class clsCalcKnot
             _Data.ToTmpTable(enumひも種.i_縦, tmptable) '出力ひも長も加算
         End If
         _ImageList縦ひも = Nothing
-        _ImageList縦ひも = New clsImageItemList(tmptable)
+        _ImageList縦ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
         'image計算結果は不要
         Return tmptable

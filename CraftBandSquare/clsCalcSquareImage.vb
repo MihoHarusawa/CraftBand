@@ -49,9 +49,17 @@ Partial Public Class clsCalcSquare
     Dim _ImageList描画要素 As clsImageItemList '底と側面
 
 
+    '現画像生成時に記号を表示する
+    Shared IsDrawMarkCurrent As Boolean = True
+
+
     'プレビュー画像生成
     'isBackFace=trueの時、UpDownを裏面として適用
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
+        '記号順が変わるので裏面には表示しない
+        IsDrawMarkCurrent = Not isBackFace AndAlso
+            Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -835,12 +843,15 @@ Partial Public Class clsCalcSquare
             item.m_a四隅 = New S四隅(New S領域(New S実座標(x_left, y_center + d幅 / 2),
                                          New S実座標(x_right, y_center - d幅 / 2)))
             If isFirst Then
-                If (draw = draw_position.before) Then
-                    item.p_p文字位置 = item.m_a四隅.p右下
-                ElseIf (draw = draw_position.after) Then
-                    item.p_p文字位置 = item.m_a四隅.p左下
-                Else
-                    item.p_p文字位置 = item.m_a四隅.p右上
+                '#60
+                If IsDrawMarkCurrent Then
+                    If (draw = draw_position.before) Then
+                        item.p_p文字位置 = item.m_a四隅.p右下
+                    ElseIf (draw = draw_position.after) Then
+                        item.p_p文字位置 = item.m_a四隅.p左下
+                    Else
+                        item.p_p文字位置 = item.m_a四隅.p右上
+                    End If
                 End If
                 isFirst = False
             End If
@@ -985,12 +996,15 @@ Partial Public Class clsCalcSquare
             item.m_a四隅 = New S四隅(New S領域(New S実座標(x_center - d幅 / 2, y_up),
                                          New S実座標(x_center + d幅 / 2, y_down)))
             If isFirst Then
-                If (draw = draw_position.before) Then
-                    item.p_p文字位置 = item.m_a四隅.p右上
-                ElseIf (draw = draw_position.after) Then
-                    item.p_p文字位置 = item.m_a四隅.p右下
-                Else
-                    item.p_p文字位置 = item.m_a四隅.p左下
+                '#60
+                If IsDrawMarkCurrent Then
+                    If (draw = draw_position.before) Then
+                        item.p_p文字位置 = item.m_a四隅.p右上
+                    ElseIf (draw = draw_position.after) Then
+                        item.p_p文字位置 = item.m_a四隅.p右下
+                    Else
+                        item.p_p文字位置 = item.m_a四隅.p左下
+                    End If
                 End If
                 isFirst = False
             End If
@@ -1089,7 +1103,10 @@ Partial Public Class clsCalcSquare
             item = New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
             item.m_a四隅 = New S四隅(New S領域(New S実座標(band_x, y_center + d幅 / 2),
                                          New S実座標(-band_x, y_center - d幅 / 2)))
-            item.p_p文字位置 = item.m_a四隅.p右上 + Unit0 * (_d基本のひも幅 / 2)
+            '#60
+            If IsDrawMarkCurrent Then
+                item.p_p文字位置 = item.m_a四隅.p右上 + Unit0 * (_d基本のひも幅 / 2)
+            End If
             _ImageList差しひも.AddItem(item)
 
 
@@ -1217,10 +1234,13 @@ Partial Public Class clsCalcSquare
             Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
             item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
-                If (draw = draw_position.after) Then
-                    item.p_p文字位置 = item.m_a四隅.p右下
-                Else
-                    item.p_p文字位置 = item.m_a四隅.p左上
+                '#60
+                If IsDrawMarkCurrent Then
+                    If (draw = draw_position.after) Then
+                        item.p_p文字位置 = item.m_a四隅.p右下
+                    Else
+                        item.p_p文字位置 = item.m_a四隅.p左上
+                    End If
                 End If
                 isFirst = False
             End If
@@ -1302,10 +1322,13 @@ Partial Public Class clsCalcSquare
             Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
             item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
-                If (draw = draw_position.after) Then
-                    item.p_p文字位置 = item.m_a四隅.p左上
-                Else
-                    item.p_p文字位置 = item.m_a四隅.p右下
+                '#60
+                If IsDrawMarkCurrent Then
+                    If (draw = draw_position.after) Then
+                        item.p_p文字位置 = item.m_a四隅.p左上
+                    Else
+                        item.p_p文字位置 = item.m_a四隅.p右下
+                    End If
                 End If
                 isFirst = False
             End If
@@ -1592,13 +1615,18 @@ Partial Public Class clsCalcSquare
 
             'sign = 0 'for debug
             item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), -45 * sign)
-            item.p_p文字位置 = New S実座標(x_center, y_center)
             If bRevert Then
                 item.m_a四隅 = item.m_a四隅.VertLeft()
-                item.p_p文字位置 = item.p_p文字位置.VertLeft()
             End If
             item.m_a四隅 = item.m_a四隅 + delta
-            item.p_p文字位置 = item.p_p文字位置 + delta
+            '#60
+            If IsDrawMarkCurrent Then
+                item.p_p文字位置 = New S実座標(x_center, y_center)
+                If bRevert Then
+                    item.p_p文字位置 = item.p_p文字位置.VertLeft()
+                End If
+                item.p_p文字位置 = item.p_p文字位置 + delta
+            End If
 
             _ImageList差しひも.AddItem(item)
         Next
@@ -1617,7 +1645,7 @@ Partial Public Class clsCalcSquare
             Return False
         End If
 
-        _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも)
+        _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも, Not IsDrawMarkCurrent)
         If _tbl縦横展開_横ひも.Rows.Count = 0 Then
             Return True
         End If
@@ -1657,7 +1685,7 @@ Partial Public Class clsCalcSquare
             Return False
         End If
 
-        _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも)
+        _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも, Not IsDrawMarkCurrent)
         If _tbl縦横展開_縦ひも.Rows.Count = 0 Then
             Return True
         End If
@@ -1737,10 +1765,10 @@ Partial Public Class clsCalcSquare
 
 
         '以降参照するのでここでセットする
-        _imageList側面上 = New clsImageItemList(tmptable)
-        _imageList側面左 = New clsImageItemList(tmptable)
-        _imageList側面下 = New clsImageItemList(tmptable)
-        _imageList側面右 = New clsImageItemList(tmptable)
+        _imageList側面上 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
+        _imageList側面左 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
+        _imageList側面下 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
+        _imageList側面右 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
 
         Dim item As clsImageItem
 
@@ -1835,7 +1863,10 @@ Partial Public Class clsCalcSquare
             item.m_a四隅.p右上 = p上ひも左下 + Unit90 * d高さ + Unit0 * get周の横()
 
             '文字位置
-            item.p_p文字位置 = p上ひも左下 + Unit0 * get周の横() + Unit90 * d高さ
+            '#60
+            If IsDrawMarkCurrent Then
+                item.p_p文字位置 = p上ひも左下 + Unit0 * get周の横() + Unit90 * d高さ
+            End If
             _imageList側面上.AddItem(item)
 
             '*下

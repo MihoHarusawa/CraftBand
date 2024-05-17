@@ -433,51 +433,108 @@ Public Class clsDataTables
 
             Select Case g_enumExeName
                 Case enumExeName.CraftBandMesh
-                    WCount = .Value("f_i縦ひもの本数")
+                    'うらおもて未対応
+                    'WCount = .Value("f_i縦ひもの本数")
+                    Return Nothing
 
                 Case enumExeName.CraftBandSquare45
                     WCount = .Value("f_i横の四角数") + .Value("f_i縦の四角数")
                     turn.p_row底_縦横.Value("f_i横の四角数") = .Value("f_i縦の四角数")
                     turn.p_row底_縦横.Value("f_i縦の四角数") = .Value("f_i横の四角数")
+                    If WCount = 0 OrElse Not bExpand Then
+                        Return turn
+                    End If
 
                 Case enumExeName.CraftBandKnot
-                    WCount = .Value("f_i縦の四角数")
+                    'うらおもて未対応
+                    'WCount = .Value("f_i縦の四角数")
+                    Return Nothing
 
                 Case enumExeName.CraftBandSquare
                     WCount = p_row底_縦横.Value("f_i縦ひもの本数")
+                    If WCount = 0 OrElse Not bExpand Then
+                        Return turn
+                    End If
 
                 Case enumExeName.CraftBandHexagon
+                    WCount = .Value("f_i斜め60度ひも本数")
+                    If .Value("f_bひも中心区分") Then
+                        turn.p_row底_縦横.Value("f_i左から何番目") = .Value("f_i斜め60度ひも本数") - .Value("f_i左から何番目") + 1
+                        turn.p_row底_縦横.Value("f_i左から何番目2") = .Value("f_i斜め120度ひも本数") - .Value("f_i左から何番目2") + 1
+                    Else
+                        turn.p_row底_縦横.Value("f_i左から何番目") = .Value("f_i斜め60度ひも本数") - .Value("f_i左から何番目")
+                        turn.p_row底_縦横.Value("f_i左から何番目2") = .Value("f_i斜め120度ひも本数") - .Value("f_i左から何番目2")
+                    End If
+                    turn.p_row底_縦横.Value("f_d左端右端の目") = .Value("f_d左端右端の目2")
+                    turn.p_row底_縦横.Value("f_d左端右端の目2") = .Value("f_d左端右端の目")
+                    If Not bExpand AndAlso (WCount = .Value("f_i斜め120度ひも本数")) Then
+                        Return turn
+                    End If
+
+                Case Else
+                    Return Nothing
 
             End Select
-
         End With
 
-        If WCount = 0 OrElse Not bExpand Then
-            Return turn
-        End If
+        '入れ替え処理
+        If {enumExeName.CraftBandSquare, enumExeName.CraftBandSquare45}.Contains(g_enumExeName) Then
 
-        '縦ひものみを入れ替えます(補強ひもは描かないので除外)
-        turn.p_tbl縦横展開.Clear()
-        For Each row As tbl縦横展開Row In p_tbl縦横展開
-            If row.f_iひも種 = enumひも種.i_縦 AndAlso
-                 0 <= row.f_iひも番号 AndAlso row.f_iひも番号 <= WCount Then
+            turn.p_tbl縦横展開.Clear()
+            For Each row As tbl縦横展開Row In p_tbl縦横展開
+                '縦ひもの左右を入れ替えます(補強ひもは描かないので除外)
+                If row.f_iひも種 = enumひも種.i_縦 AndAlso
+                    0 <= row.f_iひも番号 AndAlso row.f_iひも番号 <= WCount Then
+                    '番号を逆順にする
+                    Dim tmp As tbl縦横展開Row = turn.p_tbl縦横展開.Newtbl縦横展開Row
+                    tmp.f_iひも種 = enumひも種.i_縦
+                    tmp.f_iひも番号 = WCount - row.f_iひも番号 + 1
+                    '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
+                    'tmp.f_dひも長加算 = row.f_dひも長加算
+                    'tmp.f_dひも長加算2 = row.f_dひも長加算2
+                    'tmp.f_s色 = row.f_s色
+                    'tmp.f_sメモ = row.f_sメモ
+                    'tmp.f_i何本幅 = row.f_i何本幅
+                    getOtherSaved(tmp, row, True) '本幅も転記
+                    turn.p_tbl縦横展開.Rows.Add(tmp)
+                Else
+                    'そのまま
+                    turn.p_tbl縦横展開.ImportRow(row)
+                End If
+            Next
 
-                '番号を逆順にする
+        ElseIf {enumExeName.CraftBandHexagon}.Contains(g_enumExeName) Then
+
+            Dim WCount2 As Integer = p_row底_縦横.Value("f_i斜め120度ひも本数")
+            turn.p_tbl縦横展開.Clear()
+            For Each row As tbl縦横展開Row In p_tbl縦横展開
                 Dim tmp As tbl縦横展開Row = turn.p_tbl縦横展開.Newtbl縦横展開Row
-                tmp.f_iひも種 = enumひも種.i_縦
-                tmp.f_iひも番号 = WCount - row.f_iひも番号 + 1
-                '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
-                tmp.f_dひも長加算 = row.f_dひも長加算
-                tmp.f_dひも長加算2 = row.f_dひも長加算2
-                tmp.f_s色 = row.f_s色
-                tmp.f_sメモ = row.f_sメモ
-                tmp.f_i何本幅 = row.f_i何本幅
+                getOtherSaved(tmp, row, True) '本幅も転記
+
+                If row.f_iひも種 = CType(enumひも種.i_横, Integer) Then
+                    tmp.f_iひも種 = enumひも種.i_横
+                    tmp.f_iひも番号 = row.f_iひも番号
+                ElseIf row.f_iひも種 = CType(enumひも種.i_60度, Integer) Then
+                    '斜め60度→120度、逆順
+                    tmp.f_iひも種 = enumひも種.i_120度
+                    tmp.f_iひも番号 = WCount - row.f_iひも番号 + 1
+                ElseIf row.f_iひも種 = CType(enumひも種.i_120度, Integer) Then
+                    '斜め120度→60度、逆順
+                    tmp.f_iひも種 = enumひも種.i_60度
+                    tmp.f_iひも番号 = WCount2 - row.f_iひも番号 + 1
+                Else
+                    '描画対象外
+                    tmp = Nothing
+                    Continue For
+                End If
+
+                '加算の左右入れ替え
+                tmp.f_dひも長加算 = row.f_dひも長加算2
+                tmp.f_dひも長加算2 = row.f_dひも長加算
+
                 turn.p_tbl縦横展開.Rows.Add(tmp)
-            Else
-                'そのまま
-                turn.p_tbl縦横展開.ImportRow(row)
-            End If
-        Next
+            Next
+        End If
         turn.p_tbl縦横展開.AcceptChanges()
 
         Return turn
@@ -492,7 +549,6 @@ Public Class clsDataTables
             Return Nothing
         End Try
     End Function
-
 
 #Region "編集による更新状態"
 
@@ -555,11 +611,70 @@ Public Class clsDataTables
         Next
         Return False
     End Function
+#End Region
 
 
 #Region "ワークテーブルとtbl縦横展開の転送"
     '※キーはf_iひも種,f_iひも番号 [対象は、f_iひも種のbitを持つレコード]
     '保持するのは入力値:  f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ   f_i何本幅は対応Exeのみ
+
+    'f_i何本幅の保持対象の時True
+    Private Function isLoad何本幅() As Boolean
+        Return _
+        (g_enumExeName = enumExeName.CraftBandSquare) OrElse
+                (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
+                (g_enumExeName = enumExeName.CraftBandHexagon)
+    End Function
+
+    '保持フィールド値を別レコードから取得
+    Private Shared Function getOtherSaved(ByVal this As tbl縦横展開Row, ByVal other As tbl縦横展開Row, ByVal isget何本幅 As Boolean) As Boolean
+        Try
+            '入力対象: f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ, f_i何本幅(引数指定)
+            If other Is Nothing Then
+                this.f_dひも長加算 = 0
+                this.f_dひも長加算2 = 0
+                this.f_s色 = ""
+                this.f_sメモ = ""
+                If isget何本幅 Then
+                    this.f_i何本幅 = 1
+                End If
+
+            Else
+                this.f_dひも長加算 = other.f_dひも長加算
+                this.f_dひも長加算2 = other.f_dひも長加算2
+                '仮の値としてセットしておく
+                If this.f_dひも長加算 <> 0 OrElse this.f_dひも長加算2 <> 0 Then
+                    this.f_d出力ひも長 = this.f_dひも長 + this.f_dひも長加算 + this.f_dひも長加算2
+                End If
+                '使用可能色
+                If g_clsSelectBasics.IsExistColor(other.f_s色) Then
+                    this.f_s色 = other.f_s色
+                Else
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "skip tbl縦横展開Row({0}:{1}).f_s色={2}", other.f_sひも名, other.f_iひも番号, other.f_s色)
+                End If
+                this.f_sメモ = other.f_sメモ
+
+                'f_i何本幅
+                If isget何本幅 Then
+                    If other.f_i何本幅 < 0 Then
+                        this.f_i何本幅 = 1
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", other.f_sひも名, other.f_iひも番号, other.f_i何本幅)
+                    ElseIf g_clsSelectBasics.p_i本幅 < other.f_i何本幅 Then
+                        this.f_i何本幅 = g_clsSelectBasics.p_i本幅
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", other.f_sひも名, other.f_iひも番号, other.f_i何本幅, g_clsSelectBasics.p_i本幅)
+                    Else
+                        this.f_i何本幅 = other.f_i何本幅
+                    End If
+                End If
+            End If
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "getOtherSaved")
+            Return False
+        End Try
+    End Function
+
 
     'ワークテーブルの編集フィールドにデータベース値をセットする
     '※iひも種はレコード参照には使わない
@@ -568,10 +683,10 @@ Public Class clsDataTables
             Return 0
         End If
 
-        'f_i何本幅は対応Exeのみ
-        Dim isLoad何本幅 As Boolean = (g_enumExeName = enumExeName.CraftBandSquare) OrElse
-                (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
-                (g_enumExeName = enumExeName.CraftBandHexagon)
+        ''f_i何本幅は対応Exeのみ
+        'Dim isLoad何本幅 As Boolean = (g_enumExeName = enumExeName.CraftBandSquare) OrElse
+        '        (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
+        '        (g_enumExeName = enumExeName.CraftBandHexagon)
 
         Dim count As Integer = 0
         For Each tmp As tbl縦横展開Row In tmptable
@@ -581,31 +696,33 @@ Public Class clsDataTables
                 Continue For
             End If
 
-            '入力対象: f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
-            tmp.f_dひも長加算 = row.f_dひも長加算
-            tmp.f_dひも長加算2 = row.f_dひも長加算2
-            If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
-                tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算 + tmp.f_dひも長加算2
-            End If
-            If g_clsSelectBasics.IsExistColor(row.f_s色) Then
-                tmp.f_s色 = row.f_s色
-            Else
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", row.f_sひも名, row.f_iひも番号, row.f_s色)
-            End If
-            tmp.f_sメモ = row.f_sメモ
+            getOtherSaved(tmp, row, isLoad何本幅())
 
-            'f_i何本幅は対応Exeのみ
-            If isLoad何本幅 Then
-                If row.f_i何本幅 < 0 Then
-                    tmp.f_i何本幅 = 1
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", row.f_sひも名, row.f_iひも番号, row.f_i何本幅)
-                ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
-                    tmp.f_i何本幅 = g_clsSelectBasics.p_i本幅
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", row.f_sひも名, row.f_iひも番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
-                Else
-                    tmp.f_i何本幅 = row.f_i何本幅
-                End If
-            End If
+            ''入力対象: f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
+            'tmp.f_dひも長加算 = row.f_dひも長加算
+            'tmp.f_dひも長加算2 = row.f_dひも長加算2
+            'If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
+            '    tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算 + tmp.f_dひも長加算2
+            'End If
+            'If g_clsSelectBasics.IsExistColor(row.f_s色) Then
+            '    tmp.f_s色 = row.f_s色
+            'Else
+            '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", row.f_sひも名, row.f_iひも番号, row.f_s色)
+            'End If
+            'tmp.f_sメモ = row.f_sメモ
+
+            ''f_i何本幅は対応Exeのみ
+            'If isLoad何本幅 Then
+            '    If row.f_i何本幅 < 0 Then
+            '        tmp.f_i何本幅 = 1
+            '        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", row.f_sひも名, row.f_iひも番号, row.f_i何本幅)
+            '    ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
+            '        tmp.f_i何本幅 = g_clsSelectBasics.p_i本幅
+            '        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", row.f_sひも名, row.f_iひも番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
+            '    Else
+            '        tmp.f_i何本幅 = row.f_i何本幅
+            '    End If
+            'End If
 
             count += 1
         Next
@@ -745,18 +862,20 @@ Public Class clsDataTables
                 Exit For '↓で処理済のはずだが
             End If
 
-            lastrow.f_i何本幅 = row.f_i何本幅
-            lastrow.f_s色 = row.f_s色
-            lastrow.f_dひも長加算 = row.f_dひも長加算
-            lastrow.f_dひも長加算2 = row.f_dひも長加算2
-            lastrow.f_sメモ = row.f_sメモ
+            'lastrow.f_i何本幅 = row.f_i何本幅
+            'lastrow.f_s色 = row.f_s色
+            'lastrow.f_dひも長加算 = row.f_dひも長加算
+            'lastrow.f_dひも長加算2 = row.f_dひも長加算2
+            'lastrow.f_sメモ = row.f_sメモ
+            getOtherSaved(lastrow, row, True) 'f_i何本幅 も転記
             If row.f_iひも番号 = bandnum Then
                 currow = row
                 'f_i何本幅 は保持
-                row.f_s色 = ""
-                row.f_dひも長加算 = 0
-                row.f_dひも長加算2 = 0
-                row.f_sメモ = ""
+                'row.f_s色 = ""
+                'row.f_dひも長加算 = 0
+                'row.f_dひも長加算2 = 0
+                'row.f_sメモ = ""
+                getOtherSaved(row, Nothing, False) 'f_i何本幅 は上書きしない
                 Exit For
             End If
             lastrow = row
@@ -804,11 +923,12 @@ Public Class clsDataTables
                 Continue For
             End If
             If lastrow IsNot Nothing Then
-                lastrow.f_i何本幅 = row.f_i何本幅
-                lastrow.f_s色 = row.f_s色
-                lastrow.f_dひも長加算 = row.f_dひも長加算
-                lastrow.f_dひも長加算2 = row.f_dひも長加算2
-                lastrow.f_sメモ = row.f_sメモ
+                'lastrow.f_i何本幅 = row.f_i何本幅
+                'lastrow.f_s色 = row.f_s色
+                'lastrow.f_dひも長加算 = row.f_dひも長加算
+                'lastrow.f_dひも長加算2 = row.f_dひも長加算2
+                'lastrow.f_sメモ = row.f_sメモ
+                getOtherSaved(lastrow, row, True) '何本幅も転記
                 If currow Is Nothing Then
                     currow = lastrow
                 End If
@@ -890,7 +1010,6 @@ Public Class clsDataTables
         Return ret
     End Function
 
-#End Region
 #End Region
 
 #Region "編集用Shared"

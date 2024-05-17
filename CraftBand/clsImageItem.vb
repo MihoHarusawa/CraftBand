@@ -1663,13 +1663,13 @@ Public Class clsImageItemList
         MyBase.New
     End Sub
 
-    Sub New(ByVal tmptable As tbl縦横展開DataTable)
+    Sub New(ByVal tmptable As tbl縦横展開DataTable, Optional nomark As Boolean = False)
         MyBase.New
         If tmptable Is Nothing Then
             Exit Sub
         End If
         For Each row As tbl縦横展開Row In tmptable
-            Dim band As New clsImageItem(row)
+            Dim band As New clsImageItem(row, nomark)
             Me.AddItem(band)
         Next
     End Sub

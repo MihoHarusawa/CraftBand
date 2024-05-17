@@ -286,7 +286,7 @@ Partial Public Class clsCalcSquare45
             If m_row縦横展開 Is Nothing Then
                 Return False
             End If
-            Dim item As New clsImageItem(m_row縦横展開)
+            Dim item As New clsImageItem(m_row縦横展開, Not IsDrawMarkCurrent)
             item.m_a四隅 = m_a底の四隅
 
             Dim p中央 As S実座標 = m_a底の四隅.p中央
@@ -575,10 +575,15 @@ Partial Public Class clsCalcSquare45
     End Class
 
 
-
+    '現画像生成時に記号を表示する
+    Shared IsDrawMarkCurrent As Boolean = True
 
     'プレビュー処理
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
+        '記号順が変わるので裏面には表示しない
+        IsDrawMarkCurrent = Not isBackFace AndAlso
+            Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)

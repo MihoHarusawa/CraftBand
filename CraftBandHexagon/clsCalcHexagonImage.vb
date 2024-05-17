@@ -637,7 +637,7 @@ Partial Public Class clsCalcHexagon
             band.p終点T = pB + _parent.DeltaAxisDirection * (m_dひも幅 / 2)
 
             '記号描画位置(現物合わせ) #60
-            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+            If IsDrawMarkCurrent Then
                 If _parent.BandAngleDegree = 120 Then
                     band.p文字位置 = pB +
                   _parent.DeltaBandDirection * (m_dひも幅 / 2) +
@@ -1025,7 +1025,7 @@ Partial Public Class clsCalcHexagon
                         band.p始点T = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
                         band.p終点T = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
                         band.SetLengthRatio(r.f_d周長比率対底の周)
-                        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                        If IsDrawMarkCurrent Then
                             '文字は上側面(コード固定) #60
                             If hexidx = 3 Then
                                 band.p文字位置 = band.p始点F
@@ -1062,7 +1062,7 @@ Partial Public Class clsCalcHexagon
 
                 Dim item As New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
                 item.m_a四隅 = band.aバンド位置
-                If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                If IsDrawMarkCurrent Then
                     '文字は上側面(コード固定) #60
                     If hexidx = 3 Then
                         item.p_p文字位置 = band.p始点F '領域処理を伴う
@@ -1632,8 +1632,15 @@ Partial Public Class clsCalcHexagon
 
 #Region "プレビュー画像生成"
 
+    '現画像生成時に記号を表示する
+    Shared IsDrawMarkCurrent As Boolean = True
+
     'プレビュー画像生成
-    Public Function CalcImage(ByVal imgData As clsImageData, ByVal checked() As Boolean) As Boolean
+    Public Function CalcImage(ByVal imgData As clsImageData, ByVal checked() As Boolean, ByVal isBackFace As Boolean) As Boolean
+        '記号順が変わるので裏面には表示しない
+        IsDrawMarkCurrent = Not isBackFace AndAlso
+            Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)

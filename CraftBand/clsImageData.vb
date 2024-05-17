@@ -198,7 +198,7 @@ Public Class clsImageData
 
 
     'HTMLファイルを作る
-    Private Function makeHtmlPage(ByVal fpath As String, ByVal imgpath As String, ByVal title As String) As Boolean
+    Private Function makeHtmlPage(ByVal fpath As String, ByVal imgpath As String, ByVal title As String, ByVal isCutList As Boolean) As Boolean
 
         Dim sb As New System.Text.StringBuilder
         sb.Append("<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"">").AppendLine()
@@ -222,7 +222,9 @@ Public Class clsImageData
         End If
         sb.Append("<P></P>").AppendLine()
 
-        sb.AppendLine(_clsOutput.OutCutListHtml())
+        If isCutList Then
+            sb.AppendLine(_clsOutput.OutCutListHtml())
+        End If
 
         sb.Append("</BODY>").AppendLine()
         sb.Append("</HTML>").AppendLine()
@@ -268,7 +270,7 @@ Public Class clsImageData
         If isBackFace Then
             title = String.Format(My.Resources.TitleBackFace, title)
         End If
-        If Not makeHtmlPage(htmlFile, GifFilePath, title) Then
+        If Not makeHtmlPage(htmlFile, GifFilePath, title, Not isBackFace) Then
             'LastErrorあり
             Return False
         End If

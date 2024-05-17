@@ -961,6 +961,8 @@ Public Class frmMain
         If showTabBase Then
             ShowDefaultTabControlPage(enumReason._Always)
         End If
+        'プレビュー初期化
+        reset_preview()
     End Sub
 
     '新規作成
@@ -1286,6 +1288,13 @@ Public Class frmMain
         nud斜め左端右端の目120.Visible = visible
         lbl六つ目120度.Visible = visible
         lbl斜め左端右端120_単位.Visible = visible
+
+#If 1 Then
+        '表裏のプレビューは同数時のみ
+        radうら.Visible = Not visible
+        radおもて.Visible = Not visible
+        reset_preview()
+#End If
 
         recalc(CalcCategory.Hex_0_60_120_Gap, sender)
     End Sub
@@ -1804,20 +1813,40 @@ Public Class frmMain
     Private Sub CalcImageData()
         If ToolStripStatusLabel1.Text = "OK" Then
 
+            Dim isBackFace As Boolean = radうら.Checked
+
             Dim checked(cAngleCount) As Boolean
             checked(cIdxAngle0) = chk横ひも.Checked
-            checked(cIdxAngle60) = chk斜め60度.Checked
-            checked(cIdxAngle120) = chk斜め120度.Checked
             checked(cAngleCount) = chk側面.Checked
+
+            Dim data As clsDataTables
+            Dim calc As clsCalcHexagon
+            If radうら.Checked Then
+                data = _clsDataTables.LeftSideRightData()
+                calc = New clsCalcHexagon(data, Me)
+                If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+                    Return  '先にOKならOKのはずだが
+                End If
+                '入れ替え
+                checked(cIdxAngle60) = chk斜め120度.Checked
+                checked(cIdxAngle120) = chk斜め60度.Checked
+            Else
+                'おもて
+                data = _clsDataTables
+                calc = _clsCalcHexagon
+                'そのまま
+                checked(cIdxAngle60) = chk斜め60度.Checked
+                checked(cIdxAngle120) = chk斜め120度.Checked
+            End If
 
             Cursor.Current = Cursors.WaitCursor
             _clsImageData = New clsImageData(_sFilePath)
-            Dim ret As Boolean = _clsCalcHexagon.CalcImage(_clsImageData, checked)
+            Dim ret As Boolean = calc.CalcImage(_clsImageData, checked, isBackFace)
             Cursor.Current = Cursors.Default
 
             If Not ret Then
-                If Not String.IsNullOrWhiteSpace(_clsCalcHexagon.p_sメッセージ) Then
-                    MessageBox.Show(_clsCalcHexagon.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                If Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
+                    MessageBox.Show(calc.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
                 Exit Sub
             End If
@@ -1826,7 +1855,26 @@ Public Class frmMain
     End Sub
 
     Private Sub chkひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横ひも.CheckedChanged, chk斜め60度.CheckedChanged, chk斜め120度.CheckedChanged, chk側面.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
         CalcImageData()
+    End Sub
+
+    '※斜めひも「同数」時のみ表示される
+    Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged ' radうら.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        CalcImageData()
+    End Sub
+
+    Private Sub reset_preview()
+        radおもて.Checked = True
+        chk横ひも.Checked = True
+        chk斜め60度.Checked = True
+        chk斜め120度.Checked = True
+        chk側面.Checked = True
     End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
@@ -1841,7 +1889,7 @@ Public Class frmMain
         If _clsImageData Is Nothing Then
             Return
         End If
-        If Not _clsImageData.ImgBrowserOpen() Then
+        If Not _clsImageData.ImgBrowserOpen(radうら.Checked) Then
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
@@ -1888,15 +1936,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
-    Private Sub radおもて_CheckedChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged
-
-    End Sub
-
-    Private Sub radうら_CheckedChanged(sender As Object, e As EventArgs) Handles radうら.CheckedChanged
-
-    End Sub
-
 #End Region
 
 End Class
