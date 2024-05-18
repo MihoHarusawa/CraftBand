@@ -41,10 +41,14 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 * ひもに色を設定することで、色ごとのカットリストを出力することができます。
 
 
-The CraftBandMesh series is a collection of applications designed to assist with size calculations and designs for paper bands basket.
-It consists of multiple applications that cater to different basic knitting methods. 
-These applications share a common database, which serves as the configuration file. 
-With this series, you can easily create your own original recipes, and by saving them to files, you can organize and manage your recipes as a library.
+The CraftBandMesh series is a collection of applications designed for creating baskets 
+using bands or tapes made from paper, plastic, or natural materials such as bamboo. 
+These applications help you calculate the size, number of bands, length, and patterns created by weaving.
+
+The series includes multiple applications, each tailored to different fundamental weaving methods. 
+All applications share a common database that acts as a configuration file. 
+With this series, you can easily create your own original designs and save them as files, 
+allowing you to organize and manage your recipes as a library.
 
 
 # Requirement
