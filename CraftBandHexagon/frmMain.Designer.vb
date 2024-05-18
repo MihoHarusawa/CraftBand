@@ -23,19 +23,19 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle24 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle25 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle26 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         ToolTip1 = New ToolTip(components)
         nud基本のひも幅 = New NumericUpDown()
@@ -132,7 +132,7 @@ Partial Class frmMain
         chk斜め60度 = New CheckBox()
         chk横ひも = New CheckBox()
         chkひも中心合わせ = New CheckBox()
-        rad鉄線_3軸織り = New RadioButton()
+        rad鉄線_3軸織 = New RadioButton()
         rad巴_3すくみ = New RadioButton()
         rad麻の葉_単方向 = New RadioButton()
         rad織りなし = New RadioButton()
@@ -1367,16 +1367,16 @@ Partial Class frmMain
         ToolTip1.SetToolTip(chkひも中心合わせ, "ひも間のすき間ではなく、ひもの中心を重ねる時にON")
         chkひも中心合わせ.UseVisualStyleBackColor = True
         ' 
-        ' rad鉄線_3軸織り
+        ' rad鉄線_3軸織
         ' 
-        rad鉄線_3軸織り.AutoSize = True
-        rad鉄線_3軸織り.Location = New Point(41, 102)
-        rad鉄線_3軸織り.Name = "rad鉄線_3軸織り"
-        rad鉄線_3軸織り.Size = New Size(118, 24)
-        rad鉄線_3軸織り.TabIndex = 2
-        rad鉄線_3軸織り.Text = "鉄線(3軸織り)"
-        ToolTip1.SetToolTip(rad鉄線_3軸織り, "3軸織りの図を作ります")
-        rad鉄線_3軸織り.UseVisualStyleBackColor = True
+        rad鉄線_3軸織.AutoSize = True
+        rad鉄線_3軸織.Location = New Point(41, 102)
+        rad鉄線_3軸織.Name = "rad鉄線_3軸織"
+        rad鉄線_3軸織.Size = New Size(108, 24)
+        rad鉄線_3軸織.TabIndex = 2
+        rad鉄線_3軸織.Text = "鉄線(3軸織)"
+        ToolTip1.SetToolTip(rad鉄線_3軸織, "3軸織りの図を作ります")
+        rad鉄線_3軸織.UseVisualStyleBackColor = True
         ' 
         ' rad巴_3すくみ
         ' 
@@ -2105,8 +2105,8 @@ Partial Class frmMain
         ' f_i番号2
         ' 
         f_i番号2.DataPropertyName = "f_i番号"
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i番号2.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i番号2.DefaultCellStyle = DataGridViewCellStyle14
         f_i番号2.HeaderText = "番号"
         f_i番号2.MinimumWidth = 6
         f_i番号2.Name = "f_i番号2"
@@ -2137,8 +2137,8 @@ Partial Class frmMain
         ' f_iひも番号2
         ' 
         f_iひも番号2.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle15
         f_iひも番号2.HeaderText = "ひも番号"
         f_iひも番号2.MinimumWidth = 6
         f_iひも番号2.Name = "f_iひも番号2"
@@ -2149,8 +2149,8 @@ Partial Class frmMain
         ' f_i何本幅2
         ' 
         f_i何本幅2.DataPropertyName = "f_i何本幅"
-        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
-        f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter
+        f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle16
         f_i何本幅2.HeaderText = "何本幅"
         f_i何本幅2.MinimumWidth = 6
         f_i何本幅2.Name = "f_i何本幅2"
@@ -2160,8 +2160,8 @@ Partial Class frmMain
         ' f_i周数2
         ' 
         f_i周数2.DataPropertyName = "f_i周数"
-        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i周数2.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i周数2.DefaultCellStyle = DataGridViewCellStyle17
         f_i周数2.HeaderText = "周数"
         f_i周数2.MinimumWidth = 6
         f_i周数2.Name = "f_i周数2"
@@ -2172,8 +2172,8 @@ Partial Class frmMain
         ' f_iひも本数2
         ' 
         f_iひも本数2.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle18
         f_iひも本数2.HeaderText = "ひも本数"
         f_iひも本数2.MinimumWidth = 6
         f_iひも本数2.Name = "f_iひも本数2"
@@ -2193,10 +2193,10 @@ Partial Class frmMain
         ' f_d高さ2
         ' 
         f_d高さ2.DataPropertyName = "f_d高さ"
-        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.Format = "N2"
-        DataGridViewCellStyle6.NullValue = Nothing
-        f_d高さ2.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle19.Format = "N2"
+        DataGridViewCellStyle19.NullValue = Nothing
+        f_d高さ2.DefaultCellStyle = DataGridViewCellStyle19
         f_d高さ2.HeaderText = "高さ"
         f_d高さ2.MinimumWidth = 6
         f_d高さ2.Name = "f_d高さ2"
@@ -2208,10 +2208,10 @@ Partial Class frmMain
         ' f_d垂直ひも長2
         ' 
         f_d垂直ひも長2.DataPropertyName = "f_d垂直ひも長"
-        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle7.Format = "N2"
-        DataGridViewCellStyle7.NullValue = Nothing
-        f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle20.Format = "N2"
+        DataGridViewCellStyle20.NullValue = Nothing
+        f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle20
         f_d垂直ひも長2.HeaderText = "斜めひも長"
         f_d垂直ひも長2.MinimumWidth = 6
         f_d垂直ひも長2.Name = "f_d垂直ひも長2"
@@ -2223,8 +2223,8 @@ Partial Class frmMain
         ' Fd周長比率対底の周DataGridViewTextBoxColumn
         ' 
         Fd周長比率対底の周DataGridViewTextBoxColumn.DataPropertyName = "f_d周長比率対底の周"
-        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
-        Fd周長比率対底の周DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight
+        Fd周長比率対底の周DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle21
         Fd周長比率対底の周DataGridViewTextBoxColumn.HeaderText = "周長比率対底の周"
         Fd周長比率対底の周DataGridViewTextBoxColumn.MinimumWidth = 6
         Fd周長比率対底の周DataGridViewTextBoxColumn.Name = "Fd周長比率対底の周DataGridViewTextBoxColumn"
@@ -2235,10 +2235,10 @@ Partial Class frmMain
         ' f_d周長2
         ' 
         f_d周長2.DataPropertyName = "f_d周長"
-        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle9.Format = "N2"
-        DataGridViewCellStyle9.NullValue = Nothing
-        f_d周長2.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle22.Format = "N2"
+        DataGridViewCellStyle22.NullValue = Nothing
+        f_d周長2.DefaultCellStyle = DataGridViewCellStyle22
         f_d周長2.HeaderText = "周長"
         f_d周長2.MinimumWidth = 6
         f_d周長2.Name = "f_d周長2"
@@ -2249,10 +2249,10 @@ Partial Class frmMain
         ' f_dひも長2
         ' 
         f_dひも長2.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle10.Format = "N2"
-        DataGridViewCellStyle10.NullValue = Nothing
-        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle23.Format = "N2"
+        DataGridViewCellStyle23.NullValue = Nothing
+        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle23
         f_dひも長2.HeaderText = "ひも長"
         f_dひも長2.MinimumWidth = 6
         f_dひも長2.Name = "f_dひも長2"
@@ -2264,8 +2264,8 @@ Partial Class frmMain
         ' f_dひも長加算2
         ' 
         f_dひも長加算2.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle24
         f_dひも長加算2.HeaderText = "ひも長加算"
         f_dひも長加算2.MinimumWidth = 6
         f_dひも長加算2.Name = "f_dひも長加算2"
@@ -2275,10 +2275,10 @@ Partial Class frmMain
         ' f_d連続ひも長2
         ' 
         f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
-        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle12.Format = "N2"
-        DataGridViewCellStyle12.NullValue = Nothing
-        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle25.Format = "N2"
+        DataGridViewCellStyle25.NullValue = Nothing
+        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle25
         f_d連続ひも長2.HeaderText = "出力ひも長"
         f_d連続ひも長2.MinimumWidth = 6
         f_d連続ひも長2.Name = "f_d連続ひも長2"
@@ -2289,8 +2289,8 @@ Partial Class frmMain
         ' f_d厚さ2
         ' 
         f_d厚さ2.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle26
         f_d厚さ2.HeaderText = "厚さ"
         f_d厚さ2.MinimumWidth = 6
         f_d厚さ2.Name = "f_d厚さ2"
@@ -2367,7 +2367,7 @@ Partial Class frmMain
         ' 
         grp織りタイプ.Controls.Add(rad織りなし)
         grp織りタイプ.Controls.Add(rad麻の葉_単方向)
-        grp織りタイプ.Controls.Add(rad鉄線_3軸織り)
+        grp織りタイプ.Controls.Add(rad鉄線_3軸織)
         grp織りタイプ.Controls.Add(rad巴_3すくみ)
         grp織りタイプ.Location = New Point(34, 134)
         grp織りタイプ.Name = "grp織りタイプ"
@@ -3212,7 +3212,7 @@ Partial Class frmMain
     Friend WithEvents chk側面 As CheckBox
     Friend WithEvents chkひも中心合わせ As CheckBox
     Friend WithEvents grp織りタイプ As GroupBox
-    Friend WithEvents rad鉄線_3軸織り As RadioButton
+    Friend WithEvents rad鉄線_3軸織 As RadioButton
     Friend WithEvents rad巴_3すくみ As RadioButton
     Friend WithEvents rad麻の葉_単方向 As RadioButton
     Friend WithEvents rad織りなし As RadioButton

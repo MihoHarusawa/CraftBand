@@ -1664,7 +1664,7 @@ Partial Public Class clsCalcHexagon
             If _frmMain.rad巴_3すくみ.Checked Then
                 '3すくみ指定
                 _ImageListバンドセット = imageListバンドセット3すくみ(checked)
-            ElseIf _frmMain.rad鉄線_3軸織り.Checked Then
+            ElseIf _frmMain.rad鉄線_3軸織.Checked Then
                 '鉄線_3軸織り
                 _ImageListバンドセット = imageListバンドセット3軸織(checked)
             ElseIf _frmMain.rad麻の葉_単方向.Checked Then

@@ -439,7 +439,7 @@ Public Class frmMain
 
             Select Case .Value("f_i織りタイプ")
                 Case enum織りタイプ.i_3軸織
-                    rad鉄線_3軸織り.Checked = True
+                    rad鉄線_3軸織.Checked = True
                 Case enum織りタイプ.i_単麻の葉
                     rad麻の葉_単方向.Checked = True
                 Case enum織りタイプ.i_なし
@@ -596,7 +596,7 @@ Public Class frmMain
                 .Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_どちらでも
             End If
 
-            If rad鉄線_3軸織り.Checked Then
+            If rad鉄線_3軸織.Checked Then
                 .Value("f_i織りタイプ") = enum織りタイプ.i_3軸織
             ElseIf rad麻の葉_単方向.Checked Then
                 .Value("f_i織りタイプ") = enum織りタイプ.i_単麻の葉
@@ -1762,9 +1762,9 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad麻の葉_単方向.CheckedChanged, rad鉄線_3軸織り.CheckedChanged
+    Private Sub rad織りタイプ_CheckedChanged(sender As Object, e As EventArgs) Handles rad巴_3すくみ.CheckedChanged, rad麻の葉_単方向.CheckedChanged, rad鉄線_3軸織.CheckedChanged
         If Not _isLoadingData Then
-            If rad鉄線_3軸織り.Checked Then
+            If rad鉄線_3軸織.Checked Then
                 _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_3軸織
             ElseIf rad麻の葉_単方向.Checked Then
                 _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum織りタイプ.i_単麻の葉
@@ -1779,7 +1779,7 @@ Public Class frmMain
 
     Private Sub show織りCheck()
         Dim msg As String = Nothing
-        If rad鉄線_3軸織り.Checked Then
+        If rad鉄線_3軸織.Checked Then
             msg = _clsCalcHexagon.Check3軸織()
         ElseIf rad麻の葉_単方向.Checked Then
             msg = _clsCalcHexagon.Check単麻の葉()
