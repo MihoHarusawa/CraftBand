@@ -1265,7 +1265,7 @@ Partial Public Class clsCalcHexagon
     End Function
 
     '3軸織り(鉄線)の描画
-    Function imageListバンドセット3軸織(ByVal checked() As Boolean) As clsImageItemList
+    Function imageListバンドセット3軸織(ByVal checked() As Boolean, ByVal isBackFace As Boolean) As clsImageItemList
         If Check3軸織() IsNot Nothing Then
             Return Nothing
         End If
@@ -1278,7 +1278,7 @@ Partial Public Class clsCalcHexagon
         End If
 
         '3軸描画
-        ThreeAxisBasic(imageItemBandLists)
+        ThreeAxisBasic(imageItemBandLists, isBackFace)
 
         '3方向のバンドセット追加
         For idx As Integer = 0 To cAngleCount - 1
@@ -1336,13 +1336,18 @@ Partial Public Class clsCalcHexagon
 
 
     '3軸描画(綾指定あり)
-    Private Function ThreeAxisBasic(ByVal imageItemBandList() As clsImageItemList) As Boolean
+    Private Function ThreeAxisBasic(ByVal imageItemBandList() As clsImageItemList, ByVal isBackFace As Boolean) As Boolean
+        'スターの中心は合わせ位置(ひも中心の場合は軸方向後) -1位置をセット
         Dim ax合わせ前(cAngleCount - 1) As Integer
         For idx As Integer = 0 To cAngleCount - 1
             '合わせ目の前後のひも、前側
             ax合わせ前(idx) = _BandPositions(idx).i合わせ位置AxisIdx - 1
             '側面分をプラス、1を0に詰めた分をマイナス
             ax合わせ前(idx) = ax合わせ前(idx) + _i側面の編みひも数 - 1
+            'ひも中心で裏面は、60度・120度で軸方向位置を後へ
+            If _bひも中心合わせ AndAlso idx <> cIdxAngle0 Then
+                ax合わせ前(idx) -= 1
+            End If
         Next
 
         For idx As Integer = 0 To cAngleCount - 1
@@ -1666,7 +1671,7 @@ Partial Public Class clsCalcHexagon
                 _ImageListバンドセット = imageListバンドセット3すくみ(checked)
             ElseIf _frmMain.rad鉄線_3軸織.Checked Then
                 '鉄線_3軸織り
-                _ImageListバンドセット = imageListバンドセット3軸織(checked)
+                _ImageListバンドセット = imageListバンドセット3軸織(checked, isBackFace)
             ElseIf _frmMain.rad麻の葉_単方向.Checked Then
                 '単麻の葉編み
                 _ImageListバンドセット = imageListバンドセット単麻の葉(checked)
