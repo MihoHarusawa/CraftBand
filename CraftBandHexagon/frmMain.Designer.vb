@@ -1149,7 +1149,7 @@ Partial Class frmMain
         chk斜め同数.Size = New Size(61, 24)
         chk斜め同数.TabIndex = 7
         chk斜め同数.Text = "同数"
-        ToolTip1.SetToolTip(chk斜め同数, "60度と120度でひも本数を変える場は愛はチェックOFF")
+        ToolTip1.SetToolTip(chk斜め同数, "60度と120度でひも本数を変える場合はチェックOFF")
         chk斜め同数.UseVisualStyleBackColor = True
         ' 
         ' nud斜めひも本数120度
