@@ -355,6 +355,14 @@ Class clsCalcHexagon
             Return ""
         End Get
     End Property
+    Public ReadOnly Property p_s六つ目ベース_周円の径 As String
+        Get
+            If 0 < p_d六つ目ベース_周 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目ベース_周 / Math.PI)
+            End If
+            Return ""
+        End Get
+    End Property
 
     Public ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
@@ -405,6 +413,14 @@ Class clsCalcHexagon
         Get
             If 0 < p_d縁厚さプラス_周 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縁厚さプラス_周)
+            End If
+            Return ""
+        End Get
+    End Property
+    Public ReadOnly Property p_s縁厚さプラス_周円の径 As String
+        Get
+            If 0 < p_d縁厚さプラス_周 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縁厚さプラス_周 / Math.PI)
             End If
             Return ""
         End Get
@@ -736,28 +752,39 @@ Class clsCalcHexagon
                 'ひもの本数をセットしてください。
                 p_sメッセージ = My.Resources.CalcNoCountSet
                 Return False
-            ElseIf _iひもの本数(idx) < 2 Then
-                '六つ目を作るために、各ひも2本以上にしてください。
-                p_sメッセージ = My.Resources.CalcBandCountAtLeast
-                Return False
-            ElseIf _i何個目位置(idx) < 1 Then    '六つ目のマーク位置、1以上
-                '合わせ目の位置は1以上にしてください。
-                p_sメッセージ = My.Resources.CalcMarkPositionPlus
-                Return False
             ElseIf _iひもの本数(idx) < _i何個目位置(idx) Then '本数以下
                 '合わせ目の位置は、ひもの本数より小さくしてください。
                 p_sメッセージ = My.Resources.CalcBadMarkPosition
                 Return False
             End If
 
-            If Not _bひも中心合わせ Then
-                If _iひもの本数(idx) <= _i何個目位置(idx) Then '六つ目数=本数-1
-                    '合わせ目の位置は、ひもの本数より小さくしてください。
-                    p_sメッセージ = My.Resources.CalcBadMarkPosition
+            '横ひもゼロの特殊ケースを除いて(#62)
+            If Not (idx = cIdxAngle0 AndAlso
+              _iひもの本数(idx) = 0 AndAlso _i何個目位置(idx) = 0 AndAlso
+              _d端の目(idx) = 0 AndAlso 0 < _i側面の編みひも数 AndAlso
+              _Data.p_row底_縦横.Value("f_b斜め同数区分")) Then
+
+                'ひもは2本以上
+                If _iひもの本数(idx) < 2 Then
+                    '六つ目を作るために、各ひも2本以上にしてください。
+                    p_sメッセージ = My.Resources.CalcBandCountAtLeast
                     Return False
+                ElseIf _i何個目位置(idx) < 1 Then    '合わせ目、1以上
+                    '合わせ目の位置は1以上にしてください。
+                    p_sメッセージ = My.Resources.CalcMarkPositionPlus
+                    Return False
+                End If
+
+                If Not _bひも中心合わせ Then
+                    If _iひもの本数(idx) <= _i何個目位置(idx) Then '六つ目数=本数-1
+                        '合わせ目の位置は、ひもの本数より小さくしてください。
+                        p_sメッセージ = My.Resources.CalcBadMarkPosition
+                        Return False
+                    End If
                 End If
             End If
         Next
+
         If _i側面の編みひも数 < 0 Then
             'ひもの本数をセットしてください。
             p_sメッセージ = My.Resources.CalcNoCountSet
@@ -1275,7 +1302,7 @@ Class clsCalcHexagon
 
 
     '更新処理が必要なフィールド名
-    Shared _fields側面と縁() As String = {"f_i何本幅", "f_s色", "f_dひも長加算", "f_d周長比率対底の周"}
+    Shared _fields側面と縁() As String = {"f_i何本幅", "f_s色", "f_dひも長加算", "f_d周長比率対底の周", "f_d周長"}
     Shared Function IsDataPropertyName側面と縁(ByVal name As String) As Boolean
         Return _fields側面と縁.Contains(name)
     End Function
@@ -1292,6 +1319,10 @@ Class clsCalcHexagon
         Else
             '追加もしくは更新
             If row IsNot Nothing Then
+                If dataPropertyName = "f_d周長" Then
+                    row.f_d周長比率対底の周 = row.f_d周長 / get側面の周長()
+                End If
+
                 '追加もしくは更新
                 If row.f_i番号 = cHemNumber Then
                     '縁

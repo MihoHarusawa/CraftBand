@@ -262,9 +262,9 @@ Partial Public Class clsCalcHexagon
             End If
 
 
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(0)={0}", _BandPositions(cIdxAngle0).ToString)
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(60)={0}", _BandPositions(cIdxAngle60).ToString)
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(120)={0}", _BandPositions(cIdxAngle120).ToString)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(0)={0}", _BandPositions(cIdxAngle0).ToString)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(60)={0}", _BandPositions(cIdxAngle60).ToString)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(120)={0}", _BandPositions(cIdxAngle120).ToString)
         End If
 
         '長さからひもの長さに反映
@@ -476,10 +476,10 @@ Partial Public Class clsCalcHexagon
             _CrossLine(cIdxAngle60) = New S線分(p50, p23)
             _CrossLine(cIdxAngle120) = New S線分(p01, p34)
 
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "p50{0} p01{1} p12{2} p23{3} p34{4} p45{5} p50{6}", p50, p01, p12, p23, p34, p45, p50)
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang0 {0}", _HexLine(cIdxAngle0).dump())
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang60 {0}", _HexLine(cIdxAngle60).dump())
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang120 {0}", _HexLine(cIdxAngle120).dump())
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "p50{0} p01{1} p12{2} p23{3} p34{4} p45{5} p50{6}", p50, p01, p12, p23, p34, p45, p50)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang0 {0}", _HexLine(cIdxAngle0).dump())
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang60 {0}", _HexLine(cIdxAngle60).dump())
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang120 {0}", _HexLine(cIdxAngle120).dump())
 
             Return IsValidHexagon()
         End Function
@@ -781,8 +781,7 @@ Partial Public Class clsCalcHexagon
 
         'テーブルのレコードをセットする
         Function SetTable(ByVal table As tbl縦横展開DataTable, ByVal iひもの本数 As Integer, ByVal i基本のひも幅 As Integer) As Boolean
-            If table Is Nothing OrElse table.Rows.Count = 0 Then
-                SetBasicCount(0)
+            If table Is Nothing Then
                 Return False
             End If
             SetBasicCount(iひもの本数)
@@ -819,15 +818,22 @@ Partial Public Class clsCalcHexagon
         '基本的な配置情報を計算する
         Function CalcBasicPositions(ByVal d六つ目の高さ As Double, ByVal d端の目 As Double,
                                     ByVal i何個目位置 As Integer, ByVal bひも中心合わせ As Boolean) As Boolean
-            '条件確認
-            If _iひもの本数 < 2 OrElse d六つ目の高さ < 0 OrElse
-                    i何個目位置 < 1 OrElse _iひもの本数 < i何個目位置 Then
-                Return False
-            End If
-            If Not bひも中心合わせ AndAlso _iひもの本数 = i何個目位置 Then
-                Return False
-            End If
+
             _i何個目位置 = i何個目位置
+
+            '条件確認
+            If 0 < _iひもの本数 Then
+                If _iひもの本数 < 2 OrElse d六つ目の高さ < 0 OrElse
+                    i何個目位置 < 1 OrElse _iひもの本数 < i何個目位置 Then
+                    Return False
+                End If
+                If Not bひも中心合わせ AndAlso _iひもの本数 = i何個目位置 Then
+                    Return False
+                End If
+            Else
+                '#62 チェック済
+                '横ひも, _iひもの本数=0, i何個目位置=0, d端の目=0
+            End If
 
             Dim d端の目幅 As Double = d六つ目の高さ * d端の目
             Dim i合わせAxisIdx As Integer = AxisIdx(i何個目位置)
@@ -853,7 +859,7 @@ Partial Public Class clsCalcHexagon
             '     合わせ位置からの幅(マイナス)  ← | → 合わせ位置からの幅(プラス)
 
             Dim d端からの長さ(_iひもの本数) As Double
-            Dim d端から合わせ位置まで As Double
+            Dim d端から合わせ位置まで As Double = 0
             '軸方向に累計
             Dim d幅の計 As Double = d端の目幅
             For axis As Integer = 1 To _iひもの本数
@@ -896,7 +902,11 @@ Partial Public Class clsCalcHexagon
             _hln底の2辺.SetCenters(p底の辺の中心1, p底の辺の中心2)
 
             '最も外側のひもの中心
-            _hln最外ひもの2辺.SetCenters(ByAxis(1).m_p合わせ位置, ByAxis(_iひもの本数).m_p合わせ位置)
+            If _iひもの本数 = 0 Then '#62
+                _hln最外ひもの2辺.SetCenters(pOrigin, pOrigin)
+            Else
+                _hln最外ひもの2辺.SetCenters(ByAxis(1).m_p合わせ位置, ByAxis(_iひもの本数).m_p合わせ位置)
+            End If
             '底の厚さをプラス
             _hln底の2辺に厚さ.SetCentersDelta(_hln底の2辺, DeltaAxisDirection * p_d底の厚さ)
 

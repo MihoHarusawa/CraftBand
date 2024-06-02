@@ -207,6 +207,14 @@ Class clsCalcMesh
             Return ""
         End Get
     End Property
+    Public ReadOnly Property p_s内側_最大周の径 As String
+        Get
+            If isValid計算_最大周 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d周の最大値 / Math.PI)
+            End If
+            Return ""
+        End Get
+    End Property
     Public ReadOnly Property p_s内側_最小横 As String
         Get
             If isValid計算_横 Then
@@ -273,6 +281,19 @@ Class clsCalcMesh
             Return ""
         End Get
     End Property
+    Public ReadOnly Property p_s外側_最大周の径 As String
+        Get
+            If isValid計算_最大周 Then
+                Dim thick As Double = 8
+                If 0 < _d径の合計 Then
+                    thick = 2 * System.Math.PI
+                End If
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((_d周の最大値 + _d厚さの最大値 * thick) / Math.PI)
+            End If
+            Return ""
+        End Get
+    End Property
+
     Public ReadOnly Property p_s外側_最大横 As String
         Get
             If isValid計算_横 Then
@@ -1472,7 +1493,7 @@ Class clsCalcMesh
     End Function
 
     '更新処理が必要なフィールド名
-    Shared _fields側面() As String = {"f_i何本幅", "f_i周数", "f_b周連続区分", "f_d周長比率対底の周"}
+    Shared _fields側面() As String = {"f_i何本幅", "f_i周数", "f_b周連続区分", "f_d周長比率対底の周", "f_d周長"}
     Shared Function IsDataPropertyName側面(ByVal name As String) As Boolean
         Return _fields側面.Contains(name)
     End Function
@@ -1487,6 +1508,11 @@ Class clsCalcMesh
 
         Else
             If row IsNot Nothing Then
+                '#65
+                If dataPropertyName = "f_d周長" Then
+                    row.f_d周長比率対底の周 = row.f_d周長 / _d底の周
+                End If
+
                 '追加もしくは更新
                 If row IsNot Nothing Then
                     '追加もしくは更新

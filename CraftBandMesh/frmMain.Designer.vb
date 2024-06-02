@@ -140,6 +140,7 @@ Partial Class frmMain
         ToolStripMenuItemEditCalc = New ToolStripMenuItem()
         ToolStripSeparator5 = New ToolStripSeparator()
         ToolStripMenuItemEditColorChange = New ToolStripMenuItem()
+        ToolStripMenuItemEditColorRepeat = New ToolStripMenuItem()
         ToolStripSeparator1 = New ToolStripSeparator()
         ToolStripMenuItemEditList = New ToolStripMenuItem()
         ToolStripMenuItemEditDefaultFile = New ToolStripMenuItem()
@@ -275,7 +276,6 @@ Partial Class frmMain
         lbl計算寸法最大横 = New Label()
         lbl底 = New Label()
         lbl最大 = New Label()
-        ToolStripMenuItemEditColorRepeat = New ToolStripMenuItem()
         f_i番号2 = New DataGridViewTextBoxColumn()
         f_s編みかた名2 = New DataGridViewTextBoxColumn()
         f_s編みひも名2 = New DataGridViewTextBoxColumn()
@@ -299,6 +299,9 @@ Partial Class frmMain
         f_s記号2 = New DataGridViewTextBoxColumn()
         f_sメモ2 = New DataGridViewTextBoxColumn()
         f_bError2 = New DataGridViewCheckBoxColumn()
+        lbl最大周の径 = New Label()
+        txt外側_最大周の径 = New TextBox()
+        txt内側_最大周の径 = New TextBox()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -595,7 +598,7 @@ Partial Class frmMain
         ' nud周数_側面
         ' 
         nud周数_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        nud周数_側面.Location = New Point(650, 376)
+        nud周数_側面.Location = New Point(715, 376)
         nud周数_側面.Name = "nud周数_側面"
         nud周数_側面.Size = New Size(60, 27)
         nud周数_側面.TabIndex = 10
@@ -651,7 +654,7 @@ Partial Class frmMain
         ' btn概算
         ' 
         btn概算.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btn概算.Location = New Point(751, 137)
+        btn概算.Location = New Point(816, 137)
         btn概算.Name = "btn概算"
         btn概算.Size = New Size(111, 46)
         btn概算.TabIndex = 21
@@ -662,10 +665,10 @@ Partial Class frmMain
         ' btnひもリスト
         ' 
         btnひもリスト.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnひもリスト.Location = New Point(756, 650)
+        btnひもリスト.Location = New Point(821, 650)
         btnひもリスト.Name = "btnひもリスト"
         btnひもリスト.Size = New Size(111, 46)
-        btnひもリスト.TabIndex = 55
+        btnひもリスト.TabIndex = 60
         btnひもリスト.Text = "ひもリスト(&L)"
         ToolTip1.SetToolTip(btnひもリスト, "入力値に基づきひも幅と長さのリストを表示します")
         btnひもリスト.UseVisualStyleBackColor = True
@@ -847,7 +850,7 @@ Partial Class frmMain
         ' btn規定値
         ' 
         btn規定値.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btn規定値.Location = New Point(634, 137)
+        btn規定値.Location = New Point(699, 137)
         btn規定値.Name = "btn規定値"
         btn規定値.Size = New Size(111, 46)
         btn規定値.TabIndex = 20
@@ -858,7 +861,7 @@ Partial Class frmMain
         ' btnリセット
         ' 
         btnリセット.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnリセット.Location = New Point(517, 137)
+        btnリセット.Location = New Point(582, 137)
         btnリセット.Name = "btnリセット"
         btnリセット.Size = New Size(111, 46)
         btnリセット.TabIndex = 19
@@ -884,7 +887,7 @@ Partial Class frmMain
         txt内側_縦.Name = "txt内側_縦"
         txt内側_縦.ReadOnly = True
         txt内側_縦.Size = New Size(80, 27)
-        txt内側_縦.TabIndex = 38
+        txt内側_縦.TabIndex = 39
         txt内側_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_縦, "底の内側の縦寸法")
         ' 
@@ -895,7 +898,7 @@ Partial Class frmMain
         txt内側_高さ.Name = "txt内側_高さ"
         txt内側_高さ.ReadOnly = True
         txt内側_高さ.Size = New Size(80, 27)
-        txt内側_高さ.TabIndex = 41
+        txt内側_高さ.TabIndex = 42
         txt内側_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_高さ, "側面の高さの合計")
         ' 
@@ -917,7 +920,7 @@ Partial Class frmMain
         txt外側_縦.Name = "txt外側_縦"
         txt外側_縦.ReadOnly = True
         txt外側_縦.Size = New Size(80, 27)
-        txt外側_縦.TabIndex = 39
+        txt外側_縦.TabIndex = 40
         txt外側_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_縦, "底の内側の縦寸法に、バンドの底の厚さを加えた値")
         ' 
@@ -928,7 +931,7 @@ Partial Class frmMain
         txt外側_高さ.Name = "txt外側_高さ"
         txt外側_高さ.ReadOnly = True
         txt外側_高さ.Size = New Size(80, 27)
-        txt外側_高さ.TabIndex = 42
+        txt外側_高さ.TabIndex = 43
         txt外側_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_高さ, "側面の高さの合計に、バンドの底の厚さを加えた値")
         ' 
@@ -939,7 +942,7 @@ Partial Class frmMain
         txt内側_底の周.Name = "txt内側_底の周"
         txt内側_底の周.ReadOnly = True
         txt内側_底の周.Size = New Size(80, 27)
-        txt内側_底の周.TabIndex = 44
+        txt内側_底の周.TabIndex = 45
         txt内側_底の周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_底の周, "縦横・楕円底の周にに立ち上げ時の増分を加えた、側面の最下段の周長")
         ' 
@@ -950,7 +953,7 @@ Partial Class frmMain
         txt外側_底の周.Name = "txt外側_底の周"
         txt外側_底の周.ReadOnly = True
         txt外側_底の周.Size = New Size(80, 27)
-        txt外側_底の周.TabIndex = 45
+        txt外側_底の周.TabIndex = 46
         txt外側_底の周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_底の周, "底の周の内側の値に、バンドの底の厚さを加えた値")
         ' 
@@ -961,7 +964,7 @@ Partial Class frmMain
         txt内側_最大周.Name = "txt内側_最大周"
         txt内側_最大周.ReadOnly = True
         txt内側_最大周.Size = New Size(80, 27)
-        txt内側_最大周.TabIndex = 47
+        txt内側_最大周.TabIndex = 48
         txt内側_最大周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_最大周, "側面の周長の最大値")
         ' 
@@ -972,7 +975,7 @@ Partial Class frmMain
         txt外側_最大周.Name = "txt外側_最大周"
         txt外側_最大周.ReadOnly = True
         txt外側_最大周.Size = New Size(80, 27)
-        txt外側_最大周.TabIndex = 48
+        txt外側_最大周.TabIndex = 49
         txt外側_最大周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_最大周, "側面の周長の最大値に底の厚さを加えた値")
         ' 
@@ -983,7 +986,7 @@ Partial Class frmMain
         txt外側_最大縦.Name = "txt外側_最大縦"
         txt外側_最大縦.ReadOnly = True
         txt外側_最大縦.Size = New Size(80, 27)
-        txt外側_最大縦.TabIndex = 54
+        txt外側_最大縦.TabIndex = 56
         txt外側_最大縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_最大縦, "縦(底)に「周長比率対底の周」の最大値を乗算し、厚さをプラス")
         ' 
@@ -994,7 +997,7 @@ Partial Class frmMain
         txt外側_最大横.Name = "txt外側_最大横"
         txt外側_最大横.ReadOnly = True
         txt外側_最大横.Size = New Size(80, 27)
-        txt外側_最大横.TabIndex = 51
+        txt外側_最大横.TabIndex = 52
         txt外側_最大横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt外側_最大横, "横(底)に「周長比率対底の周」の最大値を乗算し、厚さをプラス")
         ' 
@@ -1005,7 +1008,7 @@ Partial Class frmMain
         txt内側_最小縦.Name = "txt内側_最小縦"
         txt内側_最小縦.ReadOnly = True
         txt内側_最小縦.Size = New Size(80, 27)
-        txt内側_最小縦.TabIndex = 53
+        txt内側_最小縦.TabIndex = 55
         txt内側_最小縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_最小縦, "縦(底)に「周長比率対底の周」の最小値を乗算し厚さをマイナス")
         ' 
@@ -1016,7 +1019,7 @@ Partial Class frmMain
         txt内側_最小横.Name = "txt内側_最小横"
         txt内側_最小横.ReadOnly = True
         txt内側_最小横.Size = New Size(80, 27)
-        txt内側_最小横.TabIndex = 50
+        txt内側_最小横.TabIndex = 51
         txt内側_最小横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_最小横, "横(底)に「周長比率対底の周」の最小値を乗算し、厚さをマイナス")
         ' 
@@ -1088,7 +1091,7 @@ Partial Class frmMain
         MenuStrip1.Items.AddRange(New ToolStripItem() {ToolStripMenuItemFile, ToolStripMenuItemEdit, ToolStripMenuItemSetting, ToolStripMenuItemHelp})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Size = New Size(886, 28)
+        MenuStrip1.Size = New Size(951, 28)
         MenuStrip1.TabIndex = 0
         MenuStrip1.Text = "MenuStrip1"
         ' 
@@ -1186,6 +1189,12 @@ Partial Class frmMain
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
         ToolStripMenuItemEditColorChange.Size = New Size(216, 26)
         ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
+        ' 
+        ' ToolStripMenuItemEditColorRepeat
+        ' 
+        ToolStripMenuItemEditColorRepeat.Name = "ToolStripMenuItemEditColorRepeat"
+        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
         ' 
         ' ToolStripSeparator1
         ' 
@@ -1317,8 +1326,8 @@ Partial Class frmMain
         TabControl.Location = New Point(19, 171)
         TabControl.Name = "TabControl"
         TabControl.SelectedIndex = 0
-        TabControl.Size = New Size(848, 446)
-        TabControl.TabIndex = 0
+        TabControl.Size = New Size(913, 446)
+        TabControl.TabIndex = 22
         ' 
         ' tpage底縦横
         ' 
@@ -2017,7 +2026,7 @@ Partial Class frmMain
         tpage側面.Location = New Point(4, 29)
         tpage側面.Name = "tpage側面"
         tpage側面.Padding = New Padding(3)
-        tpage側面.Size = New Size(840, 413)
+        tpage側面.Size = New Size(905, 413)
         tpage側面.TabIndex = 2
         tpage側面.Text = "側面"
         tpage側面.UseVisualStyleBackColor = True
@@ -2026,7 +2035,7 @@ Partial Class frmMain
         ' 
         lbl周数_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         lbl周数_側面.AutoSize = True
-        lbl周数_側面.Location = New Point(650, 345)
+        lbl周数_側面.Location = New Point(715, 345)
         lbl周数_側面.Name = "lbl周数_側面"
         lbl周数_側面.Size = New Size(39, 20)
         lbl周数_側面.TabIndex = 9
@@ -2088,7 +2097,7 @@ Partial Class frmMain
         ' btn追加_側面
         ' 
         btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn追加_側面.Location = New Point(721, 357)
+        btn追加_側面.Location = New Point(786, 357)
         btn追加_側面.Name = "btn追加_側面"
         btn追加_側面.Size = New Size(111, 46)
         btn追加_側面.TabIndex = 11
@@ -2121,7 +2130,7 @@ Partial Class frmMain
         cmb編みかた名_側面.FormattingEnabled = True
         cmb編みかた名_側面.Location = New Point(460, 375)
         cmb編みかた名_側面.Name = "cmb編みかた名_側面"
-        cmb編みかた名_側面.Size = New Size(184, 28)
+        cmb編みかた名_側面.Size = New Size(249, 28)
         cmb編みかた名_側面.TabIndex = 8
         ' 
         ' dgv側面
@@ -2137,7 +2146,7 @@ Partial Class frmMain
         dgv側面.Name = "dgv側面"
         dgv側面.RowHeadersWidth = 51
         dgv側面.RowTemplate.Height = 29
-        dgv側面.Size = New Size(828, 298)
+        dgv側面.Size = New Size(893, 298)
         dgv側面.TabIndex = 2
         ' 
         ' BindingSource側面
@@ -2346,7 +2355,7 @@ Partial Class frmMain
         lbl計算寸法縦.Location = New Point(209, 661)
         lbl計算寸法縦.Name = "lbl計算寸法縦"
         lbl計算寸法縦.Size = New Size(24, 20)
-        lbl計算寸法縦.TabIndex = 37
+        lbl計算寸法縦.TabIndex = 38
         lbl計算寸法縦.Text = "縦"
         ' 
         ' lbl計算寸法高さ
@@ -2356,7 +2365,7 @@ Partial Class frmMain
         lbl計算寸法高さ.Location = New Point(287, 661)
         lbl計算寸法高さ.Name = "lbl計算寸法高さ"
         lbl計算寸法高さ.Size = New Size(34, 20)
-        lbl計算寸法高さ.TabIndex = 40
+        lbl計算寸法高さ.TabIndex = 41
         lbl計算寸法高さ.Text = "高さ"
         ' 
         ' lbl計算寸法_単位
@@ -2396,7 +2405,7 @@ Partial Class frmMain
         lbl計算寸法底の周.Location = New Point(366, 661)
         lbl計算寸法底の周.Name = "lbl計算寸法底の周"
         lbl計算寸法底の周.Size = New Size(51, 20)
-        lbl計算寸法底の周.TabIndex = 43
+        lbl計算寸法底の周.TabIndex = 44
         lbl計算寸法底の周.Text = "底の周"
         ' 
         ' lbl計算寸法最大周
@@ -2406,16 +2415,16 @@ Partial Class frmMain
         lbl計算寸法最大周.Location = New Point(477, 661)
         lbl計算寸法最大周.Name = "lbl計算寸法最大周"
         lbl計算寸法最大周.Size = New Size(54, 20)
-        lbl計算寸法最大周.TabIndex = 46
+        lbl計算寸法最大周.TabIndex = 47
         lbl計算寸法最大周.Text = "最大周"
         ' 
         ' btn終了
         ' 
         btn終了.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn終了.Location = New Point(756, 702)
+        btn終了.Location = New Point(821, 702)
         btn終了.Name = "btn終了"
         btn終了.Size = New Size(111, 46)
-        btn終了.TabIndex = 56
+        btn終了.TabIndex = 61
         btn終了.Text = "終了(&X)"
         btn終了.UseVisualStyleBackColor = True
         ' 
@@ -2498,8 +2507,8 @@ Partial Class frmMain
         StatusStrip1.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel1, ToolStripStatusLabel2})
         StatusStrip1.Location = New Point(0, 757)
         StatusStrip1.Name = "StatusStrip1"
-        StatusStrip1.Size = New Size(886, 26)
-        StatusStrip1.TabIndex = 57
+        StatusStrip1.Size = New Size(951, 26)
+        StatusStrip1.TabIndex = 62
         StatusStrip1.Text = "StatusStrip1"
         ' 
         ' ToolStripStatusLabel1
@@ -2530,7 +2539,7 @@ Partial Class frmMain
         btnDEBUG.Location = New Point(758, 619)
         btnDEBUG.Name = "btnDEBUG"
         btnDEBUG.Size = New Size(81, 27)
-        btnDEBUG.TabIndex = 58
+        btnDEBUG.TabIndex = 63
         btnDEBUG.Text = "DEBUG"
         btnDEBUG.UseVisualStyleBackColor = True
         btnDEBUG.Visible = False
@@ -2542,7 +2551,7 @@ Partial Class frmMain
         lbl計算寸法最大縦.Location = New Point(660, 661)
         lbl計算寸法最大縦.Name = "lbl計算寸法最大縦"
         lbl計算寸法最大縦.Size = New Size(24, 20)
-        lbl計算寸法最大縦.TabIndex = 52
+        lbl計算寸法最大縦.TabIndex = 54
         lbl計算寸法最大縦.Text = "縦"
         ' 
         ' lbl計算寸法最大横
@@ -2552,7 +2561,7 @@ Partial Class frmMain
         lbl計算寸法最大横.Location = New Point(574, 661)
         lbl計算寸法最大横.Name = "lbl計算寸法最大横"
         lbl計算寸法最大横.Size = New Size(24, 20)
-        lbl計算寸法最大横.TabIndex = 49
+        lbl計算寸法最大横.TabIndex = 50
         lbl計算寸法最大横.Text = "横"
         ' 
         ' lbl底
@@ -2562,7 +2571,7 @@ Partial Class frmMain
         lbl底.Location = New Point(160, 661)
         lbl底.Name = "lbl底"
         lbl底.Size = New Size(34, 20)
-        lbl底.TabIndex = 59
+        lbl底.TabIndex = 37
         lbl底.Text = "(底)"
         ' 
         ' lbl最大
@@ -2572,14 +2581,8 @@ Partial Class frmMain
         lbl最大.Location = New Point(604, 661)
         lbl最大.Name = "lbl最大"
         lbl最大.Size = New Size(49, 20)
-        lbl最大.TabIndex = 60
+        lbl最大.TabIndex = 53
         lbl最大.Text = "(最大)"
-        ' 
-        ' ToolStripMenuItemEditColorRepeat
-        ' 
-        ToolStripMenuItemEditColorRepeat.Name = "色の繰り返しEToolStripMenuItem"
-        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
-        ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
         ' 
         ' f_i番号2
         ' 
@@ -2747,7 +2750,6 @@ Partial Class frmMain
         f_d周長2.HeaderText = "周長"
         f_d周長2.MinimumWidth = 6
         f_d周長2.Name = "f_d周長2"
-        f_d周長2.ReadOnly = True
         f_d周長2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_d周長2.Width = 125
         ' 
@@ -2841,12 +2843,47 @@ Partial Class frmMain
         f_bError2.Visible = False
         f_bError2.Width = 125
         ' 
+        ' lbl最大周の径
+        ' 
+        lbl最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl最大周の径.AutoSize = True
+        lbl最大周の径.Location = New Point(717, 661)
+        lbl最大周の径.Name = "lbl最大周の径"
+        lbl最大周の径.Size = New Size(81, 20)
+        lbl最大周の径.TabIndex = 57
+        lbl最大周の径.Text = "最大周の径"
+        ' 
+        ' txt外側_最大周の径
+        ' 
+        txt外側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt外側_最大周の径.Location = New Point(718, 721)
+        txt外側_最大周の径.Name = "txt外側_最大周の径"
+        txt外側_最大周の径.ReadOnly = True
+        txt外側_最大周の径.Size = New Size(80, 27)
+        txt外側_最大周の径.TabIndex = 59
+        txt外側_最大周の径.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(txt外側_最大周の径, "最大周が円周となる直径")
+        ' 
+        ' txt内側_最大周の径
+        ' 
+        txt内側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt内側_最大周の径.Location = New Point(718, 690)
+        txt内側_最大周の径.Name = "txt内側_最大周の径"
+        txt内側_最大周の径.ReadOnly = True
+        txt内側_最大周の径.Size = New Size(80, 27)
+        txt内側_最大周の径.TabIndex = 58
+        txt内側_最大周の径.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(txt内側_最大周の径, "最大周が円周となる直径")
+        ' 
         ' frmMain
         ' 
         AllowDrop = True
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(886, 783)
+        ClientSize = New Size(951, 783)
+        Controls.Add(lbl最大周の径)
+        Controls.Add(txt外側_最大周の径)
+        Controls.Add(txt内側_最大周の径)
         Controls.Add(lbl最大)
         Controls.Add(lbl底)
         Controls.Add(lbl計算寸法最大縦)
@@ -3215,4 +3252,7 @@ Partial Class frmMain
     Friend WithEvents f_s記号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError2 As DataGridViewCheckBoxColumn
+    Friend WithEvents lbl最大周の径 As Label
+    Friend WithEvents txt外側_最大周の径 As TextBox
+    Friend WithEvents txt内側_最大周の径 As TextBox
 End Class

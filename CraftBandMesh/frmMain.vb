@@ -484,6 +484,10 @@ Public Class frmMain
             txt内側_最小縦.Text = .p_s内側_最小縦
             txt外側_最大縦.Text = .p_s外側_最大縦
 
+            txt内側_最大周の径.Text = .p_s内側_最大周の径
+            txt外側_最大周の径.Text = .p_s外側_最大周の径
+
+
             txt垂直ひも数.Text = .p_i垂直ひも数
             txt底楕円の径.Text = .p_s径の合計
             txt厚さ.Text = .p_s厚さ

@@ -478,10 +478,12 @@ Public Class frmMain
             txt六つ目ベース_縦.Text = .p_s六つ目ベース_縦
             txt六つ目ベース_高さ.Text = .p_s六つ目ベース_高さ
             txt六つ目ベース_周.Text = .p_s六つ目ベース_周
+            txt六つ目ベース_周円の径.Text = .p_s六つ目ベース_周円の径
             txt縁厚さプラス_横.Text = .p_s縁厚さプラス_横
             txt縁厚さプラス_縦.Text = .p_s縁厚さプラス_縦
             txt縁厚さプラス_高さ.Text = .p_s縁厚さプラス_高さ
             txt縁厚さプラス_周.Text = .p_s縁厚さプラス_周
+            txt縁厚さプラス_周円の径.Text = .p_s縁厚さプラス_周円の径
 
             txtひもに垂直_目.Text = .p_sひもに垂直_目
             txt対角線_目.Text = .p_s対角線_目
