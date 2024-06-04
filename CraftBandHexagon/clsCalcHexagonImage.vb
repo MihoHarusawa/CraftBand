@@ -1,11 +1,8 @@
-﻿Imports System.Drawing.Drawing2D
-Imports System.Net.Security
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
+Imports CraftBandHexagon.clsCalcHexagon.CHex
 Imports CraftBandHexagon.clsCalcHexagon.CHexLine
 
 Partial Public Class clsCalcHexagon
@@ -36,7 +33,7 @@ Partial Public Class clsCalcHexagon
     Shared cSameDirectionAddLength() As Boolean = {True, True, False} '左→右,左下→右上,左上→右下
 
 
-    '                                           i_1st         i_2nd
+    '(hexidx)                                    i_1st         i_2nd
     '            (3)　　　　　　　　 線の角度　 最初の線　　　最後の線       軸方向
     '         p34 -- p23                          側面外方向   　側面外方向
     '   (4)  ／        ↙＼  (2)         0度     (0) 270度      (3)  90度       90度   (ひも逆順)      
@@ -93,7 +90,7 @@ Partial Public Class clsCalcHexagon
 
     Private Function ToStringImageData() As String
         Dim sb As New System.Text.StringBuilder
-        sb.AppendFormat("底の領域{0} _底の周({1}) _側面周比率対底({2})", _底の領域, _底の周, _側面周比率対底).AppendLine()
+        sb.AppendFormat("底の領域:{0} _底の周({1}) _側面周比率対底({2})", _底の領域, _底の周, _側面周比率対底).AppendLine()
         For idx As Integer = 0 To cAngleCount - 1
             sb.AppendLine(_BandPositions(idx).ToString)
         Next
@@ -207,6 +204,10 @@ Partial Public Class clsCalcHexagon
                Not _hex底の辺に厚さ.IsValidHexagon Then
                 '立ち上げ可能な底を作れません。
                 p_s警告 = My.Resources.CalcBadBottom
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ValidHexagon :{0}", p_s警告)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "_hex最外六角形 :{0}", _hex最外六角形.dump())
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "_hex底の辺 :{0}", _hex底の辺.dump())
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "_hex底の辺に厚さ :{0}", _hex底の辺に厚さ.dump())
             End If
             _CalcStatus = CalcStatus._hex
 
@@ -227,6 +228,7 @@ Partial Public Class clsCalcHexagon
             _BandPositions(cIdxAngle120)._hln側面上2辺)
 
 
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_hex底の辺 :{0}", _hex底の辺.dump())
             '底とクロスする位置・その長さ
             Dim err_band As New List(Of String)
             For idx As Integer = 0 To cAngleCount - 1 '0度・60度・120度
@@ -235,12 +237,14 @@ Partial Public Class clsCalcHexagon
                     band.ReSet底の交点()
 
                     '六角形の各辺に対して
-                    For hexidx = 0 To CHex.cHexCount - 1
-                        If CHex.hex_aidx(hexidx) = idx Then
+                    For hxidx = 0 To CHex.cHexCount - 1
+                        If CHex.hex_aidx(hxidx) = idx Then
                             Continue For '同方向は除外
                         End If
-                        Dim p As S実座標 = _hex底の辺.line辺(hexidx).p交点(band.fnひも中心線)
-                        band.Set底の交点(hexidx, p)
+                        '#62
+                        Dim p As S実座標
+                        Dim tt As CHex.result辺との交点 = _hex底の辺.get辺との交点(hxidx, band.fnひも中心線, p)
+                        band.Set底の交点(hxidx, p, tt)
                     Next
 
                     If Not band.IsSet底の交点Set() Then
@@ -254,8 +258,9 @@ Partial Public Class clsCalcHexagon
                 _BandPositions(idx).Set補強ひも長(ciひも番号_クロス, _hex底の辺.CrossLine(idx).Length)
             Next
             If 0 < err_band.Count Then
-                '長さを計算できないひもがあります-{0}
-                p_s警告 = String.Format(My.Resources.CalcErrorBandLength, String.Join(",", err_band))
+                '長さを計算できないひもが{0}本あります。
+                p_s警告 = String.Format(My.Resources.CalcErrorBandLength, err_band.Count)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "{0} {1}", p_s警告, String.Join(",", err_band))
 
             Else
                 _CalcStatus = CalcStatus._length
@@ -287,23 +292,28 @@ Partial Public Class clsCalcHexagon
         Friend Const HexLineCount As Integer = 2
         Dim _parent As CBandPositionList    '方向情報
 
-        Dim _p辺の中心点(HexLineCount - 1) As S実座標   'Input:中心点と角度
+        '   <---  ・  --->    i_1st
+        '
+        '  <----  ・  ---->  i_2nd
+
+        Dim _p辺の中心点(HexLineCount - 1) As S実座標   'Input:中心点　角度:parent値
         Dim _line辺(HexLineCount - 1) As S線分          '計算結果:中心点を通る辺
 
         Sub New(ByVal parent As CBandPositionList)
             _parent = parent
         End Sub
 
+        '2辺の中心点で初期化
         Sub SetCenters(ByVal p1st As S実座標, ByVal p2nd As S実座標)
             _p辺の中心点(lineIdx.i_1st) = p1st
             _p辺の中心点(lineIdx.i_2nd) = p2nd
         End Sub
-
         Sub SetCentersDelta(ByVal base As CHexLine, ByVal delta As S差分)
             _p辺の中心点(lineIdx.i_1st) = base._p辺の中心点(lineIdx.i_1st) + (delta * -1)
             _p辺の中心点(lineIdx.i_2nd) = base._p辺の中心点(lineIdx.i_2nd) + delta
         End Sub
 
+        '他方向との交点をセット
         Sub SetLinePoints(ByVal i As lineIdx, ByVal p1 As S実座標, ByVal p2 As S実座標)
             _line辺(i) = New S線分(p1, p2)
         End Sub
@@ -332,10 +342,23 @@ Partial Public Class clsCalcHexagon
             End Get
         End Property
 
+        '2辺が1本に重なる(六角形にならない)
+        ReadOnly Property IsOneLine() As Boolean
+            Get
+                Return _p辺の中心点(lineIdx.i_1st).Near(_p辺の中心点(lineIdx.i_2nd))
+            End Get
+        End Property
+
+        '辺が作られ、その方向が角度に沿っている
         ReadOnly Property IsValid辺の方向() As Boolean
             Get
-                Return SameAngle(_parent.BandAngleDegree, _line辺(lineIdx.i_1st).s差分.Angle) AndAlso
-                    SameAngle(_parent.BandAngleDegree + 180, _line辺(lineIdx.i_2nd).s差分.Angle)
+                If (Not _line辺(lineIdx.i_1st).IsDot AndAlso Not SameAngle(_parent.BandAngleDegree, _line辺(lineIdx.i_1st).s差分.Angle)) Then
+                    Return False
+                End If
+                If (Not _line辺(lineIdx.i_2nd).IsDot AndAlso Not SameAngle(_parent.BandAngleDegree + 180, _line辺(lineIdx.i_2nd).s差分.Angle)) Then
+                    Return False
+                End If
+                Return True '辺ではなく点になっている場合はNGにしない
             End Get
         End Property
 
@@ -348,8 +371,8 @@ Partial Public Class clsCalcHexagon
         Public Function dump() As String
             Dim sb As New System.Text.StringBuilder
             sb.Append(_parent.BandAngleDegree).AppendLine()
-            sb.AppendFormat("1st: 中心{0} 辺({1})", _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st).dump()).AppendLine()
-            sb.AppendFormat("2nd: 中心{0} 辺({1})", _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd).dump())
+            sb.AppendFormat("1st: 中心{0} 辺({1}) 点({2})", _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st).dump(), _line辺(lineIdx.i_1st).IsDot).AppendLine()
+            sb.AppendFormat("2nd: 中心{0} 辺({1}) 点({2})", _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd).dump(), _line辺(lineIdx.i_2nd).IsDot)
             Return sb.ToString
         End Function
 
@@ -382,12 +405,26 @@ Partial Public Class clsCalcHexagon
         Dim _HexLine(cAngleCount - 1) As CHexLine
         '同方向の対角線:AngleIndex順
         Dim _CrossLine(cAngleCount - 1) As S線分
+        '横方向に重なった形状
+        Dim _IsOneLineAngle0 As Boolean
 
         ReadOnly Property IsValidHexagon() As Boolean
             Get
-                Return _HexLine(cIdxAngle0).IsValid辺の方向 AndAlso
+                _IsOneLineAngle0 = False
+                '2辺が1本に重なって良いのは横方向のみ(#62)
+                If _HexLine(cIdxAngle60).IsOneLine OrElse _HexLine(cIdxAngle120).IsOneLine Then
+                    Return False
+                End If
+                If _HexLine(cIdxAngle0).IsOneLine Then
+                    '横方向に重なる時
+                    _IsOneLineAngle0 = True
+                    Return True
+                Else
+                    '各方向に幅がある時
+                    Return _HexLine(cIdxAngle0).IsValid辺の方向 AndAlso
                     _HexLine(cIdxAngle60).IsValid辺の方向 AndAlso
                     _HexLine(cIdxAngle120).IsValid辺の方向
+                End If
             End Get
         End Property
 
@@ -422,6 +459,38 @@ Partial Public Class clsCalcHexagon
                 Return _HexLine(hex_aidx(hexidx)).line辺(hex_line(hexidx))
             End Get
         End Property
+
+        '交点があれば返す ※IsValidHexagonの前提
+        Enum result辺との交点
+            _none   'なし
+            _calc   '計算値・要チェック
+            _fixed  'そのままの値
+        End Enum
+        Function get辺との交点(ByVal hexidx As Integer, ByVal fn As S直線式, ByRef p As S実座標) As result辺との交点
+            '同方向は除外済だが念のため
+            If SameAngle(cBandAngleDegree(CHex.hex_aidx(hexidx)), fn.Angle) OrElse
+                SameAngle(cBandAngleDegree(CHex.hex_aidx(hexidx)) + 180, fn.Angle) Then
+                Return result辺との交点._none
+            End If
+
+            If _IsOneLineAngle0 Then
+                '横方向に重なる場合は、60度・120度の辺無し
+                p = line辺(hexidx).p交点(fn)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "get辺との交点({0}) p交点{1}", hexidx, p)
+                If p.IsZero Then
+                    Return result辺との交点._none
+                Else
+                    Return result辺との交点._fixed
+                End If
+            Else
+                p = line辺(hexidx).p交点(fn)
+                If p.IsZero Then
+                    Return result辺との交点._none
+                Else
+                    Return result辺との交点._calc
+                End If
+            End If
+        End Function
 
         ReadOnly Property delta辺の外向き法線(ByVal hexidx As Integer) As S差分
             Get
@@ -487,11 +556,22 @@ Partial Public Class clsCalcHexagon
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             For i As Integer = 0 To cAngleCount - 1
+                sb.AppendFormat("IsValidHexagon({0}) ", IsValidHexagon)
                 sb.AppendFormat("_HexLine({0}) {1}", i, _HexLine(i)).AppendLine()
                 sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i))
             Next
             Return sb.ToString
         End Function
+        Public Function dump() As String
+            Dim sb As New System.Text.StringBuilder
+            For i As Integer = 0 To cAngleCount - 1
+                sb.AppendFormat("IsValidHexagon({0}) ", IsValidHexagon).AppendLine()
+                sb.AppendFormat("_HexLine({0}) {1}", i, _HexLine(i).dump()).AppendLine()
+                sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i).dump())
+            Next
+            Return sb.ToString
+        End Function
+
     End Class
 
 
@@ -539,15 +619,18 @@ Partial Public Class clsCalcHexagon
             m_交点HexIndex_EN = -1
             m_底の交点_ST.Zero()
             m_底の交点_EN.Zero()
-            m_底の交点間長 = -1
+            m_底の交点間長 = 0 '#62
         End Sub
 
         Function IsSet底の交点Set() As Boolean
             Return 0 <= m_交点HexIndex_ST AndAlso 0 <= m_交点HexIndex_EN
         End Function
 
-        Function Set底の交点(ByVal hexidx As Integer, ByVal p As S実座標) As Boolean
-            If hexidx < 0 OrElse CHex.cHexCount <= hexidx OrElse p.IsZero Then
+        Function Set底の交点(ByVal hexidx As Integer, ByVal p As S実座標, ByVal tt As CHex.result辺との交点) As Boolean
+            If hexidx < 0 OrElse CHex.cHexCount <= hexidx Then
+                Return False
+            End If
+            If tt = result辺との交点._none Then
                 Return False
             End If
 
@@ -558,7 +641,7 @@ Partial Public Class clsCalcHexagon
                 Return True
 
             ElseIf m_交点HexIndex_EN < 0 Then
-                If m_底の交点_ST.Near(p) Then
+                If tt = result辺との交点._calc AndAlso m_底の交点_ST.Near(p) Then
                     '同一点(角度がとれない)はskip
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near Skip{1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, hexidx, p)
                     Return True
@@ -566,7 +649,7 @@ Partial Public Class clsCalcHexagon
 
                 '2点目
                 Dim delta As New S差分(m_底の交点_ST, p)
-                If SameAngle(delta.Angle, _parent.BandAngleDegree) Then
+                If tt = result辺との交点._fixed OrElse SameAngle(delta.Angle, _parent.BandAngleDegree) Then
                     m_底の交点_EN = p
                     m_交点HexIndex_EN = hexidx
                 Else
@@ -1224,8 +1307,14 @@ Partial Public Class clsCalcHexagon
             If 0 <= d三角の中値 Then
                 Dim is側面の三角形(cAngleCount - 1) As Boolean
                 For idx As Integer = 0 To cAngleCount - 1
-                    Dim d As Double = (_d端の目(idx) + _d最下段の目 - 1) * _d六つ目の高さ +
+                    Dim d As Double '三角位置からのずれ
+                    If p_b横ひもゼロ Then
+                        d = (2 * (_d端の目(idx) + _d最下段の目) - 1) * _d六つ目の高さ +
                         (get側面の六つ目の高さ() - _d六つ目の高さ) * _i側面の編みひも数
+                    Else
+                        d = (_d端の目(idx) + _d最下段の目 - 1) * _d六つ目の高さ +
+                        (get側面の六つ目の高さ() - _d六つ目の高さ) * _i側面の編みひも数
+                    End If
                     is側面の三角形(idx) = (Abs(d) <= d三角の中値)
                 Next
 
@@ -1350,13 +1439,18 @@ Partial Public Class clsCalcHexagon
         'スターの中心は合わせ位置(ひも中心の場合は軸方向後) -1位置をセット
         Dim ax合わせ前(cAngleCount - 1) As Integer
         For idx As Integer = 0 To cAngleCount - 1
-            '合わせ目の前後のひも、前側
-            ax合わせ前(idx) = _BandPositions(idx).i合わせ位置AxisIdx - 1
-            '側面分をプラス、1を0に詰めた分をマイナス
-            ax合わせ前(idx) = ax合わせ前(idx) + _i側面の編みひも数 - 1
-            'ひも中心で裏面は、60度・120度で軸方向位置を後へ
-            If _bひも中心合わせ AndAlso idx <> cIdxAngle0 Then
-                ax合わせ前(idx) -= 1
+            If idx = cIdxAngle0 AndAlso p_b横ひもゼロ Then
+                '側面分をプラス、1を0に詰めた分をマイナス
+                ax合わせ前(idx) = 0 + _i側面の編みひも数 - 1
+            Else
+                '合わせ目の前後のひも、前側
+                ax合わせ前(idx) = _BandPositions(idx).i合わせ位置AxisIdx - 1
+                '側面分をプラス、1を0に詰めた分をマイナス
+                ax合わせ前(idx) = ax合わせ前(idx) + _i側面の編みひも数 - 1
+                'ひも中心で裏面は、60度・120度で軸方向位置を後へ
+                If _bひも中心合わせ AndAlso idx <> cIdxAngle0 Then
+                    ax合わせ前(idx) -= 1
+                End If
             End If
         Next
 
@@ -1569,7 +1663,8 @@ Partial Public Class clsCalcHexagon
         '                 0:0度の1st
 
         '合わせ位置の六つ目
-        If 1 < _iひもの本数(0) AndAlso 1 < _iひもの本数(1) AndAlso 1 < _iひもの本数(2) Then
+        If (1 < _iひもの本数(cIdxAngle0) AndAlso 1 < _iひもの本数(cIdxAngle60) AndAlso 1 < _iひもの本数(cIdxAngle120)) OrElse
+            p_b横ひもゼロ() Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
 
             Dim dRadius As Double

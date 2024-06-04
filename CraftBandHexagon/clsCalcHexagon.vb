@@ -1,7 +1,6 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Runtime.CompilerServices
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsMasterTables
@@ -143,6 +142,7 @@ Class clsCalcHexagon
     Private Property _d縁の高さ As Double '縁の合計値,ゼロ以上
     Private Property _d縁の垂直ひも斜め計 As Double '縁の合計値,斜め補正済み値
     Private Property _d縁の厚さ As Double '縁の最大値,ゼロ以上
+    Private Property _d縁の周長比率対底の周 As Double '縁の最大値
 
     '※ここまでの集計値については、CalcSizeで正しく得られること。
     '　レコード内のひも長については、1Pass処理値とし、不正確な可能性あり
@@ -199,6 +199,7 @@ Class clsCalcHexagon
         _d縁の高さ = 0
         _d縁の垂直ひも斜め計 = 0
         _d縁の厚さ = 0
+        _d縁の周長比率対底の周 = 1
 
         ClearImageData()
     End Sub
@@ -227,6 +228,16 @@ Class clsCalcHexagon
         End Get
     End Property
 
+    '横ひもゼロの特殊ケース(#62)
+    Public ReadOnly Property p_b横ひもゼロ() As Boolean
+        Get
+            Return Not _bひも中心合わせ AndAlso
+                _iひもの本数(cIdxAngle0) = 0 AndAlso _i何個目位置(cIdxAngle0) = 0 AndAlso
+                _iひもの本数(cIdxAngle60) = _iひもの本数(cIdxAngle120) AndAlso
+                _i何個目位置(cIdxAngle60) = _i何個目位置(cIdxAngle120) AndAlso
+                0 < _i側面の編みひも数
+        End Get
+    End Property
 
 
     '計算結果の値
@@ -283,7 +294,8 @@ Class clsCalcHexagon
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
             If 0 <= p_d六つ目ベース_周 Then
-                Return p_d六つ目ベース_周 + 6 * p_d厚さ * SIN60
+                Return p_d六つ目ベース_周 * _d縁の周長比率対底の周 _
+                    + 6 * p_d厚さ * SIN60
             End If
             Return 0
         End Get
@@ -367,7 +379,8 @@ Class clsCalcHexagon
     Public ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
             If 0 <= p_d六つ目ベース_横 Then
-                Return p_d六つ目ベース_横 + p_d厚さ * 2
+                Return p_d六つ目ベース_横 * _d縁の周長比率対底の周 _
+                    + p_d厚さ * 2
             End If
             Return 0
         End Get
@@ -384,7 +397,8 @@ Class clsCalcHexagon
     Public ReadOnly Property p_d縁厚さプラス_縦 As Double
         Get
             If 0 <= p_d六つ目ベース_縦 Then
-                Return p_d六つ目ベース_縦 + p_d厚さ * 2
+                Return p_d六つ目ベース_縦 * _d縁の周長比率対底の周 _
+                    + p_d厚さ * 2
             End If
             Return 0
         End Get
@@ -518,7 +532,7 @@ Class clsCalcHexagon
         sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1)).AppendLine()
         sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2)).AppendLine()
         sb.AppendFormat("Height:({0},bottom({1})) BandSum={2}", _i側面の編みひも数, _d最下段の目, _d側面ひも幅計).AppendLine()
-        sb.AppendFormat("Edge({0}) SlantLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも斜め計, _d縁の厚さ).AppendLine()
+        sb.AppendFormat("Edge({0}) SlantLength({1}) Thickness({2}) Ratio({3})", _d縁の高さ, _d縁の垂直ひも斜め計, _d縁の厚さ, _d縁の周長比率対底の周).AppendLine()
         sb.Append(ToStringImageData())
         Return sb.ToString
     End Function
@@ -759,11 +773,10 @@ Class clsCalcHexagon
             End If
 
             '横ひもゼロの特殊ケースを除いて(#62)
-            If Not (idx = cIdxAngle0 AndAlso
-              _iひもの本数(idx) = 0 AndAlso _i何個目位置(idx) = 0 AndAlso
-              _d端の目(idx) = 0 AndAlso 0 < _i側面の編みひも数 AndAlso
-              _Data.p_row底_縦横.Value("f_b斜め同数区分")) Then
+            If idx = cIdxAngle0 AndAlso p_b横ひもゼロ Then
 
+                '本数・位置のチェックをスキップ
+            Else
                 'ひもは2本以上
                 If _iひもの本数(idx) < 2 Then
                     '六つ目を作るために、各ひも2本以上にしてください。
@@ -800,13 +813,15 @@ Class clsCalcHexagon
             p_sメッセージ = My.Resources.CalcSmallLengthRatio
             Return False
         End If
-        '#56
-        Dim d端の目 As Double = Min(_d端の目(cIdxAngle0), _d端の目(cIdxAngle60))
-        d端の目 = Min(d端の目, _d端の目(cIdxAngle120))
-        If (_d最下段の目 + d端の目) < g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") Then
-            '上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。
-            p_sメッセージ = My.Resources.CalcBottomSpaceValue
-            Return False
+        If Not p_b横ひもゼロ Then
+            '#56
+            Dim d端の目 As Double = Min(_d端の目(cIdxAngle0), _d端の目(cIdxAngle60))
+            d端の目 = Min(d端の目, _d端の目(cIdxAngle120))
+            If (_d最下段の目 + d端の目) < g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") Then
+                '上端・下端/斜め左端・右端、最下段の値は、足して目になるようにしてください。
+                p_sメッセージ = My.Resources.CalcBottomSpaceValue
+                Return False
+            End If
         End If
 
         Return True
@@ -1376,6 +1391,14 @@ Class clsCalcHexagon
             _d縁の厚さ = 0
         Else
             _d縁の厚さ = obj3
+        End If
+
+        '_d縁の周長比率対底の周の最大値
+        Dim obj4 As Object = _Data.p_tbl側面.Compute("MAX(f_d周長比率対底の周)", cond)
+        If IsDBNull(obj4) OrElse obj4 <= 0 Then
+            _d縁の周長比率対底の周 = 1
+        Else
+            _d縁の周長比率対底の周 = obj4
         End If
 
         Return True

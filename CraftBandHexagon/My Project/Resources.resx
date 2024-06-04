@@ -169,7 +169,7 @@
     <value>目標と六つ目サイズに基づき、各ひも数を再計算します。よろしいですか？</value>
   </data>
   <data name="CalcErrorBandLength" xml:space="preserve">
-    <value>長さを計算できないひもがあります-{0}</value>
+    <value>長さを計算できないひもが{0}本あります。</value>
   </data>
   <data name="CalcMarkPositionPlus" xml:space="preserve">
     <value>合わせ目の位置は1以上にしてください。</value>

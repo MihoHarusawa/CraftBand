@@ -290,10 +290,18 @@ Public Class clsImageItem
             End Get
         End Property
 
+        '線分ではなく点
+        Function IsDot() As Boolean
+            Return p開始.Near(p終了)
+        End Function
+
         '線分上の点か
         Function IsOn(ByVal p As S実座標) As Boolean
             If Not r外接領域.isInner(p) Then
                 Return False
+            End If
+            If IsDot() Then
+                Return p開始.Near(p)
             End If
             Dim fn As New S直線式(Me)
             Return fn.IsOn(p)
@@ -316,13 +324,37 @@ Public Class clsImageItem
 
         '交点の座標　※線分上にない場合はZero値。平行線を指定すると例外になります
         Shared Function p交点(ByVal line1 As S線分, ByVal line2 As S線分) As S実座標
-            Dim fn2 As New S直線式(line2)
-            Dim p As S実座標 = p交点(line1, fn2)
-            If Not p.IsZero AndAlso line1.r外接領域.isInner(p) Then
-                Return p
+            Dim p As S実座標 'Zero
+            If line2.IsDot Then
+                'line2が点
+                If line1.IsDot Then
+                    'ともに点
+                    If line2.p開始.Near(line1.p開始) Then
+                        Return line2.p開始
+                    Else
+                        Return p 'Zero
+                    End If
+                End If
+                'line1が線
+                Dim fn1 As New S直線式(line1)
+                p = p交点(line2, fn1)
+                If Not p.IsZero AndAlso line1.r外接領域.isInner(p) Then
+                    Return p
+                Else
+                    p.Zero()
+                    Return p
+                End If
+
             Else
-                p.Zero()
-                Return p
+                'line2が線
+                Dim fn2 As New S直線式(line2)
+                p = p交点(line1, fn2)
+                If Not p.IsZero AndAlso line2.r外接領域.isInner(p) Then
+                    Return p
+                Else
+                    p.Zero()
+                    Return p
+                End If
             End If
         End Function
         Function p交点(ByVal line As S線分) As S実座標
@@ -330,8 +362,17 @@ Public Class clsImageItem
         End Function
         '
         Shared Function p交点(ByVal line1 As S線分, ByVal fn2 As S直線式) As S実座標
+            Dim p As S実座標 'Zero
+            If line1.IsDot Then
+                If fn2.IsOn(line1.p開始) Then
+                    Return line1.p開始
+                Else
+                    Return p 'Zero
+                End If
+            End If
+            '線あり
             Dim fn1 As New S直線式(line1)
-            Dim p As S実座標 = S直線式.p交点(fn1, fn2)
+            p = S直線式.p交点(fn1, fn2)
             If Not p.IsZero AndAlso line1.r外接領域.isInner(p) Then
                 Return p
             Else
@@ -878,6 +919,9 @@ Public Class clsImageItem
 
         Private Sub by2points(ByVal p1 As S実座標, ByVal p2 As S実座標)
             If NearlyEqual(p1.X, p2.X) Then
+                If NearlyEqual(p1.Y, p2.Y) Then
+                    Throw New Exception("no line.")
+                End If
                 is90 = True
                 a = Double.PositiveInfinity '∞
                 b = p1.X
