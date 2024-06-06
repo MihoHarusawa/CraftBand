@@ -274,7 +274,7 @@ Partial Class frmMain
         f_s色2 = New DataGridViewComboBoxColumn()
         f_d高さ2 = New DataGridViewTextBoxColumn()
         f_d垂直ひも長2 = New DataGridViewTextBoxColumn()
-        Fd周長比率対底の周DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
+        f_d周長比率対底の周2 = New DataGridViewTextBoxColumn()
         f_d周長2 = New DataGridViewTextBoxColumn()
         f_dひも長2 = New DataGridViewTextBoxColumn()
         f_dひも長加算2 = New DataGridViewTextBoxColumn()
@@ -2119,7 +2119,7 @@ Partial Class frmMain
         dgv側面.AutoGenerateColumns = False
         dgv側面.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, Fd周長比率対底の周DataGridViewTextBoxColumn, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長比率対底の周2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
         dgv側面.DataSource = BindingSource側面
         dgv側面.Location = New Point(6, 36)
         dgv側面.Name = "dgv側面"
@@ -2151,7 +2151,7 @@ Partial Class frmMain
         editInsertBand.Location = New Point(-3, -3)
         editInsertBand.Name = "editInsertBand"
         editInsertBand.PanelSize = New Size(840, 413)
-        editInsertBand.Size = New Size(920, 420)
+        editInsertBand.Size = New Size(920, 451)
         editInsertBand.TabIndex = 0
         ' 
         ' tpageひも上下
@@ -2770,17 +2770,17 @@ Partial Class frmMain
         f_d垂直ひも長2.ToolTipText = "高さ分のひも長、縁については折り返し分が含まれる"
         f_d垂直ひも長2.Width = 125
         ' 
-        ' Fd周長比率対底の周DataGridViewTextBoxColumn
+        ' f_d周長比率対底の周2
         ' 
-        Fd周長比率対底の周DataGridViewTextBoxColumn.DataPropertyName = "f_d周長比率対底の周"
+        f_d周長比率対底の周2.DataPropertyName = "f_d周長比率対底の周"
         DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
-        Fd周長比率対底の周DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle8
-        Fd周長比率対底の周DataGridViewTextBoxColumn.HeaderText = "周長比率対底の周"
-        Fd周長比率対底の周DataGridViewTextBoxColumn.MinimumWidth = 6
-        Fd周長比率対底の周DataGridViewTextBoxColumn.Name = "Fd周長比率対底の周DataGridViewTextBoxColumn"
-        Fd周長比率対底の周DataGridViewTextBoxColumn.SortMode = DataGridViewColumnSortMode.NotSortable
-        Fd周長比率対底の周DataGridViewTextBoxColumn.ToolTipText = "底の周長に対する比率"
-        Fd周長比率対底の周DataGridViewTextBoxColumn.Width = 125
+        f_d周長比率対底の周2.DefaultCellStyle = DataGridViewCellStyle8
+        f_d周長比率対底の周2.HeaderText = "周長比率対底の周"
+        f_d周長比率対底の周2.MinimumWidth = 6
+        f_d周長比率対底の周2.Name = "f_d周長比率対底の周2"
+        f_d周長比率対底の周2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d周長比率対底の周2.ToolTipText = "底の周長に対する比率"
+        f_d周長比率対底の周2.Width = 125
         ' 
         ' f_d周長2
         ' 
@@ -3250,7 +3250,7 @@ Partial Class frmMain
     Friend WithEvents f_s色2 As DataGridViewComboBoxColumn
     Friend WithEvents f_d高さ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_d垂直ひも長2 As DataGridViewTextBoxColumn
-    Friend WithEvents Fd周長比率対底の周DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
+    Friend WithEvents f_d周長比率対底の周2 As DataGridViewTextBoxColumn
     Friend WithEvents f_d周長2 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長2 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算2 As DataGridViewTextBoxColumn

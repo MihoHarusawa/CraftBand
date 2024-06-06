@@ -23,15 +23,15 @@ Partial Class ctrInsertBand
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         BindingSource差しひも = New System.Windows.Forms.BindingSource(components)
         ToolTip1 = New System.Windows.Forms.ToolTip(components)
         btn削除 = New Windows.Forms.Button()
@@ -52,6 +52,7 @@ Partial Class ctrInsertBand
         f_i何本ごと1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i同位置数1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i同位置順1 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_i差し位置1 = New Windows.Forms.DataGridViewComboBoxColumn()
         f_dひも長1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_iひも本数1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_dひも長加算1 = New Windows.Forms.DataGridViewTextBoxColumn()
@@ -145,7 +146,7 @@ Partial Class ctrInsertBand
         dgv差しひも.AutoGenerateColumns = False
         dgv差しひも.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv差しひも.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv差しひも.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号1, f_b有効区分1, f_i配置面1, f_i角度1, f_i中心点1, f_i何本幅1, f_s色1, f_i開始位置1, f_i何本ごと1, f_i同位置数1, f_i同位置順1, f_dひも長1, f_iひも本数1, f_dひも長加算1, f_d出力ひも長1, f_s無効理由1, f_sメモ1})
+        dgv差しひも.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号1, f_b有効区分1, f_i配置面1, f_i角度1, f_i中心点1, f_i何本幅1, f_s色1, f_i開始位置1, f_i何本ごと1, f_i同位置数1, f_i同位置順1, f_i差し位置1, f_dひも長1, f_iひも本数1, f_dひも長加算1, f_d出力ひも長1, f_s無効理由1, f_sメモ1})
         dgv差しひも.DataSource = BindingSource差しひも
         dgv差しひも.Location = New System.Drawing.Point(6, 6)
         dgv差しひも.Name = "dgv差しひも"
@@ -157,8 +158,8 @@ Partial Class ctrInsertBand
         ' f_i番号1
         ' 
         f_i番号1.DataPropertyName = "f_i番号"
-        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_i番号1.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle1.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i番号1.DefaultCellStyle = DataGridViewCellStyle1
         f_i番号1.HeaderText = "番号"
         f_i番号1.MinimumWidth = 6
         f_i番号1.Name = "f_i番号1"
@@ -223,8 +224,8 @@ Partial Class ctrInsertBand
         ' f_i開始位置1
         ' 
         f_i開始位置1.DataPropertyName = "f_i開始位置"
-        DataGridViewCellStyle11.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_i開始位置1.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle2.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i開始位置1.DefaultCellStyle = DataGridViewCellStyle2
         f_i開始位置1.HeaderText = "開始位置"
         f_i開始位置1.MinimumWidth = 6
         f_i開始位置1.Name = "f_i開始位置1"
@@ -235,8 +236,8 @@ Partial Class ctrInsertBand
         ' f_i何本ごと1
         ' 
         f_i何本ごと1.DataPropertyName = "f_i何本ごと"
-        DataGridViewCellStyle12.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_i何本ごと1.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle3.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i何本ごと1.DefaultCellStyle = DataGridViewCellStyle3
         f_i何本ごと1.HeaderText = "何本ごと"
         f_i何本ごと1.MinimumWidth = 6
         f_i何本ごと1.Name = "f_i何本ごと1"
@@ -247,8 +248,8 @@ Partial Class ctrInsertBand
         ' f_i同位置数1
         ' 
         f_i同位置数1.DataPropertyName = "f_i同位置数"
-        DataGridViewCellStyle13.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_i同位置数1.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle4.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i同位置数1.DefaultCellStyle = DataGridViewCellStyle4
         f_i同位置数1.HeaderText = "同位置数"
         f_i同位置数1.MinimumWidth = 6
         f_i同位置数1.Name = "f_i同位置数1"
@@ -259,8 +260,8 @@ Partial Class ctrInsertBand
         ' f_i同位置順1
         ' 
         f_i同位置順1.DataPropertyName = "f_i同位置順"
-        DataGridViewCellStyle14.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_i同位置順1.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle5.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i同位置順1.DefaultCellStyle = DataGridViewCellStyle5
         f_i同位置順1.HeaderText = "同位置順"
         f_i同位置順1.MinimumWidth = 6
         f_i同位置順1.Name = "f_i同位置順1"
@@ -268,13 +269,23 @@ Partial Class ctrInsertBand
         f_i同位置順1.ToolTipText = "同位置数の中で何番目か。ゼロ/空は指定なし"
         f_i同位置順1.Width = 125
         ' 
+        ' f_i差し位置1
+        ' 
+        f_i差し位置1.DataPropertyName = "f_i差し位置"
+        f_i差し位置1.HeaderText = "差し位置"
+        f_i差し位置1.MinimumWidth = 6
+        f_i差し位置1.Name = "f_i差し位置1"
+        f_i差し位置1.Resizable = Windows.Forms.DataGridViewTriState.True
+        f_i差し位置1.SortMode = Windows.Forms.DataGridViewColumnSortMode.Automatic
+        f_i差し位置1.Width = 125
+        ' 
         ' f_dひも長1
         ' 
         f_dひも長1.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle15.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle15.Format = "N2"
-        DataGridViewCellStyle15.NullValue = Nothing
-        f_dひも長1.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle6.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.Format = "N2"
+        DataGridViewCellStyle6.NullValue = Nothing
+        f_dひも長1.DefaultCellStyle = DataGridViewCellStyle6
         f_dひも長1.HeaderText = "ひも長"
         f_dひも長1.MinimumWidth = 6
         f_dひも長1.Name = "f_dひも長1"
@@ -285,8 +296,8 @@ Partial Class ctrInsertBand
         ' f_iひも本数1
         ' 
         f_iひも本数1.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle16.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_iひも本数1.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle7.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_iひも本数1.DefaultCellStyle = DataGridViewCellStyle7
         f_iひも本数1.HeaderText = "ひも本数"
         f_iひも本数1.MinimumWidth = 6
         f_iひも本数1.Name = "f_iひも本数1"
@@ -297,8 +308,8 @@ Partial Class ctrInsertBand
         ' f_dひも長加算1
         ' 
         f_dひも長加算1.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle17.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算1.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle8.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算1.DefaultCellStyle = DataGridViewCellStyle8
         f_dひも長加算1.HeaderText = "ひも長加算"
         f_dひも長加算1.MinimumWidth = 6
         f_dひも長加算1.Name = "f_dひも長加算1"
@@ -309,10 +320,10 @@ Partial Class ctrInsertBand
         ' f_d出力ひも長1
         ' 
         f_d出力ひも長1.DataPropertyName = "f_d出力ひも長"
-        DataGridViewCellStyle18.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle18.Format = "N2"
-        DataGridViewCellStyle18.NullValue = Nothing
-        f_d出力ひも長1.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle9.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle9.Format = "N2"
+        DataGridViewCellStyle9.NullValue = Nothing
+        f_d出力ひも長1.DefaultCellStyle = DataGridViewCellStyle9
         f_d出力ひも長1.HeaderText = "出力ひも長"
         f_d出力ひも長1.MinimumWidth = 6
         f_d出力ひも長1.Name = "f_d出力ひも長1"
@@ -374,6 +385,7 @@ Partial Class ctrInsertBand
     Friend WithEvents f_i何本ごと1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i同位置数1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i同位置順1 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i差し位置1 As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents f_dひも長1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_iひも本数1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算1 As Windows.Forms.DataGridViewTextBoxColumn

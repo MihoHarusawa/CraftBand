@@ -54,7 +54,7 @@ Public Class ctrInsertBand
 
     'Load後に一度だけセットしてください
     Sub SetNames(ByVal formcaption As String, ByVal tabname As String,
-                 ByVal plates As String, ByVal angles As String, ByVal centers As String)
+                 ByVal plates As String, ByVal angles As String, ByVal centers As String, ByVal positions As String)
 
         _FormCaption = formcaption
         _Profile_dgv差しひも.FormCaption = formcaption
@@ -105,8 +105,8 @@ Public Class ctrInsertBand
         f_i角度1.ValueMember = "Value"
 
         '中心点
-        _CenterTable = New dstWork.tblEnumDataTable
         If Not String.IsNullOrWhiteSpace(centers) Then
+            _CenterTable = New dstWork.tblEnumDataTable
             Dim ary As String() = centers.Split(",")
             Dim idx As Integer = 0
             For Each s As String In ary
@@ -117,10 +117,35 @@ Public Class ctrInsertBand
                 _CenterTable.Rows.Add(rc)
                 idx += 1
             Next
+            f_i中心点1.DataSource = _CenterTable
+            f_i中心点1.DisplayMember = "Display"
+            f_i中心点1.ValueMember = "Value"
+        Else
+            f_i中心点1.DataSource = Nothing
+            f_i中心点1.Visible = False
         End If
-        f_i中心点1.DataSource = _CenterTable
-        f_i中心点1.DisplayMember = "Display"
-        f_i中心点1.ValueMember = "Value"
+
+        '差し位置
+        If Not String.IsNullOrWhiteSpace(positions) Then
+            _PositionTable = New dstWork.tblEnumDataTable
+            Dim ary As String() = positions.Split(",")
+            Dim idx As Integer = 0
+            For Each s As String In ary
+                s = s.Trim
+                Dim rc As dstWork.tblEnumRow = _PositionTable.NewRow
+                rc.Display = s
+                rc.Value = idx
+                _PositionTable.Rows.Add(rc)
+                idx += 1
+            Next
+            f_i差し位置1.DataSource = _PositionTable
+            f_i差し位置1.DisplayMember = "Display"
+            f_i差し位置1.ValueMember = "Value"
+        Else
+            f_i差し位置1.DataSource = Nothing
+            f_i差し位置1.Visible = False
+        End If
+
     End Sub
 
     '編集表示する
@@ -204,7 +229,23 @@ Public Class ctrInsertBand
     Public ReadOnly Property CenterString(ByVal center As enum中心点) As String
         Get
             Try
+                If _CenterTable Is Nothing Then
+                    Return Nothing
+                End If
                 Return CType(_CenterTable.Rows(CType(center, Integer)), dstWork.tblEnumRow).Display
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End Get
+    End Property
+
+    Public ReadOnly Property PositionString(ByVal position As enum差し位置) As String
+        Get
+            Try
+                If _PositionTable Is Nothing Then
+                    Return Nothing
+                End If
+                Return CType(_PositionTable.Rows(CType(position, Integer)), dstWork.tblEnumRow).Display
             Catch ex As Exception
                 Return Nothing
             End Try
@@ -270,9 +311,10 @@ Public Class ctrInsertBand
     Dim _TabPageName As String
 
     'ドロップダウン選択肢
-    Dim _PlateTable As dstWork.tblEnumDataTable
-    Dim _AngleTable As dstWork.tblEnumDataTable
-    Dim _CenterTable As dstWork.tblEnumDataTable
+    Dim _PlateTable As dstWork.tblEnumDataTable = Nothing 'あり
+    Dim _AngleTable As dstWork.tblEnumDataTable = Nothing 'あり
+    Dim _CenterTable As dstWork.tblEnumDataTable = Nothing '任意
+    Dim _PositionTable As dstWork.tblEnumDataTable = Nothing '任意
 
     '追加の初期値
     Dim _i何本幅 As Integer
@@ -401,7 +443,7 @@ Public Class ctrInsertBand
         Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv差しひも_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         '編集対象のカラム
-        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順"}.Contains(DataPropertyName) Then
+        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順", "f_i差し位置"}.Contains(DataPropertyName) Then
             RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, DataPropertyName))
         End If
     End Sub
@@ -446,7 +488,7 @@ Public Class ctrInsertBand
         Return False 'メイン側で追加チェック
     End Function
 
-    '配置面・角度・中心点・開始位置・何本ごと　が同じ数
+    '配置面・角度・[中心点]・開始位置・何本ごと・[差し位置]　が同じ数
     Private Sub btn同位置_Click(sender As Object, e As EventArgs) Handles btn同位置.Click
         Dim table As tbl差しひもDataTable = BindingSource差しひも.DataSource
         If table Is Nothing OrElse table.Rows.Count = 0 Then
@@ -468,6 +510,9 @@ Public Class ctrInsertBand
             If 1 < match_key_count(key) Then
                 Dim odr As Integer = 1
                 For Each row As tbl差しひもRow In table.Rows
+                    If row.f_i配置面 = enum配置面.i_なし Then
+                        Continue For
+                    End If
                     If match_key(row) = key Then
                         row.f_i同位置数 = match_key_count(key)
                         row.f_i同位置順 = odr
@@ -483,8 +528,11 @@ Public Class ctrInsertBand
         If row Is Nothing Then
             Return ""
         End If
-        Return String.Format("{0}:{1}:{2}:{3}:{4}",
-                             row.f_i配置面, row.f_i角度, row.f_i中心点, row.f_i開始位置, row.f_i何本ごと)
+
+        Dim i中心点 As Integer = IIf(_CenterTable Is Nothing, 0, row.f_i中心点)
+        Dim i差し位置 As Integer = IIf(_PositionTable Is Nothing, 0, row.f_i差し位置)
+        Return String.Format("{0}:{1}:{2}:{3}:{4}:{5}",
+                             row.f_i配置面, row.f_i角度, i中心点, row.f_i開始位置, row.f_i何本ごと, i差し位置)
     End Function
 
 End Class

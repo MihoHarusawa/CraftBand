@@ -222,6 +222,16 @@ Class clsCalcHexagon
         End Get
     End Property
 
+    Public ReadOnly Property p_d六つ目の対角線 As Double
+        Get
+            If 0 <= _d六つ目の高さ Then
+                Return _d六つ目の高さ / SIN60
+            Else
+                Return 0
+            End If
+        End Get
+    End Property
+
     Shared ReadOnly Property p_d底の厚さ As Double
         Get
             Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
@@ -235,7 +245,7 @@ Class clsCalcHexagon
                 _iひもの本数(cIdxAngle0) = 0 AndAlso _i何個目位置(cIdxAngle0) = 0 AndAlso
                 _iひもの本数(cIdxAngle60) = _iひもの本数(cIdxAngle120) AndAlso
                 _i何個目位置(cIdxAngle60) = _i何個目位置(cIdxAngle120) AndAlso
-                0 < _i側面の編みひも数
+                0 < _i側面の編みひも数 AndAlso 0 < _iひもの本数(cIdxAngle60)
         End Get
     End Property
 
@@ -304,7 +314,7 @@ Class clsCalcHexagon
     '表示文字列
     Public ReadOnly Property p_sひもに垂直_目 As String
         Get
-            If 0 < _d六つ目の高さ Then
+            If 0 <= _d六つ目の高さ Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の高さ)
             End If
             Return ""
@@ -320,8 +330,8 @@ Class clsCalcHexagon
     End Property
     Public ReadOnly Property p_s対角線_目 As String
         Get
-            If 0 < _d六つ目の高さ Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d六つ目の高さ / SIN60)
+            If 0 <= p_d六つ目の対角線 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d六つ目の対角線)
             End If
             Return ""
         End Get
@@ -1763,90 +1773,58 @@ Class clsCalcHexagon
     End Function
 
     Private Function adjust_差しひも(ByRef row As tbl差しひもRow) As Boolean
-        '    If row Is Nothing Then
-        '        Return False '念のため
-        '    End If
-        '    row.f_b有効区分 = False
-        '    row.Setf_iひも本数Null()
-        '    row.Setf_dひも長Null()
-        '    row.Setf_d出力ひも長Null()
+        If row Is Nothing Then
+            Return False '念のため
+        End If
+        row.f_b有効区分 = False
+        row.Setf_iひも本数Null()
+        row.Setf_dひも長Null()
+        row.Setf_d出力ひも長Null()
 
-        '    '開始位置は1以上、何本ごとはゼロ以上
-        '    If row.f_i開始位置 < 1 Then
-        '        row.f_s無効理由 = text開始位置()
-        '        Return True '無効を返す
-        '    End If
-        '    If row.f_i何本ごと < 0 Then
-        '        row.f_s無効理由 = text何本ごと()
-        '        Return True '無効を返す
-        '    End If
-
-
-        '    '差しひもが有効か？
-        '    If Not is差しひもavairable(row) Then
-        '        Return True '無効を返す
-        '    End If
-
-        '    '本数を得る
-        '    Dim count As Integer = get差しひもCount(row)
-        '    If count <= 0 OrElse count < row.f_i開始位置 Then
-        '        row.f_s無効理由 = text開始位置()
-        '        Return True 'unnable
-        '    End If
-        '    If count < row.f_i開始位置 + row.f_i何本ごと Then
-        '        row.f_s無効理由 = text何本ごと()
-        '        Return True 'unnable
-        '    End If
-        '    '本数OK
-        '    row.f_b有効区分 = True
-        '    row.Setf_s無効理由Null()
-
-        '    '本数計算
-        '    If row.f_i何本ごと = 0 Then
-        '        row.f_iひも本数 = 1
-        '    Else
-        '        Dim left As Integer = count - row.f_i開始位置
-        '        row.f_iひも本数 = (left \ row.f_i何本ごと) + 1
-        '    End If
-        '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本",
-        '             row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
-
-        '    If Not row.Isf_dひも長Null AndAlso 0 < row.f_dひも長 Then
-        '        row.f_d出力ひも長 = row.f_dひも長 + 2 * row.f_dひも長加算
-        '    End If
-        Return True
-    End Function
-
-    '追加ボタン
-    Function add_差しひも(ByRef row As tbl差しひもRow) As Boolean
-        Dim table As tbl差しひもDataTable = _Data.p_tbl差しひも
-
-        Dim addNumber As Integer = clsDataTables.AddNumber(table)
-        If addNumber < 0 Then
-            '{0}追加用の番号がとれません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoAddNumber, text差しひも())
-            Return False
+        '開始位置は1以上、何本ごとはゼロ以上
+        If row.f_i開始位置 < 1 Then
+            row.f_s無効理由 = text開始位置()
+            Return True '無効を返す
+        End If
+        If row.f_i何本ごと < 0 Then
+            row.f_s無効理由 = text何本ごと()
+            Return True '無効を返す
         End If
 
-        'tbl差しひものレコード
-        row = table.Newtbl差しひもRow
-        row.f_i番号 = addNumber
-        If 2 < _I基本のひも幅 Then
-            row.f_i何本幅 = _I基本のひも幅 \ 2
+
+        '差しひもが有効か？
+        If Not is差しひもavairable(row) Then
+            Return True '無効を返す
+        End If
+
+        '本数を得る
+        Dim count As Integer = get差しひもCount(row)
+        If count <= 0 OrElse count < row.f_i開始位置 Then
+            row.f_s無効理由 = text開始位置()
+            Return True 'unnable
+        End If
+        If count < row.f_i開始位置 + row.f_i何本ごと Then
+            row.f_s無効理由 = text何本ごと()
+            Return True 'unnable
+        End If
+        '本数OK
+        row.f_b有効区分 = True
+        row.Setf_s無効理由Null()
+
+        '本数計算
+        If row.f_i何本ごと = 0 Then
+            row.f_iひも本数 = 1
         Else
-            row.f_i何本幅 = 1
+            Dim left As Integer = count - row.f_i開始位置
+            row.f_iひも本数 = (left \ row.f_i何本ごと) + 1
         End If
-        row.f_dひも長加算 = _dひも長加算_上端
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本",
+                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
 
-        table.Rows.Add(row)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "add_差しひも: {0}", addNumber)
+        If Not row.Isf_dひも長Null AndAlso 0 < row.f_dひも長 Then
+            row.f_d出力ひも長 = row.f_dひも長 + 2 * row.f_dひも長加算
+        End If
         Return True
-    End Function
-
-    '更新処理が必要なフィールド名
-    Shared _fields差しひも() As String = {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算"}
-    Shared Function IsDataPropertyName差しひも(ByVal name As String) As Boolean
-        Return _fields差しひも.Contains(name)
     End Function
 
     Private Function calc_差しひも(ByVal category As CalcCategory, ByVal row As tbl差しひもRow, ByVal dataPropertyName As String) As Boolean

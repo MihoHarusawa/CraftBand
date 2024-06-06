@@ -37,21 +37,25 @@ Public Class clsImageItem
         Return Math.Round(d2, mm) = Math.Round(d1, mm)
     End Function
 
+    Shared Function SameAngle(ByVal d1 As Integer, ByVal d2 As Integer) As Boolean
+        Return Modulo(d1, 360) = Modulo(d2, 360)
+    End Function
+
     Shared Function SameAngle(ByVal deg1 As Double, ByVal deg2 As Double) As Boolean
-        If deg1 = deg2 Then
-            Return True '一致
-        End If
         Do While deg1 < 0
             deg1 += 360
+        Loop
+        Do While 360 < deg1
+            deg1 -= 360
         Loop
         Do While deg2 < 0
             deg2 += 360
         Loop
-        Dim d1 As Integer = deg1
-        Dim d2 As Integer = deg2
-        Return (d1 Mod 360) = (d2 Mod 360)
+        Do While 360 < deg2
+            deg2 -= 360
+        Loop
+        Return NearlyEqual(deg1, deg2)
     End Function
-
 
     'point:点
     Structure S実座標
@@ -206,6 +210,9 @@ Public Class clsImageItem
             If IsZero Then
                 Return 0
             End If
+            If dX = 0 Then
+                Return 90
+            End If
             Dim angleRad As Double = System.Math.Atan2(dY, dX)
             Return angleRad * (180 / System.Math.PI)
         End Function
@@ -254,6 +261,12 @@ Public Class clsImageItem
         Sub Empty()
             p開始.Zero()
             p終了.Zero()
+        End Sub
+
+        Sub Revert()
+            Dim tmp As New S実座標(p開始)
+            p開始 = p終了
+            p終了 = tmp
         End Sub
 
         '回転
@@ -932,7 +945,7 @@ Public Class clsImageItem
             End If
         End Sub
 
-        Sub New(ByVal degrees As Double, ByVal p As S実座標)
+        Sub New(ByVal degrees As Integer, ByVal p As S実座標)
             If SameAngle(degrees, 90) OrElse SameAngle(degrees, -90) Then
                 is90 = True
                 a = Double.PositiveInfinity '∞

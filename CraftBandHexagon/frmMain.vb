@@ -40,7 +40,7 @@ Public Class frmMain
         _Profile_dgv側面.FormCaption = Me.Text
         dgv側面.SetProfile(_Profile_dgv側面)
 
-        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter)
+        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
 
         expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
         expand斜め60度.SetNames(Me.Text, tpage斜め60度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand7to3, My.Resources.CaptionExpand1to9)
@@ -74,7 +74,7 @@ Public Class frmMain
 
 
         '未実装
-        TabControl.TabPages.Remove(tpage差しひも)
+        'TabControl.TabPages.Remove(tpage差しひも)
         '一旦削除
         TabControl.TabPages.Remove(tpage斜め60度)
         TabControl.TabPages.Remove(tpage横ひも)

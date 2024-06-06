@@ -413,20 +413,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  目の中央,ひも中央 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property EnumStringCenter() As String
-            Get
-                Return ResourceManager.GetString("EnumStringCenter", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  なし,底面,側面,全面 に類似しているローカライズされた文字列を検索します。
+        '''  なし,底面,側面,全面,側面と角 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringPlate() As String
             Get
                 Return ResourceManager.GetString("EnumStringPlate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  おもて,うら に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property EnumStringPosition() As String
+            Get
+                Return ResourceManager.GetString("EnumStringPosition", resourceCulture)
             End Get
         End Property
         

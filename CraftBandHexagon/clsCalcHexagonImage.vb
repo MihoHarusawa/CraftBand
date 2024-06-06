@@ -1,4 +1,5 @@
-﻿Imports CraftBand
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
@@ -199,9 +200,10 @@ Partial Public Class clsCalcHexagon
             _BandPositions(cIdxAngle60)._hln底の2辺に厚さ,
             _BandPositions(cIdxAngle120)._hln底の2辺に厚さ)
 
-            If Not _hex最外六角形.IsValidHexagon OrElse
-               Not _hex底の辺.IsValidHexagon OrElse
-               Not _hex底の辺に厚さ.IsValidHexagon Then
+            '#62
+            If Not _hex最外六角形.IsValidHexagon(True) OrElse
+               Not _hex底の辺.IsValidHexagon(True) OrElse
+               Not _hex底の辺に厚さ.IsValidHexagon(True) Then
                 '立ち上げ可能な底を作れません。
                 p_s警告 = My.Resources.CalcBadBottom
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ValidHexagon :{0}", p_s警告)
@@ -236,20 +238,13 @@ Partial Public Class clsCalcHexagon
                     Dim band As CBandPosition = _BandPositions(idx).ByAxis(ax)
                     band.ReSet底の交点()
 
-                    '六角形の各辺に対して
-                    For hxidx = 0 To CHex.cHexCount - 1
-                        If CHex.hex_aidx(hxidx) = idx Then
-                            Continue For '同方向は除外
-                        End If
-                        '#62
-                        Dim p As S実座標
-                        Dim tt As CHex.result辺との交点 = _hex底の辺.get辺との交点(hxidx, band.fnひも中心線, p)
-                        band.Set底の交点(hxidx, p, tt)
-                    Next
-
-                    If Not band.IsSet底の交点Set() Then
+                    '六角形との交点を得る
+                    Dim cp As CCrossPoint = _hex底の辺.get辺との交点(band.m_p合わせ位置, band.BandAngle)
+                    If cp Is Nothing Then
                         err_band.Add(band.Ident)
                         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Error:IsSet底の交点Set {0}", band.ToString)
+                    Else
+                        band.Set底の交点(cp)
                     End If
                 Next
                 '補強ひもに長さを反映
@@ -276,7 +271,9 @@ Partial Public Class clsCalcHexagon
         ret = ret And adjust_展開ひも(AngleIndex._0deg)
         ret = ret And adjust_展開ひも(AngleIndex._60deg)
         ret = ret And adjust_展開ひも(AngleIndex._120deg)
-        _CalcStatus = CalcStatus._expanded
+        If ret Then
+            _CalcStatus = CalcStatus._expanded
+        End If
 
         Return ret
     End Function
@@ -292,9 +289,19 @@ Partial Public Class clsCalcHexagon
         Friend Const HexLineCount As Integer = 2
         Dim _parent As CBandPositionList    '方向情報
 
-        '   <---  ・  --->    i_1st
-        '
-        '  <----  ・  ---->  i_2nd
+        '   <---  ・  ---   i_2nd (バンドと逆方向)
+        '         | ゼロ=IsFlattened()
+        '  ----  ・  ---->  i_1st (バンドと同方向)
+
+        <Flags>
+        Enum enumShapeHexLine
+            none = 0    '
+            flattened = &H1   '高さがない
+            no_line_1st = &H2   '線がない(点)
+            no_line_2nd = &H4
+            bad_direction_1st = &H10  '方向が違っている
+            bad_direction_2nd = &H20
+        End Enum
 
         Dim _p辺の中心点(HexLineCount - 1) As S実座標   'Input:中心点　角度:parent値
         Dim _line辺(HexLineCount - 1) As S線分          '計算結果:中心点を通る辺
@@ -342,37 +349,85 @@ Partial Public Class clsCalcHexagon
             End Get
         End Property
 
-        '2辺が1本に重なる(六角形にならない)
-        ReadOnly Property IsOneLine() As Boolean
+        '2辺が1本につぶれている(六角形にならない)
+        Private ReadOnly Property IsFlattened() As Boolean
             Get
                 Return _p辺の中心点(lineIdx.i_1st).Near(_p辺の中心点(lineIdx.i_2nd))
             End Get
         End Property
 
-        '辺が作られ、その方向が角度に沿っている
-        ReadOnly Property IsValid辺の方向() As Boolean
+        Private ReadOnly Property Is辺Exist(ByVal i As lineIdx) As Boolean
             Get
-                If (Not _line辺(lineIdx.i_1st).IsDot AndAlso Not SameAngle(_parent.BandAngleDegree, _line辺(lineIdx.i_1st).s差分.Angle)) Then
+                Return Not _line辺(i).IsDot
+            End Get
+        End Property
+
+        ReadOnly Property ShapeHexLine() As enumShapeHexLine
+            Get
+                Dim shape As enumShapeHexLine = enumShapeHexLine.none
+
+                If IsFlattened Then
+                    shape = shape Or enumShapeHexLine.flattened
+                End If
+
+                If Is辺Exist(CHexLine.lineIdx.i_1st) Then
+                    If Not Is辺方向Valid(CHexLine.lineIdx.i_1st) Then
+                        shape = shape Or enumShapeHexLine.bad_direction_1st
+                    End If
+                Else
+                    shape = shape Or enumShapeHexLine.no_line_1st
+                End If
+
+                If Is辺Exist(CHexLine.lineIdx.i_2nd) Then
+                    If Not Is辺方向Valid(CHexLine.lineIdx.i_2nd) Then
+                        shape = shape Or enumShapeHexLine.bad_direction_2nd
+                    End If
+                Else
+                    shape = shape Or enumShapeHexLine.no_line_2nd
+                End If
+
+                Return shape
+            End Get
+        End Property
+
+        ReadOnly Property BandAngle(ByVal i As lineIdx) As Integer
+            Get
+                If i = lineIdx.i_1st Then
+                    Return _parent.BandAngleDegree
+                ElseIf i = lineIdx.i_2nd Then
+                    Return _parent.BandAngleDegree + 180
+                Else
                     Return False
                 End If
-                If (Not _line辺(lineIdx.i_2nd).IsDot AndAlso Not SameAngle(_parent.BandAngleDegree + 180, _line辺(lineIdx.i_2nd).s差分.Angle)) Then
+            End Get
+        End Property
+
+        Private ReadOnly Property Is辺方向Valid(ByVal i As lineIdx) As Boolean
+            Get
+                If i = lineIdx.i_1st Then
+                    Return Not _line辺(lineIdx.i_1st).IsDot AndAlso
+                         SameAngle(BandAngle(i), _line辺(lineIdx.i_1st).s差分.Angle)
+                ElseIf i = lineIdx.i_2nd Then
+                    Return Not _line辺(lineIdx.i_2nd).IsDot AndAlso
+                        SameAngle(BandAngle(i), _line辺(lineIdx.i_2nd).s差分.Angle)
+                Else
                     Return False
                 End If
-                Return True '辺ではなく点になっている場合はNGにしない
             End Get
         End Property
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("1st[中心{0} 辺({1})] ", _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st))
-            sb.AppendFormat("2nd[中心{0} 辺({1})] ", _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd))
+            sb.AppendFormat("{0} {1} {2}", Me.GetType().Name, _parent.BandAngleDegree, FlagEnumString(GetType(enumShapeHexLine), ShapeHexLine())).AppendLine()
+            sb.AppendFormat("1st Valid({0}) [中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_1st), _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st)).AppendLine()
+            sb.AppendFormat("2nd Valid({0}) [中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_2nd), _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd))
             Return sb.ToString
         End Function
         Public Function dump() As String
             Dim sb As New System.Text.StringBuilder
-            sb.Append(_parent.BandAngleDegree).AppendLine()
-            sb.AppendFormat("1st: 中心{0} 辺({1}) 点({2})", _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st).dump(), _line辺(lineIdx.i_1st).IsDot).AppendLine()
-            sb.AppendFormat("2nd: 中心{0} 辺({1}) 点({2})", _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd).dump(), _line辺(lineIdx.i_2nd).IsDot)
+            sb.AppendFormat("{0} {1} {2}", Me.GetType().Name, _parent.BandAngleDegree, FlagEnumString(GetType(enumShapeHexLine), ShapeHexLine())).AppendLine()
+            sb.AppendFormat("1st: Valid({0})点({1}) 中心{2} 辺({3})", Is辺方向Valid(lineIdx.i_1st), _line辺(lineIdx.i_1st).IsDot, _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st).dump()).AppendLine()
+            sb.AppendFormat("2nd: Valid({0})点({1}) 中心{2} 辺({3})", Is辺方向Valid(lineIdx.i_2nd), _line辺(lineIdx.i_2nd).IsDot, _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd).dump())
             Return sb.ToString
         End Function
 
@@ -405,26 +460,31 @@ Partial Public Class clsCalcHexagon
         Dim _HexLine(cAngleCount - 1) As CHexLine
         '同方向の対角線:AngleIndex順
         Dim _CrossLine(cAngleCount - 1) As S線分
-        '横方向に重なった形状
-        Dim _IsOneLineAngle0 As Boolean
+        '形状
+        Dim _ShapeHexLine(cAngleCount - 1) As enumShapeHexLine
 
-        ReadOnly Property IsValidHexagon() As Boolean
+        '形状として有効
+        ReadOnly Property IsValidHexagon(ByVal isAllowFlat0 As Boolean) As Boolean
             Get
-                _IsOneLineAngle0 = False
-                '2辺が1本に重なって良いのは横方向のみ(#62)
-                If _HexLine(cIdxAngle60).IsOneLine OrElse _HexLine(cIdxAngle120).IsOneLine Then
-                    Return False
+                If isAllowFlat0 Then
+                    '2辺が1本に重なって良いのは横方向のみ(#62)
+                    If _ShapeHexLine(cIdxAngle60).HasFlag(enumShapeHexLine.flattened) OrElse
+                    _ShapeHexLine(cIdxAngle120).HasFlag(enumShapeHexLine.flattened) Then
+                        Return False
+                    End If
+                    If _ShapeHexLine(cIdxAngle0).HasFlag(enumShapeHexLine.flattened) Then
+                        '横方向に重なるのを許す
+                        Return True
+                    End If
                 End If
-                If _HexLine(cIdxAngle0).IsOneLine Then
-                    '横方向に重なる時
-                    _IsOneLineAngle0 = True
-                    Return True
-                Else
-                    '各方向に幅がある時
-                    Return _HexLine(cIdxAngle0).IsValid辺の方向 AndAlso
-                    _HexLine(cIdxAngle60).IsValid辺の方向 AndAlso
-                    _HexLine(cIdxAngle120).IsValid辺の方向
-                End If
+                '各方向に幅があること
+                For ix As Integer = 0 To cAngleCount - 1
+                    If _ShapeHexLine(ix) <> enumShapeHexLine.none Then
+                        Return False
+                    End If
+                Next
+                Return True
+
             End Get
         End Property
 
@@ -459,38 +519,6 @@ Partial Public Class clsCalcHexagon
                 Return _HexLine(hex_aidx(hexidx)).line辺(hex_line(hexidx))
             End Get
         End Property
-
-        '交点があれば返す ※IsValidHexagonの前提
-        Enum result辺との交点
-            _none   'なし
-            _calc   '計算値・要チェック
-            _fixed  'そのままの値
-        End Enum
-        Function get辺との交点(ByVal hexidx As Integer, ByVal fn As S直線式, ByRef p As S実座標) As result辺との交点
-            '同方向は除外済だが念のため
-            If SameAngle(cBandAngleDegree(CHex.hex_aidx(hexidx)), fn.Angle) OrElse
-                SameAngle(cBandAngleDegree(CHex.hex_aidx(hexidx)) + 180, fn.Angle) Then
-                Return result辺との交点._none
-            End If
-
-            If _IsOneLineAngle0 Then
-                '横方向に重なる場合は、60度・120度の辺無し
-                p = line辺(hexidx).p交点(fn)
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "get辺との交点({0}) p交点{1}", hexidx, p)
-                If p.IsZero Then
-                    Return result辺との交点._none
-                Else
-                    Return result辺との交点._fixed
-                End If
-            Else
-                p = line辺(hexidx).p交点(fn)
-                If p.IsZero Then
-                    Return result辺との交点._none
-                Else
-                    Return result辺との交点._calc
-                End If
-            End If
-        End Function
 
         ReadOnly Property delta辺の外向き法線(ByVal hexidx As Integer) As S差分
             Get
@@ -545,35 +573,182 @@ Partial Public Class clsCalcHexagon
             _CrossLine(cIdxAngle60) = New S線分(p50, p23)
             _CrossLine(cIdxAngle120) = New S線分(p01, p34)
 
+            '形状を得る
+            _ShapeHexLine(cIdxAngle0) = _HexLine(cIdxAngle0).ShapeHexLine()
+            _ShapeHexLine(cIdxAngle60) = _HexLine(cIdxAngle60).ShapeHexLine()
+            _ShapeHexLine(cIdxAngle120) = _HexLine(cIdxAngle120).ShapeHexLine()
+
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "p50{0} p01{1} p12{2} p23{3} p34{4} p45{5} p50{6}", p50, p01, p12, p23, p34, p45, p50)
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang0 {0}", _HexLine(cIdxAngle0).dump())
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang60 {0}", _HexLine(cIdxAngle60).dump())
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang120 {0}", _HexLine(cIdxAngle120).dump())
 
-            Return IsValidHexagon()
+            Return True
         End Function
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("IsValidHexagon({0})({1}) ", IsValidHexagon(False), IsValidHexagon(True))
             For i As Integer = 0 To cAngleCount - 1
-                sb.AppendFormat("IsValidHexagon({0}) ", IsValidHexagon)
                 sb.AppendFormat("_HexLine({0}) {1}", i, _HexLine(i)).AppendLine()
-                sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i))
+                sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i)).AppendLine()
             Next
             Return sb.ToString
         End Function
         Public Function dump() As String
             Dim sb As New System.Text.StringBuilder
+            sb.AppendLine()
+            sb.AppendFormat("IsValidHexagon({0})({1}) ", IsValidHexagon(False), IsValidHexagon(True))
             For i As Integer = 0 To cAngleCount - 1
-                sb.AppendFormat("IsValidHexagon({0}) ", IsValidHexagon).AppendLine()
                 sb.AppendFormat("_HexLine({0}) {1}", i, _HexLine(i).dump()).AppendLine()
-                sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i).dump())
+                sb.AppendFormat("_CrossLine({0}) {1}", i, _CrossLine(i).dump()).AppendLine()
             Next
             Return sb.ToString
         End Function
 
+
+        '六角形の辺と線の交点
+        Friend Class CCrossPoint
+            Friend CrossPoint(CHex.cHexCount - 1) As S実座標
+            Friend AngleDiff(CHex.cHexCount - 1) As Integer
+            Friend PointCount As Integer = 0
+            Friend CrossLine As S線分
+            Friend CrossLength As Double = 0
+
+            Enum enumCrossStatus
+                _none   '交点なし
+                _flat   '点(つぶれた六角形)
+                _point  '1点(2辺)
+                _line   '長さのある線分
+                _vertex '〃 (3辺)
+                _vertices '〃 (4辺)
+                _etc    '？
+            End Enum
+            Friend Status As enumCrossStatus = enumCrossStatus._none
+
+            Sub New()
+            End Sub
+
+            Public Overrides Function ToString() As String
+                Dim sb As New System.Text.StringBuilder
+                sb.AppendFormat("Length={0:f2} ({1}) {2}", CrossLength, Status, CrossLine)
+                Return sb.ToString
+            End Function
+            Public Function dump() As String
+                Dim sb As New System.Text.StringBuilder
+                sb.AppendFormat("Count={0} {1} Length={2:f2} Line={3}", PointCount, Status, CrossLength, CrossLine)
+                For i As Integer = 0 To cHexCount - 1
+                    sb.AppendFormat("[{0}]{1} {2} ", i, AngleDiff(i), IIf(CrossPoint(i).IsZero, "", CrossPoint(i)))
+                Next
+                Return sb.ToString
+            End Function
+        End Class
+
+        '六角形の辺と線の交点
+        Function get辺との交点(ByVal point As S実座標, ByVal angle As Integer) As CCrossPoint
+            Dim cp As New CCrossPoint
+
+            Dim fn As New S直線式(angle, point)
+            Dim diffs As New List(Of S実座標)
+
+            With cp
+                '6辺に対して
+                For hxidx = 0 To CHex.cHexCount - 1
+                    Dim bandAngle As Integer = _HexLine(hex_aidx(hxidx)).BandAngle(hex_line(hxidx))
+                    .AngleDiff(hxidx) = bandAngle - angle
+                    '平行方向は除外
+                    If SameAngle(0, .AngleDiff(hxidx)) OrElse
+                    SameAngle(180, .AngleDiff(hxidx)) Then
+                        Continue For
+                    End If
+
+                    .CrossPoint(hxidx) = line辺(hxidx).p交点(fn)
+                    If Not .CrossPoint(hxidx).IsZero Then
+                        .PointCount += 1
+
+                        Dim exist As Boolean = False
+                        For Each pd As S実座標 In diffs
+                            If pd.Near(.CrossPoint(hxidx)) Then
+                                exist = True
+                                Exit For
+                            End If
+                        Next
+                        If Not exist Then
+                            diffs.Add(.CrossPoint(hxidx))
+                        End If
+                    End If
+                Next
+
+                '6辺との交点数
+                If .PointCount = 0 OrElse diffs.Count = 0 Then
+                    '交点がない
+                    Return Nothing
+                End If
+
+                '1点
+                If diffs.Count = 1 Then
+                    .CrossLine = New S線分(diffs(0), diffs(0))
+                    .CrossLength = 0
+
+                    'ノーチェックで決めつけます
+                    If _ShapeHexLine(cIdxAngle0).HasFlag(enumShapeHexLine.flattened) Then
+                        .Status = CCrossPoint.enumCrossStatus._flat
+                    Else
+                        .Status = CCrossPoint.enumCrossStatus._point
+                    End If
+
+                ElseIf diffs.Count = 2 Then
+                    .CrossLine = New S線分(diffs(0), diffs(1))
+                    If Not SameAngle(angle, .CrossLine.s差分.Angle) Then
+                        .CrossLine.Revert()
+                    End If
+                    .CrossLength = .CrossLine.Length
+
+                    'ノーチェックで決めつけます
+                    If .PointCount = 2 Then
+                        .Status = CCrossPoint.enumCrossStatus._line
+                    ElseIf .PointCount = 3 Then
+                        .Status = CCrossPoint.enumCrossStatus._vertex
+                    ElseIf .PointCount = 4 Then
+                        .Status = CCrossPoint.enumCrossStatus._vertices
+                    End If
+
+                Else
+                    .Status = CCrossPoint.enumCrossStatus._etc
+
+                End If
+            End With
+
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "get辺との交点({0}) {1} {2}", angle, point, cp.dump())
+
+            Return cp
+        End Function
+
     End Class
 
+
+
+    'enum値のdump
+    Friend Shared Function FlagEnumString(ByVal enumtype As Type, ByVal val As Object) As String
+        If enumtype.IsEnum Then
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("{0}({1:X})", enumtype.Name, CType(val, Integer))
+            If CType(val, Integer) = 0 Then
+                sb.Append("-")
+            Else
+                For Each flag In [Enum].GetValues(enumtype)
+                    If CType(flag, Integer) <> 0 Then
+                        If val.HasFlag(flag) Then
+                            sb.Append(flag.ToString()).Append(" ")
+                        End If
+                    End If
+                Next
+            End If
+            Return sb.ToString
+        Else
+            Return Nothing
+        End If
+    End Function
 
 #End Region
 
@@ -589,12 +764,7 @@ Partial Public Class clsCalcHexagon
         Friend m_p合わせ位置 As S実座標 '合わせライン上の点
         Friend m_d合わせ位置からの幅 As Double
 
-        '底の六角形との交点・ST→ENが方向と一致
-        Dim m_底の交点_ST As S実座標
-        Dim m_交点HexIndex_ST As Integer
-        Dim m_底の交点_EN As S実座標
-        Dim m_交点HexIndex_EN As Integer
-        Dim m_底の交点間長 As Double
+        Friend m_cp底 As CCrossPoint = Nothing
 
         '識別情報
         Friend ReadOnly Property Ident As String
@@ -610,90 +780,37 @@ Partial Public Class clsCalcHexagon
 
         Friend ReadOnly Property fnひも中心線 As S直線式
             Get
-                Return New S直線式(_parent.BandAngleDegree, m_p合わせ位置)
+                Return New S直線式(BandAngle, m_p合わせ位置)
+            End Get
+        End Property
+
+        Friend ReadOnly Property BandAngle As Integer
+            Get
+                Return _parent.BandAngleDegree
             End Get
         End Property
 
         Sub ReSet底の交点()
-            m_交点HexIndex_ST = -1
-            m_交点HexIndex_EN = -1
-            m_底の交点_ST.Zero()
-            m_底の交点_EN.Zero()
-            m_底の交点間長 = 0 '#62
+            m_cp底 = Nothing
         End Sub
 
         Function IsSet底の交点Set() As Boolean
-            Return 0 <= m_交点HexIndex_ST AndAlso 0 <= m_交点HexIndex_EN
+            Return m_cp底 IsNot Nothing AndAlso
+                m_cp底.Status <> CCrossPoint.enumCrossStatus._none
         End Function
 
-        Function Set底の交点(ByVal hexidx As Integer, ByVal p As S実座標, ByVal tt As CHex.result辺との交点) As Boolean
-            If hexidx < 0 OrElse CHex.cHexCount <= hexidx Then
+        Function Set底の交点(ByVal cp As CCrossPoint) As Boolean
+            m_cp底 = cp
+            If cp Is Nothing Then
                 Return False
             End If
-            If tt = result辺との交点._none Then
-                Return False
-            End If
-
-            If m_交点HexIndex_ST < 0 Then
-                '1点目
-                m_交点HexIndex_ST = hexidx
-                m_底の交点_ST = p
-                Return True
-
-            ElseIf m_交点HexIndex_EN < 0 Then
-                If tt = result辺との交点._calc AndAlso m_底の交点_ST.Near(p) Then
-                    '同一点(角度がとれない)はskip
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near Skip{1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, hexidx, p)
-                    Return True
-                End If
-
-                '2点目
-                Dim delta As New S差分(m_底の交点_ST, p)
-                If tt = result辺との交点._fixed OrElse SameAngle(delta.Angle, _parent.BandAngleDegree) Then
-                    m_底の交点_EN = p
-                    m_交点HexIndex_EN = hexidx
-                Else
-                    m_底の交点_EN = m_底の交点_ST
-                    m_交点HexIndex_EN = m_交点HexIndex_ST
-                    m_底の交点_ST = p
-                    m_交点HexIndex_ST = hexidx
-                End If
-                m_底の交点間長 = delta.Length
-                '
-            Else
-                '2点以上の場合、同じひも範囲内は同一とみなす
-                If m_底の交点_ST.Near(p, m_dひも幅 / 2) Then
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, hexidx, p)
-                    Return True
-                ElseIf m_底の交点_EN.Near(p, m_dひも幅 / 2) Then
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_EN.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_EN, m_底の交点_EN, hexidx, p)
-                    Return True
-                ElseIf m_底の交点_ST.Near(m_底の交点_EN, m_dひも幅 / 2) Then
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:m_底の交点_ST.Near {1}:{2} {3}:{4}", Ident, m_交点HexIndex_ST, m_底の交点_ST, m_交点HexIndex_EN, m_底の交点_EN)
-
-                    Dim delta As New S差分(m_底の交点_ST, p)
-                    If SameAngle(delta.Angle, _parent.BandAngleDegree) Then
-                        m_底の交点_EN = p
-                        m_交点HexIndex_EN = hexidx
-                    Else
-                        m_底の交点_ST = p
-                        m_交点HexIndex_ST = hexidx
-                    End If
-                    m_底の交点間長 = delta.Length
-                Else
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:3点目の認識できない交点 {1}:{2}", Ident, hexidx, p)
-                    Return False
-                End If
-            End If
-
             'save
             If m_row縦横展開 IsNot Nothing Then
-                m_row縦横展開.f_d長さ = m_底の交点間長
-                m_row縦横展開.f_iVal1 = m_交点HexIndex_ST
-                m_row縦横展開.f_iVal2 = m_交点HexIndex_EN
+                m_row縦横展開.f_d長さ = m_cp底.CrossLength
             End If
             Return True
         End Function
+
 
         Function ToBand() As CBand
             If m_row縦横展開 Is Nothing OrElse Not IsSet底の交点Set() Then
@@ -703,8 +820,8 @@ Partial Public Class clsCalcHexagon
             Dim band = New CBand(m_row縦横展開)
 
             'f_dVal1に加算の側、f_dVal2に加算2の側(by adjust_展開ひも)
-            Dim pA As S実座標 = m_底の交点_ST
-            Dim pB As S実座標 = m_底の交点_EN
+            Dim pA As S実座標 = m_cp底.CrossLine.p開始
+            Dim pB As S実座標 = m_cp底.CrossLine.p終了
             If _parent.SameDirectionAddLength Then
                 pA = pA + _parent.DeltaBandDirection * -m_row縦横展開.f_dVal1
                 pB = pB + _parent.DeltaBandDirection * m_row縦横展開.f_dVal2
@@ -745,13 +862,13 @@ Partial Public Class clsCalcHexagon
             sb.AppendFormat("{0} ひも幅({1:f1})", Ident, m_dひも幅).Append(vbTab)
             sb.AppendFormat("中心からの幅:({0:f1}) ひもの中心{1}", m_d合わせ位置からの幅, m_p合わせ位置).Append(vbTab)
             If m_row縦横展開 IsNot Nothing Then
-                sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅", m_row縦横展開.f_iひも種, m_row縦横展開.f_iひも番号, m_row縦横展開.f_i位置番号, m_row縦横展開.f_i何本幅)
+                sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅 ", FlagEnumString(GetType(enumひも種), CType(m_row縦横展開.f_iひも種, enumひも種)), m_row縦横展開.f_iひも番号, m_row縦横展開.f_i位置番号, m_row縦横展開.f_i何本幅)
             Else
-                sb.Append("No row縦横展開")
+                sb.Append("No row縦横展開 ")
             End If
-            sb.AppendFormat("底の交点 長さ{0:f2}", m_底の交点間長).AppendLine()
-            sb.AppendFormat(" START({0}):{1}", m_交点HexIndex_ST, m_底の交点_ST)
-            sb.AppendFormat(" END ({0}):{1}", m_交点HexIndex_EN, m_底の交点_EN).AppendLine()
+            If m_cp底 IsNot Nothing Then
+                sb.AppendFormat("底との交点{0}", m_cp底.ToString)
+            End If
             Return sb.ToString
         End Function
 
@@ -761,7 +878,7 @@ Partial Public Class clsCalcHexagon
     Friend Class CBandPositionList
         'セットに対する定数値
         Dim _AngleIndex As AngleIndex
-        Friend BandAngleDegree As AngleIndex 'バンドの方向角
+        Friend BandAngleDegree As Integer 'バンドの方向角
         Friend DeltaBandDirection As S差分 'バンドの方向
         Friend DeltaAxisDirection As S差分 'バンドの軸方向
         Friend SameDirectionAddLength As Boolean 'ひも長加算とバンドの方向角
@@ -1368,10 +1485,10 @@ Partial Public Class clsCalcHexagon
         If Check3軸織() IsNot Nothing Then
             Return Nothing
         End If
-        Dim _ImageListバンドと縁 As New clsImageItemList
+        Dim imageListバンドと縁 As New clsImageItemList
 
         '3方向の描画リスト
-        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(imageListバンドと縁, checked)
         If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
             Return Nothing
         End If
@@ -1381,11 +1498,11 @@ Partial Public Class clsCalcHexagon
 
         '3方向のバンドセット追加
         For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageListバンドと縁.MoveList(imageItemBandLists(idx))
             imageItemBandLists(idx) = Nothing
         Next
 
-        Return _ImageListバンドと縁
+        Return imageListバンドと縁
     End Function
 
     '描ければNothing,NGなら理由を返す
@@ -1413,10 +1530,10 @@ Partial Public Class clsCalcHexagon
         If Check単麻の葉() IsNot Nothing Then
             Return Nothing
         End If
-        Dim _ImageListバンドと縁 As New clsImageItemList
+        Dim imageListバンドと縁 As New clsImageItemList
 
         '3方向の描画リスト
-        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(_ImageListバンドと縁, checked)
+        Dim imageItemBandLists() As clsImageItemList = imageItemListBandSet(imageListバンドと縁, checked)
         If imageItemBandLists Is Nothing OrElse imageItemBandLists.Count < cAngleCount Then
             Return Nothing
         End If
@@ -1426,11 +1543,11 @@ Partial Public Class clsCalcHexagon
 
         '3方向のバンドセット追加
         For idx As Integer = 0 To cAngleCount - 1
-            _ImageListバンドと縁.MoveList(imageItemBandLists(idx))
+            imageListバンドと縁.MoveList(imageItemBandLists(idx))
             imageItemBandLists(idx) = Nothing
         Next
 
-        Return _ImageListバンドと縁
+        Return imageListバンドと縁
     End Function
 
 

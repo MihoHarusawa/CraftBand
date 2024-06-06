@@ -247,12 +247,12 @@
     <value>0度(水平・横),30度,60度(右斜め),90度,120度(左斜め),150度</value>
     <comment>frmMain</comment>
   </data>
-  <data name="EnumStringCenter" xml:space="preserve">
-    <value>目の中央,ひも中央</value>
+  <data name="EnumStringPlate" xml:space="preserve">
+    <value>なし,底面,側面,全面,側面と角</value>
     <comment>frmMain</comment>
   </data>
-  <data name="EnumStringPlate" xml:space="preserve">
-    <value>なし,底面,側面,全面</value>
+  <data name="EnumStringPosition" xml:space="preserve">
+    <value>おもて,うら</value>
     <comment>frmMain</comment>
   </data>
   <data name="FormCaption" xml:space="preserve">

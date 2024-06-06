@@ -35,7 +35,7 @@ Public Class frmMain
         _Profile_dgv側面.FormCaption = Me.Text
         dgv側面.SetProfile(_Profile_dgv側面)
 
-        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter)
+        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter, Nothing)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
         editUpDown.FormCaption = Me.Text

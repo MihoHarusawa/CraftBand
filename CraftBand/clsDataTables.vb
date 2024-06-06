@@ -148,6 +148,7 @@ Public Class clsDataTables
         i_底面 = 1
         i_側面 = 2
         i_全面 = 3
+        i_側面と角 = 4
     End Enum
 
     Public Enum enum角度
@@ -176,6 +177,10 @@ Public Class clsDataTables
         i_ひも中央 = 1
     End Enum
 
+    Public Enum enum差し位置
+        i_おもて = 0
+        i_うら = 1
+    End Enum
 
     Sub New()
         _dstDataTables = New dstDataTables
