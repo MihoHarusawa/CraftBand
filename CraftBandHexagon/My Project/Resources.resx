@@ -171,6 +171,12 @@
   <data name="CalcErrorBandLength" xml:space="preserve">
     <value>長さを計算できないひもが{0}本あります。</value>
   </data>
+  <data name="CalcErrorBasic" xml:space="preserve">
+    <value>基本的な情報を取得できません。</value>
+  </data>
+  <data name="CalcErrorReflection" xml:space="preserve">
+    <value>ひもの長さを結果に反映することができません。</value>
+  </data>
   <data name="CalcMarkPositionPlus" xml:space="preserve">
     <value>合わせ目の位置は1以上にしてください。</value>
   </data>

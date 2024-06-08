@@ -501,7 +501,7 @@ Public Class frmMain
             lbl60度本幅変更.Visible = .p_bひも本幅変更(AngleIndex._60deg)
             lbl120度本幅変更.Visible = .p_bひも本幅変更(AngleIndex._120deg)
             lbl側面ひも本幅変更.Visible = .p_b側面ひも本幅変更
-            lblひも本幅変更.Visible = .p_bひも本幅変更(AngleIndex._0deg) OrElse .p_bひも本幅変更(AngleIndex._60deg) OrElse .p_bひも本幅変更(AngleIndex._120deg) OrElse .p_b側面ひも本幅変更
+            lblひも本幅変更.Visible = .p_bひも本幅変更() OrElse .p_b側面ひも本幅変更
 
             txt側面周比率対底.Text = .p_s側面周比率対底
 

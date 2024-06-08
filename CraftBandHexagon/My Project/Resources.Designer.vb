@@ -197,6 +197,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  基本的な情報を取得できません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcErrorBasic() As String
+            Get
+                Return ResourceManager.GetString("CalcErrorBasic", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ひもの長さを結果に反映することができません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcErrorReflection() As String
+            Get
+                Return ResourceManager.GetString("CalcErrorReflection", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  合わせ目の位置は1以上にしてください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcMarkPositionPlus() As String

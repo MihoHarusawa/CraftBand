@@ -138,6 +138,7 @@ Class clsCalcHexagon
     '側面と縁: _Data.p_tbl側面の集計結果
     Private Property _d側面ひも幅計 As Double '編みひもの幅計(最下段の目・すき間・縁は含まない)
     Private Property _b側面ひも本幅変更 As Boolean
+    Private Property _d側面ひも周長比率対底の周 As Double '最大値
     '縁のみ(垂直ひもについては/SIN60値)
     Private Property _d縁の高さ As Double '縁の合計値,ゼロ以上
     Private Property _d縁の垂直ひも斜め計 As Double '縁の合計値,斜め補正済み値
@@ -192,8 +193,9 @@ Class clsCalcHexagon
         _bひも中心合わせ = False
 
         _b縦横側面を展開する = False
-        _b側面ひも本幅変更 = False
 
+        _b側面ひも本幅変更 = False
+        _d側面ひも周長比率対底の周 = 1
         _d側面ひも幅計 = -1
 
         _d縁の高さ = 0
@@ -280,6 +282,17 @@ Class clsCalcHexagon
     Public ReadOnly Property p_bひも本幅変更(ByVal aidx As AngleIndex) As Boolean
         Get
             Return get本幅変更あり(aidx)
+        End Get
+    End Property
+
+    Public ReadOnly Property p_bひも本幅変更() As Boolean
+        Get
+            For Each aidx As AngleIndex In [Enum].GetValues(GetType(AngleIndex))
+                If get本幅変更あり(aidx) Then
+                    Return True
+                End If
+            Next
+            Return False
         End Get
     End Property
 
@@ -541,7 +554,7 @@ Class clsCalcHexagon
         sb.AppendFormat("  0:({0},mark({1}),end({2}),add({3}))", _iひもの本数(0), _i何個目位置(0), _d端の目(0), _b補強ひも(0)).AppendLine()
         sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1)).AppendLine()
         sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2)).AppendLine()
-        sb.AppendFormat("Height:({0},bottom({1})) BandSum={2}", _i側面の編みひも数, _d最下段の目, _d側面ひも幅計).AppendLine()
+        sb.AppendFormat("Height:({0},bottom({1})) BandSum={2} Ratio({3})", _i側面の編みひも数, _d最下段の目, _d側面ひも幅計, _d側面ひも周長比率対底の周).AppendLine()
         sb.AppendFormat("Edge({0}) SlantLength({1}) Thickness({2}) Ratio({3})", _d縁の高さ, _d縁の垂直ひも斜め計, _d縁の厚さ, _d縁の周長比率対底の周).AppendLine()
         sb.Append(ToStringImageData())
         Return sb.ToString
@@ -568,7 +581,7 @@ Class clsCalcHexagon
     End Sub
 
     Function CalcSize(ByVal category As CalcCategory, ByVal ctr As Object, ByVal key As Object) As Boolean
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CalcSize {0} {1} {2}", category, ctr, key)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{3}CalcSize {0} {1} {2}{3}", category, ctr, key, vbCrLf & "=====" & vbCrLf)
 
         p_s警告 = Nothing
         Dim ret As Boolean = True
@@ -601,29 +614,34 @@ Class clsCalcHexagon
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
                 ret = ret And renew_ひも展開(category)
                 ret = ret And calc_位置と長さ計算(True)
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
         '配置数のタブ内
             Case CalcCategory.Hex_Add     'ひも長係数,ひも長加算
                 ret = ret And set_配置数()
                 ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)     '周長
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
             Case CalcCategory.Hex_0_60_120_Gap '各配置本数・開始位置・目
                 ret = ret And set_配置数()
                 ret = ret And renew_ひも展開(category)
                 ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)     '周長
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
             Case CalcCategory.Hex_Vert '高さ
                 ret = ret And set_配置数()
                 ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
             Case CalcCategory.Hex_Expand '縦横展開
                 ret = ret And set_配置数()
                 ret = ret And renew_ひも展開(category)
                 ret = ret And calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
         '以下、row指定がある場合は、そのタブが表示された状態
             Case CalcCategory.SideEdge  '側面と縁
@@ -651,6 +669,7 @@ Class clsCalcHexagon
                 If adjust_展開ひも(AngleIndex._0deg, row, key) Then
                     ret = ret And calc_位置と長さ計算(True)
                     ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                    ret = ret And calc_差しひも(category, Nothing, Nothing)
                 End If
 
             Case CalcCategory.Expand_60  '斜め60度
@@ -658,6 +677,7 @@ Class clsCalcHexagon
                 If adjust_展開ひも(AngleIndex._60deg, row, key) Then
                     ret = ret And calc_位置と長さ計算(True)
                     ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                    ret = ret And calc_差しひも(category, Nothing, Nothing)
                 End If
 
             Case CalcCategory.Expand_120  '斜め120度
@@ -665,6 +685,7 @@ Class clsCalcHexagon
                 If adjust_展開ひも(AngleIndex._120deg, row, key) Then
                     ret = ret And calc_位置と長さ計算(True)
                     ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                    ret = ret And calc_差しひも(category, Nothing, Nothing)
                 End If
 
             Case CalcCategory.BandColor '色の変更
@@ -1031,7 +1052,7 @@ Class clsCalcHexagon
                 table.Rows.Add(row)
             End If
             row.f_s編みかた名 = text最下段()
-            row.f_s編みひも名 = text高さの目の数()
+            row.f_s編みひも名 = text側面の編みひも()
             row.f_iひも本数 = 0
             row.f_d高さ = _d最下段の目 * _d六つ目の高さ '最下段は固定値
             row.f_d垂直ひも長 = row.f_d高さ / SIN60
@@ -1140,12 +1161,13 @@ Class clsCalcHexagon
 
     'ひも幅の合計を計算(縁・端を含まない)
     'IN:    
-    'OUT:   _d側面ひも幅計,_b側面ひも本幅変更
+    'OUT:   _d側面ひも幅計,_b側面ひも本幅変更,_d側面ひも周長比率対底の周
     Private Function calc_側面計() As Boolean
 
         'i何本幅の合計
         _d側面ひも幅計 = 0
         _b側面ひも本幅変更 = False
+        _d側面ひも周長比率対底の周 = 1
 
         'スペース(f_i番号=cIdxSpace) 縁(f_i番号=cHemNumber)は対象外
         Dim cond As String = String.Format("f_i番号 = {0}", cIdxHeight)
@@ -1154,6 +1176,9 @@ Class clsCalcHexagon
             _d側面ひも幅計 += g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) * row.f_iひも本数
             If _I基本のひも幅 <> row.f_i何本幅 Then
                 _b側面ひも本幅変更 = True
+            End If
+            If _d側面ひも周長比率対底の周 < row.f_d周長比率対底の周 Then
+                _d側面ひも周長比率対底の周 = row.f_d周長比率対底の周
             End If
         Next
         Return True
@@ -1858,7 +1883,8 @@ Class clsCalcHexagon
         End If
 
         '長さ計算をFix
-        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) Then
+        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) OrElse
+            Not calc_出力用の追加計算() Then
             Return False
         End If
 
@@ -2082,7 +2108,7 @@ Class clsCalcHexagon
                 End If
                 row.f_sタイプ = PlateString(r.f_i配置面)
                 row.f_s編みかた名 = AngleString(r.f_i角度)
-                row.f_s編みひも名 = CenterString(r.f_i中心点)
+                row.f_s編みひも名 = PositionString(r.f_i差し位置)
                 row.f_i周数 = r.f_i開始位置
                 row.f_i段数 = r.f_i何本ごと
                 row.f_sメモ = r.f_sメモ
@@ -2310,10 +2336,6 @@ Class clsCalcHexagon
         Return Nothing
     End Function
 
-    Private Function text高さの目の数() As String
-        Return _frmMain.lbl高さの六つ目数.Text
-    End Function
-
     Private Function text最下段() As String
         Return _frmMain.lbl最下段.Text
     End Function
@@ -2349,6 +2371,10 @@ Class clsCalcHexagon
         Return _frmMain.lbl基本のひも幅_単位.Text
     End Function
 
+    Private Function textひも本幅変更() As String
+        Return _frmMain.lblひも本幅変更.Text
+    End Function
+
     Private Function text本() As String
         Return _frmMain.lbl横ひもの本数_単位.Text
     End Function
@@ -2382,6 +2408,10 @@ Class clsCalcHexagon
         Return _frmMain.lbl計算寸法の周.Text
     End Function
 
+    Private Function text対角線() As String
+        Return _frmMain.lbl対角線.Text
+    End Function
+
     '差しひも
     Private Function text配置面() As String
         Return _frmMain.editInsertBand.text配置面()
@@ -2411,8 +2441,8 @@ Class clsCalcHexagon
         Return _frmMain.editInsertBand.AngleString(i)
     End Function
 
-    Private Function CenterString(ByVal i As Integer) As String
-        Return _frmMain.editInsertBand.CenterString(i)
+    Private Function PositionString(ByVal i As Integer) As String
+        Return _frmMain.editInsertBand.PositionString(i)
     End Function
 #End Region
 

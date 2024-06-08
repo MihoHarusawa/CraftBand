@@ -42,19 +42,9 @@ Public Class clsImageItem
     End Function
 
     Shared Function SameAngle(ByVal deg1 As Double, ByVal deg2 As Double) As Boolean
-        Do While deg1 < 0
-            deg1 += 360
-        Loop
-        Do While 360 < deg1
-            deg1 -= 360
-        Loop
-        Do While deg2 < 0
-            deg2 += 360
-        Loop
-        Do While 360 < deg2
-            deg2 -= 360
-        Loop
-        Return NearlyEqual(deg1, deg2)
+        Dim d1 As Integer = deg1
+        Dim d2 As Integer = deg2
+        Return SameAngle(d1, d2) OrElse SameAngle(d1, d2 - 1) OrElse SameAngle(d1, d2 + 1)
     End Function
 
     'point:点
@@ -74,6 +64,11 @@ Public Class clsImageItem
         Sub Zero()
             X = 0
             Y = 0
+        End Sub
+
+        Sub Copy(ByVal ref As S実座標)
+            X = ref.X
+            Y = ref.Y
         End Sub
 
         ReadOnly Property IsZero() As Boolean
@@ -319,6 +314,13 @@ Public Class clsImageItem
             Dim fn As New S直線式(Me)
             Return fn.IsOn(p)
         End Function
+
+        '中間点
+        ReadOnly Property p中点() As S実座標
+            Get
+                Return New S実座標((p開始.X + p終了.X) / 2, (p開始.Y + p終了.Y) / 2)
+            End Get
+        End Property
 
         '長さ
         ReadOnly Property Length As Double
@@ -1033,6 +1035,22 @@ Public Class clsImageItem
             Return p交点(Me, fn)
         End Function
 
+        Function p直交点(ByVal p As S実座標) As S実座標
+            If is90 Then
+                Return New S実座標(b, p.Y)
+            ElseIf a = 0 Then
+                Return New S実座標(p.X, b)
+            Else
+                Dim x0 = (a * p.Y + p.X - a * b) / (a ^ 2 + 1)
+                Dim y0 = (a ^ 2 * p.Y + a * p.X + b) / (a ^ 2 + 1)
+                Return New S実座標(x0, y0)
+            End If
+        End Function
+
+        Function d距離(ByVal p As S実座標) As Double
+            Return New S差分(p, p直交点(p)).Length
+        End Function
+
         '平行である時True (一致を含む)
         Shared Function is平行(ByVal fn1 As S直線式, ByVal fn2 As S直線式) As Boolean
             If fn1.is90 Then
@@ -1188,6 +1206,12 @@ Public Class clsImageItem
         End Sub
 
         Sub New(ByVal row As tbl側面Row)
+            _i何本幅 = row.f_i何本幅
+            _s色 = row.f_s色
+            _s記号 = row.f_s記号
+        End Sub
+
+        Sub New(ByVal row As tbl差しひもRow)
             _i何本幅 = row.f_i何本幅
             _s色 = row.f_s色
             _s記号 = row.f_s記号
