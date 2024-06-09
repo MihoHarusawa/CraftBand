@@ -323,10 +323,22 @@ Public Class clsImageItem
         End Property
 
         '長さ
-        ReadOnly Property Length As Double
+        Property Length As Double
             Get
                 Return Math.Sqrt((p終了.X - p開始.X) ^ 2 + (p終了.Y - p開始.Y) ^ 2)
             End Get
+            Set(value As Double)
+                If Not IsDot() Then
+                    Dim ratio As Double = value / Length
+                    If Not NearlyEqual(ratio, 1) Then
+                        Dim p中点F As S実座標 = p中点()
+                        Dim delta開始 As S差分 = (New S差分(p中点F, p開始)) * ratio
+                        Dim delta終了 As S差分 = (New S差分(p中点F, p終了)) * ratio
+                        p開始 = p中点F + delta開始
+                        p終了 = p中点F + delta終了
+                    End If
+                End If
+            End Set
         End Property
 
         '差分

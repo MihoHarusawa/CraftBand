@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Imaging
+Imports System.Reflection.Metadata
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
@@ -71,6 +72,8 @@ Partial Public Class clsCalcHexagon
     '側面のひも
     Dim _CSideBandList As CSideBandList
 
+    '側面
+    Dim _SidePlate(CHex.cHexCount - 1) As CSidePlate
 
 
     Private Sub NewImageData()
@@ -80,6 +83,9 @@ Partial Public Class clsCalcHexagon
 
         _CSideBandList = New CSideBandList
 
+        For hxidx As Integer = 0 To CHex.cHexCount - 1
+            _SidePlate(hxidx) = New CSidePlate(hxidx)
+        Next
     End Sub
 
     Private Sub ClearImageData()
@@ -290,6 +296,10 @@ Partial Public Class clsCalcHexagon
             Return False
         End If
 
+        If 0 < _Data.p_tbl差しひも.Rows.Count Then
+            ret = ret And setSideBandList()
+        End If
+
         Return ret
     End Function
 
@@ -304,6 +314,9 @@ Partial Public Class clsCalcHexagon
         '側面
         ret = ret And setSideBandList()
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_CSideBandList(0)={0}", _CSideBandList.ToString)
+
+        '
+        setSidePlate()
 
         Return ret
     End Function
@@ -560,6 +573,7 @@ Partial Public Class clsCalcHexagon
             End Get
         End Property
 
+        '-90,-30,30,90,150,-150
         Shared ReadOnly Property delta辺の外向き法線(ByVal hexidx As Integer) As S差分
             Get
                 'Return _HexLine(hex_aidx(hexidx)).delta辺の外向き法線(hex_line(hexidx))
@@ -570,6 +584,19 @@ Partial Public Class clsCalcHexagon
                 Return delta
             End Get
         End Property
+
+        '0,60,120,180,240,300
+        Shared ReadOnly Property Angle辺(ByVal hexidx As Integer) As Integer
+            Get
+                '_HexLine(hex_aidx(hexidx)).BandAngle(hex_line(hxidx))
+                Dim angle As Integer = cBandAngleDegree(hex_aidx(hexidx))
+                If hex_line(hexidx) = CHexLine.lineIdx.i_2nd Then
+                    angle += 180
+                End If
+                Return angle
+            End Get
+        End Property
+
 
         '0度,60度,120度の順に指定
         Sub New(ByVal hline1 As CHexLine, ByVal hline2 As CHexLine, ByVal hline3 As CHexLine)
@@ -655,8 +682,8 @@ Partial Public Class clsCalcHexagon
         '六角形の辺と線の交点
         Friend Class CCrossPoint
             Friend CrossPoint(CHex.cHexCount - 1) As S実座標
-            Friend AngleDiff(CHex.cHexCount - 1) As Integer
             Friend PointCount As Integer = 0
+
             Friend CrossLine As S線分
             Friend CrossLength As Double = 0
 
@@ -671,6 +698,12 @@ Partial Public Class clsCalcHexagon
             End Enum
             Friend Status As enumCrossStatus = enumCrossStatus._none
 
+            ReadOnly Property IsExist As Boolean
+                Get
+                    Return Status <> enumCrossStatus._none AndAlso Status <> enumCrossStatus._etc
+                End Get
+            End Property
+
             Sub New()
             End Sub
 
@@ -682,14 +715,14 @@ Partial Public Class clsCalcHexagon
             Public Function dump() As String
                 Dim sb As New System.Text.StringBuilder
                 sb.AppendFormat("Count={0} {1} Length={2:f2} Line={3}", PointCount, Status, CrossLength, CrossLine)
-                For i As Integer = 0 To cHexCount - 1
-                    sb.AppendFormat("[{0}]{1} {2} ", i, AngleDiff(i), IIf(CrossPoint(i).IsZero, "", CrossPoint(i)))
+                For hidx As Integer = 0 To cHexCount - 1
+                    sb.AppendFormat("{0} {1} ", hidx, IIf(CrossPoint(hidx).IsZero, "", CrossPoint(hidx)))
                 Next
                 Return sb.ToString
             End Function
         End Class
 
-        '六角形の辺と線の交点
+        '六角形の辺と線の交点を計算, ない時にはNothingを返す　※pointは内側とは限らない
         Function get辺との交点(ByVal point As S実座標, ByVal angle As Integer) As CCrossPoint
             Dim cp As New CCrossPoint
 
@@ -699,11 +732,10 @@ Partial Public Class clsCalcHexagon
             With cp
                 '6辺に対して
                 For hxidx = 0 To CHex.cHexCount - 1
-                    Dim bandAngle As Integer = _HexLine(hex_aidx(hxidx)).BandAngle(hex_line(hxidx))
-                    .AngleDiff(hxidx) = bandAngle - angle
+                    Dim bandAngle As Integer = CHex.Angle辺(hxidx)
+                    Dim anglediff As Integer = bandAngle - angle
                     '平行方向は除外
-                    If SameAngle(0, .AngleDiff(hxidx)) OrElse
-                    SameAngle(180, .AngleDiff(hxidx)) Then
+                    If SameAngle(0, anglediff) OrElse SameAngle(180, anglediff) Then
                         Continue For
                     End If
 
@@ -760,13 +792,60 @@ Partial Public Class clsCalcHexagon
 
                 Else
                     .Status = CCrossPoint.enumCrossStatus._etc
+                    'CrossLine特定不可
 
                 End If
             End With
-
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "get辺との交点({0}) {1} {2}", angle, point, cp.dump())
 
             Return cp
+        End Function
+
+        '指定方向の最も外側の点
+        Function get最外の点(ByVal angle As Integer) As S実座標
+            '辺と垂直方向
+            For hxidx As Integer = 0 To CHex.cHexCount - 1
+                If SameAngle(angle, Angle辺(hxidx) - 90) Then
+                    Return line辺(hxidx).p中点
+                End If
+            Next
+
+            Dim pPoint As S実座標 = pOrigin
+            Dim cp As CCrossPoint = get辺との交点(pPoint, angle)
+            Dim retry As Integer = 0
+
+            Do While cp IsNot Nothing AndAlso cp.IsExist AndAlso retry < 20
+                'g_clsLog.LogResourceMessage(clsLog.LogLevel.Debug, "get最外の点 {0}:{1}", retry, pPoint)
+                pPoint = cp.CrossLine.p終了
+                cp = get辺との交点(pPoint, angle + 90)
+                If cp Is Nothing OrElse Not cp.IsExist Then
+                    Exit Do
+                End If
+                If cp.Status = CCrossPoint.enumCrossStatus._point Then
+                    Return cp.CrossLine.p開始
+                End If
+                pPoint = cp.CrossLine.p中点
+                cp = get辺との交点(pPoint, angle)
+                retry += 1
+            Loop
+            'g_clsLog.LogResourceMessage(clsLog.LogLevel.Debug, "get最外の点(Exit Loop) {0}:{1}", retry, pPoint)
+            Return pPoint
+
+        End Function
+
+        '六角形の内側にある時Trueを返す
+        Function is内側(ByVal point As S実座標) As Boolean
+            '3方向でチェック
+            For Each angle As Integer In cBandAngleDegree
+                Dim cp As CCrossPoint = get辺との交点(point, angle + 90)
+                If cp Is Nothing OrElse Not cp.IsExist Then
+                    Return False
+                End If
+                If Not cp.CrossLine.IsOn(point) Then
+                    Return False
+                End If
+            Next
+            Return True
         End Function
 
     End Class
@@ -809,7 +888,7 @@ Partial Public Class clsCalcHexagon
         Friend m_pひもの中心 As S実座標
         Friend m_d合わせ位置からの幅 As Double '合わせライン上の中心位置との差
 
-        Friend m_cp底 As CHex.CCrossPoint = Nothing   '底との交点
+        Friend m_cp底の辺 As CHex.CCrossPoint = Nothing   '底との交点
 
 
         '       ひも番号  :n           (1～本数)
@@ -841,23 +920,23 @@ Partial Public Class clsCalcHexagon
         End Property
 
         Sub ReSet底の交点()
-            m_cp底 = Nothing
+            m_cp底の辺 = Nothing
         End Sub
 
         Function IsSet底の交点Set() As Boolean
-            Return m_cp底 IsNot Nothing AndAlso
-                m_cp底.Status <> CHex.CCrossPoint.enumCrossStatus._none
+            Return m_cp底の辺 IsNot Nothing AndAlso
+                m_cp底の辺.Status <> CHex.CCrossPoint.enumCrossStatus._none
         End Function
 
         '六角形との交点情報
         Function Set底の交点(ByVal cp As CHex.CCrossPoint) As Boolean
-            m_cp底 = cp
+            m_cp底の辺 = cp
             If cp Is Nothing Then
                 Return False
             End If
             'save
             If m_row縦横展開 IsNot Nothing Then
-                m_row縦横展開.f_d長さ = m_cp底.CrossLength
+                m_row縦横展開.f_d長さ = m_cp底の辺.CrossLength
             End If
             Return True
         End Function
@@ -871,8 +950,8 @@ Partial Public Class clsCalcHexagon
             Dim band = New CBand(m_row縦横展開)
 
             'f_dVal1に加算の側、f_dVal2に加算2の側(by adjust_展開ひも)
-            Dim pA As S実座標 = m_cp底.CrossLine.p開始
-            Dim pB As S実座標 = m_cp底.CrossLine.p終了
+            Dim pA As S実座標 = m_cp底の辺.CrossLine.p開始
+            Dim pB As S実座標 = m_cp底の辺.CrossLine.p終了
             If _parent.SameDirectionAddLength Then
                 pA = pA + _parent.DeltaBandDirection * -m_row縦横展開.f_dVal1
                 pB = pB + _parent.DeltaBandDirection * m_row縦横展開.f_dVal2
@@ -911,14 +990,14 @@ Partial Public Class clsCalcHexagon
         Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("{0} ひも幅({1:f1})", Ident, m_dひも幅).Append(vbTab)
-            sb.AppendFormat("中心からの幅:({0:f1}) ひもの中心{1}", m_d合わせ位置からの幅, m_pひもの中心).Append(vbTab)
+            sb.AppendFormat("合わせ位置からの幅:({0:f1}) ひもの中心{1}", m_d合わせ位置からの幅, m_pひもの中心).Append(vbTab)
             If m_row縦横展開 IsNot Nothing Then
                 sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅 ", FlagEnumString(GetType(enumひも種), CType(m_row縦横展開.f_iひも種, enumひも種)), m_row縦横展開.f_iひも番号, m_row縦横展開.f_i位置番号, m_row縦横展開.f_i何本幅)
             Else
                 sb.Append("No row縦横展開 ")
             End If
-            If m_cp底 IsNot Nothing Then
-                sb.AppendFormat("底との交点{0}", m_cp底.ToString)
+            If m_cp底の辺 IsNot Nothing Then
+                sb.AppendFormat("cp底の辺{0}", m_cp底の辺.ToString)
             End If
             Return sb.ToString
         End Function
@@ -927,6 +1006,8 @@ Partial Public Class clsCalcHexagon
 
     '各方向のセット
     Friend Class CBandPositionList
+        Implements IEnumerable(Of CBandPosition)
+
         'セットに対する定数値
         Dim _AngleIndex As AngleIndex
         Friend BandAngleDegree As Integer 'バンドの方向角
@@ -1221,6 +1302,10 @@ Partial Public Class clsCalcHexagon
             Return True
         End Function
 
+        Function get目の実質数() As Integer
+            Return _iひもの本数
+        End Function
+
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
@@ -1242,6 +1327,13 @@ Partial Public Class clsCalcHexagon
             Return sb.ToString
         End Function
 
+        Public Function GetEnumerator() As IEnumerator(Of CBandPosition) Implements IEnumerable(Of CBandPosition).GetEnumerator
+            Return _BandList.GetEnumerator()
+        End Function
+
+        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return Me.GetEnumerator()
+        End Function
     End Class
 #End Region
 
@@ -1281,11 +1373,14 @@ Partial Public Class clsCalcHexagon
 
     Friend Class CSideBandList
         Dim _Ary() As CSideBand
+        Dim _iひも本数 As Integer '_i側面の編みひも数
+        Dim _is最下段に目あり As Boolean
+        Dim _d側面の六つ目の高さ As Double
 
         '番号    ひも番号(展開なし):(展開あり)  n=_i側面の編みひも数
         'cHemNumber                                                     
-        '            縁 ==================================
-        '                                 ↑get側面の六つ目の高さ()
+        '            縁 ==================================　← m_dひも下の高さ(n+1)
+        '                                 ↑get側面の六つ目の高さ()            →端の目がない時のn,ある時のn+1
         '                      ------------------------
         'cIdxHeight   1:n           側面のひも(n)                               
         '                      ------------------------　← m_dひも下の高さ(n)
@@ -1294,18 +1389,21 @@ Partial Public Class clsCalcHexagon
         '                      ------------------------
         'cIdxHeight   1:2           側面のひも(2)                                          
         '                      ------------------------　← m_dひも下の高さ(2) 
-        '                                 ↑get側面の六つ目の高さ()
+        '                                 ↑get側面の六つ目の高さ()             →端の目がない時の1,ある時の2
         '                      ------------------------
         'cIdxHeight   1:1           側面のひも(1)                                          
         '                      ------------------------　 
-        'cIdxSpace                        ↑_d最下段の目 * _d六つ目の高さ 
+        'cIdxSpace                        ↑_d最下段の目 * _d六つ目の高さ       →端の目がある時の1
         '            底 ==================================　← m_dひも下の高さ(0)=0 ※底の厚さは加えない
 
-        Sub SetCount(ByVal i本数 As Integer)
-            ReDim _Ary(i本数) 'Clear
+        Sub SetCount(ByVal iひも本数 As Integer, ByVal is最下段に目あり As Boolean, ByVal d側面の六つ目の高さ As Double)
+            _iひも本数 = iひも本数
+            _is最下段に目あり = is最下段に目あり
+            _d側面の六つ目の高さ = d側面の六つ目の高さ
+            ReDim _Ary(iひも本数 + 1) 'Clear
         End Sub
 
-        '指定位置の要素 下からの数:1～本数, 0は最下段のスペース
+        '指定位置の要素 下からの数:1～本数+1, 0は最下段のスペース
         Friend Property At(ByVal idx As Integer) As CSideBand
             Get
                 If _Ary Is Nothing OrElse idx < 0 OrElse _Ary.Count <= idx Then
@@ -1319,12 +1417,57 @@ Partial Public Class clsCalcHexagon
                 End If
                 If _Ary Is Nothing Then
                     ReDim _Ary(idx + 1)
-                ElseIf _Ary.count <= idx Then
+                ElseIf _Ary.Count <= idx Then
                     ReDim Preserve _Ary(idx + 1)
                 End If
                 _Ary(idx) = value
             End Set
         End Property
+
+
+        '最下段の目を加味したさしひも位置の数
+        Friend ReadOnly Property InsertCount() As Integer
+            Get
+                If _is最下段に目あり Then
+                    Return _iひも本数 + 1
+                Else
+                    Return _iひも本数
+                End If
+            End Get
+        End Property
+
+        '最下段の目を加味した指定位置の高さ dInnerPosition:同幅内位置(0～1値・中央が0.5)
+        Friend Function GetHeight(ByVal idx As Integer, ByVal dInnerPosition As Double) As Double
+            If idx < 1 OrElse InsertCount < idx Then
+                Return No_Double_Value
+            End If
+            Dim sand As CSideBand = _Ary(idx)
+            If _is最下段に目あり Then
+                'ひもより下の位置
+                Return sand.m_dひも下の高さ - _d側面の六つ目の高さ * (1 - dInnerPosition)
+            Else
+                'ひもより上の位置
+                Return sand.m_dひも下の高さ + sand.m_dひも幅 + _d側面の六つ目の高さ * dInnerPosition
+            End If
+        End Function
+
+        '最下段の目を加味した指定位置の周長比率対底の周
+        Friend Function GetRatio(ByVal idx As Integer) As Double
+            If idx < 1 OrElse InsertCount < idx Then
+                Return 1 '既定値
+            End If
+            Dim sand As CSideBand = _Ary(idx)
+            If _is最下段に目あり Then
+                'ひもより下の位置
+                Dim sand0 As CSideBand = _Ary(idx - 1)
+                Return (sand.m_d周長比率対底の周 + sand0.m_d周長比率対底の周) / 2
+            Else
+                'ひもより上の位置
+                Dim sand1 As CSideBand = _Ary(idx + 1)
+                Return (sand.m_d周長比率対底の周 + sand1.m_d周長比率対底の周) / 2
+            End If
+        End Function
+
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
@@ -1345,7 +1488,7 @@ Partial Public Class clsCalcHexagon
 
     '側面のひもの情報
     Private Function setSideBandList() As Boolean
-        _CSideBandList.SetCount(_i側面の編みひも数)
+        _CSideBandList.SetCount(_i側面の編みひも数, (g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d最下段の目), get側面の六つ目の高さ())
 
         Dim d高さ As Double = 0
         '側面のレコード→1本ごとのバンド　
@@ -1367,9 +1510,18 @@ Partial Public Class clsCalcHexagon
                 Next
 
             Else 'f_i番号 = cHemNumber
-                '縁は除外
+                '縁は別途(複数レコード構成のため)
+                Exit For
             End If
         Next
+
+        '縁位置
+        If 1 < idx Then
+            Dim edge As New CSideBand
+            edge.m_dひも下の高さ = d高さ
+            edge.m_d周長比率対底の周 = _d縁の周長比率対底の周
+            _CSideBandList.At(idx) = edge
+        End If
 
         'ゼロ位置
         Dim space As CSideBand = _CSideBandList.At(0)
@@ -1377,6 +1529,7 @@ Partial Public Class clsCalcHexagon
             space = New CSideBand
             _CSideBandList.At(0) = space
         End If
+        space.m_d周長比率対底の周 = 1
 
         Return (idx = (_i側面の編みひも数 + 1))
     End Function
@@ -1384,25 +1537,106 @@ Partial Public Class clsCalcHexagon
 
 #Region "側面"
 
-    Dim _Side(CHex.cHexCount - 1) As CSide
 
     '各側面
-    Friend Class CSide
-        Dim _parent As CBandPositionList    '方向情報
-        Dim m_iひも番号 As Integer
+    Friend Class CSidePlate
+        Dim _MyHexIndex As Integer
+        'Friend _DirBandList As New List(Of CBandPosition)
 
-        Dim 底の辺 As S線分
-        Dim 辺の外向き法線 As S差分
+        Friend _BandList60 As New List(Of CBandPosition)
+        Friend _BandList120 As New List(Of CBandPosition)
+        Friend _BandList As New List(Of CBandPosition)
 
-        Friend m_row縦横展開 As tbl縦横展開Row
-        Friend m_dひも幅 As Double
-        Friend m_pひもの中心 As S実座標
-        Friend m_d合わせ位置からの幅 As Double '合わせライン上の中心位置との差
+        Sub New(ByVal hxidx As Integer)
+            _MyHexIndex = hxidx
+        End Sub
 
-        Friend m_cp底 As CHex.CCrossPoint = Nothing   '底との交点
+        Sub Clear()
+            _BandList60.Clear()
+            _BandList120.Clear()
+            _BandList.Clear()
+        End Sub
+
+        Function getCount(ByVal is角 As Boolean) As Integer
+            Return _BandList60.Count
+        End Function
+
+        Function getCenter(ByVal idx As Integer, ByVal is角 As Boolean, ByVal dInnerPosition As Double) As S実座標
+            If 1 <= idx AndAlso idx <= _BandList60.Count Then
+                Dim band As CBandPosition = _BandList60(idx - 1)
+                Return band.m_cp底の辺.CrossPoint(_MyHexIndex)
+            Else
+                Return New S実座標
+            End If
+        End Function
+
+
+        Public Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("BandList60 Count={0}", _BandList60.Count).AppendLine()
+            For Each band As CBandPosition In _BandList60
+                sb.AppendFormat("BandList60 {0} ({1}) {2}", band.Ident, band.m_cp底の辺.Status, band.m_cp底の辺.CrossPoint.ToString()).AppendLine()
+            Next
+            sb.AppendFormat("BandList120 Count={0}", _BandList120.Count).AppendLine()
+            For Each band As CBandPosition In _BandList120
+                sb.AppendFormat("BandList120 {0} ({1}) {2}", band.Ident, band.m_cp底の辺.Status, band.m_cp底の辺.CrossPoint.ToString()).AppendLine()
+            Next
+            sb.AppendFormat("BandList Count={0}", _BandList.Count).AppendLine()
+            For Each band As CBandPosition In _BandList
+                sb.AppendFormat("BandList {0} ({1}) {2}", band.Ident, band.m_cp底の辺.Status, band.m_cp底の辺.CrossPoint.ToString()).AppendLine()
+            Next
+            sb.AppendLine()
+            Return sb.ToString
+        End Function
+
 
     End Class
 
+
+    '側面のひもの情報
+    Private Function setSidePlate() As Boolean
+        For hxidx As Integer = 0 To CHex.cHexCount - 1
+            _SidePlate(hxidx).Clear()
+        Next
+
+        For idx As Integer = 0 To cAngleCount - 1
+            For Each band As CBandPosition In _BandPositions(idx)
+                If band Is Nothing OrElse band.m_cp底の辺 Is Nothing Then
+                    Continue For
+                End If
+
+                For hxidx As Integer = 0 To CHex.cHexCount - 1
+                    If Not band.m_cp底の辺.CrossPoint(hxidx).IsZero Then
+                        If SameAngle(CHex.Angle辺(hxidx) + 60, band.BandAngle) OrElse
+                            SameAngle(CHex.Angle辺(hxidx) + 60 + 180, band.BandAngle) Then
+                            _SidePlate(hxidx)._BandList60.Add(band)
+                        ElseIf SameAngle(CHex.Angle辺(hxidx) + 120, band.BandAngle) OrElse
+                            SameAngle(CHex.Angle辺(hxidx) + 120 + 180, band.BandAngle) Then
+                            _SidePlate(hxidx)._BandList120.Add(band)
+                        Else
+                            _SidePlate(hxidx)._BandList.Add(band)
+                        End If
+
+
+
+                    End If
+                Next
+            Next
+        Next
+
+        For hxidx As Integer = 0 To CHex.cHexCount - 1
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_SidePlate({0})", hxidx)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _SidePlate(hxidx).ToString)
+        Next
+
+        For angle As Integer = 0 To 360 Step 30
+            Dim p As S実座標 = _hex最外六角形.get最外の点(angle)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:{1}", angle, p.ToString)
+        Next
+
+
+        Return True
+    End Function
 #End Region
 
 
@@ -1411,26 +1645,26 @@ Partial Public Class clsCalcHexagon
 
     '3本組の位置識別
     Private Function OneOfThree(ByVal idx As Integer) As Integer
-            Return Modulo(idx, 3)
-        End Function
+        Return Modulo(idx, 3)
+    End Function
 
-        '2本組の位置識別
-        Private Function OneOfTow(ByVal idx As Integer) As Integer
-            Return Modulo(idx, 2)
-        End Function
+    '2本組の位置識別
+    Private Function OneOfTow(ByVal idx As Integer) As Integer
+        Return Modulo(idx, 2)
+    End Function
 
-        '綾を考慮した次の方向
-        Private Function NextDirection(Optional ByVal idx As Integer = 0) As Integer
-            If _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側 Then
-                'マイナス60度方向 cIdxAngle0-cIdxAngle120
-                Return Modulo(idx - 1, cAngleCount)
-            ElseIf _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側 Then
-                'プラス60度方向 cIdxAngle0-cIdxAngle60
-                Return Modulo(idx + 1, cAngleCount)
-            Else
-                Return -1   'なし
-            End If
-        End Function
+    '綾を考慮した次の方向
+    Private Function NextDirection(Optional ByVal idx As Integer = 0) As Integer
+        If _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_左側 Then
+            'マイナス60度方向 cIdxAngle0-cIdxAngle120
+            Return Modulo(idx - 1, cAngleCount)
+        ElseIf _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも") = enumコマ上側の縦ひも.i_右側 Then
+            'プラス60度方向 cIdxAngle0-cIdxAngle60
+            Return Modulo(idx + 1, cAngleCount)
+        Else
+            Return -1   'なし
+        End If
+    End Function
 
 
     '6側面のバンドセット, 縁はimglistに追加
@@ -1442,54 +1676,9 @@ Partial Public Class clsCalcHexagon
             Dim bandlist As New CBandList
             bandlists.Add(bandlist)
 
-            ''厚さを加えた長さ、底位置からスタート
-            'Dim line As S線分 = _hex底の辺に厚さ.line辺(hexidx) +
-            '         _hex底の辺.delta辺の外向き法線(hexidx) * -p_d底の厚さ
-
-            ''側面のレコード→1本ごとのバンド　※高さに、底の厚さは加えない
-            'Dim idx As Integer = 1 '0=空き, 1～本数
-            'For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC")
-            '    If r.f_i番号 = cHemNumber Then
-            '        '縁は後で処理
-            '        Continue For
-            '    End If
-            '    If r.f_i番号 = cIdxSpace Then
-            '        '最下段のスペースは高さを加えるだけ
-            '        line += _hex底の辺.delta辺の外向き法線(hexidx) * r.f_d高さ
-            '        Continue For
-            '    End If
-            '    For i As Integer = 1 To r.f_iひも本数
-            '        Dim band As CBand = Nothing
-            '        If isDraw Then
-            '            '展開されている場合は、f_d高さにセットされているが再計算する
-            '            Dim dバンド幅 As Double = g_clsSelectBasics.p_d指定本幅(r.f_i何本幅)
-
-            '            band = New CBand(r)
-            '            band.p始点F = line.p開始
-            '            band.p終点F = line.p終了
-            '            band.p始点T = line.p開始 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
-            '            band.p終点T = line.p終了 + _hex底の辺.delta辺の外向き法線(hexidx) * dバンド幅
-            '            band.SetLengthRatio(r.f_d周長比率対底の周)
-            '            If IsDrawMarkCurrent Then
-            '                '文字は上側面(コード固定) #60
-            '                If hexidx = 3 Then
-            '                    band.p文字位置 = band.p始点F
-            '                End If
-            '            End If
-            '            band.is始点FT線 = False
-            '            band.is終点FT線 = False
-
-            '            line += _hex底の辺.delta辺の外向き法線(hexidx) * (dバンド幅 + get側面の六つ目の高さ())
-            '        End If
-            '        bandlist.AddAt(band, idx)
-            '        idx += 1
-            '    Next
-            'Next
-
-            '側面のレコード→1本ごとのバンド　※高さに、底の厚さは加えない
+            '側面のレコード→1本ごとのバンド　※厚さを加えた幅・高さには加えない
             For idx As Integer = 1 To _i側面の編みひも数
                 Dim sband As CSideBand = _CSideBandList.At(idx)
-
 
                 Dim band As CBand = Nothing
                 If isDraw Then
@@ -1638,6 +1827,8 @@ Partial Public Class clsCalcHexagon
                 bandListBottom(idx) = _BandPositions(idx).ConvertToBandList()
             End If
             imageItemBandBottom(idx) = New clsImageItem(bandListBottom(idx), 1, idx)
+
+            _MainBandSet.AddRange(bandListBottom(idx))
         Next
 
 
@@ -1651,6 +1842,7 @@ Partial Public Class clsCalcHexagon
         Dim imageItemBandSide(CHex.cHexCount - 1) As clsImageItem
         For hexidx As Integer = 0 To CHex.cHexCount - 1
             imageItemBandSide(hexidx) = New clsImageItem(bandListSide(hexidx), 2, hexidx)
+            _MainBandSet.AddRange(bandListSide(hexidx))
         Next
 
         '綾指定があれば領域をクリップ
@@ -2150,6 +2342,7 @@ Partial Public Class clsCalcHexagon
 
         'バンドセット
         Dim _ImageListバンドセット As clsImageItemList = Nothing
+        _MainBandSet.Clear()
 
         If 0 <= NextDirection() Then
             '綾指定あり
@@ -2200,8 +2393,10 @@ Partial Public Class clsCalcHexagon
         End If
 
         Return True
-        End Function
+    End Function
+
+
 #End Region
 
 
-    End Class
+End Class
