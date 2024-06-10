@@ -1188,7 +1188,7 @@ Public Class clsImageItem
         Public aバンド位置 As S四隅
         Public is始点FT線 As Boolean = True
         Public is終点FT線 As Boolean = True
-        Public p文字位置 As S実座標 '原点はNG
+        Public p文字位置 As S実座標 '原点(Zero)は描かない
 
         '描画に必要な情報
         Public _i何本幅 As Integer

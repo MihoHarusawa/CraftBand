@@ -35,7 +35,44 @@ Partial Public Class clsCalcHexagon
     '--------+------------------+-----------------+-----------------+-----------------+
     '                                                    (*)ひも幅変更はNG                      
 
-#Region "呼び出しケース分類"
+#Region "サブ関数"
+    '仮の関数
+    Private Const No_Double_Value As Double = Double.MaxValue
+
+
+
+    '1から開始の点数、開始位置と何本置き指定の該当数
+    Private Function get該当数(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
+        If i開始位置 < 1 Then
+            Return 0
+        End If
+        If i点数 < i開始位置 Then
+            Return 0
+        End If
+        If i何本ごと = 0 Then
+            Return 1 '1点のみ
+        End If
+        Return 1 + (i点数 - i開始位置) \ i何本ごと
+    End Function
+
+    '次の面に続く場合の開始位置
+    Private Function get次の開始位置(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
+        If i開始位置 < 1 Then
+            Return -1 '次は無い
+        End If
+        If i点数 < i開始位置 Then
+            Return i開始位置 - i点数
+        End If
+        If i何本ごと = 0 Then
+            Return -1 '次は無い
+        End If
+        Return i何本ごと - ((i点数 - i開始位置) Mod i何本ごと)
+    End Function
+
+#End Region
+
+
+#Region "レコード更新時"
 
     '差しひもが有効か？　無効の時は、f_s無効理由をセットしFalseを返す
     '※各レコードや設定が変わるたび呼び出し
@@ -160,41 +197,12 @@ Partial Public Class clsCalcHexagon
         Return count
     End Function
 
-    '仮の関数
-    Private Const No_Double_Value As Double = Double.MaxValue
+#End Region
 
 
-
-    '1から開始の点数、開始位置と何本置き指定の該当数
-    Private Function get該当数(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
-        If i開始位置 < 1 Then
-            Return 0
-        End If
-        If i点数 < i開始位置 Then
-            Return 0
-        End If
-        If i何本ごと = 0 Then
-            Return 1 '1点のみ
-        End If
-        Return 1 + (i点数 - i開始位置) \ i何本ごと
-    End Function
-
-    '次の面に続く場合の開始位置
-    Private Function get次の開始位置(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
-        If i開始位置 < 1 Then
-            Return -1 '次は無い
-        End If
-        If i点数 < i開始位置 Then
-            Return i開始位置 - i点数
-        End If
-        If i何本ごと = 0 Then
-            Return -1 '次は無い
-        End If
-        Return i何本ごと - ((i点数 - i開始位置) Mod i何本ごと)
-    End Function
-
+#Region "出力長計算時"
     '差しひもの各長をセットしたテーブルを返す。(固定長ではないケースのみ)
-    '※リスト出力時に呼び出し
+    '※リスト出力時に呼び出し,呼び出し先で記号をセット
     Private Function get差しひもLength(ByVal row As tbl差しひもRow) As tbl縦横展開DataTable
         Select Case row.f_i配置面
                 '-------------------------------------------------
@@ -234,6 +242,10 @@ Partial Public Class clsCalcHexagon
         Return Nothing
     End Function
 
+#End Region
+
+
+#Region "イメージ生成時"
 
     '_ImageList差しひもにアイテム生成
     'プレビュー時に呼び出し(プレビュー処理内でリスト出力後)
@@ -299,7 +311,7 @@ Partial Public Class clsCalcHexagon
 
         Return True
     End Function
-#End Region
+
 
     '底の各方向への差しひも　
     ' dInnerPosition:同幅内位置(0～1値・中央が0.5)　
@@ -545,7 +557,6 @@ Partial Public Class clsCalcHexagon
         'If Not _sasihimo.ContainsKey(row.f_i番号) Then
         '    Return False
         'End If
-        Dim hex As CHex = IIf(is全面, _hex側面上辺, _hex底の辺)
 
 
         Dim d対角線幅 As Double = _d六つ目の高さ / SIN60
@@ -581,19 +592,23 @@ Partial Public Class clsCalcHexagon
 
 
         For i As Integer = -3 To count + 3
+            'pは六角形の内側とは限らない
             Dim p As S実座標 = p1 + shift * i
 
-            'If Not _hex底の辺.is内側(p) Then
-            '    Continue For
-            'End If
-            Dim cp As CCrossPoint = hex.get辺との交点(p, angle)
+            Dim cp As CCrossPoint = _hex底の辺.get辺との交点(p, angle)
             If cp Is Nothing OrElse Not cp.IsExist Then
                 Continue For
             End If
 
+            If is全面 Then
+                cp = _hex側面上辺.get辺との交点(p, angle)
+                If cp Is Nothing OrElse Not cp.IsExist Then
+                    Continue For
+                End If
+            End If
+
             Dim band As CBand = New CBand(row)
 
-            'Dim line As New S線分(p, p + New S差分(angle) * 100)
             Dim line As S線分 = cp.CrossLine
             band._s記号 = "仮"
             band.p始点F = line.p開始 + New S差分(angle + 90) * -(d幅 / 2)
@@ -618,6 +633,7 @@ Partial Public Class clsCalcHexagon
 
         Return True
     End Function
+#End Region
 
     Function to_table(ByVal row As tbl差しひもRow)
         Dim i横ひもの本数 As Integer = _BandPositions(0).get目の実質数

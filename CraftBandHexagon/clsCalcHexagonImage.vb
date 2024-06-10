@@ -1359,6 +1359,26 @@ Partial Public Class clsCalcHexagon
             m_dひも下の高さ = d
         End Sub
 
+        'line:ゼロ位置の線分 delta:辺の外向き法線
+        Function ToBand(ByVal line As S線分, ByVal delta As S差分, ByVal isMark As Boolean) As CBand
+            Dim band = New CBand(m_row側面)
+
+            'ゼロ位置からの高さを加える
+            line += delta * (m_dひも下の高さ)
+            band.p始点F = line.p開始
+            band.p終点F = line.p終了
+            band.p始点T = line.p開始 + delta * m_dひも幅
+            band.p終点T = line.p終了 + delta * m_dひも幅
+            band.SetLengthRatio(m_d周長比率対底の周)
+            If isMark Then
+                band.p文字位置 = band.p始点F
+            End If
+            band.is始点FT線 = False
+            band.is終点FT線 = False
+
+            Return band
+        End Function
+
         Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("ひも下の高さ({0:f1}) ひも幅({1:f1}) 周長比率対底の周({2}) ", m_dひも下の高さ, m_dひも幅, m_d周長比率対底の周)
@@ -1536,7 +1556,7 @@ Partial Public Class clsCalcHexagon
 #End Region
 
 #Region "側面"
-
+    '差しひも・プレビューで使用します
 
     '各側面
     Friend Class CSidePlate
@@ -1682,24 +1702,31 @@ Partial Public Class clsCalcHexagon
 
                 Dim band As CBand = Nothing
                 If isDraw Then
-                    '厚さを加えた長さ、底位置からスタート
-                    Dim line As S線分 = _hex底の辺に厚さ.line辺(hexidx) +
-                     CHex.delta辺の外向き法線(hexidx) * (-p_d底の厚さ + sband.m_dひも下の高さ)
 
-                    band = New CBand(sband.m_row側面)
-                    band.p始点F = line.p開始
-                    band.p終点F = line.p終了
-                    band.p始点T = line.p開始 + CHex.delta辺の外向き法線(hexidx) * sband.m_dひも幅
-                    band.p終点T = line.p終了 + CHex.delta辺の外向き法線(hexidx) * sband.m_dひも幅
-                    band.SetLengthRatio(sband.m_d周長比率対底の周)
-                    If IsDrawMarkCurrent Then
-                        '文字は上側面(コード固定) #60
-                        If hexidx = 3 Then
-                            band.p文字位置 = band.p始点F
-                        End If
-                    End If
-                    band.is始点FT線 = False
-                    band.is終点FT線 = False
+                    Dim line As S線分 = _hex底の辺に厚さ.line辺(hexidx) +
+                                    CHex.delta辺の外向き法線(hexidx) * (-p_d底の厚さ)
+
+                    '文字表示位置は上側面(コード固定) #60
+                    band = sband.ToBand(line, CHex.delta辺の外向き法線(hexidx), IsDrawMarkCurrent AndAlso (hexidx = 3))
+
+                    ''厚さを加えた長さ、底位置からスタート
+                    'Dim line As S線分 = _hex底の辺に厚さ.line辺(hexidx) +
+                    ' CHex.delta辺の外向き法線(hexidx) * (-p_d底の厚さ + sband.m_dひも下の高さ)
+
+                    'band = New CBand(sband.m_row側面)
+                    'band.p始点F = line.p開始
+                    'band.p終点F = line.p終了
+                    'band.p始点T = line.p開始 + CHex.delta辺の外向き法線(hexidx) * sband.m_dひも幅
+                    'band.p終点T = line.p終了 + CHex.delta辺の外向き法線(hexidx) * sband.m_dひも幅
+                    'band.SetLengthRatio(sband.m_d周長比率対底の周)
+                    'If IsDrawMarkCurrent Then
+                    '    '文字は上側面(コード固定) #60
+                    '    If hexidx = 3 Then
+                    '        band.p文字位置 = band.p始点F
+                    '    End If
+                    'End If
+                    'band.is始点FT線 = False
+                    'band.is終点FT線 = False
 
                 End If
                 bandlist.AddAt(band, idx)
