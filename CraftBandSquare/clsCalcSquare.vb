@@ -3,6 +3,7 @@
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsInsertExpand
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
@@ -1940,7 +1941,8 @@ Class clsCalcSquare
 #End Region
 
 #Region "リスト出力"
-    Dim _sasihimo As New Dictionary(Of Integer, tbl縦横展開DataTable)
+    'Dim _sasihimo As New Dictionary(Of Integer, tbl縦横展開DataTable)
+    Dim _sasihimo As New clsInsertExpand
 
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
@@ -2190,9 +2192,10 @@ Class clsCalcSquare
 
                 ElseIf 0 < r.f_iひも本数 Then
                     '差しひもの各長をセットしたテーブル
-                    Dim tmptable As tbl縦横展開DataTable = get差しひもLength(r)
-                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Rows.Count Then
-                        For Each tmp As tbl縦横展開Row In tmptable
+                    'Dim tmptable As tbl縦横展開DataTable = get差しひもLength(r)
+                    Dim tmptable As CInsertItemList = get差しひもLength(r)
+                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then 'tmptable.Rows.Count Then
+                        For Each tmp As CInsertItem In tmptable 'tbl縦横展開Row In tmptable
                             row = output.NextNewRow
                             row.f_s長さ = output.outLengthText(tmp.f_dひも長)
                             row.f_s編みひも名 = tmp.f_iひも番号

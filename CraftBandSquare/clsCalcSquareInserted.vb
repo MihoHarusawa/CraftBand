@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare.clsCalcSquare
 
@@ -274,9 +275,20 @@ Partial Public Class clsCalcSquare
     End Function
 
 
+    '配置面                           角度                           18度(e)108度(g)
+    '               0度(a)            90度(c)      45度(b)135度(d)   72度(f)162度(h)  
+    '--------+-----------------+-----------------+-----------------+-----------------+
+    '底面(A) |　　<固定長>　　 |　　<固定長>　　 |get底の斜めLength|　　　----  　　 |
+    '--------+-----------------+-----------------+-----------------+-----------------+
+    '側面(B) |　　<固定長>　　 |　　<固定長>　　 |　　<固定長>　　 |　　<固定長>　　 |
+    '--------+-----------------+-----------------+-----------------+-----------------+
+    '全面(C) |    <固定長>     |底の横+底の縦2種 |get底の斜めLength|　　　----　　　 |
+    '--------+-----------------+-----------------+-----------------+-----------------+
+
     '差しひもの各長をセットしたテーブルを返す。(固定長ではないケースのみ)
     '※リスト出力時に呼び出し
-    Private Function get差しひもLength(ByVal row As tbl差しひもRow) As tbl縦横展開DataTable
+    'Private Function get差しひもLength(ByVal row As tbl差しひもRow) As tbl縦横展開DataTable
+    Private Function get差しひもLength(ByVal row As tbl差しひもRow) As CInsertItemList
         Select Case row.f_i配置面
                 '-------------------------------------------------
             Case enum配置面.i_底面 'A
@@ -304,49 +316,56 @@ Partial Public Class clsCalcSquare
                             i縦ひもの本数 = get縦の目の実質数()
                         End If
 
-                        Dim tmptable As tbl縦横展開DataTable = New tbl縦横展開DataTable
+                        'Dim tmptable As tbl縦横展開DataTable = New tbl縦横展開DataTable
+                        Dim tmptable As CInsertItemList = New CInsertItemList(row)
                         Dim n開始位置 As Integer = row.f_i開始位置
                         '縦ひも
                         Dim count As Integer = get該当数(n開始位置, i縦ひもの本数, row.f_i何本ごと)
                         If 0 < count Then
-                            Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+                            'Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+                            Dim tmp As New CInsertItem(tmptable)
                             'key
                             tmp.f_iひも種 = enumひも種.i_縦
                             tmp.f_iひも番号 = 1
                             'copy
-                            tmp.f_i何本幅 = row.f_i何本幅
-                            tmp.f_s色 = row.f_s色
+                            'tmp.f_i何本幅 = row.f_i何本幅
+                            'tmp.f_s色 = row.f_s色
                             tmp.f_i位置番号 = row.f_i番号
                             'set
                             tmp.f_iVal1 = count 'ひも数
                             tmp.f_iVal2 = n開始位置
                             tmp.f_dひも長 = get周の縦() + get側面高(2) '縁は加えない
-                            tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
+                            'tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
                             'skip:f_sひも名,f_d幅,f_d長さ
-                            tmptable.Rows.Add(tmp)
+                            'tmptable.Rows.Add(tmp)
+                            tmptable.Add(tmp)
                         End If
                         n開始位置 = get次の開始位置(n開始位置, i縦ひもの本数, row.f_i何本ごと)
 
                         '横ひも
                         count = get該当数(n開始位置, i横ひもの本数, row.f_i何本ごと)
                         If 0 < count Then
-                            Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+                            'Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+                            Dim tmp As New CInsertItem(tmptable)
                             'key
                             tmp.f_iひも種 = enumひも種.i_横
                             tmp.f_iひも番号 = 2
                             'copy
-                            tmp.f_i何本幅 = row.f_i何本幅
-                            tmp.f_s色 = row.f_s色
+                            'tmp.f_i何本幅 = row.f_i何本幅
+                            'tmp.f_s色 = row.f_s色
                             tmp.f_i位置番号 = row.f_i番号
                             'set
                             tmp.f_iVal1 = count 'ひも数
                             tmp.f_iVal2 = n開始位置
                             tmp.f_dひも長 = get周の横() + get側面高(2) '縁は加えない
-                            tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
+                            'tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
                             'skip:f_i位置番号,f_sひも名,f_d幅,f_d長さ
-                            tmptable.Rows.Add(tmp)
+                            'tmptable.Rows.Add(tmp)
+                            tmptable.Add(tmp)
                         End If
-                        If 0 < tmptable.Rows.Count Then
+                        'If 0 < tmptable.Rows.Count Then
+                        '    Return tmptable
+                        If 0 < tmptable.Count Then
                             Return tmptable
                         Else
                             Return Nothing
@@ -366,6 +385,18 @@ Partial Public Class clsCalcSquare
     End Function
 
 
+    '配置面                           角度                           18度(e)108度(g)
+    '               0度(a)            90度(c)      45度(b)135度(d)   72度(f)162度(h)  
+    '--------+-----------------+--------------------+--------------------+--------------+
+    '底面(A) |image横ひもに差す| image縦ひもに差す  |[L]imageList底の斜め|　　----   　 |
+    '--------+-----------------+--------------------+--------------------+--------------+
+    '側面(B) |　　側面_水平 　 | image縦ひもに差す  |      image縦ひも面を斜めに　   　 |
+    '        |　　          　 | image横ひもに差す  |      image横ひも面を斜めに　　    |
+    '--------+-----------------+--------------------+--------------------+--------------+
+    '全面(C) |    側面_水平    |[L]image横ひもに差す|[L]imageList底の斜め|　　----   　 |
+    '        |　　          　 |[L]image縦ひもに差す|                    |      　　    |
+    '--------+-----------------+--------------------+--------------------+--------------+
+    '                                                [L]length結果参照
     '_ImageList差しひも生成
     'プレビュー時に呼び出し(プレビュー処理内でリスト出力後)
     Private Function imageList差しひも() As Boolean
@@ -394,10 +425,12 @@ Partial Public Class clsCalcSquare
                 Case enum配置面.i_底面 'A
                     Select Case row.f_i角度
                         Case enum角度.i_0度  '底の横 a 
-                            image横ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            'image横ひもに差す(row, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image横ひもに差す(_sasihimo.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_90度  '底の縦 c 
-                            image縦ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            'image縦ひもに差す(row, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image縦ひもに差す(_sasihimo.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_45度, enum角度.i_135度 'b,d
                             imageList底の斜め(row, dInnerPosition)
@@ -412,10 +445,15 @@ Partial Public Class clsCalcSquare
                             側面_水平(row, dInnerPosition)
 
                         Case enum角度.i_90度 'c
-                            n開始位置 = image縦ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
-                            n開始位置 = image横ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
-                            n開始位置 = image縦ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
-                            n開始位置 = image横ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
+                            Dim item As CInsertItem = _sasihimo.GetOneItem(row)
+                            'n開始位置 = image縦ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
+                            'n開始位置 = image横ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
+                            'n開始位置 = image縦ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
+                            'n開始位置 = image横ひもに差す(New clsDataRow(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
+                            n開始位置 = image縦ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
+                            n開始位置 = image横ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
+                            n開始位置 = image縦ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
+                            n開始位置 = image横ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
 
                         Case enum角度.i_45度, enum角度.i_135度, enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度 'b,d,e,f,g,h★
                             n開始位置 = image縦ひも面を斜めに(row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
@@ -434,13 +472,14 @@ Partial Public Class clsCalcSquare
                             If Not _sasihimo.ContainsKey(row.f_i番号) Then
                                 Return False
                             End If
-                            Dim tmptable As tbl縦横展開DataTable = _sasihimo(row.f_i番号)
-                            For Each tmp As tbl縦横展開Row In tmptable
+                            'Dim tmptable As tbl縦横展開DataTable = _sasihimo(row.f_i番号)
+                            Dim tmptable As CInsertItemList = _sasihimo.GetList(row.f_i番号)
+                            For Each tmp As CInsertItem In tmptable 'tbl縦横展開Row In tmptable
                                 'n開始位置←tmp.f_iVal2
                                 If tmp.f_iひも種 = enumひも種.i_横 Then
-                                    image横ひもに差す(New clsDataRow(tmp), isCenterBand, dInnerPosition, tmp.f_iVal2, i何本ごと, draw_position.center) '1～横ひも本数
+                                    image横ひもに差す(tmp, isCenterBand, dInnerPosition, tmp.f_iVal2, i何本ごと, draw_position.center) '1～横ひも本数
                                 ElseIf tmp.f_iひも種 = enumひも種.i_縦 Then
-                                    image縦ひもに差す(New clsDataRow(tmp), isCenterBand, dInnerPosition, tmp.f_iVal2, i何本ごと, draw_position.center) '横の本数+1 ～ 横の本数+縦の本数
+                                    image縦ひもに差す(tmp, isCenterBand, dInnerPosition, tmp.f_iVal2, i何本ごと, draw_position.center) '横の本数+1 ～ 横の本数+縦の本数
                                 End If
                             Next
 
@@ -530,17 +569,17 @@ Partial Public Class clsCalcSquare
 
 
     '底の横ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
-    Private Function image横ひもに差す(ByVal drow As clsDataRow, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
+    Private Function image横ひもに差す(ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 OrElse _ImageList差しひも Is Nothing Then
             Return -1
         End If
 
-        Dim i_番号 As Integer
-        If drow.ContainsName("f_i番号") Then
-            i_番号 = drow.Value("f_i番号") 'tbl差しひもRow
-        Else
-            i_番号 = drow.Value("f_i位置番号") 'tbl縦横展開Row
-        End If
+        Dim i_番号 As Integer = drow.f_i番号
+        'If drow.ContainsName("f_i番号") Then
+        '    i_番号 = drow.Value("f_i番号") 'tbl差しひもRow
+        'Else
+        '    i_番号 = drow.Value("f_i位置番号") 'tbl縦横展開Row
+        'End If
 
         '本数
         Dim n本数 As Integer = p_i横ひもの本数
@@ -551,9 +590,11 @@ Partial Public Class clsCalcSquare
             Return n開始位置 - n本数
         End If
 
-        Dim i本幅 As Integer = drow.Value("f_i何本幅")
+        'Dim i本幅 As Integer = drow.Value("f_i何本幅")
+        Dim i本幅 As Integer = drow.f_i何本幅
         Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
-        Dim dひも長 As Double = drow.Value("f_dひも長")
+        'Dim dひも長 As Double = drow.Value("f_dひも長")
+        Dim dひも長 As Double = drow.f_dひも長
 
         'バンド描画位置
         Dim x_left As Double
@@ -584,7 +625,14 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
+            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
+            '色と記号
+            Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
+            tmpitem.f_s色 = drow.f_s色
+            tmpitem.f_s記号 = drow.f_s記号
+            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), i_番号, idx)
+
+
             item.m_a四隅 = New S四隅(New S領域(New S実座標(x_left, y_center + d幅 / 2),
                                          New S実座標(x_right, y_center - d幅 / 2)))
             If isFirst Then
@@ -683,17 +731,17 @@ Partial Public Class clsCalcSquare
 
 
     '底の縦ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
-    Private Function image縦ひもに差す(ByVal drow As clsDataRow, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
+    Private Function image縦ひもに差す(ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 OrElse _ImageList差しひも Is Nothing Then
             Return -1
         End If
 
-        Dim i_番号 As Integer
-        If drow.ContainsName("f_i番号") Then
-            i_番号 = drow.Value("f_i番号") 'tbl差しひもRow
-        Else
-            i_番号 = drow.Value("f_i位置番号") 'tbl縦横展開Row
-        End If
+        Dim i_番号 As Integer = drow.f_i番号
+        'If drow.ContainsName("f_i番号") Then
+        '    i_番号 = drow.Value("f_i番号") 'tbl差しひもRow
+        'Else
+        '    i_番号 = drow.Value("f_i位置番号") 'tbl縦横展開Row
+        'End If
 
         '本数
         Dim n本数 As Integer = p_i縦ひもの本数
@@ -704,9 +752,11 @@ Partial Public Class clsCalcSquare
             Return n開始位置 - n本数
         End If
 
-        Dim i本幅 As Integer = drow.Value("f_i何本幅")
+        'Dim i本幅 As Integer = drow.Value("f_i何本幅")
+        Dim i本幅 As Integer = drow.f_i何本幅
         Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
-        Dim dひも長 As Double = drow.Value("f_dひも長")
+        'Dim dひも長 As Double = drow.Value("f_dひも長")
+        Dim dひも長 As Double = drow.f_dひも長
 
         'バンド描画長
         Dim y_up As Double
@@ -737,7 +787,12 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
+            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
+            Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
+            tmpitem.f_s色 = drow.f_s色
+            tmpitem.f_s記号 = drow.f_s記号
+            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), i_番号, idx)
+
             item.m_a四隅 = New S四隅(New S領域(New S実座標(x_center - d幅 / 2, y_up),
                                          New S実座標(x_center + d幅 / 2, y_down)))
             If isFirst Then
@@ -1128,7 +1183,8 @@ Partial Public Class clsCalcSquare
     End Function
 
     'ひも長テーブル、ひも幅変更なしのため、45度も135度も同じ長さ
-    Private Function get底の斜めLength(ByVal row As tbl差しひもRow) As tbl縦横展開DataTable
+    'Private Function get底の斜めLength(ByVal row As tbl差しひもRow) As tbl縦横展開DataTable
+    Private Function get底の斜めLength(ByVal row As tbl差しひもRow) As CInsertItemList
         Dim n点数 As Integer = get底の斜めCount(row)
         Dim count As Integer = get該当数(row.f_i開始位置, n点数, row.f_i何本ごと)
         If 0 = count Then
@@ -1206,14 +1262,16 @@ Partial Public Class clsCalcSquare
                                   row.f_i番号, n点数, nCorner, nCorner2, x_center1, x_centerCorner, y_center1)
 
         '各長さのレコード作成
-        Dim tmptable As tbl縦横展開DataTable = New tbl縦横展開DataTable
+        'Dim tmptable As tbl縦横展開DataTable = New tbl縦横展開DataTable
+        Dim tmptable As New CInsertItemList(row)
         For i As Integer = row.f_i開始位置 To n点数 Step row.f_i何本ごと
-            Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+            'Dim tmp As tbl縦横展開Row = tmptable.Newtbl縦横展開Row
+            Dim tmp As New CInsertItem(tmptable)
             tmp.f_iひも種 = iひも種
             tmp.f_iひも番号 = i
             'copy
-            tmp.f_i何本幅 = row.f_i何本幅
-            tmp.f_s色 = row.f_s色
+            'tmp.f_i何本幅 = row.f_i何本幅
+            'tmp.f_s色 = row.f_s色
             tmp.f_i位置番号 = row.f_i番号
 
             Dim idx As Integer
@@ -1289,19 +1347,20 @@ Partial Public Class clsCalcSquare
             tmp.f_iVal2 = i
             tmp.f_iVal3 = idx
             tmp.f_dひも長 = tmp.f_d長さ * ROOT2
-            tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
+            'tmp.f_d出力ひも長 = tmp.f_dひも長 + 2 * row.f_dひも長加算
 
             '保存値
             tmp.f_dVal3 = x_center
             tmp.f_dVal4 = y_center
 
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "flg={0} idx={1} dx={2:0.0} dy={3:0.0} 長さ={4:0.0} ひも長={5:0.0} center({6:0.0},{7:0.0})", tmp.f_iVal4, idx, tmp.f_dVal1, tmp.f_dVal2, tmp.f_d長さ, tmp.f_dひも長, tmp.f_dVal3, tmp.f_dVal4)
-            tmptable.Rows.Add(tmp)
+            'tmptable.Rows.Add(tmp)
+            tmptable.Add(tmp)
             If row.f_i何本ごと = 0 Then
                 Exit For
             End If
         Next
-        If 0 < tmptable.Rows.Count Then
+        If 0 < tmptable.Count Then 'tmptable.Rows.Count Then
             Return tmptable
         Else
             Return Nothing
@@ -1336,9 +1395,17 @@ Partial Public Class clsCalcSquare
         End If
         delta = delta * (dInnerPosition - 0.5) * d対角線幅
 
-        Dim tmptable As tbl縦横展開DataTable = _sasihimo(row.f_i番号)
-        For Each tmp As tbl縦横展開Row In tmptable
-            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmp), row.f_i番号, tmp.f_iひも番号)
+        'Dim tmptable As tbl縦横展開DataTable = _sasihimo(row.f_i番号)
+        Dim tmptable As CInsertItemList = _sasihimo.GetList(row.f_i番号)
+        'For Each tmp As tbl縦横展開Row In tmptable
+        For Each tmp As CInsertItem In tmptable
+
+            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmp), row.f_i番号, tmp.f_iひも番号)
+            '色と記号
+            Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
+            tmpitem.f_s色 = row.f_s色
+            tmpitem.f_s記号 = row.f_s記号
+            Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), row.f_i番号, tmp.f_iひも番号)
 
             Dim x_center As Double = tmp.f_dVal3
             Dim y_center As Double = tmp.f_dVal4

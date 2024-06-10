@@ -20,6 +20,54 @@ Public Class clsInsertExpand
         Dim m_angle As Integer
         Dim m_line As S線分 'm_angle方向
 
+        ReadOnly Property f_i番号 As Integer
+            Get
+                Return _parent._row.f_i番号
+            End Get
+        End Property
+
+        Public f_iひも種 As Integer
+        Public f_iひも番号 As Integer
+
+        ReadOnly Property f_i何本幅 As Integer
+            Get
+                Return _parent._row.f_i何本幅
+            End Get
+        End Property
+
+        ReadOnly Property f_s色 As String
+            Get
+                Return _parent._row.f_s色
+            End Get
+        End Property
+
+
+
+        Public f_i位置番号 As Integer
+
+        Public f_iVal1 As Integer 'ひも数
+        Public f_iVal2 As Integer '開始位置
+        Public f_iVal3 As Integer 'idx
+        Public f_dひも長 As Double '描画するひも長(加算値は描かない)
+
+        ReadOnly Property f_d出力ひも長 As Double
+            Get
+                Return f_dひも長 + _parent._row.f_dひも長加算 * 2
+            End Get
+        End Property
+
+
+        Public f_iVal4 As Integer '1=横へ
+        Public f_dVal1 As Double 'dx
+        Public f_dVal2 As Double 'dy
+        Public f_dVal3 As Double 'x_center
+        Public f_dVal4 As Double 'y_center
+        Public f_d長さ As Double
+
+        Public f_s記号 As String
+
+
+
         '識別情報
         Friend ReadOnly Property Ident As String
             Get
@@ -111,6 +159,54 @@ Public Class clsInsertExpand
             Return sb.ToString
         End Function
     End Class
+
+    Dim _InsertItemListMap As New CInsertItemListMap
+
+
+    Sub New()
+
+    End Sub
+
+    Sub Clear()
+        _InsertItemListMap.Clear()
+    End Sub
+
+    Sub Add(ByVal i As Integer, ByVal ilist As CInsertItemList)
+        _InsertItemListMap.Add(i, ilist)
+    End Sub
+
+    Function ContainsKey(ByVal i As Integer) As Boolean
+        Return _InsertItemListMap.ContainsKey(i)
+    End Function
+
+    Function GetList(ByVal i As Integer) As CInsertItemList
+        If Not _InsertItemListMap.ContainsKey(i) Then
+            Return Nothing
+        End If
+        Return _InsertItemListMap(i)
+    End Function
+
+    Function GetOneItem(ByVal row As tbl差しひもRow) As CInsertItem
+        If _InsertItemListMap.ContainsKey(row.f_i番号) Then
+            Dim lst As CInsertItemList = _InsertItemListMap(row.f_i番号)
+            If lst.Count <> 1 Then
+                Throw New Exception("lst.Count <> 1")
+            End If
+            Return lst(0)
+        Else
+            Dim lst As New CInsertItemList(row)
+            Dim item As New CInsertItem(lst)
+            'tbl差しひもRowが1点=長さが確定している
+            If row.Isf_dひも長Null Then
+                Throw New Exception("ひも長Null")
+            End If
+            item.f_dひも長 = row.f_dひも長
+            lst.Add(item)
+            _InsertItemListMap.Add(row.f_i番号, lst)
+            Return item
+        End If
+    End Function
+
 
 
 End Class
