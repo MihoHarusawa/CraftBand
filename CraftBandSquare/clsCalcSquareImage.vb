@@ -42,7 +42,7 @@ Partial Public Class clsCalcSquare
     Dim _ImageList描画要素 As clsImageItemList '底と側面
 
 
-    '現画像生成時に記号を表示する
+    '現画像生成時に記号を表示する #60
     Shared IsDrawMarkCurrent As Boolean = True
 
 
@@ -139,15 +139,6 @@ Partial Public Class clsCalcSquare
 
 #Region "描画のベースとなる値"
 
-    Private Const No_Double_Value As Double = Double.MaxValue
-
-    '描画の位置
-    Enum draw_position
-        before '上・右の側面
-        center '底面
-        after '下・左の側面
-    End Enum
-
     '底の配置領域に立ち上げ増分をプラス, = p_d四角ベース_周
     Private Function get側面の周長() As Double
         Return 2 * (_d四角ベース_横計 + _d四角ベース_縦計) _
@@ -184,76 +175,6 @@ Partial Public Class clsCalcSquare
     '描画の縦高ゼロ描画位置
     Private Function getZeroY(Optional ByVal multi As Double = 1) As Double
         Return multi * (get周の縦() + getZeroSide(2))
-    End Function
-
-    '目の認識
-    Private Function is縦の上下に目あり() As Boolean
-        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d上端下端の目
-    End Function
-
-    '縦の目数として処理する数
-    Private Function get縦の目の実質数() As Integer
-        If is縦の上下に目あり() Then
-            Return _i縦の目の数 + 2
-        Else
-            Return _i縦の目の数
-        End If
-    End Function
-
-    '目の認識
-    Private Function is横の左右に目あり() As Boolean
-        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d左端右端の目
-    End Function
-
-    '横の目数として処理する数
-    Private Function get横の目の実質数() As Integer
-        If is横の左右に目あり() Then
-            Return _i横の目の数 + 2
-        Else
-            Return _i横の目の数
-        End If
-    End Function
-
-    Private Function is最下段に目あり() As Boolean
-        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d最下段の目
-    End Function
-
-    '高さの目数として処理する数
-    Private Function get高さの目の実質数() As Integer
-        If is最下段に目あり() Then
-            Return _i高さの目の数 + 1
-        Else
-            Return _i高さの目の数
-        End If
-    End Function
-
-
-    '1から開始の点数、開始位置と何本置き指定の該当数
-    Private Function get該当数(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
-        If i開始位置 < 1 Then
-            Return 0
-        End If
-        If i点数 < i開始位置 Then
-            Return 0
-        End If
-        If i何本ごと = 0 Then
-            Return 1 '1点のみ
-        End If
-        Return 1 + (i点数 - i開始位置) \ i何本ごと
-    End Function
-
-    '次の面に続く場合の開始位置
-    Private Function get次の開始位置(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
-        If i開始位置 < 1 Then
-            Return -1 '次は無い
-        End If
-        If i点数 < i開始位置 Then
-            Return i開始位置 - i点数
-        End If
-        If i何本ごと = 0 Then
-            Return -1 '次は無い
-        End If
-        Return i何本ごと - ((i点数 - i開始位置) Mod i何本ごと)
     End Function
 
 #End Region

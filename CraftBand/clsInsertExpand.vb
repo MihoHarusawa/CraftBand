@@ -1,9 +1,6 @@
 ﻿
 
-Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsInsertExpand
-Imports CraftBand.clsInsertExpand.CInsertItem
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsInsertExpand
@@ -39,25 +36,20 @@ Public Class clsInsertExpand
         End Property
 
 
+        '長さ計算保持・描画用情報
         Dim m_angle As Integer
         Dim m_line As S線分 'm_angle方向
 
-
         Public m_iひも種 As Integer
         Public m_iひも番号 As Integer
-
-        Public m_iひも数 As Integer 'ひも数
-        Public m_i開始位置 As Integer '開始位置
-        Public m_idx As Integer 'idx
-
-        Public m_iFlag As Integer '1=横へ
-        Public m_ddx As Double 'dx
-        Public m_ddy As Double 'dy
-        Public m_dX As Double 'x_center
-        Public m_dY As Double 'y_center
+        Public m_iひも数 As Integer
+        Public m_i開始位置 As Integer
         Public m_d長さ As Double
 
-
+        Public m_idx As Integer
+        Public m_iFlag As Integer
+        Public m_pCenter As S実座標
+        Public m_delta As S差分
 
 
         '識別情報

@@ -7,11 +7,6 @@ Imports CraftBandSquare.clsCalcSquare
 
 Partial Public Class clsCalcSquare
 
-    Dim DELTA72 As New S差分(1, 3) '右に1個・上に3個
-    Dim DELTA18 As New S差分(3, 1) '右に3個・上に1個
-    Dim DELTA108 As New S差分(-1, 3) '左に1個・上に3個
-    Dim DELTA162 As New S差分(-3, 1) '左に3個・上に1個
-
 
     '配置面                           角度                           18度(e)108度(g)
     '               0度(a)            90度(c)      45度(b)135度(d)   72度(f)162度(h)  
@@ -27,7 +22,94 @@ Partial Public Class clsCalcSquare
     '--------+-----------------+-----------------+-----------------+-----------------+
     '                                             ※斜め各長は、ひも本幅変更なしとして計算する                                          
 
-#Region "呼び出しケース分類"
+#Region "数の認識"
+
+    Dim DELTA72 As New S差分(1, 3) '右に1個・上に3個
+    Dim DELTA18 As New S差分(3, 1) '右に3個・上に1個
+    Dim DELTA108 As New S差分(-1, 3) '左に1個・上に3個
+    Dim DELTA162 As New S差分(-3, 1) '左に3個・上に1個
+
+    Private Const No_Double_Value As Double = Double.MaxValue
+
+    '描画の位置
+    Enum draw_position
+        before '上・右の側面
+        center '底面
+        after '下・左の側面
+    End Enum
+
+    '目の認識
+    Private Function is縦の上下に目あり() As Boolean
+        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d上端下端の目
+    End Function
+
+    '縦の目数として処理する数
+    Private Function get縦の目の実質数() As Integer
+        If is縦の上下に目あり() Then
+            Return _i縦の目の数 + 2
+        Else
+            Return _i縦の目の数
+        End If
+    End Function
+
+    '目の認識
+    Private Function is横の左右に目あり() As Boolean
+        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d左端右端の目
+    End Function
+
+    '横の目数として処理する数
+    Private Function get横の目の実質数() As Integer
+        If is横の左右に目あり() Then
+            Return _i横の目の数 + 2
+        Else
+            Return _i横の目の数
+        End If
+    End Function
+
+    Private Function is最下段に目あり() As Boolean
+        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d目と数える端の目") <= _d最下段の目
+    End Function
+
+    '高さの目数として処理する数
+    Private Function get高さの目の実質数() As Integer
+        If is最下段に目あり() Then
+            Return _i高さの目の数 + 1
+        Else
+            Return _i高さの目の数
+        End If
+    End Function
+
+    '1から開始の点数、開始位置と何本置き指定の該当数
+    Private Function get該当数(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
+        If i開始位置 < 1 Then
+            Return 0
+        End If
+        If i点数 < i開始位置 Then
+            Return 0
+        End If
+        If i何本ごと = 0 Then
+            Return 1 '1点のみ
+        End If
+        Return 1 + (i点数 - i開始位置) \ i何本ごと
+    End Function
+
+    '次の面に続く場合の開始位置
+    Private Function get次の開始位置(ByVal i開始位置 As Integer, ByVal i点数 As Integer, ByVal i何本ごと As Integer) As Integer
+        If i開始位置 < 1 Then
+            Return -1 '次は無い
+        End If
+        If i点数 < i開始位置 Then
+            Return i開始位置 - i点数
+        End If
+        If i何本ごと = 0 Then
+            Return -1 '次は無い
+        End If
+        Return i何本ごと - ((i点数 - i開始位置) Mod i何本ごと)
+    End Function
+
+#End Region
+
+#Region "有効チェックとひも数(常時)"
 
     '差しひもが有効か？　無効の時は、f_s無効理由をセットしFalseを返す
     '※各レコードや設定が変わるたび呼び出し
@@ -274,6 +356,9 @@ Partial Public Class clsCalcSquare
         Return count
     End Function
 
+#End Region
+
+#Region "ひも長とイメージ(リスト処理以降)"
 
     '配置面                           角度                           18度(e)108度(g)
     '               0度(a)            90度(c)      45度(b)135度(d)   72度(f)162度(h)  
@@ -406,10 +491,10 @@ Partial Public Class clsCalcSquare
                 Case enum配置面.i_底面 'A
                     Select Case row.f_i角度
                         Case enum角度.i_0度  '底の横 a 
-                            image横ひもに差す(_sasihimo.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image横ひもに差す(_InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_90度  '底の縦 c 
-                            image縦ひもに差す(_sasihimo.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image縦ひもに差す(_InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_45度, enum角度.i_135度 'b,d
                             imageList底の斜め(row, dInnerPosition)
@@ -424,7 +509,7 @@ Partial Public Class clsCalcSquare
                             側面_水平(row, dInnerPosition)
 
                         Case enum角度.i_90度 'c
-                            Dim item As CInsertItem = _sasihimo.GetOneItem(row)
+                            Dim item As CInsertItem = _InsertExpand.GetOneItem(row)
                             n開始位置 = image縦ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
                             n開始位置 = image横ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
                             n開始位置 = image縦ひもに差す(item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
@@ -444,10 +529,10 @@ Partial Public Class clsCalcSquare
                             側面_水平(row, dInnerPosition)
 
                         Case enum角度.i_90度  '底の横+底の縦を側面に回す c
-                            If Not _sasihimo.ContainsKey(row.f_i番号) Then
+                            If Not _InsertExpand.ContainsKey(row.f_i番号) Then
                                 Return False
                             End If
-                            Dim tmptable As CInsertItemList = _sasihimo.GetList(row.f_i番号)
+                            Dim tmptable As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
                             For Each tmp As CInsertItem In tmptable
                                 'n開始位置←tmp.m_i開始位置
                                 If tmp.m_iひも種 = enumひも種.i_横 Then
@@ -1240,9 +1325,8 @@ Partial Public Class clsCalcSquare
                 x_center = x_center1 + p_d縦横_四角 * (idx - 1)
                 y_center = y_center1
                 tmp.m_iFlag = 1 '横へ
-                tmp.m_ddx = (x_center + x_line) 'dx
-                tmp.m_ddy = (y_line - y_center) 'dy
-                tmp.m_d長さ = tmp.m_ddx + tmp.m_ddy
+                tmp.m_delta = New S差分((x_center + x_line), (y_line - y_center)) 'dx,dy
+                tmp.m_d長さ = tmp.m_delta.dX + tmp.m_delta.dY
 
             ElseIf i = nCorner Then
                 '角位置
@@ -1257,11 +1341,10 @@ Partial Public Class clsCalcSquare
                 Dim dy2 As Double = (y_center + y_line)
                 If dy1 <= dx2 Then
                     tmp.m_iFlag = 1 '横扱い
-                    tmp.m_ddx = dx1
-                    tmp.m_ddy = dy1
-                    tmp.m_d長さ = tmp.m_ddx + tmp.m_ddy
+                    tmp.m_delta = New S差分(dx1, dy1)
+                    tmp.m_d長さ = tmp.m_delta.dX + tmp.m_delta.dY
                     If 0 < dShortCorner Then
-                        tmp.m_ddy = dy1 - dShortCorner
+                        tmp.m_delta.dY = dy1 - dShortCorner
                         tmp.m_d長さ -= dShortCorner
                         If (maxLine - dShortCorner) < tmp.m_d長さ Then
                             tmp.m_d長さ = maxLine - dShortCorner
@@ -1269,11 +1352,10 @@ Partial Public Class clsCalcSquare
                     End If
                 Else
                     tmp.m_iFlag = 0 '縦扱い
-                    tmp.m_ddx = dx2
-                    tmp.m_ddy = dy2
-                    tmp.m_d長さ = tmp.m_ddx + tmp.m_ddy
+                    tmp.m_delta = New S差分(dx2, dy2)
+                    tmp.m_d長さ = tmp.m_delta.dX + tmp.m_delta.dY
                     If 0 < dShortCorner Then
-                        tmp.m_ddx = dx2 - dShortCorner
+                        tmp.m_delta.dX = dx2 - dShortCorner
                         tmp.m_d長さ -= dShortCorner
                         If (maxLine - dShortCorner) < tmp.m_d長さ Then
                             tmp.m_d長さ = maxLine - dShortCorner
@@ -1287,9 +1369,8 @@ Partial Public Class clsCalcSquare
                 x_center = x_centerCorner
                 y_center = y_center1 - p_d縦横_四角 * (idx - 1)
                 tmp.m_iFlag = 0 '下へ
-                tmp.m_ddx = (x_line - x_center) 'dx
-                tmp.m_ddy = (y_center + y_line) 'dy
-                tmp.m_d長さ = tmp.m_ddx + tmp.m_ddy
+                tmp.m_delta = New S差分((x_line - x_center), (y_center + y_line)) 'dx,dy
+                tmp.m_d長さ = tmp.m_delta.dX + tmp.m_delta.dY
             End If
 
             If i = nCorner2 AndAlso 0 < dShortCorner Then
@@ -1307,17 +1388,16 @@ Partial Public Class clsCalcSquare
             'tmp.p_d出力ひも長 = tmp.m_dひも長 + 2 * row.f_dひも長加算
 
             '保存値
-            tmp.m_dX = x_center
-            tmp.m_dY = y_center
+            tmp.m_pCenter = New S実座標(x_center, y_center)
 
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "flg={0} idx={1} dx={2:0.0} dy={3:0.0} 長さ={4:0.0} ひも長={5:0.0} center({6:0.0},{7:0.0})", tmp.m_iFlag, idx, tmp.m_ddx, tmp.m_ddy, tmp.m_d長さ, tmp.m_dひも長, tmp.m_dX, tmp.m_dY)
-            'tmptable.Rows.Add(tmp)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "flg={0} idx={1} delta={2} 長さ={3:0.0} ひも長={4:0.0} center{5}", tmp.m_iFlag, idx, tmp.m_delta, tmp.m_d長さ, tmp.m_dひも長, tmp.m_pCenter)
+
             tmptable.Add(tmp)
             If row.f_i何本ごと = 0 Then
                 Exit For
             End If
         Next
-        If 0 < tmptable.Count Then 'tmptable.Rows.Count Then
+        If 0 < tmptable.Count Then
             Return tmptable
         Else
             Return Nothing
@@ -1326,7 +1406,7 @@ Partial Public Class clsCalcSquare
 
     '斜めの差しひものイメージ dInnerPosition:同幅内位置(0～1値・中央が0.5)
     Private Function imageList底の斜め(ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double) As Boolean
-        If Not _sasihimo.ContainsKey(row.f_i番号) Then
+        If Not _InsertExpand.ContainsKey(row.f_i番号) Then
             Return False
         End If
 
@@ -1352,7 +1432,7 @@ Partial Public Class clsCalcSquare
         End If
         delta = delta * (dInnerPosition - 0.5) * d対角線幅
 
-        Dim tmptable As CInsertItemList = _sasihimo.GetList(row.f_i番号)
+        Dim tmptable As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         For Each tmp As CInsertItem In tmptable
 
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmp), row.p_i番号, tmp.m_iひも番号)
@@ -1362,10 +1442,10 @@ Partial Public Class clsCalcSquare
             tmpitem.f_s記号 = row.f_s記号
             Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), row.f_i番号, tmp.m_iひも番号)
 
-            Dim x_center As Double = tmp.m_dX
-            Dim y_center As Double = tmp.m_dY
-            Dim dx As Double = tmp.m_ddx
-            Dim dy As Double = tmp.m_ddy
+            Dim x_center As Double = tmp.m_pCenter.X
+            Dim y_center As Double = tmp.m_pCenter.Y
+            Dim dx As Double = tmp.m_delta.dX
+            Dim dy As Double = tmp.m_delta.dY
             Dim sign As Integer = 1
 
             Dim rBand0 As S領域

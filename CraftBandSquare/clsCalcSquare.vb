@@ -1941,11 +1941,11 @@ Class clsCalcSquare
 #End Region
 
 #Region "リスト出力"
-    Dim _sasihimo As New clsInsertExpand
+    Dim _InsertExpand As New clsInsertExpand
 
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
-        _sasihimo.Clear()
+        _InsertExpand.Clear()
 
         If output Is Nothing Then
             '処理に必要な情報がありません。
@@ -2199,7 +2199,7 @@ Class clsCalcSquare
                             row.f_s編みひも名 = tmp.m_iひも番号
                             tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
                         Next
-                        _sasihimo.Add(r.f_i番号, tmptable)
+                        _InsertExpand.Add(r.f_i番号, tmptable)
                     End If
 
                 End If
