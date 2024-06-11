@@ -1941,7 +1941,6 @@ Class clsCalcSquare
 #End Region
 
 #Region "リスト出力"
-    'Dim _sasihimo As New Dictionary(Of Integer, tbl縦横展開DataTable)
     Dim _sasihimo As New clsInsertExpand
 
     'リスト生成
@@ -2192,15 +2191,13 @@ Class clsCalcSquare
 
                 ElseIf 0 < r.f_iひも本数 Then
                     '差しひもの各長をセットしたテーブル
-                    'Dim tmptable As tbl縦横展開DataTable = get差しひもLength(r)
                     Dim tmptable As CInsertItemList = get差しひもLength(r)
-                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then 'tmptable.Rows.Count Then
-                        For Each tmp As CInsertItem In tmptable 'tbl縦横展開Row In tmptable
+                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then
+                        For Each tmp As CInsertItem In tmptable
                             row = output.NextNewRow
-                            row.f_s長さ = output.outLengthText(tmp.f_dひも長)
-                            row.f_s編みひも名 = tmp.f_iひも番号
-                            'ひも数=f_iVal1
-                            tmp.f_s記号 = output.SetBandRow(tmp.f_iVal1, tmp.f_i何本幅, tmp.f_d出力ひも長, tmp.f_s色)
+                            row.f_s長さ = output.outLengthText(tmp.m_dひも長)
+                            row.f_s編みひも名 = tmp.m_iひも番号
+                            tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
                         Next
                         _sasihimo.Add(r.f_i番号, tmptable)
                     End If
