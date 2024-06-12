@@ -148,13 +148,12 @@ Public Class clsDataTables
         i_底面 = 1
         i_側面 = 2
         i_全面 = 3
-        i_側面と角 = 4
     End Enum
 
+    'Square
     Public Enum enum角度
         i_0度 = 0
 
-        '四角
         i_45度 = 1   '1/1系
         i_90度 = 2
         i_135度 = 3
@@ -163,14 +162,18 @@ Public Class clsDataTables
         i_72度 = 5
         i_108度 = 6
         i_162度 = 7
-
-        '六角
-        i_30度h = 1
-        i_60度h = 2
-        i_90度h = 3
-        i_120度h = 4
-        i_150度h = 5
     End Enum
+
+    'Hexagon
+    Public Enum enum角度Hex
+        i_0度H = 0
+        i_30度H = 1
+        i_60度H = 2
+        i_90度H = 3
+        i_120度H = 4
+        i_150度H = 5
+    End Enum
+
 
     Public Enum enum中心点
         i_目の中央 = 0
@@ -495,11 +498,6 @@ Public Class clsDataTables
                     tmp.f_iひも種 = enumひも種.i_縦
                     tmp.f_iひも番号 = WCount - row.f_iひも番号 + 1
                     '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
-                    'tmp.f_dひも長加算 = row.f_dひも長加算
-                    'tmp.f_dひも長加算2 = row.f_dひも長加算2
-                    'tmp.f_s色 = row.f_s色
-                    'tmp.f_sメモ = row.f_sメモ
-                    'tmp.f_i何本幅 = row.f_i何本幅
                     getOtherSaved(tmp, row, True) '本幅も転記
                     turn.p_tbl縦横展開.Rows.Add(tmp)
                 Else
@@ -541,6 +539,9 @@ Public Class clsDataTables
             Next
         End If
         turn.p_tbl縦横展開.AcceptChanges()
+
+        '差しひもはクリア
+        turn.p_tbl差しひも.Clear()
 
         Return turn
     End Function

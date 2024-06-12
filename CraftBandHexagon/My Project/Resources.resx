@@ -254,7 +254,7 @@
     <comment>frmMain</comment>
   </data>
   <data name="EnumStringPlate" xml:space="preserve">
-    <value>なし,底面,側面,全面,側面と角</value>
+    <value>なし,底面,側面,全面</value>
     <comment>frmMain</comment>
   </data>
   <data name="EnumStringPosition" xml:space="preserve">

@@ -114,6 +114,11 @@ Public Class clsImageItem
             Return New S実座標(c1.X + delta.dX, c1.Y + delta.dY)
         End Operator
 
+        '二項-演算子 
+        Shared Operator -(ByVal c1 As S実座標, ByVal delta As S差分) As S実座標
+            Return New S実座標(c1.X - delta.dX, c1.Y - delta.dY)
+        End Operator
+
         '二項*演算子 
         Shared Operator *(ByVal c1 As S実座標, ByVal c2const As Double) As S実座標
             Return New S実座標(c1.X * c2const, c1.Y * c2const)
@@ -166,7 +171,12 @@ Public Class clsImageItem
             End Get
         End Property
 
-        '回転
+        '単位化
+        Sub ToUnit()
+            Length = 1
+        End Sub
+
+        '回転した差分
         Function Rotate(ByVal angle As Double) As S差分
             Dim rad As Double = angle * System.Math.PI / 180
             Dim x As Double = dX * System.Math.Cos(rad) - dY * System.Math.Sin(rad)
@@ -220,6 +230,11 @@ Public Class clsImageItem
         '二項*演算子 
         Shared Operator *(ByVal c1 As S差分, ByVal c2const As Double) As S差分
             Return New S差分(c1.dX * c2const, c1.dY * c2const)
+        End Operator
+
+        '二項+演算子 
+        Shared Operator +(ByVal delta1 As S差分, ByVal delta2 As S差分) As S差分
+            Return New S差分(delta1.dX + delta2.dY, delta1.dX + delta2.dY)
         End Operator
 
         Public Overrides Function ToString() As String
@@ -1180,10 +1195,10 @@ Public Class clsImageItem
     Class CBand
         '始点→終点 バンドの方向角
         'F→T　軸方向(幅方向)=バンドの方向角+90
-        Friend Const i_始点F As Integer = 0
-        Friend Const i_終点F As Integer = 1
-        Friend Const i_終点T As Integer = 2
-        Friend Const i_始点T As Integer = 3
+        Friend Const i_始点F As Integer = 0 'A
+        Friend Const i_終点F As Integer = 1 'B
+        Friend Const i_終点T As Integer = 2 'C
+        Friend Const i_始点T As Integer = 3 'D
 
         Public aバンド位置 As S四隅
         Public is始点FT線 As Boolean = True
@@ -1265,17 +1280,59 @@ Public Class clsImageItem
             End Set
         End Property
 
+        ReadOnly Property delta始点終点 As S差分
+            Get
+                Return New S差分(p始点F, p終点F)
+            End Get
+        End Property
+
+        'バンドの中心ライン,幅,軸方向の単位差分
+        Function SetBand(ByVal line As S線分, ByVal width As Double, ByVal deltaAx As S差分) As Boolean
+            p始点F = line.p開始 + deltaAx * (-width / 2)
+            p終点F = line.p終了 + deltaAx * (-width / 2)
+            p始点T = line.p開始 + deltaAx * (width / 2)
+            p終点T = line.p終了 + deltaAx * (width / 2)
+            Return True
+        End Function
+        Function SetBand(ByVal line As S線分, ByVal width As Double) As Boolean
+            If line.IsDot Then
+                Return False
+            End If
+            Dim deltaAx As S差分 = line.s差分.Rotate(90)
+            deltaAx.ToUnit()  '単位化
+            Return SetBand(line, width, deltaAx)
+        End Function
+
+        'バンドのFライン,幅,軸方向の単位差分
+        Function SetBandF(ByVal line As S線分, ByVal width As Double, ByVal deltaAx As S差分) As Boolean
+            p始点F = line.p開始
+            p終点F = line.p終了
+            p始点T = line.p開始 + deltaAx * width
+            p終点T = line.p終了 + deltaAx * width
+            Return True
+        End Function
+        Function SetBandF(ByVal line As S線分, ByVal width As Double) As Boolean
+            If line.IsDot Then
+                Return False
+            End If
+            Dim deltaAx As S差分 = line.s差分.Rotate(90)
+            deltaAx.ToUnit()  '単位化
+            Return SetBandF(line, width, deltaAx)
+        End Function
+
+
+        'ライン方向に伸縮
         Function SetLengthRatio(ByVal ratio As Double) As Boolean
             If ratio = 1 Then
                 Return True
             End If
-            Dim p中点F As New S実座標((p始点F.X + p終点F.X) / 2, (p始点F.Y + p終点F.Y) / 2)
+            Dim p中点F As S実座標 = New S線分(p始点F, p終点F).p中点
             Dim delta始点F As S差分 = (New S差分(p中点F, p始点F)) * ratio
             Dim delta終点F As S差分 = (New S差分(p中点F, p終点F)) * ratio
             p始点F = p中点F + delta始点F
             p終点F = p中点F + delta終点F
 
-            Dim p中点T As New S実座標((p始点T.X + p終点T.X) / 2, (p始点T.Y + p終点T.Y) / 2)
+            Dim p中点T As S実座標 = New S線分(p始点T, p終点T).p中点
             Dim delta始点T As S差分 = (New S差分(p中点T, p始点T)) * ratio
             Dim delta終点T As S差分 = (New S差分(p中点T, p終点T)) * ratio
             p始点T = p中点T + delta始点T
@@ -1283,6 +1340,79 @@ Public Class clsImageItem
 
             Return True
         End Function
+
+
+        Enum enumMarkPosition
+            _なし
+            _始点の前
+            _始点Fの前
+            _始点Tの前
+            _終点の後
+            _終点Fの後
+            _終点Tの後
+        End Enum
+        '文字位置(距離と差分指定)
+        Function SetMarkPosition(ByVal mark As enumMarkPosition,
+                             Optional ByVal distance As Double = 0, Optional ByVal delta As S差分 = Nothing) As Boolean
+            '文字サイズは基本のひも幅
+            Dim p As S実座標
+            Select Case mark
+                Case enumMarkPosition._なし
+                    p文字位置.Zero() '消去
+                    Return True
+                Case enumMarkPosition._始点の前
+                    p = New S線分(p始点F, p始点T).p中点
+                Case enumMarkPosition._始点Fの前
+                    p = p始点F
+                Case enumMarkPosition._始点Tの前
+                    p = p始点T
+                Case enumMarkPosition._終点の後
+                    p = New S線分(p終点F, p終点T).p中点
+                Case enumMarkPosition._終点Fの後
+                    p = p終点F
+                Case enumMarkPosition._終点Tの後
+                    p = p終点T
+                Case Else
+                    Return False
+            End Select
+
+            '距離
+            If 0 < distance Then
+                Dim bandline As S差分 = delta始点終点
+                bandline.Length = distance
+                If {enumMarkPosition._始点の前, enumMarkPosition._始点Fの前, enumMarkPosition._始点Tの前}.Contains(mark) Then
+                    bandline = -bandline
+                End If
+                p = p + bandline
+            End If
+
+            '差分
+            p = p + delta
+
+            p文字位置 = p
+            Return True
+        End Function
+
+        '文字位置(差分指定)
+        Function SetMarkPosition(ByVal mark As enumMarkPosition, ByVal delta As S差分) As Boolean
+            '文字サイズは基本のひも幅
+            Dim p As S実座標
+            If mark = enumMarkPosition._なし Then
+                p文字位置.Zero() '消去
+                Return True
+            ElseIf mark = enumMarkPosition._始点の前 Then
+                p = New S線分(p始点F, p始点T).p中点
+            ElseIf mark = enumMarkPosition._終点の後 Then
+                p = New S線分(p終点F, p終点T).p中点
+            Else
+                Return False
+            End If
+
+            p文字位置 = p + delta
+            Return True
+        End Function
+
+
 
         Function Get描画領域() As S領域
             Dim r描画領域 As S領域 = aバンド位置.r外接領域
@@ -1295,7 +1425,8 @@ Public Class clsImageItem
 
         Public Overrides Function ToString() As String
             Dim sb As New StringBuilder
-            sb.AppendFormat("aバンド位置{0} is始点FT線={1} is終点FT線={2} ", aバンド位置, is始点FT線, is終点FT線)
+            sb.AppendFormat("[A]始点F{0}{4}[D]始点T{1} : [B]終点F{2}{5}[C]終点T{3} ", p始点F, p始点T, p終点F, p終点T,
+                            IIf(is始点FT線, "=", "."), IIf(is終点FT線, "=", "."))
             sb.AppendFormat("_i何本幅{0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
             Return sb.ToString
         End Function

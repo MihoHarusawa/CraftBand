@@ -1817,9 +1817,9 @@ Public Class frmMain
 
             Dim isBackFace As Boolean = radうら.Checked
 
-            Dim checked(cAngleCount) As Boolean
+            Dim checked As New CDispImageChecked
             checked(cIdxAngle0) = chk横ひも.Checked
-            checked(cAngleCount) = chk側面.Checked
+            checked.Side = chk側面.Checked
 
             Dim data As clsDataTables
             Dim calc As clsCalcHexagon

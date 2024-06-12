@@ -216,10 +216,10 @@ Public Class ctrInsertBand
         End Get
     End Property
 
-    Public ReadOnly Property AngleString(ByVal angle As enum角度) As String
+    Public ReadOnly Property AngleString(ByVal enumAngle As Integer) As String
         Get
             Try
-                Return CType(_AngleTable.Rows(CType(angle, Integer)), dstWork.tblEnumRow).Display
+                Return CType(_AngleTable.Rows(enumAngle), dstWork.tblEnumRow).Display
             Catch ex As Exception
                 Return Nothing
             End Try

@@ -28,6 +28,8 @@ Public Class clsInsertExpand
 
         Public m_dひも長 As Double '描画するひも長(加算値は描かない)
         Public m_s記号 As String  'セットされる記号
+        Public m_iひも番号 As Integer '出力リスト記載
+        Public m_iひも数 As Integer
 
         ReadOnly Property p_d出力ひも長 As Double
             Get
@@ -41,8 +43,6 @@ Public Class clsInsertExpand
         Dim m_line As S線分 'm_angle方向
 
         Public m_iひも種 As Integer
-        Public m_iひも番号 As Integer
-        Public m_iひも数 As Integer
         Public m_i開始位置 As Integer
         Public m_d長さ As Double
 
@@ -63,34 +63,7 @@ Public Class clsInsertExpand
             _parent = parent
         End Sub
 
-        Enum mark_position
-            _なし
-            _始点の前
-            _終点の後
-        End Enum
 
-
-        'Function ToBand(ByVal draw_mark As mark_position) As CBand
-        '    Dim band = New CBand(_parent._row)
-
-        '    Dim delta As New S差分(m_angle)
-        '    Dim deltaAx As New S差分(m_angle + 90)
-
-        '    'バンド描画位置
-        '    band.p始点F = m_line.p開始 + deltaAx * (-m_dひも幅 / 2)
-        '    band.p終点F = m_line.p終了 + deltaAx * (-m_dひも幅 / 2)
-        '    band.p始点T = m_line.p開始 + deltaAx * (m_dひも幅 / 2)
-        '    band.p終点T = m_line.p終了 + deltaAx * (m_dひも幅 / 2)
-
-        '    '記号描画位置
-        '    If draw_mark = mark_position._始点の前 Then
-        '        band.p文字位置 = m_line.p開始 + delta * -m_dひも幅
-        '    ElseIf draw_mark = mark_position._終点の後 Then
-        '        band.p文字位置 = m_line.p終了 + delta * m_dひも幅
-        '    End If
-
-        '    Return band
-        'End Function
 
         'Overrides Function ToString() As String
         '    Dim sb As New System.Text.StringBuilder

@@ -3,6 +3,7 @@
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsInsertExpand
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
@@ -1844,7 +1845,7 @@ Class clsCalcHexagon
             row.f_iひも本数 = (left \ row.f_i何本ごと) + 1
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本",
-                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
+                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度Hex), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
 
         If Not row.Isf_dひも長Null AndAlso 0 < row.f_dひも長 Then
             row.f_d出力ひも長 = row.f_dひも長 + 2 * row.f_dひも長加算
@@ -1870,11 +1871,8 @@ Class clsCalcHexagon
 #End Region
 
 #Region "リスト出力"
-    Dim _sasihimo As New Dictionary(Of Integer, tbl縦横展開DataTable)
-
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
-        _sasihimo.Clear()
 
         If output Is Nothing Then
             '処理に必要な情報がありません。
@@ -1883,8 +1881,10 @@ Class clsCalcHexagon
         End If
 
         '長さ計算をFix
-        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) OrElse
-            Not calc_出力用の追加計算() Then
+        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) Then
+            Return False
+        End If
+        If Not calc_追加計算(CalcStatus._position, CalcStatus._none, CalcStatus._none) Then
             Return False
         End If
 
@@ -2116,25 +2116,15 @@ Class clsCalcHexagon
                     Continue For
                 End If
 
-                If 0 < r.f_dひも長 AndAlso 0 < r.f_iひも本数 Then
-                    '固定長
-                    row.f_s長さ = output.outLengthText(r.f_dひも長)
-                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
-
-                ElseIf 0 < r.f_iひも本数 Then
-                    '差しひもの各長をセットしたテーブル
-                    'Dim tmptable As tbl縦横展開DataTable = get差しひもLength(r)
-                    'If tmptable IsNot Nothing AndAlso 0 < tmptable.Rows.Count Then
-                    '    For Each tmp As tbl縦横展開Row In tmptable
-                    '        row = output.NextNewRow
-                    '        row.f_s長さ = output.outLengthText(tmp.f_dひも長)
-                    '        row.f_s編みひも名 = tmp.f_iひも番号
-                    '        'ひも数=f_iVal1
-                    '        tmp.f_s記号 = output.SetBandRow(tmp.f_iVal1, tmp.f_i何本幅, tmp.f_d出力ひも長, tmp.f_s色)
-                    '    Next
-                    '    _sasihimo.Add(r.f_i番号, tmptable)
-                    'End If
-
+                '差しひもの各長をセットしたテーブル(固定長の場合も含む)
+                Dim tmptable As CInsertItemList = get差しひもLength(r)
+                If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then
+                    For Each tmp As CInsertItem In tmptable
+                        row = output.NextNewRow
+                        row.f_s長さ = output.outLengthText(tmp.m_dひも長)
+                        row.f_s編みひも名 = tmp.m_iひも番号
+                        tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
+                    Next
                 End If
             Next
 

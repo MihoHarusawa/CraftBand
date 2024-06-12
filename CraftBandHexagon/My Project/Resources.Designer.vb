@@ -431,7 +431,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  なし,底面,側面,全面,側面と角 に類似しているローカライズされた文字列を検索します。
+        '''  なし,底面,側面,全面 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringPlate() As String
             Get
