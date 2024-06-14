@@ -4,6 +4,7 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
 
 Public Class clsImageItem
@@ -33,8 +34,12 @@ Public Class clsImageItem
         If d2 = d1 Then
             Return True '一致
         End If
+#If 1 Then
+        Return Abs(d1 - d2) < 0.3
+#Else
         Dim mm As Integer = 1 '小数点以下1桁
         Return Math.Round(d2, mm) = Math.Round(d1, mm)
+#End If
     End Function
 
     Shared Function SameAngle(ByVal d1 As Integer, ByVal d2 As Integer) As Boolean
@@ -64,11 +69,6 @@ Public Class clsImageItem
         Sub Zero()
             X = 0
             Y = 0
-        End Sub
-
-        Sub Copy(ByVal ref As S実座標)
-            X = ref.X
-            Y = ref.Y
         End Sub
 
         ReadOnly Property IsZero() As Boolean
@@ -1062,6 +1062,7 @@ Public Class clsImageItem
             Return p交点(Me, fn)
         End Function
 
+        'pから直線への垂線の交点
         Function p直交点(ByVal p As S実座標) As S実座標
             If is90 Then
                 Return New S実座標(b, p.Y)
@@ -1074,6 +1075,7 @@ Public Class clsImageItem
             End If
         End Function
 
+        'pから直交点までの長さ
         Function d距離(ByVal p As S実座標) As Double
             Return New S差分(p, p直交点(p)).Length
         End Function
@@ -1195,6 +1197,11 @@ Public Class clsImageItem
     Class CBand
         '始点→終点 バンドの方向角
         'F→T　軸方向(幅方向)=バンドの方向角+90
+        '
+        '  始点T(D)┌──────┐終点T(C)
+        '          ├── → ──┤
+        '  始点F(A)└──────┘終点F(B)
+
         Friend Const i_始点F As Integer = 0 'A
         Friend Const i_終点F As Integer = 1 'B
         Friend Const i_終点T As Integer = 2 'C
@@ -1242,6 +1249,12 @@ Public Class clsImageItem
             _i何本幅 = row.f_i何本幅
             _s色 = row.f_s色
             _s記号 = row.f_s記号
+        End Sub
+
+        Sub New(ByVal item As CInsertItem)
+            _i何本幅 = item.p_i何本幅
+            _s色 = item.p_s色
+            _s記号 = item.m_s記号
         End Sub
 
         Property p始点F As S実座標

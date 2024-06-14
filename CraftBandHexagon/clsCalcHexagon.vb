@@ -1935,7 +1935,7 @@ Class clsCalcHexagon
                     tt.f_s記号 = output.SetBandRow(0, tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
                 End If
             Next
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tmpTable).ToString())
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tmpTable).ToString())
 
             'リスト出力
             tmps = tmpTable.Select(Nothing, "f_iひも種 ASC, f_iひも番号 ASC")
@@ -2108,7 +2108,7 @@ Class clsCalcHexagon
                 End If
                 row.f_sタイプ = PlateString(r.f_i配置面)
                 row.f_s編みかた名 = AngleString(r.f_i角度)
-                row.f_s編みひも名 = PositionString(r.f_i差し位置)
+                'row.f_s編みひも名 = PositionString(r.f_i差し位置)
                 row.f_i周数 = r.f_i開始位置
                 row.f_i段数 = r.f_i何本ごと
                 row.f_sメモ = r.f_sメモ
@@ -2116,15 +2116,22 @@ Class clsCalcHexagon
                     Continue For
                 End If
 
-                '差しひもの各長をセットしたテーブル(固定長の場合も含む)
-                Dim tmptable As CInsertItemList = get差しひもLength(r)
-                If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then
-                    For Each tmp As CInsertItem In tmptable
-                        row = output.NextNewRow
-                        row.f_s長さ = output.outLengthText(tmp.m_dひも長)
-                        row.f_s編みひも名 = tmp.m_iひも番号
-                        tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
-                    Next
+                If 0 < r.f_dひも長 AndAlso 0 < r.f_iひも本数 Then
+                    '固定長
+                    row.f_s長さ = output.outLengthText(r.f_dひも長)
+                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
+
+                ElseIf 0 < r.f_iひも本数 Then
+                    '差しひもの各長をセットしたテーブル
+                    Dim tmptable As CInsertItemList = get差しひもLength(r)
+                    If tmptable IsNot Nothing AndAlso 0 < tmptable.Count Then
+                        For Each tmp As CInsertItem In tmptable
+                            row = output.NextNewRow
+                            row.f_s長さ = output.outLengthText(tmp.m_dひも長)
+                            row.f_s編みひも名 = tmp.m_iひも番号
+                            tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
+                        Next
+                    End If
                 End If
             Next
 
