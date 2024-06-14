@@ -1937,9 +1937,10 @@ Partial Public Class clsCalcHexagon
         Friend Shared SideAngleSelected() As Integer = {0, 30, 60, 90, 120, 150}
 
         '画面で指定する開始位置の方向(Angle辺の逆向き)
-        '(hexidx)
-        '          1
-        '           →→→→→ 1
+        '(hexidx)      
+        '              ／  ／_BandList60
+        '          1 ／・／ ... 六角形の辺上にある目の中心を、60度方向に延長
+        '           →・→→→ 1         側面最初の目の水平ライン上の点で回転
         '        ／    (3)     ＼
         '     1／(4)          (2)＼
         '      ＼(5)          (1)／1
@@ -1949,7 +1950,6 @@ Partial Public Class clsCalcHexagon
         '
         Friend _Delta開始方向 As S差分 '単位
         Friend _Delta六つ目 As S差分 '開始方向の六つ目1個分
-        '
 
 
         Sub New(ByVal hxidx As Integer)
@@ -1988,6 +1988,22 @@ Partial Public Class clsCalcHexagon
             Return True
         End Function
 
+        '最外六角形上の六つ目内の中心点を通る目のライン
+        'idx:1～InsertCount,開始方向(画面指定)順
+        Function getFnCenter(ByVal idx As Integer, ByVal dInnerPosition As Double, ByRef fn As S直線式) As Boolean
+            Dim pPoint As S実座標
+            If Not getCenter(idx, dInnerPosition, pPoint) Then
+                Return False
+            End If
+
+            '開始位置の方向(Angle辺の逆向き)に60度(_BandList60)
+            Dim angle As Integer = (CHex.Angle辺(_MyHexIndex) - 180) + 60
+
+            '目を通るラインの式
+            fn = New S直線式(angle, pPoint)
+
+            Return True
+        End Function
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder

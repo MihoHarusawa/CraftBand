@@ -605,7 +605,7 @@ Partial Public Class clsCalcHexagon
 
         '側面最初の目の高さ
         Dim dHeightFirstHorizontal As Double
-        If Not _CSideBandList.GetHeight(1, dInnerPosition, dHeightFirstHorizontal) Then
+        If Not _CSideBandList.GetHeight(1, 0.5, dHeightFirstHorizontal) Then
             Return Nothing
         End If
 
@@ -655,19 +655,26 @@ Partial Public Class clsCalcHexagon
             Return n開始位置 - n本数
         End If
 
+        '水平の目のライン
         Dim line水平の目 As S線分 = _hex底の辺.line辺(hexidx) + CHex.delta辺の外向き法線(hexidx) * arg.dHeightFirstHorizontal
+        Dim fn水平の目ライン As New S直線式(line水平の目) '逆向きだが式にすると同じ
+        '底の辺
+        Dim fn底の辺ライン As New S直線式(_hex底の辺.line辺(hexidx))
+        '差しひもの角度
+        Dim angle差しひも As Integer = (CHex.Angle辺(hexidx) - 180) + arg.angleSideBand
 
-        Dim angle差しひも As Integer = CHex.Angle辺(hexidx) + arg.angleSideBand + 180
 
-
-        Dim isFirst As Boolean = True
         For idx As Integer = n開始位置 To n本数 Step i何本ごと
+            '六つ目内の中心点を通る目のライン
+            Dim fn目のライン As S直線式
+            If splate.getFnCenter(idx, arg.dInnerPosition, fn目のライン) Then
 
-            Dim pCenter As S実座標
-            If splate.getCenter(idx, arg.dInnerPosition, pCenter) Then
+                Dim p回転中心 As S実座標 = fn水平の目ライン.p交点(fn目のライン)
+                Dim fn差しひもライン As New S直線式(angle差しひも, p回転中心)
+                Dim p底との交点 As S実座標 = fn差しひもライン.p交点(fn底の辺ライン)
 
                 Dim band As CBand = New CBand(arg.row)
-                Dim line As New S線分(pCenter, pCenter + New S差分(angle差しひも) * arg.dひも長)
+                Dim line As New S線分(p底との交点, p底との交点 + New S差分(angle差しひも) * arg.dひも長)
                 band.SetBand(line, arg.dひも幅, New S差分(angle差しひも + 90))
                 If IsDrawMarkCurrent AndAlso idx = 1 Then
                     band.SetMarkPosition(enumMarkPosition._終点の後, _d基本のひも幅)
