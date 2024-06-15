@@ -58,7 +58,7 @@ Partial Public Class clsCalcHexagon
 
         _position                       '※
 
-        _error
+        _error                          '※
     End Enum
 
     '* 基本: 3方向のバンドと六角形
@@ -76,20 +76,19 @@ Partial Public Class clsCalcHexagon
     Dim _底の周 As Double
     Dim _側面周比率対底 As Double
 
-    '* 編みひもの情報
+    '* 追加情報: 基本情報に依存
+    '編みひもの情報
     Dim _CalcStatusSideBand As CalcStatus = CalcStatus._none
     Dim _CSideBandList As CSideBandList
 
-    '* 底ひも直角方向の情報(軸方向:90,150,210)
+    '底ひも直角方向の情報(軸方向:90,150,210)
     Dim _CalcStatusBottomRightAngle As CalcStatus = CalcStatus._none
     Dim _BottomRightAngle(cAngleCount - 1) As CBottomRightAngle
 
-    '* 側面の情報
+    '側面の情報
     Dim _CalcStatusSidePlate As CalcStatus = CalcStatus._none
     Dim _SidePlate(CHex.cHexCount - 1) As CSidePlate
 
-    '* 差しひも保存値
-    Dim _clsInsertExpand As clsInsertExpand
 
 
     Private Sub NewImageData()
@@ -112,7 +111,7 @@ Partial Public Class clsCalcHexagon
         Next
 
         '* 差しひも保存値
-        _clsInsertExpand = New clsInsertExpand
+        _InsertExpand = New clsInsertExpand
     End Sub
 
     Private Sub ClearImageData()
@@ -126,6 +125,10 @@ Partial Public Class clsCalcHexagon
         _hex底の辺に厚さ = Nothing
         _hex側面上辺 = Nothing
 
+        _底の領域.Clear()
+        _底の周 = -1
+        _側面周比率対底 = 1
+
         For idx As Integer = 0 To cAngleCount - 1
             _BandPositions(idx).Clear()
             _BottomRightAngle(idx).Clear()
@@ -136,7 +139,7 @@ Partial Public Class clsCalcHexagon
         Next
 
         _CSideBandList.Clear()
-        _clsInsertExpand.Clear()
+        _InsertExpand.Clear()
     End Sub
 
     Private Function ToStringImageData() As String
@@ -222,8 +225,10 @@ Partial Public Class clsCalcHexagon
         Dim ret As Boolean = True
 
         If is位置計算 Then
+            '_CalcStatus = CalcStatus._none
+            ClearImageData()
+
             '設定情報
-            _CalcStatus = CalcStatus._none
             For Each aidx As AngleIndex In enumExeName.GetValues(GetType(AngleIndex))
                 ret = ret And _BandPositions(idx(aidx)).SetTable(p_tbl縦横展開(aidx), _iひもの本数(idx(aidx)), _I基本のひも幅)
                 ret = ret And _BandPositions(idx(aidx)).CalcBasicPositions(_d六つ目の高さ, _d端の目(idx(aidx)), _i何個目位置(idx(aidx)), _bひも中心合わせ)
@@ -236,11 +241,6 @@ Partial Public Class clsCalcHexagon
             _CalcStatus = CalcStatus._basic
 
             '底位置を計算
-            _hex最外六角形 = Nothing
-            _hex底の辺 = Nothing
-            _hex底の辺に厚さ = Nothing
-            _hex側面上辺 = Nothing
-
             _hex最外六角形 = New CHex(
             _BandPositions(cIdxAngle0)._hln最外ひもの2辺,
             _BandPositions(cIdxAngle60)._hln最外ひもの2辺,
@@ -321,10 +321,15 @@ Partial Public Class clsCalcHexagon
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList(120)={0}", _BandPositions(cIdxAngle120).ToString)
         End If
 
-        '長さからひもの長さに反映
-        ret = ret And adjust_展開ひも(AngleIndex._0deg)
-        ret = ret And adjust_展開ひも(AngleIndex._60deg)
-        ret = ret And adjust_展開ひも(AngleIndex._120deg)
+        If CalcStatus._length = _CalcStatus OrElse CalcStatus._reflect = _CalcStatus Then
+            '長さからひもの長さに反映
+            ret = ret And adjust_展開ひも(AngleIndex._0deg)
+            ret = ret And adjust_展開ひも(AngleIndex._60deg)
+            ret = ret And adjust_展開ひも(AngleIndex._120deg)
+        Else
+            ret = False
+        End If
+        '
         If ret Then
             _CalcStatus = CalcStatus._reflect
         Else
@@ -730,10 +735,10 @@ Partial Public Class clsCalcHexagon
             _ShapeHexLine(cIdxAngle60) = _HexLine(cIdxAngle60).ShapeHexLine()
             _ShapeHexLine(cIdxAngle120) = _HexLine(cIdxAngle120).ShapeHexLine()
 
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "p50{0} p01{1} p12{2} p23{3} p34{4} p45{5} p50{6}", p50, p01, p12, p23, p34, p45, p50)
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang0 {0}", _HexLine(cIdxAngle0).dump())
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang60 {0}", _HexLine(cIdxAngle60).dump())
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang120 {0}", _HexLine(cIdxAngle120).dump())
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "p50{0} p01{1} p12{2} p23{3} p34{4} p45{5} p50{6}", p50, p01, p12, p23, p34, p45, p50)
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang0 {0}", _HexLine(cIdxAngle0).dump())
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang60 {0}", _HexLine(cIdxAngle60).dump())
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ang120 {0}", _HexLine(cIdxAngle120).dump())
 
             Return True
         End Function
@@ -1905,7 +1910,7 @@ Partial Public Class clsCalcHexagon
             _BottomRightAngle(aidx)._line最外六角形の最小最大 = min2max
             _BottomRightAngle(aidx)._delta六つ目 = New S差分(angle基準点ライン) * d対角線幅
 
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " BottomRightAngle({0})={1}", aidx, _BottomRightAngle(aidx))
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " BottomRightAngle({0})={1}", aidx, _BottomRightAngle(aidx))
         Next
 
         Return True
@@ -2076,11 +2081,10 @@ Partial Public Class clsCalcHexagon
                 ._Delta開始方向 = New S差分(CHex.Angle辺(hxidx) - 180)
                 ._Delta六つ目 = ._Delta開始方向 * p_d六つ目の対角線
 
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_SidePlate({0})", hxidx)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", .ToString)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_SidePlate({0})", hxidx)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", .ToString)
             End With
         Next
-
 
         Return True
     End Function
@@ -2091,10 +2095,9 @@ Partial Public Class clsCalcHexagon
 #Region "バンドと模様の描画"
 
     '描画ソート順
-    Const IdxBandDrawInsertBack As Integer = 10 '差しひも(うら)
     Const IdxBandDrawSide As Integer = 20 '側面
     Const IdxBandDrawBottom As Integer = 30 '底のひも
-    Const IdxBandDrawInsertFront As Integer = 40 '差しひも(おもて)
+    Const IdxBandDrawInsert As Integer = 40 '差しひも
 
 
 

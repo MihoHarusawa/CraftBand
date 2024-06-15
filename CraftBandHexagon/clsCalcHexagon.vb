@@ -1807,6 +1807,9 @@ Class clsCalcHexagon
         row.Setf_dひも長Null()
         row.Setf_d出力ひも長Null()
 
+        'Hexagonは目の中央だけ
+        row.f_i中心点 = enum中心点.i_目の中央
+
         '開始位置は1以上、何本ごとはゼロ以上
         If row.f_i開始位置 < 1 Then
             row.f_s無効理由 = text開始位置()
@@ -1873,6 +1876,7 @@ Class clsCalcHexagon
 #Region "リスト出力"
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
+        _InsertExpand.Clear()
 
         If output Is Nothing Then
             '処理に必要な情報がありません。

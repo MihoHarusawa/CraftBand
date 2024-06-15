@@ -7,6 +7,8 @@ Imports CraftBand.Tables.dstDataTables
 
 
 Partial Public Class clsCalcHexagon
+    '差しひも保存値
+    Dim _InsertExpand As clsInsertExpand
 
 
 
@@ -115,7 +117,6 @@ Partial Public Class clsCalcHexagon
                         row.f_s無効理由 = text角度()
                         Return False
                 End Select
-
                 '-------------------------------------------------
             Case Else 'enum配置面.i_なし/以外
                 row.f_s無効理由 = text配置面()
@@ -170,7 +171,6 @@ Partial Public Class clsCalcHexagon
                         Return -1
                 End Select
                 '-------------------------------------------------
-
             Case Else
                 Return -1
         End Select
@@ -193,7 +193,7 @@ Partial Public Class clsCalcHexagon
     '---------+-----------------+-----------+---------------+-------------+
 
     'count～ 以降は、必要に応じて calc_追加計算() を呼び出す
-    'length～ で、固定長/個々長を問わず、_clsInsertExpandに登録してCInsertItemListを返す
+    'length～ で、固定長/個々長を問わず、_InsertExpandに登録してCInsertItemListを返す
     'image～ は、_clsInsertExpandに登録がある前提で処理する
 
     '<固定長>の場合
@@ -210,14 +210,12 @@ Partial Public Class clsCalcHexagon
     '※リスト出力時に呼び出し,呼び出し先で記号をセット
     Private Function get差しひもLength(ByVal row As tbl差しひもRow) As CInsertItemList
 
-
         'ひも/目内の位置
         Dim dInnerPosition As Double = 0.5
         If Not row.Isf_i同位置数Null AndAlso Not row.Isf_i同位置順Null AndAlso
                 1 < row.f_i同位置数 AndAlso 0 < row.f_i同位置順 Then
             dInnerPosition = (2 * row.f_i同位置順 - 1) / (2 * row.f_i同位置数)
         End If
-
 
         Select Case row.f_i配置面
                 '-------------------------------------------------
@@ -256,10 +254,8 @@ Partial Public Class clsCalcHexagon
                     Case Else
 
                 End Select
-
-
+                '-------------------------------------------------
             Case Else
-
         End Select
 
         Return Nothing
@@ -327,10 +323,9 @@ Partial Public Class clsCalcHexagon
             End Select
 
             If bandlist IsNot Nothing AndAlso 0 < bandlist.Count Then
-                Dim item As New clsImageItem(bandlist, IdxBandDrawInsertFront, row.f_i番号)
+                Dim item As New clsImageItem(bandlist, IdxBandDrawInsert, row.f_i番号)
                 If CType(row.f_i差し位置, enum差し位置) = enum差し位置.i_うら Then
                     item.AddClip(bandListForClip差しひも)
-                    item.m_Index = IdxBandDrawInsertBack
                 End If
                 imgList差しひも.AddItem(item)
             End If
@@ -350,13 +345,13 @@ Partial Public Class clsCalcHexagon
 
 
     Private Function length底を平行に差す(ByVal row As tbl差しひもRow, ByVal aidx As Integer, ByVal is全面 As Boolean, ByVal dInnerPosition As Double) As CInsertItemList
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList IsNot Nothing Then
             Return insertItemList
         End If
 
         insertItemList = New CInsertItemList(row)
-        _clsInsertExpand.Add(row.f_i番号, insertItemList)
+        _InsertExpand.Add(row.f_i番号, insertItemList)
 
         '本数
         Dim n本数 As Integer = _BandPositions(aidx).InsertCount(is全面)
@@ -423,7 +418,7 @@ Partial Public Class clsCalcHexagon
 
     ' dInnerPosition:同幅内位置(0～1値・中央が0.5)　
     Private Function image底を平行に差す(ByVal row As tbl差しひもRow, ByVal aidx As Integer, ByVal is全面 As Boolean, ByVal dInnerPosition As Double) As CBandList
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList Is Nothing Then
             Return Nothing
         End If
@@ -473,13 +468,13 @@ Partial Public Class clsCalcHexagon
         If Not calc_追加計算(CalcStatus._position, CalcStatus._none, CalcStatus._none) Then
             Return Nothing
         End If
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList IsNot Nothing Then
             Return insertItemList
         End If
 
         insertItemList = New CInsertItemList(row)
-        _clsInsertExpand.Add(row.f_i番号, insertItemList)
+        _InsertExpand.Add(row.f_i番号, insertItemList)
 
         Dim n本数 As Integer = _CSideBandList.InsertCount()
         For idx As Integer = row.f_i開始位置 To n本数 Step row.f_i何本ごと
@@ -504,7 +499,7 @@ Partial Public Class clsCalcHexagon
     End Function
 
     Private Function image側面を水平に(ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double) As CBandList
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList Is Nothing Then
             '固定長の場合は作られず、記号は row(tbl差しひもRow)にある
         End If
@@ -711,13 +706,13 @@ Partial Public Class clsCalcHexagon
         If Not calc_追加計算(CalcStatus._none, CalcStatus._position, CalcStatus._none) Then
             Return Nothing
         End If
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList IsNot Nothing Then
             Return insertItemList
         End If
 
         insertItemList = New CInsertItemList(row)
-        _clsInsertExpand.Add(row.f_i番号, insertItemList)
+        _InsertExpand.Add(row.f_i番号, insertItemList)
 
         '本数
         Dim n本数 As Integer = _BottomRightAngle(aidx).InsertCount(is全面)
@@ -769,7 +764,7 @@ Partial Public Class clsCalcHexagon
         If Not calc_追加計算(CalcStatus._none, CalcStatus._position, CalcStatus._none) Then
             Return Nothing
         End If
-        Dim insertItemList As CInsertItemList = _clsInsertExpand.GetList(row.f_i番号)
+        Dim insertItemList As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         If insertItemList Is Nothing Then
             Return Nothing
         End If

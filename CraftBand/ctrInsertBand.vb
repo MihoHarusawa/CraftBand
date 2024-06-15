@@ -38,7 +38,7 @@ Public Class ctrInsertBand
     'セルの変更通知
     Public Event CellValueChanged As EventHandler(Of InsertBandEventArgs)
     Public Event InnerPositionsSet As EventHandler(Of InsertBandEventArgs)
-    '追加・削除・移動はコントロール内で完結
+    '追加(配置面なしで追加)・削除・移動はコントロール内で完結
 
 
     '対象バンド・基本値の更新
@@ -442,8 +442,8 @@ Public Class ctrInsertBand
 
         Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv差しひも_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        '編集対象のカラム
-        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順", "f_i差し位置"}.Contains(DataPropertyName) Then
+        '再計算対象のカラム　非対象 "f_i差し位置""f_s色""f_sメモ"
+        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順"}.Contains(DataPropertyName) Then
             RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, DataPropertyName))
         End If
     End Sub

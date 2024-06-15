@@ -6,6 +6,9 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare.clsCalcSquare
 
 Partial Public Class clsCalcSquare
+    '差しひも保存値
+    Dim _InsertExpand As New clsInsertExpand
+
 
 
     '配置面                           角度                           18度(e)108度(g)

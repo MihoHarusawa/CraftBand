@@ -1941,8 +1941,6 @@ Class clsCalcSquare
 #End Region
 
 #Region "リスト出力"
-    Dim _InsertExpand As New clsInsertExpand
-
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
         _InsertExpand.Clear()
