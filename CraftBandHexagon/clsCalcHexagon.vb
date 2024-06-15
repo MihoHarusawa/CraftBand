@@ -100,7 +100,7 @@ Class clsCalcHexagon
 
         '相互参照値のFix
         FixLength   '長さ確定
-        BandColor   '色の変更
+        BandColor   '色と幅の変更画面
 
     End Enum
 
@@ -551,12 +551,13 @@ Class clsCalcHexagon
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("{0}({1}){2}/{3}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ, p_s警告).AppendLine()
-        sb.AppendFormat("Target:({0},{1},{2}) Lane({3}){4}", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅, _d基本のひも幅).AppendLine()
-        sb.AppendFormat("  0:({0},mark({1}),end({2}),add({3}))", _iひもの本数(0), _i何個目位置(0), _d端の目(0), _b補強ひも(0)).AppendLine()
-        sb.AppendFormat(" 60:({0},mark({1}),end({2}),add({3}))", _iひもの本数(1), _i何個目位置(1), _d端の目(1), _b補強ひも(1)).AppendLine()
-        sb.AppendFormat("120:({0},mark({1}),end({2}),add({3}))", _iひもの本数(2), _i何個目位置(2), _d端の目(2), _b補強ひも(2)).AppendLine()
-        sb.AppendFormat("Height:({0},bottom({1})) BandSum={2} Ratio({3})", _i側面の編みひも数, _d最下段の目, _d側面ひも幅計, _d側面ひも周長比率対底の周).AppendLine()
-        sb.AppendFormat("Edge({0}) SlantLength({1}) Thickness({2}) Ratio({3})", _d縁の高さ, _d縁の垂直ひも斜め計, _d縁の厚さ, _d縁の周長比率対底の周).AppendLine()
+        sb.AppendFormat("目標寸法({0},{1},{2}) Lane({3})幅{4}", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅, _d基本のひも幅).AppendLine()
+        For i As Integer = 0 To cAngleCount - 1
+            sb.AppendFormat(" {0}:(本数({1},位置({2}),端の目({3}),補強({4}))", cBandAngleDegree(i), _iひもの本数(i), _i何個目位置(i), _d端の目(i), _b補強ひも(i)).AppendLine()
+        Next
+        sb.AppendFormat(" 側面:本数({0})最下段の目({1})_d側面ひも幅計({2})_d側面ひも周長比率対底の周({3})", _i側面の編みひも数, _d最下段の目, _d側面ひも幅計, _d側面ひも周長比率対底の周).AppendLine()
+        sb.AppendFormat("_d縁の高さ({0})_d縁の垂直ひも斜め計({1})_d縁の厚さ({2})_d縁の周長比率対底の周({3})", _d縁の高さ, _d縁の垂直ひも斜め計, _d縁の厚さ, _d縁の周長比率対底の周).AppendLine()
+        sb.AppendFormat("_d六つ目の高さ({0})get側面の六つ目の高さ({1})_bひも中心合わせ({2})_b縦横側面を展開する({3})_dひも長係数({4})", _d六つ目の高さ, get側面の六つ目の高さ(), _bひも中心合わせ, _b縦横側面を展開する, _dひも長係数).AppendLine()
         sb.Append(ToStringImageData())
         Return sb.ToString
     End Function
@@ -648,6 +649,9 @@ Class clsCalcHexagon
             Case CalcCategory.SideEdge  '側面と縁
                 Dim row As tbl側面Row = CType(ctr, tbl側面Row)
                 ret = ret And calc_側面と縁(category, row, key)
+                ret = ret And calc_位置と長さ計算(True)
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
             Case CalcCategory.Inserted '差しひも
                 Dim row As tbl差しひもRow = CType(ctr, tbl差しひもRow)
@@ -689,10 +693,11 @@ Class clsCalcHexagon
                     ret = ret And calc_差しひも(category, Nothing, Nothing)
                 End If
 
-            Case CalcCategory.BandColor '色の変更
+            Case CalcCategory.BandColor '色と幅の変更画面
                 ret = ret And renew_ひも展開(category)
                 ret = ret AndAlso calc_位置と長さ計算(True)
                 ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                ret = ret And calc_差しひも(category, Nothing, Nothing)
 
                     '相互参照値のFix(1Pass値は得られている前提)
             Case CalcCategory.FixLength
@@ -1847,8 +1852,8 @@ Class clsCalcHexagon
             Dim left As Integer = count - row.f_i開始位置
             row.f_iひも本数 = (left \ row.f_i何本ごと) + 1
         End If
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本",
-                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度Hex), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本 {8}",
+                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度Hex), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数, CType(row.f_i差し位置, enum差し位置))
 
         If Not row.Isf_dひも長Null AndAlso 0 < row.f_dひも長 Then
             row.f_d出力ひも長 = row.f_dひも長 + 2 * row.f_dひも長加算

@@ -1316,6 +1316,14 @@ Public Class clsImageItem
             Return SetBand(line, width, deltaAx)
         End Function
 
+        Function SetBand(ByVal p開始 As S実座標, ByVal p終了 As S実座標, ByVal width As Double, ByVal deltaAx As S差分) As Boolean
+            Return SetBand(New S線分(p開始, p終了), width, deltaAx)
+        End Function
+        Function SetBand(ByVal p開始 As S実座標, ByVal p終了 As S実座標, ByVal width As Double) As Boolean
+            Return SetBand(New S線分(p開始, p終了), width)
+        End Function
+
+
         'バンドのFライン,幅,軸方向の単位差分
         Function SetBandF(ByVal line As S線分, ByVal width As Double, ByVal deltaAx As S差分) As Boolean
             p始点F = line.p開始

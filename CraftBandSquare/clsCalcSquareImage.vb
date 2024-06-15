@@ -38,7 +38,7 @@ Partial Public Class clsCalcSquare
     Dim _imageList側面左 As clsImageItemList    '側面の展開レコードを含む
     Dim _imageList側面下 As clsImageItemList    '側面の展開レコードを含む
     Dim _imageList側面右 As clsImageItemList    '側面の展開レコードを含む
-    Dim _ImageList差しひも As clsImageItemList
+    'Dim _ImageList差しひも As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底と側面
 
 
@@ -67,7 +67,9 @@ Partial Public Class clsCalcSquare
         _imageList側面下 = Nothing
         _imageList側面右 = Nothing
         _ImageList描画要素 = Nothing
-        _ImageList差しひも = Nothing
+        '_ImageList差しひも = Nothing
+
+        _BandListForClip.Clear()
 
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
@@ -102,9 +104,10 @@ Partial Public Class clsCalcSquare
         regionUpDown側面3(isBackFace)
         regionUpDown側面4(isBackFace)
 
+        Dim imgList差しひも As clsImageItemList = Nothing
         If Not isBackFace Then
             '差しひも
-            imageList差しひも() '_ImageList差しひも生成
+            imgList差しひも = imageList差しひも()
         End If
 
         '中身を移動
@@ -124,8 +127,11 @@ Partial Public Class clsCalcSquare
 
         imgData.MoveList(_ImageList描画要素)
         _ImageList描画要素 = Nothing
-        imgData.MoveList(_ImageList差しひも)
-        _ImageList差しひも = Nothing
+
+        If imgList差しひも IsNot Nothing Then
+            imgData.MoveList(imgList差しひも)
+        End If
+        imgList差しひも = Nothing
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then
@@ -210,6 +216,8 @@ Partial Public Class clsCalcSquare
                 band.m_rひも位置.p左上 = New S実座標(-d横ひも表示長 / 2, Y横ひも上)
                 band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit0 * (d横ひも表示長)
                 'band.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
+
+                AddClipItem(band)
             Else
                 '補強ひもは描画しない
                 band.m_bNoMark = True
@@ -250,6 +258,8 @@ Partial Public Class clsCalcSquare
                 band.m_rひも位置.p左上 = New S実座標(X縦ひも左, d縦ひも表示長 / 2)
                 band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit270 * (d縦ひも表示長)
                 'band.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
+
+                AddClipItem(band)
             Else
                 band.m_bNoMark = True
             End If
@@ -334,6 +344,8 @@ Partial Public Class clsCalcSquare
                 + Unit0 * get周の横()
                 item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
 
+                AddClipItem(item)
+
                 p上ひも左下 = p上ひも左下 + Unit90 * item.m_row縦横展開.f_d幅
             End If
 
@@ -350,6 +362,8 @@ Partial Public Class clsCalcSquare
                 + Unit0 * get周の横()
                 item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
                 item.m_bNoMark = True '記号なし
+
+                AddClipItem(item)
 
                 p下ひも左上 = p下ひも左上 + Unit270 * item.m_row縦横展開.f_d幅
             End If
@@ -368,6 +382,8 @@ Partial Public Class clsCalcSquare
                 item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
                 item.m_bNoMark = True '記号なし
 
+                AddClipItem(item)
+
                 p左ひも右上 = p左ひも右上 + Unit180 * item.m_row縦横展開.f_d幅
             End If
 
@@ -384,6 +400,8 @@ Partial Public Class clsCalcSquare
                     + Unit270 * get周の縦()
                 item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
                 item.m_bNoMark = True '記号なし
+
+                AddClipItem(item)
 
                 p右ひも左上 = p右ひも左上 + Unit0 * item.m_row縦横展開.f_d幅
             End If

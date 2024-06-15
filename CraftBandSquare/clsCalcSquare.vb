@@ -1877,6 +1877,11 @@ Class clsCalcSquare
         row.Setf_dひも長Null()
         row.Setf_d出力ひも長Null()
 
+        'field追加に伴う
+        If row.Isf_i差し位置Null Then
+            row.f_i差し位置 = enum差し位置.i_おもて
+        End If
+
         '開始位置は1以上、何本ごとはゼロ以上(*)
         If row.f_i開始位置 < 1 Then
             row.f_s無効理由 = text開始位置()
@@ -1914,8 +1919,8 @@ Class clsCalcSquare
             Dim left As Integer = count - row.f_i開始位置
             row.f_iひも本数 = (left \ row.f_i何本ごと) + 1
         End If
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本",
-                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1},{2},{3} 全{4}本のうち{5}本ごと{6}から{7}本 {8}",
+                 row.f_i番号, CType(row.f_i配置面, enum配置面), CType(row.f_i角度, enum角度), CType(row.f_i中心点, enum中心点), count, row.f_i何本ごと, row.f_i開始位置, row.f_iひも本数, CType(row.f_i差し位置, enum差し位置))
 
         If Not row.Isf_dひも長Null AndAlso 0 < row.f_dひも長 Then
             row.f_d出力ひも長 = row.f_dひも長 + 2 * row.f_dひも長加算

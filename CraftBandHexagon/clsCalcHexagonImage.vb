@@ -140,11 +140,12 @@ Partial Public Class clsCalcHexagon
 
         _CSideBandList.Clear()
         _InsertExpand.Clear()
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "ClearImageData")
     End Sub
 
     Private Function ToStringImageData() As String
         Dim sb As New System.Text.StringBuilder
-        sb.AppendFormat("底の領域:{0} _底の周({1}) _側面周比率対底({2})", _底の領域, _底の周, _側面周比率対底).AppendLine()
+        sb.AppendFormat("_CalcStatus({0} 底の領域:{1} _底の周({2}) _側面周比率対底({3})", _CalcStatus, _底の領域, _底の周, _側面周比率対底).AppendLine()
         For idx As Integer = 0 To cAngleCount - 1
             sb.AppendLine(_BandPositions(idx).ToString)
         Next
@@ -160,6 +161,16 @@ Partial Public Class clsCalcHexagon
         If _hex側面上辺 IsNot Nothing Then
             sb.Append("_hex側面上辺").AppendLine(_hex側面上辺.ToString)
         End If
+        sb.AppendFormat("編みひもの情報 {0} {1}", _CalcStatusSideBand, _CSideBandList).AppendLine()
+        sb.AppendFormat("底ひも直角方向の情報 {0}", _CalcStatusBottomRightAngle).AppendLine()
+        For idx As Integer = 0 To cAngleCount - 1
+            sb.AppendFormat("{0}({1}) {2}", cBandAngleDegree(idx) + 90, cBandAngleDegree(idx), _BottomRightAngle(idx)).AppendLine()
+        Next
+        '位置と長さ計算時にはクリア状態
+        'sb.AppendFormat("側面の情報 {0}", _CalcStatusSidePlate).AppendLine()
+        'For idx As Integer = 0 To cHexCount - 1
+        '    sb.AppendFormat("{0} {1}", idx, _SidePlate(idx)).AppendLine()
+        'Next
 
         Return sb.ToString
     End Function
@@ -222,6 +233,7 @@ Partial Public Class clsCalcHexagon
     '配置数,展開各入力値(ひも長加算,ひも幅)がFixした状態で、長さを計算する
     '_BandPositions,_hex系,底位置
     Private Function calc_位置と長さ計算(ByVal is位置計算 As Boolean) As Boolean
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "calc_位置と長さ計算({0})", is位置計算)
         Dim ret As Boolean = True
 
         If is位置計算 Then
@@ -403,6 +415,7 @@ Partial Public Class clsCalcHexagon
             End If
         End If
 
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "calc_追加計算:_CalcStatusSideBand={0} _CalcStatusBottomRightAngle={1} _CalcStatusSidePlate={2}", _CalcStatusSideBand, _CalcStatusBottomRightAngle, _CalcStatusSidePlate)
         Return True
     End Function
 
@@ -556,9 +569,9 @@ Partial Public Class clsCalcHexagon
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("{0} {1} {2}", Me.GetType().Name, _parent.BandAngleDegree, FlagEnumString(GetType(enumShapeHexLine), ShapeHexLine())).AppendLine()
-            sb.AppendFormat("1st Valid({0}) [中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_1st), _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st)).AppendLine()
-            sb.AppendFormat("2nd Valid({0}) [中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_2nd), _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd))
+            sb.AppendFormat("{0} {1} {2}", Me.GetType().Name, _parent.BandAngleDegree, FlagEnumString(GetType(enumShapeHexLine), ShapeHexLine()))
+            sb.AppendFormat("1st({0})[中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_1st), _p辺の中心点(lineIdx.i_1st), _line辺(lineIdx.i_1st))
+            sb.AppendFormat("2nd({0})[中心{1} 辺({2})] ", Is辺方向Valid(lineIdx.i_2nd), _p辺の中心点(lineIdx.i_2nd), _line辺(lineIdx.i_2nd))
             Return sb.ToString
         End Function
         Public Function dump() As String
@@ -748,7 +761,7 @@ Partial Public Class clsCalcHexagon
             sb.AppendFormat("IsValidHexagon({0})({1}) ", IsValidHexagon(False), IsValidHexagon(True)).AppendLine()
             For i As Integer = 0 To cAngleCount - 1
                 sb.AppendFormat("({0})HexLine {1}", i, _HexLine(i)).AppendLine()
-                sb.AppendFormat("({0})CrossLine {1}", i, _CrossLine(i)).AppendLine()
+                'sb.AppendFormat("({0})CrossLine {1}", i, _CrossLine(i)).AppendLine()
             Next
             Return sb.ToString
         End Function
@@ -1802,7 +1815,7 @@ Partial Public Class clsCalcHexagon
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("CBottomRightAngle 差しひも方向({0}) 基準点ライン{1} ", _angle差しひも方向, _angle基準点ライン)
+            sb.AppendFormat("{0} 差しひも方向({1}) 基準点ライン{2} ", Me.GetType().Name, _angle差しひも方向, _angle基準点ライン)
             sb.AppendFormat("_delta六つ目{0}  最外六角形の最小最大{1} ", _delta六つ目, _line最外六角形の最小最大)
             sb.AppendFormat("_List全面の基準点={0} ", _List全面の基準点.Count)
             For i As Integer = 0 To _List底の基準点.Count - 1
@@ -2012,6 +2025,7 @@ Partial Public Class clsCalcHexagon
 
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("{0}_MyHexIndex={1} ", Me.GetType().Name, _MyHexIndex)
             sb.AppendFormat("BandList60 Count={0}", _BandList60.Count).AppendLine()
             For Each band As CBandPosition In _BandList60
                 sb.AppendFormat("BandList60 {0} ({1}) {2}", band.Ident, band.m_cp最外六角形.Status, band.m_cp最外六角形.CrossPoint(_MyHexIndex)).AppendLine()
@@ -2081,8 +2095,8 @@ Partial Public Class clsCalcHexagon
                 ._Delta開始方向 = New S差分(CHex.Angle辺(hxidx) - 180)
                 ._Delta六つ目 = ._Delta開始方向 * p_d六つ目の対角線
 
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_SidePlate({0})", hxidx)
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", .ToString)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_SidePlate({0})", hxidx)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", .ToString)
             End With
         Next
 

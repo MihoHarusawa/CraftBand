@@ -314,6 +314,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  おもて,うら に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property EnumStringPosition() As String
+            Get
+                Return ResourceManager.GetString("EnumStringPosition", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  四つ目と四角 {0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property FormCaption() As String
