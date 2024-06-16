@@ -150,11 +150,30 @@ Public Class clsOutput
         '#60
         If i < 1 Then
             Return ""
-        ElseIf String.IsNullOrWhiteSpace(_ListOutMark) OrElse _ListOutMark = "1" Then
+        ElseIf String.IsNullOrEmpty(_ListOutMark) OrElse _ListOutMark = "1" Then
             Return i.ToString
-        Else
-            Return ChrW(AscW(_ListOutMark) + i - 1)
         End If
+        '記号が指定されている#67
+        Select Case _ListOutMark(0) '1文字のはずだけれど念のため1文字目
+            Case "a"c, "ａ"c, "A"c, "Ａ"c
+                If 26 < i Then
+                    Dim m As Integer = (i - 1) \ 26
+                    Dim n As Integer = (i - 1) Mod 26 + 1
+                    Return ChrW(AscW(_ListOutMark) + m - 1) & ChrW(AscW(_ListOutMark) + n - 1)
+                End If
+            Case "①"c
+                If 20 < i Then
+                    Return String.Format("({0})", i)
+                End If
+            Case "１"c
+                If 10 <= i Then
+                    Return i.ToString
+                End If
+            Case Else
+                '
+        End Select
+        '続く文字コード
+        Return ChrW(AscW(_ListOutMark) + i - 1)
     End Function
 
     'ひもの属性からマークを得る(なければ新規マーク・あれば既存マーク)
