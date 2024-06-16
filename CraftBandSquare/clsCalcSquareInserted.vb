@@ -648,7 +648,6 @@ Partial Public Class clsCalcSquare
         End If
     End Function
 
-
     '底の横ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
     Private Function image横ひもに差す(ByRef bandlist As CBandList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 Then
@@ -706,11 +705,6 @@ Partial Public Class clsCalcSquare
             End If
 
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
-            '色と記号
-            'Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
-            'tmpitem.f_s色 = drow.p_s色
-            'tmpitem.f_s記号 = drow.m_s記号
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), i_番号, idx)
             band = New CBand(drow)
 
             'item.m_a四隅 = New S四隅(New S領域(New S実座標(x_left, y_center + d幅 / 2),
@@ -721,13 +715,10 @@ Partial Public Class clsCalcSquare
                 '#60
                 If IsDrawMarkCurrent Then
                     If (draw = draw_position.before) Then
-                        'item.p_p文字位置 = item.m_a四隅.p右下
                         band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後)
                     ElseIf (draw = draw_position.after) Then
-                        'item.p_p文字位置 = item.m_a四隅.p左下
-                        band.SetMarkPosition(CBand.enumMarkPosition._始点Fの前)
+                        band.SetMarkPosition(CBand.enumMarkPosition._始点Fの前, _d基本のひも幅)
                     Else
-                        'item.p_p文字位置 = item.m_a四隅.p右上
                         band.SetMarkPosition(CBand.enumMarkPosition._終点Tの後)
                     End If
                 End If
@@ -816,7 +807,6 @@ Partial Public Class clsCalcSquare
         End If
     End Function
 
-
     '底の縦ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
     Private Function image縦ひもに差す(ByRef bandlist As CBandList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 Then
@@ -873,10 +863,6 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
-            'Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
-            'tmpitem.f_s色 = drow.p_s色
-            'tmpitem.f_s記号 = drow.m_s記号
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), i_番号, idx)
             band = New CBand(drow)
 
@@ -888,14 +874,11 @@ Partial Public Class clsCalcSquare
                 '#60
                 If IsDrawMarkCurrent Then
                     If (draw = draw_position.before) Then
-                        'item.p_p文字位置 = item.m_a四隅.p右上
-                        band.SetMarkPosition(CBand.enumMarkPosition._始点Tの前)
+                        band.SetMarkPosition(CBand.enumMarkPosition._始点の前)
                     ElseIf (draw = draw_position.after) Then
-                        'item.p_p文字位置 = item.m_a四隅.p右下
-                        band.SetMarkPosition(CBand.enumMarkPosition._終点Tの後)
+                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後, _d基本のひも幅)
                     Else
-                        'item.p_p文字位置 = item.m_a四隅.p左下
-                        band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後)
+                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後, _d基本のひも幅)
                     End If
                 End If
                 isFirst = False
@@ -957,7 +940,7 @@ Partial Public Class clsCalcSquare
         Return (item側面上.m_rひも位置.y最上 + _d目_ひも間のすき間 * dInnerPosition) - getZeroY(1 / 2)
     End Function
 
-
+    '4側面を水平に
     Private Function 側面_水平(ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double) As CBandList
         'If _ImageList差しひも Is Nothing Then
         '    Return False
@@ -1004,8 +987,7 @@ Partial Public Class clsCalcSquare
 
             '#60
             If IsDrawMarkCurrent Then
-                'item.p_p文字位置 = item.m_a四隅.p右上 + Unit0 * (_d基本のひも幅 / 2)
-                band.SetMarkPosition(CBand.enumMarkPosition._終点Tの後, (_d基本のひも幅 / 2))
+                band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後, (_d基本のひも幅 / 2))
             End If
             '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
@@ -1077,7 +1059,6 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-
     '上の側面と下の側面
     '※縦横ともdInnerPosition移動→中心位置が対角線上で移動
     Private Function image縦ひも面を斜めに(ByRef bandlist As CBandList, ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
@@ -1133,33 +1114,32 @@ Partial Public Class clsCalcSquare
             End If
 
             'Dim rBand0 As S領域
-            Dim band0 As New CBand
+            Dim band As New CBand(row)
             If (draw = draw_position.after) Then
                 'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + dRatio * dxdy),
                 '                  New S実座標(x_center + d幅 / 2, y_center - (row.f_dひも長 - dRatio * dxdy)))
-                band0.SetBand(New S実座標(x_center, y_center + dRatio * dxdy), New S実座標(x_center, y_center - (row.f_dひも長 - dRatio * dxdy)), d幅, DeltaAx縦ひも)
+                band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center, y_center - row.f_dひも長), d幅, DeltaAx縦ひも)
+                band.MoveBand(New S差分(0, dRatio * dxdy))
             Else
                 'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + (row.f_dひも長 - dRatio * dxdy)),
                 '                  New S実座標(x_center + d幅 / 2, y_center - dRatio * dxdy))
-                band0.SetBand(New S実座標(x_center, y_center + (row.f_dひも長 - dRatio * dxdy)), New S実座標(x_center, y_center - dRatio * dxdy), d幅, DeltaAx縦ひも)
+                band.SetBand(New S実座標(x_center, y_center + row.f_dひも長), New S実座標(x_center, y_center), d幅, DeltaAx縦ひも)
+                band.MoveBand(New S差分(0, -dRatio * dxdy))
             End If
 
             'Dim aBand As New S四隅(rBand0)
 
 
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            Dim band As New CBand(row)
             'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
-            band.aバンド位置 = band0.aバンド位置.Rotate(New S実座標(x_center, y_center), dAngle)
+            band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
                 If IsDrawMarkCurrent Then
                     If (draw = draw_position.after) Then
-                        'item.p_p文字位置 = item.m_a四隅.p右下
-                        band.SetMarkPosition(CBand.enumMarkPosition._始点の前)
+                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後, _d基本のひも幅)
                     Else
-                        'item.p_p文字位置 = item.m_a四隅.p左上
-                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後)
+                        band.SetMarkPosition(CBand.enumMarkPosition._始点の前)
                     End If
                 End If
                 isFirst = False
@@ -1233,32 +1213,31 @@ Partial Public Class clsCalcSquare
             End If
 
             'Dim rBand0 As S領域
-            Dim band0 As New CBand
+            Dim band As New CBand(row)
             If (draw = draw_position.after) Then
                 'rBand0 = New S領域(New S実座標(x_center - (row.f_dひも長 - dRatio * dxdy), y_center - d幅 / 2),
                 '                  New S実座標(x_center + dRatio * dxdy, y_center + d幅 / 2))
-                band0.SetBand(New S実座標(x_center - (row.f_dひも長 - dRatio * dxdy), y_center), New S実座標(x_center + dRatio * dxdy, y_center), d幅, DeltaAx横ひも)
+                band.SetBand(New S実座標(x_center - row.f_dひも長, y_center), New S実座標(x_center, y_center), d幅, DeltaAx横ひも)
+                band.MoveBand(New S差分(dRatio * dxdy, 0))
             Else
                 'rBand0 = New S領域(New S実座標(x_center - dRatio * dxdy, y_center - d幅 / 2),
                 '                  New S実座標(x_center + (row.f_dひも長 - dRatio * dxdy), y_center + d幅 / 2))
-                band0.SetBand(New S実座標(x_center - dRatio * dxdy, y_center), New S実座標(x_center + (row.f_dひも長 - dRatio * dxdy), y_center), d幅, DeltaAx横ひも)
+                band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center + row.f_dひも長, y_center), d幅, DeltaAx横ひも)
+                band.MoveBand(New S差分(-dRatio * dxdy, 0))
             End If
 
             'Dim aBand As New S四隅(rBand0)
 
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            Dim band As New CBand(row)
             'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
-            band.aバンド位置 = band0.aバンド位置.Rotate(New S実座標(x_center, y_center), dAngle)
+            band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
                 If IsDrawMarkCurrent Then
                     If (draw = draw_position.after) Then
-                        'item.p_p文字位置 = item.m_a四隅.p左上
-                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後)
+                        band.SetMarkPosition(CBand.enumMarkPosition._始点の前, _d基本のひも幅)
                     Else
-                        'item.p_p文字位置 = item.m_a四隅.p右下
-                        band.SetMarkPosition(CBand.enumMarkPosition._始点の前)
+                        band.SetMarkPosition(CBand.enumMarkPosition._終点の後)
                     End If
                 End If
                 isFirst = False
@@ -1521,11 +1500,6 @@ Partial Public Class clsCalcSquare
         For Each tmp As CInsertItem In tmptable
 
             'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmp), row.p_i番号, tmp.m_iひも番号)
-            '色と記号
-            'Dim tmpitem As tbl縦横展開Row = (New tbl縦横展開DataTable).Newtbl縦横展開Row
-            'tmpitem.f_s色 = row.f_s色
-            'tmpitem.f_s記号 = row.f_s記号
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), row.f_i番号, tmp.m_iひも番号)
             Dim band As New CBand(tmp)
 
             Dim x_center As Double = tmp.m_pCenter.X
@@ -1535,15 +1509,16 @@ Partial Public Class clsCalcSquare
             Dim sign As Integer = 1
 
             'Dim rBand0 As S領域
-            Dim band0 As New CBand
             If (0 < tmp.m_iFlag) Then '横へ
                 'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + ROOT2 * dy),
                 '                  New S実座標(x_center + d幅 / 2, y_center - tmp.m_dひも長 + ROOT2 * dy))
-                band0.SetBand(New S実座標(x_center, y_center + ROOT2 * dy), New S実座標(x_center, y_center - tmp.m_dひも長 + ROOT2 * dy), d幅, DeltaAx縦ひも)
+                band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center, y_center - tmp.m_dひも長), d幅, DeltaAx縦ひも)
+                band.MoveBand(New S差分(0, ROOT2 * dy))
             Else
                 'rBand0 = New S領域(New S実座標(x_center - tmp.m_dひも長 + ROOT2 * dx, y_center + d幅 / 2),
                 '                  New S実座標(x_center + ROOT2 * dx, y_center - d幅 / 2))
-                band0.SetBand(New S実座標(x_center - tmp.m_dひも長 + ROOT2 * dx, y_center), New S実座標(x_center + ROOT2 * dx, y_center), d幅, DeltaAx横ひも)
+                band.SetBand(New S実座標(x_center - tmp.m_dひも長, y_center), New S実座標(x_center, y_center), d幅, DeltaAx横ひも)
+                band.MoveBand(New S差分(ROOT2 * dx, 0))
                 sign = -1
             End If
 
@@ -1551,24 +1526,19 @@ Partial Public Class clsCalcSquare
 
             'sign = 0 'for debug
             'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), -45 * sign)
-            band.aバンド位置 = band0.aバンド位置.Rotate(New S実座標(x_center, y_center), -45 * sign)
+            band.RotateBand(New S実座標(x_center, y_center), -45 * sign)
+            If IsDrawMarkCurrent Then '#60
+                band.p文字位置 = New S実座標(x_center, y_center)
+            End If
+
             If bRevert Then
                 'item.m_a四隅 = item.m_a四隅.VertLeft()
-                band.aバンド位置 = band.aバンド位置.VertLeft()
+                band.VertLeftBand()
+            Else
+                band.p文字位置 = band.p文字位置 + Unit270 * d幅
             End If
             'item.m_a四隅 = item.m_a四隅 + delta
-            band.aバンド位置 = band.aバンド位置 + delta
-            '#60
-            If IsDrawMarkCurrent Then
-                'item.p_p文字位置 = New S実座標(x_center, y_center)
-                band.p文字位置 = New S実座標(x_center, y_center)
-                If bRevert Then
-                    'item.p_p文字位置 = item.p_p文字位置.VertLeft()
-                    band.p文字位置 = band.p文字位置.VertLeft()
-                End If
-                'item.p_p文字位置 = item.p_p文字位置 + delta
-                band.p文字位置 = band.p文字位置 + delta
-            End If
+            band.MoveBand(delta)
 
             '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
@@ -1579,12 +1549,20 @@ Partial Public Class clsCalcSquare
 
 #End Region
 
-    '始点→終点
-    Dim Delta横ひも As New S差分(0)
-    Dim Delta縦ひも As New S差分(-90)
+    '                                        始点F(A)    始点T(D)
+    '  始点T(D)┌──────┐終点T(C)             ┌┬┐
+    '          ├── → ──┤                     │││
+    '  始点F(A)└──────┘終点F(B)             │││
+    '                                               │↓│     縦ひも
+    '               横ひも                          │││
+    '                                               │││
+    '                                       終点F(B)└┴┘終点T(C)
+    '
+
+
     'F→T
-    Dim DeltaAx横ひも As New S差分(90)
-    Dim DeltaAx縦ひも As New S差分(0)
+    Dim DeltaAx横ひも As S差分 = Unit90
+    Dim DeltaAx縦ひも As S差分 = Unit0
 
 
     'メインのバンドをクリップ化

@@ -1293,6 +1293,7 @@ Public Class clsImageItem
             End Set
         End Property
 
+        '始点→終点
         ReadOnly Property delta始点終点 As S差分
             Get
                 Return New S差分(p始点F, p終点F)
@@ -1342,7 +1343,7 @@ Public Class clsImageItem
         End Function
 
 
-        'ライン方向に伸縮
+        '長さの伸縮(中点を中心に)
         Function SetLengthRatio(ByVal ratio As Double) As Boolean
             If ratio = 1 Then
                 Return True
@@ -1361,6 +1362,39 @@ Public Class clsImageItem
 
             Return True
         End Function
+
+        '位置を移動
+        Sub MoveBand(ByVal delta As S差分)
+            aバンド位置 = aバンド位置 + delta
+            If Not p文字位置.IsZero Then
+                p文字位置 = p文字位置 + delta
+            End If
+        End Sub
+
+        'バンド方向に移動
+        Sub ShiftBand(ByVal distance As Double)
+            If distance <> 0 Then
+                Dim bandline As S差分 = delta始点終点
+                bandline.Length = distance
+                MoveBand(bandline)
+            End If
+        End Sub
+
+        '回転
+        Sub RotateBand(ByVal center As S実座標, ByVal angle As Double)
+            aバンド位置 = aバンド位置.Rotate(center, angle)
+            If Not p文字位置.IsZero Then
+                p文字位置 = p文字位置.Rotate(center, angle) '位置のみ
+            End If
+        End Sub
+
+        '左右反転(F/Tはそのまま)
+        Sub VertLeftBand()
+            aバンド位置 = aバンド位置.VertLeft()
+            If Not p文字位置.IsZero Then
+                p文字位置 = p文字位置.VertLeft() '位置のみ
+            End If
+        End Sub
 
 
         Enum enumMarkPosition
@@ -1448,7 +1482,7 @@ Public Class clsImageItem
             Dim sb As New StringBuilder
             sb.AppendFormat("[A]始点F{0}{4}[D]始点T{1} : [B]終点F{2}{5}[C]終点T{3} ", p始点F, p始点T, p終点F, p終点T,
                             IIf(is始点FT線, "=", "."), IIf(is終点FT線, "=", "."))
-            sb.AppendFormat("_i何本幅{0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
+            sb.AppendFormat("_i何本幅={0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
             Return sb.ToString
         End Function
     End Class

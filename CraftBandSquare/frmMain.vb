@@ -287,7 +287,7 @@ Public Class frmMain
         End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If reason.HasFlag(enumReason._GridDropdown) Then
-            If {tpage側面と縁.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
+            If {tpage側面と縁.Name, tpage差しひも.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
