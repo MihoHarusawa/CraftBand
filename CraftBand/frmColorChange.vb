@@ -364,6 +364,6 @@ Friend Class frmColorChange
     End Sub
 
     Private Sub btn閉じる_Click(sender As Object, e As EventArgs) Handles btn閉じる.Click
-        Me.Hide()
+        Me.Close() '#70 Me.Hide()
     End Sub
 End Class
