@@ -1190,7 +1190,7 @@ Class clsCalcKnot
         '削除位置以降のひも番号を詰める
         Dim rows() As tbl側面Row = table.Select(cond, "f_iひも番号 ASC")
         If rows Is Nothing OrElse rows.Count = 0 Then
-            Return False
+            Return True '#69 最後なので詰める必要なし
         End If
 
         currow = Nothing

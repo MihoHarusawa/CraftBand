@@ -679,7 +679,7 @@ Public Class ctrDataGridView
         End Try
     End Function
 
-    '指定名のフィールド値が一致する最初の1行を選択する
+    '指定名のフィールド値が一致する最初の1行を選択する(レコード指定)
     Function PositionSelect(ByVal row As DataRow, ByVal fldnames() As String) As Boolean
         Me.ClearSelection()
 
@@ -694,11 +694,48 @@ Public Class ctrDataGridView
 
         For pos As Integer = 0 To bs.Count - 1
             Dim r As DataRow = bs.Item(pos).row
+            If r Is Nothing OrElse r.RowState = DataRowState.Deleted Then
+                Continue For
+            End If
             Dim match As Boolean = True
             For Each fldname As String In fldnames
                 If r(fldname) <> row(fldname) Then
                     match = False
                     Continue For
+                End If
+            Next
+            If match Then
+                bs.Position = pos
+                Me.Rows(pos).Selected = True
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
+    '指定名のフィールド値が一致する最初の1行を選択する(値指定)'#69
+    Function PositionSelect(ByVal fldnames() As String, ByVal values() As Object) As Boolean
+        Me.ClearSelection()
+
+        If fldnames Is Nothing OrElse values Is Nothing OrElse fldnames.Count < values.Count Then
+            Return False
+        End If
+
+        Dim bs As BindingSource = Me.DataSource
+        If bs Is Nothing Then
+            Return False
+        End If
+
+        For pos As Integer = 0 To bs.Count - 1
+            Dim r As DataRow = bs.Item(pos).row
+            If r Is Nothing OrElse r.RowState = DataRowState.Deleted Then
+                Continue For
+            End If
+            Dim match As Boolean = True
+            For i As Integer = 0 To fldnames.Count - 1
+                If IsDBNull(r(fldnames(i))) OrElse r(fldnames(i)) <> values(i) Then
+                    match = False
+                    Exit For
                 End If
             Next
             If match Then

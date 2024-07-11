@@ -1202,6 +1202,9 @@ Public Class frmMain
         If Not dgv側面と縁.GetTableAndRow(table, currow) Then
             Exit Sub
         End If
+        Dim values(1) As Object 'currowの位置
+        values(0) = currow.f_i番号
+        values(1) = currow.f_iひも番号
 
         If currow.f_i番号 = clsDataTables.cHemNumber Then
             '縁を削除
@@ -1230,7 +1233,7 @@ Public Class frmMain
 
         recalc(CalcCategory.Edge, Nothing, Nothing) '計算寸法の再計算
         If currow IsNot Nothing Then
-            dgv側面と縁.PositionSelect(currow, {"f_i番号", "f_iひも番号"})
+            dgv側面と縁.PositionSelect({"f_i番号", "f_iひも番号"}, values)
         End If
     End Sub
 
