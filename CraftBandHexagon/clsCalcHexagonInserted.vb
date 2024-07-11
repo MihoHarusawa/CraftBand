@@ -544,7 +544,7 @@ Partial Public Class clsCalcHexagon
 
                 'ゼロ位置からの高さを加える
                 line += delta * (dHeight)
-                band.SetBandF(line, d幅, delta)
+                band.SetBand(line, d幅, delta) '#71
                 band.SetLengthRatio(ratio)
                 If IsDrawMarkCurrent AndAlso hexidx = 0 Then 'コード固定・下側面
                     Dim mark As enumMarkPosition = enumMarkPosition._終点の後
