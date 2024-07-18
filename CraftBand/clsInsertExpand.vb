@@ -44,12 +44,15 @@ Public Class clsInsertExpand
 
         Public m_iひも種 As Integer
         Public m_i開始位置 As Integer
-        Public m_d長さ As Double
+        Public m_d長さ As Double '0<m_iFlag時のみ(#72)
 
-        Public m_iFlag As Integer
+        Public m_iFlag As Integer = 0
         Public m_pCenter As S実座標
         Public m_delta As S差分
         Public m_line As S線分
+
+        '角の分岐用(#72)
+        Public m_lineSub(3) As S線分
 
 
         '識別情報

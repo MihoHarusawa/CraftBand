@@ -231,6 +231,9 @@
   <data name="CalcSmallLengthRatio" xml:space="preserve">
     <value>ひも長係数が小さすぎます。通常1以上の値です。</value>
   </data>
+  <data name="CalcYBranch" xml:space="preserve">
+    <value>　Y字分岐</value>
+  </data>
   <data name="CaptionExpand1to9" xml:space="preserve">
     <value>左下,右上</value>
     <comment>frmMain</comment>

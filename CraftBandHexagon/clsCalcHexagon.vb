@@ -1,8 +1,10 @@
 ﻿
 
 Imports System.Reflection
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
@@ -2137,7 +2139,28 @@ Class clsCalcHexagon
                         For Each tmp As CInsertItem In tmptable
                             row = output.NextNewRow
                             row.f_s長さ = output.outLengthText(tmp.m_dひも長)
-                            row.f_s編みひも名 = tmp.m_iひも番号
+                            row.f_s編みひも名 = tmp.m_iひも番号.ToString
+                            If 0 < tmp.m_iFlag Then
+                                '#72
+                                row.f_s編みひも名 += My.Resources.CalcYBranch
+                                Dim sb As New System.Text.StringBuilder
+                                If tmp.m_iFlag And 1 Then
+                                    '開始側
+                                    sb.Append(output.outLengthText(tmp.m_lineSub(0).Length))
+                                    sb.Append(";")
+                                    sb.Append(output.outLengthText(tmp.m_lineSub(1).Length))
+                                    sb.Append(">")
+                                End If
+                                sb.Append(output.outLengthText(tmp.m_line.Length))
+                                If tmp.m_iFlag And 2 Then
+                                    '終了側
+                                    sb.Append("<")
+                                    sb.Append(output.outLengthText(tmp.m_lineSub(2).Length))
+                                    sb.Append(";")
+                                    sb.Append(output.outLengthText(tmp.m_lineSub(3).Length))
+                                End If
+                                row.f_sメモ = sb.ToString
+                            End If
                             tmp.m_s記号 = output.SetBandRow(tmp.m_iひも数, tmp.p_i何本幅, tmp.p_d出力ひも長, tmp.p_s色)
                         Next
                     End If

@@ -4,6 +4,7 @@ Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
+Imports CraftBandHexagon.clsCalcHexagon.CHexLine
 
 
 Partial Public Class clsCalcHexagon
@@ -25,7 +26,9 @@ Partial Public Class clsCalcHexagon
     '        |    1はひも上     |                     固定長                          |
     '        |展開なければ固定長|                    斜めに6側面                      |
     '--------+------------------+-----------------+-----------------+-----------------+
-    '                                                         (*)ひも幅変更はNG                      
+    '                                                         (*)ひも幅変更はNG
+    '※特殊ケース
+    '  非ひも中心＆全面＆バンドに平行＆角の五角形を通る　→　Y字に分岐(#72)
 
 #Region "サブ関数"
 
@@ -362,11 +365,24 @@ Partial Public Class clsCalcHexagon
         '六角形との交点から長さ取得
         For idx As Integer = row.f_i開始位置 To n本数 Step row.f_i何本ごと
 
+            '中心点
             Dim pPoint As S実座標
             If Not _BandPositions(aidx).getInsertBandPoint(idx, is全面, dInnerPosition, pPoint) Then
                 Continue For
             End If
 
+            '角を通るかどうか
+            Dim isCorner(CHexLine.HexLineCount - 1) As Boolean
+            Dim fn(CHexLine.HexLineCount - 1) As S直線式 '角の五角形ライン
+            If is全面 Then
+                For lidx = 0 To CHexLine.HexLineCount - 1
+                    If _BandPositions(aidx).getIsPentagon(idx, lidx, fn(lidx)) Then
+                        isCorner(lidx) = True
+                    End If
+                Next
+            End If
+
+            '差しひも
             Dim insertItem As New CInsertItem(insertItemList)
             insertItem.m_idx = idx
             insertItem.m_iひも番号 = idx
@@ -402,6 +418,50 @@ Partial Public Class clsCalcHexagon
                 insertItem.m_dひも長 = cp.CrossLine.Length
                 insertItem.m_line = cp.CrossLine
             End If
+
+            '開始側が角の場合の特殊ケース(#72)
+            If isCorner(lineIdx.i_1st) Then
+                Dim pCenterPentagon As S実座標 = insertItem.m_line.p交点(fn(lineIdx.i_1st))
+                If Not pCenterPentagon.IsZero Then
+                    Dim sublen As Double = (New S線分(insertItem.m_line.p開始, pCenterPentagon)).Length
+                    insertItem.m_line.p開始 = pCenterPentagon
+                    insertItem.m_iFlag = insertItem.m_iFlag Or 1 '開始側
+                    '0,1
+                    Dim cp0 As CHex.CCrossPoint = hex.get辺との交点(pCenterPentagon, cBandAngleDegree(aidx) + 60)
+                    Dim cp1 As CHex.CCrossPoint = hex.get辺との交点(pCenterPentagon, cBandAngleDegree(aidx) - 60)
+                    insertItem.m_lineSub(0) = New S線分(cp0.CrossLine.p開始, pCenterPentagon)
+                    insertItem.m_lineSub(1) = New S線分(cp1.CrossLine.p開始, pCenterPentagon)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "isCorner {0}deg({1}:{2}){3}", cBandAngleDegree(aidx), aidx, idx, pCenterPentagon)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "cp0 {0}", cp0.dump)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "cp1 {0}", cp1.dump)
+                    insertItem.m_dひも長 -= sublen
+                    insertItem.m_dひも長 += insertItem.m_lineSub(0).Length
+                    insertItem.m_dひも長 += insertItem.m_lineSub(1).Length
+                    insertItem.m_d長さ = insertItem.m_line.Length
+                End If
+            End If
+            '終了側が角の場合の特殊ケース(#72)
+            If isCorner(lineIdx.i_2nd) Then
+                Dim pCenterPentagon As S実座標 = insertItem.m_line.p交点(fn(lineIdx.i_2nd))
+                If Not pCenterPentagon.IsZero Then
+                    Dim sublen As Double = (New S線分(pCenterPentagon, insertItem.m_line.p終了)).Length
+                    insertItem.m_line.p終了 = pCenterPentagon
+                    insertItem.m_iFlag = insertItem.m_iFlag Or 2 '終了側
+                    '2,3
+                    Dim cp2 As CHex.CCrossPoint = hex.get辺との交点(pCenterPentagon, cBandAngleDegree(aidx) - 60)
+                    Dim cp3 As CHex.CCrossPoint = hex.get辺との交点(pCenterPentagon, cBandAngleDegree(aidx) + 60)
+                    insertItem.m_lineSub(2) = New S線分(pCenterPentagon, cp2.CrossLine.p終了)
+                    insertItem.m_lineSub(3) = New S線分(pCenterPentagon, cp3.CrossLine.p終了)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "isCorner {0}deg({1}:{2}){3}", cBandAngleDegree(aidx), aidx, idx, pCenterPentagon)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "cp2 {0}", cp2.dump)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "cp3 {0}", cp3.dump)
+                    insertItem.m_dひも長 -= sublen
+                    insertItem.m_dひも長 += insertItem.m_lineSub(2).Length
+                    insertItem.m_dひも長 += insertItem.m_lineSub(3).Length
+                    insertItem.m_d長さ = insertItem.m_line.Length
+                End If
+            End If
+
             insertItemList.Add(insertItem)
 
             If row.f_i何本ごと = 0 Then
@@ -436,6 +496,38 @@ Partial Public Class clsCalcHexagon
             End If
 
             bandlist.Add(band)
+            '
+            If insertItem.m_iFlag And 1 Then
+                '開始側
+                band.is始点FT線 = False
+                '0
+                Dim sband As New CBand(insertItem)
+                sband.SetBand(insertItem.m_lineSub(0), dひも幅)
+                sband.is終点FT線 = False
+                bandlist.Add(sband)
+                '1
+                sband = New CBand(insertItem)
+                sband.SetBand(insertItem.m_lineSub(1), dひも幅)
+                sband.is終点FT線 = False
+                bandlist.Add(sband)
+
+            End If
+            If insertItem.m_iFlag And 2 Then
+                '終了側
+                band.is終点FT線 = False
+                '2
+                Dim sband As New CBand(insertItem)
+                sband.SetBand(insertItem.m_lineSub(2), dひも幅)
+                sband.is始点FT線 = False
+                bandlist.Add(sband)
+                '3
+                sband = New CBand(insertItem)
+                sband.SetBand(insertItem.m_lineSub(3), dひも幅)
+                sband.is始点FT線 = False
+                bandlist.Add(sband)
+
+            End If
+
         Next
 
         Return bandlist
