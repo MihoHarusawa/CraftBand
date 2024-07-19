@@ -2403,7 +2403,7 @@ Partial Class frmMain
         lblひもに垂直.Name = "lblひもに垂直"
         lblひもに垂直.Size = New Size(74, 20)
         lblひもに垂直.TabIndex = 30
-        lblひもに垂直.Text = "ひもに垂直"
+        lblひもに垂直.Text = "ひも直交"
         ' 
         ' lbl計算寸法
         ' 
@@ -2423,7 +2423,7 @@ Partial Class frmMain
         lbl計算寸法縦.Name = "lbl計算寸法縦"
         lbl計算寸法縦.Size = New Size(99, 20)
         lbl計算寸法縦.TabIndex = 43
-        lbl計算寸法縦.Text = "縦(ひもに垂直)"
+        lbl計算寸法縦.Text = "縦(ひも直交)"
         ' 
         ' lbl計算寸法高さ
         ' 

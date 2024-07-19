@@ -332,7 +332,7 @@ Partial Public Class clsCalcHexagon
                 _BandPositions(idx).Set補強ひも長(ciひも番号_補強2, _hex底の辺.line辺(CHex.hexidx(idx, CHexLine.lineIdx.i_1st)).Length)
                 _BandPositions(idx).Set補強ひも長(ciひも番号_クロス, _hex底の辺.CrossLine(idx).Length)
                 '#72
-                _BandPositions(idx).Set角位置(_hex外目幅の中心.CrossLine(idx))
+                _BandPositions(idx).Set角位置(Not p_b横ひもゼロ And Not _bひも中心合わせ, _hex外目幅の中心.CrossLine(idx))
             Next
             If 0 < err_band.Count Then
                 '長さを計算できないひもが{0}本あります。
@@ -1224,6 +1224,7 @@ Partial Public Class clsCalcHexagon
                     _BandList.Add(New CBandPosition(Me, _BandList.Count + 1))
                 Loop
             End If
+
             Return True
         End Function
 
@@ -1388,9 +1389,12 @@ Partial Public Class clsCalcHexagon
         End Sub
 
         '角位置をセットする
-        Function Set角位置(ByVal crossline As S線分) As Boolean
+        Function Set角位置(ByVal isUse As Boolean, ByVal crossline As S線分) As Boolean
             _i角位置(lineIdx.i_1st) = -1
             _i角位置(lineIdx.i_2nd) = -1
+            If Not isUse Then
+                Return True
+            End If
 
             Dim iCornerPre As Integer = Modulo(idx(_AngleIndex) + 4, 6)   '4
             Dim iCornerPst As Integer = Modulo(iCornerPre + 1, 6)   '5
