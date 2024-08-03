@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
+Imports CraftBand.ctrAddParts
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.ctrExpanding
 Imports CraftBand.ctrInsertBand
@@ -41,6 +42,7 @@ Public Class frmMain
         dgv側面.SetProfile(_Profile_dgv側面)
 
         editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
+        setAddPartsRefNames()
 
         expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
         expand斜め60度.SetNames(Me.Text, tpage斜め60度.Text, True, enumVisible.i_幅 Or enumVisible.i_出力ひも長, My.Resources.CaptionExpand7to3, My.Resources.CaptionExpand1to9)
@@ -1525,18 +1527,41 @@ Public Class frmMain
 #End Region
 
 #Region "追加品"
+
+    '追加品の参照名 #63
+    Sub setAddPartsRefNames()
+        Dim names(8) As String
+
+        '横(対角)・縦(ひも直交)・高さ・周(六角形)
+        names(1) = lbl計算寸法横.Text
+        names(2) = lbl計算寸法縦.Text
+        names(3) = lbl計算寸法高さ.Text
+        names(4) = lbl計算寸法の周.Text
+
+        '六つ目ベース・縁厚さプラス
+        For i = 1 To 4
+            names(i + 4) = names(i) & "/" & lbl縁厚さプラス.Text
+            names(i) = names(i) & "/" & lbl六つ目ベース.Text
+        Next
+
+        editAddParts.SetRefLenNames(names)
+    End Sub
+
     Sub Show追加品(ByVal works As clsDataTables)
         editAddParts.PanelSize = tpage追加品.Size
-        editAddParts.ShowGrid(works)
-        recalc(CalcCategory.Options)
+
+        '追加品の参照値 #63
+        editAddParts.ShowGrid(works, _clsCalcHexagon.getAddPartsRefValues)
+        'recalc(CalcCategory.Options)'エラーはイベントで通知
     End Sub
 
     Function Hide追加品(ByVal works As clsDataTables) As Boolean
         Return editAddParts.HideGrid(works)
+        '※エラーメッセージは、他のタブがOKなら上書きされて消えます
     End Function
 
-    Private Sub editAddParts_AddPartsError(sender As Object, e As EventArgs) Handles editAddParts.AddPartsError
-        recalc(CalcCategory.Options)
+    Private Sub editAddParts_AddPartsError(sender As Object, e As AddPartsEventArgs) Handles editAddParts.AddPartsError
+        recalc(CalcCategory.Options, e.Message)
     End Sub
 
     Private Sub tpage追加品_Resize(sender As Object, e As EventArgs) Handles tpage追加品.Resize

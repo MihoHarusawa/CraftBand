@@ -236,6 +236,10 @@
     <value>長さと重さの換算 &lt;{0}&gt;</value>
     <comment>frmBandTypeWeight</comment>
   </data>
+  <data name="CmbNameDirect" xml:space="preserve">
+    <value>入力値</value>
+    <comment>ctrAddParts</comment>
+  </data>
   <data name="ErrAddRecord" xml:space="preserve">
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>

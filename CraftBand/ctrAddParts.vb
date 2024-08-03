@@ -1,7 +1,10 @@
 ﻿Imports CraftBand.clsMasterTables
 Imports CraftBand.ctrDataGridView
+Imports CraftBand.ctrExpanding
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports System.Drawing
+Imports System.Numerics
 Imports System.Windows.Forms
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox
 
@@ -22,24 +25,48 @@ Public Class ctrAddParts
         End Get
     End Property
 
-    'エラー発生(何等かの操作による)
-    Public Event AddPartsError As EventHandler
+    'エラーメッセージ通知
+    Public Event AddPartsError As EventHandler(Of AddPartsEventArgs)
     '※追加品の編集は他のサイズには影響しないので、エラーのみ通知する
+    '※現状、エラーはマスターに参照がない場合のみ。解消はレコード削除時。
+
+    Public Class AddPartsEventArgs
+        Inherits EventArgs
+
+        Public Property Message As String
+        Public Sub New(ByVal msg As String)
+            Message = msg
+        End Sub
+    End Class
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
     Dim _i基本のひも幅 As Integer '目標寸法
     Dim _FormCaption As String
     Dim _TabPageName As String
+    Dim _RefLenTable As New dstWork.tblEnumDataTable
 
-
-
+    '参照値 #63
+    Friend Shared _Refvalues() As Double   '(0)は有効フラグ
+    Friend Shared Function isRefValue(ByVal i長さ参照 As Integer, ByRef d長さ As Double) As Boolean
+        If 0 < i長さ参照 Then
+            If _Refvalues IsNot Nothing AndAlso i長さ参照 < _Refvalues.Length AndAlso 0 < _Refvalues(0) Then
+                d長さ = _Refvalues(i長さ参照)
+            Else
+                d長さ = 0 '値なし
+            End If
+            Return True '参照あり
+        Else
+            Return False '参照なし
+        End If
+    End Function
 
     '対象バンド・基本値の更新
     Private Sub setBasics()
         With g_clsSelectBasics
             lbl長さ_単位.Text = .p_unit設定時の寸法単位.Str
             nud長さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            Me.f_d長さ3.DefaultCellStyle.Format = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
             Me.f_dひも長3.DefaultCellStyle.Format = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
         End With
     End Sub
@@ -68,20 +95,49 @@ Public Class ctrAddParts
         f_s色3.ValueMember = "Value"
     End Sub
 
-    '編集表示する
-    Function ShowGrid(ByVal works As clsDataTables) As Boolean
+    '長さの参照値名,(0)は共通セット,(1)以上
+    Sub SetRefLenNames(ByVal refnames() As String)
+        '共通セット
+        _RefLenTable.Clear()
+        Dim rc As dstWork.tblEnumRow = _RefLenTable.NewRow
+        rc.Display = My.Resources.CmbNameDirect '入力値
+        rc.Value = 0
+        _RefLenTable.Rows.Add(rc)
+
+        If refnames IsNot Nothing AndAlso 0 < refnames.Count Then
+            For i As Integer = 1 To refnames.Count - 1
+                rc = _RefLenTable.NewRow
+                rc.Display = refnames(i)
+                rc.Value = i
+                _RefLenTable.Rows.Add(rc)
+            Next
+            f_i長さ参照3.ReadOnly = False
+        End If
+
+        f_i長さ参照3.DataSource = _RefLenTable
+        f_i長さ参照3.DisplayMember = "Display"
+        f_i長さ参照3.ValueMember = "Value"
+    End Sub
+
+
+    '編集表示する refvalues():長さの参照値,(0)は有効フラグ,(1)以上が値
+    Function ShowGrid(ByVal works As clsDataTables, ByVal refvalues() As Double) As Boolean
+        _Refvalues = refvalues
+
         BindingSource追加品.Sort = Nothing
         BindingSource追加品.DataSource = Nothing
         If works Is Nothing Then
             Return False
         End If
 
-
         '非表示の間の変更を反映
         _i基本のひも幅 = works.p_row目標寸法.Value("f_i基本のひも幅")
         setOptions()
         setBasics()
         _Calc.setData(works)
+        If Not _Calc.recalc_追加品() Then
+            RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
+        End If
 
         BindingSource追加品.DataSource = works.p_tbl追加品
         BindingSource追加品.Sort = "f_i番号 , f_iひも番号"
@@ -103,9 +159,10 @@ Public Class ctrAddParts
         Return ret
     End Function
 
-    '追加品テーブルをチェックする
+    '参照の再計算とテーブルのチェック(非表示時に呼び出される想定)
     '戻り値: OK:Nothing  NG:エラー文字列
-    Function CheckError(ByVal works As clsDataTables) As String
+    Function SetRefValueAndCheckError(ByVal works As clsDataTables, ByVal refvalues() As Double) As String
+        _Refvalues = refvalues
         _Calc.setData(works)
         If Not _Calc.recalc_追加品() Then
             Return _Calc.p_sメッセージ
@@ -134,6 +191,30 @@ Public Class ctrAddParts
             End If
         Next
     End Sub
+
+    '画面の文字列
+    Public ReadOnly Property text集計対象外 As String
+        Get
+            Return f_b集計対象外区分3.HeaderText
+        End Get
+    End Property
+    Public ReadOnly Property TabPageName As String
+        Get
+            Return _TabPageName
+        End Get
+    End Property
+    Public ReadOnly Property RefLenNames(ByVal val As Integer) As String
+        Get
+            If _RefLenTable Is Nothing OrElse _RefLenTable.Rows.Count = 0 Then
+                Return Nothing
+            End If
+            Dim rc() As dstWork.tblEnumRow = _RefLenTable.Select(String.Format("Value={0}", val))
+            If rc IsNot Nothing AndAlso 0 < rc.Count Then
+                Return rc(0).Display
+            End If
+            Return Nothing
+        End Get
+    End Property
 
 #End Region
 
@@ -169,7 +250,7 @@ Public Class ctrAddParts
 
             dgv追加品.NumberPositionsSelect(row.f_i番号)
             If Not _Calc.calc_追加品(row, "f_i点数") Then
-                RaiseEvent AddPartsError(Me, EventArgs.Empty)
+                RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
             End If
 
         Else
@@ -230,7 +311,9 @@ Public Class ctrAddParts
         clsDataTables.RemoveNumberFromTable(table, number)
         clsDataTables.FillNumber(table) '#16
         If Not _Calc.calc_追加品(Nothing, Nothing) Then
-            RaiseEvent AddPartsError(Me, EventArgs.Empty)
+            RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
+        Else
+            RaiseEvent AddPartsError(Me, New AddPartsEventArgs(Nothing)) 'OK
         End If
     End Sub
 
@@ -246,7 +329,7 @@ Public Class ctrAddParts
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv追加品_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         If _Calc.IsDataPropertyName追加品(DataPropertyName) Then
             If Not _Calc.calc_追加品(current.Row, DataPropertyName) Then
-                RaiseEvent AddPartsError(Me, EventArgs.Empty)
+                RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
             End If
         End If
     End Sub
@@ -256,7 +339,7 @@ Public Class ctrAddParts
     'データ保持とクラス関数呼び出し
     Private Class Calc
 
-        Dim _Parent As ctrAddParts
+        Dim _Parent As ctrAddParts 'メッセージ用文字列取得
         Dim _Data As clsDataTables
 
         Property p_sメッセージ As String
@@ -325,7 +408,7 @@ Public Class ctrAddParts
         End Function
 
         '更新処理が必要なフィールド名
-        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ"}
+        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ", "f_i長さ参照"}
         Function IsDataPropertyName追加品(ByVal name As String) As Boolean
             Return _fields追加品.Contains(name)
         End Function
@@ -339,6 +422,13 @@ Public Class ctrAddParts
                 If dataPropertyName = "f_i点数" Then
                     Dim i点数 As Integer = row.f_i点数
                     groupRow.SetNameValue("f_i点数", i点数)
+                ElseIf dataPropertyName = "f_i長さ参照" Then '#63
+                    Dim d長さ As Double
+                    If isRefValue(row.f_i長さ参照, d長さ) Then
+                        row.f_d長さ = d長さ
+                    End If
+                ElseIf dataPropertyName = "f_d長さ" Then
+                    row.f_i長さ参照 = 0 '入力値
                 End If
                 ret = ret And set_groupRow追加品(groupRow)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Change: {0}", groupRow.ToString)
@@ -383,6 +473,16 @@ Public Class ctrAddParts
 
                 Dim i直前の何本幅 As Integer = 0
                 For Each drow As clsDataRow In groupRow
+                    'Ver1.7.3以前のデータ対応
+                    If drow.IsNull("f_i長さ参照") Then
+                        drow.Value("f_i長さ参照") = 0 '入力値
+                    End If
+                    '#63
+                    Dim d長さ As Double
+                    If isRefValue(drow.Value("f_i長さ参照"), d長さ) Then
+                        drow.Value("f_d長さ") = d長さ
+                    End If
+
                     Dim ok As Boolean = False
                     Dim idxrow As clsDataRow = grpMst.IndexDataRow(drow)
                     If idxrow IsNot Nothing Then

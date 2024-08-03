@@ -346,6 +346,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  入力値 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CmbNameDirect() As String
+            Get
+                Return ResourceManager.GetString("CmbNameDirect", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  レコードを追加できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrAddRecord() As String

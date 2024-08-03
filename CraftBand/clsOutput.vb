@@ -1,11 +1,11 @@
 ﻿Imports CraftBand.clsBandSum
 Imports CraftBand.clsMasterTables
-Imports CraftBand.Tables
 Imports CraftBand.Tables.dstOutput
+Imports CraftBand.Tables.dstDataTables
 
 Public Class clsOutput
 
-    Dim _dstOutput As dstOutput 'DataSet
+    Dim _dstOutput As Tables.dstOutput 'DataSet
     Dim _ListOutMark As String  '出力記号
 
     Dim _FilePath As String 'ファイル名
@@ -40,7 +40,7 @@ Public Class clsOutput
     End Property
 
     Sub New(ByVal fpath As String)
-        _dstOutput = New dstOutput
+        _dstOutput = New Tables.dstOutput
         _clsBandSum = New clsBandSum
         _FilePath = fpath
 
@@ -259,7 +259,46 @@ Public Class clsOutput
         Return 3    '2行
     End Function
 
+    '追加品
+    Function OutAddParts(ByVal tbl追加品 As tbl追加品DataTable, ByVal editAddParts As ctrAddParts) As Integer
+        If tbl追加品 Is Nothing OrElse tbl追加品.Rows.Count = 0 Then
+            Return 0
+        End If
 
+        Dim lines As Integer = 0
+        NextNewRow()
+        _CurrentRow.f_sカテゴリー = editAddParts.TabPageName()
+        _CurrentRow.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        _CurrentRow.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+
+        Dim order As String = "f_i番号 , f_iひも番号"
+        For Each r As tbl追加品Row In tbl追加品.Select(Nothing, order)
+            NextNewRow()
+            _CurrentRow.f_s番号 = r.f_i番号.ToString
+            _CurrentRow.f_s編みかた名 = r.f_s付属品名
+            _CurrentRow.f_s編みひも名 = r.f_s付属品ひも名
+            _CurrentRow.f_i周数 = r.f_i点数
+            _CurrentRow.f_s長さ = outLengthText(r.f_d長さ)
+            If 0 < r.f_iひも本数 AndAlso Not r.f_b集計対象外区分 Then
+                r.f_s記号 = SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+            Else
+                r.f_s記号 = ""
+
+                _CurrentRow.f_s記号 = editAddParts.text集計対象外()
+                _CurrentRow.f_s本幅 = outLaneText(r.f_i何本幅)
+                _CurrentRow.f_sひも本数 = outCountText(r.f_iひも本数)
+                _CurrentRow.f_sひも長 = outLengthText(r.f_dひも長 + r.f_dひも長加算)
+                _CurrentRow.f_s色 = r.f_s色
+            End If
+            _CurrentRow.f_sメモ = r.f_sメモ
+            If 0 < r.f_i長さ参照 Then
+                _CurrentRow.f_s高さ = editAddParts.RefLenNames(r.f_i長さ参照)
+            End If
+        Next
+
+        AddBlankLine()
+        Return lines + 1
+    End Function
 
     '集計
     Function OutSummery() As Integer

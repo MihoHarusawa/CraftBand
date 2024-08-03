@@ -3,10 +3,7 @@
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
-Imports CraftBand.clsUpDown
-Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -28,6 +25,11 @@ Class clsCalcMesh
         Side  '側面 
         Options  '追加品
         Expand '縦横展開
+
+        '相互参照値のFix
+        FixLength   '長さ確定
+        BandColor   '色と幅の変更画面
+
     End Enum
 
     Public Property p_b有効 As Boolean
@@ -165,6 +167,15 @@ Class clsCalcMesh
         End Get
     End Property
 
+    Public ReadOnly Property p_d外側_最大周 As Double
+        Get
+            Dim thick As Double = 8
+            If 0 < _d径の合計 Then
+                thick = 2 * System.Math.PI
+            End If
+            Return _d周の最大値 + _d厚さの最大値 * thick
+        End Get
+    End Property
 
     '表示文字列
     Public ReadOnly Property p_s内側_横 As String
@@ -269,14 +280,11 @@ Class clsCalcMesh
             Return ""
         End Get
     End Property
+
     Public ReadOnly Property p_s外側_最大周 As String
         Get
             If isValid計算_最大周 Then
-                Dim thick As Double = 8
-                If 0 < _d径の合計 Then
-                    thick = 2 * System.Math.PI
-                End If
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d周の最大値 + _d厚さの最大値 * thick)
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d外側_最大周)
             End If
             Return ""
         End Get
@@ -284,11 +292,7 @@ Class clsCalcMesh
     Public ReadOnly Property p_s外側_最大周の径 As String
         Get
             If isValid計算_最大周 Then
-                Dim thick As Double = 8
-                If 0 < _d径の合計 Then
-                    thick = 2 * System.Math.PI
-                End If
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((_d周の最大値 + _d厚さの最大値 * thick) / Math.PI)
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d外側_最大周 / Math.PI)
             End If
             Return ""
         End Get
@@ -410,6 +414,25 @@ Class clsCalcMesh
         End Get
     End Property
 
+    '追加品の参照値 #63
+    Function getAddPartsRefValues() As Double()
+        Dim values(8) As Double
+        values(0) = 1 'すべて有効
+
+        '(内側)横・縦・高さ・周
+        values(1) = p_d内側_最小横 'p_s内側_最小横
+        values(2) = p_d内側_最小縦 'p_s内側_最小縦
+        values(3) = p_d内側_高さ 'p_s内側_高さ
+        values(4) = _d周の最大値 'p_s内側_最大周
+        '(外側)横・縦・高さ・周
+        values(5) = p_d外側_最大横 'p_s外側_最大横
+        values(6) = p_d外側_最大縦 'p_s外側_最大縦
+        values(7) = p_d外側_高さ 'p_s外側_高さ
+        values(8) = p_d外側_最大周 'p_s外側_最大周
+
+        Return values
+    End Function
+
 
     'データ内容
     Public Function dump() As String
@@ -474,7 +497,7 @@ Class clsCalcMesh
                 ret = ret And calc_側面(category, Nothing, Nothing)
 
                 If ret Then
-                    p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                    p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
                     If Not String.IsNullOrEmpty(p_sメッセージ) Then
                         ret = False
                     End If
@@ -514,12 +537,21 @@ Class clsCalcMesh
                 ret = ret And calc_側面(category, row, key)
 
             Case CalcCategory.Options  '追加品
-                'editAddParts内の処理, エラー文字列表示のみ
-                p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                'エラーメッセージ通知
+                p_sメッセージ = ctr
                 If Not String.IsNullOrEmpty(p_sメッセージ) Then
                     ret = False
                 End If
                 '(追加品は計算寸法変更なし)
+
+            Case CalcCategory.BandColor '色と幅の変更画面
+
+
+            Case CalcCategory.FixLength '相互参照値のFix(1Pass値は得られている前提)
+                p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
+                If Not String.IsNullOrEmpty(p_sメッセージ) Then
+                    ret = False
+                End If
 
             Case Else
                 '未定義のカテゴリー'{0}'が参照されました。
@@ -2084,6 +2116,9 @@ Class clsCalcMesh
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
         End If
+        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) Then
+            Return False
+        End If
 
         Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
 
@@ -2285,7 +2320,7 @@ Class clsCalcMesh
                         r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                     Else
                         r.f_s記号 = ""
-                        row.f_s本幅 = r.f_i何本幅
+                        row.f_s本幅 = output.outLaneText(r.f_i何本幅)
                         row.f_sひも本数 = output.outCountText(r.f_iひも本数)
                         row.f_sひも長 = text次周連続()
                         row.f_s色 = r.f_s色
@@ -2299,28 +2334,7 @@ Class clsCalcMesh
         End If
 
         '***追加品
-        If 0 < _Data.p_tbl追加品.Rows.Count Then
-            row = output.NextNewRow
-            row.f_sカテゴリー = text追加品()
-            row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-            row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-
-            order = "f_i番号 , f_iひも番号"
-            For Each r As tbl追加品Row In _Data.p_tbl追加品.Select(Nothing, order)
-                row = output.NextNewRow
-                row.f_s番号 = r.f_i番号.ToString
-                row.f_s編みかた名 = r.f_s付属品名
-                row.f_s編みひも名 = r.f_s付属品ひも名
-                row.f_i周数 = r.f_i点数
-                row.f_s長さ = output.outLengthText(r.f_d長さ)
-                If 0 < r.f_iひも本数 Then
-                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
-                End If
-                row.f_sメモ = r.f_sメモ
-            Next
-
-            output.AddBlankLine()
-        End If
+        output.OutAddParts(_Data.p_tbl追加品, _frmMain.editAddParts)
 
         '***計算寸法
         row = output.NextNewRow
@@ -2509,7 +2523,6 @@ Class clsCalcMesh
         'dgv側面
         Return _frmMain.f_d垂直ひも長2.HeaderText
     End Function
-
 #End Region
 
 End Class

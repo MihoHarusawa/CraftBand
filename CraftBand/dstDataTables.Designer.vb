@@ -809,7 +809,7 @@ Namespace Tables
                 Me.columnf_sメモ.DefaultValue = CType("",String)
                 Me.columnf_sタイトル.DefaultValue = CType("",String)
                 Me.columnf_s作成者.DefaultValue = CType("",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.7.3",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.7.4",String)
                 Me.columnf_s単位.DefaultValue = CType("",String)
                 Me.columnf_sEXE名.DefaultValue = CType("",String)
             End Sub
@@ -3066,6 +3066,10 @@ Namespace Tables
             
             Private columnf_i何本幅 As Global.System.Data.DataColumn
             
+            Private columnf_b集計対象外区分 As Global.System.Data.DataColumn
+            
+            Private columnf_i長さ参照 As Global.System.Data.DataColumn
+            
             Private columnf_d長さ As Global.System.Data.DataColumn
             
             Private columnf_i点数 As Global.System.Data.DataColumn
@@ -3175,6 +3179,22 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b集計対象外区分Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b集計対象外区分
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i長さ参照Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i長さ参照
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_d長さColumn() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_d長さ
@@ -3274,9 +3294,26 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl追加品Row(ByVal f_i番号 As Integer, ByVal f_s付属品名 As String, ByVal f_s付属品ひも名 As String, ByVal f_iひも番号 As Short, ByVal f_bError As Boolean, ByVal f_b巻きひも区分 As Boolean, ByVal f_i何本幅 As Short, ByVal f_d長さ As Double, ByVal f_i点数 As Integer, ByVal f_s色 As String, ByVal f_dひも長加算 As Double, ByVal f_dひも長 As Double, ByVal f_iひも本数 As Integer, ByVal f_s記号 As String, ByVal f_sメモ As String) As tbl追加品Row
+            Public Overloads Function Addtbl追加品Row( _
+                        ByVal f_i番号 As Integer,  _
+                        ByVal f_s付属品名 As String,  _
+                        ByVal f_s付属品ひも名 As String,  _
+                        ByVal f_iひも番号 As Short,  _
+                        ByVal f_bError As Boolean,  _
+                        ByVal f_b巻きひも区分 As Boolean,  _
+                        ByVal f_i何本幅 As Short,  _
+                        ByVal f_b集計対象外区分 As Boolean,  _
+                        ByVal f_i長さ参照 As Short,  _
+                        ByVal f_d長さ As Double,  _
+                        ByVal f_i点数 As Integer,  _
+                        ByVal f_s色 As String,  _
+                        ByVal f_dひも長加算 As Double,  _
+                        ByVal f_dひも長 As Double,  _
+                        ByVal f_iひも本数 As Integer,  _
+                        ByVal f_s記号 As String,  _
+                        ByVal f_sメモ As String) As tbl追加品Row
                 Dim rowtbl追加品Row As tbl追加品Row = CType(Me.NewRow,tbl追加品Row)
-                Dim columnValuesArray() As Object = New Object() {f_i番号, f_s付属品名, f_s付属品ひも名, f_iひも番号, f_bError, f_b巻きひも区分, f_i何本幅, f_d長さ, f_i点数, f_s色, f_dひも長加算, f_dひも長, f_iひも本数, f_s記号, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_i番号, f_s付属品名, f_s付属品ひも名, f_iひも番号, f_bError, f_b巻きひも区分, f_i何本幅, f_b集計対象外区分, f_i長さ参照, f_d長さ, f_i点数, f_s色, f_dひも長加算, f_dひも長, f_iひも本数, f_s記号, f_sメモ}
                 rowtbl追加品Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl追加品Row)
                 Return rowtbl追加品Row
@@ -3312,6 +3349,8 @@ Namespace Tables
                 Me.columnf_bError = MyBase.Columns("f_bError")
                 Me.columnf_b巻きひも区分 = MyBase.Columns("f_b巻きひも区分")
                 Me.columnf_i何本幅 = MyBase.Columns("f_i何本幅")
+                Me.columnf_b集計対象外区分 = MyBase.Columns("f_b集計対象外区分")
+                Me.columnf_i長さ参照 = MyBase.Columns("f_i長さ参照")
                 Me.columnf_d長さ = MyBase.Columns("f_d長さ")
                 Me.columnf_i点数 = MyBase.Columns("f_i点数")
                 Me.columnf_s色 = MyBase.Columns("f_s色")
@@ -3339,6 +3378,10 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_b巻きひも区分)
                 Me.columnf_i何本幅 = New Global.System.Data.DataColumn("f_i何本幅", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i何本幅)
+                Me.columnf_b集計対象外区分 = New Global.System.Data.DataColumn("f_b集計対象外区分", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b集計対象外区分)
+                Me.columnf_i長さ参照 = New Global.System.Data.DataColumn("f_i長さ参照", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i長さ参照)
                 Me.columnf_d長さ = New Global.System.Data.DataColumn("f_d長さ", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d長さ)
                 Me.columnf_i点数 = New Global.System.Data.DataColumn("f_i点数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
@@ -3365,6 +3408,8 @@ Namespace Tables
                 Me.columnf_bError.DefaultValue = CType(false,Boolean)
                 Me.columnf_b巻きひも区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_i何本幅.DefaultValue = CType(1,Short)
+                Me.columnf_b集計対象外区分.DefaultValue = CType(false,Boolean)
+                Me.columnf_i長さ参照.DefaultValue = CType(0,Short)
                 Me.columnf_d長さ.DefaultValue = CType(0R,Double)
                 Me.columnf_i点数.DefaultValue = CType(1,Integer)
                 Me.columnf_s色.DefaultValue = CType("",String)
@@ -7863,6 +7908,36 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b集計対象外区分() As Boolean
+                Get
+                    If Me.Isf_b集計対象外区分Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl追加品.f_b集計対象外区分Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl追加品.f_b集計対象外区分Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i長さ参照() As Short
+                Get
+                    If Me.Isf_i長さ参照Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl追加品.f_i長さ参照Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl追加品.f_i長さ参照Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d長さ() As Double
                 Get
                     If Me.Isf_d長さNull Then
@@ -8039,6 +8114,30 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i何本幅Null()
                 Me(Me.tabletbl追加品.f_i何本幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b集計対象外区分Null() As Boolean
+                Return Me.IsNull(Me.tabletbl追加品.f_b集計対象外区分Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b集計対象外区分Null()
+                Me(Me.tabletbl追加品.f_b集計対象外区分Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i長さ参照Null() As Boolean
+                Return Me.IsNull(Me.tabletbl追加品.f_i長さ参照Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i長さ参照Null()
+                Me(Me.tabletbl追加品.f_i長さ参照Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

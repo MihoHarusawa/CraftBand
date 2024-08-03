@@ -25,6 +25,10 @@ Class clsCalcKnot
         Edge  '縁の始末 
         Options  '追加品
         Expand '縦横展開
+
+        '相互参照値のFix
+        FixLength   '長さ確定
+        BandColor   '色と幅の変更画面
     End Enum
 
     Public Property p_b有効 As Boolean
@@ -351,6 +355,24 @@ Class clsCalcKnot
         End Get
     End Property
 
+    '追加品の参照値 #63
+    Function getAddPartsRefValues() As Double()
+        Dim values(8) As Double
+        values(0) = 1 'すべて有効
+
+        '(コマ寸法ベース)横・縦・高さ・周
+        values(1) = p_dコマベース_横 'p_sコマベース_横
+        values(2) = p_dコマベース_縦 'p_sコマベース_縦
+        values(3) = p_dコマベース_高さ 'p_sコマベース_高さ
+        values(4) = p_dコマベース_周 'p_sコマベース_周
+        '(縁・厚さプラス)横・縦・高さ・周
+        values(5) = p_d縁厚さプラス_横 'p_s縁厚さプラス_横
+        values(6) = p_d縁厚さプラス_縦 'p_s縁厚さプラス_縦
+        values(7) = p_d縁厚さプラス_高さ 'p_s縁厚さプラス_高さ
+        values(8) = p_d縁厚さプラス_周 'p_s縁厚さプラス_周
+
+        Return values
+    End Function
 
     'データ内容
     Public Function dump() As String
@@ -426,7 +448,7 @@ Class clsCalcKnot
                 ret = ret And set_寸法と要尺()
                 ret = ret And calc_側面(category, Nothing, Nothing)
                 If ret Then
-                    p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                    p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
                     If Not String.IsNullOrEmpty(p_sメッセージ) Then
                         ret = False
                     End If
@@ -450,12 +472,20 @@ Class clsCalcKnot
                 ret = ret And calc_側面(category, row, key)
 
             Case CalcCategory.Options  '追加品
-                'editAddParts内の処理, エラー文字列表示のみ
-                p_sメッセージ = _frmMain.editAddParts.CheckError(_Data)
+                'エラーメッセージ通知
+                p_sメッセージ = ctr
                 If Not String.IsNullOrEmpty(p_sメッセージ) Then
                     ret = False
                 End If
                 '(追加品は計算寸法変更なし)
+
+            Case CalcCategory.FixLength '相互参照値のFix(1Pass値は得られている前提)
+                If ret Then
+                    p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
+                    If Not String.IsNullOrEmpty(p_sメッセージ) Then
+                        ret = False
+                    End If
+                End If
 
             Case Else
                 '未定義のカテゴリー'{0}'が参照されました。
@@ -1647,6 +1677,10 @@ Class clsCalcKnot
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
         End If
+        If Not CalcSize(CalcCategory.FixLength, Nothing, Nothing) Then
+            Return False
+        End If
+
         Dim b展開区分 As Boolean = _Data.p_row底_縦横.Value("f_b展開区分")
 
         adjust_側面()
@@ -1811,28 +1845,7 @@ Class clsCalcKnot
         End If
 
         '***追加品
-        If 0 < _Data.p_tbl追加品.Rows.Count Then
-            row = output.NextNewRow
-            row.f_sカテゴリー = text追加品()
-            row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-            row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
-
-            order = "f_i番号 , f_iひも番号"
-            For Each r As tbl追加品Row In _Data.p_tbl追加品.Select(Nothing, order)
-                row = output.NextNewRow
-                row.f_s番号 = r.f_i番号.ToString
-                row.f_s編みかた名 = r.f_s付属品名
-                row.f_s編みひも名 = r.f_s付属品ひも名
-                row.f_i周数 = r.f_i点数
-                row.f_s長さ = output.outLengthText(r.f_d長さ)
-                If 0 < r.f_iひも本数 Then
-                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
-                End If
-                row.f_sメモ = r.f_sメモ
-            Next
-
-            output.AddBlankLine()
-        End If
+        output.OutAddParts(_Data.p_tbl追加品, _frmMain.editAddParts)
 
         '***計算寸法
         row = output.NextNewRow
@@ -2081,7 +2094,6 @@ Class clsCalcKnot
     Private Function text要尺() As String
         Return _frmMain.lbl要尺.Text
     End Function
-
 #End Region
 
 End Class
