@@ -632,7 +632,7 @@ Partial Public Class clsCalcSquare45
 
         If Not isBackFace Then
             '付属品
-            AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+            AddPartsImage(imgData, _frmMain.editAddParts)
         End If
 
         '描画ファイル作成

@@ -1,7 +1,6 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsMasterTables
 Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
 
@@ -14,7 +13,6 @@ Partial Public Class clsCalcMesh
     'プレビュー時に生成
     Dim _imageList側面編みかた As clsImageItemList    '側面のレコードを含む
     Dim _ImageList描画要素 As clsImageItemList '底と側面
-    'Dim _ImageList付属品 As clsImageItemList
 
     Dim _dPortionOver As Double = New Length(1, "cm").Value '省略部分の長さ
 
@@ -395,15 +393,6 @@ Partial Public Class clsCalcMesh
     '    Do While 0 < i点数
     '        item = New clsImageItem(ImageTypeEnum._付属品, groupRow, i点数)
 
-    '        item.m_a四隅.p左上 = New S実座標(dX, dY)
-    '        item.m_a四隅.p右上 = New S実座標(dX + d長さ, dY)
-    '        item.m_a四隅.p左下 = New S実座標(dX, dY - d幅)
-    '        item.m_a四隅.p右下 = New S実座標(dX + d長さ, dY - d幅)
-
-    '        '文字位置
-    '        item.p_p文字位置 = item.m_a四隅.p右上
-    '        itemlist.AddItem(item)
-
     '        dY -= d幅 * 2
     '        i点数 -= 1
     '    Loop
@@ -423,7 +412,6 @@ Partial Public Class clsCalcMesh
         '念のため
         _imageList側面編みかた = Nothing
         _ImageList描画要素 = Nothing
-        '_ImageList付属品 = Nothing
 
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
@@ -453,7 +441,6 @@ Partial Public Class clsCalcMesh
 
         _imageList側面編みかた = imageList側面編みかた(dひも幅)
         _ImageList描画要素 = imageList底と側面枠(dひも幅)
-        '_ImageList付属品 = imageList付属品()
 
 
         '中身を移動
@@ -467,9 +454,7 @@ Partial Public Class clsCalcMesh
         _ImageList描画要素 = Nothing
 
         '付属品
-        AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
-        'imgData.MoveList(_ImageList付属品)
-        '_ImageList付属品 = Nothing
+        AddPartsImage(imgData, _frmMain.editAddParts)
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then

@@ -814,6 +814,17 @@ Public Class clsImageItem
             Return large
         End Function
 
+        'マイナス値もそのまま処理します
+        Function get拡大領域(ByVal width As Double) As S領域
+            Dim large As S領域
+            large.x最左 = x最左 - width
+            large.x最右 = x最右 + width
+            large.y最下 = y最下 - width
+            large.y最上 = y最上 + width
+            Return large
+        End Function
+
+
         '領域内の点か？
         Function isInner(ByVal p As S実座標) As Boolean
             If p.X < x最左 AndAlso Not NearlyEqual(x最左, p.X) Then
@@ -1251,6 +1262,12 @@ Public Class clsImageItem
             _s記号 = row.f_s記号
         End Sub
 
+        Sub New(ByVal row As tbl追加品Row)
+            _i何本幅 = row.f_i何本幅
+            _s色 = row.f_s色
+            _s記号 = row.f_s記号
+        End Sub
+
         Sub New(ByVal item As CInsertItem)
             _i何本幅 = item.p_i何本幅
             _s色 = item.p_s色
@@ -1546,13 +1563,13 @@ Public Class clsImageItem
     'レコード情報
     Public m_row縦横展開 As tbl縦横展開Row = Nothing '縦バンド・横バンド・コマの横
     Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
-    Public m_groupRow As clsGroupDataRow = Nothing 'Meshの側面,付属品("f_s記号","f_s編みかた名","f_s色"))
-    Public m_rowData As clsDataRow = Nothing 'Squareの差しひも/f_s色,f_i何本幅,f_s記号
+    Public m_groupRow As clsGroupDataRow = Nothing '編みかた,底楕円("f_s記号","f_s編みかた名","f_s色"))
+    Public m_row追加品 As tbl追加品Row = Nothing '付属品
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
 
-    '縦バンド・横バンド・コマ
+    '縦バンド・横バンド・コマ・付属品
     Public m_dひも幅 As Double
     Public m_rひも位置 As S領域
 
@@ -1589,7 +1606,8 @@ Public Class clsImageItem
 
         _コマ     'm_row縦横展開,m_row縦横展開2,m_rひも位置,m_knot
         _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
-        _付属品   'm_groupRow,m_a四隅,m_lineList,_r文字領域
+
+        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
 
         _底枠     'm_a四隅,m_lineList
         _横の側面   'm_a四隅,m_lineList
@@ -1599,9 +1617,9 @@ Public Class clsImageItem
         _底枠2     'm_lineList        (Hexagonの底)
 
 
-        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域
+        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域 (Meshの底)
         _差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
-        _ひも領域   'm_rowData,m_a四隅,_r文字領域            (旧Squareの差しひも)
+        '_ひも領域   'm_rowData,m_a四隅,_r文字領域            (旧Squareの差しひも)
 
         _底の中央線  'm_listLine
 
@@ -1683,7 +1701,7 @@ Public Class clsImageItem
 
     End Sub
 
-    '編みかた・付属品・差しひも・底楕円
+    '編みかた・底楕円(差しひも含む)
     Sub New(ByVal imageType As ImageTypeEnum, ByVal rows As clsGroupDataRow, ByVal idx2 As Integer)
         m_ImageType = imageType
         m_groupRow = rows
@@ -1693,12 +1711,12 @@ Public Class clsImageItem
         End If
     End Sub
 
-    'Squareの差しひも
-    Sub New(ByVal imageType As ImageTypeEnum, ByVal row As clsDataRow, ByVal idx1 As Integer, ByVal idx2 As Integer)
+    '付属品
+    Sub New(ByVal imageType As ImageTypeEnum, ByVal row As tbl追加品Row)
         m_ImageType = imageType
-        m_rowData = row
-        m_Index = idx1
-        m_Index2 = idx2
+        m_row追加品 = row
+        m_Index = row.f_i番号
+        m_Index2 = row.f_iひも番号
     End Sub
 
     '文字列
@@ -1792,16 +1810,16 @@ Public Class clsImageItem
                             line = 1
                         End If
                     Case ImageTypeEnum._付属品
-                        If m_groupRow IsNot Nothing Then
-                            chars = Len(m_groupRow.GetIndexNameValue(1, "f_s付属品名"))
-                            chars += m_groupRow.Count '記号数
+                        If m_row追加品 IsNot Nothing Then
+                            chars = Len(m_row追加品.f_s付属品名) + Len(m_row追加品.f_s付属品ひも名) + Len(m_row追加品.f_s記号)
+                            chars += 1 '"/"分
                             line = 1
                         End If
-                    Case ImageTypeEnum._ひも領域
-                        If m_rowData IsNot Nothing Then
-                            chars += 1 '記号1点
-                            line = 1
-                        End If
+                    'Case ImageTypeEnum._ひも領域
+                    '    If m_rowData IsNot Nothing Then
+                    '        chars += 1 '記号1点
+                    '        line = 1
+                    '    End If
                     Case ImageTypeEnum._文字列
                         If m_aryString IsNot Nothing Then
                             For Each Str As String In m_aryString
@@ -1838,10 +1856,14 @@ Public Class clsImageItem
                 r描画領域 = m_rひも位置
                 '他は領域内
 
-            Case ImageTypeEnum._編みかた, ImageTypeEnum._付属品
+            Case ImageTypeEnum._編みかた
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
+
+            Case ImageTypeEnum._付属品
+                r描画領域 = m_rひも位置.get拡大領域(m_dひも幅 / 2)
+                r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
 
             Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠
                 r描画領域 = m_a四隅.r外接領域
@@ -1851,7 +1873,7 @@ Public Class clsImageItem
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも, ImageTypeEnum._ひも領域
+            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも ', ImageTypeEnum._ひも領域
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())

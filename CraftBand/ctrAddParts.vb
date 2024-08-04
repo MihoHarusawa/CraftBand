@@ -1,12 +1,9 @@
 ﻿Imports CraftBand.clsMasterTables
 Imports CraftBand.ctrDataGridView
-Imports CraftBand.ctrExpanding
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports System.Drawing
-Imports System.Numerics
 Imports System.Windows.Forms
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox
 
 Public Class ctrAddParts
 
@@ -178,6 +175,11 @@ Public Class ctrAddParts
         Return Nothing
     End Function
 
+    'i番号,iひも番号順の個別レコード配列を返す(SetRefValueAndCheckError後)
+    Function GetAddPartsRecords() As tbl追加品Row()
+        Return _Calc.getEachRows()
+    End Function
+
 
     'カラム幅を文字列に保存
     Public ReadOnly Property GetColumnWidthString() As String
@@ -221,6 +223,20 @@ Public Class ctrAddParts
                 Return rc(0).Display
             End If
             Return Nothing
+        End Get
+    End Property
+
+    '横に対する縦の比率
+    Public ReadOnly Property getAspectRatio() As Double
+        Get
+            '1-4,5-8:横・縦・高さ・周 の2セットの想定
+            '5-8側の値を採用
+            If _Refvalues IsNot Nothing OrElse _Refvalues.Count < 7 Then
+                If 0 < _Refvalues(5) Then
+                    Return _Refvalues(6) / _Refvalues(5)
+                End If
+            End If
+            Return 0
         End Get
     End Property
 
@@ -516,7 +532,7 @@ Public Class ctrAddParts
                             End If
                             If drow.IsNull("f_i描画位置") Then
                                 If g_enumExeName = enumExeName.CraftBandMesh Then
-                                    drow.Value("f_i描画位置") = enum描画位置.i_下部
+                                    drow.Value("f_i描画位置") = enum描画位置.i_左下
                                 Else
                                     drow.Value("f_i描画位置") = enum描画位置.i_なし
                                 End If
@@ -539,6 +555,15 @@ Public Class ctrAddParts
                 Return ret
             End If
 
+        End Function
+
+        '個別レコード順
+        Function getEachRows() As tbl追加品Row()
+            If _Data Is Nothing Then
+                Return Nothing
+            End If
+            Dim order As String = "f_i番号 , f_iひも番号"
+            Return _Data.p_tbl追加品.Select(Nothing, order)
         End Function
 
     End Class

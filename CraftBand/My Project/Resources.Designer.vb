@@ -987,7 +987,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  なし,下部,中心 に類似しているローカライズされた文字列を検索します。
+        '''  なし,左下,中心 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property StringDrawPosition() As String
             Get
@@ -996,7 +996,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  バンド,直線,正方形(辺),長方形(横),円(径),楕円(横径),半円(径),正方形(周),長方形(周),円(周),楕円(周),半円(周) に類似しているローカライズされた文字列を検索します。
+        '''  横バンド,横線,正方形(辺),長方形(横),円(径),楕円(横径),上半円(径),正方形(周),長方形(周),円(周),楕円(周),上半円(周) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property StringDrawType() As String
             Get

@@ -432,14 +432,7 @@ Class clsCalcMesh
 
         Return values
     End Function
-    '横に対する縦の比率
-    Function getAspectRatio() As Double
-        If 0 < p_d外側_最大横 Then
-            Return p_d外側_最大縦 / p_d外側_最大横
-        Else
-            Return 0
-        End If
-    End Function
+
 
 
     'データ内容
@@ -2342,7 +2335,7 @@ Class clsCalcMesh
         End If
 
         '***追加品
-        output.OutAddParts(_Data.p_tbl追加品, _frmMain.editAddParts)
+        output.OutAddParts(_frmMain.editAddParts)
 
         '***計算寸法
         row = output.NextNewRow

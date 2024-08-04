@@ -680,7 +680,7 @@ Partial Public Class clsCalcKnot
         _ImageList開始位置 = Nothing
 
         '付属品
-        AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+        AddPartsImage(imgData, _frmMain.editAddParts)
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then

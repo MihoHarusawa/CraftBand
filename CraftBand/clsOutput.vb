@@ -260,8 +260,12 @@ Public Class clsOutput
     End Function
 
     '追加品
-    Function OutAddParts(ByVal tbl追加品 As tbl追加品DataTable, ByVal editAddParts As ctrAddParts) As Integer
-        If tbl追加品 Is Nothing OrElse tbl追加品.Rows.Count = 0 Then
+    Function OutAddParts(ByVal editAddParts As ctrAddParts) As Integer
+        If editAddParts Is Nothing Then
+            Return 0
+        End If
+        Dim raws() As tbl追加品Row = editAddParts.GetAddPartsRecords()
+        If raws Is Nothing OrElse raws.Count = 0 Then
             Return 0
         End If
 
@@ -271,8 +275,7 @@ Public Class clsOutput
         _CurrentRow.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         _CurrentRow.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
-        Dim order As String = "f_i番号 , f_iひも番号"
-        For Each r As tbl追加品Row In tbl追加品.Select(Nothing, order)
+        For Each r As tbl追加品Row In raws
             NextNewRow()
             _CurrentRow.f_s番号 = r.f_i番号.ToString
             _CurrentRow.f_s編みかた名 = r.f_s付属品名

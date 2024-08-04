@@ -1,8 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
-Imports System.Security.Cryptography
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -374,8 +372,8 @@ Public Class CImageDraw
             Case ImageTypeEnum._差しひも
                 Return draw差しひも(item)
 
-            Case ImageTypeEnum._ひも領域
-                Return drawひも領域(item)
+            'Case ImageTypeEnum._ひも領域
+            '    Return drawひも領域(item)
 
             Case ImageTypeEnum._付属品
                 Return draw付属品(item)
@@ -902,61 +900,149 @@ Public Class CImageDraw
         Return True
     End Function
 
-    Function drawひも領域(ByVal item As clsImageItem) As Boolean
-        If item.m_rowData Is Nothing Then
-            Return False
-        End If
-        'ひもの色
-        Dim color As String = item.m_rowData.Value("f_s色")
-        Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing OrElse colset.IsNoDrawing Then
-            Return False
-        End If
-        'ひもの領域
-        Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        If colset.BrushAlfa IsNot Nothing Then
-            _Graphic.FillPolygon(colset.BrushAlfa, points)
-        End If
-        If colset.PenBand IsNot Nothing Then
-            _Graphic.DrawLines(colset.PenBand, points)
-        End If
+    'Function drawひも領域(ByVal item As clsImageItem) As Boolean
+    '    If item.m_rowData Is Nothing Then
+    '        Return False
+    '    End If
+    '    'ひもの色
+    '    Dim color As String = item.m_rowData.Value("f_s色")
+    '    Dim colset As CPenBrush = GetBandPenBrush(color)
+    '    If colset Is Nothing OrElse colset.IsNoDrawing Then
+    '        Return False
+    '    End If
+    '    'ひもの領域
+    '    Dim points() As PointF = pixcel_lines(item.m_a四隅)
+    '    If colset.BrushAlfa IsNot Nothing Then
+    '        _Graphic.FillPolygon(colset.BrushAlfa, points)
+    '    End If
+    '    If colset.PenBand IsNot Nothing Then
+    '        _Graphic.DrawLines(colset.PenBand, points)
+    '    End If
 
-        '記号
-        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
-            Dim p As PointF = pixcel_point(item.p_p文字位置)
-            Dim str As String = item.m_rowData.Value("f_s記号")
-            _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
-        End If
+    '    '記号
+    '    If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+    '        Dim p As PointF = pixcel_point(item.p_p文字位置)
+    '        Dim str As String = item.m_rowData.Value("f_s記号")
+    '        _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
+    '    End If
 
-        Return True
-    End Function
+    '    Return True
+    'End Function
 
 
     Function draw付属品(ByVal item As clsImageItem) As Boolean
-        If item.m_groupRow Is Nothing Then
+        If item.m_row追加品 Is Nothing Then
             Return False
         End If
-        'ひも番号1の色
-        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+        '色
+        Dim color As String = item.m_row追加品.f_s色
         Dim colset As CPenBrush = GetBandPenBrush(color)
         If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
+
         '付属品の領域
-        Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        If colset.BrushAlfa IsNot Nothing Then
-            _Graphic.FillPolygon(colset.BrushAlfa, points)
-        End If
-        _Graphic.DrawLines(colset.PenBand, points)
+        'Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        'If colset.BrushAlfa IsNot Nothing Then
+        '    _Graphic.FillPolygon(colset.BrushAlfa, points)
+        'End If
+        '_Graphic.DrawLines(colset.PenBand, points)
+
+        Dim ret As Boolean = True
+        Select Case item.m_row追加品.f_i描画形状
+            Case enum描画形状.i_横バンド
+                Dim band As New CBand(item.m_row追加品)
+                band.SetBandF(New S線分(item.m_rひも位置.p左下, item.m_rひも位置.p右下), item.m_dひも幅, Unit90)
+                ret = drawバンド(band)
+
+            Case enum描画形状.i_横線
+
+                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                If 0 < item.m_dひも幅 Then
+                    If colset.BrushAlfa IsNot Nothing Then
+                        _Graphic.FillRectangle(colset.BrushAlfa, rect)
+                    End If
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawRectangle(colset.PenBand, rect.X, rect.Y, rect.Width, rect.Height)
+                    End If
+                Else
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawLine(colset.PenBand, New Point(rect.Left, rect.Top), New Point(rect.Right, rect.Top))
+                    End If
+                End If
+
+            Case enum描画形状.i_正方形_辺, enum描画形状.i_長方形_横, enum描画形状.i_正方形_周, enum描画形状.i_長方形_周
+
+                If 0 < item.m_dひも幅 AndAlso item.m_dひも幅 < item.m_rひも位置.x幅 AndAlso item.m_dひも幅 < item.m_rひも位置.y高さ Then
+                    Dim r外 As S領域 = item.m_rひも位置.get拡大領域(item.m_dひも幅 / 2)
+                    Dim r内 As S領域 = item.m_rひも位置.get拡大領域(-item.m_dひも幅 / 2)
+                    Dim rect外 As RectangleF = pixcel_rectangle(r外)
+                    Dim rect内 As RectangleF = pixcel_rectangle(r内)
+
+                    Dim path As New GraphicsPath()
+                    path.AddRectangle(rect外)
+                    path.AddRectangle(rect内)
+                    path.FillMode = FillMode.Alternate
+                    If colset.BrushAlfa IsNot Nothing Then
+                        _Graphic.FillPath(colset.BrushAlfa, path)
+                    End If
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawPath(colset.PenBand, path)
+                    End If
+                Else
+                    Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawRectangle(colset.PenBand, rect.X, rect.Y, rect.Width, rect.Height)
+                    End If
+                End If
+
+            Case enum描画形状.i_円_径, enum描画形状.i_楕円_横径, enum描画形状.i_円_周, enum描画形状.i_楕円_周
+
+                If 0 < item.m_dひも幅 AndAlso item.m_dひも幅 < item.m_rひも位置.x幅 AndAlso item.m_dひも幅 < item.m_rひも位置.y高さ Then
+                    Dim r外 As S領域 = item.m_rひも位置.get拡大領域(item.m_dひも幅 / 2)
+                    Dim r内 As S領域 = item.m_rひも位置.get拡大領域(-item.m_dひも幅 / 2)
+                    Dim rect外 As RectangleF = pixcel_rectangle(r外)
+                    Dim rect内 As RectangleF = pixcel_rectangle(r内)
+
+                    Dim path As New GraphicsPath()
+                    path.AddEllipse(rect外)
+                    path.AddEllipse(rect内)
+                    path.FillMode = FillMode.Alternate
+                    If colset.BrushAlfa IsNot Nothing Then
+                        _Graphic.FillPath(colset.BrushAlfa, path)
+                    End If
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawPath(colset.PenBand, path)
+                    End If
+                Else
+                    Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawEllipse(colset.PenBand, rect.X, rect.Y, rect.Width, rect.Height)
+                    End If
+                End If
+
+            Case enum描画形状.i_上半円_径, enum描画形状.i_上半円_周
+
+
+
+        End Select
+
+
+
+
         '付属品名
         If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
             Dim p As PointF = pixcel_point(item.p_p文字位置)
-            Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
-            str += item.m_groupRow.GetNameValue("f_s付属品名")
+            Dim str As String = item.m_row追加品.f_s記号
+            str += item.m_row追加品.f_s付属品名
+            If Not String.IsNullOrWhiteSpace(item.m_row追加品.f_s付属品ひも名) Then
+                str += "/"
+                str += item.m_row追加品.f_s付属品ひも名
+            End If
             _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
         End If
 
-        Return True
+        Return ret
     End Function
 
     Function draw軸線(ByVal item As clsImageItem) As Boolean

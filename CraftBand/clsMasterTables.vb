@@ -958,23 +958,23 @@ Public Class clsMasterTables
 
     Public Enum enum描画位置
         i_なし = 0
-        i_下部
+        i_左下
         i_中心
     End Enum
 
     Public Enum enum描画形状
-        i_バンド = 0
-        i_直線
+        i_横バンド = 0
+        i_横線
         i_正方形_辺
         i_長方形_横
         i_円_径
         i_楕円_横径
-        i_半円_径
+        i_上半円_径
         i_正方形_周
         i_長方形_周
         i_円_周
         i_楕円_周
-        i_半円_周
+        i_上半円_周
     End Enum
 
     Shared _描画位置table As dstWork.tblEnumDataTable = Nothing
@@ -984,7 +984,7 @@ Public Class clsMasterTables
         If _描画位置table Is Nothing Then
             _描画位置table = New dstWork.tblEnumDataTable
 
-            'なし,下部,中心
+            'enum描画位置の文字列
             Dim ary() As String = My.Resources.StringDrawPosition.Split(",")
             If ary IsNot Nothing AndAlso 0 < ary.Count Then
                 For i As Integer = 0 To ary.Count - 1
@@ -1011,7 +1011,7 @@ Public Class clsMasterTables
         If _描画形状table Is Nothing Then
             _描画形状table = New dstWork.tblEnumDataTable
 
-            'バンド,直線,正方形(辺),長方形(横),円(径),楕円(横径),半円(径),正方形(周),長方形(周),円(周),楕円(周),半円(周)
+            'enum描画形状の文字列
             Dim ary() As String = My.Resources.StringDrawType.Split(",")
             If ary IsNot Nothing AndAlso 0 < ary.Count Then
                 For i As Integer = 0 To ary.Count - 1
