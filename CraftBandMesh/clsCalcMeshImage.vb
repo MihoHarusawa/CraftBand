@@ -14,7 +14,7 @@ Partial Public Class clsCalcMesh
     'プレビュー時に生成
     Dim _imageList側面編みかた As clsImageItemList    '側面のレコードを含む
     Dim _ImageList描画要素 As clsImageItemList '底と側面
-    Dim _ImageList付属品 As clsImageItemList
+    'Dim _ImageList付属品 As clsImageItemList
 
     Dim _dPortionOver As Double = New Length(1, "cm").Value '省略部分の長さ
 
@@ -370,47 +370,47 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
-    '付属品
-    Function imageList付属品() As clsImageItemList
-        Dim item As clsImageItem
-        Dim itemlist As New clsImageItemList
+    ''付属品
+    'Function imageList付属品() As clsImageItemList
+    'Dim item As clsImageItem
+    'Dim itemlist As New clsImageItemList
 
-        '追加品のレコードをイメージ情報化
-        Dim dY As Double = -(3 * _dPortionOver + p_d外側_縦 / 2)
-        Dim dX As Double = -p_d外側_横 / 2
+    ''追加品のレコードをイメージ情報化
+    'Dim dY As Double = -(3 * _dPortionOver + p_d外側_縦 / 2)
+    'Dim dX As Double = -p_d外側_横 / 2
 
-        '番号ごと
-        Dim res = (From row As tbl追加品Row In _Data.p_tbl追加品
-                   Select Num = row.f_i番号
-                   Order By Num).Distinct
-        For Each num As Integer In res
-            Dim cond As String = String.Format("f_i番号 = {0}", num)
-            Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
+    ''番号ごと
+    'Dim res = (From row As tbl追加品Row In _Data.p_tbl追加品
+    '           Select Num = row.f_i番号
+    '           Order By Num).Distinct
+    'For Each num As Integer In res
+    '    Dim cond As String = String.Format("f_i番号 = {0}", num)
+    '    Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
 
-            Dim i点数 As Integer = groupRow.GetNameValue("f_i点数") '一致項目
-            Dim d長さ As Double = groupRow.GetIndexNameValue(1, "f_d長さ")
-            Dim i本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
-            Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
+    '    Dim i点数 As Integer = groupRow.GetNameValue("f_i点数") '一致項目
+    '    Dim d長さ As Double = groupRow.GetIndexNameValue(1, "f_d長さ")
+    '    Dim i本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
+    '    Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
 
-            Do While 0 < i点数
-                item = New clsImageItem(ImageTypeEnum._付属品, groupRow, i点数)
+    '    Do While 0 < i点数
+    '        item = New clsImageItem(ImageTypeEnum._付属品, groupRow, i点数)
 
-                item.m_a四隅.p左上 = New S実座標(dX, dY)
-                item.m_a四隅.p右上 = New S実座標(dX + d長さ, dY)
-                item.m_a四隅.p左下 = New S実座標(dX, dY - d幅)
-                item.m_a四隅.p右下 = New S実座標(dX + d長さ, dY - d幅)
+    '        item.m_a四隅.p左上 = New S実座標(dX, dY)
+    '        item.m_a四隅.p右上 = New S実座標(dX + d長さ, dY)
+    '        item.m_a四隅.p左下 = New S実座標(dX, dY - d幅)
+    '        item.m_a四隅.p右下 = New S実座標(dX + d長さ, dY - d幅)
 
-                '文字位置
-                item.p_p文字位置 = item.m_a四隅.p右上
-                itemlist.AddItem(item)
+    '        '文字位置
+    '        item.p_p文字位置 = item.m_a四隅.p右上
+    '        itemlist.AddItem(item)
 
-                dY -= d幅 * 2
-                i点数 -= 1
-            Loop
-        Next
+    '        dY -= d幅 * 2
+    '        i点数 -= 1
+    '    Loop
+    'Next
 
-        Return itemlist
-    End Function
+    'Return itemlist
+    'End Function
 
     'プレビュー画像生成
     Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
@@ -423,7 +423,7 @@ Partial Public Class clsCalcMesh
         '念のため
         _imageList側面編みかた = Nothing
         _ImageList描画要素 = Nothing
-        _ImageList付属品 = Nothing
+        '_ImageList付属品 = Nothing
 
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
@@ -453,7 +453,7 @@ Partial Public Class clsCalcMesh
 
         _imageList側面編みかた = imageList側面編みかた(dひも幅)
         _ImageList描画要素 = imageList底と側面枠(dひも幅)
-        _ImageList付属品 = imageList付属品()
+        '_ImageList付属品 = imageList付属品()
 
 
         '中身を移動
@@ -465,8 +465,11 @@ Partial Public Class clsCalcMesh
         _imageList側面編みかた = Nothing
         imgData.MoveList(_ImageList描画要素)
         _ImageList描画要素 = Nothing
-        imgData.MoveList(_ImageList付属品)
-        _ImageList付属品 = Nothing
+
+        '付属品
+        AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+        'imgData.MoveList(_ImageList付属品)
+        '_ImageList付属品 = Nothing
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then

@@ -630,6 +630,11 @@ Partial Public Class clsCalcSquare45
         'その他の描画パーツ
         imgData.MoveList(imageList描画要素())
 
+        If Not isBackFace Then
+            '付属品
+            AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+        End If
+
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then
             p_sメッセージ = imgData.LastError

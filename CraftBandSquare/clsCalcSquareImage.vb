@@ -133,6 +133,11 @@ Partial Public Class clsCalcSquare
         End If
         imgList差しひも = Nothing
 
+        If Not isBackFace Then
+            '付属品
+            AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+        End If
+
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then
             p_sメッセージ = imgData.LastError

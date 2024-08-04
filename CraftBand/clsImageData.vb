@@ -33,6 +33,9 @@ Public Class clsImageData
         End Get
     End Property
 
+    '中心座標
+    Public Property CenterCoordinates As S実座標
+
 
     Sub New(ByVal fpath As String)
         _FilePath = fpath
@@ -66,6 +69,15 @@ Public Class clsImageData
         End If
     End Sub
 
+    '現clsImageItemが占める領域　_rDrawingRectにセット
+    Function CurrentItemDrawingRect() As S領域
+        _rDrawingRect.Clear()
+        For Each item As clsImageItem In _ImageList
+            _rDrawingRect = _rDrawingRect.get拡大領域(item.Get描画領域)
+        Next
+        Return _rDrawingRect
+    End Function
+
 
     '描画と画像ファイル生成
     Function MakeImage(ByVal outp As clsOutput) As Boolean
@@ -77,16 +89,15 @@ Public Class clsImageData
                 Dim row As tbl縦横展開Row = item.m_row縦横展開
                 If String.IsNullOrEmpty(row.f_s記号) AndAlso
                     0 < row.f_i何本幅 AndAlso 0 < row.f_d出力ひも長 Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "MakeImage: No f_s記号 {0} {1} {2} ", row.f_sひも名, row.f_iひも種, row.f_iひも番号)
                     row.f_s記号 = outp.GetBandMark(row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
                 End If
             End If
         Next
 
-        '最大の描画範囲を得る
-        _rDrawingRect.Clear()
-        For Each item As clsImageItem In _ImageList
-            _rDrawingRect = _rDrawingRect.get拡大領域(item.Get描画領域)
-        Next
+        '最大の描画範囲を_rDrawingRectにセット
+        CurrentItemDrawingRect()
+
         '少し広げる(少なくともバンド幅の2倍分)
         _rDrawingRect.enLarge(mdlUnit.Max(New Length(1, "cm").Value, BasicBandWidth * 2))
 

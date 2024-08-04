@@ -432,6 +432,14 @@ Class clsCalcMesh
 
         Return values
     End Function
+    '横に対する縦の比率
+    Function getAspectRatio() As Double
+        If 0 < p_d外側_最大横 Then
+            Return p_d外側_最大縦 / p_d外側_最大横
+        Else
+            Return 0
+        End If
+    End Function
 
 
     'データ内容

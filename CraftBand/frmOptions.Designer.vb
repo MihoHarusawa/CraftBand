@@ -35,6 +35,7 @@ Partial Class frmOptions
         Dim DataGridViewCellStyle8 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As DataGridViewCellStyle = New DataGridViewCellStyle()
         dgvData = New ctrDataGridView()
         BindingSource付属品 = New BindingSource(components)
         lbl設定時の寸法単位 = New Label()
@@ -59,6 +60,10 @@ Partial Class frmOptions
         f_d巻きの厚み = New DataGridViewTextBoxColumn()
         f_d巻き回数比率 = New DataGridViewTextBoxColumn()
         f_dひも長加算初期値 = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分初期値 = New DataGridViewCheckBoxColumn()
+        f_i描画位置初期値 = New DataGridViewComboBoxColumn()
+        f_i描画形状 = New DataGridViewComboBoxColumn()
+        f_d描画厚初期値 = New DataGridViewTextBoxColumn()
         f_bCraftBandMesh = New DataGridViewCheckBoxColumn()
         f_bCraftBandSquare45 = New DataGridViewCheckBoxColumn()
         f_bCraftBandKnot = New DataGridViewCheckBoxColumn()
@@ -77,7 +82,7 @@ Partial Class frmOptions
         dgvData.AutoGenerateColumns = False
         dgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgvData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvData.Columns.AddRange(New DataGridViewColumn() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
+        dgvData.Columns.AddRange(New DataGridViewColumn() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_b集計対象外区分初期値, f_i描画位置初期値, f_i描画形状, f_d描画厚初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
         dgvData.DataSource = BindingSource付属品
         dgvData.Location = New System.Drawing.Point(12, 32)
         dgvData.Name = "dgvData"
@@ -317,6 +322,48 @@ Partial Class frmOptions
         f_dひも長加算初期値.ToolTipText = "ひも長に手動で加える値の初期値"
         f_dひも長加算初期値.Width = 125
         ' 
+        ' f_b集計対象外区分初期値
+        ' 
+        f_b集計対象外区分初期値.DataPropertyName = "f_b集計対象外区分初期値"
+        f_b集計対象外区分初期値.HeaderText = "集計対象外初期値"
+        f_b集計対象外区分初期値.MinimumWidth = 6
+        f_b集計対象外区分初期値.Name = "f_b集計対象外区分初期値"
+        f_b集計対象外区分初期値.ToolTipText = "「集計対象外」の初期値"
+        f_b集計対象外区分初期値.Width = 125
+        ' 
+        ' f_i描画位置初期値
+        ' 
+        f_i描画位置初期値.DataPropertyName = "f_i描画位置初期値"
+        f_i描画位置初期値.HeaderText = "描画位置初期値"
+        f_i描画位置初期値.MinimumWidth = 6
+        f_i描画位置初期値.Name = "f_i描画位置初期値"
+        f_i描画位置初期値.Resizable = DataGridViewTriState.True
+        f_i描画位置初期値.SortMode = DataGridViewColumnSortMode.Automatic
+        f_i描画位置初期値.ToolTipText = "プレビュー図に描画する場合の位置の初期値"
+        f_i描画位置初期値.Width = 125
+        ' 
+        ' f_i描画形状
+        ' 
+        f_i描画形状.DataPropertyName = "f_i描画形状"
+        f_i描画形状.HeaderText = "描画形状"
+        f_i描画形状.MinimumWidth = 6
+        f_i描画形状.Name = "f_i描画形状"
+        f_i描画形状.Resizable = DataGridViewTriState.True
+        f_i描画形状.SortMode = DataGridViewColumnSortMode.Automatic
+        f_i描画形状.ToolTipText = "プレビュー図に描画する場合の形状"
+        f_i描画形状.Width = 125
+        ' 
+        ' f_d描画厚初期値
+        ' 
+        f_d描画厚初期値.DataPropertyName = "f_d描画厚初期値"
+        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_d描画厚初期値.DefaultCellStyle = DataGridViewCellStyle11
+        f_d描画厚初期値.HeaderText = "描画厚初期値"
+        f_d描画厚初期値.MinimumWidth = 6
+        f_d描画厚初期値.Name = "f_d描画厚初期値"
+        f_d描画厚初期値.ToolTipText = "プレビュー図に描画する場合の厚さの初期値"
+        f_d描画厚初期値.Width = 125
+        ' 
         ' f_bCraftBandMesh
         ' 
         f_bCraftBandMesh.DataPropertyName = "f_bCraftBandMesh"
@@ -432,6 +479,10 @@ Partial Class frmOptions
     Friend WithEvents f_d巻きの厚み As DataGridViewTextBoxColumn
     Friend WithEvents f_d巻き回数比率 As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算初期値 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b集計対象外区分初期値 As DataGridViewCheckBoxColumn
+    Friend WithEvents f_i描画位置初期値 As DataGridViewComboBoxColumn
+    Friend WithEvents f_i描画形状 As DataGridViewComboBoxColumn
+    Friend WithEvents f_d描画厚初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_bCraftBandMesh As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandSquare45 As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandKnot As DataGridViewCheckBoxColumn

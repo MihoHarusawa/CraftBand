@@ -953,6 +953,89 @@ Public Class clsMasterTables
 #End Region
 
 #Region "付属品/Options"
+
+#Region "描画位置と形状"
+
+    Public Enum enum描画位置
+        i_なし = 0
+        i_下部
+        i_中心
+    End Enum
+
+    Public Enum enum描画形状
+        i_バンド = 0
+        i_直線
+        i_正方形_辺
+        i_長方形_横
+        i_円_径
+        i_楕円_横径
+        i_半円_径
+        i_正方形_周
+        i_長方形_周
+        i_円_周
+        i_楕円_周
+        i_半円_周
+    End Enum
+
+    Shared _描画位置table As dstWork.tblEnumDataTable = Nothing
+    Shared _描画形状table As dstWork.tblEnumDataTable = Nothing
+
+    Shared Function get描画位置table() As dstWork.tblEnumDataTable
+        If _描画位置table Is Nothing Then
+            _描画位置table = New dstWork.tblEnumDataTable
+
+            'なし,下部,中心
+            Dim ary() As String = My.Resources.StringDrawPosition.Split(",")
+            If ary IsNot Nothing AndAlso 0 < ary.Count Then
+                For i As Integer = 0 To ary.Count - 1
+                    Dim rc As dstWork.tblEnumRow = _描画位置table.NewRow
+                    rc.Display = ary(i)
+                    rc.Value = i
+                    _描画位置table.Rows.Add(rc)
+                Next
+            End If
+        End If
+        Return _描画位置table
+    End Function
+
+    Shared Function get描画位置string(ByVal ival As Integer) As String
+        Dim table As dstWork.tblEnumDataTable = get描画位置table()
+        Dim rc() As dstWork.tblEnumRow = table.Select(String.Format("Value={0}", ival))
+        If rc IsNot Nothing AndAlso 0 < rc.Count Then
+            Return rc(0).Display
+        End If
+        Return Nothing
+    End Function
+
+    Shared Function get描画形状table() As dstWork.tblEnumDataTable
+        If _描画形状table Is Nothing Then
+            _描画形状table = New dstWork.tblEnumDataTable
+
+            'バンド,直線,正方形(辺),長方形(横),円(径),楕円(横径),半円(径),正方形(周),長方形(周),円(周),楕円(周),半円(周)
+            Dim ary() As String = My.Resources.StringDrawType.Split(",")
+            If ary IsNot Nothing AndAlso 0 < ary.Count Then
+                For i As Integer = 0 To ary.Count - 1
+                    Dim rc As dstWork.tblEnumRow = _描画形状table.NewRow
+                    rc.Display = ary(i)
+                    rc.Value = i
+                    _描画形状table.Rows.Add(rc)
+                Next
+            End If
+
+        End If
+        Return _描画形状table
+    End Function
+
+    Shared Function get描画形状string(ByVal ival As Integer) As String
+        Dim table As dstWork.tblEnumDataTable = get描画形状table()
+        Dim rc() As dstWork.tblEnumRow = table.Select(String.Format("Value={0}", ival))
+        If rc IsNot Nothing AndAlso 0 < rc.Count Then
+            Return rc(0).Display
+        End If
+        Return Nothing
+    End Function
+#End Region
+
     '設定ファイルとして使える状態にする。更新した場合はTrueを返すだけ。_IsDirtyは変えない。
     Private Function SetAvairableOptions() As Boolean
         Dim table As tbl付属品DataTable = _dstMasterTables.Tables("tbl付属品")

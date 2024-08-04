@@ -26,6 +26,14 @@ Public Class frmOptions
         _MyProfile.FormCaption = Me.Text
         dgvData.SetProfile(_MyProfile)
 
+        '選択肢
+        f_i描画位置初期値.DataSource = clsMasterTables.get描画位置table
+        f_i描画位置初期値.DisplayMember = "Display"
+        f_i描画位置初期値.ValueMember = "Value"
+
+        f_i描画形状.DataSource = clsMasterTables.get描画形状table
+        f_i描画形状.DisplayMember = "Display"
+        f_i描画形状.ValueMember = "Value"
 
         For Each col As DataGridViewColumn In dgvData.Columns
             If col.DataPropertyName = "f_s付属品名" Then

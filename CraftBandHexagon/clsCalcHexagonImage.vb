@@ -2981,6 +2981,11 @@ Partial Public Class clsCalcHexagon
         imgData.MoveList(imageList描画要素)
         imageList描画要素 = Nothing
 
+        '付属品
+        If Not isBackFace AndAlso checked.IsSetAll Then
+            AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+        End If
+
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then
             p_sメッセージ = imgData.LastError

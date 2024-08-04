@@ -93,6 +93,14 @@ Public Class ctrAddParts
         f_s色3.DataSource = g_clsSelectBasics.p_tblColor
         f_s色3.DisplayMember = "Display"
         f_s色3.ValueMember = "Value"
+        '
+        f_i描画位置3.DataSource = clsMasterTables.get描画位置table
+        f_i描画位置3.DisplayMember = "Display"
+        f_i描画位置3.ValueMember = "Value"
+
+        f_i描画形状3.DataSource = clsMasterTables.get描画形状table
+        f_i描画形状3.DisplayMember = "Display"
+        f_i描画形状3.ValueMember = "Value"
     End Sub
 
     '長さの参照値名,(0)は共通セット,(1)以上
@@ -393,6 +401,9 @@ Public Class ctrAddParts
             groupRow.SetNameIndexValue("f_b巻きひも区分", grpMst)
             groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
             groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+            groupRow.SetNameIndexValue("f_i描画位置", grpMst, "f_i描画位置初期値")
+            groupRow.SetNameIndexValue("f_d描画厚", grpMst, "f_d描画厚初期値")
+            groupRow.SetNameIndexValue("f_i描画形状", grpMst)
 
             Dim first As Boolean = True
             For Each drow As clsDataRow In groupRow
@@ -496,6 +507,20 @@ Public Class ctrAddParts
                             Else
                                 drow.Value("f_dひも長") = mst.GetBandLength(drow.Value("f_d長さ"))
                             End If
+                            '常にマスタ参照
+                            drow.Value("f_i描画形状") = mst.Value("f_i描画形状")
+
+                            'Ver1.7.3以前のデータ対応
+                            If drow.IsNull("f_d描画厚") Then
+                                drow.Value("f_d描画厚") = mst.Value("f_d描画厚初期値")
+                            End If
+                            If drow.IsNull("f_i描画位置") Then
+                                If g_enumExeName = enumExeName.CraftBandMesh Then
+                                    drow.Value("f_i描画位置") = enum描画位置.i_下部
+                                Else
+                                    drow.Value("f_i描画位置") = enum描画位置.i_なし
+                                End If
+                            End If
                             ok = True
                         End If
                     End If
@@ -503,6 +528,7 @@ Public Class ctrAddParts
                         drow.Value("f_iひも本数") = DBNull.Value
                         drow.Value("f_dひも長") = DBNull.Value
                         drow.Value("f_bError") = True
+                        drow.Value("f_i描画形状") = DBNull.Value
                         '{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。
                         p_sメッセージ = String.Format(My.Resources.CalcNoMasterOption, _Parent._TabPageName, drow.Value("f_i番号"), drow.Value("f_s付属品名"), drow.Value("f_iひも番号"))
                         ret = False

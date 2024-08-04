@@ -433,7 +433,14 @@ Class clsCalcSquare
 
         Return values
     End Function
-
+    '横に対する縦の比率
+    Function getAspectRatio() As Double
+        If 0 < p_d縁厚さプラス_横 Then
+            Return p_d縁厚さプラス_縦 / p_d縁厚さプラス_横
+        Else
+            Return 0
+        End If
+    End Function
 
 
     'データ内容

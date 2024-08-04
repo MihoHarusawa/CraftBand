@@ -1601,7 +1601,7 @@ Public Class clsImageItem
 
         _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域
         _差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
-        _ひも領域   'm_rowData,m_a四隅,_r文字領域             (Squareの差しひも)
+        _ひも領域   'm_rowData,m_a四隅,_r文字領域            (旧Squareの差しひも)
 
         _底の中央線  'm_listLine
 

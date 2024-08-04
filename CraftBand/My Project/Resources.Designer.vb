@@ -987,6 +987,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  なし,下部,中心 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property StringDrawPosition() As String
+            Get
+                Return ResourceManager.GetString("StringDrawPosition", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  バンド,直線,正方形(辺),長方形(横),円(径),楕円(横径),半円(径),正方形(周),長方形(周),円(周),楕円(周),半円(周) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property StringDrawType() As String
+            Get
+                Return ResourceManager.GetString("StringDrawType", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  裏面 : {0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleBackFace() As String

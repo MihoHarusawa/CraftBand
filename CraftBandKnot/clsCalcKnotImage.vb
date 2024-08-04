@@ -679,6 +679,9 @@ Partial Public Class clsCalcKnot
         imgData.MoveList(_ImageList開始位置)
         _ImageList開始位置 = Nothing
 
+        '付属品
+        AddPartsImage(imgData, _Data.p_tbl追加品, getAspectRatio())
+
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then
             p_sメッセージ = imgData.LastError
