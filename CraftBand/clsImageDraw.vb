@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
+Imports System.IO
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -941,13 +942,6 @@ Public Class CImageDraw
             Return False
         End If
 
-        '付属品の領域
-        'Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        'If colset.BrushAlfa IsNot Nothing Then
-        '    _Graphic.FillPolygon(colset.BrushAlfa, points)
-        'End If
-        '_Graphic.DrawLines(colset.PenBand, points)
-
         Dim ret As Boolean = True
         Select Case item.m_row追加品.f_i描画形状
             Case enum描画形状.i_横バンド
@@ -955,7 +949,7 @@ Public Class CImageDraw
                 band.SetBandF(New S線分(item.m_rひも位置.p左下, item.m_rひも位置.p右下), item.m_dひも幅, Unit90)
                 ret = drawバンド(band)
 
-            Case enum描画形状.i_横線
+            Case enum描画形状.i_横四角
 
                 Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
                 If 0 < item.m_dひも幅 Then
@@ -1023,6 +1017,38 @@ Public Class CImageDraw
 
             Case enum描画形状.i_上半円_径, enum描画形状.i_上半円_周
 
+                Dim r円 As S領域 = item.m_rひも位置 '上半分
+                r円.y最下 -= r円.y高さ
+
+                If 0 < item.m_dひも幅 AndAlso item.m_dひも幅 < r円.x幅 AndAlso item.m_dひも幅 < r円.y高さ Then
+                    Dim r外 As S領域 = r円.get拡大領域(item.m_dひも幅 / 2)
+                    Dim r内 As S領域 = r円.get拡大領域(-item.m_dひも幅 / 2)
+                    Dim rect外 As RectangleF = pixcel_rectangle(r外)
+                    Dim rect内 As RectangleF = pixcel_rectangle(r内)
+
+                    If colset.BrushAlfa IsNot Nothing Then
+                        Dim path As New GraphicsPath()
+                        path.AddArc(rect外, 180, 180)
+                        path.AddArc(rect内, 180, 180)
+                        path.FillMode = FillMode.Alternate
+                        _Graphic.FillPath(colset.BrushAlfa, path)
+                    End If
+                    If colset.PenBand IsNot Nothing Then
+                        Dim path外 As New GraphicsPath()
+                        path外.AddArc(rect外, 180, 180)
+                        path外.FillMode = FillMode.Alternate
+                        _Graphic.DrawPath(colset.PenBand, path外)
+                        Dim path内 As New GraphicsPath()
+                        path内.AddArc(rect内, 180, 180)
+                        path内.FillMode = FillMode.Alternate
+                        _Graphic.DrawPath(colset.PenBand, path内)
+                    End If
+                Else
+                    Dim rect As RectangleF = pixcel_rectangle(r円)
+                    If colset.PenBand IsNot Nothing Then
+                        _Graphic.DrawArc(colset.PenBand, rect, 180, 180)
+                    End If
+                End If
 
 
         End Select

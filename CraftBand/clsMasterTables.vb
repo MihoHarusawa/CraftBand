@@ -964,7 +964,7 @@ Public Class clsMasterTables
 
     Public Enum enum描画形状
         i_横バンド = 0
-        i_横線
+        i_横四角
         i_正方形_辺
         i_長方形_横
         i_円_径
@@ -975,6 +975,8 @@ Public Class clsMasterTables
         i_円_周
         i_楕円_周
         i_上半円_周
+        i_横線
+        i_縦線
     End Enum
 
     Shared _描画位置table As dstWork.tblEnumDataTable = Nothing

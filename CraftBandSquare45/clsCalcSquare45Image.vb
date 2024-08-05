@@ -590,6 +590,9 @@ Partial Public Class clsCalcSquare45
             Return False
         End If
 
+        '原点
+        imgData.CenterCoordinates = _a底領域.p中央
+
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
         If Not CalcOutput(outp) Then

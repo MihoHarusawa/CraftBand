@@ -420,6 +420,7 @@ Public Class ctrAddParts
             groupRow.SetNameIndexValue("f_i描画位置", grpMst, "f_i描画位置初期値")
             groupRow.SetNameIndexValue("f_d描画厚", grpMst, "f_d描画厚初期値")
             groupRow.SetNameIndexValue("f_i描画形状", grpMst)
+            groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
             Dim first As Boolean = True
             For Each drow As clsDataRow In groupRow
