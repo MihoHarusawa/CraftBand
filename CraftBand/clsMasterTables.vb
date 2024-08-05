@@ -960,6 +960,7 @@ Public Class clsMasterTables
         i_なし = 0
         i_左下
         i_中心
+
     End Enum
 
     Public Enum enum描画形状

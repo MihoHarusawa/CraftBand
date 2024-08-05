@@ -1771,9 +1771,11 @@ Namespace Tables
             
             Private columnf_i描画形状 As Global.System.Data.DataColumn
             
-            Private columnf_i描画位置初期値 As Global.System.Data.DataColumn
+            Private columnf_i描画位置 As Global.System.Data.DataColumn
             
             Private columnf_d描画厚初期値 As Global.System.Data.DataColumn
+            
+            Private columnf_b描画区分初期値 As Global.System.Data.DataColumn
             
             Private columnf_bCraftBandMesh As Global.System.Data.DataColumn
             
@@ -1944,9 +1946,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property f_i描画位置初期値Column() As Global.System.Data.DataColumn
+            Public ReadOnly Property f_i描画位置Column() As Global.System.Data.DataColumn
                 Get
-                    Return Me.columnf_i描画位置初期値
+                    Return Me.columnf_i描画位置
                 End Get
             End Property
             
@@ -1955,6 +1957,14 @@ Namespace Tables
             Public ReadOnly Property f_d描画厚初期値Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_d描画厚初期値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b描画区分初期値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b描画区分初期値
                 End Get
             End Property
             
@@ -2059,8 +2069,9 @@ Namespace Tables
                         ByVal f_dひも長加算初期値 As Double,  _
                         ByVal f_b集計対象外区分初期値 As Boolean,  _
                         ByVal f_i描画形状 As Short,  _
-                        ByVal f_i描画位置初期値 As Short,  _
+                        ByVal f_i描画位置 As Short,  _
                         ByVal f_d描画厚初期値 As Double,  _
+                        ByVal f_b描画区分初期値 As Boolean,  _
                         ByVal f_bCraftBandMesh As Boolean,  _
                         ByVal f_bCraftBandSquare45 As Boolean,  _
                         ByVal f_bCraftBandKnot As Boolean,  _
@@ -2068,7 +2079,7 @@ Namespace Tables
                         ByVal f_bCraftBandHexagon As Boolean,  _
                         ByVal f_s備考 As String) As tbl付属品Row
                 Dim rowtbl付属品Row As tbl付属品Row = CType(Me.NewRow,tbl付属品Row)
-                Dim columnValuesArray() As Object = New Object() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_b集計対象外区分初期値, f_i描画形状, f_i描画位置初期値, f_d描画厚初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_b集計対象外区分初期値, f_i描画形状, f_i描画位置, f_d描画厚初期値, f_b描画区分初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
                 rowtbl付属品Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl付属品Row)
                 Return rowtbl付属品Row
@@ -2112,8 +2123,9 @@ Namespace Tables
                 Me.columnf_dひも長加算初期値 = MyBase.Columns("f_dひも長加算初期値")
                 Me.columnf_b集計対象外区分初期値 = MyBase.Columns("f_b集計対象外区分初期値")
                 Me.columnf_i描画形状 = MyBase.Columns("f_i描画形状")
-                Me.columnf_i描画位置初期値 = MyBase.Columns("f_i描画位置初期値")
+                Me.columnf_i描画位置 = MyBase.Columns("f_i描画位置")
                 Me.columnf_d描画厚初期値 = MyBase.Columns("f_d描画厚初期値")
+                Me.columnf_b描画区分初期値 = MyBase.Columns("f_b描画区分初期値")
                 Me.columnf_bCraftBandMesh = MyBase.Columns("f_bCraftBandMesh")
                 Me.columnf_bCraftBandSquare45 = MyBase.Columns("f_bCraftBandSquare45")
                 Me.columnf_bCraftBandKnot = MyBase.Columns("f_bCraftBandKnot")
@@ -2155,10 +2167,12 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_b集計対象外区分初期値)
                 Me.columnf_i描画形状 = New Global.System.Data.DataColumn("f_i描画形状", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i描画形状)
-                Me.columnf_i描画位置初期値 = New Global.System.Data.DataColumn("f_i描画位置初期値", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
-                MyBase.Columns.Add(Me.columnf_i描画位置初期値)
+                Me.columnf_i描画位置 = New Global.System.Data.DataColumn("f_i描画位置", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i描画位置)
                 Me.columnf_d描画厚初期値 = New Global.System.Data.DataColumn("f_d描画厚初期値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d描画厚初期値)
+                Me.columnf_b描画区分初期値 = New Global.System.Data.DataColumn("f_b描画区分初期値", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b描画区分初期値)
                 Me.columnf_bCraftBandMesh = New Global.System.Data.DataColumn("f_bCraftBandMesh", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_bCraftBandMesh)
                 Me.columnf_bCraftBandSquare45 = New Global.System.Data.DataColumn("f_bCraftBandSquare45", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
@@ -2190,8 +2204,9 @@ Namespace Tables
                 Me.columnf_dひも長加算初期値.DefaultValue = CType(0R,Double)
                 Me.columnf_b集計対象外区分初期値.DefaultValue = CType(false,Boolean)
                 Me.columnf_i描画形状.DefaultValue = CType(0,Short)
-                Me.columnf_i描画位置初期値.DefaultValue = CType(0,Short)
+                Me.columnf_i描画位置.DefaultValue = CType(0,Short)
                 Me.columnf_d描画厚初期値.DefaultValue = CType(0R,Double)
+                Me.columnf_b描画区分初期値.DefaultValue = CType(false,Boolean)
                 Me.columnf_bCraftBandMesh.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandSquare45.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandKnot.DefaultValue = CType(true,Boolean)
@@ -5221,16 +5236,16 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_i描画位置初期値() As Short
+            Public Property f_i描画位置() As Short
                 Get
-                    If Me.Isf_i描画位置初期値Null Then
+                    If Me.Isf_i描画位置Null Then
                         Return 0
                     Else
-                        Return CType(Me(Me.tabletbl付属品.f_i描画位置初期値Column),Short)
+                        Return CType(Me(Me.tabletbl付属品.f_i描画位置Column),Short)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletbl付属品.f_i描画位置初期値Column) = value
+                    Me(Me.tabletbl付属品.f_i描画位置Column) = value
                 End Set
             End Property
             
@@ -5246,6 +5261,21 @@ Namespace Tables
                 End Get
                 Set
                     Me(Me.tabletbl付属品.f_d描画厚初期値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b描画区分初期値() As Boolean
+                Get
+                    If Me.Isf_b描画区分初期値Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl付属品.f_b描画区分初期値Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl付属品.f_b描画区分初期値Column) = value
                 End Set
             End Property
             
@@ -5485,14 +5515,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function Isf_i描画位置初期値Null() As Boolean
-                Return Me.IsNull(Me.tabletbl付属品.f_i描画位置初期値Column)
+            Public Function Isf_i描画位置Null() As Boolean
+                Return Me.IsNull(Me.tabletbl付属品.f_i描画位置Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub Setf_i描画位置初期値Null()
-                Me(Me.tabletbl付属品.f_i描画位置初期値Column) = Global.System.Convert.DBNull
+            Public Sub Setf_i描画位置Null()
+                Me(Me.tabletbl付属品.f_i描画位置Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -5505,6 +5535,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_d描画厚初期値Null()
                 Me(Me.tabletbl付属品.f_d描画厚初期値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b描画区分初期値Null() As Boolean
+                Return Me.IsNull(Me.tabletbl付属品.f_b描画区分初期値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b描画区分初期値Null()
+                Me(Me.tabletbl付属品.f_b描画区分初期値Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

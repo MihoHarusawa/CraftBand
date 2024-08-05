@@ -877,6 +877,7 @@ Public Class frmMain
     '編みかた
     Private Sub ToolStripMenuItemSettingPattern_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingPattern.Click
         Dim dlg As New frmPattern
+        ShowDefaultTabControlPage(enumReason._Preview) '描画変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
             setPattern()
@@ -887,6 +888,7 @@ Public Class frmMain
     '付属品
     Private Sub ToolStripMenuItemSettingOptions_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingOptions.Click
         Dim dlg As New frmOptions
+        ShowDefaultTabControlPage(enumReason._Preview) '描画変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
             SaveTables(_clsDataTables)
             'setOptions()

@@ -9,6 +9,7 @@ Public Module mdlAddPartsImage
         If imgData Is Nothing OrElse editAddParts Is Nothing Then
             Return -1
         End If
+        'i番号,iひも番号順
         Dim rows() As tbl追加品Row = editAddParts.GetAddPartsRecords()
         If rows.Count = 0 Then
             Return 0
@@ -32,9 +33,21 @@ Public Module mdlAddPartsImage
             Dim i点数 As Integer = rows(imain).f_i点数 '一致項目・最初のレコード値
 
             '同じi番号の範囲
+            Dim isDraw As Boolean = False '描画指定あり
+            Dim isCenter As Boolean = False '最初の指定
+
             Dim iFrom As Integer = imain
-            Dim iTo As Integer = imain
-            For j As Integer = imain + 1 To rows.Count - 1
+            Dim iTo As Integer
+            For j As Integer = imain To rows.Count - 1
+                If Not isDraw Then
+                    If rows(j).f_i描画位置 = enum描画位置.i_中心 Then
+                        isCenter = True
+                        isDraw = True
+                    ElseIf rows(j).f_i描画位置 = enum描画位置.i_左下 Then
+                        'isCenter = False
+                        isDraw = True
+                    End If
+                End If
                 If rows(j).f_i番号 = rows(imain).f_i番号 Then
                     iTo = j
                 Else
@@ -42,75 +55,75 @@ Public Module mdlAddPartsImage
                 End If
             Next
 
-            '点数分を繰り返す
-            For iset As Integer = 1 To i点数
-                For isub As Integer = iFrom To iTo
-                    Dim row As tbl追加品Row = rows(isub)
+            '描画指定されている場合
+            If isDraw AndAlso rows(iFrom).f_b描画区分 AndAlso 0 < i点数 Then
+                '点数分を繰り返す
+                For iset As Integer = 1 To i点数
+                    '各、iひも番号
+                    For isub As Integer = iFrom To iTo
+                        Dim row As tbl追加品Row = rows(isub)
 
-                    If row.f_d長さ <= 0 Then
-                        Continue For
-                    End If
-
-                    Dim isCenter As Boolean = False
-                    If row.f_i描画位置 = enum描画位置.i_中心 Then
-                        isCenter = True
-                    ElseIf row.f_i描画位置 = enum描画位置.i_左下 Then
-                        '
-                    Else
-                        Continue For
-                    End If
-
-                    '文字位置
-                    Dim isMark As Boolean = iset = 1 AndAlso Not String.IsNullOrWhiteSpace(row.f_s記号)
-
-                    Select Case row.f_i描画形状
-                        Case enum描画形状.i_横バンド
-                            count += add_横バンド(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_横四角
-                            count += add_横四角(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_正方形_辺
-                            count += add_正方形_辺(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_長方形_横
-                            count += add_長方形_横(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_正方形_周
-                            count += add_正方形_周(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_長方形_周
-                            count += add_長方形_周(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_円_径
-                            count += add_円_径(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_楕円_横径
-                            count += add_楕円_横径(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_円_周
-                            count += add_円_周(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_楕円_周
-                            count += add_楕円_周(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_上半円_径
-                            count += add_上半円_径(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_上半円_周
-                            count += add_上半円_周(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_横線
-                            count += add_横線(itemlist, isCenter, isMark, row)
-
-                        Case enum描画形状.i_縦線
-                            count += add_縦線(itemlist, isCenter, isMark, row)
-
-                        Case Else
+                        If row.f_d長さ <= 0 OrElse row.f_i描画位置 = enum描画位置.i_なし Then
                             Continue For
-                    End Select
+                        End If
+                        'i_なし でなければ、最初のレコード位置(中心/左下)
+
+                        '文字位置
+                        Dim isMark As Boolean = (iset = 1 AndAlso Not String.IsNullOrWhiteSpace(row.f_s記号))
+
+                        Select Case row.f_i描画形状
+                            Case enum描画形状.i_横バンド
+                                count += add_横バンド(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_横四角
+                                count += add_横四角(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_正方形_辺
+                                count += add_正方形_辺(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_長方形_横
+                                count += add_長方形_横(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_正方形_周
+                                count += add_正方形_周(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_長方形_周
+                                count += add_長方形_周(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_円_径
+                                count += add_円_径(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_楕円_横径
+                                count += add_楕円_横径(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_円_周
+                                count += add_円_周(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_楕円_周
+                                count += add_楕円_周(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_上半円_径
+                                count += add_上半円_径(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_上半円_周
+                                count += add_上半円_周(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_横線
+                                count += add_横線(itemlist, isCenter, isMark, row)
+
+                            Case enum描画形状.i_縦線
+                                count += add_縦線(itemlist, isCenter, isMark, row)
+
+                            Case Else
+                                Continue For
+                        End Select
+                    Next
+
+                    If isCenter Then
+                        Exit For '中心は1回だけ
+                    End If
                 Next
-            Next
+            End If
 
             imain = iTo + 1
         Loop
@@ -124,9 +137,9 @@ Public Module mdlAddPartsImage
     End Function
 
 
-    Dim _p左下 As S実座標
-    Dim _p中心 As S実座標
     Dim _dAspectRatio As Double
+    Dim _p中心 As S実座標
+    Dim _p左下 As S実座標
 
     Private Function add_横バンド(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
         Dim count As Integer = 0
@@ -502,18 +515,22 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        Dim i本数 As Integer = 1
-        Dim d幅 As Double = row.f_d描画厚
+        Dim i本数 As Integer = row.f_iひも本数 / row.f_i点数 'マスターのひも数
+
+        If row.f_d描画厚 = 0 Then
+            i本数 = 1
+        End If
+        Dim d長さ As Double = row.f_d長さ
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-
+                item.m_rひも位置.p左下 = New S実座標(_p中心.X - d長さ / 2, _p中心.Y + (i - 1) * row.f_d描画厚)
+                item.m_rひも位置.p右上 = New S実座標(_p中心.X + d長さ / 2, _p中心.Y + (i - 1) * row.f_d描画厚)
             Else
-
-                _p左下.Y -= d幅 * 2
+                item.m_rひも位置.p左下 = New S実座標(_p左下.X, _p左下.Y - (i - 1) * row.f_d描画厚)
+                item.m_rひも位置.p右上 = New S実座標(_p左下.X + d長さ, _p左下.Y - (i - 1) * row.f_d描画厚)
             End If
-            item.m_dひも幅 = d幅
 
             If isMark AndAlso i = 1 Then
                 item.p_p文字位置 = item.m_rひも位置.p右上
@@ -521,6 +538,9 @@ Public Module mdlAddPartsImage
             itemlist.AddItem(item)
             count += 1
         Next
+        If Not isCenter Then
+            _p左下.Y -= i本数 * row.f_d描画厚
+        End If
         Return count
     End Function
 
@@ -528,18 +548,21 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        Dim i本数 As Integer = IIf(isCenter, 1, row.f_iひも本数 / row.f_i点数)
-        Dim d幅 As Double = row.f_d描画厚
+        Dim i本数 As Integer = row.f_iひも本数 / row.f_i点数 'マスターのひも数
+        If row.f_d描画厚 = 0 Then
+            i本数 = 1
+        End If
+        Dim d長さ As Double = row.f_d長さ
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-
+                item.m_rひも位置.p左下 = New S実座標(_p中心.X + (i - 1) * row.f_d描画厚, _p中心.Y - d長さ / 2)
+                item.m_rひも位置.p右上 = New S実座標(_p中心.X + (i - 1) * row.f_d描画厚, _p中心.Y + d長さ / 2)
             Else
-
-                _p左下.Y -= d幅 * 2
+                item.m_rひも位置.p左下 = New S実座標(_p左下.X + (i - 1) * row.f_d描画厚, _p左下.Y - d長さ)
+                item.m_rひも位置.p右上 = New S実座標(_p左下.X + (i - 1) * row.f_d描画厚, _p左下.Y)
             End If
-            item.m_dひも幅 = d幅
 
             If isMark AndAlso i = 1 Then
                 item.p_p文字位置 = item.m_rひも位置.p右上
@@ -547,6 +570,10 @@ Public Module mdlAddPartsImage
             itemlist.AddItem(item)
             count += 1
         Next
+        If Not isCenter Then
+            _p左下.Y -= d長さ
+        End If
+
         Return count
     End Function
 

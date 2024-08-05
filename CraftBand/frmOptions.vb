@@ -27,9 +27,9 @@ Public Class frmOptions
         dgvData.SetProfile(_MyProfile)
 
         '選択肢
-        f_i描画位置初期値.DataSource = clsMasterTables.get描画位置table
-        f_i描画位置初期値.DisplayMember = "Display"
-        f_i描画位置初期値.ValueMember = "Value"
+        f_i描画位置.DataSource = clsMasterTables.get描画位置table
+        f_i描画位置.DisplayMember = "Display"
+        f_i描画位置.ValueMember = "Value"
 
         f_i描画形状.DataSource = clsMasterTables.get描画形状table
         f_i描画形状.DisplayMember = "Display"

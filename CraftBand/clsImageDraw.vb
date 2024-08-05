@@ -1050,11 +1050,19 @@ Public Class CImageDraw
                     End If
                 End If
 
+            Case enum描画形状.i_横線
+                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                If colset.PenBand IsNot Nothing Then
+                    _Graphic.DrawLine(colset.PenBand, New Point(rect.Left, rect.Top), New Point(rect.Right, rect.Top))
+                End If
+
+            Case enum描画形状.i_縦線
+                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                If colset.PenBand IsNot Nothing Then
+                    _Graphic.DrawLine(colset.PenBand, New Point(rect.Left, rect.Top), New Point(rect.Left, rect.Bottom))
+                End If
 
         End Select
-
-
-
 
         '付属品名
         If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then

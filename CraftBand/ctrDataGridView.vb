@@ -239,7 +239,8 @@ Public Class ctrDataGridView
         If _Profile.Actions.HasFlag(enumAction._CheckBoxGray_iひも番号) AndAlso 0 <= _ColIndexひも番号 Then
             '処理対象チェックボックス列
             If (TypeOf Me.Columns(e.ColumnIndex) IsNot DataGridViewCheckBoxColumn) OrElse
-              Not {"f_b縁専用区分", "f_b底使用区分", "f_bCraftBandMesh", "f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare", "f_bCraftBandHexagon"}.Contains(Me.Columns(e.ColumnIndex).DataPropertyName) Then
+              Not {"f_b縁専用区分", "f_b底使用区分", "f_bCraftBandMesh", "f_bCraftBandSquare45", "f_bCraftBandKnot", "f_bCraftBandSquare", "f_bCraftBandHexagon",
+              "f_b描画区分", "f_b描画区分初期値"}.Contains(Me.Columns(e.ColumnIndex).DataPropertyName) Then
                 Exit Sub
             End If
 

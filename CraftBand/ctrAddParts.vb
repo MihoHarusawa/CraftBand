@@ -248,7 +248,7 @@ Public Class ctrAddParts
     Dim _Profile_追加品 As New CDataGridViewProfile(
             (New tbl追加品DataTable),
             Nothing,
-            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
+            enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号 Or enumAction._CheckBoxGray_iひも番号
             )
 
     Private Sub ctrAddParts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -417,9 +417,8 @@ Public Class ctrAddParts
             groupRow.SetNameIndexValue("f_b巻きひも区分", grpMst)
             groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
             groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
-            groupRow.SetNameIndexValue("f_i描画位置", grpMst, "f_i描画位置初期値")
+            groupRow.SetNameIndexValue("f_b描画区分", grpMst, "f_b描画区分初期値")
             groupRow.SetNameIndexValue("f_d描画厚", grpMst, "f_d描画厚初期値")
-            groupRow.SetNameIndexValue("f_i描画形状", grpMst)
             groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
             Dim first As Boolean = True
@@ -526,17 +525,14 @@ Public Class ctrAddParts
                             End If
                             '常にマスタ参照
                             drow.Value("f_i描画形状") = mst.Value("f_i描画形状")
+                            drow.Value("f_i描画位置") = mst.Value("f_i描画位置")
 
                             'Ver1.7.3以前のデータ対応
                             If drow.IsNull("f_d描画厚") Then
                                 drow.Value("f_d描画厚") = mst.Value("f_d描画厚初期値")
                             End If
-                            If drow.IsNull("f_i描画位置") Then
-                                If g_enumExeName = enumExeName.CraftBandMesh Then
-                                    drow.Value("f_i描画位置") = enum描画位置.i_左下
-                                Else
-                                    drow.Value("f_i描画位置") = enum描画位置.i_なし
-                                End If
+                            If drow.IsNull("f_b描画区分") Then
+                                drow.Value("f_b描画区分") = (g_enumExeName = enumExeName.CraftBandMesh)
                             End If
                             ok = True
                         End If
