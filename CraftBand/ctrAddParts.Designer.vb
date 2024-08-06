@@ -32,6 +32,7 @@ Partial Class ctrAddParts
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Panel = New Windows.Forms.Panel()
         lbl長さ_単位 = New Windows.Forms.Label()
         nud長さ = New Windows.Forms.NumericUpDown()
@@ -437,6 +438,8 @@ Partial Class ctrAddParts
         ' f_d描画厚3
         ' 
         f_d描画厚3.DataPropertyName = "f_d描画厚"
+        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_d描画厚3.DefaultCellStyle = DataGridViewCellStyle10
         f_d描画厚3.HeaderText = "描画厚"
         f_d描画厚3.MinimumWidth = 6
         f_d描画厚3.Name = "f_d描画厚3"
