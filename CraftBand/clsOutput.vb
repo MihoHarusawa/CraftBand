@@ -283,14 +283,14 @@ Public Class clsOutput
             _CurrentRow.f_i周数 = r.f_i点数
             _CurrentRow.f_s長さ = outLengthText(r.f_d長さ)
             If 0 < r.f_iひも本数 AndAlso Not r.f_b集計対象外区分 Then
-                r.f_s記号 = SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+                r.f_s記号 = SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
             Else
                 r.f_s記号 = ""
 
                 _CurrentRow.f_s記号 = editAddParts.text集計対象外()
                 _CurrentRow.f_s本幅 = outLaneText(r.f_i何本幅)
                 _CurrentRow.f_sひも本数 = outCountText(r.f_iひも本数)
-                _CurrentRow.f_sひも長 = outLengthText(r.f_dひも長 + r.f_dひも長加算)
+                _CurrentRow.f_sひも長 = outLengthText(r.f_d出力ひも長)
                 _CurrentRow.f_s色 = r.f_s色
             End If
             _CurrentRow.f_sメモ = r.f_sメモ

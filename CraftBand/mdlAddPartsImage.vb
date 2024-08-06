@@ -169,9 +169,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
         Dim d幅 As Double = row.f_d描画厚
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
@@ -201,9 +201,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d辺 As Double = d長さ
         For i As Integer = 1 To i本数
@@ -239,7 +239,7 @@ Public Module mdlAddPartsImage
         Dim item As clsImageItem
 
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d横 As Double = d長さ
         Dim d縦 As Double = d長さ * _dAspectRatio
@@ -271,9 +271,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d辺 As Double = d長さ / 4
         For i As Integer = 1 To i本数
@@ -308,9 +308,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d横 As Double = d長さ / (2 + 2 * _dAspectRatio)
         Dim d縦 As Double = d横 * _dAspectRatio
@@ -342,9 +342,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d径 As Double = d長さ
         For i As Integer = 1 To i本数
@@ -379,9 +379,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d横径 As Double = d長さ
         Dim d縦径 As Double = d横径 * _dAspectRatio
@@ -413,9 +413,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d径 As Double = d長さ / Math.PI
         For i As Integer = 1 To i本数
@@ -447,12 +447,12 @@ Public Module mdlAddPartsImage
             Return 0
         End If
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim count As Integer = 0
         Dim item As clsImageItem
 
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d As Double = 1 / _dAspectRatio
         Dim ph As Double = Math.PI * (3 * (d + 1) - Math.Sqrt((3 * d + 1) * (d + 3)))
@@ -486,9 +486,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d径 As Double = d長さ
         For i As Integer = 1 To i本数
@@ -519,9 +519,9 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
+        '左下・中心: 1点,長さ/出力ひも長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d径 As Double = d長さ * 2 / Math.PI
         For i As Integer = 1 To i本数
@@ -559,8 +559,8 @@ Public Module mdlAddPartsImage
         If Not isCenter Then
             i本数 = i本数 / row.f_i点数 'マスターのひも数
         End If
-        '線の長さは、長さ/集計対象外時はひも出力長
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        '線の長さは、長さ/集計対象外時は出力ひも長
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
@@ -600,8 +600,8 @@ Public Module mdlAddPartsImage
         If Not isCenter Then
             i本数 = i本数 / row.f_i点数 'マスターのひも数
         End If
-        '線の長さは、長さ/集計対象外時はひも出力長
-        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+        '線の長さは、長さ/集計対象外時は出力ひも長
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)

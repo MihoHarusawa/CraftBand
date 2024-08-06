@@ -83,17 +83,17 @@ Public Class clsImageData
     Function MakeImage(ByVal outp As clsOutput) As Boolean
         _clsOutput = outp
 
-        'ひもに記号を振る(縦横展開テーブルを作り直した時用)
-        For Each item As clsImageItem In _ImageList
-            If item.m_row縦横展開 IsNot Nothing Then
-                Dim row As tbl縦横展開Row = item.m_row縦横展開
-                If String.IsNullOrEmpty(row.f_s記号) AndAlso
-                    0 < row.f_i何本幅 AndAlso 0 < row.f_d出力ひも長 Then
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "MakeImage: No f_s記号 {0} {1} {2} ", row.f_sひも名, row.f_iひも種, row.f_iひも番号)
-                    row.f_s記号 = outp.GetBandMark(row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
-                End If
-            End If
-        Next
+        ''ひもに記号を振る(縦横展開テーブルを作り直した時用)
+        'For Each item As clsImageItem In _ImageList
+        '    If item.m_row縦横展開 IsNot Nothing Then
+        '        Dim row As tbl縦横展開Row = item.m_row縦横展開
+        '        If String.IsNullOrEmpty(row.f_s記号) AndAlso
+        '            0 < row.f_i何本幅 AndAlso 0 < row.f_d出力ひも長 Then
+        '            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "MakeImage: No f_s記号 {0} {1} {2} ", row.f_sひも名, row.f_iひも種, row.f_iひも番号)
+        '            row.f_s記号 = outp.GetBandMark(row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
+        '        End If
+        '    End If
+        'Next
 
         '最大の描画範囲を_rDrawingRectにセット
         CurrentItemDrawingRect()

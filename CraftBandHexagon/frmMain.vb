@@ -305,6 +305,8 @@ Public Class frmMain
     Enum enumReason
         _GridDropdown = &H1
         _Preview = &H2
+        _Pattern = &H4
+        _Option = &H8
         _Always = &H100 '#41
     End Enum
     Private Sub ShowDefaultTabControlPage(ByVal reason As enumReason)
@@ -312,13 +314,23 @@ Public Class frmMain
             Exit Sub
         End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
-        If reason.HasFlag(enumReason._GridDropdown) Then
+        If Not needreset AndAlso reason.HasFlag(enumReason._GridDropdown) Then
             If {tpage側面と縁.Name, tpage差しひも.Name, tpage追加品.Name, tpage横ひも.Name, tpage斜め120度.Name, tpage斜め60度.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
-        If reason.HasFlag(enumReason._Preview) Then
+        If Not needreset AndAlso reason.HasFlag(enumReason._Preview) Then
             If {tpageプレビュー.Name}.Contains(_CurrentTabControlName) Then
+                needreset = True
+            End If
+        End If
+        If Not needreset AndAlso reason.HasFlag(enumReason._Pattern) Then
+            If {tpageプレビュー.Name, tpage側面と縁.Name}.Contains(_CurrentTabControlName) Then
+                needreset = True
+            End If
+        End If
+        If Not needreset AndAlso reason.HasFlag(enumReason._Option) Then
+            If {tpageプレビュー.Name, tpage追加品.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -877,8 +889,8 @@ Public Class frmMain
     '編みかた
     Private Sub ToolStripMenuItemSettingPattern_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingPattern.Click
         Dim dlg As New frmPattern
-        ShowDefaultTabControlPage(enumReason._Preview) '描画変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
+            ShowDefaultTabControlPage(enumReason._Pattern)
             SaveTables(_clsDataTables)
             setPattern()
             recalc(CalcCategory.BsMaster)
@@ -888,8 +900,8 @@ Public Class frmMain
     '付属品
     Private Sub ToolStripMenuItemSettingOptions_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingOptions.Click
         Dim dlg As New frmOptions
-        ShowDefaultTabControlPage(enumReason._Preview) '描画変更の可能性
         If dlg.ShowDialog() = DialogResult.OK Then
+            ShowDefaultTabControlPage(enumReason._Option)
             SaveTables(_clsDataTables)
             'setOptions()
             recalc(CalcCategory.BsMaster)
@@ -899,8 +911,8 @@ Public Class frmMain
     '描画色
     Private Sub ToolStripMenuItemSettingColor_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSettingColor.Click
         Dim dlg As New frmColor
-        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色にかかわるため
         If dlg.ShowDialog() = DialogResult.OK Then
+            ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '色にかかわるため
             'プレビュー以外は関係なし
         End If
     End Sub

@@ -65,6 +65,7 @@ Public Class ctrAddParts
             nud長さ.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             Me.f_d長さ3.DefaultCellStyle.Format = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
             Me.f_dひも長3.DefaultCellStyle.Format = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
+            Me.f_d出力ひも長3.DefaultCellStyle.Format = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
         End With
     End Sub
 
@@ -435,7 +436,7 @@ Public Class ctrAddParts
         End Function
 
         '更新処理が必要なフィールド名
-        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ", "f_i長さ参照"}
+        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ", "f_i長さ参照", "f_dひも長加算"}
         Function IsDataPropertyName追加品(ByVal name As String) As Boolean
             Return _fields追加品.Contains(name)
         End Function
@@ -491,6 +492,7 @@ Public Class ctrAddParts
                 'なし
                 groupRow.SetNameValue("f_dひも長", DBNull.Value)
                 groupRow.SetNameValue("f_iひも本数", DBNull.Value)
+                groupRow.SetNameValue("f_d出力ひも長", DBNull.Value)
                 groupRow.SetNameValue("f_bError", True)
                 '{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。
                 p_sメッセージ = String.Format(My.Resources.CalcNoMasterOption, _Parent._TabPageName, groupRow.GetNameValue("f_i番号"), groupRow.GetNameValue("f_s付属品名"), groupRow.GetNameValue("f_iひも番号"))
@@ -523,6 +525,8 @@ Public Class ctrAddParts
                             Else
                                 drow.Value("f_dひも長") = mst.GetBandLength(drow.Value("f_d長さ"))
                             End If
+                            drow.Value("f_d出力ひも長") = drow.Value("f_dひも長") + drow.Value("f_dひも長加算")
+
                             '常にマスタ参照
                             drow.Value("f_i描画形状") = mst.Value("f_i描画形状")
                             drow.Value("f_i描画位置") = mst.Value("f_i描画位置")
@@ -540,6 +544,7 @@ Public Class ctrAddParts
                     If Not ok Then
                         drow.Value("f_iひも本数") = DBNull.Value
                         drow.Value("f_dひも長") = DBNull.Value
+                        drow.Value("f_d出力ひも長") = DBNull.Value
                         drow.Value("f_bError") = True
                         drow.Value("f_i描画形状") = DBNull.Value
                         '{0}の番号{1}で設定にない付属品名'{2}'(ひも番号{3})が参照されています。
