@@ -33,20 +33,12 @@ Public Module mdlAddPartsImage
             Dim i点数 As Integer = rows(imain).f_i点数 '一致項目・最初のレコード値
 
             '同じi番号の範囲
-            Dim isDraw As Boolean = False '描画指定あり
-            Dim isCenter As Boolean = False '最初の指定
-
+            Dim first描画位置 As enum描画位置 = enum描画位置.i_なし
             Dim iFrom As Integer = imain
             Dim iTo As Integer
             For j As Integer = imain To rows.Count - 1
-                If Not isDraw Then
-                    If rows(j).f_i描画位置 = enum描画位置.i_中心 Then
-                        isCenter = True
-                        isDraw = True
-                    ElseIf rows(j).f_i描画位置 = enum描画位置.i_左下 Then
-                        'isCenter = False
-                        isDraw = True
-                    End If
+                If first描画位置 = enum描画位置.i_なし Then
+                    first描画位置 = rows(j).f_i描画位置
                 End If
                 If rows(j).f_i番号 = rows(imain).f_i番号 Then
                     iTo = j
@@ -55,18 +47,22 @@ Public Module mdlAddPartsImage
                 End If
             Next
 
-            '描画指定されている場合
-            If isDraw AndAlso rows(iFrom).f_b描画区分 AndAlso 0 < i点数 Then
-                '点数分を繰り返す
+            '描画指定されている場合(f_b描画区分はi番号ごと)
+            If 0 < i点数 AndAlso (first描画位置 <> enum描画位置.i_なし) AndAlso rows(iFrom).f_b描画区分 Then
+                Dim isCenter As Boolean = (first描画位置 = enum描画位置.i_中心)
+                If isCenter Then
+                    i点数 = 1 '中心は1回だけ
+                End If
+
+                '点数分を繰り返す(左下の時)
                 For iset As Integer = 1 To i点数
                     '各、iひも番号
                     For isub As Integer = iFrom To iTo
                         Dim row As tbl追加品Row = rows(isub)
-
-                        If row.f_d長さ <= 0 OrElse row.f_i描画位置 = enum描画位置.i_なし Then
+                        '同位置のみ対象
+                        If row.f_i描画位置 <> first描画位置 Then
                             Continue For
                         End If
-                        'i_なし でなければ、最初のレコード位置(中心/左下)
 
                         '文字位置
                         Dim isMark As Boolean = (iset = 1 AndAlso Not String.IsNullOrWhiteSpace(row.f_s記号))
@@ -118,10 +114,6 @@ Public Module mdlAddPartsImage
                                 Continue For
                         End Select
                     Next
-
-                    If isCenter Then
-                        Exit For '中心は1回だけ
-                    End If
                 Next
             End If
 
@@ -145,6 +137,8 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下:マスター本数,長さ 
+        '中心:1本,長さ
         Dim i本数 As Integer = IIf(isCenter, 1, row.f_iひも本数 / row.f_i点数) 'マスターのひも数
         Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
         For i As Integer = 1 To i本数
@@ -175,17 +169,19 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
         Dim d幅 As Double = row.f_d描画厚
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-                item.m_rひも位置.p左下 = New S実座標(_p中心.X - row.f_d長さ / 2, _p中心.Y - d幅 / 2)
-                item.m_rひも位置.p右上 = New S実座標(_p中心.X + row.f_d長さ / 2, _p中心.Y + d幅 / 2)
+                item.m_rひも位置.p左下 = New S実座標(_p中心.X - d長さ / 2, _p中心.Y - d幅 / 2)
+                item.m_rひも位置.p右上 = New S実座標(_p中心.X + d長さ / 2, _p中心.Y + d幅 / 2)
             Else
                 item.m_rひも位置.p左下 = New S実座標(_p左下.X, _p左下.Y - d幅)
-                item.m_rひも位置.p右上 = New S実座標(_p左下.X + row.f_d長さ, _p左下.Y)
+                item.m_rひも位置.p右上 = New S実座標(_p左下.X + d長さ, _p左下.Y)
 
                 _p左下.Y -= d幅 * 2
             End If
@@ -205,8 +201,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d辺 As Double = row.f_d長さ
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d辺 As Double = d長さ
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -232,12 +231,18 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_長方形_横(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+        If _dAspectRatio = 0 Then
+            Return 0
+        End If
+
         Dim count As Integer = 0
         Dim item As clsImageItem
 
         Dim i本数 As Integer = 1
-        Dim d横 As Double = row.f_d長さ
-        Dim d縦 As Double = row.f_d長さ * _dAspectRatio
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d横 As Double = d長さ
+        Dim d縦 As Double = d長さ * _dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -266,8 +271,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d辺 As Double = row.f_d長さ / 4
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d辺 As Double = d長さ / 4
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -293,11 +301,18 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_長方形_周(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+        If _dAspectRatio = 0 Then
+            Return 0
+        End If
+
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d横 As Double = row.f_d長さ / (2 + 2 * _dAspectRatio)
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d横 As Double = d長さ / (2 + 2 * _dAspectRatio)
         Dim d縦 As Double = d横 * _dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
@@ -327,8 +342,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d径 As Double = row.f_d長さ
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d径 As Double = d長さ
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -354,11 +372,18 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_楕円_横径(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+        If _dAspectRatio = 0 Then
+            Return 0
+        End If
+
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d横径 As Double = row.f_d長さ
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d横径 As Double = d長さ
         Dim d縦径 As Double = d横径 * _dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
@@ -388,8 +413,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d径 As Double = row.f_d長さ / Math.PI
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d径 As Double = d長さ / Math.PI
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -419,13 +447,16 @@ Public Module mdlAddPartsImage
             Return 0
         End If
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim count As Integer = 0
         Dim item As clsImageItem
 
         Dim i本数 As Integer = 1
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
         Dim d As Double = 1 / _dAspectRatio
         Dim ph As Double = Math.PI * (3 * (d + 1) - Math.Sqrt((3 * d + 1) * (d + 3)))
-        Dim d縦径 As Double = 2 * row.f_d長さ / ph
+        Dim d縦径 As Double = 2 * d長さ / ph
         Dim d横径 As Double = d縦径 * d
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
@@ -455,8 +486,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d径 As Double = row.f_d長さ
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d径 As Double = d長さ
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -485,8 +519,11 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
+        '左下・中心: 1点,長さ/ひも出力長(集計対象外時)
         Dim i本数 As Integer = 1
-        Dim d径 As Double = row.f_d長さ * 2 / Math.PI
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
+        Dim d径 As Double = d長さ * 2 / Math.PI
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -515,21 +552,25 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        Dim i本数 As Integer = row.f_iひも本数 / row.f_i点数 'マスターのひも数
-
-        If row.f_d描画厚 = 0 Then
-            i本数 = 1
+        '本数は、左下=マスター本数 ; 中心=全ひも本数(1回しか呼び出されないので)
+        '　本数が1本の時: ゼロ位置からf_d描画厚をシフトした位置
+        '　本数が複数の時: ゼロ位置からf_d描画厚をシフトしつつ指定点数
+        Dim i本数 As Integer = row.f_iひも本数
+        If Not isCenter Then
+            i本数 = i本数 / row.f_i点数 'マスターのひも数
         End If
-        Dim d長さ As Double = row.f_d長さ
+        '線の長さは、長さ/集計対象外時はひも出力長
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-                item.m_rひも位置.p左下 = New S実座標(_p中心.X - d長さ / 2, _p中心.Y + (i - 1) * row.f_d描画厚)
-                item.m_rひも位置.p右上 = New S実座標(_p中心.X + d長さ / 2, _p中心.Y + (i - 1) * row.f_d描画厚)
+                item.m_rひも位置.p左下 = New S実座標(_p中心.X - d長さ / 2, _p中心.Y + i * row.f_d描画厚)
+                item.m_rひも位置.p右上 = New S実座標(_p中心.X + d長さ / 2, _p中心.Y + i * row.f_d描画厚)
             Else
-                item.m_rひも位置.p左下 = New S実座標(_p左下.X, _p左下.Y - (i - 1) * row.f_d描画厚)
-                item.m_rひも位置.p右上 = New S実座標(_p左下.X + d長さ, _p左下.Y - (i - 1) * row.f_d描画厚)
+                item.m_rひも位置.p左下 = New S実座標(_p左下.X, _p左下.Y - i * row.f_d描画厚)
+                item.m_rひも位置.p右上 = New S実座標(_p左下.X + d長さ, _p左下.Y - i * row.f_d描画厚)
             End If
 
             If isMark AndAlso i = 1 Then
@@ -537,6 +578,10 @@ Public Module mdlAddPartsImage
             End If
             itemlist.AddItem(item)
             count += 1
+
+            If row.f_d描画厚 = 0 Then
+                Exit For
+            End If
         Next
         If Not isCenter Then
             _p左下.Y -= i本数 * row.f_d描画厚
@@ -548,20 +593,25 @@ Public Module mdlAddPartsImage
         Dim count As Integer = 0
         Dim item As clsImageItem
 
-        Dim i本数 As Integer = row.f_iひも本数 / row.f_i点数 'マスターのひも数
-        If row.f_d描画厚 = 0 Then
-            i本数 = 1
+        '本数は、左下=マスター本数 ; 中心=全ひも本数(1回しか呼び出されないので)
+        '　本数が1本の時: ゼロ位置からf_d描画厚をシフトした位置
+        '　本数が複数の時: ゼロ位置からf_d描画厚をシフトしつつ指定点数
+        Dim i本数 As Integer = row.f_iひも本数
+        If Not isCenter Then
+            i本数 = i本数 / row.f_i点数 'マスターのひも数
         End If
-        Dim d長さ As Double = row.f_d長さ
+        '線の長さは、長さ/集計対象外時はひも出力長
+        Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_dひも長 + row.f_dひも長加算, row.f_d長さ)
+
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-                item.m_rひも位置.p左下 = New S実座標(_p中心.X + (i - 1) * row.f_d描画厚, _p中心.Y - d長さ / 2)
-                item.m_rひも位置.p右上 = New S実座標(_p中心.X + (i - 1) * row.f_d描画厚, _p中心.Y + d長さ / 2)
+                item.m_rひも位置.p左下 = New S実座標(_p中心.X + i * row.f_d描画厚, _p中心.Y - d長さ / 2)
+                item.m_rひも位置.p右上 = New S実座標(_p中心.X + i * row.f_d描画厚, _p中心.Y + d長さ / 2)
             Else
-                item.m_rひも位置.p左下 = New S実座標(_p左下.X + (i - 1) * row.f_d描画厚, _p左下.Y - d長さ)
-                item.m_rひも位置.p右上 = New S実座標(_p左下.X + (i - 1) * row.f_d描画厚, _p左下.Y)
+                item.m_rひも位置.p左下 = New S実座標(_p左下.X + i * row.f_d描画厚, _p左下.Y - d長さ)
+                item.m_rひも位置.p右上 = New S実座標(_p左下.X + i * row.f_d描画厚, _p左下.Y)
             End If
 
             If isMark AndAlso i = 1 Then
@@ -569,6 +619,10 @@ Public Module mdlAddPartsImage
             End If
             itemlist.AddItem(item)
             count += 1
+
+            If row.f_d描画厚 = 0 Then
+                Exit For
+            End If
         Next
         If Not isCenter Then
             _p左下.Y -= d長さ
