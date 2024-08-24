@@ -42,9 +42,13 @@ Public Class clsSelectBasics
     End Property
     Public ReadOnly Property p_d指定本幅(ByVal n As Integer) As Double
         Get
-            Return _d一本幅 * n
+            If n = 0 Then
+                Return 0
+            End If
+            Return _バンド幅Ary(n - 1) '_d一本幅 * n
         End Get
     End Property
+
 
     '色の選択肢　※変更時には中身を入れ替えます
     Public ReadOnly Property p_tblColor As dstWork.tblColorDataTable
@@ -94,7 +98,8 @@ Public Class clsSelectBasics
 
     Dim _i本幅 As Integer
     Dim _lenバンド幅 As Length
-    Dim _d一本幅 As Double
+    'Dim _d一本幅 As Double #77
+    Dim _バンド幅Ary() As Double
     Dim _row選択中バンドの種類 As clsDataRow 'tblバンドの種類Row
 
     Dim _dstWork As dstWork
@@ -159,7 +164,8 @@ Public Class clsSelectBasics
             End If
 
             _lenバンド幅 = New Length(dバンド幅, p_unit設定時の寸法単位)
-            _d一本幅 = dバンド幅 / _i本幅
+            '_d一本幅 = dバンド幅 / _i本幅 #77
+            _バンド幅Ary = frmBandTypeWidth.Getバンド幅Ary(_i本幅, dバンド幅, .Value("f_s本幅の幅リスト"))
 
             str = .Value("f_s色リスト")
 

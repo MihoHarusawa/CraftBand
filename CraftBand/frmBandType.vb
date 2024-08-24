@@ -8,6 +8,10 @@ Public Class frmBandType
     Dim _NameColumnIndex As Integer = -1
     Dim _WeightColumnIndex As Integer = -1
     Dim _ColorListColumnIndex As Integer = -1
+
+    Dim _LaneCountColumnIndex As Integer = -1
+    Dim _WidthColumnIndex As Integer = -1
+    Dim _LaneWidthColumnIndex As Integer = -1
     Dim _table As tblバンドの種類DataTable
 
     Dim _MyProfile As New CDataGridViewProfile(
@@ -29,6 +33,12 @@ Public Class frmBandType
                 _WeightColumnIndex = col.Index
             ElseIf col.DataPropertyName = "f_s色リスト" Then
                 _ColorListColumnIndex = col.Index
+            ElseIf col.DataPropertyName = "f_i本幅" Then
+                _LaneCountColumnIndex = col.Index
+            ElseIf col.DataPropertyName = "f_dバンド幅" Then
+                _WidthColumnIndex = col.Index
+            ElseIf col.DataPropertyName = "f_s本幅の幅リスト" Then
+                _LaneWidthColumnIndex = col.Index
             End If
         Next
 
@@ -47,6 +57,10 @@ Public Class frmBandType
         If __paras.GetLastData("frmBandTypeGrid", colwid) Then
             Me.dgvData.SetColumnWidthFromString(colwid)
         End If
+
+#If DEBUG Then
+        Me.f_s本幅の幅リスト.ReadOnly = False
+#End If
 
     End Sub
 
@@ -197,20 +211,35 @@ Public Class frmBandType
     End Sub
 
     Private Sub dgvData_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellClick
-        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 OrElse _NameColumnIndex < 0 OrElse _ColorListColumnIndex < 0 OrElse
-            e.ColumnIndex <> dgvData.Columns("ColumnBotton").Index Then
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 OrElse _NameColumnIndex < 0 OrElse _ColorListColumnIndex < 0 Then
             Exit Sub
         End If
 
-        'ボタンクリック
-        Dim dlg As New frmColorList
-        dlg.BandTypeName = dgvData.Rows(e.RowIndex).Cells(_NameColumnIndex).Value
-        dlg.ColorString = dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value
+        If e.ColumnIndex = dgvData.Columns("ColumnBotton").Index Then
+            '色選択ボタンクリック
+            Dim dlg As New frmColorList
+            dlg.BandTypeName = dgvData.Rows(e.RowIndex).Cells(_NameColumnIndex).Value
+            dlg.ColorString = dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value
 
-        If dlg.ShowDialog() <> DialogResult.OK Then
-            Exit Sub
+            If dlg.ShowDialog() <> DialogResult.OK Then
+                Exit Sub
+            End If
+            dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value = dlg.ColorString
+
+        ElseIf e.ColumnIndex = dgvData.Columns("ColumnBotton本幅の幅").Index Then
+            '本幅の幅ボタンクリック
+
+            Dim dlg As New frmBandTypeWidth
+            dlg.p_sバンドの種類名 = dgvData.Rows(e.RowIndex).Cells(_NameColumnIndex).Value
+            dlg.p_i本幅 = dgvData.Rows(e.RowIndex).Cells(_LaneCountColumnIndex).Value
+            dlg.p_dバンド幅 = dgvData.Rows(e.RowIndex).Cells(_WidthColumnIndex).Value
+            dlg.p_s本幅の幅リスト = dgvData.Rows(e.RowIndex).Cells(_LaneWidthColumnIndex).Value
+
+            If dlg.ShowDialog() <> DialogResult.OK Then
+                Exit Sub
+            End If
+            dgvData.Rows(e.RowIndex).Cells(_LaneWidthColumnIndex).Value = dlg.p_s本幅の幅リスト
+
         End If
-
-        dgvData.Rows(e.RowIndex).Cells(_ColorListColumnIndex).Value = dlg.ColorString
     End Sub
 End Class

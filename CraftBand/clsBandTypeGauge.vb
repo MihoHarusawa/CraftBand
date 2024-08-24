@@ -15,6 +15,7 @@ Public Class clsBandTypeGauge
     Dim _sバンドの種類名 As String
     Dim _i本幅 As Integer
     Dim _dバンド幅 As Double
+    Dim _バンド幅Ary() As Double '#77
 
     Public GauteDataTable As dstWork.tblGaugeDataTable = Nothing
     Public Const c_SortOrder As String = "f_i本幅"
@@ -100,6 +101,7 @@ Public Class clsBandTypeGauge
             _dコマ要尺係数b = .Value("f_dコマ要尺係数b")
             _i本幅 = .Value("f_i本幅")
             _dバンド幅 = .Value("f_dバンド幅")
+            _バンド幅Ary = frmBandTypeWidth.Getバンド幅Ary(_i本幅, _dバンド幅, .Value("f_s本幅の幅リスト"))
         End With
 
         '全本幅のレコード作成
@@ -108,7 +110,7 @@ Public Class clsBandTypeGauge
             Dim workrow As dstWork.tblGaugeRow = GauteDataTable.NewtblGaugeRow
             workrow.f_sバンドの種類名 = _sバンドの種類名
             workrow.f_i本幅 = i
-            workrow.f_dひも幅 = (_dバンド幅 / _i本幅) * i
+            workrow.f_dひも幅 = _バンド幅Ary(i - 1) ' (_dバンド幅 / _i本幅) * i
             workrow.f_dコマ寸法計算値 = calcコマ寸法計算値(workrow.f_dひも幅)
             workrow.f_dコマ要尺計算値 = calcコマ要尺計算値(workrow.f_dひも幅)
             If Not _NoCalcIndex.Contains(i) Then

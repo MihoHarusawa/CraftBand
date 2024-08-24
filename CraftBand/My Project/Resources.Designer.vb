@@ -888,6 +888,78 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}本幅の文字列&apos;{1}&apos;が読み取れません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthBadString() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthBadString", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  本幅数{0}とリストの登録数{1}が異なります。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthDiffCount() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthDiffCount", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  本幅,バンド幅が正しくありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthInvalid() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthInvalid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}本幅の変更幅 &apos;{1}&apos;最大幅には設定しないでください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthNoMax() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthNoMax", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}本幅の変更幅 &apos;{1}&apos;正の値にしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthPlus() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthPlus", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  現在の設定値にエラーがあるため、リセットして終了します。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthReset() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthReset", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  &quot;{0}本幅の値{1:F2}と{2}本幅の値{3:F2}が逆です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthReverse() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthReverse", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}本幅の変更幅 &apos;{1}&apos;バンド幅&apos;{2}&apos;以下にしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthUnder() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthUnder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  ファイル&apos;{0}&apos;に {1}点の書き出しを行いました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgExported() As String

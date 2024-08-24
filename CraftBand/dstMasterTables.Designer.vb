@@ -1151,6 +1151,8 @@ Namespace Tables
             
             Private columnf_d目と数える端の目 As Global.System.Data.DataColumn
             
+            Private columnf_s本幅の幅リスト As Global.System.Data.DataColumn
+            
             Private columnf_s製品情報 As Global.System.Data.DataColumn
             
             Private columnf_s備考 As Global.System.Data.DataColumn
@@ -1384,6 +1386,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s本幅の幅リストColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s本幅の幅リスト
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_s製品情報Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_s製品情報
@@ -1460,10 +1470,11 @@ Namespace Tables
                         ByVal f_dコマ要尺係数b As Double,  _
                         ByVal f_d四つ畳みひも長加算初期値 As Double,  _
                         ByVal f_d目と数える端の目 As Double,  _
+                        ByVal f_s本幅の幅リスト As String,  _
                         ByVal f_s製品情報 As String,  _
                         ByVal f_s備考 As String) As tblバンドの種類Row
                 Dim rowtblバンドの種類Row As tblバンドの種類Row = CType(Me.NewRow,tblバンドの種類Row)
-                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_s長さと重さ, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_d目と数える端の目, f_s製品情報, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_s長さと重さ, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_d目と数える端の目, f_s本幅の幅リスト, f_s製品情報, f_s備考}
                 rowtblバンドの種類Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblバンドの種類Row)
                 Return rowtblバンドの種類Row
@@ -1516,6 +1527,7 @@ Namespace Tables
                 Me.columnf_dコマ要尺係数b = MyBase.Columns("f_dコマ要尺係数b")
                 Me.columnf_d四つ畳みひも長加算初期値 = MyBase.Columns("f_d四つ畳みひも長加算初期値")
                 Me.columnf_d目と数える端の目 = MyBase.Columns("f_d目と数える端の目")
+                Me.columnf_s本幅の幅リスト = MyBase.Columns("f_s本幅の幅リスト")
                 Me.columnf_s製品情報 = MyBase.Columns("f_s製品情報")
                 Me.columnf_s備考 = MyBase.Columns("f_s備考")
             End Sub
@@ -1571,6 +1583,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_d四つ畳みひも長加算初期値)
                 Me.columnf_d目と数える端の目 = New Global.System.Data.DataColumn("f_d目と数える端の目", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d目と数える端の目)
+                Me.columnf_s本幅の幅リスト = New Global.System.Data.DataColumn("f_s本幅の幅リスト", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s本幅の幅リスト)
                 Me.columnf_s製品情報 = New Global.System.Data.DataColumn("f_s製品情報", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s製品情報)
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -1602,6 +1616,7 @@ Namespace Tables
                 Me.columnf_dコマ要尺係数b.DefaultValue = CType(0.7R,Double)
                 Me.columnf_d四つ畳みひも長加算初期値.DefaultValue = CType(0R,Double)
                 Me.columnf_d目と数える端の目.DefaultValue = CType(1R,Double)
+                Me.columnf_s本幅の幅リスト.DefaultValue = CType("",String)
                 Me.columnf_s製品情報.DefaultValue = CType("",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
@@ -2492,7 +2507,7 @@ Namespace Tables
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.8.2",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.8.3",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -4677,6 +4692,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s本幅の幅リスト() As String
+                Get
+                    If Me.Isf_s本幅の幅リストNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblバンドの種類.f_s本幅の幅リストColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblバンドの種類.f_s本幅の幅リストColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s製品情報() As String
                 Get
                     If Me.Isf_s製品情報Null Then
@@ -4979,6 +5009,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_d目と数える端の目Null()
                 Me(Me.tabletblバンドの種類.f_d目と数える端の目Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s本幅の幅リストNull() As Boolean
+                Return Me.IsNull(Me.tabletblバンドの種類.f_s本幅の幅リストColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s本幅の幅リストNull()
+                Me(Me.tabletblバンドの種類.f_s本幅の幅リストColumn) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

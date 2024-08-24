@@ -39,6 +39,8 @@ Namespace Tables
         
         Private tabletblColorRepeat As tblColorRepeatDataTable
         
+        Private tabletblLaneWidth As tblLaneWidthDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -88,6 +90,9 @@ Namespace Tables
                 End If
                 If (Not (ds.Tables("tblColorRepeat")) Is Nothing) Then
                     MyBase.Tables.Add(New tblColorRepeatDataTable(ds.Tables("tblColorRepeat")))
+                End If
+                If (Not (ds.Tables("tblLaneWidth")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblLaneWidthDataTable(ds.Tables("tblLaneWidth")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -173,6 +178,16 @@ Namespace Tables
         Public ReadOnly Property tblColorRepeat() As tblColorRepeatDataTable
             Get
                 Return Me.tabletblColorRepeat
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblLaneWidth() As tblLaneWidthDataTable
+            Get
+                Return Me.tabletblLaneWidth
             End Get
         End Property
         
@@ -264,6 +279,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblColorRepeat")) Is Nothing) Then
                     MyBase.Tables.Add(New tblColorRepeatDataTable(ds.Tables("tblColorRepeat")))
                 End If
+                If (Not (ds.Tables("tblLaneWidth")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblLaneWidthDataTable(ds.Tables("tblLaneWidth")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -338,6 +356,12 @@ Namespace Tables
                     Me.tabletblColorRepeat.InitVars
                 End If
             End If
+            Me.tabletblLaneWidth = CType(MyBase.Tables("tblLaneWidth"),tblLaneWidthDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblLaneWidth) Is Nothing) Then
+                    Me.tabletblLaneWidth.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -362,6 +386,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblColorChange)
             Me.tabletblColorRepeat = New tblColorRepeatDataTable()
             MyBase.Tables.Add(Me.tabletblColorRepeat)
+            Me.tabletblLaneWidth = New tblLaneWidthDataTable()
+            MyBase.Tables.Add(Me.tabletblLaneWidth)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -403,6 +429,12 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblColorRepeat() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblLaneWidth() As Boolean
             Return false
         End Function
         
@@ -484,6 +516,9 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblColorRepeatRowChangeEventHandler(ByVal sender As Object, ByVal e As tblColorRepeatRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblLaneWidthRowChangeEventHandler(ByVal sender As Object, ByVal e As tblLaneWidthRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -4024,6 +4059,286 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblLaneWidthDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblLaneWidthRow)
+            
+            Private columnf_i本幅 As Global.System.Data.DataColumn
+            
+            Private columnf_d等分幅 As Global.System.Data.DataColumn
+            
+            Private columnf_d変更幅 As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblLaneWidth"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i本幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i本幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_d等分幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_d等分幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_d変更幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_d変更幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblLaneWidthRow
+                Get
+                    Return CType(Me.Rows(index),tblLaneWidthRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblLaneWidthRowChanging As tblLaneWidthRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblLaneWidthRowChanged As tblLaneWidthRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblLaneWidthRowDeleting As tblLaneWidthRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblLaneWidthRowDeleted As tblLaneWidthRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblLaneWidthRow(ByVal row As tblLaneWidthRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblLaneWidthRow(ByVal f_i本幅 As Short, ByVal f_d等分幅 As Double, ByVal f_d変更幅 As Double) As tblLaneWidthRow
+                Dim rowtblLaneWidthRow As tblLaneWidthRow = CType(Me.NewRow,tblLaneWidthRow)
+                Dim columnValuesArray() As Object = New Object() {f_i本幅, f_d等分幅, f_d変更幅}
+                rowtblLaneWidthRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblLaneWidthRow)
+                Return rowtblLaneWidthRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblLaneWidthDataTable = CType(MyBase.Clone,tblLaneWidthDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblLaneWidthDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnf_i本幅 = MyBase.Columns("f_i本幅")
+                Me.columnf_d等分幅 = MyBase.Columns("f_d等分幅")
+                Me.columnf_d変更幅 = MyBase.Columns("f_d変更幅")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnf_i本幅 = New Global.System.Data.DataColumn("f_i本幅", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i本幅)
+                Me.columnf_d等分幅 = New Global.System.Data.DataColumn("f_d等分幅", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_d等分幅)
+                Me.columnf_d変更幅 = New Global.System.Data.DataColumn("f_d変更幅", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_d変更幅)
+                Me.columnf_i本幅.DefaultValue = CType(1,Short)
+                Me.columnf_d等分幅.DefaultValue = CType(0R,Double)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblLaneWidthRow() As tblLaneWidthRow
+                Return CType(Me.NewRow,tblLaneWidthRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblLaneWidthRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblLaneWidthRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblLaneWidthRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblLaneWidthRowChanged(Me, New tblLaneWidthRowChangeEvent(CType(e.Row,tblLaneWidthRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblLaneWidthRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblLaneWidthRowChanging(Me, New tblLaneWidthRowChangeEvent(CType(e.Row,tblLaneWidthRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblLaneWidthRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblLaneWidthRowDeleted(Me, New tblLaneWidthRowChangeEvent(CType(e.Row,tblLaneWidthRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblLaneWidthRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblLaneWidthRowDeleting(Me, New tblLaneWidthRowChangeEvent(CType(e.Row,tblLaneWidthRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblLaneWidthRow(ByVal row As tblLaneWidthRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblLaneWidthDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -7361,6 +7676,103 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblLaneWidthRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblLaneWidth As tblLaneWidthDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblLaneWidth = CType(Me.Table,tblLaneWidthDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i本幅() As Short
+                Get
+                    If Me.Isf_i本幅Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblLaneWidth.f_i本幅Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblLaneWidth.f_i本幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_d等分幅() As Double
+                Get
+                    If Me.Isf_d等分幅Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblLaneWidth.f_d等分幅Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblLaneWidth.f_d等分幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_d変更幅() As Double
+                Get
+                    If Me.Isf_d変更幅Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblLaneWidth.f_d変更幅Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblLaneWidth.f_d変更幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i本幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblLaneWidth.f_i本幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i本幅Null()
+                Me(Me.tabletblLaneWidth.f_i本幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_d等分幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblLaneWidth.f_d等分幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_d等分幅Null()
+                Me(Me.tabletblLaneWidth.f_d等分幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_d変更幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblLaneWidth.f_d変更幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_d変更幅Null()
+                Me(Me.tabletblLaneWidth.f_d変更幅Column) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -7598,6 +8010,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblColorRepeatRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblLaneWidthRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblLaneWidthRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblLaneWidthRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblLaneWidthRow
                 Get
                     Return Me.eventRow
                 End Get

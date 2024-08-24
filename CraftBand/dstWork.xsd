@@ -168,12 +168,21 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblColorRepeat" msprop:Generator_RowEvHandlerName="tblColorRepeatRowChangeEventHandler" msprop:Generator_RowDeletedName="tblColorRepeatRowDeleted" msprop:Generator_RowDeletingName="tblColorRepeatRowDeleting" msprop:Generator_RowEvArgName="tblColorRepeatRowChangeEvent" msprop:Generator_TablePropName="tblColorRepeat" msprop:Generator_RowChangedName="tblColorRepeatRowChanged" msprop:Generator_RowChangingName="tblColorRepeatRowChanging" msprop:Generator_TableClassName="tblColorRepeatDataTable" msprop:Generator_RowClassName="tblColorRepeatRow" msprop:Generator_TableVarName="tabletblColorRepeat" msprop:Generator_UserTableName="tblColorRepeat">
+        <xs:element name="tblColorRepeat" msprop:Generator_RowEvHandlerName="tblColorRepeatRowChangeEventHandler" msprop:Generator_RowDeletedName="tblColorRepeatRowDeleted" msprop:Generator_RowDeletingName="tblColorRepeatRowDeleting" msprop:Generator_RowEvArgName="tblColorRepeatRowChangeEvent" msprop:Generator_TablePropName="tblColorRepeat" msprop:Generator_RowChangedName="tblColorRepeatRowChanged" msprop:Generator_UserTableName="tblColorRepeat" msprop:Generator_RowChangingName="tblColorRepeatRowChanging" msprop:Generator_RowClassName="tblColorRepeatRow" msprop:Generator_TableClassName="tblColorRepeatDataTable" msprop:Generator_TableVarName="tabletblColorRepeat">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Index" msprop:Generator_ColumnPropNameInTable="IndexColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Index" msprop:Generator_UserColumnName="Index" msprop:Generator_ColumnVarNameInTable="columnIndex" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="Color" msprop:Generator_ColumnPropNameInTable="ColorColumn" msprop:nullValue="" msprop:Generator_ColumnPropNameInRow="Color" msprop:Generator_UserColumnName="Color" msprop:Generator_ColumnVarNameInTable="columnColor" type="xs:string" default="" minOccurs="0" />
               <xs:element name="Lane" msprop:Generator_ColumnPropNameInTable="LaneColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Lane" msprop:Generator_UserColumnName="Lane" msprop:Generator_ColumnVarNameInTable="columnLane" type="xs:short" default="0" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblLaneWidth" msprop:Generator_RowClassName="tblLaneWidthRow" msprop:Generator_RowEvHandlerName="tblLaneWidthRowChangeEventHandler" msprop:Generator_RowDeletedName="tblLaneWidthRowDeleted" msprop:Generator_RowDeletingName="tblLaneWidthRowDeleting" msprop:Generator_RowEvArgName="tblLaneWidthRowChangeEvent" msprop:Generator_TablePropName="tblLaneWidth" msprop:Generator_RowChangedName="tblLaneWidthRowChanged" msprop:Generator_UserTableName="tblLaneWidth" msprop:Generator_RowChangingName="tblLaneWidthRowChanging" msprop:Generator_TableClassName="tblLaneWidthDataTable" msprop:Generator_TableVarName="tabletblLaneWidth">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="f_i本幅" msprop:Generator_ColumnPropNameInTable="f_i本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i本幅" msprop:Generator_UserColumnName="f_i本幅" msprop:Generator_ColumnVarNameInTable="columnf_i本幅" type="xs:short" default="1" minOccurs="0" />
+              <xs:element name="f_d等分幅" msprop:Generator_ColumnPropNameInTable="f_d等分幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d等分幅" msprop:Generator_UserColumnName="f_d等分幅" msprop:Generator_ColumnVarNameInTable="columnf_d等分幅" type="xs:double" default="0" minOccurs="0" />
+              <xs:element name="f_d変更幅" msprop:Generator_ColumnPropNameInTable="f_d変更幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d変更幅" msprop:Generator_UserColumnName="f_d変更幅" msprop:Generator_ColumnVarNameInTable="columnf_d変更幅" type="xs:double" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

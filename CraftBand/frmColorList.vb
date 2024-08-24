@@ -54,4 +54,11 @@ Public Class frmColorList
     Private Sub frmColorList_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         __paras.SetLastData("frmColorList", Me.Size)
     End Sub
+
+    Private Sub btnチェック反転_Click(sender As Object, e As EventArgs) Handles btnチェック反転.Click
+        For i As Integer = 0 To clb使用色.Items.Count - 1
+            Dim isChecked As Boolean = clb使用色.GetItemChecked(i)
+            clb使用色.SetItemChecked(i, Not isChecked)
+        Next
+    End Sub
 End Class
