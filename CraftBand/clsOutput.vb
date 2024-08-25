@@ -2,6 +2,7 @@
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstOutput
 Imports CraftBand.Tables.dstDataTables
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 
 Public Class clsOutput
 
@@ -320,8 +321,10 @@ Public Class clsOutput
         _CurrentRow.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         '
         _CurrentRow.f_s編みかた名 = My.Resources.CalcOutLongest '単純計
-        _CurrentRow.f_s編みひも名 = My.Resources.CalcOutShortest '面積長
-        _CurrentRow.f_s高さ = My.Resources.CalcOutShortest '面積長
+        If Not g_clsSelectBasics.p_isバンド個別幅 Then
+            _CurrentRow.f_s編みひも名 = My.Resources.CalcOutShortest '面積長
+            _CurrentRow.f_s高さ = My.Resources.CalcOutShortest '面積長
+        End If
         _CurrentRow.f_s長さ = My.Resources.CalcOutLonguest '最長
         _CurrentRow.f_sメモ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
@@ -343,12 +346,15 @@ Public Class clsOutput
                 Dim length As Double = bandLength(lane)
                 _CurrentRow.f_sひも長 = outLengthText(length)
                 _CurrentRow.f_s色 = color
-
                 '単純計
                 sum += length
                 '面積長=割かなかったとしたらの長さ
                 Dim band As Double = length / g_clsSelectBasics.p_i本幅 * lane
-                _CurrentRow.f_s高さ = outLengthText(band)
+                If Not g_clsSelectBasics.p_isバンド個別幅 Then
+                    _CurrentRow.f_s高さ = outLengthText(band)
+                Else
+                    _CurrentRow.f_sタイプ = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(g_clsSelectBasics.p_d指定本幅(lane), False)
+                End If
                 '最長
                 Dim maxlen As Double = bandMaxLength(lane)
                 _CurrentRow.f_s長さ = outLengthText(maxlen)
@@ -367,7 +373,9 @@ Public Class clsOutput
                 lines += 1
                 _CurrentRow.f_s本幅 = Parentheses(My.Resources.CalcOutLongest) '単純計
                 _CurrentRow.f_sひも長 = outLengthText(sum)
-                _CurrentRow.f_s高さ = outLengthText(sumlength)
+                If Not g_clsSelectBasics.p_isバンド個別幅 Then
+                    _CurrentRow.f_s高さ = outLengthText(sumlength)
+                End If
                 _CurrentRow.f_s長さ = outLengthText(maxmaxlen)
                 _CurrentRow.f_sひも本数 = Parentheses(outCountText(sumcount))
 
@@ -379,7 +387,9 @@ Public Class clsOutput
                     End If
                 End If
                 _CurrentRow.f_s編みかた名 = g_clsSelectBasics.p_sリスト集計出力長(sum)
-                _CurrentRow.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlength)
+                If Not g_clsSelectBasics.p_isバンド個別幅 Then
+                    _CurrentRow.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlength)
+                End If
             End If
 
             '全色計
@@ -389,11 +399,15 @@ Public Class clsOutput
         Next
 
         If _RowSemmery IsNot Nothing Then
+            '単純計
             _RowSemmery.f_sひも本数 = outCountText(sumcountAllColor)
-            _RowSemmery.f_s記号 = Parentheses(My.Resources.CalcOutLongest) '単純計
+            _RowSemmery.f_s記号 = Parentheses(My.Resources.CalcOutLongest)
             _RowSemmery.f_sひも長 = g_clsSelectBasics.p_sリスト集計出力長(sumAllColor)
-            _RowSemmery.f_s編みかた名 = Parentheses(My.Resources.CalcOutShortest) '面積長
-            _RowSemmery.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlengthAllColor)
+            '面積長
+            If Not g_clsSelectBasics.p_isバンド個別幅 Then
+                _RowSemmery.f_s編みかた名 = Parentheses(My.Resources.CalcOutShortest)
+                _RowSemmery.f_s編みひも名 = g_clsSelectBasics.p_sリスト集計出力長(sumlengthAllColor)
+            End If
         End If
 
         Return lines
@@ -415,6 +429,9 @@ Public Class clsOutput
             _CurrentRow.f_sひも長 = outLengthText(rcut.f_d長さ)
             _CurrentRow.f_sひも本数 = outCountText(rcut.f_i合計本数)
             _CurrentRow.f_s色 = rcut.f_s色
+            If g_clsSelectBasics.p_isバンド個別幅 Then
+                _CurrentRow.f_sタイプ = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(g_clsSelectBasics.p_d指定本幅(rcut.f_i本幅), False)
+            End If
         Next
 
         Return lines
@@ -432,6 +449,11 @@ Public Class clsOutput
             sb.Append("<TD>").Append(outLengthText(rcut.f_d長さ)).Append(g_clsSelectBasics.p_unit出力時の寸法単位.Str).Append("</TD>").AppendLine()
             sb.Append("<TD>").Append(outCountText(rcut.f_i合計本数)).Append("</TD>").AppendLine()
             sb.Append("<TD>").Append(rcut.f_s色).Append("</TD>").AppendLine()
+
+            If g_clsSelectBasics.p_isバンド個別幅 Then
+                sb.Append("<TD>").Append(g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(g_clsSelectBasics.p_d指定本幅(rcut.f_i本幅), False)).Append("</TD>").AppendLine()
+            End If
+
             sb.AppendLine("</TR>")
         Next
         sb.AppendLine("</TABLE>")

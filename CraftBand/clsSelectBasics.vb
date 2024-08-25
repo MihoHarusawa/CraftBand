@@ -1,4 +1,5 @@
-﻿Imports CraftBand.clsMasterTables
+﻿Imports System.Windows.Forms
+Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables
 
 ''' <summary>
@@ -45,7 +46,7 @@ Public Class clsSelectBasics
             If n = 0 Then
                 Return 0
             End If
-            Return _バンド幅Ary(n - 1) '_d一本幅 * n
+            Return _aryバンド幅(n - 1) '_d一本幅 * n
         End Get
     End Property
 
@@ -94,12 +95,20 @@ Public Class clsSelectBasics
         End Get
     End Property
 
+    'バンドに個別幅が指定されているかどうか
+    Public ReadOnly Property p_isバンド個別幅 As Boolean
+        Get
+            Return _isバンド個別幅
+        End Get
+    End Property
 
 
     Dim _i本幅 As Integer
     Dim _lenバンド幅 As Length
     'Dim _d一本幅 As Double #77
-    Dim _バンド幅Ary() As Double
+    Dim _aryバンド幅() As Double
+    Dim _isバンド個別幅 As Boolean
+
     Dim _row選択中バンドの種類 As clsDataRow 'tblバンドの種類Row
 
     Dim _dstWork As dstWork
@@ -130,9 +139,9 @@ Public Class clsSelectBasics
         '対象バンドの種類 
         Dim bandtypename As String = Nothing
         If __paras.GetLastData("TargetBandTypeName", bandtypename) Then
-            SetTargetBandTypeName(bandtypename)
+            SetTargetBandTypeName(bandtypename, False)
         Else
-            SetTargetBandTypeName(Nothing)
+            SetTargetBandTypeName(Nothing, False)
         End If
     End Sub
 
@@ -144,12 +153,13 @@ Public Class clsSelectBasics
 
     'g_clsMasterTablesがセットされた後、マスターを参照して対象バンドをセットする
     'p_unit設定時の寸法単位の変更の影響あり(lenバンド幅)
-    Public Sub SetTargetBandTypeName(ByVal bandtypename As String)
+    Public Sub SetTargetBandTypeName(ByVal bandtypename As String, ByVal isShowErr As Boolean)
 
         _row選択中バンドの種類 = g_clsMasterTables.GetBandTypeRecord(bandtypename, True).Clone
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "SetTargetBandTypeName({0}) {1}", bandtypename, _row選択中バンドの種類.dump)
 
-        Dim str As String
+        Dim err幅リスト As String = Nothing
+        Dim str色リスト As String
         With _row選択中バンドの種類
             p_s対象バンドの種類名 = .Value("f_sバンドの種類名") '存在するレコード
 
@@ -165,15 +175,16 @@ Public Class clsSelectBasics
 
             _lenバンド幅 = New Length(dバンド幅, p_unit設定時の寸法単位)
             '_d一本幅 = dバンド幅 / _i本幅 #77
-            _バンド幅Ary = frmBandTypeWidth.Getバンド幅Ary(_i本幅, dバンド幅, .Value("f_s本幅の幅リスト"))
+            _aryバンド幅 = frmBandTypeWidth.Getバンド幅Ary(_i本幅, dバンド幅, .Value("f_s本幅の幅リスト"), err幅リスト)
+            _isバンド個別幅 = String.IsNullOrEmpty(err幅リスト) AndAlso Not String.IsNullOrEmpty(.Value("f_s本幅の幅リスト"))
 
-            str = .Value("f_s色リスト")
+            str色リスト = .Value("f_s色リスト")
 
             '以外の設定値についてはレコード参照
         End With
 
         '色リストの選択肢
-        ToColorTable(_dstWork.Tables("tblColor"), str, True)
+        ToColorTable(_dstWork.Tables("tblColor"), str色リスト, True)
         'うち描画しない色#52
         Dim noDwgColors As New List(Of String)
         For Each r As dstWork.tblColorRow In _dstWork.Tables("tblColor").Rows
@@ -210,6 +221,12 @@ Public Class clsSelectBasics
             _LaneTable.AcceptChanges()
         End If
 
+        '警告メッセージ
+        If Not String.IsNullOrEmpty(err幅リスト) AndAlso isShowErr Then
+            'バンドの種類'{0}'の本幅の幅リストはエラーのため適用されません
+            Dim msg As String = String.Format(My.Resources.MsgBandTypeWidthErrSkip, p_s対象バンドの種類名, err幅リスト)
+            MessageBox.Show(msg, IIf(String.IsNullOrEmpty(bandtypename), "Default", bandtypename), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
     End Sub
 
     '色文字列をテーブルレコード化,レコード数を返す
@@ -279,8 +296,8 @@ Public Class clsSelectBasics
     End Function
 
     '対象バンドの種類名に対するマスターの再読み込み
-    Public Sub UpdateTargetBandType()
-        SetTargetBandTypeName(p_s対象バンドの種類名)
+    Public Sub UpdateTargetBandType(ByVal isShowErr As Boolean)
+        SetTargetBandTypeName(p_s対象バンドの種類名, isShowErr)
     End Sub
 
     Public Overloads Function ToString() As String

@@ -89,7 +89,7 @@ Public Class frmSelectBand
 
         Dim sel As String = cmb対象バンドの種類名.Text
         If sel <> g_clsSelectBasics.p_s対象バンドの種類名 Then
-            g_clsSelectBasics.SetTargetBandTypeName(sel)
+            g_clsSelectBasics.SetTargetBandTypeName(sel, True)
             Me.DialogResult = DialogResult.OK
         Else
             'g_clsSelectBasics.UpdateTargetBandType()

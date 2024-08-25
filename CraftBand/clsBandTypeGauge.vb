@@ -101,7 +101,8 @@ Public Class clsBandTypeGauge
             _dコマ要尺係数b = .Value("f_dコマ要尺係数b")
             _i本幅 = .Value("f_i本幅")
             _dバンド幅 = .Value("f_dバンド幅")
-            _バンド幅Ary = frmBandTypeWidth.Getバンド幅Ary(_i本幅, _dバンド幅, .Value("f_s本幅の幅リスト"))
+            Dim errdmy As String = Nothing
+            _バンド幅Ary = frmBandTypeWidth.Getバンド幅Ary(_i本幅, _dバンド幅, .Value("f_s本幅の幅リスト"), errdmy)
         End With
 
         '全本幅のレコード作成

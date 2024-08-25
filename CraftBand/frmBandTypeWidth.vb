@@ -158,13 +158,15 @@ Public Class frmBandTypeWidth
             If Check幅リスト文字列(p_i本幅, p_dバンド幅, p_s本幅の幅リスト, Err) Then
                 DialogResult = Windows.Forms.DialogResult.Cancel 'エラーなし
             Else
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "frmBandTypeWidth.btnキャンセル_Click : {0}", Err)
-                '現在の設定値にエラーがあるため、リセットして終了します。
-                If MessageBox.Show(My.Resources.MsgBandTypeWidthReset, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = DialogResult.OK Then
+                '現在の設定値にエラーがあります。リセットしてよいですか。
+                Dim ret As DialogResult = MessageBox.Show(My.Resources.MsgBandTypeWidthReset, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                If ret = DialogResult.Yes Then
                     p_s本幅の幅リスト = ""
                     DialogResult = Windows.Forms.DialogResult.OK
+                ElseIf ret = DialogResult.No Then
+                    DialogResult = Windows.Forms.DialogResult.Cancel
                 Else
-                    Exit Sub '修正する
+                    Exit Sub '再入力
                 End If
             End If
         End If
@@ -191,7 +193,7 @@ Public Class frmBandTypeWidth
         Return aryバンド幅
     End Function
 
-    '文字列を分割して読み取る
+    '文字列を分割して読み取る err文字列があればエラー
     Private Shared Function get幅リスト(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal s本幅の幅リスト As String,
                             ByRef err As String) As Double()
 
@@ -258,7 +260,7 @@ Public Class frmBandTypeWidth
         Return ary幅リスト
     End Function
 
-    '大小関係のチェックとバンド幅Ary化
+    '大小関係のチェックとバンド幅Ary化 err文字列があればエラー
     Private Shared Function check幅リストtoバンド幅Ary(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal ary幅リスト() As Double,
                                  ByRef err As String) As Double()
 
@@ -287,7 +289,7 @@ Public Class frmBandTypeWidth
         End If
     End Function
 
-    '変更幅文字列のチェック
+    '変更幅文字列のチェック　戻り値:OK=true, false時はerr文字列セット
     Shared Function Check幅リスト文字列(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal s幅リスト As String, ByRef err As String) As Boolean
         Dim ary幅リスト() As Double = get幅リスト(i本幅, dバンド幅, s幅リスト, err)
         If Not String.IsNullOrEmpty(err) Then
@@ -298,15 +300,14 @@ Public Class frmBandTypeWidth
         Return String.IsNullOrEmpty(err)
     End Function
 
-    '本幅の幅リスト文字列が正しい場合のみ、読み取り値を返す。以外は等分
-    Shared Function Getバンド幅Ary(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal s本幅の幅リスト As String) As Double()
+    '本幅の幅リスト文字列が正しい場合のみ読み取り値、以外は等分値を返す。エラー文字列があればエラー
+    Shared Function Getバンド幅Ary(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal s本幅の幅リスト As String, ByRef err As String) As Double()
 
-        Dim err As String = Nothing
         Dim ary幅リスト() As Double = get幅リスト(i本幅, dバンド幅, s本幅の幅リスト, err)
 
         'エラーがある
         If Not String.IsNullOrEmpty(err) Then
-            'エラーはログに出力するだけ
+            'エラーはログに出力する
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "get幅リスト err:{0}{1}{2}", err, Environment.NewLine, s本幅の幅リスト)
             Return get等分値Ary(i本幅, dバンド幅)
         End If
@@ -323,7 +324,7 @@ Public Class frmBandTypeWidth
             Return aryバンド幅
         End If
 
-        'エラーはログに出力するだけ
+        'エラーはログに出力する
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "check幅リストtoバンド幅Ary err:{0}{1}{2}", err, Environment.NewLine, s本幅の幅リスト)
 
         '等分値を返す

@@ -106,7 +106,7 @@ Public Class frmBasics
         g_clsMasterTables.SetBasicUnit(unit.Str)
         g_clsSelectBasics.p_unit設定時の寸法単位 = unit
 
-        g_clsSelectBasics.UpdateTargetBandType()
+        g_clsSelectBasics.UpdateTargetBandType(True)
 
         Me.DialogResult = DialogResult.OK
         Me.Close()
@@ -154,7 +154,7 @@ Public Class frmBasics
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
         If r = DialogResult.Yes Then
-            g_clsSelectBasics.UpdateTargetBandType()
+            g_clsSelectBasics.UpdateTargetBandType(True)
         End If
         Me.DialogResult = DialogResult.OK
         Me.Close()

@@ -59,7 +59,7 @@ Public Class frmPattern
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         If g_clsMasterTables.UpdatePatternTable(_table) Then
-            g_clsSelectBasics.UpdateTargetBandType()
+            g_clsSelectBasics.UpdateTargetBandType(False)
             Me.DialogResult = DialogResult.OK 'Changed, Need Update
         Else
             Me.DialogResult = DialogResult.Cancel 'No Change

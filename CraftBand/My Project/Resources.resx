@@ -483,6 +483,11 @@
     <value>本幅数{0}とリストの登録数{1}が異なります。</value>
     <comment>frmBandTypeWidth</comment>
   </data>
+  <data name="MsgBandTypeWidthErrSkip" xml:space="preserve">
+    <value>バンドの種類'{0}'の本幅の幅リストはエラーのため適用されません
+{1}</value>
+    <comment>frmBandTypeWidth</comment>
+  </data>
   <data name="MsgBandTypeWidthInvalid" xml:space="preserve">
     <value>本幅,バンド幅が正しくありません。</value>
     <comment>frmBandTypeWidth</comment>
@@ -496,7 +501,7 @@
     <comment>frmBandTypeWidth</comment>
   </data>
   <data name="MsgBandTypeWidthReset" xml:space="preserve">
-    <value>現在の設定値にエラーがあるため、リセットして終了します。</value>
+    <value>現在の設定値にエラーがあります。リセットしてよいですか。</value>
     <comment>frmBandTypeWidth</comment>
   </data>
   <data name="MsgBandTypeWidthReverse" xml:space="preserve">

@@ -65,9 +65,21 @@ Public Class frmBandType
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
+        '#77
+        For Each rec As tblバンドの種類Row In _table
+            Dim err As String = Nothing
+            If Not frmBandTypeWidth.Check幅リスト文字列(rec.f_i本幅, rec.f_dバンド幅, rec.f_s本幅の幅リスト, err) Then
+                'バンドの種類'{0}'の本幅の幅リストはエラーのため適用されません
+                Dim msg As String = String.Format(My.Resources.MsgBandTypeWidthErrSkip, rec.f_sバンドの種類名, err)
+                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                selectBandRow(rec.f_sバンドの種類名)
+                Exit Sub
+            End If
+        Next
+
         If g_clsMasterTables.UpdateBandTypeTable(BindingSourceバンドの種類.DataSource) Then
             '対象バンドの種類名に対するマスターの再読み込み
-            g_clsSelectBasics.UpdateTargetBandType()
+            g_clsSelectBasics.UpdateTargetBandType(True)
             Me.DialogResult = DialogResult.OK 'Changed, Need Update
         Else
             Me.DialogResult = DialogResult.Cancel 'No Change

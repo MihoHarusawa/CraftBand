@@ -340,7 +340,7 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp目標寸法() {0}", row目標寸法.ToString)
         With row目標寸法
             If .Value("f_sバンドの種類名") <> g_clsSelectBasics.p_s対象バンドの種類名 Then
-                g_clsSelectBasics.SetTargetBandTypeName(.Value("f_sバンドの種類名"))
+                g_clsSelectBasics.SetTargetBandTypeName(.Value("f_sバンドの種類名"), True)
                 setBasics(True)
             End If
             '

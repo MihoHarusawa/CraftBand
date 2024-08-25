@@ -906,6 +906,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  バンドの種類&apos;{0}&apos;の本幅の幅リストはエラーのため適用されません
+        '''{1} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgBandTypeWidthErrSkip() As String
+            Get
+                Return ResourceManager.GetString("MsgBandTypeWidthErrSkip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  本幅,バンド幅が正しくありません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgBandTypeWidthInvalid() As String
@@ -933,7 +943,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  現在の設定値にエラーがあるため、リセットして終了します。 に類似しているローカライズされた文字列を検索します。
+        '''  現在の設定値にエラーがあります。リセットしてよいですか。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgBandTypeWidthReset() As String
             Get
