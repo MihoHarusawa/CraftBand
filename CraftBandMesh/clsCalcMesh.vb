@@ -416,7 +416,7 @@ Class clsCalcMesh
 
     '追加品の参照値 #63
     Function getAddPartsRefValues() As Double()
-        Dim values(8) As Double
+        Dim values(12) As Double
         values(0) = 1 'すべて有効
 
         '(内側)横・縦・高さ・周
@@ -429,6 +429,11 @@ Class clsCalcMesh
         values(6) = p_d外側_最大縦 'p_s外側_最大縦
         values(7) = p_d外側_高さ 'p_s外側_高さ
         values(8) = p_d外側_最大周 'p_s外側_最大周
+        '目標寸法/横・縦・高さ・基本のひも幅
+        values(9) = _d横_目標 '目標寸法/横
+        values(10) = _d縦_目標 '目標寸法/縦
+        values(11) = _d高さ_目標 '目標寸法/高さ
+        values(12) = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅) '基本のひも幅
 
         Return values
     End Function

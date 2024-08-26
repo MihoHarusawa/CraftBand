@@ -33,6 +33,7 @@ Partial Class ctrAddParts
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Panel = New Windows.Forms.Panel()
         lbl長さ_単位 = New Windows.Forms.Label()
         nud長さ = New Windows.Forms.NumericUpDown()
@@ -60,6 +61,7 @@ Partial Class ctrAddParts
         f_i点数3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_s色3 = New Windows.Forms.DataGridViewComboBoxColumn()
         f_dひも長3 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_d縦対横比率 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_dひも長加算3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_iひも本数3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_d出力ひも長3 = New Windows.Forms.DataGridViewTextBoxColumn()
@@ -220,7 +222,7 @@ Partial Class ctrAddParts
         dgv追加品.AutoGenerateColumns = False
         dgv追加品.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv追加品.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_i描画位置3, f_b描画区分3, f_d描画厚3, f_i描画形状3, f_sメモ3, f_bError3})
+        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_d縦対横比率, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_i描画位置3, f_b描画区分3, f_d描画厚3, f_i描画形状3, f_sメモ3, f_bError3})
         dgv追加品.DataSource = BindingSource追加品
         dgv追加品.Location = New System.Drawing.Point(6, 8)
         dgv追加品.Name = "dgv追加品"
@@ -368,11 +370,24 @@ Partial Class ctrAddParts
         f_dひも長3.ToolTipText = "長さをもとに、付属品に設定した係数で計算した値"
         f_dひも長3.Width = 125
         ' 
+        ' f_d縦対横比率
+        ' 
+        f_d縦対横比率.DataPropertyName = "f_d縦対横比率"
+        DataGridViewCellStyle7.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle7.Format = "N2"
+        DataGridViewCellStyle7.NullValue = Nothing
+        f_d縦対横比率.DefaultCellStyle = DataGridViewCellStyle7
+        f_d縦対横比率.HeaderText = "f_d縦対横比率"
+        f_d縦対横比率.MinimumWidth = 6
+        f_d縦対横比率.Name = "f_d縦対横比率"
+        f_d縦対横比率.Visible = False
+        f_d縦対横比率.Width = 125
+        ' 
         ' f_dひも長加算3
         ' 
         f_dひも長加算3.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle7.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算3.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle8.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算3.DefaultCellStyle = DataGridViewCellStyle8
         f_dひも長加算3.HeaderText = "ひも長加算"
         f_dひも長加算3.MinimumWidth = 6
         f_dひも長加算3.Name = "f_dひも長加算3"
@@ -383,8 +398,8 @@ Partial Class ctrAddParts
         ' f_iひも本数3
         ' 
         f_iひも本数3.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle8.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_iひも本数3.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle9.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_iひも本数3.DefaultCellStyle = DataGridViewCellStyle9
         f_iひも本数3.HeaderText = "ひも本数"
         f_iひも本数3.MinimumWidth = 6
         f_iひも本数3.Name = "f_iひも本数3"
@@ -395,8 +410,8 @@ Partial Class ctrAddParts
         ' f_d出力ひも長3
         ' 
         f_d出力ひも長3.DataPropertyName = "f_d出力ひも長"
-        DataGridViewCellStyle9.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_d出力ひも長3.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_d出力ひも長3.DefaultCellStyle = DataGridViewCellStyle10
         f_d出力ひも長3.HeaderText = "出力ひも長"
         f_d出力ひも長3.MinimumWidth = 6
         f_d出力ひも長3.Name = "f_d出力ひも長3"
@@ -438,8 +453,8 @@ Partial Class ctrAddParts
         ' f_d描画厚3
         ' 
         f_d描画厚3.DataPropertyName = "f_d描画厚"
-        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        f_d描画厚3.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle11.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_d描画厚3.DefaultCellStyle = DataGridViewCellStyle11
         f_d描画厚3.HeaderText = "描画厚"
         f_d描画厚3.MinimumWidth = 6
         f_d描画厚3.Name = "f_d描画厚3"
@@ -522,6 +537,7 @@ Partial Class ctrAddParts
     Friend WithEvents f_i点数3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s色3 As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents f_dひも長3 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_d縦対横比率 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_iひも本数3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_d出力ひも長3 As Windows.Forms.DataGridViewTextBoxColumn

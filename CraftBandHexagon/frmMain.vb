@@ -1543,7 +1543,7 @@ Public Class frmMain
 
     '追加品の参照名 #63
     Sub setAddPartsRefNames()
-        Dim names(8) As String
+        Dim names(12) As String
 
         '横(対角)・縦(ひも直交)・高さ・周(六角形)
         names(1) = lbl計算寸法横.Text
@@ -1556,6 +1556,12 @@ Public Class frmMain
             names(i + 4) = names(i) & "/" & lbl縁厚さプラス.Text
             names(i) = names(i) & "/" & lbl六つ目ベース.Text
         Next
+
+        '目標寸法/横・縦・高さ・基本のひも幅
+        names(9) = lbl横寸法.Text & "/" & grp目標寸法.Text
+        names(10) = lbl縦寸法.Text & "/" & grp目標寸法.Text
+        names(11) = lbl高さ寸法.Text & "/" & grp目標寸法.Text
+        names(12) = lbl基本のひも幅.Text
 
         editAddParts.SetRefLenNames(names)
     End Sub
