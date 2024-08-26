@@ -218,6 +218,9 @@
   <data name="CalcOutLonguest" xml:space="preserve">
     <value>最長</value>
   </data>
+  <data name="CalcOutNoSum" xml:space="preserve">
+    <value>集計対象外</value>
+  </data>
   <data name="CalcOutShortest" xml:space="preserve">
     <value>面積長</value>
   </data>

@@ -1201,6 +1201,7 @@ Class clsCalcMesh
             groupRow.SetNameIndexValue("f_b周連続区分", grpMst)
             groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
             groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+            groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
             '2本幅が普通(#18)
             If groupRow.Count = 1 Then
@@ -1219,7 +1220,7 @@ Class clsCalcMesh
     End Function
 
     '更新処理が必要なフィールド名
-    Shared _fields底楕円() As String = {"f_i何本幅", "f_i周数", "f_i差しひも本数", "f_b周連続区分"}
+    Shared _fields底楕円() As String = {"f_i何本幅", "f_i周数", "f_i差しひも本数", "f_b周連続区分", "f_b集計対象外区分", "f_b次周連続区分"}
     Shared Function IsDataPropertyName底楕円(ByVal name As String) As Boolean
         Return _fields底楕円.Contains(name)
     End Function
@@ -1257,6 +1258,16 @@ Class clsCalcMesh
                         r.f_i周数 = i周数
                         ret = ret And set_row底楕円(r)
                     Next
+                ElseIf dataPropertyName = "f_b集計対象外区分" Then
+                    If row.f_b集計対象外区分 Then
+                        row.f_b次周連続区分 = False
+                    End If
+
+                ElseIf dataPropertyName = "f_b次周連続区分" Then
+                    If row.f_b次周連続区分 Then
+                        row.f_b集計対象外区分 = False
+                    End If
+
                 Else
                     'そのレコード
                     ret = ret And set_row底楕円(row)
@@ -1516,6 +1527,7 @@ Class clsCalcMesh
         groupRow.SetNameIndexValue("f_b周連続区分", grpMst)
         groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
         groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+        groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
         For Each drow As clsDataRow In groupRow
             Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow)) '必ずある
@@ -1526,7 +1538,7 @@ Class clsCalcMesh
     End Function
 
     '更新処理が必要なフィールド名
-    Shared _fields側面() As String = {"f_i何本幅", "f_i周数", "f_b周連続区分", "f_d周長比率対底の周", "f_d周長"}
+    Shared _fields側面() As String = {"f_i何本幅", "f_i周数", "f_b周連続区分", "f_d周長比率対底の周", "f_d周長", "f_b集計対象外区分", "f_b次周連続区分"}
     Shared Function IsDataPropertyName側面(ByVal name As String) As Boolean
         Return _fields側面.Contains(name)
     End Function
@@ -1544,6 +1556,16 @@ Class clsCalcMesh
                 '#65
                 If dataPropertyName = "f_d周長" Then
                     row.f_d周長比率対底の周 = row.f_d周長 / _d底の周
+
+                ElseIf dataPropertyName = "f_b集計対象外区分" Then
+                    If row.f_b集計対象外区分 Then
+                        row.f_b次周連続区分 = False
+                    End If
+
+                ElseIf dataPropertyName = "f_b次周連続区分" Then
+                    If row.f_b次周連続区分 Then
+                        row.f_b集計対象外区分 = False
+                    End If
                 End If
 
                 '追加もしくは更新
@@ -2252,7 +2274,12 @@ Class clsCalcMesh
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 < r.f_d連続ひも長 Then
-                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        If Not r.f_b集計対象外区分 Then
+                            r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        Else
+                            r.f_s記号 = ""
+                            output.SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        End If
                     Else
                         r.f_s記号 = ""
                         row.f_s本幅 = r.f_i何本幅
@@ -2274,7 +2301,12 @@ Class clsCalcMesh
                 End If
                 row.f_s番号 = r.f_i番号.ToString
                 row.f_s編みひも名 = r.f_s編みひも名
-                r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                If Not r.f_b集計対象外区分 Then
+                    r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                Else
+                    r.f_s記号 = ""
+                    output.SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                End If
                 row.f_sひも長 = output.outLengthText(r.f_d連続ひも長)
                 row.f_sメモ = r.f_sメモ
             Next
@@ -2296,7 +2328,9 @@ Class clsCalcMesh
                 For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
                     If 0 < r.f_iひも本数 Then
                         If 0 <= r.f_d連続ひも長 Then
-                            output.SetBandRow(0, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                            If Not r.f_b集計対象外区分 Then
+                                output.SetBandRow(0, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                            End If
                         End If
                     End If
                 Next
@@ -2318,7 +2352,12 @@ Class clsCalcMesh
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 <= r.f_d連続ひも長 Then
-                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        If Not r.f_b集計対象外区分 Then
+                            r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        Else
+                            r.f_s記号 = ""
+                            output.SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        End If
                     Else
                         r.f_s記号 = ""
                         row.f_s本幅 = output.outLaneText(r.f_i何本幅)

@@ -527,6 +527,8 @@ Namespace Tables
             
             Private columnf_dひも長加算初期値 As Global.System.Data.DataColumn
             
+            Private columnf_b集計対象外区分初期値 As Global.System.Data.DataColumn
+            
             Private columnf_d厚さ As Global.System.Data.DataColumn
             
             Private columnf_bCraftBandMesh As Global.System.Data.DataColumn
@@ -714,6 +716,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b集計対象外区分初期値Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b集計対象外区分初期値
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_d厚さColumn() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_d厚さ
@@ -823,6 +833,7 @@ Namespace Tables
                         ByVal f_dひも長加算1周あたり As Double,  _
                         ByVal f_dひも長加算ひもあたり As Double,  _
                         ByVal f_dひも長加算初期値 As Double,  _
+                        ByVal f_b集計対象外区分初期値 As Boolean,  _
                         ByVal f_d厚さ As Double,  _
                         ByVal f_bCraftBandMesh As Boolean,  _
                         ByVal f_bCraftBandSquare45 As Boolean,  _
@@ -831,7 +842,7 @@ Namespace Tables
                         ByVal f_bCraftBandHexagon As Boolean,  _
                         ByVal f_s備考 As String) As tbl編みかたRow
                 Dim rowtbl編みかたRow As tbl編みかたRow = CType(Me.NewRow,tbl編みかたRow)
-                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも1幅係数1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_i本幅初期値, f_iひも数, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも1幅係数1目あたり, f_dひも長加算1周あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_b集計対象外区分初期値, f_d厚さ, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考}
                 rowtbl編みかたRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl編みかたRow)
                 Return rowtbl編みかたRow
@@ -877,6 +888,7 @@ Namespace Tables
                 Me.columnf_dひも長加算1周あたり = MyBase.Columns("f_dひも長加算1周あたり")
                 Me.columnf_dひも長加算ひもあたり = MyBase.Columns("f_dひも長加算ひもあたり")
                 Me.columnf_dひも長加算初期値 = MyBase.Columns("f_dひも長加算初期値")
+                Me.columnf_b集計対象外区分初期値 = MyBase.Columns("f_b集計対象外区分初期値")
                 Me.columnf_d厚さ = MyBase.Columns("f_d厚さ")
                 Me.columnf_bCraftBandMesh = MyBase.Columns("f_bCraftBandMesh")
                 Me.columnf_bCraftBandSquare45 = MyBase.Columns("f_bCraftBandSquare45")
@@ -923,6 +935,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_dひも長加算ひもあたり)
                 Me.columnf_dひも長加算初期値 = New Global.System.Data.DataColumn("f_dひも長加算初期値", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算初期値)
+                Me.columnf_b集計対象外区分初期値 = New Global.System.Data.DataColumn("f_b集計対象外区分初期値", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b集計対象外区分初期値)
                 Me.columnf_d厚さ = New Global.System.Data.DataColumn("f_d厚さ", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_d厚さ)
                 Me.columnf_bCraftBandMesh = New Global.System.Data.DataColumn("f_bCraftBandMesh", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
@@ -959,6 +973,7 @@ Namespace Tables
                 Me.columnf_dひも長加算1周あたり.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算ひもあたり.DefaultValue = CType(0R,Double)
                 Me.columnf_dひも長加算初期値.DefaultValue = CType(0R,Double)
+                Me.columnf_b集計対象外区分初期値.DefaultValue = CType(false,Boolean)
                 Me.columnf_d厚さ.DefaultValue = CType(0R,Double)
                 Me.columnf_bCraftBandMesh.DefaultValue = CType(true,Boolean)
                 Me.columnf_bCraftBandSquare45.DefaultValue = CType(true,Boolean)
@@ -3963,6 +3978,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b集計対象外区分初期値() As Boolean
+                Get
+                    If Me.Isf_b集計対象外区分初期値Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletbl編みかた.f_b集計対象外区分初期値Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl編みかた.f_b集計対象外区分初期値Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_d厚さ() As Double
                 Get
                     If Me.Isf_d厚さNull Then
@@ -4232,6 +4262,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dひも長加算初期値Null()
                 Me(Me.tabletbl編みかた.f_dひも長加算初期値Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b集計対象外区分初期値Null() As Boolean
+                Return Me.IsNull(Me.tabletbl編みかた.f_b集計対象外区分初期値Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b集計対象外区分初期値Null()
+                Me(Me.tabletbl編みかた.f_b集計対象外区分初期値Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

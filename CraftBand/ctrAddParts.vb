@@ -204,11 +204,11 @@ Public Class ctrAddParts
     End Sub
 
     '画面の文字列
-    Public ReadOnly Property text集計対象外 As String
-        Get
-            Return f_b集計対象外区分3.HeaderText
-        End Get
-    End Property
+    'Public ReadOnly Property text集計対象外 As String
+    '    Get
+    '        Return f_b集計対象外区分3.HeaderText
+    '    End Get
+    'End Property
     Public ReadOnly Property TabPageName As String
         Get
             Return _TabPageName

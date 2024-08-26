@@ -67,6 +67,7 @@ Partial Class frmPattern
         f_dひも長加算ひもあたり = New DataGridViewTextBoxColumn()
         f_dひも長加算初期値 = New DataGridViewTextBoxColumn()
         f_d厚さ = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分初期値 = New DataGridViewCheckBoxColumn()
         f_bCraftBandMesh = New DataGridViewCheckBoxColumn()
         f_bCraftBandSquare45 = New DataGridViewCheckBoxColumn()
         f_bCraftBandKnot = New DataGridViewCheckBoxColumn()
@@ -85,7 +86,7 @@ Partial Class frmPattern
         dgvData.AutoGenerateColumns = False
         dgvData.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgvData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvData.Columns.AddRange(New DataGridViewColumn() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_iひも数, f_i本幅初期値, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも長加算1周あたり, f_dひも1幅係数1目あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
+        dgvData.Columns.AddRange(New DataGridViewColumn() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_iひも数, f_i本幅初期値, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも長加算1周あたり, f_dひも1幅係数1目あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_b集計対象外区分初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
         dgvData.DataSource = BindingSource編みかた
         dgvData.Location = New System.Drawing.Point(12, 32)
         dgvData.Name = "dgvData"
@@ -378,6 +379,14 @@ Partial Class frmPattern
         f_d厚さ.Name = "f_d厚さ"
         f_d厚さ.Width = 125
         ' 
+        ' f_b集計対象外区分初期値
+        ' 
+        f_b集計対象外区分初期値.DataPropertyName = "f_b集計対象外区分初期値"
+        f_b集計対象外区分初期値.HeaderText = "集計対象外区分初期値"
+        f_b集計対象外区分初期値.MinimumWidth = 6
+        f_b集計対象外区分初期値.Name = "f_b集計対象外区分初期値"
+        f_b集計対象外区分初期値.Width = 125
+        ' 
         ' f_bCraftBandMesh
         ' 
         f_bCraftBandMesh.DataPropertyName = "f_bCraftBandMesh"
@@ -486,6 +495,7 @@ Partial Class frmPattern
     Friend WithEvents f_dひも長加算ひもあたり As DataGridViewTextBoxColumn
     Friend WithEvents f_dひも長加算初期値 As DataGridViewTextBoxColumn
     Friend WithEvents f_d厚さ As DataGridViewTextBoxColumn
+    Friend WithEvents f_b集計対象外区分初期値 As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandMesh As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandSquare45 As DataGridViewCheckBoxColumn
     Friend WithEvents f_bCraftBandKnot As DataGridViewCheckBoxColumn

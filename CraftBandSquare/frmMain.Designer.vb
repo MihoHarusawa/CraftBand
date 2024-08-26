@@ -235,6 +235,7 @@ Partial Class frmMain
         f_iひも番号2 = New DataGridViewTextBoxColumn()
         f_i何本幅2 = New DataGridViewComboBoxColumn()
         f_i周数2 = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分2 = New DataGridViewCheckBoxColumn()
         f_iひも本数2 = New DataGridViewTextBoxColumn()
         f_s色2 = New DataGridViewComboBoxColumn()
         f_d高さ2 = New DataGridViewTextBoxColumn()
@@ -1752,7 +1753,7 @@ Partial Class frmMain
         dgv側面.AutoGenerateColumns = False
         dgv側面.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_b集計対象外区分2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
         dgv側面.DataSource = BindingSource側面
         dgv側面.Location = New Point(6, 36)
         dgv側面.Name = "dgv側面"
@@ -2283,6 +2284,14 @@ Partial Class frmMain
         f_i周数2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i周数2.Width = 60
         ' 
+        ' f_b集計対象外区分2
+        ' 
+        f_b集計対象外区分2.DataPropertyName = "f_b集計対象外区分"
+        f_b集計対象外区分2.HeaderText = "集計対象外"
+        f_b集計対象外区分2.MinimumWidth = 6
+        f_b集計対象外区分2.Name = "f_b集計対象外区分2"
+        f_b集計対象外区分2.Width = 125
+        ' 
         ' f_iひも本数2
         ' 
         f_iひも本数2.DataPropertyName = "f_iひも本数"
@@ -2753,6 +2762,7 @@ Partial Class frmMain
     Friend WithEvents f_iひも番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_i何本幅2 As DataGridViewComboBoxColumn
     Friend WithEvents f_i周数2 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b集計対象外区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_iひも本数2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色2 As DataGridViewComboBoxColumn
     Friend WithEvents f_d高さ2 As DataGridViewTextBoxColumn

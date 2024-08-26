@@ -96,7 +96,7 @@ Public Class clsOutput
         Return False
     End Function
 
-    '現在行にひも属性表示
+    '現在行にひも属性表示し、記号を返す
     Function SetBandRow(ByVal count As Integer, ByVal lane As Integer, ByVal length As Double, ByVal color As String, Optional ByVal group As String = Nothing) As String
         'カットリスト記号生成
         Dim mark As String = AddMark(count, lane, length, color, group)
@@ -115,6 +115,17 @@ Public Class clsOutput
 
         Return mark
     End Function
+
+    Sub SetBandRowNoMark(ByVal count As Integer, ByVal lane As Integer, ByVal length As Double, ByVal color As String, Optional ByVal group As String = Nothing)
+        If _CurrentRow IsNot Nothing Then
+            _CurrentRow.f_s記号 = My.Resources.CalcOutNoSum '集計対象外
+            _CurrentRow.f_s本幅 = outLaneText(lane)
+            _CurrentRow.f_sひも本数 = outCountText(count)
+            _CurrentRow.f_sひも長 = outLengthText(length)
+            _CurrentRow.f_s色 = color
+        End If
+    End Sub
+
 
     'カットリスト記号を得る※既存がなければ呼び出し順
     Function GetBandMark(ByVal lane As Integer, ByVal length As Double, ByVal color As String, Optional ByVal group As String = Nothing) As String
@@ -287,12 +298,13 @@ Public Class clsOutput
                 r.f_s記号 = SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
             Else
                 r.f_s記号 = ""
+                SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)
 
-                _CurrentRow.f_s記号 = editAddParts.text集計対象外()
-                _CurrentRow.f_s本幅 = outLaneText(r.f_i何本幅)
-                _CurrentRow.f_sひも本数 = outCountText(r.f_iひも本数)
-                _CurrentRow.f_sひも長 = outLengthText(r.f_d出力ひも長)
-                _CurrentRow.f_s色 = r.f_s色
+                '_CurrentRow.f_s記号 = My.Resources.CalcOutNoSum '集計対象外
+                '_CurrentRow.f_s本幅 = outLaneText(r.f_i何本幅)
+                '_CurrentRow.f_sひも本数 = outCountText(r.f_iひも本数)
+                '_CurrentRow.f_sひも長 = outLengthText(r.f_d出力ひも長)
+                '_CurrentRow.f_s色 = r.f_s色
             End If
             _CurrentRow.f_sメモ = r.f_sメモ
             If 0 < r.f_i長さ参照 Then

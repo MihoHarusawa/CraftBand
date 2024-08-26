@@ -902,6 +902,7 @@ Class clsCalcSquare45
         groupRow.SetNameIndexValue("f_b周連続区分", grpMst)
         groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
         groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+        groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
         For Each drow As clsDataRow In groupRow
             Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow)) '必ずある
@@ -1588,7 +1589,12 @@ Class clsCalcSquare45
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 <= r.f_dひも長 OrElse 0 <= r.f_dひも長加算 Then
-                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+                        If Not r.f_b集計対象外区分 Then
+                            r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+                        Else
+                            r.f_s記号 = ""
+                            output.SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_dひも長 + r.f_dひも長加算, r.f_s色)
+                        End If
                     End If
 
                 End If

@@ -72,13 +72,13 @@ Public Class frmMain
         TabControl.TabPages.Remove(tpage縦ひも)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
-        f_i何本幅2.DataSource = g_clsSelectBasics.p_tblLane
-        f_i何本幅2.DisplayMember = "Display"
-        f_i何本幅2.ValueMember = "Value"
+        f_i何本幅.DataSource = g_clsSelectBasics.p_tblLane
+        f_i何本幅.DisplayMember = "Display"
+        f_i何本幅.ValueMember = "Value"
 
-        f_s色2.DataSource = g_clsSelectBasics.p_tblColor
-        f_s色2.DisplayMember = "Display"
-        f_s色2.ValueMember = "Value"
+        f_s色.DataSource = g_clsSelectBasics.p_tblColor
+        f_s色.DisplayMember = "Display"
+        f_s色.ValueMember = "Value"
         '
         setBasics(g_clsSelectBasics.p_s対象バンドの種類名 = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")) '異なる場合は DispTables内
         setPattern()
@@ -168,11 +168,11 @@ Public Class frmMain
 
             'Grid
             Dim format As String = String.Format("N{0}", .p_unit設定時の寸法単位.DecimalPlaces)
-            Me.f_d高さ2.DefaultCellStyle.Format = format
-            Me.f_d垂直ひも長2.DefaultCellStyle.Format = format
-            Me.f_d周長2.DefaultCellStyle.Format = format
-            Me.f_dひも長2.DefaultCellStyle.Format = format
-            Me.f_d連続ひも長2.DefaultCellStyle.Format = format
+            Me.f_d高さ.DefaultCellStyle.Format = format
+            Me.f_d垂直ひも長.DefaultCellStyle.Format = format
+            Me.f_d周長.DefaultCellStyle.Format = format
+            Me.f_dひも長.DefaultCellStyle.Format = format
+            Me.f_d連続ひも長.DefaultCellStyle.Format = format
 
         End With
 

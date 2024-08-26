@@ -1006,6 +1006,7 @@ Class clsCalcSquare
             row.Setf_s色Null()
             row.Setf_i何本幅Null()
             row.Setf_dひも長加算Null()
+            row.f_b集計対象外区分 = False
         Else
             If 0 < row.f_iひも本数 Then
                 row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間)
@@ -1018,6 +1019,7 @@ Class clsCalcSquare
             row.f_dひも長 = row.f_d周長 * _dひも長係数
             row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
             row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+            row.f_b集計対象外区分 = False
         End If
         Return True
     End Function
@@ -1099,6 +1101,7 @@ Class clsCalcSquare
         groupRow.SetNameIndexValue("f_s編みひも名", grpMst)
         groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
         groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+        groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
         For Each drow As clsDataRow In groupRow
             Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow)) '必ずある
@@ -1225,7 +1228,7 @@ Class clsCalcSquare
 
 
     '更新処理が必要なフィールド名
-    Shared _fields側面と縁() As String = {"f_i何本幅", "f_i周数", "f_dひも長加算", "f_s色"}
+    Shared _fields側面と縁() As String = {"f_i何本幅", "f_i周数", "f_dひも長加算", "f_s色", "f_b集計対象外区分"}
     Shared Function IsDataPropertyName側面と縁(ByVal name As String) As Boolean
         Return _fields側面と縁.Contains(name)
     End Function
@@ -2119,8 +2122,10 @@ Class clsCalcSquare
                         Continue For
                     End If
                     If 0 < r.f_iひも本数 Then
-                        If 0 < r.f_d連続ひも長 Then
+                        If 0 < r.f_d連続ひも長 AndAlso Not r.f_b集計対象外区分 Then
                             r.f_s記号 = output.SetBandRow(0, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        Else
+                            r.f_s記号 = ""
                         End If
                     End If
                 Next
@@ -2131,7 +2136,8 @@ Class clsCalcSquare
             Dim contcount As Integer = 0
             For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
                 If r_prv IsNot Nothing AndAlso r_prv.f_s記号 = r.f_s記号 _
-                    AndAlso r_prv.f_s編みひも名 = r.f_s編みひも名 AndAlso r_prv.f_sメモ = r.f_sメモ Then
+                    AndAlso r_prv.f_s編みひも名 = r.f_s編みひも名 AndAlso r_prv.f_sメモ = r.f_sメモ _
+                    AndAlso r_prv.f_b集計対象外区分 = r.f_b集計対象外区分 Then
                     contcount += r.f_iひも本数
                 Else
                     If r_prv IsNot Nothing Then
@@ -2151,7 +2157,11 @@ Class clsCalcSquare
                         row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                         row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
                         If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
-                            output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                            If r.f_b集計対象外区分 Then
+                                output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                            Else
+                                output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                            End If
                         End If
                         row.f_sメモ = r_prv.f_sメモ
                     End If
@@ -2176,7 +2186,11 @@ Class clsCalcSquare
                 row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                 row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
                 If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
-                    output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                    If r_prv.f_b集計対象外区分 Then
+                        output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                    Else
+                        output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                    End If
                 End If
                 row.f_sメモ = r_prv.f_sメモ
             End If

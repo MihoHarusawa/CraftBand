@@ -123,6 +123,8 @@ Partial Class frmMain
         txtメモ = New TextBox()
         txt作成者 = New TextBox()
         txtタイトル = New TextBox()
+        txt外側_最大周の径 = New TextBox()
+        txt内側_最大周の径 = New TextBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -201,6 +203,7 @@ Partial Class frmMain
         f_iひも番号1 = New DataGridViewTextBoxColumn()
         f_i何本幅1 = New DataGridViewComboBoxColumn()
         f_i周数1 = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分1 = New DataGridViewCheckBoxColumn()
         f_s色1 = New DataGridViewComboBoxColumn()
         f_i段数1 = New DataGridViewTextBoxColumn()
         f_b周連続区分1 = New DataGridViewCheckBoxColumn()
@@ -276,12 +279,14 @@ Partial Class frmMain
         lbl計算寸法最大横 = New Label()
         lbl底 = New Label()
         lbl最大 = New Label()
+        lbl最大周の径 = New Label()
         f_i番号2 = New DataGridViewTextBoxColumn()
         f_s編みかた名2 = New DataGridViewTextBoxColumn()
         f_s編みひも名2 = New DataGridViewTextBoxColumn()
         f_iひも番号2 = New DataGridViewTextBoxColumn()
         f_i何本幅2 = New DataGridViewComboBoxColumn()
         f_i周数2 = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分2 = New DataGridViewCheckBoxColumn()
         f_s色2 = New DataGridViewComboBoxColumn()
         f_b周連続区分2 = New DataGridViewCheckBoxColumn()
         f_b次周連続区分2 = New DataGridViewCheckBoxColumn()
@@ -299,9 +304,6 @@ Partial Class frmMain
         f_s記号2 = New DataGridViewTextBoxColumn()
         f_sメモ2 = New DataGridViewTextBoxColumn()
         f_bError2 = New DataGridViewCheckBoxColumn()
-        lbl最大周の径 = New Label()
-        txt外側_最大周の径 = New TextBox()
-        txt内側_最大周の径 = New TextBox()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -608,7 +610,7 @@ Partial Class frmMain
         ' nud周数_底楕円
         ' 
         nud周数_底楕円.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        nud周数_底楕円.Location = New Point(650, 375)
+        nud周数_底楕円.Location = New Point(717, 375)
         nud周数_底楕円.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         nud周数_底楕円.Name = "nud周数_底楕円"
         nud周数_底楕円.Size = New Size(60, 27)
@@ -1085,6 +1087,28 @@ Partial Class frmMain
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
+        ' txt外側_最大周の径
+        ' 
+        txt外側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt外側_最大周の径.Location = New Point(718, 721)
+        txt外側_最大周の径.Name = "txt外側_最大周の径"
+        txt外側_最大周の径.ReadOnly = True
+        txt外側_最大周の径.Size = New Size(80, 27)
+        txt外側_最大周の径.TabIndex = 59
+        txt外側_最大周の径.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(txt外側_最大周の径, "最大周が円周となる直径")
+        ' 
+        ' txt内側_最大周の径
+        ' 
+        txt内側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        txt内側_最大周の径.Location = New Point(718, 690)
+        txt内側_最大周の径.Name = "txt内側_最大周の径"
+        txt内側_最大周の径.ReadOnly = True
+        txt内側_最大周の径.Size = New Size(80, 27)
+        txt内側_最大周の径.TabIndex = 58
+        txt内側_最大周の径.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(txt内側_最大周の径, "最大周が円周となる直径")
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1341,7 +1365,7 @@ Partial Class frmMain
         tpage底縦横.Location = New Point(4, 29)
         tpage底縦横.Name = "tpage底縦横"
         tpage底縦横.Padding = New Padding(3)
-        tpage底縦横.Size = New Size(840, 413)
+        tpage底縦横.Size = New Size(905, 413)
         tpage底縦横.TabIndex = 0
         tpage底縦横.Text = "底(縦横)"
         tpage底縦横.UseVisualStyleBackColor = True
@@ -1617,7 +1641,7 @@ Partial Class frmMain
         tpage底楕円.Location = New Point(4, 29)
         tpage底楕円.Name = "tpage底楕円"
         tpage底楕円.Padding = New Padding(3)
-        tpage底楕円.Size = New Size(840, 413)
+        tpage底楕円.Size = New Size(905, 413)
         tpage底楕円.TabIndex = 1
         tpage底楕円.Text = "底(楕円)"
         tpage底楕円.UseVisualStyleBackColor = True
@@ -1626,7 +1650,7 @@ Partial Class frmMain
         ' 
         lbl周数_底楕円.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         lbl周数_底楕円.AutoSize = True
-        lbl周数_底楕円.Location = New Point(630, 344)
+        lbl周数_底楕円.Location = New Point(697, 344)
         lbl周数_底楕円.Name = "lbl周数_底楕円"
         lbl周数_底楕円.Size = New Size(85, 20)
         lbl周数_底楕円.TabIndex = 7
@@ -1666,7 +1690,7 @@ Partial Class frmMain
         ' btn追加_底楕円
         ' 
         btn追加_底楕円.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn追加_底楕円.Location = New Point(721, 356)
+        btn追加_底楕円.Location = New Point(788, 356)
         btn追加_底楕円.Name = "btn追加_底楕円"
         btn追加_底楕円.Size = New Size(111, 46)
         btn追加_底楕円.TabIndex = 9
@@ -1699,7 +1723,7 @@ Partial Class frmMain
         cmb編みかた名_底楕円.FormattingEnabled = True
         cmb編みかた名_底楕円.Location = New Point(460, 374)
         cmb編みかた名_底楕円.Name = "cmb編みかた名_底楕円"
-        cmb編みかた名_底楕円.Size = New Size(184, 28)
+        cmb編みかた名_底楕円.Size = New Size(251, 28)
         cmb編みかた名_底楕円.TabIndex = 6
         ' 
         ' dgv底楕円
@@ -1709,13 +1733,13 @@ Partial Class frmMain
         dgv底楕円.AutoGenerateColumns = False
         dgv底楕円.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv底楕円.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv底楕円.Columns.AddRange(New DataGridViewColumn() {f_i番号1, f_b差しひも区分1, f_i差しひも本数1, f_s編みかた名1, f_s編みひも名1, f_iひも番号1, f_i何本幅1, f_i周数1, f_s色1, f_i段数1, f_b周連続区分1, f_b次周連続区分1, f_d円弧部分長1, f_d径の累計1, f_d差しひも間のすき間1, f_d径1, f_d周長1, f_dひも長1, f_dひも長加算1, f_d連続ひも長1, f_iひも本数1, f_i差しひも累計1, f_s記号1, f_sメモ1, f_bError1})
+        dgv底楕円.Columns.AddRange(New DataGridViewColumn() {f_i番号1, f_b差しひも区分1, f_i差しひも本数1, f_s編みかた名1, f_s編みひも名1, f_iひも番号1, f_i何本幅1, f_i周数1, f_b集計対象外区分1, f_s色1, f_i段数1, f_b周連続区分1, f_b次周連続区分1, f_d円弧部分長1, f_d径の累計1, f_d差しひも間のすき間1, f_d径1, f_d周長1, f_dひも長1, f_dひも長加算1, f_d連続ひも長1, f_iひも本数1, f_i差しひも累計1, f_s記号1, f_sメモ1, f_bError1})
         dgv底楕円.DataSource = BindingSource底_楕円
         dgv底楕円.Location = New Point(6, 6)
         dgv底楕円.Name = "dgv底楕円"
         dgv底楕円.RowHeadersWidth = 51
         dgv底楕円.RowTemplate.Height = 29
-        dgv底楕円.Size = New Size(828, 328)
+        dgv底楕円.Size = New Size(893, 328)
         dgv底楕円.TabIndex = 0
         ' 
         ' f_i番号1
@@ -1801,6 +1825,14 @@ Partial Class frmMain
         f_i周数1.Name = "f_i周数1"
         f_i周数1.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i周数1.Width = 61
+        ' 
+        ' f_b集計対象外区分1
+        ' 
+        f_b集計対象外区分1.DataPropertyName = "f_b集計対象外区分"
+        f_b集計対象外区分1.HeaderText = "集計対象外"
+        f_b集計対象外区分1.MinimumWidth = 6
+        f_b集計対象外区分1.Name = "f_b集計対象外区分1"
+        f_b集計対象外区分1.Width = 125
         ' 
         ' f_s色1
         ' 
@@ -2140,7 +2172,7 @@ Partial Class frmMain
         dgv側面.AutoGenerateColumns = False
         dgv側面.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_s色2, f_b周連続区分2, f_b次周連続区分2, f_i段数, f_d高さ2, f_d高さ比率2, f_d垂直ひも長2, f_d周長比率対底の周2, f_d周長2, f_dひも長2, f_dひも長加算2, f_iひも本数2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_b集計対象外区分2, f_s色2, f_b周連続区分2, f_b次周連続区分2, f_i段数, f_d高さ2, f_d高さ比率2, f_d垂直ひも長2, f_d周長比率対底の周2, f_d周長2, f_dひも長2, f_dひも長加算2, f_iひも本数2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
         dgv側面.DataSource = BindingSource側面
         dgv側面.Location = New Point(6, 36)
         dgv側面.Name = "dgv側面"
@@ -2160,7 +2192,7 @@ Partial Class frmMain
         tpage追加品.Location = New Point(4, 29)
         tpage追加品.Name = "tpage追加品"
         tpage追加品.Padding = New Padding(3)
-        tpage追加品.Size = New Size(840, 413)
+        tpage追加品.Size = New Size(905, 413)
         tpage追加品.TabIndex = 3
         tpage追加品.Text = "追加品"
         tpage追加品.UseVisualStyleBackColor = True
@@ -2187,7 +2219,7 @@ Partial Class frmMain
         tpageメモ他.Location = New Point(4, 29)
         tpageメモ他.Name = "tpageメモ他"
         tpageメモ他.Padding = New Padding(3)
-        tpageメモ他.Size = New Size(840, 413)
+        tpageメモ他.Size = New Size(905, 413)
         tpageメモ他.TabIndex = 4
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
@@ -2260,7 +2292,7 @@ Partial Class frmMain
         tpage横ひも.Location = New Point(4, 29)
         tpage横ひも.Name = "tpage横ひも"
         tpage横ひも.Padding = New Padding(3)
-        tpage横ひも.Size = New Size(840, 413)
+        tpage横ひも.Size = New Size(905, 413)
         tpage横ひも.TabIndex = 5
         tpage横ひも.Text = "横ひも"
         tpage横ひも.UseVisualStyleBackColor = True
@@ -2281,7 +2313,7 @@ Partial Class frmMain
         tpage縦ひも.Location = New Point(4, 29)
         tpage縦ひも.Name = "tpage縦ひも"
         tpage縦ひも.Padding = New Padding(3)
-        tpage縦ひも.Size = New Size(840, 413)
+        tpage縦ひも.Size = New Size(905, 413)
         tpage縦ひも.TabIndex = 6
         tpage縦ひも.Text = "縦ひも"
         tpage縦ひも.UseVisualStyleBackColor = True
@@ -2304,7 +2336,7 @@ Partial Class frmMain
         tpageプレビュー.Location = New Point(4, 29)
         tpageプレビュー.Name = "tpageプレビュー"
         tpageプレビュー.Padding = New Padding(3)
-        tpageプレビュー.Size = New Size(840, 413)
+        tpageプレビュー.Size = New Size(905, 413)
         tpageプレビュー.TabIndex = 7
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
@@ -2584,6 +2616,16 @@ Partial Class frmMain
         lbl最大.TabIndex = 53
         lbl最大.Text = "(最大)"
         ' 
+        ' lbl最大周の径
+        ' 
+        lbl最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl最大周の径.AutoSize = True
+        lbl最大周の径.Location = New Point(717, 661)
+        lbl最大周の径.Name = "lbl最大周の径"
+        lbl最大周の径.Size = New Size(81, 20)
+        lbl最大周の径.TabIndex = 57
+        lbl最大周の径.Text = "最大周の径"
+        ' 
         ' f_i番号2
         ' 
         f_i番号2.DataPropertyName = "f_i番号"
@@ -2649,6 +2691,14 @@ Partial Class frmMain
         f_i周数2.Name = "f_i周数2"
         f_i周数2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i周数2.Width = 60
+        ' 
+        ' f_b集計対象外区分2
+        ' 
+        f_b集計対象外区分2.DataPropertyName = "f_b集計対象外区分"
+        f_b集計対象外区分2.HeaderText = "集計対象外"
+        f_b集計対象外区分2.MinimumWidth = 6
+        f_b集計対象外区分2.Name = "f_b集計対象外区分2"
+        f_b集計対象外区分2.Width = 125
         ' 
         ' f_s色2
         ' 
@@ -2842,38 +2892,6 @@ Partial Class frmMain
         f_bError2.Name = "f_bError2"
         f_bError2.Visible = False
         f_bError2.Width = 125
-        ' 
-        ' lbl最大周の径
-        ' 
-        lbl最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl最大周の径.AutoSize = True
-        lbl最大周の径.Location = New Point(717, 661)
-        lbl最大周の径.Name = "lbl最大周の径"
-        lbl最大周の径.Size = New Size(81, 20)
-        lbl最大周の径.TabIndex = 57
-        lbl最大周の径.Text = "最大周の径"
-        ' 
-        ' txt外側_最大周の径
-        ' 
-        txt外側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt外側_最大周の径.Location = New Point(718, 721)
-        txt外側_最大周の径.Name = "txt外側_最大周の径"
-        txt外側_最大周の径.ReadOnly = True
-        txt外側_最大周の径.Size = New Size(80, 27)
-        txt外側_最大周の径.TabIndex = 59
-        txt外側_最大周の径.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt外側_最大周の径, "最大周が円周となる直径")
-        ' 
-        ' txt内側_最大周の径
-        ' 
-        txt内側_最大周の径.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt内側_最大周の径.Location = New Point(718, 690)
-        txt内側_最大周の径.Name = "txt内側_最大周の径"
-        txt内側_最大周の径.ReadOnly = True
-        txt内側_最大周の径.Size = New Size(80, 27)
-        txt内側_最大周の径.TabIndex = 58
-        txt内側_最大周の径.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(txt内側_最大周の径, "最大周が円周となる直径")
         ' 
         ' frmMain
         ' 
@@ -3192,6 +3210,21 @@ Partial Class frmMain
     Friend WithEvents picプレビュー As PictureBox
     Friend WithEvents btn画像ファイル As Button
     Friend WithEvents btnブラウザ As Button
+    Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents editAddParts As CraftBand.ctrAddParts
+    Friend WithEvents txt作成者 As TextBox
+    Friend WithEvents txtタイトル As TextBox
+    Friend WithEvents lbl作成者 As Label
+    Friend WithEvents lblタイトル As Label
+    Friend WithEvents expand横ひも As CraftBand.ctrExpanding
+    Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
+    Friend WithEvents grp楕円底個別設定 As GroupBox
+    Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
+    Friend WithEvents lbl最大周の径 As Label
+    Friend WithEvents txt外側_最大周の径 As TextBox
+    Friend WithEvents txt内側_最大周の径 As TextBox
     Friend WithEvents f_i番号1 As DataGridViewTextBoxColumn
     Friend WithEvents f_b差しひも区分1 As DataGridViewCheckBoxColumn
     Friend WithEvents f_i差しひも本数1 As DataGridViewTextBoxColumn
@@ -3200,6 +3233,7 @@ Partial Class frmMain
     Friend WithEvents f_iひも番号1 As DataGridViewTextBoxColumn
     Friend WithEvents f_i何本幅1 As DataGridViewComboBoxColumn
     Friend WithEvents f_i周数1 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b集計対象外区分1 As DataGridViewCheckBoxColumn
     Friend WithEvents f_s色1 As DataGridViewComboBoxColumn
     Friend WithEvents f_i段数1 As DataGridViewTextBoxColumn
     Friend WithEvents f_b周連続区分1 As DataGridViewCheckBoxColumn
@@ -3217,24 +3251,13 @@ Partial Class frmMain
     Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError1 As DataGridViewCheckBoxColumn
-    Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents editAddParts As CraftBand.ctrAddParts
-    Friend WithEvents txt作成者 As TextBox
-    Friend WithEvents txtタイトル As TextBox
-    Friend WithEvents lbl作成者 As Label
-    Friend WithEvents lblタイトル As Label
-    Friend WithEvents expand横ひも As CraftBand.ctrExpanding
-    Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
-    Friend WithEvents grp楕円底個別設定 As GroupBox
-    Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_iひも番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_i何本幅2 As DataGridViewComboBoxColumn
     Friend WithEvents f_i周数2 As DataGridViewTextBoxColumn
+    Friend WithEvents f_b集計対象外区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_s色2 As DataGridViewComboBoxColumn
     Friend WithEvents f_b周連続区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_b次周連続区分2 As DataGridViewCheckBoxColumn
@@ -3252,7 +3275,4 @@ Partial Class frmMain
     Friend WithEvents f_s記号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError2 As DataGridViewCheckBoxColumn
-    Friend WithEvents lbl最大周の径 As Label
-    Friend WithEvents txt外側_最大周の径 As TextBox
-    Friend WithEvents txt内側_最大周の径 As TextBox
 End Class

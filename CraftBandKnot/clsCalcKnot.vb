@@ -785,6 +785,7 @@ Class clsCalcKnot
                     row.f_d周長 = p_dコマベース_周
                     row.f_dひも長 = p_i垂直ひも数 * _dコマベース要尺 + _dひも長加算_側面
                     row.f_d厚さ = p_d四つ畳み編みの厚さ
+                    row.f_b集計対象外区分 = False
                     '非表示
                     row.f_i周数 = 1
                     row.f_i段数 = p_i垂直ひも数 'コマ数
@@ -831,6 +832,7 @@ Class clsCalcKnot
                     row.f_d周長 = p_dコマベース_周
                     row.f_dひも長 = p_i垂直ひも数 * _dコマベース要尺 + _dひも長加算_側面
                     row.f_d厚さ = p_d折り返しの厚さ
+                    row.f_b集計対象外区分 = False
                     '非表示
                     row.f_i周数 = 1
                     row.f_i段数 = p_i垂直ひも数 'コマ数
@@ -918,6 +920,7 @@ Class clsCalcKnot
         groupRow.SetNameIndexValue("f_b周連続区分", grpMst)
         groupRow.SetNameIndexValue("f_dひも長加算", grpMst, "f_dひも長加算初期値")
         groupRow.SetNameIndexValue("f_sメモ", grpMst, "f_s備考")
+        groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
 
         For Each drow As clsDataRow In groupRow
             Dim mst As New clsOptionDataRow(grpMst.IndexDataRow(drow)) '必ずある
@@ -928,7 +931,7 @@ Class clsCalcKnot
     End Function
 
     '更新処理が必要なフィールド名
-    Shared _fields側面() As String = {"f_i何本幅"}
+    Shared _fields側面() As String = {"f_i何本幅", "f_b集計対象外区分"}
     Shared Function IsDataPropertyName側面(ByVal name As String) As Boolean
         Return _fields側面.Contains(name)
     End Function
@@ -954,6 +957,9 @@ Class clsCalcKnot
                     End If
                     ret = ret And set_groupRow側面(groupRow)
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Side Change: {0}", groupRow.ToString)
+                Else
+                    '編みひも
+                    row.f_b集計対象外区分 = False
                 End If
             Else
                 '削除
@@ -1835,7 +1841,12 @@ Class clsCalcKnot
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 <= r.f_d連続ひも長 Then
-                        r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        If r.f_i番号 = cHemNumber AndAlso r.f_b集計対象外区分 Then
+                            r.f_s記号 = ""
+                            output.SetBandRowNoMark(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        Else
+                            r.f_s記号 = output.SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
+                        End If
                     End If
 
                 End If

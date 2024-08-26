@@ -301,6 +301,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  集計対象外 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutNoSum() As String
+            Get
+                Return ResourceManager.GetString("CalcOutNoSum", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  面積長 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutShortest() As String

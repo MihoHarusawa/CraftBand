@@ -213,6 +213,7 @@ Partial Class frmMain
         f_i何本幅2 = New DataGridViewComboBoxColumn()
         f_i周数2 = New DataGridViewTextBoxColumn()
         f_s色2 = New DataGridViewComboBoxColumn()
+        f_b集計対象外区分2 = New DataGridViewCheckBoxColumn()
         f_b周連続区分2 = New DataGridViewCheckBoxColumn()
         f_b次周連続区分2 = New DataGridViewCheckBoxColumn()
         f_i段数 = New DataGridViewTextBoxColumn()
@@ -1517,7 +1518,7 @@ Partial Class frmMain
         dgv側面と縁.AutoGenerateColumns = False
         dgv側面と縁.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面と縁.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面と縁.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_s色2, f_b周連続区分2, f_b次周連続区分2, f_i段数, f_d高さ2, f_d高さ比率2, f_d垂直ひも長2, f_d周長比率対底の周2, f_d周長2, f_dひも長2, f_dひも長加算2, f_iひも本数2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面と縁.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_s色2, f_b集計対象外区分2, f_b周連続区分2, f_b次周連続区分2, f_i段数, f_d高さ2, f_d高さ比率2, f_d垂直ひも長2, f_d周長比率対底の周2, f_d周長2, f_dひも長2, f_dひも長加算2, f_iひも本数2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
         dgv側面と縁.DataSource = BindingSource側面と縁
         dgv側面と縁.Location = New Point(6, 6)
         dgv側面と縁.Name = "dgv側面と縁"
@@ -1952,6 +1953,14 @@ Partial Class frmMain
         f_s色2.Resizable = DataGridViewTriState.True
         f_s色2.Width = 80
         ' 
+        ' f_b集計対象外区分2
+        ' 
+        f_b集計対象外区分2.DataPropertyName = "f_b集計対象外区分"
+        f_b集計対象外区分2.HeaderText = "集計対象外"
+        f_b集計対象外区分2.MinimumWidth = 6
+        f_b集計対象外区分2.Name = "f_b集計対象外区分2"
+        f_b集計対象外区分2.Width = 125
+        ' 
         ' f_b周連続区分2
         ' 
         f_b周連続区分2.DataPropertyName = "f_b周連続区分"
@@ -2147,7 +2156,7 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8.0F, 20.0F)
+        AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(886, 783)
         Controls.Add(lbl厚さ)
@@ -2432,6 +2441,7 @@ Partial Class frmMain
     Friend WithEvents f_i何本幅2 As DataGridViewComboBoxColumn
     Friend WithEvents f_i周数2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s色2 As DataGridViewComboBoxColumn
+    Friend WithEvents f_b集計対象外区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_b周連続区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_b次周連続区分2 As DataGridViewCheckBoxColumn
     Friend WithEvents f_i段数 As DataGridViewTextBoxColumn
