@@ -15,9 +15,6 @@ Public Module mdlAddPartsImage
             Return 0
         End If
 
-        '横に対する縦の比率
-        _dAspectRatio = editAddParts.getAspectRatio()
-
         '現在の描画位置
         _p左下 = imgData.CurrentItemDrawingRect.p左下 '最下
         _p中心 = imgData.CenterCoordinates
@@ -129,7 +126,6 @@ Public Module mdlAddPartsImage
     End Function
 
 
-    Dim _dAspectRatio As Double
     Dim _p中心 As S実座標
     Dim _p左下 As S実座標
 
@@ -231,7 +227,8 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_長方形_横(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
-        If _dAspectRatio = 0 Then
+        Dim dAspectRatio As Double = row.f_d縦対横比率
+        If dAspectRatio = 0 Then
             Return 0
         End If
 
@@ -242,7 +239,7 @@ Public Module mdlAddPartsImage
         Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d横 As Double = d長さ
-        Dim d縦 As Double = d長さ * _dAspectRatio
+        Dim d縦 As Double = d長さ * dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -301,7 +298,8 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_長方形_周(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
-        If _dAspectRatio = 0 Then
+        Dim dAspectRatio As Double = row.f_d縦対横比率
+        If dAspectRatio = 0 Then
             Return 0
         End If
 
@@ -312,8 +310,8 @@ Public Module mdlAddPartsImage
         Dim i本数 As Integer = 1
         Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
-        Dim d横 As Double = d長さ / (2 + 2 * _dAspectRatio)
-        Dim d縦 As Double = d横 * _dAspectRatio
+        Dim d横 As Double = d長さ / (2 + 2 * dAspectRatio)
+        Dim d縦 As Double = d横 * dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -372,7 +370,8 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_楕円_横径(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
-        If _dAspectRatio = 0 Then
+        Dim dAspectRatio As Double = row.f_d縦対横比率
+        If dAspectRatio = 0 Then
             Return 0
         End If
 
@@ -384,7 +383,7 @@ Public Module mdlAddPartsImage
         Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
         Dim d横径 As Double = d長さ
-        Dim d縦径 As Double = d横径 * _dAspectRatio
+        Dim d縦径 As Double = d横径 * dAspectRatio
         For i As Integer = 1 To i本数
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
@@ -443,7 +442,8 @@ Public Module mdlAddPartsImage
 
 
     Private Function add_楕円_周(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
-        If _dAspectRatio = 0 Then
+        Dim dAspectRatio As Double = row.f_d縦対横比率
+        If dAspectRatio = 0 Then
             Return 0
         End If
 
@@ -454,7 +454,7 @@ Public Module mdlAddPartsImage
         Dim i本数 As Integer = 1
         Dim d長さ As Double = IIf(row.f_b集計対象外区分, row.f_d出力ひも長, row.f_d長さ)
 
-        Dim d As Double = 1 / _dAspectRatio
+        Dim d As Double = 1 / dAspectRatio
         Dim ph As Double = Math.PI * (3 * (d + 1) - Math.Sqrt((3 * d + 1) * (d + 3)))
         Dim d縦径 As Double = 2 * d長さ / ph
         Dim d横径 As Double = d縦径 * d

@@ -45,17 +45,48 @@ Public Class ctrAddParts
 
     '参照値 #63
     Friend Shared _Refvalues() As Double   '(0)は有効フラグ
-    Friend Shared Function isRefValue(ByVal i長さ参照 As Integer, ByRef d長さ As Double) As Boolean
+    Friend Shared Function isRefValue(ByVal i長さ参照 As Integer, ByRef d長さ As Double, ByRef d縦対横比率 As Double) As Boolean
         If 0 < i長さ参照 Then
             If _Refvalues IsNot Nothing AndAlso i長さ参照 < _Refvalues.Length AndAlso 0 < _Refvalues(0) Then
+                '値あり
                 d長さ = _Refvalues(i長さ参照)
+
+                '横に対する縦の比率
+                d縦対横比率 = 0
+                If 12 <= _Refvalues.Length Then
+                    '1-4,5-8,9-12の3セット12点:横・縦・高さ・周/幅の想定
+                    If i長さ参照 <= 4 AndAlso 0 < _Refvalues(1) Then
+                        '1-4
+                        d縦対横比率 = _Refvalues(2) / _Refvalues(1)
+                    ElseIf i長さ参照 <= 8 AndAlso 0 < _Refvalues(5) Then
+                        '5-8
+                        d縦対横比率 = _Refvalues(6) / _Refvalues(5)
+                    ElseIf 0 < _Refvalues(9) Then
+                        '9-12
+                        d縦対横比率 = _Refvalues(10) / _Refvalues(9)
+                    End If
+                End If
             Else
-                d長さ = 0 '値なし
+                '値なし
+                d長さ = 0
+                d縦対横比率 = 0
             End If
             Return True '参照あり
         Else
             Return False '参照なし
         End If
+    End Function
+
+    '参照がない時の縦対横比率
+    Friend Shared Function getAspectRatio() As Double
+        '1-4,5-8,9-12の3セット12点:横・縦・高さ・周/幅の想定
+        '2セット目(5-8)の値を採用
+        If _Refvalues IsNot Nothing OrElse _Refvalues.Count < 7 Then
+            If 0 < _Refvalues(5) Then
+                Return _Refvalues(6) / _Refvalues(5)
+            End If
+        End If
+        Return 0
     End Function
 
     '対象バンド・基本値の更新
@@ -203,12 +234,6 @@ Public Class ctrAddParts
         Next
     End Sub
 
-    '画面の文字列
-    'Public ReadOnly Property text集計対象外 As String
-    '    Get
-    '        Return f_b集計対象外区分3.HeaderText
-    '    End Get
-    'End Property
     Public ReadOnly Property TabPageName As String
         Get
             Return _TabPageName
@@ -224,20 +249,6 @@ Public Class ctrAddParts
                 Return rc(0).Display
             End If
             Return Nothing
-        End Get
-    End Property
-
-    '横に対する縦の比率
-    Public ReadOnly Property getAspectRatio() As Double
-        Get
-            '1-4,5-8:横・縦・高さ・周 の2セットの想定
-            '5-8側の値を採用
-            If _Refvalues IsNot Nothing OrElse _Refvalues.Count < 7 Then
-                If 0 < _Refvalues(5) Then
-                    Return _Refvalues(6) / _Refvalues(5)
-                End If
-            End If
-            Return 0
         End Get
     End Property
 
@@ -452,11 +463,14 @@ Public Class ctrAddParts
                     groupRow.SetNameValue("f_i点数", i点数)
                 ElseIf dataPropertyName = "f_i長さ参照" Then '#63
                     Dim d長さ As Double
-                    If isRefValue(row.f_i長さ参照, d長さ) Then
+                    Dim d縦対横比率 As Double
+                    If isRefValue(row.f_i長さ参照, d長さ, d縦対横比率) Then
                         row.f_d長さ = d長さ
+                        row.f_d縦対横比率 = d縦対横比率
                     End If
                 ElseIf dataPropertyName = "f_d長さ" Then
                     row.f_i長さ参照 = 0 '入力値
+                    row.f_d縦対横比率 = getAspectRatio()
                 End If
                 ret = ret And set_groupRow追加品(groupRow)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Change: {0}", groupRow.ToString)
@@ -508,8 +522,12 @@ Public Class ctrAddParts
                     End If
                     '#63
                     Dim d長さ As Double
-                    If isRefValue(drow.Value("f_i長さ参照"), d長さ) Then
+                    Dim d縦対横比率 As Double
+                    If isRefValue(drow.Value("f_i長さ参照"), d長さ, d縦対横比率) Then
                         drow.Value("f_d長さ") = d長さ
+                        drow.Value("f_d縦対横比率") = d縦対横比率
+                    Else
+                        drow.Value("f_d縦対横比率") = getAspectRatio()
                     End If
 
                     Dim ok As Boolean = False

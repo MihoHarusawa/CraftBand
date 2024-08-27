@@ -174,7 +174,7 @@ Public Class frmBandTypeWidth
     End Sub
 
 
-
+#Region "Shared関数"
     '等分値
     Private Shared Function get等分値(ByVal i本幅 As Integer, ByVal dバンド幅 As Double, ByVal i本 As Integer) As Double
         If i本幅 = 0 Then
@@ -330,6 +330,6 @@ Public Class frmBandTypeWidth
         '等分値を返す
         Return get等分値Ary(i本幅, dバンド幅)
     End Function
-
+#End Region
 
 End Class
