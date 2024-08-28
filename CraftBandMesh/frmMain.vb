@@ -47,8 +47,8 @@ Public Class frmMain
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
         setAddPartsRefNames()
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
 
 #If DEBUG Then
@@ -248,7 +248,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Oval}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Expand, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Oval}.Contains(category) Then
             Save底_縦横(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -510,6 +510,9 @@ Public Class frmMain
             lbl縦寸法の差.Text = .p_s縦寸法の差
             lbl高さ寸法の差.Text = .p_s高さ寸法の差
 
+            lbl縦置きの計.Text = .p_s縦横の横
+            lbl横置きの計.Text = .p_s縦横の縦
+
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
                 ToolStripStatusLabel2.Text = ""
@@ -701,7 +704,9 @@ Public Class frmMain
             _clsCalcMesh.prepare縦横展開DataTable()
         End If
 
-        ShowColorRepeatForm(_clsDataTables)
+        If 0 < ShowColorRepeatForm(_clsDataTables) Then
+            recalc(CalcCategory.BandColor)
+        End If
     End Sub
 
     'リセット
@@ -777,6 +782,8 @@ Public Class frmMain
 
         '実行する
         ShowDefaultTabControlPage(enumReason._Always)
+        chk縦横を展開する.Checked = False
+
         If _clsCalcMesh.CalcTarget() Then
             _isLoadingData = True
             '計算結果の縦横値
@@ -1127,6 +1134,7 @@ Public Class frmMain
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
         set底の縦横展開(chk縦横を展開する.Checked)
+        recalc(CalcCategory.Expand, sender)
     End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
@@ -1258,6 +1266,19 @@ Public Class frmMain
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
         ShowDefaultTabControlPage(enumReason._Preview)
     End Sub
+
+    Private Sub chk斜めの補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも.CheckedChanged
+
+    End Sub
+
+    Private Sub chk補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk補強ひも.CheckedChanged
+
+    End Sub
+
+    Private Sub chk始末ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk始末ひも.CheckedChanged
+
+    End Sub
+
 #End Region
 
 #Region "底楕円"
@@ -1599,7 +1620,7 @@ Public Class frmMain
         'タブ切り替えタイミングのため、表示は更新済
         Save底_縦横(works.p_row底_縦横)
         expand横ひも.PanelSize = tpage横ひも.Size
-        expand横ひも.ShowGrid(_clsCalcMesh.set横展開DataTable(True))
+        expand横ひも.ShowGrid(_clsCalcMesh.get横展開DataTable())
     End Sub
 
     Function Hide横ひも(ByVal works As clsDataTables) As Boolean
@@ -1610,7 +1631,7 @@ Public Class frmMain
         'タブ切り替えタイミングのため、表示は更新済
         Save底_縦横(works.p_row底_縦横)
         expand縦ひも.PanelSize = tpage縦ひも.Size
-        expand縦ひも.ShowGrid(_clsCalcMesh.set縦展開DataTable(True))
+        expand縦ひも.ShowGrid(_clsCalcMesh.get縦展開DataTable())
     End Sub
 
     Function Hide縦ひも(ByVal works As clsDataTables) As Boolean
@@ -1640,7 +1661,7 @@ Public Class frmMain
 
         nud長い横ひもの本数.Value = nud長い横ひもの本数.Value + 1 'with recalc
 
-        expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
+        'expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
         expand横ひも.PositionSelect(currow)
     End Sub
 
@@ -1654,13 +1675,13 @@ Public Class frmMain
         If iひも種.HasFlag(enumひも種.i_補強) OrElse iひも種.HasFlag(enumひも種.i_最上と最下) Then
             _clsDataTables.FromTmpTable(enumひも種.i_横, expand横ひも.DataSource)
             If iひも種.HasFlag(enumひも種.i_補強) Then
-                chk補強ひも.Checked = False
+                chk補強ひも.Checked = False 'with recalc
             End If
             If iひも種.HasFlag(enumひも種.i_最上と最下) Then
-                rad最上と最下の短いひも_なし.Checked = True
+                rad最上と最下の短いひも_なし.Checked = True 'with recalc
             End If
             Save底_縦横(_clsDataTables.p_row底_縦横)
-            expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
+            'expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
 
             Exit Sub
         End If
@@ -1670,12 +1691,12 @@ Public Class frmMain
         _clsDataTables.FromTmpTable(enumひも種.i_横, expand横ひも.DataSource)
         nud長い横ひもの本数.Value = nud長い横ひもの本数.Value - 1 'with recalc
         '
-        expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
+        'expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
         expand横ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
-        expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(False)
+        expand横ひも.DataSource = _clsCalcMesh.get横展開DataTable(True)
     End Sub
 
     Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
@@ -1696,7 +1717,7 @@ Public Class frmMain
 
         nud縦ひもの本数.Value = nud縦ひもの本数.Value + 1 'with recalc
 
-        expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+        'expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
         expand縦ひも.PositionSelect(currow)
     End Sub
 
@@ -1716,7 +1737,7 @@ Public Class frmMain
                 chk斜めの補強ひも.Checked = False
             End If
             Save底_縦横(_clsDataTables.p_row底_縦横)
-            expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+            'expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
             Exit Sub
         End If
 
@@ -1725,12 +1746,12 @@ Public Class frmMain
         _clsDataTables.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, expand縦ひも.DataSource)
         nud縦ひもの本数.Value = nud縦ひもの本数.Value - 1 'with recalc
         '
-        expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
+        'expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
         expand縦ひも.PositionSelect(currow)
     End Sub
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
-        expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(False)
+        expand縦ひも.DataSource = _clsCalcMesh.get縦展開DataTable(True)
     End Sub
 
 #End Region
@@ -1817,7 +1838,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 #End Region
 
 End Class

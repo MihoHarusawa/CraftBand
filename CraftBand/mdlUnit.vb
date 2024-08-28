@@ -224,7 +224,7 @@
 
 
         '現設定の何本幅分か
-        Public Property ByLane() As Double  '現設定の何本幅分か
+        Private Property ByLane() As Double  '現設定の何本幅分か
             Get
                 Return _Millimeter / (g_clsSelectBasics.p_lenバンド幅._Millimeter / g_clsSelectBasics.p_i本幅)
             End Get
@@ -234,7 +234,11 @@
         End Property
         Public ReadOnly Property ByLaneText As String
             Get
-                Return ByLane.ToString("F1")
+                If g_clsSelectBasics.p_isバンド個別幅 Then
+                    Return "--"
+                Else
+                    Return ByLane.ToString("F1")
+                End If
             End Get
         End Property
 

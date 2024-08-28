@@ -1856,6 +1856,8 @@ Namespace Tables
             
             Private columnf_i差しひも累計 As Global.System.Data.DataColumn
             
+            Private columnf_i差しひも種 As Global.System.Data.DataColumn
+            
             Private columnf_s編みかた名 As Global.System.Data.DataColumn
             
             Private columnf_s編みひも名 As Global.System.Data.DataColumn
@@ -1964,6 +1966,14 @@ Namespace Tables
             Public ReadOnly Property f_i差しひも累計Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_i差しひも累計
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i差しひも種Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i差しひも種
                 End Get
             End Property
             
@@ -2185,6 +2195,7 @@ Namespace Tables
                         ByVal f_b差しひも区分 As Boolean,  _
                         ByVal f_i差しひも本数 As Short,  _
                         ByVal f_i差しひも累計 As Integer,  _
+                        ByVal f_i差しひも種 As Short,  _
                         ByVal f_s編みかた名 As String,  _
                         ByVal f_s編みひも名 As String,  _
                         ByVal f_iひも番号 As Short,  _
@@ -2208,7 +2219,7 @@ Namespace Tables
                         ByVal f_s記号 As String,  _
                         ByVal f_sメモ As String) As tbl底_楕円Row
                 Dim rowtbl底_楕円Row As tbl底_楕円Row = CType(Me.NewRow,tbl底_楕円Row)
-                Dim columnValuesArray() As Object = New Object() {f_i番号, f_b差しひも区分, f_i差しひも本数, f_i差しひも累計, f_s編みかた名, f_s編みひも名, f_iひも番号, f_bError, f_i何本幅, f_b集計対象外区分, f_i周数, f_s色, f_i段数, f_b周連続区分, f_b次周連続区分, f_d径, f_d径の累計, f_d円弧部分長, f_d差しひも間のすき間, f_d周長, f_dひも長加算, f_dひも長, f_d連続ひも長, f_iひも本数, f_s記号, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_i番号, f_b差しひも区分, f_i差しひも本数, f_i差しひも累計, f_i差しひも種, f_s編みかた名, f_s編みひも名, f_iひも番号, f_bError, f_i何本幅, f_b集計対象外区分, f_i周数, f_s色, f_i段数, f_b周連続区分, f_b次周連続区分, f_d径, f_d径の累計, f_d円弧部分長, f_d差しひも間のすき間, f_d周長, f_dひも長加算, f_dひも長, f_d連続ひも長, f_iひも本数, f_s記号, f_sメモ}
                 rowtbl底_楕円Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl底_楕円Row)
                 Return rowtbl底_楕円Row
@@ -2241,6 +2252,7 @@ Namespace Tables
                 Me.columnf_b差しひも区分 = MyBase.Columns("f_b差しひも区分")
                 Me.columnf_i差しひも本数 = MyBase.Columns("f_i差しひも本数")
                 Me.columnf_i差しひも累計 = MyBase.Columns("f_i差しひも累計")
+                Me.columnf_i差しひも種 = MyBase.Columns("f_i差しひも種")
                 Me.columnf_s編みかた名 = MyBase.Columns("f_s編みかた名")
                 Me.columnf_s編みひも名 = MyBase.Columns("f_s編みひも名")
                 Me.columnf_iひも番号 = MyBase.Columns("f_iひも番号")
@@ -2276,6 +2288,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i差しひも本数)
                 Me.columnf_i差しひも累計 = New Global.System.Data.DataColumn("f_i差しひも累計", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i差しひも累計)
+                Me.columnf_i差しひも種 = New Global.System.Data.DataColumn("f_i差しひも種", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i差しひも種)
                 Me.columnf_s編みかた名 = New Global.System.Data.DataColumn("f_s編みかた名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s編みかた名)
                 Me.columnf_s編みひも名 = New Global.System.Data.DataColumn("f_s編みひも名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -2326,6 +2340,7 @@ Namespace Tables
                 Me.columnf_b差しひも区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_i差しひも本数.DefaultValue = CType(0,Short)
                 Me.columnf_i差しひも累計.DefaultValue = CType(0,Integer)
+                Me.columnf_i差しひも種.DefaultValue = CType(0,Short)
                 Me.columnf_s編みかた名.DefaultValue = CType("",String)
                 Me.columnf_s編みひも名.DefaultValue = CType("",String)
                 Me.columnf_iひも番号.AllowDBNull = false
@@ -6723,6 +6738,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i差しひも種() As Short
+                Get
+                    If Me.Isf_i差しひも種Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl底_楕円.f_i差しひも種Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl底_楕円.f_i差しひも種Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s編みかた名() As String
                 Get
                     If Me.Isf_s編みかた名Null Then
@@ -7081,6 +7111,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_i差しひも累計Null()
                 Me(Me.tabletbl底_楕円.f_i差しひも累計Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i差しひも種Null() As Boolean
+                Return Me.IsNull(Me.tabletbl底_楕円.f_i差しひも種Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i差しひも種Null()
+                Me(Me.tabletbl底_楕円.f_i差しひも種Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

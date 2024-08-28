@@ -645,7 +645,7 @@ Partial Class frmMain
         ' chk斜めの補強ひも
         ' 
         chk斜めの補強ひも.AutoSize = True
-        chk斜めの補強ひも.Location = New Point(432, 103)
+        chk斜めの補強ひも.Location = New Point(471, 103)
         chk斜めの補強ひも.Name = "chk斜めの補強ひも"
         chk斜めの補強ひも.Size = New Size(123, 24)
         chk斜めの補強ひも.TabIndex = 3
@@ -748,7 +748,7 @@ Partial Class frmMain
         ' 
         nud垂直ひも長加算.DecimalPlaces = 2
         nud垂直ひも長加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud垂直ひも長加算.Location = New Point(572, 66)
+        nud垂直ひも長加算.Location = New Point(611, 66)
         nud垂直ひも長加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud垂直ひも長加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nud垂直ひも長加算.Name = "nud垂直ひも長加算"
@@ -760,7 +760,7 @@ Partial Class frmMain
         ' lbl垂直ひも長加算
         ' 
         lbl垂直ひも長加算.AutoSize = True
-        lbl垂直ひも長加算.Location = New Point(431, 71)
+        lbl垂直ひも長加算.Location = New Point(470, 71)
         lbl垂直ひも長加算.Name = "lbl垂直ひも長加算"
         lbl垂直ひも長加算.Size = New Size(107, 20)
         lbl垂直ひも長加算.TabIndex = 0
@@ -783,7 +783,7 @@ Partial Class frmMain
         nud楕円底円弧の半径加算.DecimalPlaces = 2
         nud楕円底円弧の半径加算.Enabled = False
         nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底円弧の半径加算.Location = New Point(413, 23)
+        nud楕円底円弧の半径加算.Location = New Point(473, 23)
         nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud楕円底円弧の半径加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nud楕円底円弧の半径加算.Name = "nud楕円底円弧の半径加算"
@@ -795,7 +795,7 @@ Partial Class frmMain
         ' lbl楕円底円弧の半径加算
         ' 
         lbl楕円底円弧の半径加算.AutoSize = True
-        lbl楕円底円弧の半径加算.Location = New Point(247, 27)
+        lbl楕円底円弧の半径加算.Location = New Point(307, 27)
         lbl楕円底円弧の半径加算.Name = "lbl楕円底円弧の半径加算"
         lbl楕円底円弧の半径加算.Size = New Size(156, 20)
         lbl楕円底円弧の半径加算.TabIndex = 1
@@ -807,7 +807,7 @@ Partial Class frmMain
         nud楕円底周の加算.DecimalPlaces = 2
         nud楕円底周の加算.Enabled = False
         nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底周の加算.Location = New Point(664, 23)
+        nud楕円底周の加算.Location = New Point(724, 23)
         nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud楕円底周の加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nud楕円底周の加算.Name = "nud楕円底周の加算"
@@ -819,7 +819,7 @@ Partial Class frmMain
         ' lbl楕円底周の加算
         ' 
         lbl楕円底周の加算.AutoSize = True
-        lbl楕円底周の加算.Location = New Point(533, 27)
+        lbl楕円底周の加算.Location = New Point(593, 27)
         lbl楕円底周の加算.Name = "lbl楕円底周の加算"
         lbl楕円底周の加算.Size = New Size(111, 20)
         lbl楕円底周の加算.TabIndex = 4
@@ -1038,7 +1038,7 @@ Partial Class frmMain
         ' btn画像ファイル
         ' 
         btn画像ファイル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル.Location = New Point(607, 361)
+        btn画像ファイル.Location = New Point(671, 361)
         btn画像ファイル.Name = "btn画像ファイル"
         btn画像ファイル.Size = New Size(111, 46)
         btn画像ファイル.TabIndex = 2
@@ -1049,7 +1049,7 @@ Partial Class frmMain
         ' btnブラウザ
         ' 
         btnブラウザ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ.Location = New Point(724, 361)
+        btnブラウザ.Location = New Point(788, 361)
         btnブラウザ.Name = "btnブラウザ"
         btnブラウザ.Size = New Size(111, 46)
         btnブラウザ.TabIndex = 3
@@ -1063,7 +1063,7 @@ Partial Class frmMain
         txtメモ.Location = New Point(24, 148)
         txtメモ.Multiline = True
         txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 185)
+        txtメモ.Size = New Size(861, 185)
         txtメモ.TabIndex = 5
         ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
         ' 
@@ -1073,7 +1073,7 @@ Partial Class frmMain
         txt作成者.Location = New Point(128, 82)
         txt作成者.Multiline = True
         txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 49)
+        txt作成者.Size = New Size(757, 49)
         txt作成者.TabIndex = 3
         ToolTip1.SetToolTip(txt作成者, "作成者情報")
         ' 
@@ -1083,7 +1083,7 @@ Partial Class frmMain
         txtタイトル.Location = New Point(128, 18)
         txtタイトル.Multiline = True
         txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 49)
+        txtタイトル.Size = New Size(757, 49)
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
@@ -1374,7 +1374,7 @@ Partial Class frmMain
         ' 
         chk縦横を展開する.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         chk縦横を展開する.AutoSize = True
-        chk縦横を展開する.Location = New Point(698, 21)
+        chk縦横を展開する.Location = New Point(761, 21)
         chk縦横を展開する.Name = "chk縦横を展開する"
         chk縦横を展開する.Size = New Size(125, 24)
         chk縦横を展開する.TabIndex = 5
@@ -1384,7 +1384,7 @@ Partial Class frmMain
         ' lbl垂直ひも長加算_単位
         ' 
         lbl垂直ひも長加算_単位.AutoSize = True
-        lbl垂直ひも長加算_単位.Location = New Point(646, 71)
+        lbl垂直ひも長加算_単位.Location = New Point(685, 71)
         lbl垂直ひも長加算_単位.Name = "lbl垂直ひも長加算_単位"
         lbl垂直ひも長加算_単位.Size = New Size(35, 20)
         lbl垂直ひも長加算_単位.TabIndex = 2
@@ -1410,9 +1410,9 @@ Partial Class frmMain
         grp縦置き.Controls.Add(lbl縦ひもの本数_単位)
         grp縦置き.Controls.Add(lbl縦ひもの本数)
         grp縦置き.Controls.Add(nud縦ひもの本数)
-        grp縦置き.Location = New Point(415, 139)
+        grp縦置き.Location = New Point(460, 139)
         grp縦置き.Name = "grp縦置き"
-        grp縦置き.Size = New Size(408, 268)
+        grp縦置き.Size = New Size(434, 268)
         grp縦置き.TabIndex = 4
         grp縦置き.TabStop = False
         grp縦置き.Text = "縦置き"
@@ -1421,13 +1421,13 @@ Partial Class frmMain
         ' 
         lbl縦置きの計.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl縦置きの計.AutoSize = True
-        lbl縦置きの計.Location = New Point(325, 13)
+        lbl縦置きの計.Location = New Point(342, 18)
         lbl縦置きの計.Name = "lbl縦置きの計"
         lbl縦置きの計.RightToLeft = RightToLeft.Yes
         lbl縦置きの計.Size = New Size(77, 20)
         lbl縦置きの計.TabIndex = 0
         lbl縦置きの計.Text = "縦置きの計"
-        lbl縦置きの計.TextAlign = ContentAlignment.MiddleCenter
+        lbl縦置きの計.TextAlign = ContentAlignment.TopCenter
         ' 
         ' lbl縦ひものメモ
         ' 
@@ -1442,7 +1442,7 @@ Partial Class frmMain
         ' 
         txt縦ひものメモ.Location = New Point(157, 227)
         txt縦ひものメモ.Name = "txt縦ひものメモ"
-        txt縦ひものメモ.Size = New Size(231, 27)
+        txt縦ひものメモ.Size = New Size(240, 27)
         txt縦ひものメモ.TabIndex = 16
         ' 
         ' lbl縦ひも_単位
@@ -1533,7 +1533,7 @@ Partial Class frmMain
         grp横置き.Controls.Add(nud長い横ひもの本数)
         grp横置き.Location = New Point(28, 21)
         grp横置き.Name = "grp横置き"
-        grp横置き.Size = New Size(381, 354)
+        grp横置き.Size = New Size(421, 354)
         grp横置き.TabIndex = 0
         grp横置き.TabStop = False
         grp横置き.Text = "横置き"
@@ -1550,17 +1550,18 @@ Partial Class frmMain
         ' lbl横置きの計
         ' 
         lbl横置きの計.AutoSize = True
-        lbl横置きの計.Location = New Point(298, 13)
+        lbl横置きの計.Location = New Point(329, 19)
         lbl横置きの計.Name = "lbl横置きの計"
         lbl横置きの計.Size = New Size(77, 20)
         lbl横置きの計.TabIndex = 1
         lbl横置きの計.Text = "横置きの計"
+        lbl横置きの計.TextAlign = ContentAlignment.TopCenter
         ' 
         ' txt横ひものメモ
         ' 
         txt横ひものメモ.Location = New Point(182, 316)
         txt横ひものメモ.Name = "txt横ひものメモ"
-        txt横ひものメモ.Size = New Size(184, 27)
+        txt横ひものメモ.Size = New Size(220, 27)
         txt横ひものメモ.TabIndex = 21
         ' 
         ' lbl横ひも間のすき間_単位
@@ -2236,7 +2237,7 @@ Partial Class frmMain
         grp楕円底個別設定.Controls.Add(chk楕円底個別設定)
         grp楕円底個別設定.Location = New Point(26, 339)
         grp楕円底個別設定.Name = "grp楕円底個別設定"
-        grp楕円底個別設定.Size = New Size(792, 61)
+        grp楕円底個別設定.Size = New Size(859, 61)
         grp楕円底個別設定.TabIndex = 6
         grp楕円底個別設定.TabStop = False
         grp楕円底個別設定.Text = "楕円底"
@@ -2244,7 +2245,7 @@ Partial Class frmMain
         ' lbl楕円底周の加算_単位
         ' 
         lbl楕円底周の加算_単位.AutoSize = True
-        lbl楕円底周の加算_単位.Location = New Point(738, 27)
+        lbl楕円底周の加算_単位.Location = New Point(798, 27)
         lbl楕円底周の加算_単位.Name = "lbl楕円底周の加算_単位"
         lbl楕円底周の加算_単位.Size = New Size(35, 20)
         lbl楕円底周の加算_単位.TabIndex = 6
@@ -2253,7 +2254,7 @@ Partial Class frmMain
         ' lbl楕円底円弧の半径加算_単位
         ' 
         lbl楕円底円弧の半径加算_単位.AutoSize = True
-        lbl楕円底円弧の半径加算_単位.Location = New Point(487, 27)
+        lbl楕円底円弧の半径加算_単位.Location = New Point(547, 27)
         lbl楕円底円弧の半径加算_単位.Name = "lbl楕円底円弧の半径加算_単位"
         lbl楕円底円弧の半径加算_単位.Size = New Size(35, 20)
         lbl楕円底円弧の半径加算_単位.TabIndex = 3
@@ -2304,7 +2305,7 @@ Partial Class frmMain
         expand横ひも.Location = New Point(-3, -3)
         expand横ひも.Name = "expand横ひも"
         expand横ひも.PanelSize = New Size(840, 413)
-        expand横ひも.Size = New Size(840, 413)
+        expand横ひも.Size = New Size(902, 413)
         expand横ひも.TabIndex = 0
         ' 
         ' tpage縦ひも
@@ -2325,7 +2326,7 @@ Partial Class frmMain
         expand縦ひも.Location = New Point(-3, -3)
         expand縦ひも.Name = "expand縦ひも"
         expand縦ひも.PanelSize = New Size(840, 413)
-        expand縦ひも.Size = New Size(837, 410)
+        expand縦ひも.Size = New Size(902, 410)
         expand縦ひも.TabIndex = 0
         ' 
         ' tpageプレビュー
@@ -2346,7 +2347,7 @@ Partial Class frmMain
         picプレビュー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         picプレビュー.Location = New Point(6, 6)
         picプレビュー.Name = "picプレビュー"
-        picプレビュー.Size = New Size(828, 349)
+        picプレビュー.Size = New Size(893, 349)
         picプレビュー.SizeMode = PictureBoxSizeMode.Zoom
         picプレビュー.TabIndex = 1
         picプレビュー.TabStop = False

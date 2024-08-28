@@ -629,6 +629,7 @@ Public Class clsDataTables
         Return _
         (g_enumExeName = enumExeName.CraftBandSquare) OrElse
                 (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
+                (g_enumExeName = enumExeName.CraftBandMesh AndAlso "1.8.1" <= p_row目標寸法.Value("f_sバージョン")) OrElse
                 (g_enumExeName = enumExeName.CraftBandHexagon)
     End Function
 
@@ -689,11 +690,6 @@ Public Class clsDataTables
             Return 0
         End If
 
-        ''f_i何本幅は対応Exeのみ
-        'Dim isLoad何本幅 As Boolean = (g_enumExeName = enumExeName.CraftBandSquare) OrElse
-        '        (g_enumExeName = enumExeName.CraftBandSquare45 AndAlso "1.6.0" <= p_row目標寸法.Value("f_sバージョン")) OrElse
-        '        (g_enumExeName = enumExeName.CraftBandHexagon)
-
         Dim count As Integer = 0
         For Each tmp As tbl縦横展開Row In tmptable
             '同じキーレコードを検索
@@ -703,32 +699,6 @@ Public Class clsDataTables
             End If
 
             getOtherSaved(tmp, row, isLoad何本幅())
-
-            ''入力対象: f_dひも長加算,f_dひも長加算2, f_s色, f_sメモを取得
-            'tmp.f_dひも長加算 = row.f_dひも長加算
-            'tmp.f_dひも長加算2 = row.f_dひも長加算2
-            'If tmp.f_dひも長加算 <> 0 OrElse tmp.f_dひも長加算2 <> 0 Then
-            '    tmp.f_d出力ひも長 = tmp.f_dひも長 + tmp.f_dひも長加算 + tmp.f_dひも長加算2
-            'End If
-            'If g_clsSelectBasics.IsExistColor(row.f_s色) Then
-            '    tmp.f_s色 = row.f_s色
-            'Else
-            '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_s色={2}", row.f_sひも名, row.f_iひも番号, row.f_s色)
-            'End If
-            'tmp.f_sメモ = row.f_sメモ
-
-            ''f_i何本幅は対応Exeのみ
-            'If isLoad何本幅 Then
-            '    If row.f_i何本幅 < 0 Then
-            '        tmp.f_i何本幅 = 1
-            '        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->1", row.f_sひも名, row.f_iひも番号, row.f_i何本幅)
-            '    ElseIf g_clsSelectBasics.p_i本幅 < row.f_i何本幅 Then
-            '        tmp.f_i何本幅 = g_clsSelectBasics.p_i本幅
-            '        g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "ToTmpTable skip tbl縦横展開Row({0}:{1}).f_i何本幅={2}->{3}", row.f_sひも名, row.f_iひも番号, row.f_i何本幅, g_clsSelectBasics.p_i本幅)
-            '    Else
-            '        tmp.f_i何本幅 = row.f_i何本幅
-            '    End If
-            'End If
 
             count += 1
         Next
@@ -742,9 +712,6 @@ Public Class clsDataTables
         If tmptable Is Nothing OrElse tmptable.Rows.Count = 0 OrElse iひも種 = 0 Then
             Return 0
         End If
-        'If tmptable.GetChanges() Is Nothing Then
-        '    Return 0
-        'End If
 
         'ひも種で指定されたカテゴリーのレコードを削除
         Dim count As Integer = Removeひも種Rows(iひも種)
@@ -868,19 +835,9 @@ Public Class clsDataTables
                 Exit For '↓で処理済のはずだが
             End If
 
-            'lastrow.f_i何本幅 = row.f_i何本幅
-            'lastrow.f_s色 = row.f_s色
-            'lastrow.f_dひも長加算 = row.f_dひも長加算
-            'lastrow.f_dひも長加算2 = row.f_dひも長加算2
-            'lastrow.f_sメモ = row.f_sメモ
             getOtherSaved(lastrow, row, True) 'f_i何本幅 も転記
             If row.f_iひも番号 = bandnum Then
                 currow = row
-                'f_i何本幅 は保持
-                'row.f_s色 = ""
-                'row.f_dひも長加算 = 0
-                'row.f_dひも長加算2 = 0
-                'row.f_sメモ = ""
                 getOtherSaved(row, Nothing, False) 'f_i何本幅 は上書きしない
                 Exit For
             End If
@@ -929,11 +886,6 @@ Public Class clsDataTables
                 Continue For
             End If
             If lastrow IsNot Nothing Then
-                'lastrow.f_i何本幅 = row.f_i何本幅
-                'lastrow.f_s色 = row.f_s色
-                'lastrow.f_dひも長加算 = row.f_dひも長加算
-                'lastrow.f_dひも長加算2 = row.f_dひも長加算2
-                'lastrow.f_sメモ = row.f_sメモ
                 getOtherSaved(lastrow, row, True) '何本幅も転記
                 If currow Is Nothing Then
                     currow = lastrow

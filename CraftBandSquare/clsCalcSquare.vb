@@ -39,6 +39,7 @@ Class clsCalcSquare
 
         '相互参照値のFix
         FixLength   '長さ確定
+        BandColor   '色と幅の変更画面
 
     End Enum
 
@@ -584,6 +585,10 @@ Class clsCalcSquare
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
                 ret = ret And calc_縦ひも展開(category, row, key)
 
+            Case CalcCategory.BandColor '色と幅の変更画面
+                ret = ret And calc_側面と縁(category, Nothing, Nothing)
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_横ひも展開(category, Nothing, Nothing)
 
             '相互参照値のFix(1Pass値は得られている前提)
             Case CalcCategory.FixLength

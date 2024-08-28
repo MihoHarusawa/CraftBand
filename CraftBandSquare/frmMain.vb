@@ -600,7 +600,9 @@ Public Class frmMain
         End If
         _clsCalcSquare.adjust_側面()
 
-        ShowColorRepeatForm(_clsDataTables)
+        If 0 < ShowColorRepeatForm(_clsDataTables) Then
+            recalc(CalcCategory.BandColor)
+        End If
     End Sub
 
     'リセット

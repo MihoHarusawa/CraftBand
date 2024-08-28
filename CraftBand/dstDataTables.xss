@@ -8,7 +8,7 @@
   <Shapes>
     <Shape ID="DesignTable:tbl目標寸法" ZOrder="8" X="223" Y="54" Height="425" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="421" />
     <Shape ID="DesignTable:tbl底_縦横" ZOrder="7" X="515" Y="52" Height="1046" Width="205" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="1042" />
-    <Shape ID="DesignTable:tbl底_楕円" ZOrder="6" X="17" Y="635" Height="471" Width="184" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="467" />
+    <Shape ID="DesignTable:tbl底_楕円" ZOrder="6" X="17" Y="635" Height="517" Width="179" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="513" />
     <Shape ID="DesignTable:tbl側面" ZOrder="5" X="242" Y="637" Height="448" Width="228" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="444" />
     <Shape ID="DesignTable:tbl追加品" ZOrder="4" X="896" Y="51" Height="586" Width="155" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="582" />
     <Shape ID="DesignTable:tbl縦横展開" ZOrder="3" X="13" Y="54" Height="540" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="536" />

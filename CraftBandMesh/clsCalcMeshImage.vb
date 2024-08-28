@@ -6,9 +6,9 @@ Imports CraftBand.Tables.dstDataTables
 
 Partial Public Class clsCalcMesh
 
-    'リスト出力時に生成
-    Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
-    Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
+    ''リスト出力時に生成
+    'Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
+    'Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
 
     'プレビュー時に生成
     Dim _imageList側面編みかた As clsImageItemList    '側面のレコードを含む
@@ -18,8 +18,8 @@ Partial Public Class clsCalcMesh
 
 
     '横ひもリストの描画情報
-    Private Function imageList横ひも() As Boolean
-        If _ImageList横ひも Is Nothing Then
+    Private Function imageList横ひも(ByVal imgList横ひも As clsImageItemList) As Boolean
+        If imgList横ひも Is Nothing Then
             Return False
         End If
 
@@ -31,8 +31,8 @@ Partial Public Class clsCalcMesh
         Dim d横ひも間のすき間 As Double = _Data.p_row底_縦横.Value("f_d横ひも間のすき間")
 
         '上から下へ(位置順)
-        _ImageList横ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList横ひも
+        imgList横ひも.SortByPosition()
+        For Each band As clsImageItem In imgList横ひも
             If band.m_row縦横展開 Is Nothing Then
                 Continue For
             End If
@@ -63,8 +63,8 @@ Partial Public Class clsCalcMesh
     End Function
 
     '縦ひもリストの描画情報
-    Private Function imageList縦ひも() As Boolean
-        If _ImageList縦ひも Is Nothing Then
+    Private Function imageList縦ひも(ByVal imgList縦ひも As clsImageItemList) As Boolean
+        If imgList縦ひも Is Nothing Then
             Return False
         End If
 
@@ -74,8 +74,8 @@ Partial Public Class clsCalcMesh
         Dim dひとつのすき間の寸法 As Double = _Data.p_row底_縦横.Value("f_dひとつのすき間の寸法")
 
         '左から右へ(位置順)
-        _ImageList縦ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList縦ひも
+        imgList縦ひも.SortByPosition()
+        For Each band As clsImageItem In imgList縦ひも
             If band.m_row縦横展開 Is Nothing Then
                 Continue For
             End If
@@ -368,38 +368,6 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
-    ''付属品
-    'Function imageList付属品() As clsImageItemList
-    'Dim item As clsImageItem
-    'Dim itemlist As New clsImageItemList
-
-    ''追加品のレコードをイメージ情報化
-    'Dim dY As Double = -(3 * _dPortionOver + p_d外側_縦 / 2)
-    'Dim dX As Double = -p_d外側_横 / 2
-
-    ''番号ごと
-    'Dim res = (From row As tbl追加品Row In _Data.p_tbl追加品
-    '           Select Num = row.f_i番号
-    '           Order By Num).Distinct
-    'For Each num As Integer In res
-    '    Dim cond As String = String.Format("f_i番号 = {0}", num)
-    '    Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
-
-    '    Dim i点数 As Integer = groupRow.GetNameValue("f_i点数") '一致項目
-    '    Dim d長さ As Double = groupRow.GetIndexNameValue(1, "f_d長さ")
-    '    Dim i本幅 As Integer = groupRow.GetIndexNameValue(1, "f_i何本幅")
-    '    Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
-
-    '    Do While 0 < i点数
-    '        item = New clsImageItem(ImageTypeEnum._付属品, groupRow, i点数)
-
-    '        dY -= d幅 * 2
-    '        i点数 -= 1
-    '    Loop
-    'Next
-
-    'Return itemlist
-    'End Function
 
     'プレビュー画像生成
     Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
@@ -419,12 +387,9 @@ Partial Public Class clsCalcMesh
             Return False 'p_sメッセージあり
         End If
 
-        'リスト処理で残された情報
-        If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-            Return False
-        End If
+        Dim imgList横ひも As New clsImageItemList(get横展開DataTable())
+        Dim imgList縦ひも As New clsImageItemList(get縦展開DataTable())
+
 
         '文字サイズ
         Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
@@ -432,11 +397,11 @@ Partial Public Class clsCalcMesh
         imgData.setBasics(dひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
         '描画用のデータ追加
-        imageList横ひも()
-        imageList縦ひも()
+        Me.imageList横ひも(imgList横ひも)
+        Me.imageList縦ひも(imgList縦ひも)
         If _Data.p_row底_縦横.Value("f_b展開区分") Then
             '描画用のデータ追加
-            regionUpDown底(_ImageList横ひも, _ImageList縦ひも)
+            regionUpDown底(imgList横ひも, imgList縦ひも)
         End If
 
         _imageList側面編みかた = imageList側面編みかた(dひも幅)
@@ -444,10 +409,10 @@ Partial Public Class clsCalcMesh
 
 
         '中身を移動
-        imgData.MoveList(_ImageList横ひも)
-        _ImageList横ひも = Nothing
-        imgData.MoveList(_ImageList縦ひも)
-        _ImageList縦ひも = Nothing
+        imgData.MoveList(imgList横ひも)
+        imgList横ひも = Nothing
+        imgData.MoveList(imgList縦ひも)
+        imgList縦ひも = Nothing
         imgData.MoveList(_imageList側面編みかた)
         _imageList側面編みかた = Nothing
         imgData.MoveList(_ImageList描画要素)

@@ -588,7 +588,7 @@ Public Class frmMain
         End If
 
         If 0 < ShowColorChangeForm(_clsDataTables) Then
-            recalc(CalcCategory.BandColor)
+            'recalc(CalcCategory.BandColor)
         End If
     End Sub
 
