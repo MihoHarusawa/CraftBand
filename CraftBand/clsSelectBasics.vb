@@ -46,6 +46,10 @@ Public Class clsSelectBasics
             If n = 0 Then
                 Return 0
             End If
+            If _aryバンド幅.Count < n Then
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "p_d指定本幅({0}){1}", n, _aryバンド幅.Count)
+                Return _aryバンド幅(_aryバンド幅.Count - 1) 'Max値
+            End If
             Return _aryバンド幅(n - 1) '_d一本幅 * n
         End Get
     End Property

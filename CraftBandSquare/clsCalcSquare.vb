@@ -2167,7 +2167,7 @@ Class clsCalcSquare
                         row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                         row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
                         If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
-                            If r.f_b集計対象外区分 Then
+                            If r_prv.f_b集計対象外区分 Then
                                 output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
                             Else
                                 output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
