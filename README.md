@@ -68,13 +68,13 @@ allowing you to organize and manage your recipes as a library.
 
 # Current Binary Version
 
-Installer         1.8.6.0
-CraftBand.dll     1.8.6.0 
-CraftBandMesh     1.8.6.0
-CraftBandSqare45  1.5.6.0  
-CraftBandKnot     1.4.6.0
-CraftBandSquare   1.3.6.0
-CraftBandHexagon  1.0.6.0
+Installer         1.8.7.0
+CraftBand.dll     1.8.7.0 
+CraftBandMesh     1.8.7.0
+CraftBandSqare45  1.5.7.0  
+CraftBandKnot     1.4.7.0
+CraftBandSquare   1.3.7.0
+CraftBandHexagon  1.0.7.0
 
 # Usage
 

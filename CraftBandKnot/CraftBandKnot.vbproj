@@ -14,8 +14,8 @@
     <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
     <ApplicationIcon>IconKnot.ico</ApplicationIcon>
-    <AssemblyVersion>1.4.6.0</AssemblyVersion>
-    <FileVersion>1.4.6.0</FileVersion>
+    <AssemblyVersion>1.4.7.0</AssemblyVersion>
+    <FileVersion>1.4.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

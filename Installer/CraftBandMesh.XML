@@ -24,6 +24,7 @@
                 <xs:element name="f_dひも長加算1周あたり" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_dひも長加算ひもあたり" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_b集計対象外区分初期値" type="xs:boolean" default="false" minOccurs="0" />
                 <xs:element name="f_d厚さ" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_bCraftBandMesh" type="xs:boolean" default="true" minOccurs="0" />
                 <xs:element name="f_bCraftBandSquare45" type="xs:boolean" default="true" minOccurs="0" />
@@ -61,6 +62,7 @@
                 <xs:element name="f_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
                 <xs:element name="f_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
                 <xs:element name="f_d目と数える端の目" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_s本幅の幅リスト" type="xs:string" default="" minOccurs="0" />
                 <xs:element name="f_s製品情報" type="xs:string" default="" minOccurs="0" />
                 <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
               </xs:sequence>
@@ -100,7 +102,7 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element name="f_s単位" type="xs:string" default="mm" minOccurs="0" />
-                <xs:element name="f_sバージョン" type="xs:string" default="1.8.2" minOccurs="0" />
+                <xs:element name="f_sバージョン" type="xs:string" default="1.8.3" minOccurs="0" />
                 <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
@@ -196,6 +198,7 @@
     <f_dひも長加算1周あたり>10</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>10</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -222,6 +225,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -248,6 +252,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>6</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -274,6 +279,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -300,6 +306,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -326,6 +333,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -352,6 +360,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -378,6 +387,7 @@
     <f_dひも長加算1周あたり>20</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -404,6 +414,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -430,6 +441,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>7</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -456,6 +468,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -482,6 +495,7 @@
     <f_dひも長加算1周あたり>20</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -508,6 +522,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -534,6 +549,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -560,6 +576,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -586,6 +603,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -612,6 +630,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -638,6 +657,7 @@
     <f_dひも長加算1周あたり>20</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -664,6 +684,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -690,6 +711,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -716,6 +738,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -742,6 +765,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -768,6 +792,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -794,6 +819,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -820,6 +846,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -846,6 +873,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -872,6 +900,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -898,6 +927,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -924,6 +954,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -950,6 +981,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -976,6 +1008,7 @@
     <f_dひも長加算1周あたり>10</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>10</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1002,6 +1035,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1028,6 +1062,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1054,6 +1089,7 @@
     <f_dひも長加算1周あたり>20</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1080,6 +1116,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1106,6 +1143,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>10</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1132,6 +1170,7 @@
     <f_dひも長加算1周あたり>100</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1158,6 +1197,7 @@
     <f_dひも長加算1周あたり>100</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1184,6 +1224,7 @@
     <f_dひも長加算1周あたり>100</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1210,6 +1251,7 @@
     <f_dひも長加算1周あたり>100</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>1</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1236,6 +1278,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1262,6 +1305,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1288,6 +1332,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1314,6 +1359,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1340,6 +1386,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>10</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1366,6 +1413,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1392,6 +1440,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1418,6 +1467,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1444,6 +1494,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1470,6 +1521,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>4</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1496,6 +1548,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>5</f_d厚さ>
     <f_bCraftBandMesh>false</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1522,6 +1575,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>6</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1548,6 +1602,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1574,6 +1629,7 @@
     <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1600,6 +1656,7 @@
     <f_dひも長加算1周あたり>20</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>4</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1626,6 +1683,7 @@
     <f_dひも長加算1周あたり>10</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1652,6 +1710,7 @@
     <f_dひも長加算1周あたり>70</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1678,6 +1737,7 @@
     <f_dひも長加算1周あたり>70</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1704,6 +1764,7 @@
     <f_dひも長加算1周あたり>70</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1730,6 +1791,7 @@
     <f_dひも長加算1周あたり>70</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0.5</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1756,6 +1818,7 @@
     <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>4</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1782,6 +1845,7 @@
     <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1808,6 +1872,7 @@
     <f_dひも長加算1周あたり>40</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
@@ -1834,6 +1899,7 @@
     <f_dひも長加算1周あたり>50</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1860,6 +1926,7 @@
     <f_dひも長加算1周あたり>50</f_dひも長加算1周あたり>
     <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
     <f_dひも長加算初期値>20</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>3</f_d厚さ>
     <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
@@ -1893,6 +1960,7 @@
     <f_dコマ要尺係数b>0.6709633649932143</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>0.7</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -1921,6 +1989,7 @@
     <f_dコマ要尺係数b>0.620891494424741</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>0.7</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -1949,6 +2018,7 @@
     <f_dコマ要尺係数b>0.6709633649932143</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>0.7</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -1977,6 +2047,7 @@
     <f_dコマ要尺係数b>0.7212121212121213</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>1</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考>書籍記載値</f_s備考>
   </tblバンドの種類>
@@ -2005,6 +2076,7 @@
     <f_dコマ要尺係数b>0.0266666666666661</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>0.5</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -2033,6 +2105,7 @@
     <f_dコマ要尺係数b>0.0266666666666661</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>1</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -2061,6 +2134,7 @@
     <f_dコマ要尺係数b>0.0266666666666661</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>1</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -2089,6 +2163,7 @@
     <f_dコマ要尺係数b>0.7</f_dコマ要尺係数b>
     <f_d四つ畳みひも長加算初期値>0</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>1</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -3160,7 +3235,7 @@
   </tbl付属品>
   <tbl基本値>
     <f_s単位>mm</f_s単位>
-    <f_sバージョン>1.8.2</f_sバージョン>
+    <f_sバージョン>1.8.3</f_sバージョン>
     <f_s備考 />
   </tbl基本値>
   <tbl描画色>
