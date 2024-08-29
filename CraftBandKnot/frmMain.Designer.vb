@@ -1959,6 +1959,7 @@ Partial Class frmMain
         f_b集計対象外区分2.HeaderText = "集計対象外"
         f_b集計対象外区分2.MinimumWidth = 6
         f_b集計対象外区分2.Name = "f_b集計対象外区分2"
+        f_b集計対象外区分2.ReadOnly = True
         f_b集計対象外区分2.Width = 125
         ' 
         ' f_b周連続区分2

@@ -1016,7 +1016,7 @@ Class clsCalcSquare
             row.Setf_s色Null()
             row.Setf_i何本幅Null()
             row.Setf_dひも長加算Null()
-            row.f_b集計対象外区分 = False
+            row.f_b集計対象外区分 = True
         Else
             If 0 < row.f_iひも本数 Then
                 row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間)

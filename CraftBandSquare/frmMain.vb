@@ -1300,11 +1300,33 @@ Public Class frmMain
         End If
 
         Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         If IsDataPropertyName側面と縁(DataPropertyName) Then
             recalc(CalcCategory.SideEdge, current.Row, DataPropertyName)
         End If
     End Sub
+
+    Private Sub dgv_CellFormatting側面(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv側面.CellFormatting
+        Dim dgv As DataGridView = CType(sender, DataGridView)
+        Dim current As System.Data.DataRowView = BindingSource側面.Current
+        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
+            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+            Exit Sub
+        End If
+        If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_b集計対象外区分" Then
+            For Each col As DataGridViewColumn In dgv.Columns
+                If col.DataPropertyName = "f_i番号" Then
+                    If dgv.Rows(e.RowIndex).Cells(col.Index).Value = clsDataTables.cHemNumber Then
+                        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly = False
+                    Else
+                        dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly = True
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
 
 #End Region
 

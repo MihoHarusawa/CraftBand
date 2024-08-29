@@ -1140,7 +1140,8 @@ Public Class frmMain
         If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
             Exit Sub
         End If
-        If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" Then
+        If dgv.Columns(e.ColumnIndex).DataPropertyName = "f_i何本幅" OrElse
+             dgv.Columns(e.ColumnIndex).DataPropertyName = "f_b集計対象外区分" Then
             For Each col As DataGridViewColumn In dgv.Columns
                 If col.DataPropertyName = "f_i番号" Then
                     If dgv.Rows(e.RowIndex).Cells(col.Index).Value = clsDataTables.cHemNumber Then

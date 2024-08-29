@@ -2679,7 +2679,8 @@ Class clsCalcMesh
                     tmp = tmps(i)
                 End If
                 If tmp IsNot Nothing AndAlso
-                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 Then
+                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 _
+                AndAlso lasttmp.f_dひも長加算 = tmp.f_dひも長加算 Then
                     '同じひも種・記号の継続
                     contcount += 1
                     If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
@@ -2694,8 +2695,8 @@ Class clsCalcMesh
                     row.f_s編みかた名 = lasttmp.f_sひも名
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
-                    If lasttmp.f_dひも長加算 <> 0 Then
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算)
+                    If (lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2) <> 0 Then
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     If _b縦横を展開する Then
