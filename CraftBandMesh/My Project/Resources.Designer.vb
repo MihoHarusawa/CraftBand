@@ -178,11 +178,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}は [{1}] で変更してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcMsgTopBottomBand() As String
+            Get
+                Return ResourceManager.GetString("CalcMsgTopBottomBand", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}追加用の番号がとれません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoAddNumber() As String
             Get
                 Return ResourceManager.GetString("CalcNoAddNumber", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  基本のひも幅を設定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoBaseBandSet() As String
+            Get
+                Return ResourceManager.GetString("CalcNoBaseBandSet", resourceCulture)
             End Get
         End Property
         
@@ -277,7 +295,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  目標寸法もしくは基本のひも幅が正しくありません。 に類似しているローカライズされた文字列を検索します。
+        '''  目標とする縦寸法・横寸法・高さ寸法を設定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoTargetSet() As String
             Get
@@ -309,6 +327,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcOutTurn() As String
             Get
                 Return ResourceManager.GetString("CalcOutTurn", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}を指定するのであれば{1}をセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcSetHorizontal() As String
+            Get
+                Return ResourceManager.GetString("CalcSetHorizontal", resourceCulture)
             End Get
         End Property
         

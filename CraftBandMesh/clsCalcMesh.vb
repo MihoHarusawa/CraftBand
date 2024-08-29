@@ -1,6 +1,8 @@
 ﻿
 
 Imports System.Reflection
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+Imports System.Xml
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsMasterTables
@@ -25,6 +27,7 @@ Class clsCalcMesh
         Expand '縦横展開
 
         GapFit  'すき間を横寸法に合わせる。画面値更新と再計算
+        LaneSync  '展開本幅の同期。底の縦横の本幅に合わせる
 
         Oval '底の楕円 
         Side  '側面 
@@ -46,16 +49,22 @@ Class clsCalcMesh
     Private Property _d縦_目標 As Double
     Private Property _d高さ_目標 As Double
     Private Property _I基本のひも幅 As Integer
-    '縦横のキャッシュ
-
-
+    Private Property _d基本のひも幅 As Double
+    '底(縦横)のキャッシュ
+    Private Property _i長い横ひもの本数 As Integer
+    Private Property _i短い横ひもの本数 As Integer '_i長い横ひもの本数-1
+    Private Property _i最上と最下の横ひも何本幅 As Integer  '三択から, ゼロはなし
+    Private Property _d最上と最下の短いひもの幅 As Double   '〃　※展開タブでは変更不可
+    Private Property _d横ひも間のすき間 As Double
+    Private Property _i縦ひもの本数 As Integer
+    Private Property _dひとつのすき間の寸法 As Double '縦ひも間
+    Private Property _d垂直ひも長加算 As Double
+    Private Property _b縦横を展開する As Boolean
     '縦横計算値
     Private Property _d縦横の横 As Double '縦横分のみ
     Private Property _d縦横の縦 As Double '縦横分のみ
     Private Property _i垂直ひも数_縦横 As Integer 'ゼロ以上
     Private Property _d縦横の垂直ひも間の周 As Double '2*(縦+最上と最下の短いひもを除く横)'ゼロ以上
-    Private Property _d最上と最下の短いひもの幅 As Double 'ゼロ以上
-    Private Property _b縦横を展開する As Boolean
     '底楕円
     Private Property _d径の合計 As Double '底_楕円の合計値
     Private Property _d底の周 As Double '_d縦横の周+2π径+定数,ゼロ以上
@@ -70,7 +79,7 @@ Class clsCalcMesh
 
     '※ここまでの各、個別集計値については、CalcSizeで正しく得られること。
     '　レコード内のひも長については、1Pass処理値とし、不正確な可能性あり
-    '　リスト出力時に、再計算して合わせる
+    '　2Passのadjust_横ひも()adjust_縦ひも()で、底の縦横・楕円・側面の結果反映
 
 
     '初期化
@@ -82,13 +91,22 @@ Class clsCalcMesh
         _d縦_目標 = -1
         _d高さ_目標 = -1
         _I基本のひも幅 = -1
+        _d基本のひも幅 = -1
+
+        _i長い横ひもの本数 = -1
+        _i短い横ひもの本数 = -1
+        _i最上と最下の横ひも何本幅 = -1
+        _d横ひも間のすき間 = -1
+        _i縦ひもの本数 = -1
+        _dひとつのすき間の寸法 = -1
+        _d垂直ひも長加算 = -1
+        _b縦横を展開する = False
 
         _d縦横の横 = -1
         _d縦横の縦 = -1
         _i垂直ひも数_縦横 = 0
         _d縦横の垂直ひも間の周 = 0
         _d最上と最下の短いひもの幅 = 0
-        _b縦横を展開する = False
 
         _d径の合計 = -1
         _d底の周 = -1
@@ -541,13 +559,16 @@ Class clsCalcMesh
             Case CalcCategory.NewData, CalcCategory.BsMaster
                 'データ変更/基本値/マスター/バンド選択
                 Clear()
-                set_目標寸法()
-                ret = ret And calc_縦寸法()
-                ret = ret And calc_横寸法()
-
-                ret = ret And renew_ひも展開(category) 'TODO: 位置確認
+                ret = ret And set_目標寸法(False)
+                ret = ret And set_底の縦横()
+                ret = ret And calc_横ひも展開(category, Nothing, Nothing) '縦の集計値
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing) '横の集計値
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも() '縦の集計値反映
+                ret = ret And adjust_縦ひも() '横の集計値反映
+                'calc_縦寸法()
+                'calc_横寸法()
 
                 If ret Then
                     p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
@@ -557,43 +578,76 @@ Class clsCalcMesh
                 End If
 
             Case CalcCategory.Target    '目標寸法
-                set_目標寸法()
+                ret = ret And set_目標寸法(False)
                '(差の表示が変わるだけ)
 
             Case CalcCategory.Horizontal '横置き
-                ret = ret And calc_縦寸法()
+                ret = ret And set_底の縦横()
+                ret = ret And calc_横ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_縦ひも()
+                'calc_縦寸法()
 
             Case CalcCategory.Vertical '縦置き
-                ret = ret And calc_横寸法()
+                ret = ret And set_底の縦横()
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
+                'calc_横寸法()
 
             Case CalcCategory.GapFit     '横寸法に合わせる
-                set_目標寸法()
-                If Not calc_すき間の寸法() Then
-                    Return False
+                set_底の縦横()  '念のため
+                Return calc_すき間の寸法()
+
+            Case CalcCategory.LaneSync  '展開本幅の同期
+                set_底の縦横()  '念のため
+                If Not _b縦横を展開する Then
+                    Return True '対象外
                 End If
+                ret = sync_展開本幅() '本幅と集計値
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
+
 
             Case CalcCategory.Expand '縦横展開
-                ret = ret And renew_ひも展開(category)
-                ret = ret And calc_位置と長さ計算(True)
+                ret = ret And set_底の縦横() 'CheckBox
+                ret = ret And calc_横ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_底楕円(category, Nothing, Nothing)
+                ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
 
+            Case CalcCategory.Expand_Yoko  '横ひも展開
+                Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
+                ret = ret And calc_横ひも展開(category, row, key)
+                ret = ret And calc_底楕円(category, Nothing, Nothing)
+                ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_縦ひも()
+
+            Case CalcCategory.Expand_Tate  '縦ひも展開
+                Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
+                ret = ret And calc_縦ひも展開(category, row, key)
+                ret = ret And calc_底楕円(category, Nothing, Nothing)
+                ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
 
             Case CalcCategory.Oval '底の楕円
                 Dim row As tbl底_楕円Row = CType(ctr, tbl底_楕円Row)
                 ret = ret And calc_底楕円(category, row, key)
-                ret = ret And calc_横寸法()
-                ret = ret And calc_縦寸法()
-                ret = ret And calc_底楕円(category, row, key)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
 
             Case CalcCategory.Side  '側面
                 Dim row As tbl側面Row = CType(ctr, tbl側面Row)
                 ret = ret And calc_側面(category, row, key)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
 
             Case CalcCategory.Options  '追加品
                 'エラーメッセージ通知
@@ -604,9 +658,16 @@ Class clsCalcMesh
                 '(追加品は計算寸法変更なし)
 
             Case CalcCategory.BandColor '色と幅の変更画面
-
+                ret = ret And calc_横ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_底楕円(category, Nothing, Nothing)
+                ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
 
             Case CalcCategory.FixLength '相互参照値のFix(1Pass値は得られている前提)
+                ret = ret And adjust_横ひも()
+                ret = ret And adjust_縦ひも()
                 p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
                 If Not String.IsNullOrEmpty(p_sメッセージ) Then
                     ret = False
@@ -624,13 +685,14 @@ Class clsCalcMesh
     End Function
 
     '目標寸法(内側値)をセットする
-    Private Sub set_目標寸法()
+    Private Function set_目標寸法(ByVal needTarget As Boolean) As Boolean
 
         With _Data.p_row目標寸法
             _d横_目標 = .Value("f_d横寸法")
             _d縦_目標 = .Value("f_d縦寸法")
             _d高さ_目標 = .Value("f_d高さ寸法")
             _I基本のひも幅 = .Value("f_i基本のひも幅")
+            _d基本のひも幅 = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
 
             '内側の寸法を目標とする
             If Not .Value("f_b内側区分") Then
@@ -642,15 +704,101 @@ Class clsCalcMesh
             End If
         End With
 
-    End Sub
+        If Not isValidTarget(needTarget) Then
+            Return False
+        End If
+
+        Return True
+    End Function
+
+
+    '
+    '                  ■■■■■■                ←_i最上と最下の横ひもの本数(0/2)　同幅でも別扱い
+    '        □□□□□□□□□□□□□□□□      ←_i長い横ひもの本数
+    '                  □□□□□□                ←_i短い横ひもの本数
+    '        □□□□□□□□□□□□□□□□
+    '                  □□□□□□
+    '        □□□□□□□□□□□□□□□□
+    '                  ■■■■■■        ※最上と最下の横ひもの幅は、展開レコードでは変更不可 
+    '                                        底の楕円の計算に使うため
+
+    '底(縦横)の基本的な設定値のキャッシュ
+    Private Function set_底の縦横() As Boolean
+        With _Data.p_row底_縦横
+            _b縦横を展開する = .Value("f_b展開区分")
+            _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
+
+            '横
+            _i長い横ひもの本数 = .Value("f_i長い横ひもの本数")
+            _d横ひも間のすき間 = .Value("f_d横ひも間のすき間")
+
+            _i短い横ひもの本数 = 0
+            If 1 < _i長い横ひもの本数 AndAlso 0 < .Value("f_i短い横ひも") Then
+                _i短い横ひもの本数 = _i長い横ひもの本数 - 1
+            End If
+
+            '縦
+            _i縦ひもの本数 = .Value("f_i縦ひもの本数")
+            _dひとつのすき間の寸法 = .Value("f_dひとつのすき間の寸法")
+
+            '派生値
+            _i垂直ひも数_縦横 = 2 * (_i長い横ひもの本数 + _i縦ひもの本数)
+
+            '三択値
+            _i最上と最下の横ひも何本幅 = 0
+            _d最上と最下の短いひもの幅 = 0
+            If 0 < _i長い横ひもの本数 Then
+                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
+                AndAlso 0 < .Value("f_i短い横ひも") Then
+                    _i最上と最下の横ひも何本幅 = .Value("f_i短い横ひも")
+                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
+                End If
+                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
+                AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
+                    _i最上と最下の横ひも何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
+                End If
+            Else
+                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
+                AndAlso 0 < .Value("f_i短い横ひも") Then
+                    '{0}を指定するのであれば{1}をセットしてください。
+                    p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
+                    Return False
+                End If
+                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
+                AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
+                    '{0}を指定するのであれば{1}をセットしてください。
+                    p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
+                    Return False
+                End If
+            End If
+
+            '値のチェック
+            If _i縦ひもの本数 < 1 Then
+                '縦ひもの本数の指定が正しくありません。
+                p_sメッセージ = My.Resources.CalcNoHeightCount
+                Return False
+            End If
+
+            Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
+            If 0 < d縦ひも間の最小間隔 AndAlso
+                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
+                '縦ひも間のすき間が最小間隔より小さくなっています。
+                p_sメッセージ = My.Resources.CalcNoSpaceHeight
+                Return False
+            End If
+
+        End With
+        Return True
+    End Function
 
 
 #Region "縦横"
 
     '横寸法=(目標寸法-2径)として、間のすき間を算出する
     '　不可時はエラーメッセージで中断。OK時は、画面値を更新し関連再計算
-    'IN:    _D横_目標  _d計算_径  縦ひもの本数  縦ひも(本幅)
-    'OUT:   _D計算_横  nudひとつのすき間の寸法   setSaveValue縦横()
+    'IN:    _d横_目標,_d径の合計,_i縦ひもの本数,_d縦横の横,_dひとつのすき間の寸法
+    'OUT:   nudひとつのすき間の寸法 
     Function calc_すき間の寸法() As Boolean
         Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
 
@@ -662,37 +810,25 @@ Class clsCalcMesh
         If Not isValid横_目標 Then
             '横寸法が指定されていないため、すき間の寸法を計算できません。
             p_sメッセージ = My.Resources.CalcNoTargetWidth
+            Return False
 
         Else
-            Do While True
-                With _Data.p_row底_縦横
-                    If .Value("f_i縦ひもの本数") < 2 Then
-                        '縦ひもの本数の指定が正しくありません。
-                        p_sメッセージ = My.Resources.CalcNoHeightCount
-                        Exit Do
-                    End If
+            If _i縦ひもの本数 < 2 Then
+                '縦ひもの本数の指定が正しくありません。
+                p_sメッセージ = My.Resources.CalcNoHeightCount
+                Return False
+            End If
 
-                    '縦ひも分の横寸法
-                    Dim band As Double = g_clsSelectBasics.p_d指定本幅(.Value("f_i縦ひも")) * .Value("f_i縦ひもの本数")
-                    If target <= band Then
-                        '横寸法が小さすぎるため縦ひもを置けません。
-                        p_sメッセージ = My.Resources.CalcNoShortWidth
-                        Exit Do
-                    End If
+            '縦ひも分の横寸法
+            'Dim band As Double = g_clsSelectBasics.p_d指定本幅(.Value("f_i縦ひも")) * .Value("f_i縦ひもの本数")
+            Dim band As Double = _d縦横の横 - _dひとつのすき間の寸法 * (_i縦ひもの本数 - 1)
+            If target <= band Then
+                '横寸法が小さすぎるため縦ひもを置けません。
+                p_sメッセージ = My.Resources.CalcNoShortWidth
+                Return False
+            End If
 
-                    dひとつのすき間の寸法 = (target - band) / (.Value("f_i縦ひもの本数") - 1)
-                End With
-
-                ret = True
-                _d縦横の横 = target
-
-                Exit Do
-            Loop
-        End If
-
-        If Not ret Then
-            'すき間が計算できない時
-            Return False
+            dひとつのすき間の寸法 = (target - band) / (_i縦ひもの本数 - 1)
         End If
         'すき間が計算できた
 
@@ -700,17 +836,16 @@ Class clsCalcMesh
         If dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
             '縦ひも間のすき間が最小間隔より小さくなっています。
             p_sメッセージ = My.Resources.CalcNoSpaceHeight
-            ret = False
+            Return False
         End If
 
-        '結果のセットと表示
-        _Data.p_row底_縦横.Value("f_dひとつのすき間の寸法") = dひとつのすき間の寸法
-        _frmMain.setひとつのすき間の寸法(dひとつのすき間の寸法)
+        '結果のセット
+        _frmMain.nudひとつのすき間の寸法.Value = dひとつのすき間の寸法 'recalc
 
-        setSaveValue縦横()
-        Return ret
+        Return True
     End Function
 
+#If 0 Then  '先の処理との比較用
     '縦置き項目→横寸法を算出
     'IN:    縦ひもの本数  ひとつのすき間の寸法  縦ひも(本幅)
     'OUT:   _D計算_横  setSaveValue縦横()
@@ -744,9 +879,19 @@ Class clsCalcMesh
             '縦ひも分の横寸法
             band = g_clsSelectBasics.p_d指定本幅(.Value("f_i縦ひも")) * i縦ひもの本数
         End With
-        _d縦横の横 = band + space
 
-        setSaveValue縦横()
+
+        '_d縦横の横 = band + space
+        Dim d縦横の横 As Double = band + space
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:{1} 一致={2}", _d縦横の横, d縦横の横, _d縦横の横 = d縦横の横)
+
+        Dim diff As Double = Abs(_d縦横の横 - d縦横の横)
+        If diff < 0.1 Then
+            MsgBox("calc_横寸法 OK")
+        Else
+            MsgBox(String.Format("calc_横寸法 NG{0:F2}<>{1:F2} {2}幅分", _d縦横の横, d縦横の横, New Length(diff).ByLaneText))
+        End If
+
         Return Not warning
     End Function
 
@@ -776,16 +921,16 @@ Class clsCalcMesh
             Dim vert3 As Double = 0
             If 0 < i横ひもの数 Then
                 If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 Then
-                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも"))
+                    '_d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも"))
                     vert3 = g_clsSelectBasics.p_d指定本幅(.Value("f_i短い横ひも")) * 2
                     i横ひもの数 += 2
 
                 ElseIf .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 Then
-                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i最上と最下の短いひもの幅"))
+                    '_d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(.Value("f_i最上と最下の短いひもの幅"))
                     vert3 = _d最上と最下の短いひもの幅 * 2
                     i横ひもの数 += 2
                 Else 'なし
-                    _d最上と最下の短いひもの幅 = 0
+                    '_d最上と最下の短いひもの幅 = 0
                 End If
             End If
 
@@ -799,26 +944,43 @@ Class clsCalcMesh
             vert_in = vert1 + vert2 + vert3 + vert4
         End With
 
-        _d縦横の縦 = vert_in
+        '_d縦横の縦 = vert_in
+        Dim d縦横の縦 As Double = vert_in
 
-        setSaveValue縦横()
+        Dim diff As Double = Abs(_d縦横の縦 - d縦横の縦)
+        If diff < 0.1 Then
+            MsgBox("calc_縦寸法 OK")
+        Else
+            MsgBox(String.Format("calc_縦寸法 NG{0:F2}<>{1:F2} {2}幅分", _d縦横の縦, d縦横の縦, New Length(diff).ByLaneText))
+        End If
+
         Return True
     End Function
-
-    Private Sub setSaveValue縦横()
-        _i垂直ひも数_縦横 = 2 * (_Data.p_row底_縦横.Value("f_i長い横ひもの本数") + _Data.p_row底_縦横.Value("f_i縦ひもの本数"))
-
-        _d縦横の垂直ひも間の周 = 0
-        If isValid計算_横 Then
-            _d縦横の垂直ひも間の周 += _d縦横の横 * 2
-        End If
-        If isValid計算_縦 Then
-            _d縦横の垂直ひも間の周 += (_d縦横の縦 - 2 * _d最上と最下の短いひもの幅) * 2
-        End If
-    End Sub
+#End If
 #End Region
 
 #Region "概算"
+    '目標寸法のキャッシュを参照しながら、_Data.p_row底_縦横にセット
+
+    '有効な目標寸法がある
+    Public Function isValidTarget(ByVal needTarget As Boolean) As Boolean
+        If needTarget Then
+            If Not isValid横_目標 OrElse Not isValid縦_目標 OrElse Not isValid高さ_目標 OrElse Not isValid基本のひも幅 Then
+                '目標とする縦寸法・横寸法・高さ寸法を設定してください。
+                p_sメッセージ = My.Resources.CalcNoTargetSet
+                Return False
+            End If
+        End If
+        '常に必要
+        If _I基本のひも幅 <= 0 Then
+            '基本のひも幅を設定してください。
+            p_sメッセージ = My.Resources.CalcNoBaseBandSet
+            Return False
+        End If
+
+        Return True
+    End Function
+
 
     '有効な入力がある
     Public Function IsValidInput() As Boolean
@@ -835,12 +997,12 @@ Class clsCalcMesh
     ''' <returns></returns>
     Public Function CheckTarget(ByRef message As String) As Boolean
         If Not isCalcable() Then
-            Return False
+            Return False '概算できない
         End If
 
         If Not IsValidInput() Then
             message = Nothing
-            Return True
+            Return True '入力がないので、すぐに概算していい
         End If
         '有効な入力がある場合
 
@@ -884,10 +1046,7 @@ Class clsCalcMesh
     End Function
 
     Private Function isCalcable() As Boolean
-        set_目標寸法()
-        If Not isValid横_目標 OrElse Not isValid縦_目標 OrElse Not isValid高さ_目標 OrElse Not isValid基本のひも幅 Then
-            '目標寸法もしくは基本のひも幅が正しくありません。
-            p_sメッセージ = My.Resources.CalcNoTargetSet
+        If Not set_目標寸法(True) Then
             Return False
         End If
 
@@ -918,17 +1077,16 @@ Class clsCalcMesh
     '目標寸法→底_縦横
     Private Function calc_Target() As Boolean
         '長い横ひもは基本のひも幅
-        Dim d基本のひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
 
         Dim ret As Boolean = True
         '_Data.p_row底_縦横.Value("f_b展開区分") = False  概算ボタンでOFF
 
 
         If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
-            ret = ret And calc_Target_縦(d基本のひも幅)
+            ret = ret And calc_Target_縦()
         End If
         If Not isValid計算_縦 OrElse Not isNear(p_d内側_縦, _d縦_目標) Then
-            ret = ret And calc_Target_横(d基本のひも幅)
+            ret = ret And calc_Target_横()
         End If
         If Not isValid計算_高さ OrElse Not isNear(p_d内側_高さ, _d高さ_目標) Then
             ret = ret And calc_Target_高さ()
@@ -937,11 +1095,11 @@ Class clsCalcMesh
     End Function
 
     '縦寸法から横ひも(底楕円が設定されていればその分マイナス)
-    Private Function calc_Target_横(d基本のひも幅 As Double) As Boolean
+    Private Function calc_Target_横() As Boolean
         Dim d横ひも間のすき間 As Double = 0
 
         Dim d縦 As Double = _d縦_目標 - _d径の合計 * 2
-        Dim yoko As Integer = Math.Truncate(d縦 / (d基本のひも幅 + d横ひも間のすき間)) 'ドット以下切り捨て
+        Dim yoko As Integer = Math.Truncate(d縦 / (_d基本のひも幅 + d横ひも間のすき間)) 'ドット以下切り捨て
         'issue#2
         Dim n長い横ひもの本数 As Integer = getOddHalf(yoko, ((g_clsSelectBasics.p_i本幅 / 2) < _I基本のひも幅))
         If n長い横ひもの本数 < 1 Then
@@ -954,7 +1112,7 @@ Class clsCalcMesh
         Dim n短い横ひもn本幅 As Integer = _I基本のひも幅 '開始値
 
         '短い横ひもで埋める分
-        Dim dLeft As Double = d縦 - (n長い横ひもの本数 * (d基本のひも幅 + d横ひも間のすき間))
+        Dim dLeft As Double = d縦 - (n長い横ひもの本数 * (_d基本のひも幅 + d横ひも間のすき間))
 
         Dim dLeft2 As Double = dLeft - (n短い横ひも数 * (g_clsSelectBasics.p_d指定本幅(n短い横ひもn本幅) + d横ひも間のすき間))
         If dLeft2 < 0 Then
@@ -1025,10 +1183,10 @@ Class clsCalcMesh
     End Function
 
     '横寸法から縦ひも(横寸法優先)(底楕円が設定されていればその分マイナス)
-    Private Function calc_Target_縦(d基本のひも幅 As Double)
+    Private Function calc_Target_縦()
         Dim d横 As Double = _d横_目標 - _d径の合計 * 2
         Dim n縦ひもn本幅 As Integer = _I基本のひも幅
-        Dim tate As Integer = Math.Truncate(d横 / d基本のひも幅) 'ドット以下切り捨て
+        Dim tate As Integer = Math.Truncate(d横 / _d基本のひも幅) 'ドット以下切り捨て
         'issue#2
         Dim n縦ひもの本数 = getOddHalf(tate, ((g_clsSelectBasics.p_i本幅 / 2) < _I基本のひも幅))
         If n縦ひもの本数 <= 1 Then
@@ -1796,7 +1954,7 @@ Class clsCalcMesh
 #Region "縦横展開"
 
     '縦横の展開DataTable
-    '　非展開時 :タブ非表示。加算・色なし、固定幅。底(縦横)を反映した状態で保持
+    '　非展開時 :タブ非表示。加算・色なし、固定幅。底(縦横)全てを反映した状態で保持
     '　展開時   :タブに表示。底(縦横)の変更時、既存レコードは保持
     Dim __tbl横展開 As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
     Dim __tbl縦展開 As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
@@ -1804,7 +1962,102 @@ Class clsCalcMesh
     '横ひも: enumひも種: i_横 + i_長い,i_短い,i_最上と最下,i_補強,
     '縦ひも: enumひも種: i_縦 + i_補強 / i_斜め+i_補強
 
-    '横展開テーブルを作り直す レコード数増減＆Fix
+    '編集中の値を_Data.p_tbl縦横展開 に反映させる(色編集時)
+    Function prepare縦横展開DataTable() As Boolean
+        Try
+            Dim yokotable As tbl縦横展開DataTable = get横展開DataTable()
+            _Data.FromTmpTable(enumひも種.i_横, yokotable)
+
+            Dim tatetable As tbl縦横展開DataTable = get縦展開DataTable()
+            _Data.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tatetable)
+
+            Return True
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "prepare縦横展開DataTable")
+            Return False
+        End Try
+    End Function
+
+    '底(縦横)の本幅値に合わせる
+    Function sync_展開本幅() As Boolean
+        Dim rows() As tbl縦横展開Row
+
+        '長い横ひも
+        rows = __tbl横展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_長い, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i長い横ひも")
+        Next
+        '短い横ひも
+        rows = __tbl横展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_短い, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i短い横ひも")
+        Next
+        '最上と最下
+        rows = __tbl横展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_最上と最下, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _i最上と最下の横ひも何本幅
+        Next
+        '補強ひも
+        rows = __tbl横展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_最上と最下, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            If 0 < _i最上と最下の横ひも何本幅 Then
+                row.f_i何本幅 = _i最上と最下の横ひも何本幅
+            Else
+                row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i長い横ひも")
+            End If
+        Next
+        adjust_横ひも()
+        _Data.FromTmpTable(enumひも種.i_横, __tbl横展開)
+
+
+        '縦縦ひも
+        rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i縦ひも")
+        Next
+        '始末ひも
+        rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_縦 Or enumひも種.i_補強, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i縦ひも")
+        Next
+        '斜めの補強ひも
+        rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_斜め Or enumひも種.i_補強, Integer)))
+        For Each row As tbl縦横展開Row In rows
+            row.f_i何本幅 = _I基本のひも幅
+        Next
+        adjust_縦ひも()
+        _Data.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, __tbl縦展開)
+
+        Return calc_集計値(True, True)
+    End Function
+
+    '集計値更新
+    Function calc_集計値(ByVal is横展開 As Boolean, ByVal is縦展開 As Boolean) As Boolean
+
+        If is横展開 Then
+            _d縦横の縦 = 0
+            Dim obj As Object = __tbl横展開.Compute("SUM(f_d幅)", Nothing)
+            If Not IsDBNull(obj) AndAlso 0 < obj Then
+                _d縦横の縦 = obj
+            End If
+        End If
+
+        If is縦展開 Then
+            _d縦横の横 = 0
+            Dim obj As Object = __tbl縦展開.Compute("SUM(f_d幅)", Nothing)
+            If Not IsDBNull(obj) AndAlso 0 < obj Then
+                _d縦横の横 = obj
+            End If
+        End If
+
+        _d縦横の垂直ひも間の周 = _d縦横の横 * 2 +
+                                (_d縦横の縦 - (2 * _d最上と最下の短いひもの幅)) * 2
+        Return True
+    End Function
+
+#Region "横"
+    '底(縦横)設定に基づき縦展開テーブルを作り直す(レコード数増減＆Fix)
+    'isRefSaved: True=_Data.p_tbl縦横展開を反映する False=反映しない(非展開値)
     Function renew横展開DataTable(ByVal isRefSaved As Boolean) As Boolean
         If Not isRefSaved Then
             __tbl横展開.Clear()
@@ -1815,9 +2068,6 @@ Class clsCalcMesh
         End If
         __tbl横展開.AcceptChanges()
 
-        Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
-
-        Dim d短い横ひも長のばらつき As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d短い横ひも長のばらつき")
 
         Dim row As tbl縦横展開Row
 
@@ -1825,11 +2075,10 @@ Class clsCalcMesh
         With _Data.p_row底_縦横
             Dim posyoko As Integer = 1
 
-            '.Value("f_i長い横ひも") は1以上
-            If 0 < .Value("f_i長い横ひもの本数") Then
+            If 0 < _i長い横ひもの本数 Then
 
-                Dim n長い横ひもの数 As Integer = .Value("f_i長い横ひもの本数")
-                Dim n短い横ひもの数 As Integer = n長い横ひもの数 - 1
+                'Dim n長い横ひもの数 As Integer = .Value("f_i長い横ひもの本数")
+                'Dim n短い横ひもの数 As Integer = n長い横ひもの数 - 1
                 Dim n異なる幅の位置 As Integer = -1 '最上と最下
                 Dim n短い横ひもの開始位置 As Integer
                 If 0 < .Value("f_i短い横ひも") Then
@@ -1838,32 +2087,29 @@ Class clsCalcMesh
                     n短い横ひもの開始位置 = -1 '短い横ひもなし
                 End If
 
-                Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
-                If rad = enum最上と最下の短いひも.i_同じ幅 Then
-                    If 0 < n短い横ひもの開始位置 Then
-                        n短い横ひもの数 += 2
-                        n短い横ひもの開始位置 = posyoko '長い横ひもの前
-                        posyoko += 1 '空ける
-                    End If
-                ElseIf rad = enum最上と最下の短いひも.i_異なる幅 Then
+                '同じ幅の場合は短い横ひもにまとめていた→最上・最下は変更不可のため常に別扱い
+                'Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
+                'If rad = enum最上と最下の短いひも.i_同じ幅 Then
+                '    If 0 < n短い横ひもの開始位置 Then
+                '        n短い横ひもの数 += 2
+                '        n短い横ひもの開始位置 = posyoko '長い横ひもの前
+                '        posyoko += 1 '空ける
+                '    End If
+                'ElseIf rad = enum最上と最下の短いひも.i_異なる幅 Then
+                If 0 < _i最上と最下の横ひも何本幅 Then
                     n異なる幅の位置 = posyoko
                     posyoko += 1 '空ける
                     n短い横ひもの開始位置 += 1 'ひとつずれる(-1→0)
                 End If
 
-                For idx As Integer = 1 To n長い横ひもの数
+                For idx As Integer = 1 To _i長い横ひもの本数 'n長い横ひもの数
                     row = Find縦横展開Row(__tbl横展開, enumひも種.i_横 Or enumひも種.i_長い, idx, True)
 
-                    'row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_長い
                     row.f_i位置番号 = posyoko
-                    'row.f_iひも番号 = idx
                     row.f_sひも名 = text長い横ひも()
                     row.f_i何本幅 = .Value("f_i長い横ひも")
-                    row.f_dひも長 = _d縦横の横 + 2 * (_d径の合計 + d垂直ひも長)
-                    row.f_d出力ひも長 = row.f_dひも長
-                    row.f_d長さ = _d縦横の横
+                    adjust_横ひも(row, Nothing)
 
-                    'tbl縦横展開.Rows.Add(row)
                     row.f_iVal1 = 0 'used
                     If 0 < n短い横ひもの開始位置 Then
                         posyoko += 2
@@ -1874,20 +2120,14 @@ Class clsCalcMesh
 
                 If 0 < n短い横ひもの開始位置 Then
                     posyoko = n短い横ひもの開始位置
-                    For idx As Integer = 1 To n短い横ひもの数
-                        'row = tbl縦横展開.Newtbl縦横展開Row
+                    For idx As Integer = 1 To _i短い横ひもの本数 'n短い横ひもの数
                         row = Find縦横展開Row(__tbl横展開, enumひも種.i_横 Or enumひも種.i_短い, idx, True)
 
-                        'row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_短い
                         row.f_i位置番号 = posyoko
-                        'row.f_iひも番号 = idx
                         row.f_sひも名 = text短い横ひも()
                         row.f_i何本幅 = .Value("f_i短い横ひも")
-                        row.f_dひも長 = _d縦横の横 - d短い横ひも長のばらつき
-                        row.f_d出力ひも長 = row.f_dひも長
-                        row.f_d長さ = _d縦横の横
+                        adjust_横ひも(row, Nothing)
 
-                        'tbl縦横展開.Rows.Add(row)
                         row.f_iVal1 = 0 'used
                         posyoko += 2
                     Next
@@ -1895,10 +2135,8 @@ Class clsCalcMesh
 
                 If 0 < n異なる幅の位置 Then
                     For idx As Integer = 1 To 2
-                        'row = tbl縦横展開.Newtbl縦横展開Row
                         row = Find縦横展開Row(__tbl横展開, enumひも種.i_横 Or enumひも種.i_最上と最下, idx, True)
 
-                        'row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_最上と最下
                         If idx = 1 Then
                             row.f_i位置番号 = n異なる幅の位置 '空けておいた番号
                         Else
@@ -1907,12 +2145,9 @@ Class clsCalcMesh
                         End If
                         row.f_iひも番号 = idx
                         row.f_sひも名 = text最上と最下の短いひも()
-                        row.f_i何本幅 = .Value("f_i最上と最下の短いひもの幅")
-                        row.f_dひも長 = _d縦横の横 - d短い横ひも長のばらつき
-                        row.f_d出力ひも長 = row.f_dひも長
-                        row.f_d長さ = _d縦横の横
+                        row.f_i何本幅 = _i最上と最下の横ひも何本幅 ' .Value("f_i最上と最下の短いひもの幅")
+                        adjust_横ひも(row, Nothing)
 
-                        'tbl縦横展開.Rows.Add(row)
                         row.f_iVal1 = 0 'used
                     Next
                 End If
@@ -1928,27 +2163,26 @@ Class clsCalcMesh
             posyoko = cBackPosition
             If .Value("f_b補強ひも区分") Then
                 For idx As Integer = 1 To 2
-                    'row = tbl縦横展開.Newtbl縦横展開Row
                     row = Find縦横展開Row(__tbl横展開, enumひも種.i_横 Or enumひも種.i_補強, idx, True)
 
-                    'row.f_iひも種 = enumひも種.i_横 Or enumひも種.i_補強
                     row.f_i位置番号 = posyoko
-                    'row.f_iひも番号 = idx
                     row.f_sひも名 = text補強ひも()
-                    row.f_dひも長 = _d縦横の横
-                    row.f_d出力ひも長 = row.f_dひも長
+                    adjust_横ひも(row, Nothing)
 
-                    Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
-                    If rad = enum最上と最下の短いひも.i_なし Then
-                        row.f_i何本幅 = .Value("f_i長い横ひも")
-                    ElseIf rad = enum最上と最下の短いひも.i_同じ幅 Then
-                        row.f_i何本幅 = .Value("f_i長い横ひも")
+                    'Dim rad As enum最上と最下の短いひも = .Value("f_i最上と最下の短いひも")
+                    'If rad = enum最上と最下の短いひも.i_なし Then
+                    '    row.f_i何本幅 = .Value("f_i長い横ひも")
+                    'ElseIf rad = enum最上と最下の短いひも.i_同じ幅 Then
+                    '    row.f_i何本幅 = .Value("f_i長い横ひも")
+                    'Else
+                    '    row.f_i何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                    'End If
+                    If 0 < _i最上と最下の横ひも何本幅 Then
+                        row.f_i何本幅 = _i最上と最下の横ひも何本幅
                     Else
-                        row.f_i何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                        row.f_i何本幅 = .Value("f_i長い横ひも")
                     End If
-                    row.f_d長さ = _d縦横の横
 
-                    'tbl縦横展開.Rows.Add(row)
                     row.f_iVal1 = 0 'used
                     posyoko += 1
                 Next
@@ -1966,12 +2200,116 @@ Class clsCalcMesh
         '指定があれば既存情報反映
         If isRefSaved Then
             _Data.ToTmpTable(enumひも種.i_横, __tbl横展開)
+            adjust_横ひも()
+            __tbl横展開.AcceptChanges()
         End If
 
         Return True
     End Function
 
-    '縦展開テーブルを作り直す レコード数増減＆Fix
+    '現編集内容をそのまま渡す。isReset指定時は初期化
+    Friend Function get横展開DataTable(Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
+        If isReset Then
+            _Data.Removeひも種Rows(enumひも種.i_横)
+            renew横展開DataTable(False) '既存反映なし・サイズは同じ
+        End If
+        Return __tbl横展開
+    End Function
+
+    'CalcSizeからの呼び出し 
+    '   Expand_Yoko: 対応レコードの派生更新(画面で編集中のみ)   
+    '   以外:   __tbl横展開 テーブルごと更新
+    'IN:_b縦横側面を展開する,_d最上と最下の短いひもの幅
+    'OUT:_d縦横の縦 _d縦横の垂直ひも間の周
+    Function calc_横ひも展開(ByVal category As CalcCategory, ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
+        Dim ret As Boolean = True
+        If category = CalcCategory.Expand_Yoko AndAlso row IsNot Nothing Then
+            'テーブル編集中
+            ret = adjust_横ひも(row, dataPropertyName)
+        Else
+            '横ひもを再セット
+            ret = renew横展開DataTable(_b縦横を展開する)
+        End If
+
+        '集計値更新
+        Return calc_集計値(True, False) 'is横展開
+    End Function
+
+    '横ひもの全レコードの幅と長さをセット
+    Function adjust_横ひも() As Boolean
+        Dim ret As Boolean = True
+        For Each row As tbl縦横展開Row In __tbl横展開
+            If Not adjust_横ひも(row, Nothing) Then
+                ret = False
+            End If
+        Next
+        Return ret
+    End Function
+
+    '横ひもの指定レコードの幅と長さを計算
+    'Ref:   _d横ひも間のすき間,_d垂直ひも長加算,_i長い横ひもの本数,_d最上と最下の短いひもの幅
+    'IN:    _d縦横の横,_d径の合計,_d垂直ひも長合計
+    'OUT:   各レコードのf_d幅,f_d長さ,f_dひも長,f_d出力ひも長
+    Function adjust_横ひも(ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
+        If Not String.IsNullOrEmpty(dataPropertyName) Then
+            'セル編集操作時
+            If dataPropertyName = "f_s色" Then
+                Return True
+            End If
+        End If
+
+        If row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_長い) Then
+            If _i最上と最下の横ひも何本幅 = 0 AndAlso row.f_iひも番号 = _i長い横ひもの本数 Then
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+            Else
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d横ひも間のすき間
+            End If
+            row.f_d長さ = _d縦横の横
+            row.f_dひも長 = _d縦横の横 + 2 * (_d径の合計 + _d垂直ひも長合計 + _d垂直ひも長加算)
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        ElseIf row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_短い) Then
+            '最下にはならない
+            row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d横ひも間のすき間
+            row.f_d長さ = _d縦横の横
+            row.f_dひも長 = _d縦横の横 - g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d短い横ひも長のばらつき")
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        ElseIf row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_最上と最下) Then
+            '何本幅変更不可
+            row.f_i何本幅 = _i最上と最下の横ひも何本幅
+            If Not String.IsNullOrEmpty(dataPropertyName) AndAlso dataPropertyName = "f_i何本幅" Then
+                '{0}は [{1}] で変更してください。
+                Dim msg As String = String.Format(My.Resources.CalcMsgTopBottomBand, text最上と最下の短いひも(), text底縦横)
+                MessageBox.Show(msg, _frmMain.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Return True
+            End If
+            If row.f_iひも番号 = 2 Then
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
+            Else
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅) + _d横ひも間のすき間
+            End If
+            row.f_d長さ = _d縦横の横
+            row.f_dひも長 = _d縦横の横 - g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d短い横ひも長のばらつき")
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        ElseIf row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_補強) Then
+            row.f_d幅 = 0
+            row.f_d長さ = _d縦横の横
+            row.f_dひも長 = _d縦横の横
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        End If
+
+        Return True
+    End Function
+
+
+#End Region
+
+#Region "縦"
+    '底(縦横)設定に基づき縦展開テーブルを作り直す(レコード数増減＆Fix)
+    'isRefSaved: True=_Data.p_tbl縦横展開を反映する False=反映しない(非展開値)
     Function renew縦展開DataTable(ByVal isRefSaved As Boolean) As Boolean
         If Not isRefSaved Then
             __tbl縦展開.Clear()
@@ -1982,31 +2320,23 @@ Class clsCalcMesh
         End If
         __tbl縦展開.AcceptChanges()
 
-        Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
 
         Dim row As tbl縦横展開Row
 
-        'f_dひも長加算,f_s色は初期値
         With _Data.p_row底_縦横
             '#48 位置番号
-            Dim postate As Integer = - .Value("f_i縦ひもの本数") \ 2
-            Dim skipzero As Boolean = (.Value("f_i縦ひもの本数") Mod 2) = 0
+            Dim postate As Integer = -_i縦ひもの本数 \ 2
+            Dim skipzero As Boolean = (_i縦ひもの本数 Mod 2) = 0
             '.Value("f_i縦ひも") は1以上
-            If 0 < .Value("f_i縦ひもの本数") Then
-                For idx As Integer = 1 To .Value("f_i縦ひもの本数")
-                    'row = tbl縦横展開.Newtbl縦横展開Row
+            If 0 < _i縦ひもの本数 Then
+                For idx As Integer = 1 To _i縦ひもの本数
                     row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦, idx, True)
 
-                    'row.f_iひも種 = enumひも種.i_縦
                     row.f_i位置番号 = postate
-                    'row.f_iひも番号 = idx
                     row.f_sひも名 = text縦ひも()
                     row.f_i何本幅 = .Value("f_i縦ひも")
-                    row.f_d長さ = _d縦横の縦
-                    row.f_dひも長 = _d縦横の縦 + 2 * (_d径の合計 + d垂直ひも長)
-                    row.f_d出力ひも長 = row.f_dひも長
+                    adjust_縦ひも(row, Nothing)
 
-                    'tbl縦横展開.Rows.Add(row)
                     row.f_iVal1 = 0 'used
                     postate += 1
                     If skipzero AndAlso (postate = 0) Then
@@ -2019,18 +2349,12 @@ Class clsCalcMesh
             postate = cBackPosition
             If .Value("f_b始末ひも区分") Then
                 For idx As Integer = 1 To 2
-                    'row = tbl縦横展開.Newtbl縦横展開Row
                     row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦 Or enumひも種.i_補強, idx, True)
-                    'row.f_iひも種 = enumひも種.i_縦 Or enumひも種.i_補強
                     row.f_i位置番号 = postate
-                    'row.f_iひも番号 = idx
                     row.f_sひも名 = text始末ひも()
                     row.f_i何本幅 = .Value("f_i縦ひも")
-                    row.f_d長さ = _d縦横の縦
-                    row.f_dひも長 = _d縦横の縦
-                    row.f_d出力ひも長 = row.f_dひも長
+                    adjust_縦ひも(row, Nothing)
 
-                    'tbl縦横展開.Rows.Add(row)
                     row.f_iVal1 = 0 'used
                     postate += 1
                 Next
@@ -2038,19 +2362,13 @@ Class clsCalcMesh
 
             If .Value("f_b斜めの補強ひも区分") Then
                 For idx As Integer = 1 To 2
-                    'row = tbl縦横展開.Newtbl縦横展開Row
                     row = Find縦横展開Row(__tbl縦展開, enumひも種.i_斜め Or enumひも種.i_補強, idx, True)
 
-                    'row.f_iひも種 = enumひも種.i_斜め Or enumひも種.i_補強
                     row.f_i位置番号 = postate
-                    'row.f_iひも番号 = idx
                     row.f_sひも名 = text斜めの補強ひも()
                     row.f_i何本幅 = _I基本のひも幅
-                    row.f_dひも長 = Math.Sqrt(_d縦横の横 ^ 2 + _d縦横の縦 ^ 2)
-                    row.f_d出力ひも長 = row.f_dひも長
-                    row.f_d長さ = _d縦横の縦 + _d縦横の横
+                    adjust_縦ひも(row, Nothing)
 
-                    'tbl縦横展開.Rows.Add(row)
                     row.f_iVal1 = 0 'used
                     postate += 1
                 Next
@@ -2069,96 +2387,91 @@ Class clsCalcMesh
         '指定があれば既存情報反映
         If isRefSaved Then
             _Data.ToTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, __tbl縦展開)
+            adjust_縦ひも()
+            __tbl縦展開.AcceptChanges()
         End If
 
         Return True
     End Function
 
-
-    'CalcSizeからの呼び出し 
-    'OUT:_b縦横を展開する,__tbl横展開,__tbl縦展開
-    Function renew_ひも展開(ByVal category As CalcCategory) As Boolean
-        _b縦横を展開する = _Data.p_row底_縦横.Value("f_b展開区分")
-
-        Dim ret As Boolean = True
-        ret = ret Or renew横展開DataTable(_b縦横を展開する)
-        ret = ret Or renew縦展開DataTable(_b縦横を展開する)
-        Return ret
-    End Function
-
-    Friend Function get横展開DataTable(Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
-        If isReset Then
-            _Data.Removeひも種Rows(enumひも種.i_横)
-            renew横展開DataTable(False) '既存反映なし・サイズは同じ
-            calc_位置と長さ計算(True)
-        End If
-        Return __tbl横展開
-    End Function
-
+    '現編集内容をそのまま渡す。isReset指定時は初期化
     Friend Function get縦展開DataTable(Optional ByVal isReset As Boolean = False) As tbl縦横展開DataTable
         If isReset Then
             _Data.Removeひも種Rows(enumひも種.i_縦 Or enumひも種.i_斜め)
             renew縦展開DataTable(False) '既存反映なし・サイズは同じ
-            calc_位置と長さ計算(True)
         End If
         Return __tbl縦展開
     End Function
 
-    '底の横ひもの編集完了,_tbl縦横展開_横ひもを_Dataに反映
-    Friend Function save横展開DataTable(Optional ByVal always As Boolean = False) As Boolean
-        Try
-            If always OrElse __tbl横展開.GetChanges IsNot Nothing Then
-                Dim change As Integer = _Data.FromTmpTable(enumひも種.i_横, __tbl横展開)
-            End If
-            Return True
-
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "save横展開DataTable")
-            Return False
-        End Try
-    End Function
-
-    '底の横ひもの編集完了,_tbl縦横展開_横ひもを_Dataに反映
-    Friend Function save縦展開DataTable(Optional ByVal always As Boolean = False) As Boolean
-        Try
-            If always OrElse __tbl縦展開.GetChanges IsNot Nothing Then
-                Dim change As Integer = _Data.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, __tbl縦展開)
-            End If
-            Return True
-
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "save縦展開DataTable")
-            Return False
-        End Try
-    End Function
-
-    '底(縦横)の値を_Data.p_tbl縦横展開 に反映させる
-    Function prepare縦横展開DataTable() As Boolean
-        Try
-            Dim yokotable As tbl縦横展開DataTable = get横展開DataTable()
-            _Data.FromTmpTable(enumひも種.i_横, yokotable)
-
-            Dim tatetable As tbl縦横展開DataTable = get縦展開DataTable()
-            _Data.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, tatetable)
-
-            Return True
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "prepare縦横展開DataTable")
-            Return False
-        End Try
-    End Function
-
-    '配置数,展開各入力値(ひも長加算,ひも幅)がFixした状態で、長さを計算する
-    '_BandPositions,_hex系,底位置
-    Private Function calc_位置と長さ計算(ByVal is位置計算 As Boolean) As Boolean
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "calc_位置と長さ計算({0})", is位置計算)
+    'CalcSizeからの呼び出し 
+    '   Expand_Tate: 対応レコードの派生更新(画面で編集中のみ)   
+    '   以外:   _tbl縦展開 テーブルごと更新
+    'IN:_b縦横側面を展開する,_d最上と最下の短いひもの幅
+    'OUT:_d縦横の横 _d縦横の垂直ひも間の周
+    Function calc_縦ひも展開(ByVal category As CalcCategory, ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
         Dim ret As Boolean = True
-
-        If is位置計算 Then
-            '_CalcStatus = CalcStatus._none
+        If category = CalcCategory.Expand_Tate AndAlso row IsNot Nothing Then
+            'テーブル編集中
+            ret = adjust_縦ひも(row, dataPropertyName)
+        Else
+            '縦ひもを再セット
+            ret = renew縦展開DataTable(_b縦横を展開する)
         End If
+
+        '集計値更新
+        Return calc_集計値(False, True) 'is縦展開
+    End Function
+
+    '縦ひもの全レコードの幅と長さをセット
+    Function adjust_縦ひも() As Boolean
+        Dim ret As Boolean = True
+        For Each row As tbl縦横展開Row In __tbl縦展開
+            If Not adjust_縦ひも(row, Nothing) Then
+                ret = False
+            End If
+        Next
         Return ret
     End Function
+
+    '縦ひもの指定レコードの幅と長さをセット
+    'Ref:   _dひとつのすき間の寸法,_d垂直ひも長加算,_i縦ひもの本数
+    'IN:    _d縦横の縦,_d径の合計,_d垂直ひも長合計,_d縦横の横(クロス値)
+    'OUT:   各レコードのf_d幅,f_d長さ,f_dひも長,f_d出力ひも長
+    Function adjust_縦ひも(ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
+        If Not String.IsNullOrEmpty(dataPropertyName) Then
+            'セル編集操作時
+            If dataPropertyName = "f_s色" Then
+                Return True
+            End If
+        End If
+
+        If row.f_iひも種 = enumひも種.i_縦 Then
+            If row.f_iひも番号 = _i縦ひもの本数 Then
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+            Else
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _dひとつのすき間の寸法
+            End If
+            row.f_d長さ = _d縦横の縦
+            row.f_dひも長 = _d縦横の縦 + 2 * (_d径の合計 + _d垂直ひも長合計 + _d垂直ひも長加算)
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        ElseIf row.f_iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) Then
+            row.f_d幅 = 0
+            row.f_d長さ = _d縦横の縦
+            row.f_dひも長 = _d縦横の縦
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        ElseIf row.f_iひも種 = (enumひも種.i_斜め Or enumひも種.i_補強) Then
+            row.f_d幅 = 0
+            row.f_d長さ = _d縦横の縦 + _d縦横の横
+            row.f_dひも長 = Math.Sqrt(_d縦横の横 ^ 2 + _d縦横の縦 ^ 2) 'クロス値
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
+
+        End If
+
+        Return True
+    End Function
+#End Region
 
 #End Region
 
@@ -2385,7 +2698,7 @@ Class clsCalcMesh
                         row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算)
                     End If
                     row.f_sメモ = sbMemo.ToString
-                    If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                    If _b縦横を展開する Then
                         If contcount = 1 Then
                             row.f_s編みひも名 = String.Format("{0}", lasttmp.f_iひも番号)
                         Else

@@ -163,8 +163,14 @@
   <data name="CalcHeightOver" xml:space="preserve">
     <value>底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。</value>
   </data>
+  <data name="CalcMsgTopBottomBand" xml:space="preserve">
+    <value>{0}は [{1}] で変更してください。</value>
+  </data>
   <data name="CalcNoAddNumber" xml:space="preserve">
     <value>{0}追加用の番号がとれません。</value>
+  </data>
+  <data name="CalcNoBaseBandSet" xml:space="preserve">
+    <value>基本のひも幅を設定してください。</value>
   </data>
   <data name="CalcNoDefCategory" xml:space="preserve">
     <value>未定義のカテゴリー'{0}'が参照されました。</value>
@@ -197,7 +203,7 @@
     <value>縦ひも間のすき間が最小間隔より小さくなっています。</value>
   </data>
   <data name="CalcNoTargetSet" xml:space="preserve">
-    <value>目標寸法もしくは基本のひも幅が正しくありません。</value>
+    <value>目標とする縦寸法・横寸法・高さ寸法を設定してください。</value>
   </data>
   <data name="CalcNoTargetWidth" xml:space="preserve">
     <value>横寸法が指定されていないため、すき間の寸法を計算できません。</value>
@@ -207,6 +213,9 @@
   </data>
   <data name="CalcOutTurn" xml:space="preserve">
     <value>折り返し</value>
+  </data>
+  <data name="CalcSetHorizontal" xml:space="preserve">
+    <value>{0}を指定するのであれば{1}をセットしてください。</value>
   </data>
   <data name="CalcTooShortHeight" xml:space="preserve">
     <value>縦寸法が小さすぎるため横ひもを置けません。</value>

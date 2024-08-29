@@ -125,6 +125,7 @@ Partial Class frmMain
         txtタイトル = New TextBox()
         txt外側_最大周の径 = New TextBox()
         txt内側_最大周の径 = New TextBox()
+        btn展開本幅の同期 = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1109,6 +1110,18 @@ Partial Class frmMain
         txt内側_最大周の径.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt内側_最大周の径, "最大周が円周となる直径")
         ' 
+        ' btn展開本幅の同期
+        ' 
+        btn展開本幅の同期.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        btn展開本幅の同期.Location = New Point(758, 54)
+        btn展開本幅の同期.Name = "btn展開本幅の同期"
+        btn展開本幅の同期.Size = New Size(136, 46)
+        btn展開本幅の同期.TabIndex = 6
+        btn展開本幅の同期.Text = "展開本幅の同期"
+        ToolTip1.SetToolTip(btn展開本幅の同期, "[横ひも] [縦ひも] タブの各本幅値を" & vbCrLf & "[底(縦横)] の各設定値に合わせます")
+        btn展開本幅の同期.UseVisualStyleBackColor = True
+        btn展開本幅の同期.Visible = False
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1355,6 +1368,7 @@ Partial Class frmMain
         ' 
         ' tpage底縦横
         ' 
+        tpage底縦横.Controls.Add(btn展開本幅の同期)
         tpage底縦横.Controls.Add(chk縦横を展開する)
         tpage底縦横.Controls.Add(nud垂直ひも長加算)
         tpage底縦横.Controls.Add(lbl垂直ひも長加算_単位)
@@ -3252,6 +3266,7 @@ Partial Class frmMain
     Friend WithEvents f_s記号1 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError1 As DataGridViewCheckBoxColumn
+    Friend WithEvents btn展開本幅の同期 As Button
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

@@ -19,7 +19,6 @@ Public Class frmMain
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
-    Dim _isChangingByCode As Boolean = False
 
 
 #Region "基本的な画面処理"
@@ -468,15 +467,6 @@ Public Class frmMain
         End If
     End Sub
 
-    'clsCalcMeshからセット
-    Public Function setひとつのすき間の寸法(ByVal value As Double) As Boolean
-        _isChangingByCode = True
-        dispValidValueNud(nudひとつのすき間の寸法, value)
-        _isChangingByCode = False
-
-        Return True
-    End Function
-
 
     Private Sub Disp計算結果(ByVal calc As clsCalcMesh)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
@@ -689,9 +679,9 @@ Public Class frmMain
                                                  CType(enumひも種.i_横 Or enumひも種.i_短い, Integer), CType(enumひも種.i_横 Or enumひも種.i_最上と最下, Integer))
 
         Dim _ColorRepeatSettings() As CColorRepeatSetting = {
-        New CColorRepeatSetting(lbl長い横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_長い, Integer)), "f_iひも番号 ASC", False, True),
-        New CColorRepeatSetting(lbl短い横ひも.Text, enumDataID._tbl縦横展開, cond_short, "f_i位置番号 ASC", False, True),
-        New CColorRepeatSetting(lbl縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), "f_iひも番号 ASC", False, True)}
+        New CColorRepeatSetting(lbl長い横ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_横 Or enumひも種.i_長い, Integer)), "f_iひも番号 ASC", True, True),
+        New CColorRepeatSetting(lbl短い横ひも.Text, enumDataID._tbl縦横展開, cond_short, "f_i位置番号 ASC", True, True),
+        New CColorRepeatSetting(lbl縦ひも.Text, enumDataID._tbl縦横展開, String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)), "f_iひも番号 ASC", True, True)}
 
         Return CreateColorRepeatForm(_ColorRepeatSettings)
     End Function
@@ -1134,6 +1124,7 @@ Public Class frmMain
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
         set底の縦横展開(chk縦横を展開する.Checked)
+        btn展開本幅の同期.Visible = chk縦横を展開する.Checked
         recalc(CalcCategory.Expand, sender)
     End Sub
 
@@ -1248,9 +1239,7 @@ Public Class frmMain
             txt_ひとつのすき間の寸法_本幅分.Text = ""
         End If
 
-        If Not _isChangingByCode Then
-            recalc(CalcCategory.Vertical, sender)
-        End If
+        recalc(CalcCategory.Vertical, sender)
     End Sub
 
     Private Sub btn横寸法に合わせる_Click(sender As Object, e As EventArgs) Handles btn横寸法に合わせる.Click
@@ -1263,22 +1252,25 @@ Public Class frmMain
 
     End Sub
 
+    Private Sub btn展開本幅の同期_Click(sender As Object, e As EventArgs) Handles btn展開本幅の同期.Click
+        recalc(CalcCategory.LaneSync, sender)
+    End Sub
+
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
         ShowDefaultTabControlPage(enumReason._Preview)
     End Sub
 
-    Private Sub chk斜めの補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも.CheckedChanged
-
+    Private Sub chk補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk補強ひも.CheckedChanged
+        recalc(CalcCategory.Horizontal, sender)
     End Sub
 
-    Private Sub chk補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk補強ひも.CheckedChanged
-
+    Private Sub chk斜めの補強ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜めの補強ひも.CheckedChanged
+        recalc(CalcCategory.Vertical, sender)
     End Sub
 
     Private Sub chk始末ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk始末ひも.CheckedChanged
-
+        recalc(CalcCategory.Vertical, sender)
     End Sub
-
 #End Region
 
 #Region "底楕円"
@@ -1680,7 +1672,7 @@ Public Class frmMain
             If iひも種.HasFlag(enumひも種.i_最上と最下) Then
                 rad最上と最下の短いひも_なし.Checked = True 'with recalc
             End If
-            Save底_縦横(_clsDataTables.p_row底_縦横)
+            'Save底_縦横(_clsDataTables.p_row底_縦横)
             'expand横ひも.DataSource = _clsCalcMesh.set横展開DataTable(True)
 
             Exit Sub
@@ -1731,12 +1723,12 @@ Public Class frmMain
         If iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) OrElse iひも種 = (enumひも種.i_斜め Or enumひも種.i_補強) Then
             _clsDataTables.FromTmpTable(enumひも種.i_縦 Or enumひも種.i_斜め, expand縦ひも.DataSource)
             If iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) Then
-                chk始末ひも.Checked = False
+                chk始末ひも.Checked = False 'with recalc
             End If
             If iひも種 = (enumひも種.i_斜め Or enumひも種.i_補強) Then
-                chk斜めの補強ひも.Checked = False
+                chk斜めの補強ひも.Checked = False 'with recalc
             End If
-            Save底_縦横(_clsDataTables.p_row底_縦横)
+            'Save底_縦横(_clsDataTables.p_row底_縦横)
             'expand縦ひも.DataSource = _clsCalcMesh.set縦展開DataTable(True)
             Exit Sub
         End If
@@ -1752,6 +1744,22 @@ Public Class frmMain
 
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcMesh.get縦展開DataTable(True)
+    End Sub
+
+    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
+    End Sub
+
+    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
     End Sub
 
 #End Region
@@ -1838,6 +1846,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 #End Region
 
 End Class

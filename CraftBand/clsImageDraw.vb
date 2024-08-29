@@ -842,7 +842,7 @@ Public Class CImageDraw
             Return False
         End If
         '周の線
-        If colset.PenLane IsNot Nothing Then
+        If colset.PenBand IsNot Nothing Then
             For Each line As S線分 In item.m_lineList
                 _Graphic.DrawLine(colset.PenBand, pixcel_point(line.p開始), pixcel_point(line.p終了))
             Next
