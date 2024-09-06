@@ -185,6 +185,13 @@ Public Class ctrDataGridView
             End If
         End If
 
+        'comboBoxのDelete値(#78)
+        Dim comboBox = TryCast(Me.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
+        If comboBox IsNot Nothing AndAlso comboBox.Value = 0 Then
+            Me.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = DBNull.Value
+            e.ThrowException = False
+                Exit Sub
+            End If
 
         '受け付けない(要・再入力)
         '{0}行目<{1}> データエラー{2}{3}
