@@ -331,6 +331,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  側面の高さが異なるため直方体になりません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ModelDiffHeight() As String
+            Get
+                Return ResourceManager.GetString("ModelDiffHeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}が描画できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ModelNoImage() As String

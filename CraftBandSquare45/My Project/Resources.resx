@@ -238,4 +238,7 @@
   <data name="ModelNoImage" xml:space="preserve">
     <value>{0}が描画できませんでした。</value>
   </data>
+  <data name="ModelDiffHeight" xml:space="preserve">
+    <value>側面の高さが異なるため直方体になりません。</value>
+  </data>
 </root>

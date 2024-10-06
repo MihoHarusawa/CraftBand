@@ -20,6 +20,8 @@ Public Class clsModelImageData
     Dim _region各面(cBasketPlateCount - 1) As S領域
     Dim _path各面画像(cBasketPlateCount - 1) As String
     Dim _data各面(cBasketPlateCount - 1) As clsDataTables
+    Dim _delta画像サイズ(cBasketPlateCount - 1) As S差分
+
 
     '対象指定
     Sub New(ByVal calc As clsCalcSquare45, ByVal fpath As String)
@@ -92,8 +94,17 @@ Public Class clsModelImageData
     Function ModelFileOpen() As Boolean
         Dim outpath As String = IO.Path.Combine(IO.Path.GetTempPath, "Square45_model")
 
+        Dim height As Double = _delta画像サイズ(1).dY '左側面
+        If Not NearlyEqual(height, _delta画像サイズ(2).dY) OrElse
+           Not NearlyEqual(height, _delta画像サイズ(3).dY) OrElse
+           Not NearlyEqual(height, _delta画像サイズ(4).dY) Then
+            '側面の高さが異なるため直方体になりません。
+            _LastError = My.Resources.ModelDiffHeight
+            Return False
+        End If
+
         ' OBJとMTLファイルの出力
-        Return CreateOBJWithTextures(_calc.p_d底の横長, _calc.p_d四角ベース_高さ + _calc.p_d縁の高さ, _calc.p_d底の縦長,
+        Return CreateOBJWithTextures(_calc.p_d底の横長, height, _calc.p_d底の縦長,
         _path各面画像, outpath)
     End Function
 
@@ -298,19 +309,19 @@ Public Class clsModelImageData
 
         '横ひも,順方向,縦の四角数,後半
         base(0) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i縦の四角数, True)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 0, base(0))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 0, base(0))
 
         '縦ひも,順方向,横の四角数,後半
         base(1) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i横の四角数, True)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 1, base(1))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 1, base(1))
 
         '横ひも,逆方向,縦の四角数,前半
         base(2) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i縦の四角数, False)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 2, base(2))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 2, base(2))
 
         '縦ひも,逆方向,横の四角数,前半
         base(3) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i横の四角数, False)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 3, base(3))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 3, base(3))
 
         For iData As Integer = 1 To cBasketPlateCount - 1
             Dim base_idx As Integer = {-1, 0, 3, 2, 1}(iData)
@@ -329,19 +340,19 @@ Public Class clsModelImageData
 
         '縦ひも,逆方向,縦の四角数,前半
         base(0) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i縦の四角数, False)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 0, base(0))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 0, base(0))
 
         '横ひも,逆方向,横の四角数,前半
         base(1) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i横の四角数, False)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 1, base(1))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 1, base(1))
 
         '縦ひも,順方向,縦の四角数,後半
         base(2) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i縦の四角数, True)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 2, base(2))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 2, base(2))
 
         '横ひも,順方向,横の四角数,後半
         base(3) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i横の四角数, True)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 3, base(3))
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 3, base(3))
 
         For iData As Integer = 1 To cBasketPlateCount - 1
             Dim base_idx As Integer = {-1, 0, 1, 2, 3}(iData)
@@ -510,6 +521,14 @@ Public Class clsModelImageData
                     _LastError = String.Format(My.Resources.ModelNoImage, dispPlateName(i))
                     ret = False
                 End If
+                If {1, 3}.Contains(i) Then
+                    '右側面と左側面
+                    _delta画像サイズ(i) = New S差分(calc.p_d底の縦長, calc.p_d底の横長)
+                Else
+                    '底と前面と背面
+                    _delta画像サイズ(i) = New S差分(calc.p_d底の横長, calc.p_d底の縦長)
+                End If
+
                 imgdata.Clear()
                 If Not ret Then
                     Exit For
@@ -544,7 +563,8 @@ Public Class clsModelImageData
 
             '絵
             item = New clsImageItem(clsImageItem.ImageTypeEnum._画像貼付, i)
-            item.m_a四隅 = New S四隅(_region各面(i))
+            Dim s As New S領域(_region各面(i).p左下, _region各面(i).p左下 + _delta画像サイズ(i))
+            item.m_a四隅 = New S四隅(s)
             item.m_fpath = _path各面画像(i)
             itemlist.AddItem(item)
         Next
