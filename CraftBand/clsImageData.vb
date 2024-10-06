@@ -1,16 +1,21 @@
-﻿Imports CraftBand.CImageDraw
+﻿Imports System.IO
+Imports CraftBand.CImageDraw
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
 ''' <summary>
 ''' イメージ処理データ(1枚の絵のデータ要素の配置)
 ''' </summary>
 Public Class clsImageData
-
-
     'ファイル名
     Public ReadOnly Property FilePath As String
+
     'ファイルエラー文字列
+    Protected _LastError As String
     Public ReadOnly Property LastError As String
+        Get
+            Return _LastError
+        End Get
+    End Property
 
     'イメージファイル
     Public ReadOnly Property GifFilePath As String
@@ -36,7 +41,7 @@ Public Class clsImageData
     '中心座標
     Public Property CenterCoordinates As S実座標
 
-
+    'fpath:タイトル、htmlファイル名
     Sub New(ByVal fpath As String)
         _FilePath = fpath
     End Sub
@@ -80,6 +85,7 @@ Public Class clsImageData
 
 
     '描画と画像ファイル生成
+    'outp: Html時のタイトルとカットリスト
     Function MakeImage(ByVal outp As clsOutput) As Boolean
         _clsOutput = outp
 
@@ -209,7 +215,7 @@ Public Class clsImageData
 
 
     'HTMLファイルを作る
-    Private Function makeHtmlPage(ByVal fpath As String, ByVal imgpath As String, ByVal title As String, ByVal isCutList As Boolean) As Boolean
+    Private Function makeHtmlPage(ByVal fpath As String, ByVal imgpath As String, ByVal title As String, ByVal drawinfo As enumBrowserDrawInfo) As Boolean
 
         Dim sb As New System.Text.StringBuilder
         sb.Append("<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"">").AppendLine()
@@ -226,15 +232,19 @@ Public Class clsImageData
         sb.Append("</P></H1>").AppendLine()
 
         '
-        If Not String.IsNullOrWhiteSpace(imgpath) Then
+        If drawinfo.HasFlag(enumBrowserDrawInfo._gif) AndAlso
+            Not String.IsNullOrWhiteSpace(imgpath) Then
             sb.Append("<img src=""")
             sb.Append(imgpath)
             sb.Append(""">").AppendLine()
         End If
         sb.Append("<P></P>").AppendLine()
 
-        If isCutList Then
+        If drawinfo.HasFlag(enumBrowserDrawInfo._cutlist) AndAlso _clsOutput IsNot Nothing Then
             sb.AppendLine(_clsOutput.OutCutListHtml())
+        End If
+        If drawinfo.HasFlag(enumBrowserDrawInfo._size) AndAlso _clsOutput IsNot Nothing Then
+            sb.AppendLine(_clsOutput.OutSizeHtml())
         End If
 
         sb.Append("</BODY>").AppendLine()
@@ -259,8 +269,20 @@ Public Class clsImageData
     End Function
 
 
+    <Flags()>
+    Public Enum enumBrowserDrawInfo
+        _none = 0
+        _gif = &H1          '画像
+        _cutlist = &H2      'カットリスト
+        _title_back = &H4   '裏面タイトル
+        _size = &H8     'サイズ
+    End Enum
+    Public Const cBrowserBasicInfo As enumBrowserDrawInfo = enumBrowserDrawInfo._gif Or enumBrowserDrawInfo._cutlist
+    Public Const cBrowserBackFace As enumBrowserDrawInfo = enumBrowserDrawInfo._gif Or enumBrowserDrawInfo._title_back
+    Public Const cBrowserSize As enumBrowserDrawInfo = enumBrowserDrawInfo._gif Or enumBrowserDrawInfo._size
+
     'ブラウザで開く
-    Public Function ImgBrowserOpen(Optional ByVal isBackFace As Boolean = False) As Boolean
+    Public Function ImgBrowserOpen(ByVal drawinfo As enumBrowserDrawInfo) As Boolean
         If String.IsNullOrWhiteSpace(GifFilePath) OrElse Not IO.File.Exists(GifFilePath) Then
             '画像ファイルが作られていません。
             _LastError = String.Format(My.Resources.ErrNoGifFile)
@@ -278,10 +300,11 @@ Public Class clsImageData
         If String.IsNullOrWhiteSpace(title) Then
             title = IO.Path.GetFileNameWithoutExtension(FilePath)
         End If
-        If isBackFace Then
+        If drawinfo.HasFlag(enumBrowserDrawInfo._title_back) Then
+            '裏面 : {0}
             title = String.Format(My.Resources.TitleBackFace, title)
         End If
-        If Not makeHtmlPage(htmlFile, GifFilePath, title, Not isBackFace) Then
+        If Not makeHtmlPage(htmlFile, GifFilePath, title, drawinfo) Then
             'LastErrorあり
             Return False
         End If
@@ -300,7 +323,6 @@ Public Class clsImageData
 
         End Try
     End Function
-
 
 
     '画像ファイルを開く
@@ -328,7 +350,6 @@ Public Class clsImageData
 
     End Function
 
-
     Public Overrides Function ToString() As String
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("FilePath={0}", FilePath).AppendLine()
@@ -339,5 +360,126 @@ Public Class clsImageData
         sb.AppendFormat("ImageList {0}", _ImageList.ToString)
         Return sb.ToString
     End Function
+
+
+    '面の順序
+    Enum enumBasketPlateIdx
+        _bottom = 0 '底面         横と縦
+        _leftside  '左側面
+        _front      '前面         横と高さ
+        _rightside  '右側面
+        _back   '背面
+    End Enum
+    Public Const cBasketPlateCount As Integer = 5
+
+    '3D
+    Public Function CreateOBJWithTextures(width As Single, height As Single, depth As Single, textureFiles() As String, outputDir As String) As Boolean
+        Try
+
+            ' 出力ディレクトリを作成
+            If Not IO.Directory.Exists(outputDir) Then
+                IO.Directory.CreateDirectory(outputDir)
+            End If
+
+            ' OBJファイルのパス
+            Dim objFilePath As String = IO.Path.Combine(outputDir, "textured_rectangular_prism.obj")
+            ' MTLファイルのパス
+            Dim mtlFilePath As String = IO.Path.Combine(outputDir, "textured_rectangular_prism.mtl")
+
+            ' OBJファイルを作成
+            Using writer As New StreamWriter(objFilePath)
+                ' MTLファイルを参照
+                writer.WriteLine("mtllib textured_rectangular_prism.mtl")
+
+                ' 頂点データを出力 (8頂点)
+                writer.WriteLine("v 0 0 0")                 ' 頂点1 (左下手前)
+                writer.WriteLine("v " & width & " 0 0")     ' 頂点2 (右下手前)
+                writer.WriteLine("v " & width & " " & height & " 0") ' 頂点3 (右上手前)
+                writer.WriteLine("v 0 " & height & " 0")    ' 頂点4 (左上手前)
+                writer.WriteLine("v 0 0 " & depth)          ' 頂点5 (左下奥)
+                writer.WriteLine("v " & width & " 0 " & depth) ' 頂点6 (右下奥)
+                writer.WriteLine("v " & width & " " & height & " " & depth) ' 頂点7 (右上奥)
+                writer.WriteLine("v 0 " & height & " " & depth) ' 頂点8 (左上奥)
+
+                ' テクスチャ座標 (2D座標)
+                writer.WriteLine("vt 0 0")
+                writer.WriteLine("vt 1 0")
+                writer.WriteLine("vt 1 1")
+                writer.WriteLine("vt 0 1")
+
+                ' 面に対応するマテリアルを使用
+                ' 底面
+                writer.WriteLine("usemtl bottom_texture")
+                writer.WriteLine("f 1/1 2/2 6/3 5/4")
+
+                ' 左側面
+                writer.WriteLine("usemtl left_texture")
+                writer.WriteLine("f 1/1 5/2 8/3 4/4")
+
+                ' 正面
+                writer.WriteLine("usemtl front_texture")
+                'writer.WriteLine("f 1/1 2/2 3/3 4/4")
+                writer.WriteLine("f 1/2 2/1 3/4 4/3")
+
+                ' 右側面
+                writer.WriteLine("usemtl right_texture")
+                'writer.WriteLine("f 2/1 6/2 7/3 3/4")
+                writer.WriteLine("f 2/2 6/1 7/4 3/3")
+
+                ' 背面
+                writer.WriteLine("usemtl back_texture")
+                writer.WriteLine("f 5/1 6/2 7/3 8/4")
+
+                ' 上面 (透明)
+                writer.WriteLine("usemtl transparent_material")
+                writer.WriteLine("f 4/1 3/2 7/3 8/4")
+            End Using
+
+            ' MTLファイルの作成
+            Using writer As New StreamWriter(mtlFilePath)
+                ' 各面に対応するマテリアルを定義
+                writer.WriteLine("newmtl bottom_texture")
+                writer.WriteLine("map_Kd " & IO.Path.GetFileName(textureFiles(0))) '底面のテクスチャ
+                writer.WriteLine()
+
+                writer.WriteLine("newmtl left_texture")
+                writer.WriteLine("map_Kd " & IO.Path.GetFileName(textureFiles(1))) '左側面のテクスチャ
+                writer.WriteLine()
+
+                writer.WriteLine("newmtl front_texture")
+                writer.WriteLine("map_Kd " & IO.Path.GetFileName(textureFiles(4))) '背面のテクスチャ
+                writer.WriteLine()
+
+                writer.WriteLine("newmtl right_texture")
+                writer.WriteLine("map_Kd " & IO.Path.GetFileName(textureFiles(3))) '右側面のテクスチャ
+                writer.WriteLine()
+
+                writer.WriteLine("newmtl back_texture")
+                writer.WriteLine("map_Kd " & IO.Path.GetFileName(textureFiles(2))) '前面のテクスチャ
+                writer.WriteLine()
+
+                ' 透明なマテリアルを定義
+                writer.WriteLine("newmtl transparent_material")
+                writer.WriteLine("d 0.0") ' 完全に透明に設定
+            End Using
+
+            ' 画像ファイルを出力ディレクトリにコピー
+            For Each textureFile As String In textureFiles
+                IO.File.Copy(textureFile, IO.Path.Combine(outputDir, IO.Path.GetFileName(textureFile)), True)
+            Next
+
+            ' 作成したOBJファイルを開く
+            Process.Start("explorer.exe", objFilePath)
+            Return True
+
+        Catch ex As Exception
+            'ファイル'{0}'を起動できませんでした。
+            _LastError = String.Format(My.Resources.WarningFileStartError, GifFilePath)
+            g_clsLog.LogException(ex, "clsImageData.CreateOBJWithTextures", GifFilePath)
+            Return False
+        End Try
+    End Function
+
+
 
 End Class

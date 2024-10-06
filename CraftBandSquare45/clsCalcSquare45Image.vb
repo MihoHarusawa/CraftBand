@@ -4,6 +4,7 @@ Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
+Imports CraftBandSquare45.clsModelImageData
 
 Partial Public Class clsCalcSquare45
 
@@ -12,11 +13,35 @@ Partial Public Class clsCalcSquare45
     '底の形状
     Dim _a底領域 As S四隅
 
+    '底の絵のファイル
+    Dim _BottomPngFilePath As String = Nothing
+    Property p_sBottomPngFilePath(ByVal check As Boolean) As String
+        Get
+            If check AndAlso Not String.IsNullOrWhiteSpace(_BottomPngFilePath) Then
+                If IO.File.Exists(_BottomPngFilePath) Then
+                    Return _BottomPngFilePath
+                Else
+                    Return Nothing
+                End If
+            Else
+                Return _BottomPngFilePath
+            End If
+        End Get
+        Set(value As String)
+            _BottomPngFilePath = value
+            If check AndAlso Not String.IsNullOrWhiteSpace(value) AndAlso IO.File.Exists(value) Then
+                IO.File.Delete(value)
+            End If
+        End Set
+    End Property
+    '底の絵の回転角度
+    Property p_dBottomPngRotateAngle As Double
+
 
     '
     '　横のひも番号　右上(A)             縦ひも X→  右上       左上              右上
     '　　①　　　　　／＼　　　　　　 　　　　 　／│             __________________
-    '　　②　　　　／　　＼　　　　　 　　　／││ │             ＼______________／
+    '　　②　　　横／　　＼縦　　　　 　　　／││ │             ＼______________／
     '　　③　↑+Y／　　　　＼右下(D) 　　　│ ││ │               ______________
     '　　④　│／　　　　　／　　　　　／││ ││ │         ↑    ＼__________／
     '　　..　│＼左上(B) ／　　　　　　＼││ ││ │　　　　　　　　 　____
@@ -252,7 +277,7 @@ Partial Public Class clsCalcSquare45
             '
             If Not p_b長方形である Then
                 '底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1})
-                p_s警告 = String.Format(My.Resources.CalcNoRectanble,
+                p_s警告 = String.Format(My.Resources.CalcNoRectangle,
                         p_d底の横長, p_d底の横長(True), p_d底の縦長, p_d底の縦長(True))
             End If
 
@@ -270,7 +295,7 @@ Partial Public Class clsCalcSquare45
 
 
     'ひもの底位置
-    Private Class CBandPosition
+    Friend Class CBandPosition
         Dim _Idx As Integer
 
         Public m_row縦横展開 As tbl縦横展開Row
@@ -333,7 +358,7 @@ Partial Public Class clsCalcSquare45
     End Class
 
     '展開テーブルの位置計算用
-    Private Class CBandPositionList
+    Friend Class CBandPositionList
         Dim _Direction As emExp
 
 
@@ -355,6 +380,10 @@ Partial Public Class clsCalcSquare45
         Public _本幅の計_Z As Integer
         Public _本幅の計_P As Integer
 
+        Public Function ListCount() As Integer
+            Return _BandList.Count
+        End Function
+
         '指定位置の要素 ひも番号:1～_iひもの本数　で使用
         ReadOnly Property ByIdx(ByVal idx As Integer) As CBandPosition
             Get
@@ -362,6 +391,16 @@ Partial Public Class clsCalcSquare45
                     Return Nothing
                 End If
                 Return _BandList(idx - 1)
+            End Get
+        End Property
+
+        '最期から指定位置の要素 ひも番号:1～_iひもの本数　で使用
+        ReadOnly Property ByReverseIdx(ByVal idx As Integer) As CBandPosition
+            Get
+                If idx < 1 OrElse _iひもの本数 < idx Then
+                    Return Nothing
+                End If
+                Return _BandList(_iひもの本数 - idx)
             End Get
         End Property
 
@@ -696,6 +735,16 @@ Partial Public Class clsCalcSquare45
             item.m_a四隅.pD = item.m_a四隅.pD + delta
             item.m_a四隅.pB = item.m_a四隅.pB + delta
             itemlist.AddItem(item)
+
+        End If
+
+        '底の画像
+        If Not String.IsNullOrWhiteSpace(p_sBottomPngFilePath(False)) Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 1)
+            item.m_a四隅 = _a底領域
+            item.m_fpath = p_sBottomPngFilePath(False)
+            item.m_angle = p_dBottomPngRotateAngle
+            itemlist.AddItem(item)
         End If
 
         '底枠
@@ -824,6 +873,41 @@ Partial Public Class clsCalcSquare45
         Next
 
         Return True
+    End Function
+
+
+    'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分
+    Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean) As CBandAttributeList
+        Dim balist As New CBandAttributeList
+
+        '開始位置
+        Dim idx As Integer = 1
+        '後半を正順に / 前半を逆順に
+        If isFromLast AndAlso Not isReverse OrElse Not isFromLast AndAlso isReverse Then
+            idx = _BandPositions(iExp).ListCount - count + 1 '1～の値
+        End If
+        Do While 0 < count
+
+            Dim band As CBandPosition
+            If isReverse Then
+                band = _BandPositions(iExp).ByReverseIdx(idx)
+            Else
+                band = _BandPositions(iExp).ByIdx(idx)
+            End If
+
+            If band IsNot Nothing AndAlso band.m_row縦横展開 IsNot Nothing Then
+                Dim ba As New CBandAttribute(band.m_row縦横展開)
+                balist.Add(ba)
+            Else
+                'あるはず・スペースフォルダとして
+                balist.Add(Nothing)
+            End If
+
+            idx += 1
+            count -= 1
+        Loop
+
+        Return balist
     End Function
 
 

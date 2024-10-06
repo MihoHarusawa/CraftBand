@@ -1,4 +1,5 @@
 ﻿
+Imports System.IO
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
@@ -70,6 +71,7 @@ Public Class frmMain
         'プレビューを先にするため一旦削除
         TabControl.TabPages.Remove(tpage横ひも)
         TabControl.TabPages.Remove(tpage縦ひも)
+        TabControl.TabPages.Remove(tpageひも上下)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅.DataSource = g_clsSelectBasics.p_tblLane
@@ -258,6 +260,8 @@ Public Class frmMain
                 Show縦ひも(works)
             Case tpageプレビュー.Name
                 Showプレビュー()
+            Case tpageプレビュー2.Name
+                Showプレビュー2()
             Case tpageひも上下.Name
                 Showひも上下(works)
             Case Else ' 
@@ -286,17 +290,17 @@ Public Class frmMain
             End If
         End If
         If Not needreset AndAlso reason.HasFlag(enumReason._Preview) Then
-            If {tpageプレビュー.Name, tpageひも上下.Name}.Contains(_CurrentTabControlName) Then
+            If {tpageプレビュー.Name, tpageプレビュー2.Name, tpageひも上下.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If Not needreset AndAlso reason.HasFlag(enumReason._Pattern) Then
-            If {tpageプレビュー.Name, tpage縁の始末.Name}.Contains(_CurrentTabControlName) Then
+            If {tpageプレビュー.Name, tpageプレビュー2.Name, tpage縁の始末.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
         If Not needreset AndAlso reason.HasFlag(enumReason._Option) Then
-            If {tpageプレビュー.Name, tpage追加品.Name}.Contains(_CurrentTabControlName) Then
+            If {tpageプレビュー.Name, tpageプレビュー2.Name, tpage追加品.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -327,6 +331,8 @@ Public Class frmMain
                 Hide縦ひも(_clsDataTables)
             Case tpageプレビュー.Name
                 Hideプレビュー()
+            Case tpageプレビュー2.Name
+                Hideプレビュー2()
             Case tpageひも上下.Name
                 Hideひも上下(_clsDataTables)
             Case Else ' 
@@ -1493,7 +1499,7 @@ Public Class frmMain
         If _clsImageData Is Nothing Then
             Return
         End If
-        If Not _clsImageData.ImgBrowserOpen(radうら.Checked) Then
+        If Not _clsImageData.ImgBrowserOpen(IIf(radうら.Checked, clsImageData.cBrowserBackFace, clsImageData.cBrowserBasicInfo)) Then
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
@@ -1514,6 +1520,67 @@ Public Class frmMain
         Showプレビュー()
     End Sub
 
+#End Region
+
+#Region "プレビュー2"
+    Dim _clsModelImageData As clsModelImageData
+    Private Sub Showプレビュー2()
+        picプレビュー2.Image = Nothing
+        _clsModelImageData = Nothing
+
+        SaveTables(_clsDataTables)
+        Dim ret As Boolean = _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        Disp計算結果(_clsCalcSquare45) 'NGはToolStripに表示
+        If Not ret Then
+            Return
+        End If
+
+        Cursor.Current = Cursors.WaitCursor
+        _clsModelImageData = New clsModelImageData(_clsCalcSquare45, _sFilePath)
+        ret = _clsModelImageData.CalcModel()
+        Cursor.Current = Cursors.Default
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
+            MessageBox.Show(_clsModelImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+    End Sub
+
+    Private Sub Hideプレビュー2()
+        picプレビュー2.Image = Nothing
+        If _clsModelImageData IsNot Nothing Then
+            _clsModelImageData.Clear()
+            _clsModelImageData = Nothing
+        End If
+    End Sub
+
+    Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs) Handles btn3Dモデル.Click
+        If _clsModelImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsModelImageData.ModelFileOpen Then
+            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub btn画像ファイル2_Click(sender As Object, e As EventArgs) Handles btn画像ファイル2.Click
+        If _clsModelImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsModelImageData.ImgFileOpen Then
+            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub btnブラウザ2_Click(sender As Object, e As EventArgs) Handles btnブラウザ2.Click
+        If _clsModelImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsModelImageData.ImgBrowserOpen(clsImageData.cBrowserSize) Then
+            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
 #End Region
 
 

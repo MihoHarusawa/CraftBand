@@ -223,6 +223,24 @@ Public Class clsUpDown
         Return matrix_to_table()
     End Function
 
+    '位置をシフト
+    Function Shift(ByVal shift_x As Integer, ByVal shift_y As Integer) As Boolean
+        If table_to_matrix() Then
+            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
+            For y As Integer = 1 To VerticalCount
+                Dim ys As Integer = Modulo((y + shift_y - 1), VerticalCount) + 1
+                For x As Integer = 1 To HorizontalCount
+                    Dim xs As Integer = Modulo((x + shift_x - 1), HorizontalCount) + 1
+                    _Matrix(x, y) = save(xs, ys)
+                Next
+            Next
+            Return matrix_to_table()
+        Else
+            Return False
+        End If
+    End Function
+
+
 
 #Region "レコードR/W"
 

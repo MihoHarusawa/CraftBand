@@ -117,6 +117,12 @@ Class clsCalcSquare45
 
 #Region "プロパティ値"
 
+    ReadOnly Property p_dひも幅の一辺 As Double
+        Get
+            Return _dひも幅の一辺
+        End Get
+    End Property
+
     ReadOnly Property p_sひも幅の辺 As String
         Get
             If 0 < _dひも幅の一辺 Then
@@ -162,6 +168,12 @@ Class clsCalcSquare45
     ReadOnly Property p_i縦の四角数 As Integer
         Get
             Return _i縦の四角数
+        End Get
+    End Property
+
+    ReadOnly Property p_i高さの切上四角数 As Integer
+        Get
+            Return CInt(Math.Ceiling(_d高さの四角数))
         End Get
     End Property
 
@@ -221,6 +233,12 @@ Class clsCalcSquare45
             Else
                 Return d
             End If
+        End Get
+    End Property
+
+    ReadOnly Property p_d縁の高さ As Double
+        Get
+            Return _d縁の高さ
         End Get
     End Property
 
@@ -496,8 +514,8 @@ Class clsCalcSquare45
 
 
 
-    Dim _Data As clsDataTables
-    Dim _frmMain As frmMain
+    Friend _Data As clsDataTables
+    Friend _frmMain As frmMain
 
     Sub New(ByVal data As clsDataTables, ByVal frm As frmMain)
         _Data = data

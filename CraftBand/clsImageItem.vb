@@ -1590,9 +1590,13 @@ Public Class clsImageItem
     '四つ畳み編みのコマ
     Public m_knot As CKnot = Nothing
 
-    '_バンドセット
+    'バンドセット
     Public m_bandList As CBandList = Nothing
     Public m_clipList As CBandList = Nothing
+
+    'クリップ
+    Public m_fpath As String 'jpg
+    Public m_angle As Double
 
 
     '描画タイプ(描画順)
@@ -1606,6 +1610,9 @@ Public Class clsImageItem
 
         _コマ     'm_row縦横展開,m_row縦横展開2,m_rひも位置,m_knot
         _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
+
+        _画像保存   'm_a四隅
+        _画像貼付   'm_a四隅
 
         _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
 
@@ -1890,6 +1897,9 @@ Public Class clsImageItem
             Case ImageTypeEnum._横軸線, ImageTypeEnum._横軸線
                 '描画領域の後に作成されるが一応
                 r描画領域 = m_lineList.Get描画領域()
+
+            Case ImageTypeEnum._画像保存, ImageTypeEnum._画像貼付
+                r描画領域 = m_a四隅.r外接領域
 
         End Select
         Return r描画領域

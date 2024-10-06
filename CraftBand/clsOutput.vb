@@ -8,6 +8,7 @@ Public Class clsOutput
 
     Dim _dstOutput As Tables.dstOutput 'DataSet
     Dim _ListOutMark As String  '出力記号
+    Dim _editAddParts As ctrAddParts    '追加品
 
     Dim _FilePath As String 'ファイル名
     Public ReadOnly Property FilePath As String
@@ -273,6 +274,7 @@ Public Class clsOutput
 
     '追加品
     Function OutAddParts(ByVal editAddParts As ctrAddParts) As Integer
+        _editAddParts = editAddParts
         If editAddParts Is Nothing Then
             Return 0
         End If
@@ -471,5 +473,32 @@ Public Class clsOutput
         sb.AppendLine("</TABLE>")
         Return sb.ToString
     End Function
+
+    Function OutSizeHtml() As String
+        If _editAddParts Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim sb As New System.Text.StringBuilder
+
+        sb.AppendLine("<TABLE>")
+        Dim i As Integer = 1
+
+        Dim name As String = _editAddParts.RefLenNames(i)
+        Do While Not String.IsNullOrWhiteSpace(name)
+            Dim val As Double = ctrAddParts._Refvalues(i)
+
+            sb.Append("<TR>")
+            sb.Append("<TD>").Append(name).Append("</TD>").AppendLine()
+            sb.Append("<TD>").Append(outLengthTextWithUnit(val)).Append("</TD>").AppendLine()
+            sb.AppendLine("</TR>")
+
+            i += 1
+            name = _editAddParts.RefLenNames(i)
+        Loop
+        sb.AppendLine("</TABLE>")
+        Return sb.ToString
+    End Function
+
 
 End Class

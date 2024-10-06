@@ -106,6 +106,9 @@ Partial Class frmMain
         txt先の三角形の本幅の差 = New TextBox()
         txt四辺形の本幅の差 = New TextBox()
         txt後の三角形の本幅の差 = New TextBox()
+        btn画像ファイル2 = New Button()
+        btnブラウザ2 = New Button()
+        btn3Dモデル = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -178,6 +181,8 @@ Partial Class frmMain
         lbl底に = New Label()
         lbl垂直に = New Label()
         editUpDown = New ctrEditUpDown()
+        tpageプレビュー2 = New TabPage()
+        picプレビュー2 = New PictureBox()
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl四角ベース = New Label()
         lbl計算寸法 = New Label()
@@ -250,6 +255,8 @@ Partial Class frmMain
         CType(picプレビュー, ComponentModel.ISupportInitialize).BeginInit()
         tpageひも上下.SuspendLayout()
         grp縦横の四角.SuspendLayout()
+        tpageプレビュー2.SuspendLayout()
+        CType(picプレビュー2, ComponentModel.ISupportInitialize).BeginInit()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
         ' 
@@ -986,6 +993,39 @@ Partial Class frmMain
         ToolTip1.SetToolTip(txt後の三角形の本幅の差, "後の三角形の本幅の差")
         txt後の三角形の本幅の差.Visible = False
         ' 
+        ' btn画像ファイル2
+        ' 
+        btn画像ファイル2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btn画像ファイル2.Location = New Point(606, 361)
+        btn画像ファイル2.Name = "btn画像ファイル2"
+        btn画像ファイル2.Size = New Size(111, 46)
+        btn画像ファイル2.TabIndex = 1
+        btn画像ファイル2.Text = "画像ファイル(&I)"
+        ToolTip1.SetToolTip(btn画像ファイル2, "生成した画像ファイルを開きます")
+        btn画像ファイル2.UseVisualStyleBackColor = True
+        ' 
+        ' btnブラウザ2
+        ' 
+        btnブラウザ2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnブラウザ2.Location = New Point(723, 361)
+        btnブラウザ2.Name = "btnブラウザ2"
+        btnブラウザ2.Size = New Size(111, 46)
+        btnブラウザ2.TabIndex = 2
+        btnブラウザ2.Text = "ブラウザ(&B)"
+        ToolTip1.SetToolTip(btnブラウザ2, "生成した画像ファイルをブラウザで開きます")
+        btnブラウザ2.UseVisualStyleBackColor = True
+        ' 
+        ' btn3Dモデル
+        ' 
+        btn3Dモデル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btn3Dモデル.Location = New Point(489, 361)
+        btn3Dモデル.Name = "btn3Dモデル"
+        btn3Dモデル.Size = New Size(111, 46)
+        btn3Dモデル.TabIndex = 0
+        btn3Dモデル.Text = "3Dモデル(&M)"
+        ToolTip1.SetToolTip(btn3Dモデル, "生成した画像ファイルを開きます")
+        btn3Dモデル.UseVisualStyleBackColor = True
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1197,11 +1237,12 @@ Partial Class frmMain
         TabControl.Controls.Add(tpage縦ひも)
         TabControl.Controls.Add(tpageプレビュー)
         TabControl.Controls.Add(tpageひも上下)
+        TabControl.Controls.Add(tpageプレビュー2)
         TabControl.Location = New Point(19, 171)
         TabControl.Name = "TabControl"
         TabControl.SelectedIndex = 0
         TabControl.Size = New Size(848, 446)
-        TabControl.TabIndex = 22
+        TabControl.TabIndex = 0
         ' 
         ' tpage四角数
         ' 
@@ -1644,6 +1685,30 @@ Partial Class frmMain
         editUpDown.PanelSize = New Size(800, 400)
         editUpDown.Size = New Size(806, 406)
         editUpDown.TabIndex = 1
+        ' 
+        ' tpageプレビュー2
+        ' 
+        tpageプレビュー2.Controls.Add(btn3Dモデル)
+        tpageプレビュー2.Controls.Add(btn画像ファイル2)
+        tpageプレビュー2.Controls.Add(btnブラウザ2)
+        tpageプレビュー2.Controls.Add(picプレビュー2)
+        tpageプレビュー2.Location = New Point(4, 29)
+        tpageプレビュー2.Name = "tpageプレビュー2"
+        tpageプレビュー2.Padding = New Padding(3)
+        tpageプレビュー2.Size = New Size(840, 413)
+        tpageプレビュー2.TabIndex = 9
+        tpageプレビュー2.Text = "プレビュー2"
+        tpageプレビュー2.UseVisualStyleBackColor = True
+        ' 
+        ' picプレビュー2
+        ' 
+        picプレビュー2.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        picプレビュー2.Location = New Point(6, 6)
+        picプレビュー2.Name = "picプレビュー2"
+        picプレビュー2.Size = New Size(828, 349)
+        picプレビュー2.SizeMode = PictureBoxSizeMode.Zoom
+        picプレビュー2.TabIndex = 4
+        picプレビュー2.TabStop = False
         ' 
         ' f_i段数2
         ' 
@@ -2185,6 +2250,8 @@ Partial Class frmMain
         tpageひも上下.PerformLayout()
         grp縦横の四角.ResumeLayout(False)
         grp縦横の四角.PerformLayout()
+        tpageプレビュー2.ResumeLayout(False)
+        CType(picプレビュー2, ComponentModel.ISupportInitialize).EndInit()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
         ResumeLayout(False)
@@ -2361,6 +2428,11 @@ Partial Class frmMain
     Friend WithEvents radうら As RadioButton
     Friend WithEvents radおもて As RadioButton
     Friend WithEvents dgv縁の始末 As ctrDataGridView
+    Friend WithEvents tpageプレビュー2 As TabPage
+    Friend WithEvents btn画像ファイル2 As Button
+    Friend WithEvents btnブラウザ2 As Button
+    Friend WithEvents picプレビュー2 As PictureBox
+    Friend WithEvents btn3Dモデル As Button
     Friend WithEvents f_i番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn

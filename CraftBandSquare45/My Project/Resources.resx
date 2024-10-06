@@ -226,7 +226,16 @@
     <value>上,下</value>
     <comment>frmMain</comment>
   </data>
-  <data name="CalcNoRectanble" xml:space="preserve">
+  <data name="CalcNoRectangle" xml:space="preserve">
     <value>底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1})</value>
+  </data>
+  <data name="ModelNoRectangle" xml:space="preserve">
+    <value>{0}が長方形でないため描画できません。</value>
+  </data>
+  <data name="ModelPlateNames" xml:space="preserve">
+    <value>底,左側面,前面,右側面,背面</value>
+  </data>
+  <data name="ModelNoImage" xml:space="preserve">
+    <value>{0}が描画できませんでした。</value>
   </data>
 </root>

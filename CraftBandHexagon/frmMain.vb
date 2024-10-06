@@ -1957,7 +1957,7 @@ Public Class frmMain
         If _clsImageData Is Nothing Then
             Return
         End If
-        If Not _clsImageData.ImgBrowserOpen(radうら.Checked) Then
+        If Not _clsImageData.ImgBrowserOpen(IIf(radうら.Checked, clsImageData.cBrowserBackFace, clsImageData.cBrowserBasicInfo)) Then
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub

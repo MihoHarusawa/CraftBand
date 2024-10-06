@@ -1,7 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
-Imports System.IO
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -11,8 +10,11 @@ Imports CraftBand.clsMasterTables
 Public Class CImageDraw
     Implements IDisposable
 
-    Dim ImageScale As Double = 1
+    'クリップ画像保存の形式
+    Public Const cImageClipFileExtention As String = ".png"
 
+
+    Dim ImageScale As Double = 1
 
     ' (原点)
     '　●→→→→→→→→→→→→X
@@ -367,14 +369,17 @@ Public Class CImageDraw
             Case ImageTypeEnum._編みかた
                 Return draw編みかた(item)
 
+            Case ImageTypeEnum._画像保存
+                Return save画像(item)
+
+            Case ImageTypeEnum._画像貼付
+                Return load画像(item)
+
             Case ImageTypeEnum._底楕円
                 Return draw底楕円(item)
 
             Case ImageTypeEnum._差しひも
                 Return draw差しひも(item)
-
-            'Case ImageTypeEnum._ひも領域
-            '    Return drawひも領域(item)
 
             Case ImageTypeEnum._付属品
                 Return draw付属品(item)
@@ -901,36 +906,6 @@ Public Class CImageDraw
         Return True
     End Function
 
-    'Function drawひも領域(ByVal item As clsImageItem) As Boolean
-    '    If item.m_rowData Is Nothing Then
-    '        Return False
-    '    End If
-    '    'ひもの色
-    '    Dim color As String = item.m_rowData.Value("f_s色")
-    '    Dim colset As CPenBrush = GetBandPenBrush(color)
-    '    If colset Is Nothing OrElse colset.IsNoDrawing Then
-    '        Return False
-    '    End If
-    '    'ひもの領域
-    '    Dim points() As PointF = pixcel_lines(item.m_a四隅)
-    '    If colset.BrushAlfa IsNot Nothing Then
-    '        _Graphic.FillPolygon(colset.BrushAlfa, points)
-    '    End If
-    '    If colset.PenBand IsNot Nothing Then
-    '        _Graphic.DrawLines(colset.PenBand, points)
-    '    End If
-
-    '    '記号
-    '    If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
-    '        Dim p As PointF = pixcel_point(item.p_p文字位置)
-    '        Dim str As String = item.m_rowData.Value("f_s記号")
-    '        _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
-    '    End If
-
-    '    Return True
-    'End Function
-
-
     Function draw付属品(ByVal item As clsImageItem) As Boolean
         If item.m_row追加品 Is Nothing Then
             Return False
@@ -1126,6 +1101,58 @@ Public Class CImageDraw
     End Function
 
 
+    '領域を画像保存
+    Function save画像(ByVal item As clsImageItem) As Boolean
+        If Canvas Is Nothing OrElse item Is Nothing OrElse
+            item.m_a四隅.IsEmpty OrElse String.IsNullOrWhiteSpace(item.m_fpath) Then
+            Return False
+        End If
+
+        Try
+            If IO.File.Exists(item.m_fpath) Then
+                IO.File.Delete(item.m_fpath)
+            End If
+
+            '※角度は、BitMap に対してそのまま適用
+            Dim savepng As New CSavePng
+            Dim ret As Boolean = savepng.CopyRotateAndSaveToPNG(Canvas, pixcel_lines(item.m_a四隅), item.m_angle, item.m_fpath)
+
+            'エラーにしない(結果はファイルの有無で判断)
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "CImageDraw.save画像")
+            Return False
+
+        End Try
+    End Function
+
+
+    '指定点に画像ファイル貼付
+    Function load画像(ByVal item As clsImageItem) As Boolean
+        If Canvas Is Nothing OrElse item Is Nothing OrElse
+             Not IO.File.Exists(item.m_fpath) Then
+            Return False
+        End If
+
+        Try
+            '画像を読み込む
+            Dim img As Image = Image.FromFile(item.m_fpath)
+            Dim p As PointF = pixcel_point(item.m_a四隅.p左上)
+            ' 画像を描画する
+            _Graphic.DrawImage(img, p.X, p.Y)
+
+            ' リソースを解放
+            img.Dispose()
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "CImageDraw.load画像")
+            Return False
+        End Try
+    End Function
+
+
     Private disposedValue As Boolean
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
@@ -1171,4 +1198,114 @@ Public Class CImageDraw
         GC.SuppressFinalize(Me)
     End Sub
 
+
+
+    '指定の領域を切り出し、回転して画像ファイルを作る
+    Private Class CSavePng
+        Function CopyRotateAndSaveToPNG(originalBitmap As Bitmap, points() As PointF, angle As Single, outputFilePath As String) As Boolean
+            '外接矩形を取得
+            Dim path As New Drawing2D.GraphicsPath()
+            path.AddPolygon(points)
+            Dim bounds As RectangleF = path.GetBounds()
+
+            '1. 外接矩形サイズで新しいビットマップを作成
+            Dim width As Integer = CInt(Math.Ceiling(bounds.Width))
+            Dim height As Integer = CInt(Math.Ceiling(bounds.Height))
+            Dim clippedBitmap As New Bitmap(width, height)
+
+            '外接矩形をバウンディングボックスの原点に合わせてシフトする
+            Dim mtxShift As New Drawing2D.Matrix()
+            mtxShift.Translate(-bounds.X, -bounds.Y)  ' path を bounds の位置から (0, 0) へシフト
+            path.Transform(mtxShift)  ' path 全体をシフトする
+
+            'path部分のみを外接矩形サイズに描画
+            Using g As Graphics = Graphics.FromImage(clippedBitmap)
+                g.SmoothingMode = SmoothingMode.AntiAlias
+                g.Clear(Color.Transparent)
+                g.SetClip(path) 'シフト後の path
+                '切り取り描画
+                g.DrawImage(originalBitmap, 0, 0, bounds, GraphicsUnit.Pixel)
+            End Using
+            'clippedBitmap.Save(outputFilePath, Imaging.ImageFormat.Png)
+
+
+
+            '2. 中心に対して指定角度回転
+            'ビットマップ
+            Dim rotatedBitmap As Bitmap = RotateBitmap(clippedBitmap, angle)
+            'rotatedBitmap.Save(outputFilePath, Imaging.ImageFormat.Png)
+
+            '回転したpathの外接矩形
+            Dim rotatedPath As New Drawing2D.GraphicsPath(path.PathPoints, path.PathTypes)
+            Dim rotateMatrix As New Drawing2D.Matrix()
+            rotateMatrix.RotateAt(angle, New PointF(rotatedBitmap.Width / 2, rotatedBitmap.Height / 2))
+            rotatedPath.Transform(rotateMatrix)
+            Dim rotatedBounds As RectangleF = rotatedPath.GetBounds()
+
+            '回転したビットマップ上の中心位置
+            Dim centerRectangle As New RectangleF((rotatedBitmap.Width - rotatedBounds.Width) / 2,
+                                                  (rotatedBitmap.Height - rotatedBounds.Height) / 2,
+                                                  rotatedBounds.Width, rotatedBounds.Height)
+
+
+
+            '3. 回転後のpathの外接矩形サイズでビットマップを作成
+            Dim finalWidth As Integer = CInt(Math.Ceiling(rotatedBounds.Width))
+            Dim finalHeight As Integer = CInt(Math.Ceiling(rotatedBounds.Height))
+            Dim finalBitmap As New Bitmap(finalWidth, finalHeight)
+
+            '回転後の外接矩形部分のみを描画
+            Using g As Graphics = Graphics.FromImage(finalBitmap)
+                g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                g.Clear(Color.Transparent)
+
+                g.DrawImage(rotatedBitmap, 0, 0, centerRectangle, GraphicsUnit.Pixel)
+            End Using
+
+            '4. 結果をファイルに保存
+            finalBitmap.Save(outputFilePath, Imaging.ImageFormat.Png)
+
+            ' リソース解放
+            clippedBitmap.Dispose()
+            rotatedBitmap.Dispose()
+            finalBitmap.Dispose()
+
+            Return True
+        End Function
+
+        Function RotateBitmap(bmp As Bitmap, angle As Single) As Bitmap
+            'ビットマップの中心を回転の中心に設定
+            Dim rotateAtX As Single = bmp.Width / 2
+            Dim rotateAtY As Single = bmp.Height / 2
+
+            '回転後に収まる新しいビットマップのサイズを計算
+            Dim rotateMatrix As New Drawing2D.Matrix()
+            rotateMatrix.RotateAt(angle, New PointF(rotateAtX, rotateAtY))
+
+            'ビットマップのバウンディングボックスを回転して新しい外接矩形を取得
+            Dim path As New Drawing2D.GraphicsPath()
+            path.AddRectangle(New RectangleF(0, 0, bmp.Width, bmp.Height))
+            path.Transform(rotateMatrix)
+            Dim rotatedBounds As RectangleF = path.GetBounds()
+
+            '新しいビットマップを外接矩形のサイズで作成
+            Dim rotatedBitmap As New Bitmap(CInt(Math.Ceiling(rotatedBounds.Width)), CInt(Math.Ceiling(rotatedBounds.Height)))
+
+            Using g As Graphics = Graphics.FromImage(rotatedBitmap)
+                g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+                g.Clear(Color.Transparent)
+
+                ' 回転の中心をビットマップの中心に設定し、回転後のビットマップを新しいキャンバスの中央に配置
+                g.TranslateTransform(rotatedBitmap.Width / 2, rotatedBitmap.Height / 2)
+                g.RotateTransform(angle)
+
+                ' ビットマップの中心を回転の基準点にして、元のビットマップを描画
+                g.TranslateTransform(-rotateAtX, -rotateAtY)
+                g.DrawImage(bmp, New PointF(0, 0))
+            End Using
+
+            Return rotatedBitmap
+        End Function
+
+    End Class
 End Class
