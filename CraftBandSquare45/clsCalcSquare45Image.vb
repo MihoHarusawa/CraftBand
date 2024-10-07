@@ -4,7 +4,7 @@ Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandSquare45.clsModelImageData
+Imports CraftBandSquare45.clsModelSquare45
 
 Partial Public Class clsCalcSquare45
 
@@ -13,6 +13,7 @@ Partial Public Class clsCalcSquare45
     '底の形状
     Dim _a底領域 As S四隅
 
+#Region "テクスチャファイル作成用"
     '底の絵のファイル
     Dim _BottomPngFilePath As String = Nothing
     Property p_sBottomPngFilePath(ByVal check As Boolean) As String
@@ -36,7 +37,7 @@ Partial Public Class clsCalcSquare45
     End Property
     '底の絵の回転角度
     Property p_dBottomPngRotateAngle As Double
-
+#End Region
 
     '
     '　横のひも番号　右上(A)             縦ひも X→  右上       左上              右上

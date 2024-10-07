@@ -109,6 +109,18 @@ Class clsCalcKnot
 
 #Region "プロパティ値"
 
+    ReadOnly Property p_d縁の高さ As Double
+        Get
+            Return _d縁の高さ
+        End Get
+    End Property
+
+    ReadOnly Property p_dコマの寸法 As Double
+        Get
+            Return _dコマの寸法
+        End Get
+    End Property
+
     ReadOnly Property p_sコマの寸法 As String
         Get
             If 0 < _dコマの寸法 Then
@@ -429,8 +441,8 @@ Class clsCalcKnot
 
 
     '参照値
-    Dim _Data As clsDataTables
-    Dim _frmMain As frmMain
+    Friend _Data As clsDataTables
+    Friend _frmMain As frmMain
 
 
 

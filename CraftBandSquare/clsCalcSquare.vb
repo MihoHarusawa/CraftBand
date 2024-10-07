@@ -149,6 +149,12 @@ Class clsCalcSquare
     End Sub
 
 #Region "プロパティ値"
+    Public ReadOnly Property p_d基本のひも幅 As Double
+        Get
+            Return _d基本のひも幅
+        End Get
+    End Property
+
     Public ReadOnly Property p_i縦ひもの本数 As Integer
         Get
             Return _i縦ひもの本数
@@ -201,6 +207,12 @@ Class clsCalcSquare
     Public ReadOnly Property p_d四角ベース_高さ As Double '側面ひもが配置される高さ
         Get
             Return _d四角ベース_高さ計
+        End Get
+    End Property
+
+    Public ReadOnly Property p_d縁の高さ As Double
+        Get
+            Return _d縁の高さ
         End Get
     End Property
 
@@ -478,8 +490,8 @@ Class clsCalcSquare
 
 
 
-    Dim _Data As clsDataTables
-    Dim _frmMain As frmMain
+    Friend _Data As clsDataTables
+    Friend _frmMain As frmMain
 
     Sub New(ByVal data As clsDataTables, ByVal frm As frmMain)
         _Data = data

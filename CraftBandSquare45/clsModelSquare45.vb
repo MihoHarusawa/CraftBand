@@ -4,9 +4,8 @@ Imports CraftBand.clsImageItem
 Imports CraftBand.clsDataTables
 Imports CraftBandSquare45.clsCalcSquare45
 Imports CraftBand.Tables.dstDataTables
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 
-Public Class clsModelImageData
+Public Class clsModelSquare45
     Inherits clsImageData
 
     Shared _PlateNames() As String = {"bottom", "leftside", "front", "rightside", "back"}
@@ -59,12 +58,12 @@ Public Class clsModelImageData
             Return False
         End If
 
-        '各面に対応したdataを作る
+        '各面に対応した画像用dataの初期化と四角数
         If Not setSideDataBandCount() Then
             Return False
         End If
 
-        'dataから画像生成
+        '画像用dataから画像生成
         If Not getImages() Then
             Return False
         End If
@@ -79,7 +78,7 @@ Public Class clsModelImageData
         '基本のひも幅と基本色
         setBasics(_calc.p_dひも幅の一辺, _calc._Data.p_row目標寸法.Value("f_s基本色"))
 
-        '描画
+        '絵の貼付と面枠描画
         MoveList(imageList側面展開図())
 
         'ファイル作成
@@ -176,6 +175,7 @@ Public Class clsModelImageData
         Return True
     End Function
 
+#Region "側面に回り込んで積まれるバンド"
     '
     '            　　　　　　／＼　
     '                  高さ／　　＼縦　
@@ -381,7 +381,6 @@ Public Class clsModelImageData
         _data各面(enumBasketPlateIdx._leftside).p_tbl縦横展開.Clear()
         _data各面(enumBasketPlateIdx._leftside).p_tbl縦横展開.Merge(table横)
         _data各面(enumBasketPlateIdx._leftside).p_tbl縦横展開.Merge(table縦)
-        _data各面(enumBasketPlateIdx._leftside).ResetStartPoint()
         table横.Clear()
         table縦.Clear()
 
@@ -392,7 +391,6 @@ Public Class clsModelImageData
         _data各面(enumBasketPlateIdx._front).p_tbl縦横展開.Clear()
         _data各面(enumBasketPlateIdx._front).p_tbl縦横展開.Merge(table横)
         _data各面(enumBasketPlateIdx._front).p_tbl縦横展開.Merge(table縦)
-        _data各面(enumBasketPlateIdx._front).ResetStartPoint()
         table横.Clear()
         table縦.Clear()
 
@@ -403,7 +401,6 @@ Public Class clsModelImageData
         _data各面(enumBasketPlateIdx._rightside).p_tbl縦横展開.Clear()
         _data各面(enumBasketPlateIdx._rightside).p_tbl縦横展開.Merge(table横)
         _data各面(enumBasketPlateIdx._rightside).p_tbl縦横展開.Merge(table縦)
-        _data各面(enumBasketPlateIdx._rightside).ResetStartPoint()
         table横.Clear()
         table縦.Clear()
 
@@ -414,14 +411,14 @@ Public Class clsModelImageData
         _data各面(enumBasketPlateIdx._back).p_tbl縦横展開.Clear()
         _data各面(enumBasketPlateIdx._back).p_tbl縦横展開.Merge(table横)
         _data各面(enumBasketPlateIdx._back).p_tbl縦横展開.Merge(table縦)
-        _data各面(enumBasketPlateIdx._back).ResetStartPoint()
         table横.Clear()
         table縦.Clear()
 
-
-
         Return True
     End Function
+
+#End Region
+
 
 
     Function setUpDown() As Boolean
@@ -454,10 +451,14 @@ Public Class clsModelImageData
     End Function
 
 
-
+    '各面に対応した画像用dataの初期化と四角数
     Function setSideDataBandCount() As Boolean
-        For i As Integer = 0 To cBasketPlateCount - 1
-            _data各面(i) = New clsDataTables(_calc._Data)
+        '画像用データ
+        _data各面(0) = New clsDataTables(_calc._Data)
+        _data各面(0).p_tbl追加品.Clear()
+
+        For i As Integer = 1 To cBasketPlateCount - 1
+            _data各面(i) = New clsDataTables(_data各面(0))
         Next
 
 
@@ -489,19 +490,20 @@ Public Class clsModelImageData
         '斜め各方向に下からバンドを積む
         set_45()
         set_135()
-        'ひも上下
-        setUpDown()
         '斜めに積まれたデータを各面の縦ひも・横ひもにセット
         setDataFromStack()
+        'ひも上下
+        setUpDown()
 
         Return True
     End Function
 
-    'dataから画像生成
+    '画像用dataから画像生成
     Function getImages() As Boolean
 
         Dim ret As Boolean = True
-        For i As Integer = 0 To 4
+        For i As Integer = 0 To cBasketPlateCount - 1
+            _data各面(i).ResetStartPoint()
             _path各面画像(i) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(i), CImageDraw.cImageClipFileExtention))
 
             Dim calc As New clsCalcSquare45(_data各面(i), _calc._frmMain)
@@ -545,7 +547,7 @@ Public Class clsModelImageData
     End Function
 
 
-    '絵の貼付と面枠
+    '絵の貼付と面枠描画
     Function imageList側面展開図() As clsImageItemList
 
         Dim item As clsImageItem

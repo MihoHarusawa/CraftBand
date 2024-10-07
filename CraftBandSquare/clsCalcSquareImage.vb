@@ -1,5 +1,6 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.clsUpDown
@@ -20,7 +21,7 @@ Partial Public Class clsCalcSquare
     '　　　　││　：│┗━━━━┛│：　││   　
     '　　　　└┴─┴┼──────┼┴─┴┘     
     '　点線がZero位置├‥‥‥‥‥‥┤f_d底の厚さ 　　　　　┐
-    '　　　　　　　　│　　　　　　│p_d四角ベース_高さ　　┘get側面高()
+    '　　　　　　　　│　　　　　　│p_d四角ベース_高さ　　┘get側面高()    p_d縁厚さプラス_高さ
     '　　　　　　　　├──────┤　　　　　　　　　　　　　　　　　　
     '　　　　　　　　└──────┘_d縁の高さ/_d縁の垂直ひも長
     '
@@ -45,6 +46,33 @@ Partial Public Class clsCalcSquare
     '現画像生成時に記号を表示する #60
     Shared IsDrawMarkCurrent As Boolean = True
 
+#Region "テクスチャファイル作成用"
+    '絵のファイル
+    Dim _PlatePngFilePath(clsImageData.cBasketPlateCount - 1) As String
+    Property p_sPlatePngFilePath(ByVal pidx As clsImageData.enumBasketPlateIdx, ByVal check As Boolean) As String
+        Get
+            If check AndAlso Not String.IsNullOrWhiteSpace(_PlatePngFilePath(pidx)) Then
+                If IO.File.Exists(_PlatePngFilePath(pidx)) Then
+                    Return _PlatePngFilePath(pidx)
+                Else
+                    Return Nothing
+                End If
+            Else
+                Return _PlatePngFilePath(pidx)
+            End If
+        End Get
+        Set(value As String)
+            _PlatePngFilePath(pidx) = value
+            If check AndAlso Not String.IsNullOrWhiteSpace(value) AndAlso IO.File.Exists(value) Then
+                IO.File.Delete(value)
+            End If
+        End Set
+    End Property
+
+    '絵の回転角度
+    Shared _PlateAngle() As Integer = {0, 90, 0, -90, 180}
+
+#End Region
 
     'プレビュー画像生成
     'isBackFace=trueの時、UpDownを裏面として適用
@@ -157,19 +185,19 @@ Partial Public Class clsCalcSquare
     End Function
 
     '横ひも長計算・描画に使用
-    Private Function get周の横(Optional ByVal multi As Double = 1) As Double
+    Friend Function get周の横(Optional ByVal multi As Double = 1) As Double
         Return multi *
             (_d四角ベース_横計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
     End Function
 
     '縦ひも長計算・描画に使用
-    Private Function get周の縦(Optional ByVal multi As Double = 1) As Double
+    Friend Function get周の縦(Optional ByVal multi As Double = 1) As Double
         Return multi *
             (_d四角ベース_縦計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
     End Function
 
     '縦ひも長計算・描画に使用   '縁は含まない
-    Private Function get側面高(ByVal count As Integer) As Double
+    Friend Function get側面高(ByVal count As Integer) As Double
         Return count * (_d四角ベース_高さ計 + getZeroSide())
     End Function
 
@@ -186,6 +214,11 @@ Partial Public Class clsCalcSquare
     '描画の縦高ゼロ描画位置
     Private Function getZeroY(Optional ByVal multi As Double = 1) As Double
         Return multi * (get周の縦() + getZeroSide(2))
+    End Function
+
+    '側面描画長、底の周から縁を加えた高さ
+    Friend Function get縁厚さプラス_高さ() As Double
+        Return get側面高(1) + _d縁の高さ
     End Function
 
 #End Region
@@ -507,49 +540,92 @@ Partial Public Class clsCalcSquare
         item.m_lineList.Add(line)
 
         itemlist.AddItem(item)
+        '底の画像
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._bottom, False)) Then
+            Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 1)
+            item2.m_a四隅 = a底の周
+            item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._bottom, False)
+            item2.m_angle = _PlateAngle(enumBasketPlateIdx._bottom)
+            itemlist.AddItem(item2)
+        End If
 
-        Dim d縁厚さプラス_高さ As Double = get側面高(1) + _d縁の高さ
+
+        Dim _d縁厚さプラス_高さ As Double = get縁厚さプラス_高さ()
         Dim d底の厚さ As Double = getZeroSide()
 
         '上の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
         item.m_a四隅.p左下 = a底の周.p左上
         item.m_a四隅.p右下 = a底の周.p右上
-        item.m_a四隅.p左上 = item.m_a四隅.p左下 + Unit90 * d縁厚さプラス_高さ
-        item.m_a四隅.p右上 = item.m_a四隅.p右下 + Unit90 * d縁厚さプラス_高さ
+        item.m_a四隅.p左上 = item.m_a四隅.p左下 + Unit90 * _d縁厚さプラス_高さ
+        item.m_a四隅.p右上 = item.m_a四隅.p右下 + Unit90 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p左下, item.m_a四隅.p右下) + Unit90 * d底の厚さ
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
+        '上の側面(前面の画像)
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._front, False)) Then
+            Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 2)
+            item2.m_a四隅 = item.m_a四隅
+            item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._front, False)
+            item2.m_angle = _PlateAngle(enumBasketPlateIdx._front)
+            itemlist.AddItem(item2)
+        End If
+
 
         '右の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
         item.m_a四隅.p左上 = a底の周.p右上
         item.m_a四隅.p左下 = a底の周.p右下
-        item.m_a四隅.p右上 = item.m_a四隅.p左上 + Unit0 * d縁厚さプラス_高さ
-        item.m_a四隅.p右下 = item.m_a四隅.p左下 + Unit0 * d縁厚さプラス_高さ
+        item.m_a四隅.p右上 = item.m_a四隅.p左上 + Unit0 * _d縁厚さプラス_高さ
+        item.m_a四隅.p右下 = item.m_a四隅.p左下 + Unit0 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p左下) + Unit0 * d底の厚さ
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
+        '右の側面(右側面の画像)
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)) Then
+            Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 3)
+            item2.m_a四隅 = item.m_a四隅
+            item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)
+            item2.m_angle = _PlateAngle(enumBasketPlateIdx._rightside)
+            itemlist.AddItem(item2)
+        End If
+
 
         '下の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
         item.m_a四隅.p左上 = a底の周.p左下
         item.m_a四隅.p右上 = a底の周.p右下
-        item.m_a四隅.p左下 = item.m_a四隅.p左上 + Unit270 * d縁厚さプラス_高さ
-        item.m_a四隅.p右下 = item.m_a四隅.p右上 + Unit270 * d縁厚さプラス_高さ
+        item.m_a四隅.p左下 = item.m_a四隅.p左上 + Unit270 * _d縁厚さプラス_高さ
+        item.m_a四隅.p右下 = item.m_a四隅.p右上 + Unit270 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p右上) + Unit270 * d底の厚さ
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
+        '下の側面(背面の画像)
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._back, False)) Then
+            Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 4)
+            item2.m_a四隅 = item.m_a四隅
+            item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._back, False)
+            item2.m_angle = _PlateAngle(enumBasketPlateIdx._back)
+            itemlist.AddItem(item2)
+        End If
 
         '左の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
         item.m_a四隅.p右上 = a底の周.p左上
         item.m_a四隅.p右下 = a底の周.p左下
-        item.m_a四隅.p左上 = item.m_a四隅.p右上 + Unit180 * d縁厚さプラス_高さ
-        item.m_a四隅.p左下 = item.m_a四隅.p右下 + Unit180 * d縁厚さプラス_高さ
+        item.m_a四隅.p左上 = item.m_a四隅.p右上 + Unit180 * _d縁厚さプラス_高さ
+        item.m_a四隅.p左下 = item.m_a四隅.p右下 + Unit180 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p右上, item.m_a四隅.p右下) + Unit180 * d底の厚さ
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
+        '左の側面(左側面の画像)
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)) Then
+            Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 5)
+            item2.m_a四隅 = item.m_a四隅
+            item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)
+            item2.m_angle = _PlateAngle(enumBasketPlateIdx._leftside)
+            itemlist.AddItem(item2)
+        End If
 
         Return itemlist
     End Function

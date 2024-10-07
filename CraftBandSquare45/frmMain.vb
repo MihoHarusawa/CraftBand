@@ -1523,7 +1523,7 @@ Public Class frmMain
 #End Region
 
 #Region "プレビュー2"
-    Dim _clsModelImageData As clsModelImageData
+    Dim _clsModelImageData As clsModelSquare45
     Private Sub Showプレビュー2()
         picプレビュー2.Image = Nothing
         _clsModelImageData = Nothing
@@ -1536,7 +1536,7 @@ Public Class frmMain
         End If
 
         Cursor.Current = Cursors.WaitCursor
-        _clsModelImageData = New clsModelImageData(_clsCalcSquare45, _sFilePath)
+        _clsModelImageData = New clsModelSquare45(_clsCalcSquare45, _sFilePath)
         ret = _clsModelImageData.CalcModel()
         Cursor.Current = Cursors.Default
 
