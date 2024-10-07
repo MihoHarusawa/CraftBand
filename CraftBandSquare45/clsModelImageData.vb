@@ -92,7 +92,6 @@ Public Class clsModelImageData
 
     '3Dモデルを開く
     Function ModelFileOpen() As Boolean
-        Dim outpath As String = IO.Path.Combine(IO.Path.GetTempPath, "Square45_model")
 
         Dim height As Double = _delta画像サイズ(1).dY '左側面
         If Not NearlyEqual(height, _delta画像サイズ(2).dY) OrElse
@@ -101,6 +100,11 @@ Public Class clsModelImageData
             '側面の高さが異なるため直方体になりません。
             _LastError = My.Resources.ModelDiffHeight
             Return False
+        End If
+
+        Dim outpath As String = Nothing
+        If _calc._frmMain.radビューア.Checked Then
+            outpath = IO.Path.Combine(IO.Path.GetTempPath, "Square45_model")
         End If
 
         ' OBJとMTLファイルの出力

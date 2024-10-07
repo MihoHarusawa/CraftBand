@@ -988,6 +988,25 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  フォルダ&apos;{0}&apos; に
+        ''' OBJファイル&apos;{1}&apos; および関連ファイル一式を出力しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgObjOutput() As String
+            Get
+                Return ResourceManager.GetString("MsgObjOutput", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  出力先フォルダを選択してください。複数ファイルがセットで出力されます。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgObjOutputSelect() As String
+            Get
+                Return ResourceManager.GetString("MsgObjOutputSelect", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  [{0}] の {1}点を更新しました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgUpdate() As String

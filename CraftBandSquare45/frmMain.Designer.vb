@@ -109,6 +109,8 @@ Partial Class frmMain
         btn画像ファイル2 = New Button()
         btnブラウザ2 = New Button()
         btn3Dモデル = New Button()
+        radビューア = New RadioButton()
+        radファイル = New RadioButton()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -182,6 +184,7 @@ Partial Class frmMain
         lbl垂直に = New Label()
         editUpDown = New ctrEditUpDown()
         tpageプレビュー2 = New TabPage()
+        grp3D = New GroupBox()
         picプレビュー2 = New PictureBox()
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl四角ベース = New Label()
@@ -256,6 +259,7 @@ Partial Class frmMain
         tpageひも上下.SuspendLayout()
         grp縦横の四角.SuspendLayout()
         tpageプレビュー2.SuspendLayout()
+        grp3D.SuspendLayout()
         CType(picプレビュー2, ComponentModel.ISupportInitialize).BeginInit()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
@@ -999,7 +1003,7 @@ Partial Class frmMain
         btn画像ファイル2.Location = New Point(606, 361)
         btn画像ファイル2.Name = "btn画像ファイル2"
         btn画像ファイル2.Size = New Size(111, 46)
-        btn画像ファイル2.TabIndex = 1
+        btn画像ファイル2.TabIndex = 2
         btn画像ファイル2.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル2, "生成した画像ファイルを開きます")
         btn画像ファイル2.UseVisualStyleBackColor = True
@@ -1010,7 +1014,7 @@ Partial Class frmMain
         btnブラウザ2.Location = New Point(723, 361)
         btnブラウザ2.Name = "btnブラウザ2"
         btnブラウザ2.Size = New Size(111, 46)
-        btnブラウザ2.TabIndex = 2
+        btnブラウザ2.TabIndex = 3
         btnブラウザ2.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ2, "生成した画像ファイルをブラウザで開きます")
         btnブラウザ2.UseVisualStyleBackColor = True
@@ -1021,10 +1025,34 @@ Partial Class frmMain
         btn3Dモデル.Location = New Point(489, 361)
         btn3Dモデル.Name = "btn3Dモデル"
         btn3Dモデル.Size = New Size(111, 46)
-        btn3Dモデル.TabIndex = 0
+        btn3Dモデル.TabIndex = 1
         btn3Dモデル.Text = "3Dモデル(&M)"
         ToolTip1.SetToolTip(btn3Dモデル, "生成した画像ファイルを開きます")
         btn3Dモデル.UseVisualStyleBackColor = True
+        ' 
+        ' radビューア
+        ' 
+        radビューア.AutoSize = True
+        radビューア.Checked = True
+        radビューア.Location = New Point(29, 19)
+        radビューア.Name = "radビューア"
+        radビューア.Size = New Size(73, 24)
+        radビューア.TabIndex = 0
+        radビューア.TabStop = True
+        radビューア.Text = "ビューア"
+        ToolTip1.SetToolTip(radビューア, "3Dファイルを標準ビューアで開きます")
+        radビューア.UseVisualStyleBackColor = True
+        ' 
+        ' radファイル
+        ' 
+        radファイル.AutoSize = True
+        radファイル.Location = New Point(114, 19)
+        radファイル.Name = "radファイル"
+        radファイル.Size = New Size(72, 24)
+        radファイル.TabIndex = 1
+        radファイル.Text = "ファイル"
+        ToolTip1.SetToolTip(radファイル, "3Dファイルを圧縮ファイルにします")
+        radファイル.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1688,6 +1716,7 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー2
         ' 
+        tpageプレビュー2.Controls.Add(grp3D)
         tpageプレビュー2.Controls.Add(btn3Dモデル)
         tpageプレビュー2.Controls.Add(btn画像ファイル2)
         tpageプレビュー2.Controls.Add(btnブラウザ2)
@@ -1699,6 +1728,18 @@ Partial Class frmMain
         tpageプレビュー2.TabIndex = 9
         tpageプレビュー2.Text = "プレビュー2"
         tpageプレビュー2.UseVisualStyleBackColor = True
+        ' 
+        ' grp3D
+        ' 
+        grp3D.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        grp3D.Controls.Add(radファイル)
+        grp3D.Controls.Add(radビューア)
+        grp3D.Location = New Point(284, 356)
+        grp3D.Name = "grp3D"
+        grp3D.Size = New Size(199, 51)
+        grp3D.TabIndex = 0
+        grp3D.TabStop = False
+        grp3D.Text = "3D"
         ' 
         ' picプレビュー2
         ' 
@@ -2251,6 +2292,8 @@ Partial Class frmMain
         grp縦横の四角.ResumeLayout(False)
         grp縦横の四角.PerformLayout()
         tpageプレビュー2.ResumeLayout(False)
+        grp3D.ResumeLayout(False)
+        grp3D.PerformLayout()
         CType(picプレビュー2, ComponentModel.ISupportInitialize).EndInit()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
@@ -2433,6 +2476,9 @@ Partial Class frmMain
     Friend WithEvents btnブラウザ2 As Button
     Friend WithEvents picプレビュー2 As PictureBox
     Friend WithEvents btn3Dモデル As Button
+    Friend WithEvents grp3D As GroupBox
+    Friend WithEvents radビューア As RadioButton
+    Friend WithEvents radファイル As RadioButton
     Friend WithEvents f_i番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn

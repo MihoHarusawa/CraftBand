@@ -407,11 +407,11 @@
   </data>
   <data name="LogImportBefore" xml:space="preserve">
     <value>+ 変更前</value>
-    <comment>clsMasterTables</comment>
+    <comment>clsImageData</comment>
   </data>
   <data name="LogImportExistSkip" xml:space="preserve">
     <value>- 同名あり 既存を保持</value>
-    <comment>clsMasterTables</comment>
+    <comment>clsImageData</comment>
   </data>
   <data name="LogImportMasterFile" xml:space="preserve">
     <value>設定ファイルのインポート (上書き)</value>
@@ -607,5 +607,12 @@
   </data>
   <data name="WarningFileStartError" xml:space="preserve">
     <value>ファイル'{0}'を起動できませんでした。</value>
+  </data>
+  <data name="MsgObjOutputSelect" xml:space="preserve">
+    <value>出力先フォルダを選択してください。複数ファイルがセットで出力されます。</value>
+  </data>
+  <data name="MsgObjOutput" xml:space="preserve">
+    <value>フォルダ'{0}' に
+ OBJファイル'{1}' および関連ファイル一式を出力しました。</value>
   </data>
 </root>

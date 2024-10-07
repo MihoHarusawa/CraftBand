@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Windows.Forms
 Imports CraftBand.CImageDraw
 Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
@@ -373,18 +374,18 @@ Public Class clsImageData
     Public Const cBasketPlateCount As Integer = 5
 
     '3D
-    Public Function CreateOBJWithTextures(width As Single, height As Single, depth As Single, textureFiles() As String, outputDir As String) As Boolean
+    Public Function CreateOBJWithTextures(ByVal width As Single, ByVal height As Single, ByVal depth As Single,
+                                          ByVal textureFiles() As String, ByVal outPath As String) As Boolean
         Try
-
-            ' 出力ディレクトリを作成
-            If Not IO.Directory.Exists(outputDir) Then
-                IO.Directory.CreateDirectory(outputDir)
+            Dim outputFolder As String = getOutputFolder(outPath)
+            If String.IsNullOrEmpty(outputFolder) Then
+                Return True 'Manual Stop
             End If
 
             ' OBJファイルのパス
-            Dim objFilePath As String = IO.Path.Combine(outputDir, "textured_rectangular_prism.obj")
+            Dim objFilePath As String = IO.Path.Combine(outputFolder, "textured_rectangular_prism.obj")
             ' MTLファイルのパス
-            Dim mtlFilePath As String = IO.Path.Combine(outputDir, "textured_rectangular_prism.mtl")
+            Dim mtlFilePath As String = IO.Path.Combine(outputFolder, "textured_rectangular_prism.mtl")
 
             ' OBJファイルを作成
             Using writer As New StreamWriter(objFilePath)
@@ -465,11 +466,17 @@ Public Class clsImageData
 
             ' 画像ファイルを出力ディレクトリにコピー
             For Each textureFile As String In textureFiles
-                IO.File.Copy(textureFile, IO.Path.Combine(outputDir, IO.Path.GetFileName(textureFile)), True)
+                IO.File.Copy(textureFile, IO.Path.Combine(outputFolder, IO.Path.GetFileName(textureFile)), True)
             Next
 
             ' 作成したOBJファイルを開く
-            Process.Start("explorer.exe", objFilePath)
+            If Not String.IsNullOrWhiteSpace(outPath) Then
+                Process.Start("explorer.exe", objFilePath)
+            Else
+                'フォルダ'{0}' に OBJファイル'{1}' および関連ファイル一式を出力しました。
+                Dim msg As String = String.Format(My.Resources.MsgObjOutput, outputFolder, IO.Path.GetFileName(objFilePath))
+                MessageBox.Show(msg, IO.Path.GetFileNameWithoutExtension(FilePath), MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
             Return True
 
         Catch ex As Exception
@@ -480,6 +487,34 @@ Public Class clsImageData
         End Try
     End Function
 
+    Private Function getOutputFolder(ByVal outDir As String) As String
+        Dim outputFolder As String
 
+        If String.IsNullOrWhiteSpace(outDir) Then
+
+            Dim folderDialog As New FolderBrowserDialog()
+
+            '出力先フォルダを選択してください。複数ファイルがセットで出力されます。
+            folderDialog.Description = My.Resources.MsgObjOutputSelect
+            folderDialog.RootFolder = Environment.SpecialFolder.Desktop '
+
+            If folderDialog.ShowDialog() = DialogResult.OK Then
+                outputFolder = folderDialog.SelectedPath
+            Else
+                Return Nothing 'Cancel
+            End If
+
+        Else
+            outputFolder = outDir
+
+        End If
+
+        ' 出力ディレクトリを作成
+        If Not IO.Directory.Exists(outputFolder) Then
+            IO.Directory.CreateDirectory(outputFolder)
+        End If
+
+        Return outputFolder
+    End Function
 
 End Class
