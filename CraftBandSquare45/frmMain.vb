@@ -71,7 +71,7 @@ Public Class frmMain
         'プレビューを先にするため一旦削除
         TabControl.TabPages.Remove(tpage横ひも)
         TabControl.TabPages.Remove(tpage縦ひも)
-        TabControl.TabPages.Remove(tpageひも上下)
+        'TabControl.TabPages.Remove(tpageひも上下)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅.DataSource = g_clsSelectBasics.p_tblLane
@@ -1235,9 +1235,9 @@ Public Class frmMain
             If Not TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Add(tpage縦ひも)
             End If
-            If Not TabControl.TabPages.Contains(tpageひも上下) Then
-                TabControl.TabPages.Add(tpageひも上下)
-            End If
+            'If Not TabControl.TabPages.Contains(tpageひも上下) Then
+            '    TabControl.TabPages.Add(tpageひも上下)
+            'End If
         Else
             If TabControl.TabPages.Contains(tpage横ひも) Then
                 TabControl.TabPages.Remove(tpage横ひも)
@@ -1245,9 +1245,9 @@ Public Class frmMain
             If TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Remove(tpage縦ひも)
             End If
-            If TabControl.TabPages.Contains(tpageひも上下) Then
-                TabControl.TabPages.Remove(tpageひも上下)
-            End If
+            'If TabControl.TabPages.Contains(tpageひも上下) Then
+            '    TabControl.TabPages.Remove(tpageひも上下)
+            'End If
         End If
     End Sub
 

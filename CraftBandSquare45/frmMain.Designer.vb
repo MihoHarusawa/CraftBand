@@ -1264,8 +1264,8 @@ Partial Class frmMain
         TabControl.Controls.Add(tpage横ひも)
         TabControl.Controls.Add(tpage縦ひも)
         TabControl.Controls.Add(tpageプレビュー)
-        TabControl.Controls.Add(tpageひも上下)
         TabControl.Controls.Add(tpageプレビュー2)
+        TabControl.Controls.Add(tpageひも上下)
         TabControl.Location = New Point(19, 171)
         TabControl.Name = "TabControl"
         TabControl.SelectedIndex = 0

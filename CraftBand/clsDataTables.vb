@@ -238,6 +238,7 @@ Public Class clsDataTables
                 p_row底_縦横.Value("f_dひも間のすき間") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも間のすき間初期値")
                 p_row底_縦横.Value("f_dひも長係数") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長係数初期値")
                 p_row底_縦横.Value("f_dひも長加算") = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_dひも長加算初期値")
+                p_row底_縦横.Value("f_iひも上下の高さ数") = -1'展開なしの値
 
             Case enumExeName.CraftBandKnot
                 p_row底_縦横.Value("f_b始末ひも区分") = False '使わない
