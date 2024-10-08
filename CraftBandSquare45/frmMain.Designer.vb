@@ -111,6 +111,9 @@ Partial Class frmMain
         btn3Dモデル = New Button()
         radビューア = New RadioButton()
         radファイル = New RadioButton()
+        lbl開始高さ = New Label()
+        num開始高さ = New NumericUpDown()
+        chk1回のみ = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -178,14 +181,14 @@ Partial Class frmMain
         radうら = New RadioButton()
         radおもて = New RadioButton()
         picプレビュー = New PictureBox()
+        tpageプレビュー2 = New TabPage()
+        grp3D = New GroupBox()
+        picプレビュー2 = New PictureBox()
         tpageひも上下 = New TabPage()
         grp縦横の四角 = New GroupBox()
         lbl底に = New Label()
         lbl垂直に = New Label()
         editUpDown = New ctrEditUpDown()
-        tpageプレビュー2 = New TabPage()
-        grp3D = New GroupBox()
-        picプレビュー2 = New PictureBox()
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl四角ベース = New Label()
         lbl計算寸法 = New Label()
@@ -243,6 +246,7 @@ Partial Class frmMain
         grp目標寸法.SuspendLayout()
         CType(nud底に, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud垂直に, ComponentModel.ISupportInitialize).BeginInit()
+        CType(num開始高さ, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         TabControl.SuspendLayout()
         tpage四角数.SuspendLayout()
@@ -256,11 +260,11 @@ Partial Class frmMain
         tpage縦ひも.SuspendLayout()
         tpageプレビュー.SuspendLayout()
         CType(picプレビュー, ComponentModel.ISupportInitialize).BeginInit()
-        tpageひも上下.SuspendLayout()
-        grp縦横の四角.SuspendLayout()
         tpageプレビュー2.SuspendLayout()
         grp3D.SuspendLayout()
         CType(picプレビュー2, ComponentModel.ISupportInitialize).BeginInit()
+        tpageひも上下.SuspendLayout()
+        grp縦横の四角.SuspendLayout()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
         ' 
@@ -879,39 +883,39 @@ Partial Class frmMain
         ' 
         ' nud底に
         ' 
-        nud底に.Location = New Point(266, 37)
+        nud底に.Location = New Point(245, 37)
         nud底に.Name = "nud底に"
         nud底に.Size = New Size(46, 27)
-        nud底に.TabIndex = 6
+        nud底に.TabIndex = 4
         ToolTip1.SetToolTip(nud底に, "底側(辺を含まない)にいくつ連続するか")
         nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
         ' chk横の辺
         ' 
         chk横の辺.AutoSize = True
-        chk横の辺.Location = New Point(8, 38)
+        chk横の辺.Location = New Point(12, 38)
         chk横の辺.Name = "chk横の辺"
         chk横の辺.Size = New Size(73, 24)
-        chk横の辺.TabIndex = 4
+        chk横の辺.TabIndex = 0
         chk横の辺.Text = "横の辺"
         ToolTip1.SetToolTip(chk横の辺, "左上と右下(横の四角数側)の辺のチェックの状態" & vbCrLf & "右上と左下(縦の四角数側)は逆になります")
         chk横の辺.UseVisualStyleBackColor = True
         ' 
         ' nud垂直に
         ' 
-        nud垂直に.Location = New Point(152, 36)
+        nud垂直に.Location = New Point(144, 36)
         nud垂直に.Name = "nud垂直に"
         nud垂直に.Size = New Size(46, 27)
-        nud垂直に.TabIndex = 3
+        nud垂直に.TabIndex = 2
         ToolTip1.SetToolTip(nud垂直に, "立ち上げる側(辺を含む)にいくつ連続するか")
         nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
         ' btn合わせる
         ' 
-        btn合わせる.Location = New Point(341, 25)
+        btn合わせる.Location = New Point(312, 25)
         btn合わせる.Name = "btn合わせる"
         btn合わせる.Size = New Size(111, 46)
-        btn合わせる.TabIndex = 2
+        btn合わせる.TabIndex = 5
         btn合わせる.Text = "合わせる(&I)"
         ToolTip1.SetToolTip(btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
         btn合わせる.UseVisualStyleBackColor = True
@@ -1053,6 +1057,36 @@ Partial Class frmMain
         radファイル.Text = "ファイル"
         ToolTip1.SetToolTip(radファイル, "3Dファイルを圧縮ファイルにします")
         radファイル.UseVisualStyleBackColor = True
+        ' 
+        ' lbl開始高さ
+        ' 
+        lbl開始高さ.AutoSize = True
+        lbl開始高さ.Location = New Point(8, 45)
+        lbl開始高さ.Name = "lbl開始高さ"
+        lbl開始高さ.Size = New Size(64, 20)
+        lbl開始高さ.TabIndex = 0
+        lbl開始高さ.Text = "開始高さ"
+        ToolTip1.SetToolTip(lbl開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
+        ' 
+        ' num開始高さ
+        ' 
+        num開始高さ.Location = New Point(80, 42)
+        num開始高さ.Minimum = New Decimal(New Integer() {1, 0, 0, Integer.MinValue})
+        num開始高さ.Name = "num開始高さ"
+        num開始高さ.Size = New Size(46, 27)
+        num開始高さ.TabIndex = 1
+        ToolTip1.SetToolTip(num開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
+        ' 
+        ' chk1回のみ
+        ' 
+        chk1回のみ.AutoSize = True
+        chk1回のみ.Location = New Point(146, 43)
+        chk1回のみ.Name = "chk1回のみ"
+        chk1回のみ.Size = New Size(79, 24)
+        chk1回のみ.TabIndex = 2
+        chk1回のみ.Text = "1回のみ"
+        ToolTip1.SetToolTip(chk1回のみ, "1回だけの適用とし、繰り返さない場合にチェックを入れる")
+        chk1回のみ.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1652,68 +1686,6 @@ Partial Class frmMain
         picプレビュー.TabIndex = 0
         picプレビュー.TabStop = False
         ' 
-        ' tpageひも上下
-        ' 
-        tpageひも上下.Controls.Add(grp縦横の四角)
-        tpageひも上下.Controls.Add(editUpDown)
-        tpageひも上下.Location = New Point(4, 29)
-        tpageひも上下.Name = "tpageひも上下"
-        tpageひも上下.Padding = New Padding(3)
-        tpageひも上下.Size = New Size(840, 413)
-        tpageひも上下.TabIndex = 8
-        tpageひも上下.Text = "ひも上下"
-        tpageひも上下.UseVisualStyleBackColor = True
-        ' 
-        ' grp縦横の四角
-        ' 
-        grp縦横の四角.Controls.Add(lbl底に)
-        grp縦横の四角.Controls.Add(nud底に)
-        grp縦横の四角.Controls.Add(lbl垂直に)
-        grp縦横の四角.Controls.Add(chk横の辺)
-        grp縦横の四角.Controls.Add(nud垂直に)
-        grp縦横の四角.Controls.Add(btn合わせる)
-        grp縦横の四角.Location = New Point(22, 6)
-        grp縦横の四角.Name = "grp縦横の四角"
-        grp縦横の四角.Size = New Size(463, 84)
-        grp縦横の四角.TabIndex = 3
-        grp縦横の四角.TabStop = False
-        grp縦横の四角.Text = "縦横の四角"
-        ' 
-        ' lbl底に
-        ' 
-        lbl底に.AutoSize = True
-        lbl底に.Location = New Point(224, 39)
-        lbl底に.Name = "lbl底に"
-        lbl底に.Size = New Size(36, 20)
-        lbl底に.TabIndex = 7
-        lbl底に.Text = "底に"
-        ' 
-        ' lbl垂直に
-        ' 
-        lbl垂直に.AutoSize = True
-        lbl垂直に.Location = New Point(98, 39)
-        lbl垂直に.Name = "lbl垂直に"
-        lbl垂直に.Size = New Size(51, 20)
-        lbl垂直に.TabIndex = 5
-        lbl垂直に.Text = "垂直に"
-        ' 
-        ' editUpDown
-        ' 
-        editUpDown.AutoSize = True
-        editUpDown.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        editUpDown.FormCaption = Nothing
-        editUpDown.IsSquare45 = False
-        editUpDown.I上右側面本数 = 0
-        editUpDown.I垂直領域四角数 = 0
-        editUpDown.I横の四角数 = 0
-        editUpDown.I水平領域四角数 = 0
-        editUpDown.I縦の四角数 = 0
-        editUpDown.Location = New Point(-3, -3)
-        editUpDown.Name = "editUpDown"
-        editUpDown.PanelSize = New Size(800, 400)
-        editUpDown.Size = New Size(806, 406)
-        editUpDown.TabIndex = 1
-        ' 
         ' tpageプレビュー2
         ' 
         tpageプレビュー2.Controls.Add(grp3D)
@@ -1750,6 +1722,71 @@ Partial Class frmMain
         picプレビュー2.SizeMode = PictureBoxSizeMode.Zoom
         picプレビュー2.TabIndex = 4
         picプレビュー2.TabStop = False
+        ' 
+        ' tpageひも上下
+        ' 
+        tpageひも上下.Controls.Add(chk1回のみ)
+        tpageひも上下.Controls.Add(lbl開始高さ)
+        tpageひも上下.Controls.Add(num開始高さ)
+        tpageひも上下.Controls.Add(grp縦横の四角)
+        tpageひも上下.Controls.Add(editUpDown)
+        tpageひも上下.Location = New Point(4, 29)
+        tpageひも上下.Name = "tpageひも上下"
+        tpageひも上下.Padding = New Padding(3)
+        tpageひも上下.Size = New Size(840, 413)
+        tpageひも上下.TabIndex = 8
+        tpageひも上下.Text = "ひも上下"
+        tpageひも上下.UseVisualStyleBackColor = True
+        ' 
+        ' grp縦横の四角
+        ' 
+        grp縦横の四角.Controls.Add(lbl底に)
+        grp縦横の四角.Controls.Add(nud底に)
+        grp縦横の四角.Controls.Add(lbl垂直に)
+        grp縦横の四角.Controls.Add(chk横の辺)
+        grp縦横の四角.Controls.Add(nud垂直に)
+        grp縦横の四角.Controls.Add(btn合わせる)
+        grp縦横の四角.Location = New Point(236, 6)
+        grp縦横の四角.Name = "grp縦横の四角"
+        grp縦横の四角.Size = New Size(436, 84)
+        grp縦横の四角.TabIndex = 3
+        grp縦横の四角.TabStop = False
+        grp縦横の四角.Text = "縦横の四角"
+        ' 
+        ' lbl底に
+        ' 
+        lbl底に.AutoSize = True
+        lbl底に.Location = New Point(203, 39)
+        lbl底に.Name = "lbl底に"
+        lbl底に.Size = New Size(36, 20)
+        lbl底に.TabIndex = 3
+        lbl底に.Text = "底に"
+        ' 
+        ' lbl垂直に
+        ' 
+        lbl垂直に.AutoSize = True
+        lbl垂直に.Location = New Point(90, 39)
+        lbl垂直に.Name = "lbl垂直に"
+        lbl垂直に.Size = New Size(51, 20)
+        lbl垂直に.TabIndex = 1
+        lbl垂直に.Text = "垂直に"
+        ' 
+        ' editUpDown
+        ' 
+        editUpDown.AutoSize = True
+        editUpDown.AutoSizeMode = AutoSizeMode.GrowAndShrink
+        editUpDown.FormCaption = Nothing
+        editUpDown.IsSquare45 = False
+        editUpDown.I上右側面本数 = 0
+        editUpDown.I垂直領域四角数 = 0
+        editUpDown.I横の四角数 = 0
+        editUpDown.I水平領域四角数 = 0
+        editUpDown.I縦の四角数 = 0
+        editUpDown.Location = New Point(-3, -3)
+        editUpDown.Name = "editUpDown"
+        editUpDown.PanelSize = New Size(800, 400)
+        editUpDown.Size = New Size(806, 406)
+        editUpDown.TabIndex = 4
         ' 
         ' f_i段数2
         ' 
@@ -2266,6 +2303,7 @@ Partial Class frmMain
         grp目標寸法.PerformLayout()
         CType(nud底に, ComponentModel.ISupportInitialize).EndInit()
         CType(nud垂直に, ComponentModel.ISupportInitialize).EndInit()
+        CType(num開始高さ, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         TabControl.ResumeLayout(False)
@@ -2287,14 +2325,14 @@ Partial Class frmMain
         tpageプレビュー.ResumeLayout(False)
         tpageプレビュー.PerformLayout()
         CType(picプレビュー, ComponentModel.ISupportInitialize).EndInit()
-        tpageひも上下.ResumeLayout(False)
-        tpageひも上下.PerformLayout()
-        grp縦横の四角.ResumeLayout(False)
-        grp縦横の四角.PerformLayout()
         tpageプレビュー2.ResumeLayout(False)
         grp3D.ResumeLayout(False)
         grp3D.PerformLayout()
         CType(picプレビュー2, ComponentModel.ISupportInitialize).EndInit()
+        tpageひも上下.ResumeLayout(False)
+        tpageひも上下.PerformLayout()
+        grp縦横の四角.ResumeLayout(False)
+        grp縦横の四角.PerformLayout()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
         ResumeLayout(False)
@@ -2479,6 +2517,9 @@ Partial Class frmMain
     Friend WithEvents grp3D As GroupBox
     Friend WithEvents radビューア As RadioButton
     Friend WithEvents radファイル As RadioButton
+    Friend WithEvents chk1回のみ As CheckBox
+    Friend WithEvents lbl開始高さ As Label
+    Friend WithEvents num開始高さ As NumericUpDown
     Friend WithEvents f_i番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn

@@ -71,7 +71,6 @@ Public Class frmMain
         'プレビューを先にするため一旦削除
         TabControl.TabPages.Remove(tpage横ひも)
         TabControl.TabPages.Remove(tpage縦ひも)
-        'TabControl.TabPages.Remove(tpageひも上下)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅.DataSource = g_clsSelectBasics.p_tblLane
@@ -1611,6 +1610,10 @@ Public Class frmMain
                 col.Visible = True
             End If
         Next
+    End Sub
+
+    Private Sub num開始高さ_ValueChanged(sender As Object, e As EventArgs) Handles num開始高さ.ValueChanged
+
     End Sub
 
 #End Region
