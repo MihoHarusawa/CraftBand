@@ -37,6 +37,63 @@ Partial Public Class clsCalcSquare45
     End Property
     '底の絵の回転角度
     Property p_dBottomPngRotateAngle As Double
+
+    Dim _idx_x As Integer = 0
+    Dim _idx_y As Integer = 0
+    Sub setUpDownStartPosition(ByVal idx_x As Integer, idx_y As Integer)
+        _idx_x = idx_x
+        _idx_y = idx_y
+    End Sub
+
+    Private Function getIdx_x() As Integer
+        If String.IsNullOrWhiteSpace(_BottomPngFilePath) Then
+        Else
+            Return _idx_x
+        End If
+    End Function
+
+    Private Function getIdx_y() As Integer
+        If String.IsNullOrWhiteSpace(_BottomPngFilePath) Then
+        Else
+            Return _idx_y
+        End If
+    End Function
+
+
+    'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分
+    Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean) As CBandAttributeList
+        Dim balist As New CBandAttributeList
+
+        '開始位置
+        Dim idx As Integer = 1
+        '後半を正順に / 前半を逆順に
+        If isFromLast AndAlso Not isReverse OrElse Not isFromLast AndAlso isReverse Then
+            idx = _BandPositions(iExp).ListCount - count + 1 '1～の値
+        End If
+        Do While 0 < count
+
+            Dim band As CBandPosition
+            If isReverse Then
+                band = _BandPositions(iExp).ByReverseIdx(idx)
+            Else
+                band = _BandPositions(iExp).ByIdx(idx)
+            End If
+
+            If band IsNot Nothing AndAlso band.m_row縦横展開 IsNot Nothing Then
+                Dim ba As New CBandAttribute(band.m_row縦横展開)
+                balist.Add(ba)
+            Else
+                'あるはず・スペースフォルダとして
+                balist.Add(Nothing)
+            End If
+
+            idx += 1
+            count -= 1
+        Loop
+
+        Return balist
+    End Function
+
 #End Region
 
     '
@@ -659,7 +716,8 @@ Partial Public Class clsCalcSquare45
         '基本のひも幅と基本色
         imgData.setBasics(_dひも幅の一辺, _Data.p_row目標寸法.Value("f_s基本色"))
 
-        If _b縦横を展開する Then
+        'ひも上下で指定
+        If 0 <= _Data.p_row底_縦横.Value("f_iひも上下の高さ数") Then 'If _b縦横を展開する Then
             '描画用のデータ追加
             regionUpDown底(_ImageList横ひも, _ImageList縦ひも, isBackFace)
         End If
@@ -832,10 +890,21 @@ Partial Public Class clsCalcSquare45
         If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
             Return False
         End If
-        Dim revRange As Integer = -1
-        If isBackFace Then
-            revRange = p_i縦ひもの本数
+
+        'ひも上下の高さ・1回区分
+        Dim updown_takasa As Integer = _Data.p_row底_縦横.Value("f_iひも上下の高さ数")
+        If _Data.p_row底_縦横.Value("f_bひも上下1回区分") Then
+            If Not _CUpDown.TrimTopLeft(updown_takasa, updown_takasa) Then
+                Return True '不要
+            End If
+            _CUpDown.SetTrueInRangeOnly(True)
+        Else
+            _CUpDown.Shift(updown_takasa, updown_takasa)
+            _CUpDown.SetTrueInRangeOnly(False)
         End If
+
+        '裏面は左右反転
+        Dim revRange As Integer = IIf(isBackFace, p_i縦ひもの本数, -1)
 
         For iTate As Integer = 1 To p_i縦ひもの本数
             Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
@@ -876,40 +945,6 @@ Partial Public Class clsCalcSquare45
         Return True
     End Function
 
-
-    'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分
-    Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean) As CBandAttributeList
-        Dim balist As New CBandAttributeList
-
-        '開始位置
-        Dim idx As Integer = 1
-        '後半を正順に / 前半を逆順に
-        If isFromLast AndAlso Not isReverse OrElse Not isFromLast AndAlso isReverse Then
-            idx = _BandPositions(iExp).ListCount - count + 1 '1～の値
-        End If
-        Do While 0 < count
-
-            Dim band As CBandPosition
-            If isReverse Then
-                band = _BandPositions(iExp).ByReverseIdx(idx)
-            Else
-                band = _BandPositions(iExp).ByIdx(idx)
-            End If
-
-            If band IsNot Nothing AndAlso band.m_row縦横展開 IsNot Nothing Then
-                Dim ba As New CBandAttribute(band.m_row縦横展開)
-                balist.Add(ba)
-            Else
-                'あるはず・スペースフォルダとして
-                balist.Add(Nothing)
-            End If
-
-            idx += 1
-            count -= 1
-        Loop
-
-        Return balist
-    End Function
 
 
 End Class

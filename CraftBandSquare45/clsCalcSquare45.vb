@@ -1089,11 +1089,11 @@ Class clsCalcSquare45
 
 #Region "ひも上下"
 
-    Function fitsizeひも上下(ByVal yoko As Boolean, ByVal sideup As Integer, ByVal botm As Integer) As clsUpDown
+    Function fitsizeひも上下(ByVal yoko As Boolean, ByVal sideup As Integer, ByVal botm As Integer, ByVal takasa As Integer) As clsUpDown
 
         Dim updown As New clsUpDown(clsUpDown.enumTargetFace.Bottom)
-        updown.HorizontalCount = p_i横ひもの本数
-        updown.VerticalCount = p_i縦ひもの本数
+        updown.HorizontalCount = p_i横ひもの本数 + 2 * takasa
+        updown.VerticalCount = p_i縦ひもの本数 + 2 * takasa
 
         'ゼロの場合は底の線だけ
         If sideup < 0 OrElse botm < 0 OrElse (sideup = 0 And botm = 0) Then

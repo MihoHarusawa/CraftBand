@@ -447,12 +447,6 @@ Public Class clsModelSquare45
         back.Shift(_calc.p_i縦の四角数, _calc.p_i縦の四角数)
         _data各面(enumBasketPlateIdx._back).FromClsUpDown(back)
 
-
-
-        _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-        _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_bひも上下1回区分") = 0
-
-
         Return True
     End Function
 

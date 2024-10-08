@@ -1,10 +1,6 @@
 ﻿Imports CraftBand
-Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsDataTables
 Imports CraftBandSquare.clsCalcSquare
-Imports CraftBand.Tables.dstDataTables
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 
 Public Class clsModelSquare
     Inherits clsImageData

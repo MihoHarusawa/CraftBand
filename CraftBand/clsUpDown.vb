@@ -223,8 +223,11 @@ Public Class clsUpDown
         Return matrix_to_table()
     End Function
 
-    '位置をシフト
+    '位置をシフト 値はプラス/マイナス
     Function Shift(ByVal shift_x As Integer, ByVal shift_y As Integer) As Boolean
+        If shift_x = 0 AndAlso shift_y = 0 Then
+            Return True
+        End If
         If table_to_matrix() Then
             Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
             For y As Integer = 1 To VerticalCount
@@ -240,6 +243,31 @@ Public Class clsUpDown
         End If
     End Function
 
+    '左上をトリミング プラス値指定、水平・垂直いずれかゼロになる場合はFalseを返す
+    Function TrimTopLeft(ByVal trim_x As Integer, ByVal trim_y As Integer) As Boolean
+        If trim_x = 0 AndAlso trim_y = 0 Then
+            Return True
+        End If
+        If trim_x < 0 OrElse trim_y < 0 OrElse
+            HorizontalCount <= trim_x OrElse VerticalCount <= trim_y Then
+            Return False
+        End If
+        If table_to_matrix() Then
+            Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
+            For y As Integer = 1 To VerticalCount
+                Dim ys As Integer = y + trim_y
+                For x As Integer = 1 To HorizontalCount
+                    Dim xs As Integer = x + trim_x
+                    _Matrix(x, y) = save(xs, ys)
+                Next
+            Next
+            HorizontalCount -= trim_x
+            VerticalCount -= trim_y
+            Return matrix_to_table()
+        Else
+            Return False
+        End If
+    End Function
 
 
 #Region "レコードR/W"
@@ -803,19 +831,16 @@ Public Class clsUpDown
 #Region "上下の取得・設定"
     '※マトリクス部分のみを処理します
 
-    '上値を取得 Idx は各、1～描画領域Count  ※HorizontalCount,VerticalCountの剰余値の値
-    'RangeRevertが1以上であれば、裏面としての値を返す(1～RangeRevertは逆位置)
-    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer,
-                     Optional ByVal RangeRevert1 As Integer = -1, Optional ByVal RangeRevert2 As Integer = -1) As Boolean
-        If Not IsValid(False) Then 'チェックはMatrix
-            Return False
-        End If
-        '縦方向はmod値
-        Dim vIdx As Integer = Modulo((vertIdx - 1), VerticalCount) + 1
+    '範囲内のみTrueを返す設定 ※ClearやReset対象外なので、同じインスタンス使用注意
+    Dim _TrueInRangeOnly As Boolean = False
+    Sub SetTrueInRangeOnly(ByVal val As Boolean)
+        _TrueInRangeOnly = val
+    End Sub
 
-        '横方向は、範囲指定があれば、範囲内は逆の位置
-        Dim hIdx As Integer
+    '横方向の範囲指定で、範囲内は逆からの位置を返す
+    Private Function horzRevertIdx(ByVal horzIdx As Integer, ByVal RangeRevert1 As Integer, ByVal RangeRevert2 As Integer) As Integer
         If 0 < RangeRevert1 Then
+            Dim hIdx As Integer
             '位置を入れ替え、値を反転するか
             If 1 <= horzIdx AndAlso horzIdx <= RangeRevert1 Then
                 '1番目の範囲内
@@ -826,9 +851,43 @@ Public Class clsUpDown
             Else
                 hIdx = horzIdx
             End If
+            Return hIdx
+        Else
+            Return horzIdx  '呼ばれないはずだがそのまま返しておく
+        End If
+    End Function
+
+    '上値を取得 Idx は各、1～描画領域Count  ※HorizontalCount,VerticalCountの剰余値の値
+    'RangeRevertが1以上であれば、裏面としての値を返す(1～RangeRevertは逆位置)
+    Function GetIsUp(ByVal horzIdx As Integer, ByVal vertIdx As Integer,
+                     Optional ByVal RangeRevert1 As Integer = -1, Optional ByVal RangeRevert2 As Integer = -1) As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        '範囲内限定の場合
+        If _TrueInRangeOnly AndAlso (vertIdx < 1 OrElse VerticalCount < vertIdx) Then
+            Return False
+        End If
+        '縦方向はmod値
+        Dim vIdx As Integer = Modulo((vertIdx - 1), VerticalCount) + 1
+
+        '横方向は、範囲指定があれば、範囲内は逆の位置
+        Dim hIdx As Integer
+        If 0 < RangeRevert1 Then
+            '位置を入れ替え
+            hIdx = horzRevertIdx(horzIdx, RangeRevert1, RangeRevert2)
+            '範囲内限定の場合
+            If _TrueInRangeOnly AndAlso (hIdx < 1 OrElse HorizontalCount < hIdx) Then
+                Return False
+            End If
             hIdx = Modulo((hIdx - 1), HorizontalCount) + 1
+            '反転した値
             Return Not _Matrix(hIdx, vIdx)
         Else
+            '範囲内限定の場合
+            If _TrueInRangeOnly AndAlso (horzIdx < 1 OrElse HorizontalCount < horzIdx) Then
+                Return False
+            End If
             hIdx = Modulo((horzIdx - 1), HorizontalCount) + 1
             Return _Matrix(hIdx, vIdx)
         End If
@@ -837,7 +896,36 @@ Public Class clsUpDown
     '下値を取得
     Function GetIsDown(ByVal horzIdx As Integer, ByVal vertIdx As Integer,
                        Optional ByVal RangeRevert1 As Integer = -1, Optional ByVal RangeRevert2 As Integer = -1) As Boolean
-        Return Not GetIsUp(horzIdx, vertIdx, RangeRevert1, RangeRevert2)
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        '範囲内限定の場合
+        If _TrueInRangeOnly AndAlso (vertIdx < 1 OrElse VerticalCount < vertIdx) Then
+            Return False
+        End If
+        '縦方向はmod値
+        Dim vIdx As Integer = Modulo((vertIdx - 1), VerticalCount) + 1
+
+        '横方向は、範囲指定があれば、範囲内は逆の位置
+        Dim hIdx As Integer
+        If 0 < RangeRevert1 Then
+            '位置を入れ替え
+            hIdx = horzRevertIdx(horzIdx, RangeRevert1, RangeRevert2)
+            '範囲内限定の場合
+            If _TrueInRangeOnly AndAlso (hIdx < 1 OrElse HorizontalCount < hIdx) Then
+                Return False
+            End If
+            hIdx = Modulo((hIdx - 1), HorizontalCount) + 1
+            '反転した値
+            Return _Matrix(hIdx, vIdx)
+        Else
+            '範囲内限定の場合
+            If _TrueInRangeOnly AndAlso (horzIdx < 1 OrElse HorizontalCount < horzIdx) Then
+                Return False
+            End If
+            hIdx = Modulo((horzIdx - 1), HorizontalCount) + 1
+            Return Not _Matrix(hIdx, vIdx)
+        End If
     End Function
 
     '上値をセット 範囲内のIdxであること

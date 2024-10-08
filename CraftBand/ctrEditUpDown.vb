@@ -42,6 +42,15 @@ Public Class ctrEditUpDown
         End Get
     End Property
 
+    Public Property I開始高さ四角数 As Integer
+        Get
+            Return _I開始高さ四角数
+        End Get
+        Set(value As Integer)
+            _I開始高さ四角数 = value
+            dgvひも上下.Refresh()
+        End Set
+    End Property
 
     'Square
     Public Property I水平領域四角数 As Integer '剰余数計算用
@@ -49,8 +58,9 @@ Public Class ctrEditUpDown
     Public Property I上右側面本数 As Integer = 0 'Reset時の下左初期値
     'Square45
     Public Property IsSquare45 As Boolean = False
-    Public Property I横の四角数 As Integer '配置表示用 45度側
-    Public Property I縦の四角数 As Integer '〃　　　　135度側
+    Public Property I横の四角数 As Integer '配置表示用 45度側(表示中は変わらない)
+    Public Property I縦の四角数 As Integer '〃　　　　135度側(〃)
+    Dim _I開始高さ四角数 As Integer '周りにプラスされる高さ
 
     Dim _Is底位置表示 As Boolean = False 'Square45かつサイズ一致時
 
@@ -296,6 +306,9 @@ Public Class ctrEditUpDown
 
     '1～I水平領域四角数, 1～I垂直領域四角数
     Private Function getBackColor(ByVal horzIdx As Integer, ByVal vertIdx As Integer, ByVal value As Boolean) As Drawing.Color
+        If I開始高さ四角数 < 0 Then
+            Return If(value, Color.FromArgb(10, 10, 10), Color.FromArgb(50, 50, 50))
+        End If
         If _Is底位置表示 Then
             Dim cat As bottom_category = checkIsInBottom(horzIdx, vertIdx)
             Select Case cat
@@ -321,6 +334,9 @@ Public Class ctrEditUpDown
         _edge_line '境界線
         _center_line '中央線
         _side '側面
+        _none   '存在しない
+        _side_line_left  '側面の辺・左側
+        _side_line_right  '側面の辺・右側
     End Enum
     Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As bottom_category
         Dim n左上ライン As Integer = horzIdx + vertIdx

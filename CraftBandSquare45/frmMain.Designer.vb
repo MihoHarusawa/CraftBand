@@ -112,7 +112,7 @@ Partial Class frmMain
         radビューア = New RadioButton()
         radファイル = New RadioButton()
         lbl開始高さ = New Label()
-        num開始高さ = New NumericUpDown()
+        nud開始高さ = New NumericUpDown()
         chk1回のみ = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
@@ -246,7 +246,7 @@ Partial Class frmMain
         grp目標寸法.SuspendLayout()
         CType(nud底に, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud垂直に, ComponentModel.ISupportInitialize).BeginInit()
-        CType(num開始高さ, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud開始高さ, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         TabControl.SuspendLayout()
         tpage四角数.SuspendLayout()
@@ -1068,14 +1068,14 @@ Partial Class frmMain
         lbl開始高さ.Text = "開始高さ"
         ToolTip1.SetToolTip(lbl開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
         ' 
-        ' num開始高さ
+        ' nud開始高さ
         ' 
-        num開始高さ.Location = New Point(80, 42)
-        num開始高さ.Minimum = New Decimal(New Integer() {1, 0, 0, Integer.MinValue})
-        num開始高さ.Name = "num開始高さ"
-        num開始高さ.Size = New Size(46, 27)
-        num開始高さ.TabIndex = 1
-        ToolTip1.SetToolTip(num開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
+        nud開始高さ.Location = New Point(80, 42)
+        nud開始高さ.Minimum = New Decimal(New Integer() {1, 0, 0, Integer.MinValue})
+        nud開始高さ.Name = "nud開始高さ"
+        nud開始高さ.Size = New Size(46, 27)
+        nud開始高さ.TabIndex = 1
+        ToolTip1.SetToolTip(nud開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
         ' 
         ' chk1回のみ
         ' 
@@ -1727,7 +1727,7 @@ Partial Class frmMain
         ' 
         tpageひも上下.Controls.Add(chk1回のみ)
         tpageひも上下.Controls.Add(lbl開始高さ)
-        tpageひも上下.Controls.Add(num開始高さ)
+        tpageひも上下.Controls.Add(nud開始高さ)
         tpageひも上下.Controls.Add(grp縦横の四角)
         tpageひも上下.Controls.Add(editUpDown)
         tpageひも上下.Location = New Point(4, 29)
@@ -2303,7 +2303,7 @@ Partial Class frmMain
         grp目標寸法.PerformLayout()
         CType(nud底に, ComponentModel.ISupportInitialize).EndInit()
         CType(nud垂直に, ComponentModel.ISupportInitialize).EndInit()
-        CType(num開始高さ, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud開始高さ, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         TabControl.ResumeLayout(False)
@@ -2519,7 +2519,7 @@ Partial Class frmMain
     Friend WithEvents radファイル As RadioButton
     Friend WithEvents chk1回のみ As CheckBox
     Friend WithEvents lbl開始高さ As Label
-    Friend WithEvents num開始高さ As NumericUpDown
+    Friend WithEvents nud開始高さ As NumericUpDown
     Friend WithEvents f_i番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn

@@ -389,6 +389,21 @@ Public Class frmMain
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
             nud高さの四角数.Value = .Value("f_d高さの四角数")
+
+            'ひも上下
+            chk1回のみ.Checked = .Value("f_bひも上下1回区分") 'Null値はFalse
+            Dim startheight As Integer
+            If .IsNull("f_iひも上下の高さ数") Then
+                'Ver1.8.2以前との互換
+                If .Value("f_b展開区分") Then
+                    startheight = 0
+                Else
+                    startheight = -1
+                End If
+            Else
+                startheight = .Value("f_iひも上下の高さ数")
+            End If
+            nud開始高さ.Value = startheight
         End With
     End Sub
 
@@ -549,6 +564,9 @@ Public Class frmMain
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
             .Value("f_d高さの四角数") = nud高さの四角数.Value
+
+            .Value("f_bひも上下1回区分") = chk1回のみ.Checked
+            .Value("f_iひも上下の高さ数") = nud開始高さ.Value
         End With
         Return True
     End Function
@@ -1055,6 +1073,9 @@ Public Class frmMain
 #Region "コントロール変更イベント"
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
+        If chk縦横を展開する.Checked AndAlso nud開始高さ.Value < 0 Then
+            nud開始高さ.Value = 0
+        End If
         set底の縦横展開(chk縦横を展開する.Checked)
         recalc(CalcCategory.Square_Expand, sender)
     End Sub
@@ -1412,16 +1433,20 @@ Public Class frmMain
     Sub Showひも上下(ByVal works As clsDataTables)
         editUpDown.I横の四角数 = _clsCalcSquare45.p_i横の四角数
         editUpDown.I縦の四角数 = _clsCalcSquare45.p_i縦の四角数
+        editUpDown.I開始高さ四角数 = nud開始高さ.Value
         editUpDown.PanelSize = tpageひも上下.Size
 
         editUpDown.ShowGrid(works, enumTargetFace.Bottom)
     End Sub
 
     Function Hideひも上下(ByVal works As clsDataTables) As Boolean
+        _clsDataTables.p_row底_縦横.Value("f_bひも上下1回区分") = chk1回のみ.Checked
+        _clsDataTables.p_row底_縦横.Value("f_iひも上下の高さ数") = nud開始高さ.Value
         Return editUpDown.HideGrid(works)
     End Function
 
     Function saveひも上下(ByVal works As clsDataTables, ByVal isMsg As Boolean) As Boolean
+        '開始高さ・1回のみは、Save四角数で保存済
         Return editUpDown.Save(works, isMsg)
     End Function
 
@@ -1429,17 +1454,28 @@ Public Class frmMain
         editUpDown.PanelSize = tpageひも上下.Size
     End Sub
 
+    Private Sub nud開始高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud開始高さ.ValueChanged
+        editUpDown.I開始高さ四角数 = nud開始高さ.Value
+
+    End Sub
 
     Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
-        If editUpDown.Is底位置表示 Then
-            '{0}に基づき再度初期化してよろしいですか？
-            If MessageBox.Show(String.Format(My.Resources.AskInitializeAgain, grp縦横の四角.Text),
+        chk1回のみ.Checked = True
+        Dim takasa As Integer = nud開始高さ.Value
+        If takasa < 0 Then
+            nud開始高さ.Value = 0
+            takasa = 0
+        Else
+            If editUpDown.Is底位置表示 Then
+                '{0}に基づき再度初期化してよろしいですか？
+                If MessageBox.Show(String.Format(My.Resources.AskInitializeAgain, grp縦横の四角.Text),
                                Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
-                Exit Sub
+                    Exit Sub
+                End If
             End If
         End If
 
-        Dim updown As clsUpDown = _clsCalcSquare45.fitsizeひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value)
+        Dim updown As clsUpDown = _clsCalcSquare45.fitsizeひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value, takasa)
         If updown Is Nothing OrElse Not updown.IsValid(False) Then
             '現在の値では合わせることはできません。
             MessageBox.Show(My.Resources.MessageCannotSuit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -1610,10 +1646,6 @@ Public Class frmMain
                 col.Visible = True
             End If
         Next
-    End Sub
-
-    Private Sub num開始高さ_ValueChanged(sender As Object, e As EventArgs) Handles num開始高さ.ValueChanged
-
     End Sub
 
 #End Region
