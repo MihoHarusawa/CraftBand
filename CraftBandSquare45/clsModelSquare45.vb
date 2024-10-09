@@ -30,18 +30,21 @@ Public Class clsModelSquare45
 
     Overloads Sub Clear()
         MyBase.Clear()
-        For i As Integer = 0 To cBasketPlateCount - 1
-            If _data各面(i) IsNot Nothing Then
-                _data各面(i).Clear()
-                _data各面(i) = Nothing
+        For pidx As Integer = 0 To cBasketPlateCount - 1
+            If _data各面(pidx) IsNot Nothing Then
+                _data各面(pidx).Clear()
+                _data各面(pidx) = Nothing
             End If
-            If _SideBandStack(i) IsNot Nothing Then
-                _SideBandStack(i).Clear()
-                _SideBandStack(i) = Nothing
+            If _SideBandStack(pidx) IsNot Nothing Then
+                _SideBandStack(pidx).Clear()
+                _SideBandStack(pidx) = Nothing
             End If
             '
-            _region各面(i).Empty()
-            _path各面画像(i) = Nothing
+            _region各面(pidx).Empty()
+            _path各面画像(pidx) = Nothing
+
+            _dxdyStart(pidx).clear()
+            _IsDxDySet = False
         Next
     End Sub
 
@@ -59,7 +62,7 @@ Public Class clsModelSquare45
         End If
 
         '各面に対応した画像用dataの初期化と四角数
-        If Not setSideDataBandCount() Then
+        If Not setDataEachPlate() Then
             Return False
         End If
 
@@ -111,6 +114,8 @@ Public Class clsModelSquare45
         _path各面画像, outpath)
     End Function
 
+
+#Region "各面の画像生成用のデータ"
 
     '各面の領域
     '
@@ -195,9 +200,8 @@ Public Class clsModelSquare45
     '＼左側面  ／　  　＼　　／　　　
     '縦＼　　／　　　　　＼／　　　　
     '　　＼／　　　　    
+    '　
     '　　　
-    '　　　
-    '
     '
     Friend Class CBandAttribute
         Dim _i何本幅 As Integer
@@ -419,48 +423,141 @@ Public Class clsModelSquare45
 
 #End Region
 
+    'ひも上下の適用開始位置(1回のとき)
+    Dim _IsDxDySet As Boolean = False
+    Private Structure SDXDY
+        Public dx As Integer
+        Public dy As Integer
+        Sub clear()
+            dx = 0
+            dy = 0
+        End Sub
+    End Structure
+    Dim _dxdyStart(cBasketPlateCount - 1) As SDXDY
 
-
-    Function setUpDown() As Boolean
+    '各面に合わせたひも上下
+    Function setPlateUpDown() As Boolean
         Dim updown As New clsUpDown   'CheckBoxTableは使わない
         If Not _calc._Data.ToClsUpDown(updown) OrElse Not updown.IsValid(False) Then 'チェックはMatrix
             updown.Reset(0)
         End If
 
-        '左側面: 底の左下、縦×高さ
-        Dim leftside As New clsUpDown(updown)
-        leftside.Shift(-_calc.p_i高さの切上四角数, _calc.p_i横の四角数)
-        _data各面(enumBasketPlateIdx._leftside).FromClsUpDown(leftside)
+        'ひも上下の高さ・1回区分
+        Dim updown_takasa As Integer = _calc._Data.p_row底_縦横.Value("f_iひも上下の高さ数")
+        Dim pidx As enumBasketPlateIdx
+        If _calc._Data.p_row底_縦横.Value("f_bひも上下1回区分") Then
+            '* 1回のみの適用
 
-        '前面: 底の左上、横×高さ
-        Dim front As New clsUpDown(updown)
-        front.Shift(-_calc.p_i高さの切上四角数, -_calc.p_i高さの切上四角数)
-        _data各面(enumBasketPlateIdx._front).FromClsUpDown(front)
+            '底位置に合わせる
+            pidx = enumBasketPlateIdx._bottom
+            Dim bottom As New clsUpDown(updown)
+            If bottom.TrimTopLeft(updown_takasa, updown_takasa) Then
+                _data各面(pidx).FromClsUpDown(bottom)
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+                '左上から開始
+                _dxdyStart(pidx).dx = 0
+                _dxdyStart(pidx).dy = 0
+            Else
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
+            End If
 
-        '右側面: 底の右上、縦×高さ
-        Dim rightside As New clsUpDown(updown)
-        rightside.Shift(_calc.p_i横の四角数, -_calc.p_i高さの切上四角数)
-        _data各面(enumBasketPlateIdx._rightside).FromClsUpDown(rightside)
+            '左側面: 底の左下、縦×高さ
+            pidx = enumBasketPlateIdx._leftside
+            Dim leftside As New clsUpDown(updown)
+            If leftside.TrimTopLeft(0, _calc.p_i横の四角数 + updown_takasa) Then
+                _data各面(pidx).FromClsUpDown(leftside)
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+                _dxdyStart(pidx).dx = _calc.p_i高さの切上四角数 - updown_takasa
+                _dxdyStart(pidx).dy = 0
+            Else
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
+            End If
 
-        '背面: 底の右下、横×高さ
-        Dim back As New clsUpDown(updown)
-        back.Shift(_calc.p_i縦の四角数, _calc.p_i縦の四角数)
-        _data各面(enumBasketPlateIdx._back).FromClsUpDown(back)
+            '前面: 底の左上、横×高さ
+            pidx = enumBasketPlateIdx._front
+            Dim front As New clsUpDown(updown)
+            _data各面(pidx).FromClsUpDown(front)
+            _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+            '(高さの四角-updown高さ)点から開始
+            _dxdyStart(pidx).dx = _calc.p_i高さの切上四角数 - updown_takasa
+            _dxdyStart(pidx).dy = _calc.p_i高さの切上四角数 - updown_takasa
 
+            '右側面: 底の右上、縦×高さ
+            pidx = enumBasketPlateIdx._rightside
+            Dim rightside As New clsUpDown(updown)
+            If rightside.TrimTopLeft(_calc.p_i横の四角数 + updown_takasa, 0) Then
+                _data各面(pidx).FromClsUpDown(rightside)
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+                _dxdyStart(pidx).dx = 0
+                _dxdyStart(pidx).dy = _calc.p_i高さの切上四角数 - updown_takasa
+            Else
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
+            End If
+
+            '背面: 底の右下、横×高さ
+            pidx = enumBasketPlateIdx._back
+            Dim back As New clsUpDown(updown)
+            If back.TrimTopLeft(_calc.p_i縦の四角数 + updown_takasa, _calc.p_i縦の四角数 + updown_takasa) Then
+                _data各面(pidx).FromClsUpDown(back)
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+                _dxdyStart(pidx).dx = 0
+                _dxdyStart(pidx).dy = 0
+            Else
+                _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
+            End If
+
+            _IsDxDySet = True
+
+        Else
+            '* 繰り返し適用
+
+            '底位置に合わせる
+            updown.Shift(updown_takasa, updown_takasa)
+            _data各面(enumBasketPlateIdx._bottom).FromClsUpDown(updown)
+            _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+
+            '左側面: 底の左下、縦×高さ
+            Dim leftside As New clsUpDown(updown)
+            leftside.Shift(-_calc.p_i高さの切上四角数, _calc.p_i横の四角数)
+            _data各面(enumBasketPlateIdx._leftside).FromClsUpDown(leftside)
+            _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+
+            '前面: 底の左上、横×高さ
+            Dim front As New clsUpDown(updown)
+            front.Shift(-_calc.p_i高さの切上四角数, -_calc.p_i高さの切上四角数)
+            _data各面(enumBasketPlateIdx._front).FromClsUpDown(front)
+            _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+
+            '右側面: 底の右上、縦×高さ
+            Dim rightside As New clsUpDown(updown)
+            rightside.Shift(_calc.p_i横の四角数, -_calc.p_i高さの切上四角数)
+            _data各面(enumBasketPlateIdx._rightside).FromClsUpDown(rightside)
+            _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+
+            '背面: 底の右下、横×高さ
+            Dim back As New clsUpDown(updown)
+            back.Shift(_calc.p_i縦の四角数, _calc.p_i縦の四角数)
+            _data各面(enumBasketPlateIdx._back).FromClsUpDown(back)
+            _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
+
+        End If
         Return True
     End Function
 
 
     '各面に対応した画像用dataの初期化と四角数
-    Function setSideDataBandCount() As Boolean
+    Function setDataEachPlate() As Boolean
         '画像用データ
-        _data各面(0) = New clsDataTables(_calc._Data)
-        _data各面(0).p_tbl追加品.Clear()
+        _data各面(enumBasketPlateIdx._bottom) = New clsDataTables(_calc._Data)
+        _data各面(enumBasketPlateIdx._bottom).p_tbl追加品.Clear()
 
-        For i As Integer = 1 To cBasketPlateCount - 1
-            _data各面(i) = New clsDataTables(_data各面(0))
+        For pidx As Integer = 1 To cBasketPlateCount - 1
+            _data各面(pidx) = New clsDataTables(_data各面(enumBasketPlateIdx._bottom))
         Next
 
+        '底
+        _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_d高さの四角数") = 0
+        '_SideBandStackは使わない
 
         '左側面: 底の左下、縦×高さ
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i高さの切上四角数
@@ -492,8 +589,9 @@ Public Class clsModelSquare45
         set_135()
         '斜めに積まれたデータを各面の縦ひも・横ひもにセット
         setDataFromStack()
-        'ひも上下
-        setUpDown()
+
+        '各面に合わせたひも上下
+        setPlateUpDown()
 
         Return True
     End Function
@@ -502,37 +600,42 @@ Public Class clsModelSquare45
     Function getImages() As Boolean
 
         Dim ret As Boolean = True
-        For i As Integer = 0 To cBasketPlateCount - 1
-            _data各面(i).ResetStartPoint()
-            _path各面画像(i) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(i), CImageDraw.cImageClipFileExtention))
+        For pidx As Integer = 0 To cBasketPlateCount - 1
+            _data各面(pidx).ResetStartPoint()
+            _path各面画像(pidx) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(pidx), CImageDraw.cImageClipFileExtention))
 
-            Dim calc As New clsCalcSquare45(_data各面(i), _calc._frmMain)
-            calc.p_sBottomPngFilePath(True) = _path各面画像(i) 'あれば削除
-            calc.p_dBottomPngRotateAngle = _PlateAngle(i)
+            Dim calcTmp As New clsCalcSquare45(_data各面(pidx), _calc._frmMain)
+            calcTmp.p_sBottomPngFilePath(True) = _path各面画像(pidx) 'あれば削除
+            calcTmp.p_dBottomPngRotateAngle = _PlateAngle(pidx)
 
-            If calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
-                If Not calc.p_b長方形である Then
+            If calcTmp.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+                If Not calcTmp.p_b長方形である Then
                     '{0}が長方形でないため描画できません。
-                    _LastError = String.Format(My.Resources.ModelNoRectangle, dispPlateName(i))
+                    _LastError = String.Format(My.Resources.ModelNoRectangle, dispPlateName(pidx))
                     ret = False
                     Exit For
                 End If
 
-                Dim imgdata As New clsImageData(_PlateNames(i)) '仮の名前で
-                If Not calc.CalcImage(imgdata, False) Then
-                    _LastError = calc.p_sメッセージ
+                If _IsDxDySet Then
+                    'UpDown適用開始位置
+                    calcTmp.setUpDownStartPosition(_dxdyStart(pidx).dx, _dxdyStart(pidx).dy)
+                End If
+
+                Dim imgdata As New clsImageData(_PlateNames(pidx)) '仮の名前で
+                If Not calcTmp.CalcImage(imgdata, False) Then
+                    _LastError = calcTmp.p_sメッセージ
                     ret = False
-                ElseIf String.IsNullOrEmpty(calc.p_sBottomPngFilePath(True)) Then
+                ElseIf String.IsNullOrEmpty(calcTmp.p_sBottomPngFilePath(True)) Then
                     '{0}が描画できませんでした。
-                    _LastError = String.Format(My.Resources.ModelNoImage, dispPlateName(i))
+                    _LastError = String.Format(My.Resources.ModelNoImage, dispPlateName(pidx))
                     ret = False
                 End If
-                If {1, 3}.Contains(i) Then
+                If {1, 3}.Contains(pidx) Then
                     '右側面と左側面
-                    _delta画像サイズ(i) = New S差分(calc.p_d底の縦長, calc.p_d底の横長)
+                    _delta画像サイズ(pidx) = New S差分(calcTmp.p_d底の縦長, calcTmp.p_d底の横長)
                 Else
                     '底と前面と背面
-                    _delta画像サイズ(i) = New S差分(calc.p_d底の横長, calc.p_d底の縦長)
+                    _delta画像サイズ(pidx) = New S差分(calcTmp.p_d底の横長, calcTmp.p_d底の縦長)
                 End If
 
                 imgdata.Clear()
@@ -540,12 +643,12 @@ Public Class clsModelSquare45
                     Exit For
                 End If
             End If
-            calc.Clear()
+            calcTmp.Clear()
         Next
 
         Return ret
     End Function
-
+#End Region
 
     '絵の貼付と面枠描画
     Function imageList側面展開図() As clsImageItemList
@@ -557,21 +660,21 @@ Public Class clsModelSquare45
         Dim fuchi As Double = _calc.p_d縁の高さ
 
         '側面
-        For i As Integer = 1 To cBasketPlateCount - 1
+        For pidx As Integer = 1 To cBasketPlateCount - 1 '底以外
             '面枠
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, i)
-            item.m_a四隅 = New S四隅(_region各面(i))
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, pidx)
+            item.m_a四隅 = New S四隅(_region各面(pidx))
 
-            line = New S線分(_region各面(i).p左上, _region各面(i).p右上)
+            line = New S線分(_region各面(pidx).p左上, _region各面(pidx).p右上)
             line += Unit90 * fuchi
             item.m_lineList.Add(line)
             itemlist.AddItem(item)
 
             '絵
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像貼付, i)
-            Dim s As New S領域(_region各面(i).p左下, _region各面(i).p左下 + _delta画像サイズ(i))
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像貼付, pidx)
+            Dim s As New S領域(_region各面(pidx).p左下, _region各面(pidx).p左下 + _delta画像サイズ(pidx))
             item.m_a四隅 = New S四隅(s)
-            item.m_fpath = _path各面画像(i)
+            item.m_fpath = _path各面画像(pidx)
             itemlist.AddItem(item)
         Next
 

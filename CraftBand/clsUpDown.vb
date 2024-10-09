@@ -837,7 +837,7 @@ Public Class clsUpDown
         _TrueInRangeOnly = val
     End Sub
 
-    '横方向の範囲指定で、範囲内は逆からの位置を返す
+    '横方向の範囲指定で、範囲内であれば範囲の逆からの位置を返す　※範囲開始位置=1の前提
     Private Function horzRevertIdx(ByVal horzIdx As Integer, ByVal RangeRevert1 As Integer, ByVal RangeRevert2 As Integer) As Integer
         If 0 < RangeRevert1 Then
             Dim hIdx As Integer
@@ -865,7 +865,8 @@ Public Class clsUpDown
             Return False
         End If
         '範囲内限定の場合
-        If _TrueInRangeOnly AndAlso (vertIdx < 1 OrElse VerticalCount < vertIdx) Then
+        If _TrueInRangeOnly AndAlso
+            ((horzIdx < 1) OrElse (vertIdx < 1 OrElse VerticalCount < vertIdx)) Then
             Return False
         End If
         '縦方向はmod値
@@ -900,7 +901,8 @@ Public Class clsUpDown
             Return False
         End If
         '範囲内限定の場合
-        If _TrueInRangeOnly AndAlso (vertIdx < 1 OrElse VerticalCount < vertIdx) Then
+        If _TrueInRangeOnly AndAlso
+            ((horzIdx < 1) OrElse (vertIdx < 1 OrElse VerticalCount < vertIdx)) Then
             Return False
         End If
         '縦方向はmod値

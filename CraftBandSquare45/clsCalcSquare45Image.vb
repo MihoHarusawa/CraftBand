@@ -38,27 +38,15 @@ Partial Public Class clsCalcSquare45
     '底の絵の回転角度
     Property p_dBottomPngRotateAngle As Double
 
-    Dim _idx_x As Integer = 0
-    Dim _idx_y As Integer = 0
+    'UpDownの適用開始位置
+    Dim _is_updown_start_set As Boolean = False
+    Dim _updown_start_x As Integer = 0
+    Dim _updown_start_y As Integer = 0
     Sub setUpDownStartPosition(ByVal idx_x As Integer, idx_y As Integer)
-        _idx_x = idx_x
-        _idx_y = idx_y
+        _updown_start_x = idx_x
+        _updown_start_y = idx_y
+        _is_updown_start_set = Not ((idx_x = 0) AndAlso (idx_y = 0))
     End Sub
-
-    Private Function getIdx_x() As Integer
-        If String.IsNullOrWhiteSpace(_BottomPngFilePath) Then
-        Else
-            Return _idx_x
-        End If
-    End Function
-
-    Private Function getIdx_y() As Integer
-        If String.IsNullOrWhiteSpace(_BottomPngFilePath) Then
-        Else
-            Return _idx_y
-        End If
-    End Function
-
 
     'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分
     Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean) As CBandAttributeList
@@ -906,6 +894,14 @@ Partial Public Class clsCalcSquare45
         '裏面は左右反転
         Dim revRange As Integer = IIf(isBackFace, p_i縦ひもの本数, -1)
 
+        '左上(0,0)からの開始位置
+        Dim dx As Integer = 0
+        Dim dy As Integer = 0
+        If _is_updown_start_set Then
+            dx = _updown_start_x
+            dy = _updown_start_y
+        End If
+
         For iTate As Integer = 1 To p_i縦ひもの本数
             Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
             If itemTate Is Nothing Then
@@ -914,7 +910,7 @@ Partial Public Class clsCalcSquare45
             If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
 
             For iYoko As Integer = 1 To p_i横ひもの本数
-                If _CUpDown.GetIsDown(iTate, iYoko, revRange) Then
+                If _CUpDown.GetIsDown(iTate - dx, iYoko - dy, revRange) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
                     If isDrawingItem(itemYoko) Then
                         itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
@@ -932,7 +928,7 @@ Partial Public Class clsCalcSquare45
             If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
 
             For iTate As Integer = 1 To p_i縦ひもの本数
-                If _CUpDown.GetIsUp(iTate, iYoko, revRange) Then
+                If _CUpDown.GetIsUp(iTate - dx, iYoko - dy, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
                     If isDrawingItem(itemTate) Then
                         itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
