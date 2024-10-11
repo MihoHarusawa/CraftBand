@@ -615,4 +615,8 @@
     <value>フォルダ'{0}' に
  OBJファイル'{1}' および関連ファイル一式を出力しました。</value>
   </data>
+  <data name="CalcUpDownSetResult" xml:space="preserve">
+    <value>チェック結果を反映させますか？</value>
+    <comment>ctrEditUpDown</comment>
+  </data>
 </root>

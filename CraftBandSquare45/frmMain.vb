@@ -1431,11 +1431,12 @@ Public Class frmMain
 #Region "ひも上下"
 
     Sub Showひも上下(ByVal works As clsDataTables)
-        editUpDown.I横の四角数 = _clsCalcSquare45.p_i横の四角数
-        editUpDown.I縦の四角数 = _clsCalcSquare45.p_i縦の四角数
-        editUpDown.I開始高さ四角数 = nud開始高さ.Value
-        editUpDown.PanelSize = tpageひも上下.Size
+        editUpDown.SetSquare45Basics(_clsCalcSquare45.p_i横の四角数,
+                                    _clsCalcSquare45.p_i縦の四角数,
+                                    _clsCalcSquare45.p_i高さの切上四角数)
+        editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
 
+        editUpDown.PanelSize = tpageひも上下.Size
         editUpDown.ShowGrid(works, enumTargetFace.Bottom)
     End Sub
 
@@ -1455,18 +1456,23 @@ Public Class frmMain
     End Sub
 
     Private Sub nud開始高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud開始高さ.ValueChanged
-        editUpDown.I開始高さ四角数 = nud開始高さ.Value
-
+        editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
     End Sub
 
+    Private Sub chk1回のみ_Click(sender As Object, e As EventArgs) Handles chk1回のみ.CheckedChanged
+        editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
+    End Sub
+
+
     Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
+        Dim chkPrv As Boolean = chk1回のみ.Checked
         chk1回のみ.Checked = True
         Dim takasa As Integer = nud開始高さ.Value
         If takasa < 0 Then
             nud開始高さ.Value = 0
             takasa = 0
         Else
-            If editUpDown.Is底位置表示 Then
+            If chkPrv AndAlso editUpDown.Is底位置表示 Then
                 '{0}に基づき再度初期化してよろしいですか？
                 If MessageBox.Show(String.Format(My.Resources.AskInitializeAgain, grp縦横の四角.Text),
                                Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) <> DialogResult.OK Then
@@ -1617,7 +1623,6 @@ Public Class frmMain
         End If
     End Sub
 #End Region
-
 
 #Region "DEBUG"
     Dim bVisible As Boolean = False

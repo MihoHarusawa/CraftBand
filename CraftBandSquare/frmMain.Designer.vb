@@ -1877,9 +1877,7 @@ Partial Class frmMain
         editUpDown.IsSquare45 = False
         editUpDown.I上右側面本数 = 0
         editUpDown.I垂直領域四角数 = 0
-        editUpDown.I横の四角数 = 0
         editUpDown.I水平領域四角数 = 0
-        editUpDown.I縦の四角数 = 0
         editUpDown.Location = New Point(-3, -3)
         editUpDown.Name = "editUpDown"
         editUpDown.PanelSize = New Size(800, 400)

@@ -44,6 +44,8 @@ Public Class clsUpDown
         HorizontalCount = ref.HorizontalCount
         VerticalCount = ref.VerticalCount
         Memo = ref.Memo
+
+        'データそのままの状態
         Array.Copy(ref._Matrix, _Matrix, ref._Matrix.Length)
         If ref.CheckBoxTable IsNot Nothing Then
             CheckBoxTable = New dstWork.tblCheckBoxDataTable
@@ -58,6 +60,22 @@ Public Class clsUpDown
         HorizontalCount = horizon
         VerticalCount = vert
     End Sub
+
+    Function Clone(Optional ByVal mtx_only As Boolean = False) As clsUpDown
+        Dim updown As New clsUpDown(TargetFace)
+        updown.HorizontalCount = HorizontalCount
+        updown.VerticalCount = VerticalCount
+        updown.Memo = Memo
+        table_to_matrix(True) '編集中のテーブル値
+        Array.Copy(_Matrix, updown._Matrix, _Matrix.Length)
+        If CheckBoxTable IsNot Nothing AndAlso Not mtx_only Then
+            updown.CheckBoxTable = New dstWork.tblCheckBoxDataTable
+            For Each r As dstWork.tblCheckBoxRow In CheckBoxTable.Rows
+                updown.CheckBoxTable.ImportRow(r)
+            Next
+        End If
+        Return updown
+    End Function
 
     ReadOnly Property IsValid(ByVal isCheckExistTable As Boolean) As Boolean
         Get
@@ -99,7 +117,7 @@ Public Class clsUpDown
             End If
         End If
         Try
-            If set_mtx Then 'CheckBoxTable.GetChanges は見ない
+            If set_mtx OrElse CheckBoxTable.GetChanges IsNot Nothing Then
                 For y As Integer = 1 To CheckBoxTable.Rows.Count
                     Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
                     If r.Index <> y Then
@@ -979,6 +997,26 @@ Public Class clsUpDown
     '全値を下
     Function SetIsDownpAll() As Boolean
         Return SetIsUpAll(False)
+    End Function
+
+    '一致(マトリクス値比較)
+    Function IsSame(ByVal ref As clsUpDown) As Boolean
+        If ref Is Nothing OrElse Not ref.IsValid(False) Then
+            Return False
+        ElseIf ref.HorizontalCount <> HorizontalCount OrElse ref.VerticalCount <> VerticalCount Then
+            Return False
+        End If
+        If table_to_matrix() OrElse Not ref.table_to_matrix() Then
+            Return False
+        End If
+        For horzIdx As Integer = 1 To HorizontalCount
+            For vertIdx As Integer = 1 To VerticalCount
+                If ref._Matrix(horzIdx, vertIdx) <> _Matrix(horzIdx, vertIdx) Then
+                    Return False
+                End If
+            Next
+        Next
+        Return True
     End Function
 #End Region
 

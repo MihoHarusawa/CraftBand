@@ -1,11 +1,6 @@
 ﻿Imports System.Drawing
-Imports System.Drawing.Drawing2D
-Imports System.Reflection
-Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms
 Imports CraftBand.clsUpDown
-Imports CraftBand.ctrDataGridView
-Imports CraftBand.Tables
 
 Public Class ctrEditUpDown
 
@@ -38,18 +33,12 @@ Public Class ctrEditUpDown
 
     Public ReadOnly Property Is底位置表示 As Boolean
         Get
-            Return _Is底位置表示
+            If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing Then
+                Return _clsSquare45Bottom.Is底位置表示()
+            Else
+                Return False
+            End If
         End Get
-    End Property
-
-    Public Property I開始高さ四角数 As Integer
-        Get
-            Return _I開始高さ四角数
-        End Get
-        Set(value As Integer)
-            _I開始高さ四角数 = value
-            dgvひも上下.Refresh()
-        End Set
     End Property
 
     'Square
@@ -58,11 +47,7 @@ Public Class ctrEditUpDown
     Public Property I上右側面本数 As Integer = 0 'Reset時の下左初期値
     'Square45
     Public Property IsSquare45 As Boolean = False
-    Public Property I横の四角数 As Integer '配置表示用 45度側(表示中は変わらない)
-    Public Property I縦の四角数 As Integer '〃　　　　135度側(〃)
-    Dim _I開始高さ四角数 As Integer '周りにプラスされる高さ
-
-    Dim _Is底位置表示 As Boolean = False 'Square45かつサイズ一致時
+    Public _clsSquare45Bottom As clsSquare45Bottom
 
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
@@ -85,10 +70,10 @@ Public Class ctrEditUpDown
         End If
 
         _CurrentTargetFace = face
-        If IsSquare45 Then
-            I水平領域四角数 = I横の四角数 + I縦の四角数
-            I垂直領域四角数 = I横の四角数 + I縦の四角数
-        End If
+        'If IsSquare45 Then
+        '    I水平領域四角数 = I横の四角数 + I縦の四角数 + 2 * I高さ編集四角数
+        '    I垂直領域四角数 = I横の四角数 + I縦の四角数 + 2 * I高さ編集四角数
+        'End If
 
         Dim updown As clsUpDown = _Calc.loadData(face, works, I上右側面本数)
         If updown Is Nothing Then
@@ -163,7 +148,33 @@ Public Class ctrEditUpDown
 
         Panel.Enabled = False
         _CurrentTargetFace = enumTargetFace.NoDef
+        _clsSquare45Bottom = Nothing
         Return ret
+    End Function
+
+    Function SetSquare45Basics(ByVal yoko As Integer, ByVal tate As Integer, ByVal takasa As Integer) As Boolean
+        I水平領域四角数 = yoko + tate
+        I垂直領域四角数 = yoko + tate
+        '
+        If Not IsSquare45 Then
+            Return False
+        End If
+        _clsSquare45Bottom = Nothing
+        _clsSquare45Bottom = New clsSquare45Bottom(yoko, tate, takasa)
+        Return True
+    End Function
+
+    Function ChangeSquare45EditHeight(ByVal edit_takasa As Integer, ByVal once As Boolean) As Boolean
+        If _clsSquare45Bottom Is Nothing Then
+            Return False
+        Else
+            Dim ret As Boolean = _clsSquare45Bottom.SetEditHeight(edit_takasa, once)
+            If Panel.Enabled Then
+                dgvひも上下.Refresh()
+                btn側面確認.Visible = _clsSquare45Bottom.Is底位置表示
+            End If
+            Return ret
+        End If
     End Function
 #End Region
 
@@ -222,8 +233,13 @@ Public Class ctrEditUpDown
                 nud水平に.Value = updown.HorizontalCount
                 nud垂直に.Value = updown.VerticalCount
 
-                'Square45の底表示かどうか
-                _Is底位置表示 = IsSquare45 AndAlso (updown.HorizontalCount = I水平領域四角数 AndAlso updown.VerticalCount = I垂直領域四角数)
+                ''Square45の底表示かどうか
+                '_Is底位置表示 = IsSquare45 AndAlso (updown.HorizontalCount = I水平領域四角数 AndAlso updown.VerticalCount = I垂直領域四角数)
+                If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing Then
+                    _clsSquare45Bottom.SetEditCount(updown.HorizontalCount, updown.VerticalCount)
+                    btn側面確認.Visible = _clsSquare45Bottom.Is底位置表示
+                End If
+
                 'DataGridViewのカラム表示
                 setUpdownColumns(updown.HorizontalCount)
                 '上下図の残り数
@@ -276,103 +292,20 @@ Public Class ctrEditUpDown
         Return True
     End Function
 
-    '1～(縦+横) → .. -3, -2, -1, 0, 0, 0, 1, 2, 3 ..
-    Private Function getIndexPosition(ByVal idx As Integer) As Integer
-        If _Is底位置表示 Then
-
-            Dim smalls As Integer
-            Dim coms As Integer
-            If I縦の四角数 < I横の四角数 Then
-                smalls = I縦の四角数
-                coms = I横の四角数 - I縦の四角数
-            Else
-                smalls = I横の四角数
-                coms = I縦の四角数 - I横の四角数
-            End If
-
-            If idx <= smalls Then
-                Return idx - smalls - 1
-            ElseIf idx <= smalls + coms Then
-                Return 0
-            ElseIf idx <= I縦の四角数 + I横の四角数 Then
-                Return idx - (smalls + coms)
-            Else
-                Return idx
-            End If
+    Private Function getIndexPosition(ByVal idx As Integer) As String
+        If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing AndAlso _clsSquare45Bottom.Is底位置表示 Then
+            Return _clsSquare45Bottom.GetIndexPositionString(idx)
         Else
-            Return idx
+            Return idx.ToString
         End If
     End Function
 
     '1～I水平領域四角数, 1～I垂直領域四角数
     Private Function getBackColor(ByVal horzIdx As Integer, ByVal vertIdx As Integer, ByVal value As Boolean) As Drawing.Color
-        If I開始高さ四角数 < 0 Then
-            Return If(value, Color.FromArgb(10, 10, 10), Color.FromArgb(50, 50, 50))
-        End If
-        If _Is底位置表示 Then
-            Dim cat As bottom_category = checkIsInBottom(horzIdx, vertIdx)
-            Select Case cat
-                Case bottom_category._bottom '底の中
-                    Return If(value, Color.FromArgb(160, 160, 160), Color.White)
-                Case bottom_category._side '側面
-                    Return If(value, Color.FromArgb(140, 140, 140), Color.FromArgb(240, 240, 240))
-                Case bottom_category._edge_line '境界線
-                    Return If(value, Color.FromArgb(140, 140, 110), Color.FromArgb(240, 240, 210))
-                Case bottom_category._center_line '中央線
-                    Return If(value, Color.FromArgb(140, 140, 120), Color.FromArgb(240, 240, 220))
-                Case Else
-                    Return If(value, Color.FromArgb(160, 160, 160), Color.White)
-            End Select
-
+        If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing Then
+            Return _clsSquare45Bottom.GetBackColor(horzIdx, vertIdx, value)
         Else
-            Return If(value, Color.FromArgb(160, 160, 160), Color.White)
-        End If
-    End Function
-
-    Enum bottom_category
-        _bottom '底
-        _edge_line '境界線
-        _center_line '中央線
-        _side '側面
-        _none   '存在しない
-        _side_line_left  '側面の辺・左側
-        _side_line_right  '側面の辺・右側
-    End Enum
-    Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As bottom_category
-        Dim n左上ライン As Integer = horzIdx + vertIdx
-        Dim n右下ライン As Integer = (I水平領域四角数 - horzIdx + 1) + (I垂直領域四角数 - vertIdx + 1)
-        Dim n右上ライン As Integer = (I水平領域四角数 - horzIdx + 1) + vertIdx
-        Dim n左下ライン As Integer = horzIdx + (I垂直領域四角数 - vertIdx + 1)
-
-        If n左上ライン = I横の四角数 + 1 Then
-            Return bottom_category._edge_line
-        ElseIf n左上ライン < I横の四角数 + 1 Then
-            Return bottom_category._side
-
-        ElseIf n右下ライン = I横の四角数 + 1 Then
-            Return bottom_category._edge_line
-        ElseIf n右下ライン < I横の四角数 + 1 Then
-            Return bottom_category._side
-
-        ElseIf n右上ライン = I縦の四角数 + 1 Then
-            Return bottom_category._edge_line
-        ElseIf n右上ライン < I縦の四角数 + 1 Then
-            Return bottom_category._side
-
-        ElseIf n左下ライン = I縦の四角数 + 1 Then
-            Return bottom_category._edge_line
-        ElseIf n左下ライン < I縦の四角数 + 1 Then
-            Return bottom_category._side
-
-        Else
-            If getIndexPosition(horzIdx) = 0 AndAlso getIndexPosition(vertIdx) = 0 Then
-                If (I横の四角数 < I縦の四角数) AndAlso (horzIdx = vertIdx) Then
-                    Return bottom_category._center_line
-                ElseIf (I横の四角数 > I縦の四角数) AndAlso (horzIdx = (I垂直領域四角数 - vertIdx + 1)) Then
-                    Return bottom_category._center_line
-                End If
-            End If
-            Return bottom_category._bottom '底
+            Return IIf(value, Color.FromArgb(160, 160, 160), Color.White)
         End If
     End Function
 
@@ -645,8 +578,10 @@ Public Class ctrEditUpDown
     Private Sub btnチェック_Click(sender As Object, e As EventArgs) Handles btnチェック.Click
         Dim msg As String = Nothing
         If Not _Calc.updownチェック(msg) Then
+            'NG時はメッセージあり
             MessageBox.Show(msg, FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
+            'OKでもメッセージがあれば表示
             If String.IsNullOrWhiteSpace(msg) Then
                 'チェックOKです。
                 MessageBox.Show(My.Resources.MessageCheckOK,
@@ -656,6 +591,39 @@ Public Class ctrEditUpDown
             End If
         End If
     End Sub
+
+    'Squareの底編集時
+    Private Sub btn側面確認_Click(sender As Object, e As EventArgs) Handles btn側面確認.Click
+        If Not IsSquare45 OrElse _clsSquare45Bottom Is Nothing OrElse Not _clsSquare45Bottom.Is底位置表示 Then
+            Return
+        End If
+        Dim msg As String = Nothing
+        Dim updown As clsUpDown = _Calc.updownClone()
+        If Not _clsSquare45Bottom.CheckSideLine(msg, updown) Then
+            'NG時はメッセージあり
+            MessageBox.Show(msg, FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If updown IsNot Nothing AndAlso updown.IsValid(False) AndAlso Not _Calc.updownIsSame(updown) Then
+                'チェック結果を反映させますか？
+                msg = My.Resources.CalcUpDownSetResult
+                If MessageBox.Show(msg, FormCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    Replace(updown)
+                End If
+            End If
+
+        Else
+            'OKでもメッセージがあれば表示
+            If String.IsNullOrWhiteSpace(msg) Then
+                'チェックOKです。
+                MessageBox.Show(My.Resources.MessageCheckOK,
+                            FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                MessageBox.Show(msg, FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+        End If
+
+    End Sub
+
+
 
 
     '選択状態を操作対象としてどう認識したか
@@ -723,7 +691,7 @@ Public Class ctrEditUpDown
                     FormCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         If ret = DialogResult.Yes Then
             Return select_target.target_rectangle
-        ElseIf ret = DialogResult.no Then
+        ElseIf ret = DialogResult.No Then
             Return select_target.target_no_loop '(一方向指定)
         End If
         Return select_target.target_none
@@ -868,6 +836,15 @@ Public Class ctrEditUpDown
             Return _CUpDown.Check(msg)
         End Function
 
+        Function updownClone() As clsUpDown
+            Return _CUpDown.Clone(True)
+        End Function
+
+        Function updownIsSame(ByVal updown As clsUpDown) As Boolean
+            Return _CUpDown.IsSame(updown)
+        End Function
+
+
     End Class
 
 
@@ -908,7 +885,7 @@ Public Class ctrEditUpDown
             indexRect.Inflate(-2, -2)
             '行番号を描画する
             TextRenderer.DrawText(e.Graphics,
-                                  getIndexPosition(Index).ToString(),
+                                  getIndexPosition(Index),
                 e.CellStyle.Font, indexRect, e.CellStyle.ForeColor, TextFormatFlags.Right Or TextFormatFlags.VerticalCenter)
             '描画が完了したことを知らせる
             e.Handled = True
@@ -2033,8 +2010,6 @@ Public Class ctrEditUpDown
             _DataGridSelection.ExtentSelection(1, -1)
         End If
     End Sub
-
-
 #End Region
 
 

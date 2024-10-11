@@ -346,6 +346,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  チェック結果を反映させますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcUpDownSetResult() As String
+            Get
+                Return ResourceManager.GetString("CalcUpDownSetResult", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  長さと重さの換算 &lt;{0}&gt; に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionBandTypeWeight() As String
