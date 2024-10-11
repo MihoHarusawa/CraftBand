@@ -364,7 +364,7 @@ Public Class clsImageData
 
 
     '面の順序
-    Enum enumBasketPlateIdx
+    Public Enum enumBasketPlateIdx
         _bottom = 0 '底面         横と縦
         _leftside  '左側面
         _front      '前面         横と高さ
@@ -372,6 +372,18 @@ Public Class clsImageData
         _back   '背面
     End Enum
     Public Const cBasketPlateCount As Integer = 5
+
+    '面名
+    Public Shared ReadOnly Property BasketPlateString(ByVal i As Integer) As String
+        Get
+            If i < 0 OrElse cBasketPlateCount <= i Then
+                Return Nothing
+            End If
+            '底,左側面,前面,右側面,背面
+            Dim ary() As String = My.Resources.ModelPlateNames.Split(",")
+            Return ary(i)
+        End Get
+    End Property
 
     '3D
     Public Function CreateOBJWithTextures(ByVal width As Single, ByVal height As Single, ByVal depth As Single,

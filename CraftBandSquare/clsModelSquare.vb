@@ -117,16 +117,6 @@ Public Class clsModelSquare
     '　　　　　└────┘         　         ↓　
     ' 　　<tate><- yoko -><tate><- yoko ->
 
-    '面名
-    Private Function dispPlateName(ByVal i As Integer) As String
-        If i < 0 OrElse cBasketPlateCount <= i Then
-            Return Nothing
-        End If
-        '底,左側面,前面,右側面,背面
-        Dim ary() As String = My.Resources.ModelPlateNames.Split(",")
-        Return ary(i)
-    End Function
-
     '各面の領域をセットする
     Private Function setRegions() As Boolean
         '底の横
@@ -200,7 +190,7 @@ Public Class clsModelSquare
                 For i As Integer = 0 To cBasketPlateCount - 1
                     If String.IsNullOrEmpty(calcTmp.p_sPlatePngFilePath(i, True)) Then
                         '{0}が描画できませんでした。
-                        _LastError = String.Format(My.Resources.ModelNoImage, dispPlateName(i))
+                        _LastError = String.Format(My.Resources.ModelNoImage, BasketPlateString(i))
                         ret = False
                     End If
                     If i = 0 Then

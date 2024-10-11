@@ -117,7 +117,7 @@ Public Class clsUpDown
             End If
         End If
         Try
-            If set_mtx OrElse CheckBoxTable.GetChanges IsNot Nothing Then
+            If set_mtx OrElse CheckBoxTable.GetChanges IsNot Nothing Then 'CheckBoxTable.GetChangesは信用できません
                 For y As Integer = 1 To CheckBoxTable.Rows.Count
                     Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
                     If r.Index <> y Then
@@ -963,6 +963,21 @@ Public Class clsUpDown
         Return True
     End Function
 
+    '値を反転
+    Function SetReverse(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Boolean
+        If Not IsValid(False) Then 'チェックはMatrix
+            Return False
+        End If
+        If horzIdx < 1 OrElse HorizontalCount < horzIdx Then
+            Return False
+        End If
+        If vertIdx < 1 OrElse VerticalCount < vertIdx Then
+            Return False
+        End If
+        _Matrix(horzIdx, vertIdx) = Not _Matrix(horzIdx, vertIdx)
+        Return True
+    End Function
+
     '全値を上
     Function SetIsUpAll(Optional isup As Boolean = True) As Boolean
         If Not IsValid(False) Then 'チェックはMatrix
@@ -1024,7 +1039,7 @@ Public Class clsUpDown
         Dim sb As New System.Text.StringBuilder
         sb.AppendFormat("{0} TargetFace={1} Size({2},{3})", Me.GetType.Name, TargetFace, HorizontalCount, VerticalCount).AppendLine()
         If CheckBoxTable IsNot Nothing Then
-            sb.Append("Table ")
+            sb.AppendLine("Table ")
             For y As Integer = 1 To CheckBoxTable.Rows.Count
                 Dim r As dstWork.tblCheckBoxRow = CheckBoxTable.Rows(y - 1)
                 sb.AppendFormat("[{0}]", r.Index)
@@ -1038,7 +1053,7 @@ Public Class clsUpDown
             Next
             sb.AppendLine()
         End If
-        sb.Append("Matrix")
+        sb.AppendLine("Matrix")
         For y As Integer = 1 To VerticalCount
             sb.AppendFormat("[{0}]", y)
             For x As Integer = 1 To HorizontalCount
@@ -1048,6 +1063,7 @@ Public Class clsUpDown
                     sb.Append("0 ")
                 End If
             Next
+            sb.AppendLine()
         Next
         sb.AppendLine()
         sb.AppendFormat("Memo:{0}", Memo)

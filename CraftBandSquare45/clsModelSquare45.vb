@@ -1,9 +1,8 @@
 ﻿Imports CraftBand
-Imports CraftBand.clsImageData
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsDataTables
-Imports CraftBandSquare45.clsCalcSquare45
+Imports CraftBand.clsImageItem
 Imports CraftBand.Tables.dstDataTables
+Imports CraftBandSquare45.clsCalcSquare45
 
 Public Class clsModelSquare45
     Inherits clsImageData
@@ -52,7 +51,7 @@ Public Class clsModelSquare45
     Public Function CalcModel() As Boolean
         If Not _calc.p_b長方形である Then
             '{0}が長方形でないため描画できません。
-            _LastError = String.Format(My.Resources.ModelNoRectangle, dispPlateName(enumBasketPlateIdx._bottom))
+            _LastError = String.Format(My.Resources.ModelNoRectangle, BasketPlateString(enumBasketPlateIdx._bottom))
             Return False
         End If
 
@@ -134,15 +133,6 @@ Public Class clsModelSquare45
     '　　　　　└────┘         　         ↓　
     ' 　　<tate><- yoko -><tate><- yoko ->
 
-    '面名
-    Private Function dispPlateName(ByVal i As Integer) As String
-        If i < 0 OrElse cBasketPlateCount <= i Then
-            Return Nothing
-        End If
-        '底,左側面,前面,右側面,背面
-        Dim ary() As String = My.Resources.ModelPlateNames.Split(",")
-        Return ary(i)
-    End Function
 
     '各面の領域をセットする
     Private Function setRegions() As Boolean
@@ -611,7 +601,7 @@ Public Class clsModelSquare45
             If calcTmp.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
                 If Not calcTmp.p_b長方形である Then
                     '{0}が長方形でないため描画できません。
-                    _LastError = String.Format(My.Resources.ModelNoRectangle, dispPlateName(pidx))
+                    _LastError = String.Format(My.Resources.ModelNoRectangle, BasketPlateString(pidx))
                     ret = False
                     Exit For
                 End If
@@ -627,7 +617,7 @@ Public Class clsModelSquare45
                     ret = False
                 ElseIf String.IsNullOrEmpty(calcTmp.p_sBottomPngFilePath(True)) Then
                     '{0}が描画できませんでした。
-                    _LastError = String.Format(My.Resources.ModelNoImage, dispPlateName(pidx))
+                    _LastError = String.Format(My.Resources.ModelNoImage, BasketPlateString(pidx))
                     ret = False
                 End If
                 If {1, 3}.Contains(pidx) Then

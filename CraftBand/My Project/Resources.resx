@@ -619,4 +619,8 @@
     <value>チェック結果を反映させますか？</value>
     <comment>ctrEditUpDown</comment>
   </data>
+  <data name="ModelPlateNames" xml:space="preserve">
+    <value>底,左側面,前面,右側面,背面</value>
+    <comment>clsImageData</comment>
+  </data>
 </root>

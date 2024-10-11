@@ -1,18 +1,21 @@
-﻿Imports System.Drawing
+﻿Imports System.Diagnostics.Metrics
+Imports System.Drawing
+Imports System.Windows.Forms
+Imports CraftBand.clsImageData
 Imports CraftBand.ctrEditUpDown
 
 Public Class clsSquare45Bottom
 
     Dim _i横の四角数 As Integer '配置表示用 45度側
     Dim _i縦の四角数 As Integer '〃　　　　135度側
-    Dim _i高さ切上四角数 As Integer '設定の切上値
+    Dim _i高さ切上四角数 As Integer '設定の切上値(未使用領域の表示のみ)
 
 
     Dim _i領域四角数 As Integer = 0
     Dim _is底位置表示 As Boolean = False 'IsValidかつサイズ一致時
 
     'メイン画面コントロール指定
-    Dim _i高さ編集四角数 As Integer '開始高さ
+    Dim _i高さ編集四角数 As Integer '開始高さ,領域サイズ要因
     Dim _EditHorizontal As Integer = 0  '
     Dim _EditVertical As Integer = 0
     Dim _IsOnce As Boolean = 0
@@ -78,14 +81,14 @@ Public Class clsSquare45Bottom
     End Function
 
     '
-    '1～高さ(縦+横)高さ →C,B,A .. -3, -2, -1, 0, 0, 0, 1, 2, 3 ..A,B,C.
-    Function GetIndexPositionString(ByVal idx As Integer) As String
+    '1～高さ(縦+横)高さ →-C,-B,-A .. -3, -2, -1, 0, 0, 0, 1, 2, 3 ..A,B,C.
+    Function GetIndexPosition(ByVal idx As Integer) As String
         If _is底位置表示 Then
             'idx = 1～I水平領域四角数
             If idx <= _i高さ編集四角数 Then
                 Return Chr(Asc("A") + (_i高さ編集四角数 - idx))
             ElseIf (_i領域四角数 - _i高さ編集四角数) < idx Then
-                Return Chr(Asc("A") + (_i高さ編集四角数 - _i領域四角数 + idx - 1))
+                Return "-" & Chr(Asc("A") + (_i高さ編集四角数 - _i領域四角数 + idx - 1))
             End If
 
             '底の中
@@ -121,11 +124,12 @@ Public Class clsSquare45Bottom
         _bottom '底の中
         _bottom_line '境界線
         _center_line '中央線
-        _side45 '側面45
         _side135 '側面135
+        _side45R '側面45
         _noexist   '存在しない
         _side_line_front  '側面の辺・正面と背面側
-        _side_line_side  '側面の辺・側面側
+        _side_line_sideR  '側面の辺・側面側
+        _height_over45R '高さの外45
         _height_over '高さの外
     End Enum
 
@@ -134,11 +138,12 @@ Public Class clsSquare45Bottom
     Color.FromArgb(160, 160, 160),'底の中,
     Color.FromArgb(88, 136, 36), '境界線
     Color.FromArgb(255, 0, 0), '中央線
-    Color.FromArgb(255, 217, 102), '側面45
-    Color.FromArgb(244, 176, 132), '側面135
+    Color.FromArgb(255, 217, 102), '側面135
+    Color.FromArgb(252, 228, 214), '側面45 ※
     Color.FromArgb(51, 63, 79), '存在しない
     Color.FromArgb(46, 118, 184), '側面の辺・正面と背面側
-    Color.FromArgb(0, 32, 96), '側面の辺・右側
+    Color.FromArgb(0, 51, 154), '側面の辺・側面側 ※
+    Color.FromArgb(240, 240, 240), '高さの外45 ※
     Color.FromArgb(160, 160, 160) '高さの外
 }
 
@@ -147,11 +152,12 @@ Public Class clsSquare45Bottom
     Color.White,'底の中,
     Color.FromArgb(146, 208, 80), '境界線
     Color.FromArgb(255, 121, 121), '中央線
-    Color.FromArgb(255, 242, 204), '側面45
-    Color.FromArgb(252, 228, 214), '側面135
+    Color.FromArgb(255, 242, 204), '側面135
+    Color.FromArgb(244, 176, 132), '側面45 ※
     Color.FromArgb(117, 113, 113), '存在しない
     Color.FromArgb(155, 194, 230), '側面の辺・前面と背面側
-    Color.FromArgb(0, 51, 154), '側面の辺・側面側
+    Color.FromArgb(0, 32, 96), '側面の辺・側面側 ※
+    Color.FromArgb(170, 170, 170), '高さの外45 ※
     Color.White '高さの外
 }
 
@@ -344,13 +350,13 @@ Public Class clsSquare45Bottom
             Case area45_上外 + area135_上線
                 Return bottom_category._side_line_front
             Case area45_上外 + area135_間
-                Return bottom_category._side45
+                Return bottom_category._side135
             Case area45_上外 + area135_下線
                 Return bottom_category._side_line_front
 
             ' area45_上の線 の場合
             Case area45_上線 + area135_上外
-                Return bottom_category._side_line_side
+                Return bottom_category._side_line_sideR
             Case area45_上線 + area135_上線
                 Return bottom_category._nodef   'ないはず
             Case area45_上線 + area135_間
@@ -358,11 +364,13 @@ Public Class clsSquare45Bottom
             Case area45_上線 + area135_下線
                 Return bottom_category._nodef   'ないはず
             Case area45_上線 + area135_下外
-                Return bottom_category._side_line_side
+                Return bottom_category._side_line_sideR
 
             ' area45_間 の場合
+            Case area45_間 + area135_上枠外
+                Return bottom_category._height_over45R
             Case area45_間 + area135_上外
-                Return bottom_category._side135
+                Return bottom_category._side45R
             Case area45_間 + area135_上線
                 Return bottom_category._bottom_line
             Case area45_間 + area135_間
@@ -374,11 +382,13 @@ Public Class clsSquare45Bottom
             Case area45_間 + area135_下線
                 Return bottom_category._bottom_line
             Case area45_間 + area135_下外
-                Return bottom_category._side135
+                Return bottom_category._side45R
+            Case area45_間 + area135_下枠外
+                Return bottom_category._height_over45R
 
             ' area45_下の線 の場合
             Case area45_下線 + area135_上外
-                Return bottom_category._side_line_side
+                Return bottom_category._side_line_sideR
             Case area45_下線 + area135_上線
                 Return bottom_category._nodef   'ないはず
             Case area45_下線 + area135_間
@@ -386,13 +396,13 @@ Public Class clsSquare45Bottom
             Case area45_下線 + area135_下線
                 Return bottom_category._nodef   'ないはず
             Case area45_下線 + area135_下外
-                Return bottom_category._side_line_side
+                Return bottom_category._side_line_sideR
 
             ' area45_下外 の場合
             Case area45_下外 + area135_上線
                 Return bottom_category._side_line_front
             Case area45_下外 + area135_間
-                Return bottom_category._side45
+                Return bottom_category._side135
             Case area45_下外 + area135_下線
                 Return bottom_category._side_line_front
 
@@ -554,6 +564,85 @@ Public Class clsSquare45Bottom
         Return True
     End Function
 
+    '立ち上げた時に同じ位置になる2箇所
+    Structure SSamePointPair
+        '正: 前面/背面側
+        Public horzIdx As Integer
+        Public vertIdx As Integer
+        Public val As Boolean
+        Public plateIdx As enumBasketPlateIdx
+
+        '従: 両側面側
+        Public horzIdxRef As Integer
+        Public vertIdxRef As Integer
+        Public valRef As Boolean
+        Public plateIdxRef As enumBasketPlateIdx
+
+        '下からの段数
+        Public nStep As Integer
+
+        Dim _clsSquare45Bottom As clsSquare45Bottom
+
+        Sub New(ByVal parent As clsSquare45Bottom, ByVal hidx As Integer, ByVal vidx As Integer)
+            _clsSquare45Bottom = parent
+            horzIdx = hidx
+            vertIdx = vidx
+        End Sub
+
+        Public ReadOnly Property isOK As Boolean
+            Get
+                Return (val = Not valRef)
+            End Get
+        End Property
+
+        Private Shared Function OnOff(ByVal b As Boolean) As String
+            Return IIf(b, "on", "off")
+        End Function
+
+        Private Shared Function OkNg(ByVal b As Boolean) As String
+            Return IIf(b, "OK", "NG")
+        End Function
+
+        Public Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            sb.Append(OkNg(isOK))
+            If _clsSquare45Bottom IsNot Nothing Then
+                sb.AppendFormat(" {0} {1} ({2},{3})", BasketPlateString(plateIdx), nStep, _clsSquare45Bottom.GetIndexPosition(horzIdx), _clsSquare45Bottom.GetIndexPosition(vertIdx))
+                sb.AppendFormat(":{0} ({1},{2}) ({3})", BasketPlateString(plateIdxRef), _clsSquare45Bottom.GetIndexPosition(horzIdxRef), _clsSquare45Bottom.GetIndexPosition(vertIdxRef), OnOff(val))
+            Else
+                sb.AppendFormat(" {0} {1} ({2},{3})", BasketPlateString(plateIdx), nStep, horzIdx, vertIdx)
+                sb.AppendFormat(":{0} ({1},{2}) ({3})", BasketPlateString(plateIdxRef), horzIdxRef, vertIdxRef, OnOff(val))
+            End If
+            Return sb.ToString
+        End Function
+
+    End Structure
+
+    Class CSamePointPairList
+        Inherits List(Of SSamePointPair)
+
+        Public Property CountOK As Integer = 0
+        Public Property CountNG As Integer = 0
+
+        Overloads Sub Add(ByVal item As SSamePointPair)
+            If item.isOK Then
+                CountOK += 1
+            Else
+                CountNG += 1
+            End If
+            MyBase.Add(item)
+        End Sub
+
+        '全内容
+        Public Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("CSamePointPairList Count={0} OK={1} NG={2}", Count, CountOK, CountNG).AppendLine()
+            For Each sp As SSamePointPair In Me
+                sb.AppendLine(sp.ToString)
+            Next
+            Return sb.ToString
+        End Function
+    End Class
 
 
     '側面の整合性をチェックする
@@ -566,15 +655,169 @@ Public Class clsSquare45Bottom
             Return False
         End If
         If _i高さ編集四角数 = 0 Then
-            msg = "照合すべき辺は編集されていません。"
+            msg = "開始高さがゼロのため編集対象の側面辺はありません。"
+            updown = Nothing
             Return True
         End If
-        msg = "(1,1)(1,2)(2,1)が矛盾します"
-        updown.SetIsUp(1, 1)
-        updown.SetIsUp(1, 2)
-        updown.SetIsUp(2, 1)
 
-        Return False
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown Before{0}{1}", vbCrLf, updown.ToString)
+
+
+        '左上ライン・右上ラインに沿ってチェックする
+        Dim checklist As New CSamePointPairList
+        Dim ret As Boolean = checkSideLineLeft(updown, checklist)
+        ret = ret And checkSideLineRight(updown, checklist)
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CheckSideLine({0}) {1}{2}", ret, vbCrLf, checklist.ToString())
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown After{0}{1}", vbCrLf, updown.ToString)
+
+        If checklist.Count = 0 Then
+            msg = "チェック対象の側面辺はありませんでした。"
+            updown = Nothing
+
+        ElseIf 0 < checklist.CountNG Then
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("全{0}点中 {1}点に不整合があります。", checklist.Count, checklist.CountNG).AppendLine()
+            For Each sp As SSamePointPair In checklist
+                If Not sp.isOK Then
+                    sb.AppendLine(sp.ToString)
+                End If
+            Next
+            msg = sb.ToString
+
+        Else
+            msg = String.Format("側面辺 {0}点の対応を確認しました。", checklist.Count)
+            updown = Nothing
+
+        End If
+        Return ret
     End Function
+
+    '前面左側、左下ラインに沿ったチェック
+    Private Function checkSideLineLeft(ByRef updown As clsUpDown, ByVal checklist As CSamePointPairList)
+        Dim ret As Boolean = True
+
+        For horzIdx As Integer = 1 To _i領域四角数
+            '左下ライン＼
+            Dim vertIdx As Integer = horzIdx + _i横の四角数
+            If vertIdx < 1 OrElse _i領域四角数 < vertIdx Then
+                Continue For
+            End If
+            Dim dd As SSamePointPair
+
+            Dim i45 As Integer = area45(horzIdx, vertIdx)
+            If i45 = area45_上外 Then
+                '前面側のbottom_category._side_line_front 
+
+                '対応する同位置は、on 左上ライン／
+                dd = New SSamePointPair(Me, horzIdx, vertIdx)
+                dd.horzIdxRef = horzIdx
+                dd.vertIdxRef = -horzIdx + _i領域四角数 - _i縦の四角数 + 1
+
+                dd.plateIdx = enumBasketPlateIdx._front
+                dd.plateIdxRef = enumBasketPlateIdx._leftside
+
+                dd.nStep = _i高さ編集四角数 - horzIdx + 1
+
+            ElseIf i45 = area45_下外 Then
+                '背面側のbottom_category._side_line_front 
+
+                '対応する同位置は、on 右下ライン／
+                dd = New SSamePointPair(Me, horzIdx, vertIdx)
+                dd.vertIdxRef = vertIdx
+                dd.horzIdxRef = -vertIdx + _i領域四角数 + _i縦の四角数 + 1
+
+                dd.plateIdx = enumBasketPlateIdx._back
+                dd.plateIdxRef = enumBasketPlateIdx._leftside
+
+                dd.nStep = vertIdx - (_i領域四角数 - _i高さ編集四角数)
+
+            Else
+                Continue For
+            End If
+
+            If dd.horzIdxRef < 1 OrElse _i領域四角数 < dd.horzIdxRef OrElse
+                    dd.vertIdxRef < 1 OrElse _i領域四角数 < dd.vertIdxRef Then
+                dd = Nothing
+                Continue For
+            End If
+
+            dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
+            dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
+            checklist.Add(dd)
+
+            If Not dd.isOK Then
+                updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
+                ret = False
+            End If
+        Next
+
+        Return ret
+    End Function
+
+    '前面右側、右上ラインに沿ったチェック
+    Private Function checkSideLineRight(ByRef updown As clsUpDown, ByVal checklist As CSamePointPairList)
+        Dim ret As Boolean = True
+
+        For horzIdx As Integer = 1 To _i領域四角数
+            '右上ライン＼
+            Dim vertIdx As Integer = horzIdx - _i横の四角数
+            If vertIdx < 1 OrElse _i領域四角数 < vertIdx Then
+                Continue For
+            End If
+            Dim dd As SSamePointPair
+
+            Dim i45 As Integer = area45(horzIdx, vertIdx)
+            If i45 = area45_上外 Then
+                '前面側のbottom_category._side_line_front 
+
+                '対応する同位置は、on 左上ライン／
+                dd = New SSamePointPair(Me, horzIdx, vertIdx)
+                dd.vertIdxRef = vertIdx
+                dd.horzIdxRef = -vertIdx + _i領域四角数 - _i縦の四角数 + 1
+
+                dd.plateIdx = enumBasketPlateIdx._front
+                dd.plateIdxRef = enumBasketPlateIdx._rightside
+
+                dd.nStep = _i高さ編集四角数 - vertIdx + 1
+
+            ElseIf i45 = area45_下外 Then
+                '背面側のbottom_category._side_line_front 
+
+                '対応する同位置は、on 右下ライン／
+                dd = New SSamePointPair(Me, horzIdx, vertIdx)
+                dd.horzIdxRef = horzIdx
+                dd.vertIdxRef = -horzIdx + _i領域四角数 + _i縦の四角数 + 1
+
+                dd.plateIdx = enumBasketPlateIdx._back
+                dd.plateIdxRef = enumBasketPlateIdx._rightside
+
+                dd.nStep = horzIdx - (_i領域四角数 - _i高さ編集四角数)
+
+            Else
+                Continue For
+            End If
+
+            If dd.horzIdxRef < 1 OrElse _i領域四角数 < dd.horzIdxRef OrElse
+                    dd.vertIdxRef < 1 OrElse _i領域四角数 < dd.vertIdxRef Then
+                dd = Nothing
+                Continue For
+            End If
+
+            dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
+            dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
+            checklist.Add(dd)
+
+            If Not dd.isOK Then
+                updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
+                ret = False
+            End If
+        Next
+
+        Return ret
+    End Function
+
+
+
 
 End Class

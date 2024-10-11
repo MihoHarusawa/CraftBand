@@ -294,7 +294,7 @@ Public Class ctrEditUpDown
 
     Private Function getIndexPosition(ByVal idx As Integer) As String
         If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing AndAlso _clsSquare45Bottom.Is底位置表示 Then
-            Return _clsSquare45Bottom.GetIndexPositionString(idx)
+            Return _clsSquare45Bottom.GetIndexPosition(idx)
         Else
             Return idx.ToString
         End If
@@ -833,17 +833,19 @@ Public Class ctrEditUpDown
 
         'チェック #28
         Function updownチェック(ByRef msg As String) As Boolean
+            _CUpDown.ReSize(True) 'TableをMatrixに反映
             Return _CUpDown.Check(msg)
         End Function
 
         Function updownClone() As clsUpDown
+            _CUpDown.ReSize(True) 'TableをMatrixに反映
             Return _CUpDown.Clone(True)
         End Function
 
         Function updownIsSame(ByVal updown As clsUpDown) As Boolean
+            _CUpDown.ReSize(True) 'TableをMatrixに反映
             Return _CUpDown.IsSame(updown)
         End Function
-
 
     End Class
 

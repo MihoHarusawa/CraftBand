@@ -358,15 +358,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  底,左側面,前面,右側面,背面 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property ModelPlateNames() As String
-            Get
-                Return ResourceManager.GetString("ModelPlateNames", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String
