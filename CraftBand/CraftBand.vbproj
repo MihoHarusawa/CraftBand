@@ -10,8 +10,8 @@
     <Authors>MihoHarusawa</Authors>
     <Title>CraftBandMesh共通ライブラリ</Title>
     <Copyright>Copyright © LaboHarusawa 2022-2024</Copyright>
-    <FileVersion>1.8.7.0</FileVersion>
-    <AssemblyVersion>1.8.7.0</AssemblyVersion>
+    <FileVersion>1.8.8.0</FileVersion>
+    <AssemblyVersion>1.8.8.0</AssemblyVersion>
     <Description>CraftBandMeshシリーズ共通ライブラリ</Description>
   </PropertyGroup>
 

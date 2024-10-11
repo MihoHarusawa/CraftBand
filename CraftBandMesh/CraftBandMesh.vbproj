@@ -13,8 +13,8 @@
     <Copyright>Copyright © LaboHarusawa 2022-2024</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.8.7.0</FileVersion>
-    <AssemblyVersion>1.8.7.0</AssemblyVersion>
+    <FileVersion>1.8.8.0</FileVersion>
+    <AssemblyVersion>1.8.8.0</AssemblyVersion>
     <Description>四角底と楕円底かごのデザインとサイズ計算</Description>
   </PropertyGroup>
 

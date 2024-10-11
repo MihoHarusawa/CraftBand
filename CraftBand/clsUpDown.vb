@@ -272,9 +272,9 @@ Public Class clsUpDown
         End If
         If table_to_matrix() Then
             Dim save(,) As Boolean = DirectCast(_Matrix.Clone(), Boolean(,))
-            For y As Integer = 1 To VerticalCount
+            For y As Integer = 1 To VerticalCount - trim_y
                 Dim ys As Integer = y + trim_y
-                For x As Integer = 1 To HorizontalCount
+                For x As Integer = 1 To HorizontalCount - trim_x
                     Dim xs As Integer = x + trim_x
                     _Matrix(x, y) = save(xs, ys)
                 Next
