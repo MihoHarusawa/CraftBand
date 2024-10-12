@@ -478,6 +478,11 @@ Public Class clsImageData
 
             ' 画像ファイルを出力ディレクトリにコピー
             For Each textureFile As String In textureFiles
+                If Not IO.File.Exists(textureFile) Then
+                    '画像ファイル'{0}'が生成されていません。。
+                    _LastError = String.Format(My.Resources.ErrNoImageFile, IO.Path.GetFileNameWithoutExtension(textureFile))
+                    Return False
+                End If
                 IO.File.Copy(textureFile, IO.Path.Combine(outputFolder, IO.Path.GetFileName(textureFile)), True)
             Next
 

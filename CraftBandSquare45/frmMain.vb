@@ -1,5 +1,6 @@
 ﻿
 Imports System.IO
+Imports System.Windows
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
@@ -1431,13 +1432,18 @@ Public Class frmMain
 #Region "ひも上下"
 
     Sub Showひも上下(ByVal works As clsDataTables)
+        Dim ret As Boolean =
         editUpDown.SetSquare45Basics(_clsCalcSquare45.p_i横の四角数,
                                     _clsCalcSquare45.p_i縦の四角数,
-                                    _clsCalcSquare45.p_i高さの切上四角数)
+                                    _clsCalcSquare45.p_i高さの切上四角数) AndAlso
         editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
 
         editUpDown.PanelSize = tpageひも上下.Size
         editUpDown.ShowGrid(works, enumTargetFace.Bottom)
+        If Not ret Then
+            '現在の値で編集することはできません。
+            MessageBox.Show(My.Resources.MsgCannotEdit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
     End Sub
 
     Function Hideひも上下(ByVal works As clsDataTables) As Boolean
@@ -1456,13 +1462,22 @@ Public Class frmMain
     End Sub
 
     Private Sub nud開始高さ_ValueChanged(sender As Object, e As EventArgs) Handles nud開始高さ.ValueChanged
-        editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
+        If _CurrentTabControlName = tpageひも上下.Name Then
+            If Not editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked) Then
+                '現在の値で編集することはできません。
+                MessageBox.Show(My.Resources.MsgCannotEdit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        End If
     End Sub
 
     Private Sub chk1回のみ_Click(sender As Object, e As EventArgs) Handles chk1回のみ.CheckedChanged
-        editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
+        If _CurrentTabControlName = tpageひも上下.Name Then
+            If Not editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked) Then
+                '現在の値で編集することはできません。
+                MessageBox.Show(My.Resources.MsgCannotEdit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        End If
     End Sub
-
 
     Private Sub btn合わせる_Click(sender As Object, e As EventArgs) Handles btn合わせる.Click
         Dim chkPrv As Boolean = chk1回のみ.Checked

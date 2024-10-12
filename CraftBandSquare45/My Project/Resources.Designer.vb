@@ -358,6 +358,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  現在の値で編集することはできません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgCannotEdit() As String
+            Get
+                Return ResourceManager.GetString("MsgCannotEdit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String

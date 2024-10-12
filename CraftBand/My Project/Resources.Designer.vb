@@ -589,6 +589,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  画像ファイル&apos;{0}&apos;が生成されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrNoImageFile() As String
+            Get
+                Return ResourceManager.GetString("ErrNoImageFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  起動に必要なパラメータがありません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrNoInitializeParameters() As String
@@ -625,6 +634,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  全{0}点中 {1}点に不整合があります。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrrSquare45BottomBad() As String
+            Get
+                Return ResourceManager.GetString("ErrrSquare45BottomBad", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  既存の{0}&lt;{1}&gt;と同じにはできません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrSameName() As String
@@ -639,6 +657,33 @@ Namespace My.Resources
         Friend ReadOnly Property ErrSaveMasterTableFile() As String
             Get
                 Return ResourceManager.GetString("ErrSaveMasterTableFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  チェック対象が正しく設定されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrSquare45BottomNoTarget() As String
+            Get
+                Return ResourceManager.GetString("ErrSquare45BottomNoTarget", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  チェック対象の側面辺が見つかりませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrSquare45BottomNotFound() As String
+            Get
+                Return ResourceManager.GetString("ErrSquare45BottomNotFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  開始高さがゼロのため編集対象の側面辺はありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrSquare45BottomZeroHeight() As String
+            Get
+                Return ResourceManager.GetString("ErrSquare45BottomZeroHeight", resourceCulture)
             End Get
         End Property
         
@@ -1021,6 +1066,15 @@ Namespace My.Resources
         Friend ReadOnly Property MsgObjOutputSelect() As String
             Get
                 Return ResourceManager.GetString("MsgObjOutputSelect", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  側面辺 {0}点の対応を確認しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgSquare45BottomChecked() As String
+            Get
+                Return ResourceManager.GetString("MsgSquare45BottomChecked", resourceCulture)
             End Get
         End Property
         

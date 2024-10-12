@@ -238,4 +238,7 @@
   <data name="ModelDiffHeight" xml:space="preserve">
     <value>側面の高さが異なるため直方体になりません。</value>
   </data>
+  <data name="MsgCannotEdit" xml:space="preserve">
+    <value>現在の値で編集することはできません。</value>
+  </data>
 </root>

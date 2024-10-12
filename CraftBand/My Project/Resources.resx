@@ -623,4 +623,28 @@
     <value>底,左側面,前面,右側面,背面</value>
     <comment>clsImageData</comment>
   </data>
+  <data name="ErrNoImageFile" xml:space="preserve">
+    <value>画像ファイル'{0}'が生成されていません。</value>
+    <comment>clsImageData</comment>
+  </data>
+  <data name="ErrSquare45BottomNoTarget" xml:space="preserve">
+    <value>チェック対象が正しく設定されていません。</value>
+    <comment>clsSquare45Bottom</comment>
+  </data>
+  <data name="ErrSquare45BottomZeroHeight" xml:space="preserve">
+    <value>開始高さがゼロのため編集対象の側面辺はありません。</value>
+    <comment>clsSquare45Bottom</comment>
+  </data>
+  <data name="ErrrSquare45BottomBad" xml:space="preserve">
+    <value>全{0}点中 {1}点に不整合があります。</value>
+    <comment>ctrSquare45Bottom</comment>
+  </data>
+  <data name="ErrSquare45BottomNotFound" xml:space="preserve">
+    <value>チェック対象の側面辺が見つかりませんでした。</value>
+    <comment>ctrSquare45Bottom</comment>
+  </data>
+  <data name="MsgSquare45BottomChecked" xml:space="preserve">
+    <value>側面辺 {0}点の対応を確認しました。</value>
+    <comment>ctrSquare45Bottom</comment>
+  </data>
 </root>

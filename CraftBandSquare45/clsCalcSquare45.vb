@@ -1094,14 +1094,15 @@ Class clsCalcSquare45
 
         Dim square45bottom As New clsSquare45Bottom(_i横の四角数, _i縦の四角数, p_i高さの切上四角数)
         '開始高さ
-        square45bottom.SetEditHeight(takasa, True)
+        If Not square45bottom.SetEditHeight(takasa, True) Then
+            Return Nothing
+        End If
         '生成領域のサイズ
         Dim areasize As Integer = _i横の四角数 + _i縦の四角数 + takasa * 2
         square45bottom.SetEditCount(areasize, areasize)
         If Not square45bottom.Is底位置表示 Then
             Return Nothing
         End If
-
 
         Return square45bottom.FitSizeUpDown(yoko, sideup, botm)
     End Function

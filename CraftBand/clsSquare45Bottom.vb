@@ -1,8 +1,5 @@
-﻿Imports System.Diagnostics.Metrics
-Imports System.Drawing
-Imports System.Windows.Forms
+﻿Imports System.Drawing
 Imports CraftBand.clsImageData
-Imports CraftBand.ctrEditUpDown
 
 Public Class clsSquare45Bottom
 
@@ -15,7 +12,7 @@ Public Class clsSquare45Bottom
     Dim _is底位置表示 As Boolean = False 'IsValidかつサイズ一致時
 
     'メイン画面コントロール指定
-    Dim _i高さ編集四角数 As Integer '開始高さ,領域サイズ要因
+    Dim _i高さ編集四角数 As Integer '開始高さ,領域サイズ要因,マイナス時は底編集対象外
     Dim _EditHorizontal As Integer = 0  '
     Dim _EditVertical As Integer = 0
     Dim _IsOnce As Boolean = 0
@@ -67,33 +64,73 @@ Public Class clsSquare45Bottom
     '設定値の状態
     Private Function calcBasicCount() As Boolean
         _i領域四角数 = _i横の四角数 + _i縦の四角数 + 2 * _i高さ編集四角数
+        If _i横の四角数 < 0 OrElse _i縦の四角数 < 0 OrElse _i高さ切上四角数 < 0 Then
+            _IsValid = False
+            Return False
+        End If
+        _IsValid = True
 
-        If 0 < _i横の四角数 AndAlso 0 < _i縦の四角数 AndAlso 0 <= _i高さ切上四角数 AndAlso
-                0 <= _i高さ編集四角数 AndAlso 0 < _EditHorizontal AndAlso 0 < _EditVertical Then
-            _IsValid = True
-            _is底位置表示 = _IsOnce AndAlso (_EditHorizontal = _EditVertical) AndAlso (_EditHorizontal = _i領域四角数)
+        If 0 < _i横の四角数 AndAlso 0 < _i縦の四角数 AndAlso
+                _IsOnce AndAlso
+                0 <= _i高さ編集四角数 AndAlso
+                0 < _EditHorizontal AndAlso 0 < _EditVertical AndAlso
+                (_EditHorizontal = _EditVertical) AndAlso
+                (_EditHorizontal = _i領域四角数) AndAlso
+                _i領域四角数 < clsUpDown.cMaxUpdownColumns Then
+            _is底位置表示 = True
         Else
             _is底位置表示 = False
-            _IsValid = False
         End If
 
         Return _IsValid
     End Function
 
-    '
+    '範囲内の値である　※底位置表示に使う前提
+    Private Function inRange(ByVal idx As Integer) As Boolean
+        Return 1 <= idx AndAlso idx <= _i領域四角数
+    End Function
+
+    '-2="-B",-1="-A",0="0",1="A",2="B",3="C"...
+    Private Function alfaString(ByVal idx As Integer) As String
+        Dim sign As String
+        Dim number As Integer
+        If idx < 0 Then
+            sign = "-"
+            number = -idx
+        ElseIf 0 < idx Then
+            sign = ""
+            number = idx
+        Else
+            Return "0"
+        End If
+
+        Dim str As String = ""
+        While 0 < number
+            Dim modulo As Integer = (number - 1) Mod 26
+            str = Chr(Asc("A") + modulo) & str
+            number = (number - 1) \ 26
+        End While
+
+        Return sign + str
+    End Function
+
+
     '1～高さ(縦+横)高さ →-C,-B,-A .. -3, -2, -1, 0, 0, 0, 1, 2, 3 ..A,B,C.
     Function GetIndexPosition(ByVal idx As Integer) As String
         If _is底位置表示 Then
-            'idx = 1～I水平領域四角数
+            If Not inRange(idx) Then
+                Return String.Empty
+            End If
+
+            '両側高さ編集四角数
             If idx <= _i高さ編集四角数 Then
-                Return Chr(Asc("A") + (_i高さ編集四角数 - idx))
+                Return alfaString(idx - _i高さ編集四角数 - 1)
             ElseIf (_i領域四角数 - _i高さ編集四角数) < idx Then
-                Return "-" & Chr(Asc("A") + (_i高さ編集四角数 - _i領域四角数 + idx - 1))
+                Return alfaString(_i領域四角数 - _i高さ編集四角数 - idx + 1)
             End If
 
             '底の中
             Dim ib As Integer = idx - _i高さ編集四角数
-
             Dim smalls As Integer
             Dim coms As Integer
             If _i縦の四角数 < _i横の四角数 Then
@@ -420,6 +457,9 @@ Public Class clsSquare45Bottom
         Dim updown As New clsUpDown(clsUpDown.enumTargetFace.Bottom)
         updown.HorizontalCount = _i領域四角数
         updown.VerticalCount = _i領域四角数
+        If Not updown.IsValid(False) Then
+            Return Nothing
+        End If
 
         If i垂直に < 0 OrElse i底に < 0 OrElse (i垂直に = 0 And i底に = 0) Then
             If Not fitSizeZero(updown, is横の辺) Then
@@ -650,12 +690,14 @@ Public Class clsSquare45Bottom
     Function CheckSideLine(ByRef msg As String, ByRef updown As clsUpDown) As Boolean
         If updown Is Nothing OrElse updown.HorizontalCount <> _i領域四角数 OrElse updown.VerticalCount <> _i領域四角数 OrElse
             Not IsValid Then
-            msg = "チェック対象が正しく設定されていません。"
+            '"チェック対象が正しく設定されていません。"
+            msg = My.Resources.ErrSquare45BottomNoTarget
             updown = Nothing
             Return False
         End If
         If _i高さ編集四角数 = 0 Then
-            msg = "開始高さがゼロのため編集対象の側面辺はありません。"
+            '開始高さがゼロのため編集対象の側面辺はありません。
+            msg = My.Resources.ErrSquare45BottomZeroHeight
             updown = Nothing
             Return True
         End If
@@ -672,12 +714,15 @@ Public Class clsSquare45Bottom
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "updown After{0}{1}", vbCrLf, updown.ToString)
 
         If checklist.Count = 0 Then
-            msg = "チェック対象の側面辺はありませんでした。"
+            '"チェック対象の側面辺が見つかりませんでした。"
+            msg = My.Resources.ErrSquare45BottomNotFound
             updown = Nothing
+            ret = False 'あるはずなのでこれもエラー
 
         ElseIf 0 < checklist.CountNG Then
             Dim sb As New System.Text.StringBuilder
-            sb.AppendFormat("全{0}点中 {1}点に不整合があります。", checklist.Count, checklist.CountNG).AppendLine()
+            '"全{0}点中 {1}点に不整合があります。"
+            sb.AppendFormat(My.Resources.ErrrSquare45BottomBad, checklist.Count, checklist.CountNG).AppendLine()
             For Each sp As SSamePointPair In checklist
                 If Not sp.isOK Then
                     sb.AppendLine(sp.ToString)
@@ -686,7 +731,8 @@ Public Class clsSquare45Bottom
             msg = sb.ToString
 
         Else
-            msg = String.Format("側面辺 {0}点の対応を確認しました。", checklist.Count)
+            '"側面辺 {0}点の対応を確認しました。"
+            msg = String.Format(My.Resources.MsgSquare45BottomChecked, checklist.Count)
             updown = Nothing
 
         End If
@@ -700,7 +746,7 @@ Public Class clsSquare45Bottom
         For horzIdx As Integer = 1 To _i領域四角数
             '左下ライン＼
             Dim vertIdx As Integer = horzIdx + _i横の四角数
-            If vertIdx < 1 OrElse _i領域四角数 < vertIdx Then
+            If Not inRange(vertIdx) Then
                 Continue For
             End If
             Dim dd As SSamePointPair
@@ -736,8 +782,7 @@ Public Class clsSquare45Bottom
                 Continue For
             End If
 
-            If dd.horzIdxRef < 1 OrElse _i領域四角数 < dd.horzIdxRef OrElse
-                    dd.vertIdxRef < 1 OrElse _i領域四角数 < dd.vertIdxRef Then
+            If Not inRange(dd.horzIdxRef) OrElse Not inRange(dd.vertIdxRef) Then
                 dd = Nothing
                 Continue For
             End If
@@ -762,7 +807,7 @@ Public Class clsSquare45Bottom
         For horzIdx As Integer = 1 To _i領域四角数
             '右上ライン＼
             Dim vertIdx As Integer = horzIdx - _i横の四角数
-            If vertIdx < 1 OrElse _i領域四角数 < vertIdx Then
+            If Not inRange(vertIdx) Then
                 Continue For
             End If
             Dim dd As SSamePointPair
@@ -798,8 +843,7 @@ Public Class clsSquare45Bottom
                 Continue For
             End If
 
-            If dd.horzIdxRef < 1 OrElse _i領域四角数 < dd.horzIdxRef OrElse
-                    dd.vertIdxRef < 1 OrElse _i領域四角数 < dd.vertIdxRef Then
+            If Not inRange(dd.horzIdxRef) OrElse Not inRange(dd.vertIdxRef) Then
                 dd = Nothing
                 Continue For
             End If
