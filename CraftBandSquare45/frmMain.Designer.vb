@@ -1608,12 +1608,12 @@ Partial Class frmMain
         ' 
         ' expand横ひも
         ' 
-        expand横ひも.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        expand横ひも.AutoSize = True
         expand横ひも.AutoSizeMode = AutoSizeMode.GrowAndShrink
         expand横ひも.Location = New Point(-3, -3)
         expand横ひも.Name = "expand横ひも"
         expand横ひも.PanelSize = New Size(840, 413)
-        expand横ひも.Size = New Size(843, 413)
+        expand横ひも.Size = New Size(846, 419)
         expand横ひも.TabIndex = 0
         ' 
         ' tpage縦ひも
@@ -1629,12 +1629,12 @@ Partial Class frmMain
         ' 
         ' expand縦ひも
         ' 
-        expand縦ひも.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        expand縦ひも.AutoSize = True
         expand縦ひも.AutoSizeMode = AutoSizeMode.GrowAndShrink
         expand縦ひも.Location = New Point(-3, -3)
         expand縦ひも.Name = "expand縦ひも"
         expand縦ひも.PanelSize = New Size(840, 413)
-        expand縦ひも.Size = New Size(843, 416)
+        expand縦ひも.Size = New Size(846, 419)
         expand縦ひも.TabIndex = 0
         ' 
         ' tpageプレビュー

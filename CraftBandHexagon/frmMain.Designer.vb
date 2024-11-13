@@ -2147,12 +2147,12 @@ Partial Class frmMain
         ' 
         ' editInsertBand
         ' 
-        editInsertBand.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editInsertBand.AutoSize = True
         editInsertBand.AutoSizeMode = AutoSizeMode.GrowAndShrink
         editInsertBand.Location = New Point(-3, -3)
         editInsertBand.Name = "editInsertBand"
         editInsertBand.PanelSize = New Size(840, 413)
-        editInsertBand.Size = New Size(920, 451)
+        editInsertBand.Size = New Size(846, 419)
         editInsertBand.TabIndex = 0
         ' 
         ' tpageひも上下
@@ -2332,12 +2332,12 @@ Partial Class frmMain
         ' 
         ' expand斜め120度
         ' 
-        expand斜め120度.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        expand斜め120度.AutoSize = True
         expand斜め120度.AutoSizeMode = AutoSizeMode.GrowAndShrink
         expand斜め120度.Location = New Point(-3, -3)
         expand斜め120度.Name = "expand斜め120度"
         expand斜め120度.PanelSize = New Size(840, 413)
-        expand斜め120度.Size = New Size(920, 451)
+        expand斜め120度.Size = New Size(846, 419)
         expand斜め120度.TabIndex = 1
         ' 
         ' tpage横ひも
@@ -2353,12 +2353,12 @@ Partial Class frmMain
         ' 
         ' expand横ひも
         ' 
-        expand横ひも.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        expand横ひも.AutoSize = True
         expand横ひも.AutoSizeMode = AutoSizeMode.GrowAndShrink
         expand横ひも.Location = New Point(-3, -3)
         expand横ひも.Name = "expand横ひも"
         expand横ひも.PanelSize = New Size(840, 413)
-        expand横ひも.Size = New Size(920, 451)
+        expand横ひも.Size = New Size(846, 419)
         expand横ひも.TabIndex = 1
         ' 
         ' tpage斜め60度
@@ -2374,12 +2374,12 @@ Partial Class frmMain
         ' 
         ' expand斜め60度
         ' 
-        expand斜め60度.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        expand斜め60度.AutoSize = True
         expand斜め60度.AutoSizeMode = AutoSizeMode.GrowAndShrink
         expand斜め60度.Location = New Point(-3, -3)
         expand斜め60度.Name = "expand斜め60度"
         expand斜め60度.PanelSize = New Size(840, 413)
-        expand斜め60度.Size = New Size(920, 451)
+        expand斜め60度.Size = New Size(846, 419)
         expand斜め60度.TabIndex = 10
         ' 
         ' BindingSource差しひも
