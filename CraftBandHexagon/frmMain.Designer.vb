@@ -1072,7 +1072,7 @@ Partial Class frmMain
         txtメモ.Location = New Point(22, 144)
         txtメモ.Multiline = True
         txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 285)
+        txtメモ.Size = New Size(866, 285)
         txtメモ.TabIndex = 5
         ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
         ' 
@@ -1093,7 +1093,7 @@ Partial Class frmMain
         txtタイトル.Location = New Point(126, 14)
         txtタイトル.Multiline = True
         txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 49)
+        txtタイトル.Size = New Size(762, 49)
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
@@ -1103,7 +1103,7 @@ Partial Class frmMain
         txt作成者.Location = New Point(126, 78)
         txt作成者.Multiline = True
         txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 49)
+        txt作成者.Size = New Size(762, 49)
         txt作成者.TabIndex = 3
         ToolTip1.SetToolTip(txt作成者, "作成者情報")
         ' 
