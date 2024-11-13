@@ -1,12 +1,8 @@
-﻿Imports System.Drawing.Imaging
-Imports System.Reflection.Metadata
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandHexagon.clsCalcHexagon
 Imports CraftBandHexagon.clsCalcHexagon.CHex
 Imports CraftBandHexagon.clsCalcHexagon.CHexLine
 

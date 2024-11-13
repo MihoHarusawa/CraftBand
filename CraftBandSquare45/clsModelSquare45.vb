@@ -435,13 +435,14 @@ Public Class clsModelSquare45
         'ひも上下の高さ・1回区分
         Dim updown_takasa As Integer = _calc._Data.p_row底_縦横.Value("f_iひも上下の高さ数")
         Dim pidx As enumBasketPlateIdx
+        Dim dAddEnd As Double = _calc.p_dひも幅の一辺 '#80 底をフルに描画
         If _calc._Data.p_row底_縦横.Value("f_bひも上下1回区分") Then
             '* 1回のみの適用
 
             '底位置に合わせる
             pidx = enumBasketPlateIdx._bottom
             Dim bottom As New clsUpDown(updown)
-            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             If bottom.TrimTopLeft(updown_takasa, updown_takasa) Then
                 _data各面(pidx).FromClsUpDown(bottom)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
@@ -455,7 +456,7 @@ Public Class clsModelSquare45
             '左側面: 底の左下、縦×高さ
             pidx = enumBasketPlateIdx._leftside
             Dim leftside As New clsUpDown(updown)
-            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             If leftside.TrimTopLeft(0, _calc.p_i横の四角数 + updown_takasa) Then
                 _data各面(pidx).FromClsUpDown(leftside)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
@@ -470,7 +471,7 @@ Public Class clsModelSquare45
             Dim front As New clsUpDown(updown)
             _data各面(pidx).FromClsUpDown(front)
             _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             '(高さの四角-updown高さ)点から開始
             _dxdyStart(pidx).dx = _calc.p_i高さの切上四角数 - updown_takasa
             _dxdyStart(pidx).dy = _calc.p_i高さの切上四角数 - updown_takasa
@@ -478,7 +479,7 @@ Public Class clsModelSquare45
             '右側面: 底の右上、縦×高さ
             pidx = enumBasketPlateIdx._rightside
             Dim rightside As New clsUpDown(updown)
-            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             If rightside.TrimTopLeft(_calc.p_i横の四角数 + updown_takasa, 0) Then
                 _data各面(pidx).FromClsUpDown(rightside)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
@@ -491,7 +492,7 @@ Public Class clsModelSquare45
             '背面: 底の右下、横×高さ
             pidx = enumBasketPlateIdx._back
             Dim back As New clsUpDown(updown)
-            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             If back.TrimTopLeft(_calc.p_i縦の四角数 + updown_takasa, _calc.p_i縦の四角数 + updown_takasa) Then
                 _data各面(pidx).FromClsUpDown(back)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
@@ -510,35 +511,35 @@ Public Class clsModelSquare45
             updown.Shift(updown_takasa, updown_takasa)
             _data各面(enumBasketPlateIdx._bottom).FromClsUpDown(updown)
             _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '左側面: 底の左下、縦×高さ
             Dim leftside As New clsUpDown(updown)
             leftside.Shift(-_calc.p_i高さの切上四角数, _calc.p_i横の四角数)
             _data各面(enumBasketPlateIdx._leftside).FromClsUpDown(leftside)
             _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '前面: 底の左上、横×高さ
             Dim front As New clsUpDown(updown)
             front.Shift(-_calc.p_i高さの切上四角数, -_calc.p_i高さの切上四角数)
             _data各面(enumBasketPlateIdx._front).FromClsUpDown(front)
             _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '右側面: 底の右上、縦×高さ
             Dim rightside As New clsUpDown(updown)
             rightside.Shift(_calc.p_i横の四角数, -_calc.p_i高さの切上四角数)
             _data各面(enumBasketPlateIdx._rightside).FromClsUpDown(rightside)
             _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '背面: 底の右下、横×高さ
             Dim back As New clsUpDown(updown)
             back.Shift(_calc.p_i縦の四角数, _calc.p_i縦の四角数)
             _data各面(enumBasketPlateIdx._back).FromClsUpDown(back)
             _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-            _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_dひも長加算") = 0 '#80
+            _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
         End If
         Return True
@@ -603,6 +604,24 @@ Public Class clsModelSquare45
         For pidx As Integer = 0 To cBasketPlateCount - 1
             _data各面(pidx).ResetStartPoint()
             _path各面画像(pidx) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(pidx), CImageDraw.cImageClipFileExtention))
+
+            'Debug用
+            If clsLog.LogLevel.Detail <= g_clsLog.Level Then
+                If Not String.IsNullOrWhiteSpace(MyBase.FilePath) Then
+                    Dim fpath As String = IO.Path.GetFileNameWithoutExtension(MyBase.FilePath) & "-" & _PlateNames(pidx)
+                    fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
+                    fpath = IO.Path.ChangeExtension(fpath, IO.Path.GetExtension(MyBase.FilePath))
+                    Try
+                        If _data各面(pidx).Save(fpath) Then
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFile={0}", fpath)
+                        Else
+                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFileError={0}", _data各面(pidx).LastError)
+                        End If
+                    Catch ex As Exception
+                        g_clsLog.LogException(ex, fpath)
+                    End Try
+                End If
+            End If
 
             Dim calcTmp As New clsCalcSquare45(_data各面(pidx), _calc._frmMain)
             calcTmp.p_sBottomPngFilePath(True) = _path各面画像(pidx) 'あれば削除
