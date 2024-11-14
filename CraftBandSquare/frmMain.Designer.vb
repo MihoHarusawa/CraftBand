@@ -2181,10 +2181,8 @@ Partial Class frmMain
         grp3D.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         grp3D.Controls.Add(radファイル)
         grp3D.Controls.Add(radビューア)
-        grp3D.Location = New Point(248, 267)
-        grp3D.Margin = New Padding(3, 2, 3, 2)
+        grp3D.Location = New Point(248, 266)
         grp3D.Name = "grp3D"
-        grp3D.Padding = New Padding(3, 2, 3, 2)
         grp3D.Size = New Size(174, 38)
         grp3D.TabIndex = 5
         grp3D.TabStop = False
