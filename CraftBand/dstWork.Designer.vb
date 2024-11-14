@@ -41,6 +41,8 @@ Namespace Tables
         
         Private tabletblLaneWidth As tblLaneWidthDataTable
         
+        Private tabletblSaveTemporarily As tblSaveTemporarilyDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -93,6 +95,9 @@ Namespace Tables
                 End If
                 If (Not (ds.Tables("tblLaneWidth")) Is Nothing) Then
                     MyBase.Tables.Add(New tblLaneWidthDataTable(ds.Tables("tblLaneWidth")))
+                End If
+                If (Not (ds.Tables("tblSaveTemporarily")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblSaveTemporarilyDataTable(ds.Tables("tblSaveTemporarily")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -193,6 +198,16 @@ Namespace Tables
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblSaveTemporarily() As tblSaveTemporarilyDataTable
+            Get
+                Return Me.tabletblSaveTemporarily
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
          Global.System.ComponentModel.BrowsableAttribute(true),  _
          Global.System.ComponentModel.DesignerSerializationVisibilityAttribute(Global.System.ComponentModel.DesignerSerializationVisibility.Visible)>  _
         Public Overrides Property SchemaSerializationMode() As Global.System.Data.SchemaSerializationMode
@@ -282,6 +297,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblLaneWidth")) Is Nothing) Then
                     MyBase.Tables.Add(New tblLaneWidthDataTable(ds.Tables("tblLaneWidth")))
                 End If
+                If (Not (ds.Tables("tblSaveTemporarily")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblSaveTemporarilyDataTable(ds.Tables("tblSaveTemporarily")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -362,6 +380,12 @@ Namespace Tables
                     Me.tabletblLaneWidth.InitVars
                 End If
             End If
+            Me.tabletblSaveTemporarily = CType(MyBase.Tables("tblSaveTemporarily"),tblSaveTemporarilyDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblSaveTemporarily) Is Nothing) Then
+                    Me.tabletblSaveTemporarily.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -388,6 +412,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblColorRepeat)
             Me.tabletblLaneWidth = New tblLaneWidthDataTable()
             MyBase.Tables.Add(Me.tabletblLaneWidth)
+            Me.tabletblSaveTemporarily = New tblSaveTemporarilyDataTable()
+            MyBase.Tables.Add(Me.tabletblSaveTemporarily)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -435,6 +461,12 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblLaneWidth() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblSaveTemporarily() As Boolean
             Return false
         End Function
         
@@ -519,6 +551,9 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblLaneWidthRowChangeEventHandler(ByVal sender As Object, ByVal e As tblLaneWidthRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblSaveTemporarilyRowChangeEventHandler(ByVal sender As Object, ByVal e As tblSaveTemporarilyRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -4339,6 +4374,310 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblSaveTemporarilyDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblSaveTemporarilyRow)
+            
+            Private columnIndex As Global.System.Data.DataColumn
+            
+            Private columnTimeString As Global.System.Data.DataColumn
+            
+            Private columnIsFileExist As Global.System.Data.DataColumn
+            
+            Private columnDescription As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblSaveTemporarily"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property IndexColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnIndex
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property TimeStringColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnTimeString
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property IsFileExistColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnIsFileExist
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property DescriptionColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnDescription
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblSaveTemporarilyRow
+                Get
+                    Return CType(Me.Rows(index),tblSaveTemporarilyRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblSaveTemporarilyRowChanging As tblSaveTemporarilyRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblSaveTemporarilyRowChanged As tblSaveTemporarilyRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblSaveTemporarilyRowDeleting As tblSaveTemporarilyRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblSaveTemporarilyRowDeleted As tblSaveTemporarilyRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblSaveTemporarilyRow(ByVal row As tblSaveTemporarilyRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblSaveTemporarilyRow(ByVal Index As Integer, ByVal TimeString As String, ByVal IsFileExist As Boolean, ByVal Description As String) As tblSaveTemporarilyRow
+                Dim rowtblSaveTemporarilyRow As tblSaveTemporarilyRow = CType(Me.NewRow,tblSaveTemporarilyRow)
+                Dim columnValuesArray() As Object = New Object() {Index, TimeString, IsFileExist, Description}
+                rowtblSaveTemporarilyRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblSaveTemporarilyRow)
+                Return rowtblSaveTemporarilyRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function FindByIndex(ByVal Index As Integer) As tblSaveTemporarilyRow
+                Return CType(Me.Rows.Find(New Object() {Index}),tblSaveTemporarilyRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblSaveTemporarilyDataTable = CType(MyBase.Clone,tblSaveTemporarilyDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblSaveTemporarilyDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnIndex = MyBase.Columns("Index")
+                Me.columnTimeString = MyBase.Columns("TimeString")
+                Me.columnIsFileExist = MyBase.Columns("IsFileExist")
+                Me.columnDescription = MyBase.Columns("Description")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnIndex = New Global.System.Data.DataColumn("Index", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnIndex)
+                Me.columnTimeString = New Global.System.Data.DataColumn("TimeString", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnTimeString)
+                Me.columnIsFileExist = New Global.System.Data.DataColumn("IsFileExist", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnIsFileExist)
+                Me.columnDescription = New Global.System.Data.DataColumn("Description", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnDescription)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnIndex}, true))
+                Me.columnIndex.AllowDBNull = false
+                Me.columnIndex.Unique = true
+                Me.columnIndex.DefaultValue = CType(0,Integer)
+                Me.columnTimeString.DefaultValue = CType("",String)
+                Me.columnIsFileExist.DefaultValue = CType(false,Boolean)
+                Me.columnDescription.DefaultValue = CType("",String)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblSaveTemporarilyRow() As tblSaveTemporarilyRow
+                Return CType(Me.NewRow,tblSaveTemporarilyRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblSaveTemporarilyRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblSaveTemporarilyRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblSaveTemporarilyRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblSaveTemporarilyRowChanged(Me, New tblSaveTemporarilyRowChangeEvent(CType(e.Row,tblSaveTemporarilyRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblSaveTemporarilyRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblSaveTemporarilyRowChanging(Me, New tblSaveTemporarilyRowChangeEvent(CType(e.Row,tblSaveTemporarilyRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblSaveTemporarilyRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblSaveTemporarilyRowDeleted(Me, New tblSaveTemporarilyRowChangeEvent(CType(e.Row,tblSaveTemporarilyRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblSaveTemporarilyRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblSaveTemporarilyRowDeleting(Me, New tblSaveTemporarilyRowChangeEvent(CType(e.Row,tblSaveTemporarilyRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblSaveTemporarilyRow(ByVal row As tblSaveTemporarilyRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblSaveTemporarilyDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -7773,6 +8112,114 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblSaveTemporarilyRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblSaveTemporarily As tblSaveTemporarilyDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblSaveTemporarily = CType(Me.Table,tblSaveTemporarilyDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Index() As Integer
+                Get
+                    Return CType(Me(Me.tabletblSaveTemporarily.IndexColumn),Integer)
+                End Get
+                Set
+                    Me(Me.tabletblSaveTemporarily.IndexColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property TimeString() As String
+                Get
+                    If Me.IsTimeStringNull Then
+                        Return String.Empty
+                    Else
+                        Return CType(Me(Me.tabletblSaveTemporarily.TimeStringColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblSaveTemporarily.TimeStringColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property IsFileExist() As Boolean
+                Get
+                    If Me.IsIsFileExistNull Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblSaveTemporarily.IsFileExistColumn),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblSaveTemporarily.IsFileExistColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Description() As String
+                Get
+                    If Me.IsDescriptionNull Then
+                        Return String.Empty
+                    Else
+                        Return CType(Me(Me.tabletblSaveTemporarily.DescriptionColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblSaveTemporarily.DescriptionColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsTimeStringNull() As Boolean
+                Return Me.IsNull(Me.tabletblSaveTemporarily.TimeStringColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetTimeStringNull()
+                Me(Me.tabletblSaveTemporarily.TimeStringColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsIsFileExistNull() As Boolean
+                Return Me.IsNull(Me.tabletblSaveTemporarily.IsFileExistColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetIsFileExistNull()
+                Me(Me.tabletblSaveTemporarily.IsFileExistColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsDescriptionNull() As Boolean
+                Return Me.IsNull(Me.tabletblSaveTemporarily.DescriptionColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetDescriptionNull()
+                Me(Me.tabletblSaveTemporarily.DescriptionColumn) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -8046,6 +8493,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblLaneWidthRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblSaveTemporarilyRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblSaveTemporarilyRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblSaveTemporarilyRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblSaveTemporarilyRow
                 Get
                     Return Me.eventRow
                 End Get

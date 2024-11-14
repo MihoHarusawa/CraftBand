@@ -177,12 +177,22 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblLaneWidth" msprop:Generator_RowClassName="tblLaneWidthRow" msprop:Generator_RowEvHandlerName="tblLaneWidthRowChangeEventHandler" msprop:Generator_RowDeletedName="tblLaneWidthRowDeleted" msprop:Generator_RowDeletingName="tblLaneWidthRowDeleting" msprop:Generator_RowEvArgName="tblLaneWidthRowChangeEvent" msprop:Generator_TablePropName="tblLaneWidth" msprop:Generator_RowChangedName="tblLaneWidthRowChanged" msprop:Generator_UserTableName="tblLaneWidth" msprop:Generator_RowChangingName="tblLaneWidthRowChanging" msprop:Generator_TableClassName="tblLaneWidthDataTable" msprop:Generator_TableVarName="tabletblLaneWidth">
+        <xs:element name="tblLaneWidth" msprop:Generator_RowEvHandlerName="tblLaneWidthRowChangeEventHandler" msprop:Generator_RowDeletedName="tblLaneWidthRowDeleted" msprop:Generator_RowDeletingName="tblLaneWidthRowDeleting" msprop:Generator_RowEvArgName="tblLaneWidthRowChangeEvent" msprop:Generator_TablePropName="tblLaneWidth" msprop:Generator_RowChangedName="tblLaneWidthRowChanged" msprop:Generator_UserTableName="tblLaneWidth" msprop:Generator_RowChangingName="tblLaneWidthRowChanging" msprop:Generator_RowClassName="tblLaneWidthRow" msprop:Generator_TableClassName="tblLaneWidthDataTable" msprop:Generator_TableVarName="tabletblLaneWidth">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="f_i本幅" msprop:Generator_ColumnPropNameInTable="f_i本幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_i本幅" msprop:Generator_UserColumnName="f_i本幅" msprop:Generator_ColumnVarNameInTable="columnf_i本幅" type="xs:short" default="1" minOccurs="0" />
               <xs:element name="f_d等分幅" msprop:Generator_ColumnPropNameInTable="f_d等分幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d等分幅" msprop:Generator_UserColumnName="f_d等分幅" msprop:Generator_ColumnVarNameInTable="columnf_d等分幅" type="xs:double" default="0" minOccurs="0" />
               <xs:element name="f_d変更幅" msprop:Generator_ColumnPropNameInTable="f_d変更幅Column" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="f_d変更幅" msprop:Generator_UserColumnName="f_d変更幅" msprop:Generator_ColumnVarNameInTable="columnf_d変更幅" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblSaveTemporarily" msprop:Generator_RowClassName="tblSaveTemporarilyRow" msprop:Generator_RowEvHandlerName="tblSaveTemporarilyRowChangeEventHandler" msprop:Generator_RowDeletedName="tblSaveTemporarilyRowDeleted" msprop:Generator_RowDeletingName="tblSaveTemporarilyRowDeleting" msprop:Generator_RowEvArgName="tblSaveTemporarilyRowChangeEvent" msprop:Generator_TablePropName="tblSaveTemporarily" msprop:Generator_RowChangedName="tblSaveTemporarilyRowChanged" msprop:Generator_UserTableName="tblSaveTemporarily" msprop:Generator_RowChangingName="tblSaveTemporarilyRowChanging" msprop:Generator_TableClassName="tblSaveTemporarilyDataTable" msprop:Generator_TableVarName="tabletblSaveTemporarily">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Index" msprop:Generator_ColumnPropNameInTable="IndexColumn" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="Index" msprop:Generator_UserColumnName="Index" msprop:Generator_ColumnVarNameInTable="columnIndex" type="xs:int" default="0" />
+              <xs:element name="TimeString" msprop:Generator_ColumnPropNameInTable="TimeStringColumn" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="TimeString" msprop:Generator_UserColumnName="TimeString" msprop:Generator_ColumnVarNameInTable="columnTimeString" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="IsFileExist" msprop:nullValue="0" msprop:Generator_ColumnPropNameInTable="IsFileExistColumn" msprop:Generator_ColumnVarNameInTable="columnIsFileExist" msprop:Generator_UserColumnName="IsFileExist" msprop:Generator_ColumnPropNameInRow="IsFileExist" type="xs:boolean" default="false" minOccurs="0" />
+              <xs:element name="Description" msprop:Generator_ColumnPropNameInTable="DescriptionColumn" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="Description" msprop:Generator_UserColumnName="Description" msprop:Generator_ColumnVarNameInTable="columnDescription" type="xs:string" default="" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -208,6 +218,10 @@
     <xs:unique name="tblEnumPKey" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:tblEnum" />
       <xs:field xpath="mstns:Value" />
+    </xs:unique>
+    <xs:unique name="tblSaveTemporarily_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:tblSaveTemporarily" />
+      <xs:field xpath="mstns:Index" />
     </xs:unique>
   </xs:element>
 </xs:schema>

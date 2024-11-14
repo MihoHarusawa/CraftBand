@@ -114,6 +114,7 @@ Partial Class frmMain
         lbl開始高さ = New Label()
         nud開始高さ = New NumericUpDown()
         chk1回のみ = New CheckBox()
+        btn一時保存 = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -126,6 +127,7 @@ Partial Class frmMain
         ToolStripMenuItemEdit = New ToolStripMenuItem()
         ToolStripMenuItemEditSelectBand = New ToolStripMenuItem()
         ToolStripSeparator4 = New ToolStripSeparator()
+        ToolStripMenuItemEditSaveTemporarily = New ToolStripMenuItem()
         ToolStripMenuItemEditReset = New ToolStripMenuItem()
         ToolStripMenuItemEditDefault = New ToolStripMenuItem()
         ToolStripMenuItemEditCalc = New ToolStripMenuItem()
@@ -275,9 +277,10 @@ Partial Class frmMain
         ' 
         ' nud基本のひも幅
         ' 
-        nud基本のひも幅.Location = New Point(618, 66)
+        nud基本のひも幅.Location = New Point(541, 50)
+        nud基本のひも幅.Margin = New Padding(3, 2, 3, 2)
         nud基本のひも幅.Name = "nud基本のひも幅"
-        nud基本のひも幅.Size = New Size(66, 27)
+        nud基本のひも幅.Size = New Size(58, 23)
         nud基本のひも幅.TabIndex = 14
         nud基本のひも幅.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud基本のひも幅, "何本幅のひもを使うか")
@@ -286,9 +289,9 @@ Partial Class frmMain
         ' lbl基本のひも幅
         ' 
         lbl基本のひも幅.AutoSize = True
-        lbl基本のひも幅.Location = New Point(618, 39)
+        lbl基本のひも幅.Location = New Point(541, 29)
         lbl基本のひも幅.Name = "lbl基本のひも幅"
-        lbl基本のひも幅.Size = New Size(89, 20)
+        lbl基本のひも幅.Size = New Size(72, 15)
         lbl基本のひも幅.TabIndex = 13
         lbl基本のひも幅.Text = "基本のひも幅"
         ToolTip1.SetToolTip(lbl基本のひも幅, "何本幅のひもを使うか")
@@ -296,19 +299,20 @@ Partial Class frmMain
         ' lbl横寸法
         ' 
         lbl横寸法.AutoSize = True
-        lbl横寸法.Location = New Point(250, 39)
+        lbl横寸法.Location = New Point(219, 29)
         lbl横寸法.Name = "lbl横寸法"
-        lbl横寸法.Size = New Size(54, 20)
+        lbl横寸法.Size = New Size(43, 15)
         lbl横寸法.TabIndex = 3
         lbl横寸法.Text = "横寸法"
         ToolTip1.SetToolTip(lbl横寸法, "目標とする横の長さ")
         ' 
         ' nud横寸法
         ' 
-        nud横寸法.Location = New Point(211, 66)
+        nud横寸法.Location = New Point(185, 50)
+        nud横寸法.Margin = New Padding(3, 2, 3, 2)
         nud横寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud横寸法.Name = "nud横寸法"
-        nud横寸法.Size = New Size(116, 27)
+        nud横寸法.Size = New Size(102, 23)
         nud横寸法.TabIndex = 4
         nud横寸法.TextAlign = HorizontalAlignment.Right
         nud横寸法.ThousandsSeparator = True
@@ -316,10 +320,11 @@ Partial Class frmMain
         ' 
         ' nud縦寸法
         ' 
-        nud縦寸法.Location = New Point(333, 66)
+        nud縦寸法.Location = New Point(291, 50)
+        nud縦寸法.Margin = New Padding(3, 2, 3, 2)
         nud縦寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud縦寸法.Name = "nud縦寸法"
-        nud縦寸法.Size = New Size(116, 27)
+        nud縦寸法.Size = New Size(102, 23)
         nud縦寸法.TabIndex = 7
         nud縦寸法.TextAlign = HorizontalAlignment.Right
         nud縦寸法.ThousandsSeparator = True
@@ -328,19 +333,20 @@ Partial Class frmMain
         ' lbl縦寸法
         ' 
         lbl縦寸法.AutoSize = True
-        lbl縦寸法.Location = New Point(372, 39)
+        lbl縦寸法.Location = New Point(326, 29)
         lbl縦寸法.Name = "lbl縦寸法"
-        lbl縦寸法.Size = New Size(54, 20)
+        lbl縦寸法.Size = New Size(43, 15)
         lbl縦寸法.TabIndex = 6
         lbl縦寸法.Text = "縦寸法"
         ToolTip1.SetToolTip(lbl縦寸法, "目標とする縦の長さ")
         ' 
         ' nud高さ寸法
         ' 
-        nud高さ寸法.Location = New Point(455, 66)
+        nud高さ寸法.Location = New Point(398, 50)
+        nud高さ寸法.Margin = New Padding(3, 2, 3, 2)
         nud高さ寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud高さ寸法.Name = "nud高さ寸法"
-        nud高さ寸法.Size = New Size(116, 27)
+        nud高さ寸法.Size = New Size(102, 23)
         nud高さ寸法.TabIndex = 10
         nud高さ寸法.TextAlign = HorizontalAlignment.Right
         nud高さ寸法.ThousandsSeparator = True
@@ -349,9 +355,9 @@ Partial Class frmMain
         ' lbl高さ寸法
         ' 
         lbl高さ寸法.AutoSize = True
-        lbl高さ寸法.Location = New Point(494, 39)
+        lbl高さ寸法.Location = New Point(432, 29)
         lbl高さ寸法.Name = "lbl高さ寸法"
-        lbl高さ寸法.Size = New Size(64, 20)
+        lbl高さ寸法.Size = New Size(51, 15)
         lbl高さ寸法.TabIndex = 9
         lbl高さ寸法.Text = "高さ寸法"
         ToolTip1.SetToolTip(lbl高さ寸法, "目標とする高さ")
@@ -359,9 +365,10 @@ Partial Class frmMain
         ' chk縦の補強ひも
         ' 
         chk縦の補強ひも.AutoSize = True
-        chk縦の補強ひも.Location = New Point(32, 136)
+        chk縦の補強ひも.Location = New Point(28, 102)
+        chk縦の補強ひも.Margin = New Padding(3, 2, 3, 2)
         chk縦の補強ひも.Name = "chk縦の補強ひも"
-        chk縦の補強ひも.Size = New Size(111, 24)
+        chk縦の補強ひも.Size = New Size(91, 19)
         chk縦の補強ひも.TabIndex = 6
         chk縦の補強ひも.Text = "縦の補強ひも"
         ToolTip1.SetToolTip(chk縦の補強ひも, "底の縦側に貼るひもを置く場合はチェックON")
@@ -370,9 +377,10 @@ Partial Class frmMain
         ' chk横の補強ひも
         ' 
         chk横の補強ひも.AutoSize = True
-        chk横の補強ひも.Location = New Point(26, 131)
+        chk横の補強ひも.Location = New Point(23, 98)
+        chk横の補強ひも.Margin = New Padding(3, 2, 3, 2)
         chk横の補強ひも.Name = "chk横の補強ひも"
-        chk横の補強ひも.Size = New Size(111, 24)
+        chk横の補強ひも.Size = New Size(91, 19)
         chk横の補強ひも.TabIndex = 6
         chk横の補強ひも.Text = "横の補強ひも"
         ToolTip1.SetToolTip(chk横の補強ひも, "底の横側に貼るひもを置く場合はチェックON")
@@ -381,10 +389,11 @@ Partial Class frmMain
         ' btn概算
         ' 
         btn概算.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btn概算.Location = New Point(751, 137)
+        btn概算.Location = New Point(657, 103)
+        btn概算.Margin = New Padding(3, 2, 3, 2)
         btn概算.Name = "btn概算"
-        btn概算.Size = New Size(111, 46)
-        btn概算.TabIndex = 21
+        btn概算.Size = New Size(97, 34)
+        btn概算.TabIndex = 22
         btn概算.Text = "概算(&C)"
         ToolTip1.SetToolTip(btn概算, "目標寸法と基本のひも幅から底の縦横と側面値を計算します")
         btn概算.UseVisualStyleBackColor = True
@@ -392,10 +401,11 @@ Partial Class frmMain
         ' btnひもリスト
         ' 
         btnひもリスト.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnひもリスト.Location = New Point(756, 650)
+        btnひもリスト.Location = New Point(662, 488)
+        btnひもリスト.Margin = New Padding(3, 2, 3, 2)
         btnひもリスト.Name = "btnひもリスト"
-        btnひもリスト.Size = New Size(111, 46)
-        btnひもリスト.TabIndex = 56
+        btnひもリスト.Size = New Size(97, 34)
+        btnひもリスト.TabIndex = 57
         btnひもリスト.Text = "ひもリスト(&L)"
         ToolTip1.SetToolTip(btnひもリスト, "入力値に基づきひも幅と長さのリストを表示します")
         btnひもリスト.UseVisualStyleBackColor = True
@@ -404,10 +414,10 @@ Partial Class frmMain
         ' 
         lbl垂直ひも数.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl垂直ひも数.AutoSize = True
-        lbl垂直ひも数.Location = New Point(262, 625)
+        lbl垂直ひも数.Location = New Point(229, 469)
         lbl垂直ひも数.Name = "lbl垂直ひも数"
-        lbl垂直ひも数.Size = New Size(77, 20)
-        lbl垂直ひも数.TabIndex = 26
+        lbl垂直ひも数.Size = New Size(62, 15)
+        lbl垂直ひも数.TabIndex = 27
         lbl垂直ひも数.Text = "垂直ひも数"
         ToolTip1.SetToolTip(lbl垂直ひも数, "垂直にたちあげるひも(長い横ひもと縦ひもの合計)")
         ' 
@@ -415,11 +425,12 @@ Partial Class frmMain
         ' 
         txt垂直ひも数.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt垂直ひも数.BorderStyle = BorderStyle.FixedSingle
-        txt垂直ひも数.Location = New Point(348, 623)
+        txt垂直ひも数.Location = New Point(304, 467)
+        txt垂直ひも数.Margin = New Padding(3, 2, 3, 2)
         txt垂直ひも数.Name = "txt垂直ひも数"
         txt垂直ひも数.ReadOnly = True
-        txt垂直ひも数.Size = New Size(67, 27)
-        txt垂直ひも数.TabIndex = 27
+        txt垂直ひも数.Size = New Size(59, 23)
+        txt垂直ひも数.TabIndex = 28
         txt垂直ひも数.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt垂直ひも数, "垂直にたちあげるひも(長い横ひもと縦ひもの合計")
         ' 
@@ -427,10 +438,11 @@ Partial Class frmMain
         ' 
         nudひも間のすき間.DecimalPlaces = 2
         nudひも間のすき間.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nudひも間のすき間.Location = New Point(573, 45)
+        nudひも間のすき間.Location = New Point(501, 34)
+        nudひも間のすき間.Margin = New Padding(3, 2, 3, 2)
         nudひも間のすき間.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nudひも間のすき間.Name = "nudひも間のすき間"
-        nudひも間のすき間.Size = New Size(68, 27)
+        nudひも間のすき間.Size = New Size(60, 23)
         nudひも間のすき間.TabIndex = 5
         nudひも間のすき間.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nudひも間のすき間, "ひもとひものすき間の寸法")
@@ -438,9 +450,9 @@ Partial Class frmMain
         ' lblひも間のすき間
         ' 
         lblひも間のすき間.AutoSize = True
-        lblひも間のすき間.Location = New Point(447, 47)
+        lblひも間のすき間.Location = New Point(391, 35)
         lblひも間のすき間.Name = "lblひも間のすき間"
-        lblひも間のすき間.Size = New Size(97, 20)
+        lblひも間のすき間.Size = New Size(79, 15)
         lblひも間のすき間.TabIndex = 4
         lblひも間のすき間.Text = "ひも間のすき間"
         ToolTip1.SetToolTip(lblひも間のすき間, "ひもと横ひものすき間の寸法")
@@ -449,11 +461,12 @@ Partial Class frmMain
         ' 
         nudひも長加算.DecimalPlaces = 2
         nudひも長加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nudひも長加算.Location = New Point(573, 131)
+        nudひも長加算.Location = New Point(501, 98)
+        nudひも長加算.Margin = New Padding(3, 2, 3, 2)
         nudひも長加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nudひも長加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
         nudひも長加算.Name = "nudひも長加算"
-        nudひも長加算.Size = New Size(68, 27)
+        nudひも長加算.Size = New Size(60, 23)
         nudひも長加算.TabIndex = 10
         nudひも長加算.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nudひも長加算, "全てのひもの端に加える長さ(両端で2倍を加えます)")
@@ -461,9 +474,9 @@ Partial Class frmMain
         ' lblひも長加算
         ' 
         lblひも長加算.AutoSize = True
-        lblひも長加算.Location = New Point(447, 133)
+        lblひも長加算.Location = New Point(391, 100)
         lblひも長加算.Name = "lblひも長加算"
-        lblひも長加算.Size = New Size(117, 20)
+        lblひも長加算.Size = New Size(94, 15)
         lblひも長加算.TabIndex = 9
         lblひも長加算.Text = "ひも長加算(一端)"
         ToolTip1.SetToolTip(lblひも長加算, "全てのひもの端に加える長さ")
@@ -471,10 +484,11 @@ Partial Class frmMain
         ' btn規定値
         ' 
         btn規定値.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btn規定値.Location = New Point(634, 137)
+        btn規定値.Location = New Point(555, 103)
+        btn規定値.Margin = New Padding(3, 2, 3, 2)
         btn規定値.Name = "btn規定値"
-        btn規定値.Size = New Size(111, 46)
-        btn規定値.TabIndex = 20
+        btn規定値.Size = New Size(97, 34)
+        btn規定値.TabIndex = 21
         btn規定値.Text = "規定値(&D)"
         ToolTip1.SetToolTip(btn規定値, "登録した規定値にセットします")
         btn規定値.UseVisualStyleBackColor = True
@@ -482,10 +496,11 @@ Partial Class frmMain
         ' btnリセット
         ' 
         btnリセット.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnリセット.Location = New Point(517, 137)
+        btnリセット.Location = New Point(452, 103)
+        btnリセット.Margin = New Padding(3, 2, 3, 2)
         btnリセット.Name = "btnリセット"
-        btnリセット.Size = New Size(111, 46)
-        btnリセット.TabIndex = 19
+        btnリセット.Size = New Size(97, 34)
+        btnリセット.TabIndex = 20
         btnリセット.Text = "リセット(&R)"
         ToolTip1.SetToolTip(btnリセット, "入力した値をクリアします")
         btnリセット.UseVisualStyleBackColor = True
@@ -493,97 +508,105 @@ Partial Class frmMain
         ' txt四角ベース_横
         ' 
         txt四角ベース_横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt四角ベース_横.Location = New Point(386, 689)
+        txt四角ベース_横.Location = New Point(338, 517)
+        txt四角ベース_横.Margin = New Padding(3, 2, 3, 2)
         txt四角ベース_横.Name = "txt四角ベース_横"
         txt四角ベース_横.ReadOnly = True
-        txt四角ベース_横.Size = New Size(80, 27)
-        txt四角ベース_横.TabIndex = 45
+        txt四角ベース_横.Size = New Size(70, 23)
+        txt四角ベース_横.TabIndex = 46
         txt四角ベース_横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_横, "四角(ひも幅+すき間)部分の横の長さ")
         ' 
         ' txt四角ベース_縦
         ' 
         txt四角ベース_縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt四角ベース_縦.Location = New Point(472, 689)
+        txt四角ベース_縦.Location = New Point(413, 517)
+        txt四角ベース_縦.Margin = New Padding(3, 2, 3, 2)
         txt四角ベース_縦.Name = "txt四角ベース_縦"
         txt四角ベース_縦.ReadOnly = True
-        txt四角ベース_縦.Size = New Size(80, 27)
-        txt四角ベース_縦.TabIndex = 48
+        txt四角ベース_縦.Size = New Size(70, 23)
+        txt四角ベース_縦.TabIndex = 49
         txt四角ベース_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_縦, "四角(ひも幅+すき間)部分の縦の長さ")
         ' 
         ' txt四角ベース_高さ
         ' 
         txt四角ベース_高さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt四角ベース_高さ.Location = New Point(558, 689)
+        txt四角ベース_高さ.Location = New Point(488, 517)
+        txt四角ベース_高さ.Margin = New Padding(3, 2, 3, 2)
         txt四角ベース_高さ.Name = "txt四角ベース_高さ"
         txt四角ベース_高さ.ReadOnly = True
-        txt四角ベース_高さ.Size = New Size(80, 27)
-        txt四角ベース_高さ.TabIndex = 51
+        txt四角ベース_高さ.Size = New Size(70, 23)
+        txt四角ベース_高さ.TabIndex = 52
         txt四角ベース_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_高さ, "四角(ひも幅+すき間)部分の高さ")
         ' 
         ' txt縁厚さプラス_横
         ' 
         txt縁厚さプラス_横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt縁厚さプラス_横.Location = New Point(386, 720)
+        txt縁厚さプラス_横.Location = New Point(338, 540)
+        txt縁厚さプラス_横.Margin = New Padding(3, 2, 3, 2)
         txt縁厚さプラス_横.Name = "txt縁厚さプラス_横"
         txt縁厚さプラス_横.ReadOnly = True
-        txt縁厚さプラス_横.Size = New Size(80, 27)
-        txt縁厚さプラス_横.TabIndex = 46
+        txt縁厚さプラス_横.Size = New Size(70, 23)
+        txt縁厚さプラス_横.TabIndex = 47
         txt縁厚さプラス_横.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_横, "四角ベースの長さに厚さを加えた横長")
         ' 
         ' txt縁厚さプラス_縦
         ' 
         txt縁厚さプラス_縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt縁厚さプラス_縦.Location = New Point(472, 720)
+        txt縁厚さプラス_縦.Location = New Point(413, 540)
+        txt縁厚さプラス_縦.Margin = New Padding(3, 2, 3, 2)
         txt縁厚さプラス_縦.Name = "txt縁厚さプラス_縦"
         txt縁厚さプラス_縦.ReadOnly = True
-        txt縁厚さプラス_縦.Size = New Size(80, 27)
-        txt縁厚さプラス_縦.TabIndex = 49
+        txt縁厚さプラス_縦.Size = New Size(70, 23)
+        txt縁厚さプラス_縦.TabIndex = 50
         txt縁厚さプラス_縦.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_縦, "四角ベースの長さに厚さを加えた縦長")
         ' 
         ' txt縁厚さプラス_高さ
         ' 
         txt縁厚さプラス_高さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt縁厚さプラス_高さ.Location = New Point(558, 720)
+        txt縁厚さプラス_高さ.Location = New Point(488, 540)
+        txt縁厚さプラス_高さ.Margin = New Padding(3, 2, 3, 2)
         txt縁厚さプラス_高さ.Name = "txt縁厚さプラス_高さ"
         txt縁厚さプラス_高さ.ReadOnly = True
-        txt縁厚さプラス_高さ.Size = New Size(80, 27)
-        txt縁厚さプラス_高さ.TabIndex = 52
+        txt縁厚さプラス_高さ.Size = New Size(70, 23)
+        txt縁厚さプラス_高さ.TabIndex = 53
         txt縁厚さプラス_高さ.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_高さ, "四角ベースの高さに底厚さと縁を加えた高さ")
         ' 
         ' txt四角ベース_周
         ' 
         txt四角ベース_周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt四角ベース_周.Location = New Point(644, 689)
+        txt四角ベース_周.Location = New Point(564, 517)
+        txt四角ベース_周.Margin = New Padding(3, 2, 3, 2)
         txt四角ベース_周.Name = "txt四角ベース_周"
         txt四角ベース_周.ReadOnly = True
-        txt四角ベース_周.Size = New Size(80, 27)
-        txt四角ベース_周.TabIndex = 54
+        txt四角ベース_周.Size = New Size(70, 23)
+        txt四角ベース_周.TabIndex = 55
         txt四角ベース_周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt四角ベース_周, "四角(ひも幅+すき間)部分の周の長さ")
         ' 
         ' txt縁厚さプラス_周
         ' 
         txt縁厚さプラス_周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt縁厚さプラス_周.Location = New Point(644, 720)
+        txt縁厚さプラス_周.Location = New Point(564, 540)
+        txt縁厚さプラス_周.Margin = New Padding(3, 2, 3, 2)
         txt縁厚さプラス_周.Name = "txt縁厚さプラス_周"
         txt縁厚さプラス_周.ReadOnly = True
-        txt縁厚さプラス_周.Size = New Size(80, 27)
-        txt縁厚さプラス_周.TabIndex = 55
+        txt縁厚さプラス_周.Size = New Size(70, 23)
+        txt縁厚さプラス_周.TabIndex = 56
         txt縁厚さプラス_周.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縁厚さプラス_周, "四角ベースの周に厚さを加えた外周")
         ' 
         ' lbl横ひも
         ' 
         lbl横ひも.AutoSize = True
-        lbl横ひも.Location = New Point(26, 87)
+        lbl横ひも.Location = New Point(23, 65)
         lbl横ひも.Name = "lbl横ひも"
-        lbl横ひも.Size = New Size(47, 20)
+        lbl横ひも.Size = New Size(38, 15)
         lbl横ひも.TabIndex = 3
         lbl横ひも.Text = "横ひも"
         ToolTip1.SetToolTip(lbl横ひも, "横に置かれるひもの本数")
@@ -592,10 +615,11 @@ Partial Class frmMain
         ' 
         nudひも長係数.DecimalPlaces = 2
         nudひも長係数.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nudひも長係数.Location = New Point(573, 88)
+        nudひも長係数.Location = New Point(501, 66)
+        nudひも長係数.Margin = New Padding(3, 2, 3, 2)
         nudひも長係数.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         nudひも長係数.Name = "nudひも長係数"
-        nudひも長係数.Size = New Size(68, 27)
+        nudひも長係数.Size = New Size(60, 23)
         nudひも長係数.TabIndex = 8
         nudひも長係数.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nudひも長係数, "すべてのひもの計算値に乗算する値")
@@ -606,10 +630,11 @@ Partial Class frmMain
         nud高さの四角数.DecimalPlaces = 1
         nud高さの四角数.Increment = New Decimal(New Integer() {5, 0, 0, 65536})
         nud高さの四角数.InterceptArrowKeys = False
-        nud高さの四角数.Location = New Point(188, 291)
+        nud高さの四角数.Location = New Point(164, 218)
+        nud高さの四角数.Margin = New Padding(3, 2, 3, 2)
         nud高さの四角数.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         nud高さの四角数.Name = "nud高さの四角数"
-        nud高さの四角数.Size = New Size(68, 27)
+        nud高さの四角数.Size = New Size(60, 23)
         nud高さの四角数.TabIndex = 2
         nud高さの四角数.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nud高さの四角数, "折ってたちあげ側面となる四角(対角線)数")
@@ -617,9 +642,9 @@ Partial Class frmMain
         ' lbl高さの四角数
         ' 
         lbl高さの四角数.AutoSize = True
-        lbl高さの四角数.Location = New Point(54, 291)
+        lbl高さの四角数.Location = New Point(47, 218)
         lbl高さの四角数.Name = "lbl高さの四角数"
-        lbl高さの四角数.Size = New Size(91, 20)
+        lbl高さの四角数.Size = New Size(73, 15)
         lbl高さの四角数.TabIndex = 1
         lbl高さの四角数.Text = "高さの四角数"
         ToolTip1.SetToolTip(lbl高さの四角数, "折ってたちあげ側面となる四角数")
@@ -627,9 +652,9 @@ Partial Class frmMain
         ' lbl縦ひも
         ' 
         lbl縦ひも.AutoSize = True
-        lbl縦ひも.Location = New Point(32, 90)
+        lbl縦ひも.Location = New Point(28, 68)
         lbl縦ひも.Name = "lbl縦ひも"
-        lbl縦ひも.Size = New Size(47, 20)
+        lbl縦ひも.Size = New Size(38, 15)
         lbl縦ひも.TabIndex = 3
         lbl縦ひも.Text = "縦ひも"
         ToolTip1.SetToolTip(lbl縦ひも, "縦に置かれるひもの本数")
@@ -638,10 +663,10 @@ Partial Class frmMain
         ' 
         lbl1つの辺.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl1つの辺.AutoSize = True
-        lbl1つの辺.Location = New Point(24, 692)
+        lbl1つの辺.Location = New Point(21, 519)
         lbl1つの辺.Name = "lbl1つの辺"
-        lbl1つの辺.Size = New Size(56, 20)
-        lbl1つの辺.TabIndex = 34
+        lbl1つの辺.Size = New Size(44, 15)
+        lbl1つの辺.TabIndex = 35
         lbl1つの辺.Text = "1つの辺"
         ToolTip1.SetToolTip(lbl1つの辺, "ひとつの四角の1辺")
         ' 
@@ -649,38 +674,40 @@ Partial Class frmMain
         ' 
         lblひも幅.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lblひも幅.AutoSize = True
-        lblひも幅.Location = New Point(101, 660)
+        lblひも幅.Location = New Point(88, 495)
         lblひも幅.Name = "lblひも幅"
-        lblひも幅.Size = New Size(47, 20)
-        lblひも幅.TabIndex = 36
+        lblひも幅.Size = New Size(38, 15)
+        lblひも幅.TabIndex = 37
         lblひも幅.Text = "ひも幅"
         ToolTip1.SetToolTip(lblひも幅, "基本のひも幅の寸法")
         ' 
         ' Label10
         ' 
         Label10.AutoSize = True
-        Label10.Location = New Point(447, 90)
+        Label10.Location = New Point(391, 68)
         Label10.Name = "Label10"
-        Label10.Size = New Size(77, 20)
+        Label10.Size = New Size(62, 15)
         Label10.TabIndex = 7
         Label10.Text = "ひも長係数"
         ToolTip1.SetToolTip(Label10, "すべてのひもの計算値に乗算する値")
         ' 
         ' txt縦ひもの本数
         ' 
-        txt縦ひもの本数.Location = New Point(158, 87)
+        txt縦ひもの本数.Location = New Point(138, 65)
+        txt縦ひもの本数.Margin = New Padding(3, 2, 3, 2)
         txt縦ひもの本数.Name = "txt縦ひもの本数"
         txt縦ひもの本数.ReadOnly = True
-        txt縦ひもの本数.Size = New Size(68, 27)
+        txt縦ひもの本数.Size = New Size(60, 23)
         txt縦ひもの本数.TabIndex = 4
         ToolTip1.SetToolTip(txt縦ひもの本数, "縦に置かれるひもの本数")
         ' 
         ' txt横ひもの本数
         ' 
-        txt横ひもの本数.Location = New Point(160, 84)
+        txt横ひもの本数.Location = New Point(140, 63)
+        txt横ひもの本数.Margin = New Padding(3, 2, 3, 2)
         txt横ひもの本数.Name = "txt横ひもの本数"
         txt横ひもの本数.ReadOnly = True
-        txt横ひもの本数.Size = New Size(68, 27)
+        txt横ひもの本数.Size = New Size(60, 23)
         txt横ひもの本数.TabIndex = 4
         ToolTip1.SetToolTip(txt横ひもの本数, "横に置かれるひもの本数")
         ' 
@@ -688,10 +715,10 @@ Partial Class frmMain
         ' 
         lbl四角.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl四角.AutoSize = True
-        lbl四角.Location = New Point(169, 660)
+        lbl四角.Location = New Point(148, 495)
         lbl四角.Name = "lbl四角"
-        lbl四角.Size = New Size(135, 20)
-        lbl四角.TabIndex = 39
+        lbl四角.Size = New Size(109, 15)
+        lbl四角.TabIndex = 40
         lbl四角.Text = "四角(ひも幅+すき間)"
         ToolTip1.SetToolTip(lbl四角, "基本のひも幅にすき間をプラスした、四角の寸法")
         ' 
@@ -699,10 +726,10 @@ Partial Class frmMain
         ' 
         lbl厚さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl厚さ.AutoSize = True
-        lbl厚さ.Location = New Point(427, 625)
+        lbl厚さ.Location = New Point(374, 469)
         lbl厚さ.Name = "lbl厚さ"
-        lbl厚さ.Size = New Size(34, 20)
-        lbl厚さ.TabIndex = 28
+        lbl厚さ.Size = New Size(27, 15)
+        lbl厚さ.TabIndex = 29
         lbl厚さ.Text = "厚さ"
         ToolTip1.SetToolTip(lbl厚さ, "バンドの種類による厚さ・縁の厚さ")
         ' 
@@ -710,20 +737,22 @@ Partial Class frmMain
         ' 
         txt厚さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt厚さ.BorderStyle = BorderStyle.FixedSingle
-        txt厚さ.Location = New Point(472, 623)
+        txt厚さ.Location = New Point(413, 467)
+        txt厚さ.Margin = New Padding(3, 2, 3, 2)
         txt厚さ.Name = "txt厚さ"
         txt厚さ.ReadOnly = True
-        txt厚さ.Size = New Size(69, 27)
-        txt厚さ.TabIndex = 29
+        txt厚さ.Size = New Size(61, 23)
+        txt厚さ.TabIndex = 30
         txt厚さ.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt厚さ, "バンドの種類による厚さ・縁の厚さ")
         ' 
         ' btn画像ファイル
         ' 
         btn画像ファイル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル.Location = New Point(606, 361)
+        btn画像ファイル.Location = New Point(530, 271)
+        btn画像ファイル.Margin = New Padding(3, 2, 3, 2)
         btn画像ファイル.Name = "btn画像ファイル"
-        btn画像ファイル.Size = New Size(111, 46)
+        btn画像ファイル.Size = New Size(97, 34)
         btn画像ファイル.TabIndex = 2
         btn画像ファイル.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
@@ -732,9 +761,10 @@ Partial Class frmMain
         ' btnブラウザ
         ' 
         btnブラウザ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ.Location = New Point(723, 361)
+        btnブラウザ.Location = New Point(633, 271)
+        btnブラウザ.Margin = New Padding(3, 2, 3, 2)
         btnブラウザ.Name = "btnブラウザ"
-        btnブラウザ.Size = New Size(111, 46)
+        btnブラウザ.Size = New Size(97, 34)
         btnブラウザ.TabIndex = 3
         btnブラウザ.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
@@ -743,19 +773,20 @@ Partial Class frmMain
         ' lbl縦の四角数
         ' 
         lbl縦の四角数.AutoSize = True
-        lbl縦の四角数.Location = New Point(32, 44)
+        lbl縦の四角数.Location = New Point(28, 33)
         lbl縦の四角数.Name = "lbl縦の四角数"
-        lbl縦の四角数.Size = New Size(81, 20)
+        lbl縦の四角数.Size = New Size(65, 15)
         lbl縦の四角数.TabIndex = 0
         lbl縦の四角数.Text = "縦の四角数"
         ToolTip1.SetToolTip(lbl縦の四角数, "-45度の側面の四角(対角線)数")
         ' 
         ' nud縦の四角数
         ' 
-        nud縦の四角数.Location = New Point(158, 42)
+        nud縦の四角数.Location = New Point(138, 32)
+        nud縦の四角数.Margin = New Padding(3, 2, 3, 2)
         nud縦の四角数.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         nud縦の四角数.Name = "nud縦の四角数"
-        nud縦の四角数.Size = New Size(68, 27)
+        nud縦の四角数.Size = New Size(60, 23)
         nud縦の四角数.TabIndex = 1
         nud縦の四角数.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nud縦の四角数, "-45度の側面の四角(対角線)数")
@@ -764,19 +795,20 @@ Partial Class frmMain
         ' lbl横の四角数
         ' 
         lbl横の四角数.AutoSize = True
-        lbl横の四角数.Location = New Point(26, 43)
+        lbl横の四角数.Location = New Point(23, 32)
         lbl横の四角数.Name = "lbl横の四角数"
-        lbl横の四角数.Size = New Size(81, 20)
+        lbl横の四角数.Size = New Size(65, 15)
         lbl横の四角数.TabIndex = 0
         lbl横の四角数.Text = "横の四角数"
         ToolTip1.SetToolTip(lbl横の四角数, "+45度の側面の四角(対角線)数")
         ' 
         ' nud横の四角数
         ' 
-        nud横の四角数.Location = New Point(160, 41)
+        nud横の四角数.Location = New Point(140, 31)
+        nud横の四角数.Margin = New Padding(3, 2, 3, 2)
         nud横の四角数.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         nud横の四角数.Name = "nud横の四角数"
-        nud横の四角数.Size = New Size(68, 27)
+        nud横の四角数.Size = New Size(60, 23)
         nud横の四角数.TabIndex = 1
         nud横の四角数.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nud横の四角数, "+45度の側面の四角(対角線)数")
@@ -786,9 +818,11 @@ Partial Class frmMain
         ' 
         grp目標寸法.Controls.Add(rad目標寸法_内側)
         grp目標寸法.Controls.Add(rad目標寸法_外側)
-        grp目標寸法.Location = New Point(19, 31)
+        grp目標寸法.Location = New Point(17, 23)
+        grp目標寸法.Margin = New Padding(3, 2, 3, 2)
         grp目標寸法.Name = "grp目標寸法"
-        grp目標寸法.Size = New Size(181, 62)
+        grp目標寸法.Padding = New Padding(3, 2, 3, 2)
+        grp目標寸法.Size = New Size(158, 46)
         grp目標寸法.TabIndex = 1
         grp目標寸法.TabStop = False
         grp目標寸法.Text = "目標寸法"
@@ -797,9 +831,10 @@ Partial Class frmMain
         ' rad目標寸法_内側
         ' 
         rad目標寸法_内側.AutoSize = True
-        rad目標寸法_内側.Location = New Point(113, 23)
+        rad目標寸法_内側.Location = New Point(99, 17)
+        rad目標寸法_内側.Margin = New Padding(3, 2, 3, 2)
         rad目標寸法_内側.Name = "rad目標寸法_内側"
-        rad目標寸法_内側.Size = New Size(60, 24)
+        rad目標寸法_内側.Size = New Size(49, 19)
         rad目標寸法_内側.TabIndex = 1
         rad目標寸法_内側.Text = "内側"
         ToolTip1.SetToolTip(rad目標寸法_内側, "設定寸法より小さくなる四角数を計算")
@@ -809,9 +844,10 @@ Partial Class frmMain
         ' 
         rad目標寸法_外側.AutoSize = True
         rad目標寸法_外側.Checked = True
-        rad目標寸法_外側.Location = New Point(47, 23)
+        rad目標寸法_外側.Location = New Point(41, 17)
+        rad目標寸法_外側.Margin = New Padding(3, 2, 3, 2)
         rad目標寸法_外側.Name = "rad目標寸法_外側"
-        rad目標寸法_外側.Size = New Size(60, 24)
+        rad目標寸法_外側.Size = New Size(49, 19)
         rad目標寸法_外側.TabIndex = 0
         rad目標寸法_外側.TabStop = True
         rad目標寸法_外側.Text = "外側"
@@ -822,9 +858,10 @@ Partial Class frmMain
         ' 
         chk縦横を展開する.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         chk縦横を展開する.AutoSize = True
-        chk縦横を展開する.Location = New Point(698, 21)
+        chk縦横を展開する.Location = New Point(618, 16)
+        chk縦横を展開する.Margin = New Padding(3, 2, 3, 2)
         chk縦横を展開する.Name = "chk縦横を展開する"
-        chk縦横を展開する.Size = New Size(125, 24)
+        chk縦横を展開する.Size = New Size(102, 19)
         chk縦横を展開する.TabIndex = 13
         chk縦横を展開する.Text = "縦横を展開する"
         ToolTip1.SetToolTip(chk縦横を展開する, "縦ひも・横ひもを個別に設定したい時にON")
@@ -833,59 +870,64 @@ Partial Class frmMain
         ' txt対角線_ひも幅
         ' 
         txt対角線_ひも幅.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt対角線_ひも幅.Location = New Point(86, 720)
+        txt対角線_ひも幅.Location = New Point(75, 540)
+        txt対角線_ひも幅.Margin = New Padding(3, 2, 3, 2)
         txt対角線_ひも幅.Name = "txt対角線_ひも幅"
         txt対角線_ひも幅.ReadOnly = True
-        txt対角線_ひも幅.Size = New Size(80, 27)
-        txt対角線_ひも幅.TabIndex = 38
+        txt対角線_ひも幅.Size = New Size(70, 23)
+        txt対角線_ひも幅.TabIndex = 39
         ToolTip1.SetToolTip(txt対角線_ひも幅, "ひも幅の四角の対角線")
         ' 
         ' txt1つの辺_ひも幅
         ' 
         txt1つの辺_ひも幅.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt1つの辺_ひも幅.Location = New Point(86, 689)
+        txt1つの辺_ひも幅.Location = New Point(75, 517)
+        txt1つの辺_ひも幅.Margin = New Padding(3, 2, 3, 2)
         txt1つの辺_ひも幅.Name = "txt1つの辺_ひも幅"
         txt1つの辺_ひも幅.ReadOnly = True
-        txt1つの辺_ひも幅.Size = New Size(80, 27)
-        txt1つの辺_ひも幅.TabIndex = 37
+        txt1つの辺_ひも幅.Size = New Size(70, 23)
+        txt1つの辺_ひも幅.TabIndex = 38
         ToolTip1.SetToolTip(txt1つの辺_ひも幅, "ひも幅の四角の一辺")
         ' 
         ' lbl対角線
         ' 
         lbl対角線.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl対角線.AutoSize = True
-        lbl対角線.Location = New Point(24, 723)
+        lbl対角線.Location = New Point(21, 542)
         lbl対角線.Name = "lbl対角線"
-        lbl対角線.Size = New Size(54, 20)
-        lbl対角線.TabIndex = 35
+        lbl対角線.Size = New Size(43, 15)
+        lbl対角線.TabIndex = 36
         lbl対角線.Text = "対角線"
         ToolTip1.SetToolTip(lbl対角線, "ひとつの四角の対角線")
         ' 
         ' txt対角線_四角
         ' 
         txt対角線_四角.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt対角線_四角.Location = New Point(172, 720)
+        txt対角線_四角.Location = New Point(150, 540)
+        txt対角線_四角.Margin = New Padding(3, 2, 3, 2)
         txt対角線_四角.Name = "txt対角線_四角"
         txt対角線_四角.ReadOnly = True
-        txt対角線_四角.Size = New Size(80, 27)
-        txt対角線_四角.TabIndex = 41
+        txt対角線_四角.Size = New Size(70, 23)
+        txt対角線_四角.TabIndex = 42
         ToolTip1.SetToolTip(txt対角線_四角, "ひも幅にすき間を加えた、単位となるの四角の対角線")
         ' 
         ' txt1つの辺_四角
         ' 
         txt1つの辺_四角.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        txt1つの辺_四角.Location = New Point(172, 689)
+        txt1つの辺_四角.Location = New Point(150, 517)
+        txt1つの辺_四角.Margin = New Padding(3, 2, 3, 2)
         txt1つの辺_四角.Name = "txt1つの辺_四角"
         txt1つの辺_四角.ReadOnly = True
-        txt1つの辺_四角.Size = New Size(80, 27)
-        txt1つの辺_四角.TabIndex = 40
+        txt1つの辺_四角.Size = New Size(70, 23)
+        txt1つの辺_四角.TabIndex = 41
         ToolTip1.SetToolTip(txt1つの辺_四角, "ひも幅にすき間を加えた、単位となるの四角の一辺")
         ' 
         ' nud底に
         ' 
-        nud底に.Location = New Point(245, 37)
+        nud底に.Location = New Point(214, 28)
+        nud底に.Margin = New Padding(3, 2, 3, 2)
         nud底に.Name = "nud底に"
-        nud底に.Size = New Size(46, 27)
+        nud底に.Size = New Size(40, 23)
         nud底に.TabIndex = 4
         ToolTip1.SetToolTip(nud底に, "底側(辺を含まない)にいくつ連続するか")
         nud底に.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -893,9 +935,10 @@ Partial Class frmMain
         ' chk横の辺
         ' 
         chk横の辺.AutoSize = True
-        chk横の辺.Location = New Point(12, 38)
+        chk横の辺.Location = New Point(10, 28)
+        chk横の辺.Margin = New Padding(3, 2, 3, 2)
         chk横の辺.Name = "chk横の辺"
-        chk横の辺.Size = New Size(73, 24)
+        chk横の辺.Size = New Size(60, 19)
         chk横の辺.TabIndex = 0
         chk横の辺.Text = "横の辺"
         ToolTip1.SetToolTip(chk横の辺, "左上と右下(横の四角数側)の辺のチェックの状態" & vbCrLf & "右上と左下(縦の四角数側)は逆になります")
@@ -903,18 +946,20 @@ Partial Class frmMain
         ' 
         ' nud垂直に
         ' 
-        nud垂直に.Location = New Point(144, 36)
+        nud垂直に.Location = New Point(126, 27)
+        nud垂直に.Margin = New Padding(3, 2, 3, 2)
         nud垂直に.Name = "nud垂直に"
-        nud垂直に.Size = New Size(46, 27)
+        nud垂直に.Size = New Size(40, 23)
         nud垂直に.TabIndex = 2
         ToolTip1.SetToolTip(nud垂直に, "立ち上げる側(辺を含む)にいくつ連続するか")
         nud垂直に.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
         ' btn合わせる
         ' 
-        btn合わせる.Location = New Point(312, 25)
+        btn合わせる.Location = New Point(273, 19)
+        btn合わせる.Margin = New Padding(3, 2, 3, 2)
         btn合わせる.Name = "btn合わせる"
-        btn合わせる.Size = New Size(111, 46)
+        btn合わせる.Size = New Size(97, 34)
         btn合わせる.TabIndex = 5
         btn合わせる.Text = "合わせる(&I)"
         ToolTip1.SetToolTip(btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
@@ -923,30 +968,33 @@ Partial Class frmMain
         ' txtメモ
         ' 
         txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(22, 147)
+        txtメモ.Location = New Point(19, 110)
+        txtメモ.Margin = New Padding(3, 2, 3, 2)
         txtメモ.Multiline = True
         txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 246)
+        txtメモ.Size = New Size(695, 186)
         txtメモ.TabIndex = 5
         ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
         ' 
         ' txt作成者
         ' 
         txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(126, 81)
+        txt作成者.Location = New Point(110, 61)
+        txt作成者.Margin = New Padding(3, 2, 3, 2)
         txt作成者.Multiline = True
         txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 49)
+        txt作成者.Size = New Size(604, 38)
         txt作成者.TabIndex = 3
         ToolTip1.SetToolTip(txt作成者, "作成者情報")
         ' 
         ' txtタイトル
         ' 
         txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(126, 17)
+        txtタイトル.Location = New Point(110, 13)
+        txtタイトル.Margin = New Padding(3, 2, 3, 2)
         txtタイトル.Multiline = True
         txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 49)
+        txtタイトル.Size = New Size(604, 38)
         txtタイトル.TabIndex = 1
         ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
@@ -954,10 +1002,10 @@ Partial Class frmMain
         ' 
         lbl本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl本幅の差.AutoSize = True
-        lbl本幅の差.Location = New Point(557, 627)
+        lbl本幅の差.Location = New Point(487, 470)
         lbl本幅の差.Name = "lbl本幅の差"
-        lbl本幅の差.Size = New Size(66, 20)
-        lbl本幅の差.TabIndex = 30
+        lbl本幅の差.Size = New Size(53, 15)
+        lbl本幅の差.TabIndex = 31
         lbl本幅の差.Text = "本幅の差"
         ToolTip1.SetToolTip(lbl本幅の差, "縦ひも・横ひもの本幅合計値の差")
         lbl本幅の差.Visible = False
@@ -966,11 +1014,12 @@ Partial Class frmMain
         ' 
         txt先の三角形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt先の三角形の本幅の差.BorderStyle = BorderStyle.FixedSingle
-        txt先の三角形の本幅の差.Location = New Point(632, 623)
+        txt先の三角形の本幅の差.Location = New Point(553, 467)
+        txt先の三角形の本幅の差.Margin = New Padding(3, 2, 3, 2)
         txt先の三角形の本幅の差.Name = "txt先の三角形の本幅の差"
         txt先の三角形の本幅の差.ReadOnly = True
-        txt先の三角形の本幅の差.Size = New Size(35, 27)
-        txt先の三角形の本幅の差.TabIndex = 31
+        txt先の三角形の本幅の差.Size = New Size(31, 23)
+        txt先の三角形の本幅の差.TabIndex = 32
         txt先の三角形の本幅の差.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt先の三角形の本幅の差, "先の三角形の本幅の差")
         txt先の三角形の本幅の差.Visible = False
@@ -979,11 +1028,12 @@ Partial Class frmMain
         ' 
         txt四辺形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt四辺形の本幅の差.BorderStyle = BorderStyle.FixedSingle
-        txt四辺形の本幅の差.Location = New Point(673, 623)
+        txt四辺形の本幅の差.Location = New Point(589, 467)
+        txt四辺形の本幅の差.Margin = New Padding(3, 2, 3, 2)
         txt四辺形の本幅の差.Name = "txt四辺形の本幅の差"
         txt四辺形の本幅の差.ReadOnly = True
-        txt四辺形の本幅の差.Size = New Size(35, 27)
-        txt四辺形の本幅の差.TabIndex = 32
+        txt四辺形の本幅の差.Size = New Size(31, 23)
+        txt四辺形の本幅の差.TabIndex = 33
         txt四辺形の本幅の差.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt四辺形の本幅の差, "四辺形部分の本幅の差")
         txt四辺形の本幅の差.Visible = False
@@ -992,11 +1042,12 @@ Partial Class frmMain
         ' 
         txt後の三角形の本幅の差.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         txt後の三角形の本幅の差.BorderStyle = BorderStyle.FixedSingle
-        txt後の三角形の本幅の差.Location = New Point(714, 623)
+        txt後の三角形の本幅の差.Location = New Point(625, 467)
+        txt後の三角形の本幅の差.Margin = New Padding(3, 2, 3, 2)
         txt後の三角形の本幅の差.Name = "txt後の三角形の本幅の差"
         txt後の三角形の本幅の差.ReadOnly = True
-        txt後の三角形の本幅の差.Size = New Size(35, 27)
-        txt後の三角形の本幅の差.TabIndex = 33
+        txt後の三角形の本幅の差.Size = New Size(31, 23)
+        txt後の三角形の本幅の差.TabIndex = 34
         txt後の三角形の本幅の差.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt後の三角形の本幅の差, "後の三角形の本幅の差")
         txt後の三角形の本幅の差.Visible = False
@@ -1004,9 +1055,10 @@ Partial Class frmMain
         ' btn画像ファイル2
         ' 
         btn画像ファイル2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル2.Location = New Point(606, 361)
+        btn画像ファイル2.Location = New Point(530, 271)
+        btn画像ファイル2.Margin = New Padding(3, 2, 3, 2)
         btn画像ファイル2.Name = "btn画像ファイル2"
-        btn画像ファイル2.Size = New Size(111, 46)
+        btn画像ファイル2.Size = New Size(97, 34)
         btn画像ファイル2.TabIndex = 2
         btn画像ファイル2.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル2, "生成した画像ファイルを開きます")
@@ -1015,9 +1067,10 @@ Partial Class frmMain
         ' btnブラウザ2
         ' 
         btnブラウザ2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ2.Location = New Point(723, 361)
+        btnブラウザ2.Location = New Point(633, 271)
+        btnブラウザ2.Margin = New Padding(3, 2, 3, 2)
         btnブラウザ2.Name = "btnブラウザ2"
-        btnブラウザ2.Size = New Size(111, 46)
+        btnブラウザ2.Size = New Size(97, 34)
         btnブラウザ2.TabIndex = 3
         btnブラウザ2.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ2, "生成した画像ファイルをブラウザで開きます")
@@ -1026,9 +1079,10 @@ Partial Class frmMain
         ' btn3Dモデル
         ' 
         btn3Dモデル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn3Dモデル.Location = New Point(489, 361)
+        btn3Dモデル.Location = New Point(428, 271)
+        btn3Dモデル.Margin = New Padding(3, 2, 3, 2)
         btn3Dモデル.Name = "btn3Dモデル"
-        btn3Dモデル.Size = New Size(111, 46)
+        btn3Dモデル.Size = New Size(97, 34)
         btn3Dモデル.TabIndex = 1
         btn3Dモデル.Text = "3Dモデル(&M)"
         ToolTip1.SetToolTip(btn3Dモデル, "生成した画像ファイルを開きます")
@@ -1038,9 +1092,10 @@ Partial Class frmMain
         ' 
         radビューア.AutoSize = True
         radビューア.Checked = True
-        radビューア.Location = New Point(29, 19)
+        radビューア.Location = New Point(25, 14)
+        radビューア.Margin = New Padding(3, 2, 3, 2)
         radビューア.Name = "radビューア"
-        radビューア.Size = New Size(73, 24)
+        radビューア.Size = New Size(58, 19)
         radビューア.TabIndex = 0
         radビューア.TabStop = True
         radビューア.Text = "ビューア"
@@ -1050,9 +1105,10 @@ Partial Class frmMain
         ' radファイル
         ' 
         radファイル.AutoSize = True
-        radファイル.Location = New Point(114, 19)
+        radファイル.Location = New Point(100, 14)
+        radファイル.Margin = New Padding(3, 2, 3, 2)
         radファイル.Name = "radファイル"
-        radファイル.Size = New Size(72, 24)
+        radファイル.Size = New Size(59, 19)
         radファイル.TabIndex = 1
         radファイル.Text = "ファイル"
         ToolTip1.SetToolTip(radファイル, "3Dファイルを圧縮ファイルにします")
@@ -1061,32 +1117,46 @@ Partial Class frmMain
         ' lbl開始高さ
         ' 
         lbl開始高さ.AutoSize = True
-        lbl開始高さ.Location = New Point(8, 45)
+        lbl開始高さ.Location = New Point(7, 34)
         lbl開始高さ.Name = "lbl開始高さ"
-        lbl開始高さ.Size = New Size(64, 20)
+        lbl開始高さ.Size = New Size(51, 15)
         lbl開始高さ.TabIndex = 0
         lbl開始高さ.Text = "開始高さ"
         ToolTip1.SetToolTip(lbl開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
         ' 
         ' nud開始高さ
         ' 
-        nud開始高さ.Location = New Point(80, 42)
+        nud開始高さ.Location = New Point(70, 32)
+        nud開始高さ.Margin = New Padding(3, 2, 3, 2)
         nud開始高さ.Minimum = New Decimal(New Integer() {1, 0, 0, Integer.MinValue})
         nud開始高さ.Name = "nud開始高さ"
-        nud開始高さ.Size = New Size(46, 27)
+        nud開始高さ.Size = New Size(40, 23)
         nud開始高さ.TabIndex = 1
         ToolTip1.SetToolTip(nud開始高さ, "適用開始点の高さの四角数、底のみはゼロ、マイナスは適用なし")
         ' 
         ' chk1回のみ
         ' 
         chk1回のみ.AutoSize = True
-        chk1回のみ.Location = New Point(146, 43)
+        chk1回のみ.Location = New Point(128, 32)
+        chk1回のみ.Margin = New Padding(3, 2, 3, 2)
         chk1回のみ.Name = "chk1回のみ"
-        chk1回のみ.Size = New Size(79, 24)
+        chk1回のみ.Size = New Size(65, 19)
         chk1回のみ.TabIndex = 2
         chk1回のみ.Text = "1回のみ"
         ToolTip1.SetToolTip(chk1回のみ, "1回だけの適用とし、繰り返さない場合にチェックを入れる")
         chk1回のみ.UseVisualStyleBackColor = True
+        ' 
+        ' btn一時保存
+        ' 
+        btn一時保存.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        btn一時保存.Location = New Point(349, 103)
+        btn一時保存.Margin = New Padding(3, 2, 3, 2)
+        btn一時保存.Name = "btn一時保存"
+        btn一時保存.Size = New Size(97, 34)
+        btn一時保存.TabIndex = 19
+        btn一時保存.Text = "一時保存(&T)"
+        ToolTip1.SetToolTip(btn一時保存, "現在の状態を保存/復元します")
+        btn一時保存.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1094,7 +1164,8 @@ Partial Class frmMain
         MenuStrip1.Items.AddRange(New ToolStripItem() {ToolStripMenuItemFile, ToolStripMenuItemEdit, ToolStripMenuItemSetting, ToolStripMenuItemHelp})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Size = New Size(886, 28)
+        MenuStrip1.Padding = New Padding(5, 2, 0, 2)
+        MenuStrip1.Size = New Size(777, 24)
         MenuStrip1.TabIndex = 0
         MenuStrip1.Text = "MenuStrip1"
         ' 
@@ -1102,189 +1173,203 @@ Partial Class frmMain
         ' 
         ToolStripMenuItemFile.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemFileNew, ToolStripMenuItemFileOpen, ToolStripMenuItemFileSaveAs, ToolStripMenuItemFileSave, ToolStripSeparator2, ToolStripMenuItemFileAbort, ToolStripMenuItemFileExit})
         ToolStripMenuItemFile.Name = "ToolStripMenuItemFile"
-        ToolStripMenuItemFile.Size = New Size(82, 24)
+        ToolStripMenuItemFile.Size = New Size(67, 20)
         ToolStripMenuItemFile.Text = "ファイル(&F)"
         ' 
         ' ToolStripMenuItemFileNew
         ' 
         ToolStripMenuItemFileNew.Name = "ToolStripMenuItemFileNew"
-        ToolStripMenuItemFileNew.Size = New Size(218, 26)
+        ToolStripMenuItemFileNew.Size = New Size(174, 22)
         ToolStripMenuItemFileNew.Text = "新規作成(&N)"
         ' 
         ' ToolStripMenuItemFileOpen
         ' 
         ToolStripMenuItemFileOpen.Name = "ToolStripMenuItemFileOpen"
-        ToolStripMenuItemFileOpen.Size = New Size(218, 26)
+        ToolStripMenuItemFileOpen.Size = New Size(174, 22)
         ToolStripMenuItemFileOpen.Text = "開く(&O)"
         ' 
         ' ToolStripMenuItemFileSaveAs
         ' 
         ToolStripMenuItemFileSaveAs.Name = "ToolStripMenuItemFileSaveAs"
-        ToolStripMenuItemFileSaveAs.Size = New Size(218, 26)
+        ToolStripMenuItemFileSaveAs.Size = New Size(174, 22)
         ToolStripMenuItemFileSaveAs.Text = "名前をつけて保存(&A)"
         ' 
         ' ToolStripMenuItemFileSave
         ' 
         ToolStripMenuItemFileSave.Name = "ToolStripMenuItemFileSave"
-        ToolStripMenuItemFileSave.Size = New Size(218, 26)
+        ToolStripMenuItemFileSave.Size = New Size(174, 22)
         ToolStripMenuItemFileSave.Text = "保存(&S)"
         ' 
         ' ToolStripSeparator2
         ' 
         ToolStripSeparator2.Name = "ToolStripSeparator2"
-        ToolStripSeparator2.Size = New Size(215, 6)
+        ToolStripSeparator2.Size = New Size(171, 6)
         ' 
         ' ToolStripMenuItemFileAbort
         ' 
         ToolStripMenuItemFileAbort.Name = "ToolStripMenuItemFileAbort"
-        ToolStripMenuItemFileAbort.Size = New Size(218, 26)
+        ToolStripMenuItemFileAbort.Size = New Size(174, 22)
         ToolStripMenuItemFileAbort.Text = "中止(&C)"
         ' 
         ' ToolStripMenuItemFileExit
         ' 
         ToolStripMenuItemFileExit.Name = "ToolStripMenuItemFileExit"
-        ToolStripMenuItemFileExit.Size = New Size(218, 26)
+        ToolStripMenuItemFileExit.Size = New Size(174, 22)
         ToolStripMenuItemFileExit.Text = "終了(&X)"
         ' 
         ' ToolStripMenuItemEdit
         ' 
-        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
+        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditSaveTemporarily, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
         ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
-        ToolStripMenuItemEdit.Size = New Size(71, 24)
+        ToolStripMenuItemEdit.Size = New Size(57, 20)
         ToolStripMenuItemEdit.Text = "編集(&E)"
         ' 
         ' ToolStripMenuItemEditSelectBand
         ' 
         ToolStripMenuItemEditSelectBand.Name = "ToolStripMenuItemEditSelectBand"
-        ToolStripMenuItemEditSelectBand.Size = New Size(216, 26)
+        ToolStripMenuItemEditSelectBand.Size = New Size(173, 22)
         ToolStripMenuItemEditSelectBand.Text = "バンドの種類選択(&S)"
         ' 
         ' ToolStripSeparator4
         ' 
         ToolStripSeparator4.Name = "ToolStripSeparator4"
-        ToolStripSeparator4.Size = New Size(213, 6)
+        ToolStripSeparator4.Size = New Size(170, 6)
+        ' 
+        ' ToolStripMenuItemEditSaveTemporarily
+        ' 
+        ToolStripMenuItemEditSaveTemporarily.Name = "ToolStripMenuItemEditSaveTemporarily"
+        ToolStripMenuItemEditSaveTemporarily.Size = New Size(173, 22)
+        ToolStripMenuItemEditSaveTemporarily.Text = "一時保存(&T)"
+        ToolStripMenuItemEditSaveTemporarily.ToolTipText = "現在の状態を保存/復元します"
         ' 
         ' ToolStripMenuItemEditReset
         ' 
         ToolStripMenuItemEditReset.Name = "ToolStripMenuItemEditReset"
-        ToolStripMenuItemEditReset.Size = New Size(216, 26)
+        ToolStripMenuItemEditReset.Size = New Size(173, 22)
         ToolStripMenuItemEditReset.Text = "リセット(&R)"
+        ToolStripMenuItemEditReset.ToolTipText = "入力した値をクリアします"
         ' 
         ' ToolStripMenuItemEditDefault
         ' 
         ToolStripMenuItemEditDefault.Name = "ToolStripMenuItemEditDefault"
-        ToolStripMenuItemEditDefault.Size = New Size(216, 26)
+        ToolStripMenuItemEditDefault.Size = New Size(173, 22)
         ToolStripMenuItemEditDefault.Text = "規定値(&D)"
+        ToolStripMenuItemEditDefault.ToolTipText = "登録した規定値にセットします"
         ' 
         ' ToolStripMenuItemEditCalc
         ' 
         ToolStripMenuItemEditCalc.Name = "ToolStripMenuItemEditCalc"
-        ToolStripMenuItemEditCalc.Size = New Size(216, 26)
+        ToolStripMenuItemEditCalc.Size = New Size(173, 22)
         ToolStripMenuItemEditCalc.Text = "概算(&C)"
+        ToolStripMenuItemEditCalc.ToolTipText = "目標寸法と基本のひも幅から底の縦横と側面値を計算します"
         ' 
         ' ToolStripSeparator5
         ' 
         ToolStripSeparator5.Name = "ToolStripSeparator5"
-        ToolStripSeparator5.Size = New Size(213, 6)
+        ToolStripSeparator5.Size = New Size(170, 6)
         ' 
         ' ToolStripMenuItemEditColorChange
         ' 
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
-        ToolStripMenuItemEditColorChange.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorChange.Size = New Size(173, 22)
         ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
+        ToolStripMenuItemEditColorChange.ToolTipText = "設定した色を一括で変更できます"
         ' 
         ' ToolStripMenuItemEditColorRepeat
         ' 
         ToolStripMenuItemEditColorRepeat.Name = "ToolStripMenuItemEditColorRepeat"
-        ToolStripMenuItemEditColorRepeat.Size = New Size(216, 26)
+        ToolStripMenuItemEditColorRepeat.Size = New Size(173, 22)
         ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
+        ToolStripMenuItemEditColorRepeat.ToolTipText = "繰り返しパターンを適用できます"
         ' 
         ' ToolStripSeparator1
         ' 
         ToolStripSeparator1.Name = "ToolStripSeparator1"
-        ToolStripSeparator1.Size = New Size(213, 6)
+        ToolStripSeparator1.Size = New Size(170, 6)
         ' 
         ' ToolStripMenuItemEditList
         ' 
         ToolStripMenuItemEditList.Name = "ToolStripMenuItemEditList"
-        ToolStripMenuItemEditList.Size = New Size(216, 26)
+        ToolStripMenuItemEditList.Size = New Size(173, 22)
         ToolStripMenuItemEditList.Text = "ひもリスト(&L)"
+        ToolStripMenuItemEditList.ToolTipText = "入力値に基づきひも幅と長さのリストを表示します"
         ' 
         ' ToolStripMenuItemEditDefaultFile
         ' 
         ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
-        ToolStripMenuItemEditDefaultFile.Size = New Size(216, 26)
+        ToolStripMenuItemEditDefaultFile.Size = New Size(173, 22)
         ToolStripMenuItemEditDefaultFile.Text = "規定値保存(&F)"
+        ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値を指定します"
         ' 
         ' ToolStripMenuItemSetting
         ' 
         ToolStripMenuItemSetting.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemSettingBandType, ToolStripMenuItemSettingPattern, ToolStripMenuItemSettingOptions, ToolStripMenuItemSettingColor, ToolStripMenuItemSettingUpDown, ToolStripSeparator3, ToolStripMenuItemSettingBasics})
         ToolStripMenuItemSetting.Name = "ToolStripMenuItemSetting"
-        ToolStripMenuItemSetting.Size = New Size(71, 24)
+        ToolStripMenuItemSetting.Size = New Size(57, 20)
         ToolStripMenuItemSetting.Text = "設定(&S)"
         ' 
         ' ToolStripMenuItemSettingBandType
         ' 
         ToolStripMenuItemSettingBandType.Name = "ToolStripMenuItemSettingBandType"
-        ToolStripMenuItemSettingBandType.Size = New Size(186, 26)
+        ToolStripMenuItemSettingBandType.Size = New Size(149, 22)
         ToolStripMenuItemSettingBandType.Text = "バンドの種類(&T)"
         ' 
         ' ToolStripMenuItemSettingPattern
         ' 
         ToolStripMenuItemSettingPattern.Name = "ToolStripMenuItemSettingPattern"
-        ToolStripMenuItemSettingPattern.Size = New Size(186, 26)
+        ToolStripMenuItemSettingPattern.Size = New Size(149, 22)
         ToolStripMenuItemSettingPattern.Text = "編みかた(&P)"
         ' 
         ' ToolStripMenuItemSettingOptions
         ' 
         ToolStripMenuItemSettingOptions.Name = "ToolStripMenuItemSettingOptions"
-        ToolStripMenuItemSettingOptions.Size = New Size(186, 26)
+        ToolStripMenuItemSettingOptions.Size = New Size(149, 22)
         ToolStripMenuItemSettingOptions.Text = "付属品(&O)"
         ' 
         ' ToolStripMenuItemSettingColor
         ' 
         ToolStripMenuItemSettingColor.Name = "ToolStripMenuItemSettingColor"
-        ToolStripMenuItemSettingColor.Size = New Size(186, 26)
+        ToolStripMenuItemSettingColor.Size = New Size(149, 22)
         ToolStripMenuItemSettingColor.Text = "描画色(&C)"
         ' 
         ' ToolStripMenuItemSettingUpDown
         ' 
         ToolStripMenuItemSettingUpDown.Name = "ToolStripMenuItemSettingUpDown"
-        ToolStripMenuItemSettingUpDown.Size = New Size(186, 26)
+        ToolStripMenuItemSettingUpDown.Size = New Size(149, 22)
         ToolStripMenuItemSettingUpDown.Text = "上下図(&U)"
         ' 
         ' ToolStripSeparator3
         ' 
         ToolStripSeparator3.Name = "ToolStripSeparator3"
-        ToolStripSeparator3.Size = New Size(183, 6)
+        ToolStripSeparator3.Size = New Size(146, 6)
         ' 
         ' ToolStripMenuItemSettingBasics
         ' 
         ToolStripMenuItemSettingBasics.Name = "ToolStripMenuItemSettingBasics"
-        ToolStripMenuItemSettingBasics.Size = New Size(186, 26)
+        ToolStripMenuItemSettingBasics.Size = New Size(149, 22)
         ToolStripMenuItemSettingBasics.Text = "基本設定(&B)"
         ' 
         ' ToolStripMenuItemHelp
         ' 
         ToolStripMenuItemHelp.Name = "ToolStripMenuItemHelp"
-        ToolStripMenuItemHelp.Size = New Size(79, 24)
+        ToolStripMenuItemHelp.Size = New Size(65, 20)
         ToolStripMenuItemHelp.Text = "ヘルプ(&H)"
         ' 
         ' lbl基本のひも幅_単位
         ' 
         lbl基本のひも幅_単位.AutoSize = True
-        lbl基本のひも幅_単位.Location = New Point(690, 73)
+        lbl基本のひも幅_単位.Location = New Point(604, 55)
         lbl基本のひも幅_単位.Name = "lbl基本のひも幅_単位"
-        lbl基本のひも幅_単位.Size = New Size(39, 20)
+        lbl基本のひも幅_単位.Size = New Size(31, 15)
         lbl基本のひも幅_単位.TabIndex = 16
         lbl基本のひも幅_単位.Text = "本幅"
         ' 
         ' lbl目標寸法_単位
         ' 
         lbl目標寸法_単位.AutoSize = True
-        lbl目標寸法_単位.Location = New Point(576, 73)
+        lbl目標寸法_単位.Location = New Point(504, 55)
         lbl目標寸法_単位.Name = "lbl目標寸法_単位"
-        lbl目標寸法_単位.Size = New Size(35, 20)
+        lbl目標寸法_単位.Size = New Size(27, 15)
         lbl目標寸法_単位.TabIndex = 12
         lbl目標寸法_単位.Text = "mm"
         ' 
@@ -1300,11 +1385,12 @@ Partial Class frmMain
         TabControl.Controls.Add(tpageプレビュー)
         TabControl.Controls.Add(tpageプレビュー2)
         TabControl.Controls.Add(tpageひも上下)
-        TabControl.Location = New Point(19, 171)
+        TabControl.Location = New Point(17, 128)
+        TabControl.Margin = New Padding(3, 2, 3, 2)
         TabControl.Name = "TabControl"
         TabControl.SelectedIndex = 0
-        TabControl.Size = New Size(848, 446)
-        TabControl.TabIndex = 0
+        TabControl.Size = New Size(742, 334)
+        TabControl.TabIndex = 23
         ' 
         ' tpage四角数
         ' 
@@ -1322,10 +1408,11 @@ Partial Class frmMain
         tpage四角数.Controls.Add(lblひも間のすき間)
         tpage四角数.Controls.Add(grp縦置き)
         tpage四角数.Controls.Add(grp横置き)
-        tpage四角数.Location = New Point(4, 29)
+        tpage四角数.Location = New Point(4, 24)
+        tpage四角数.Margin = New Padding(3, 2, 3, 2)
         tpage四角数.Name = "tpage四角数"
-        tpage四角数.Padding = New Padding(3)
-        tpage四角数.Size = New Size(840, 413)
+        tpage四角数.Padding = New Padding(3, 2, 3, 2)
+        tpage四角数.Size = New Size(734, 306)
         tpage四角数.TabIndex = 0
         tpage四角数.Text = "四角数"
         tpage四角数.UseVisualStyleBackColor = True
@@ -1333,27 +1420,27 @@ Partial Class frmMain
         ' lbl高さの四角数_単位
         ' 
         lbl高さの四角数_単位.AutoSize = True
-        lbl高さの四角数_単位.Location = New Point(268, 293)
+        lbl高さの四角数_単位.Location = New Point(234, 220)
         lbl高さの四角数_単位.Name = "lbl高さの四角数_単位"
-        lbl高さの四角数_単位.Size = New Size(24, 20)
+        lbl高さの四角数_単位.Size = New Size(19, 15)
         lbl高さの四角数_単位.TabIndex = 3
         lbl高さの四角数_単位.Text = "個"
         ' 
         ' lblひも長加算_単位
         ' 
         lblひも長加算_単位.AutoSize = True
-        lblひも長加算_単位.Location = New Point(657, 133)
+        lblひも長加算_単位.Location = New Point(575, 100)
         lblひも長加算_単位.Name = "lblひも長加算_単位"
-        lblひも長加算_単位.Size = New Size(35, 20)
+        lblひも長加算_単位.Size = New Size(27, 15)
         lblひも長加算_単位.TabIndex = 11
         lblひも長加算_単位.Text = "mm"
         ' 
         ' lblひも間のすき間_単位
         ' 
         lblひも間のすき間_単位.AutoSize = True
-        lblひも間のすき間_単位.Location = New Point(657, 47)
+        lblひも間のすき間_単位.Location = New Point(575, 35)
         lblひも間のすき間_単位.Name = "lblひも間のすき間_単位"
-        lblひも間のすき間_単位.Size = New Size(35, 20)
+        lblひも間のすき間_単位.Size = New Size(27, 15)
         lblひも間のすき間_単位.TabIndex = 6
         lblひも間のすき間_単位.Text = "mm"
         ' 
@@ -1368,9 +1455,11 @@ Partial Class frmMain
         grp縦置き.Controls.Add(lbl縦の四角数_単位)
         grp縦置き.Controls.Add(lbl縦の四角数)
         grp縦置き.Controls.Add(nud縦の四角数)
-        grp縦置き.Location = New Point(415, 178)
+        grp縦置き.Location = New Point(363, 134)
+        grp縦置き.Margin = New Padding(3, 2, 3, 2)
         grp縦置き.Name = "grp縦置き"
-        grp縦置き.Size = New Size(381, 229)
+        grp縦置き.Padding = New Padding(3, 2, 3, 2)
+        grp縦置き.Size = New Size(333, 172)
         grp縦置き.TabIndex = 12
         grp縦置き.TabStop = False
         grp縦置き.Text = "縦置き"
@@ -1378,34 +1467,35 @@ Partial Class frmMain
         ' lbl縦ひもの本数_単位
         ' 
         lbl縦ひもの本数_単位.AutoSize = True
-        lbl縦ひもの本数_単位.Location = New Point(242, 90)
+        lbl縦ひもの本数_単位.Location = New Point(212, 68)
         lbl縦ひもの本数_単位.Name = "lbl縦ひもの本数_単位"
-        lbl縦ひもの本数_単位.Size = New Size(24, 20)
+        lbl縦ひもの本数_単位.Size = New Size(19, 15)
         lbl縦ひもの本数_単位.TabIndex = 5
         lbl縦ひもの本数_単位.Text = "本"
         ' 
         ' lbl縦ひものメモ
         ' 
         lbl縦ひものメモ.AutoSize = True
-        lbl縦ひものメモ.Location = New Point(32, 186)
+        lbl縦ひものメモ.Location = New Point(28, 140)
         lbl縦ひものメモ.Name = "lbl縦ひものメモ"
-        lbl縦ひものメモ.Size = New Size(81, 20)
+        lbl縦ひものメモ.Size = New Size(65, 15)
         lbl縦ひものメモ.TabIndex = 7
         lbl縦ひものメモ.Text = "縦ひものメモ"
         ' 
         ' txt縦ひものメモ
         ' 
-        txt縦ひものメモ.Location = New Point(158, 183)
+        txt縦ひものメモ.Location = New Point(138, 137)
+        txt縦ひものメモ.Margin = New Padding(3, 2, 3, 2)
         txt縦ひものメモ.Name = "txt縦ひものメモ"
-        txt縦ひものメモ.Size = New Size(201, 27)
+        txt縦ひものメモ.Size = New Size(176, 23)
         txt縦ひものメモ.TabIndex = 8
         ' 
         ' lbl縦の四角数_単位
         ' 
         lbl縦の四角数_単位.AutoSize = True
-        lbl縦の四角数_単位.Location = New Point(242, 44)
+        lbl縦の四角数_単位.Location = New Point(212, 33)
         lbl縦の四角数_単位.Name = "lbl縦の四角数_単位"
-        lbl縦の四角数_単位.Size = New Size(24, 20)
+        lbl縦の四角数_単位.Size = New Size(19, 15)
         lbl縦の四角数_単位.TabIndex = 2
         lbl縦の四角数_単位.Text = "個"
         ' 
@@ -1420,9 +1510,11 @@ Partial Class frmMain
         grp横置き.Controls.Add(lbl横の四角数_単位)
         grp横置き.Controls.Add(lbl横の四角数)
         grp横置き.Controls.Add(nud横の四角数)
-        grp横置き.Location = New Point(28, 21)
+        grp横置き.Location = New Point(24, 16)
+        grp横置き.Margin = New Padding(3, 2, 3, 2)
         grp横置き.Name = "grp横置き"
-        grp横置き.Size = New Size(381, 229)
+        grp横置き.Padding = New Padding(3, 2, 3, 2)
+        grp横置き.Size = New Size(333, 172)
         grp横置き.TabIndex = 0
         grp横置き.TabStop = False
         grp横置き.Text = "横置き"
@@ -1430,34 +1522,35 @@ Partial Class frmMain
         ' lbl横ひもの本数_単位
         ' 
         lbl横ひもの本数_単位.AutoSize = True
-        lbl横ひもの本数_単位.Location = New Point(240, 87)
+        lbl横ひもの本数_単位.Location = New Point(210, 65)
         lbl横ひもの本数_単位.Name = "lbl横ひもの本数_単位"
-        lbl横ひもの本数_単位.Size = New Size(24, 20)
+        lbl横ひもの本数_単位.Size = New Size(19, 15)
         lbl横ひもの本数_単位.TabIndex = 5
         lbl横ひもの本数_単位.Text = "本"
         ' 
         ' lbl横ひものメモ
         ' 
         lbl横ひものメモ.AutoSize = True
-        lbl横ひものメモ.Location = New Point(26, 183)
+        lbl横ひものメモ.Location = New Point(23, 137)
         lbl横ひものメモ.Name = "lbl横ひものメモ"
-        lbl横ひものメモ.Size = New Size(81, 20)
+        lbl横ひものメモ.Size = New Size(65, 15)
         lbl横ひものメモ.TabIndex = 7
         lbl横ひものメモ.Text = "横ひものメモ"
         ' 
         ' txt横ひものメモ
         ' 
-        txt横ひものメモ.Location = New Point(160, 180)
+        txt横ひものメモ.Location = New Point(140, 135)
+        txt横ひものメモ.Margin = New Padding(3, 2, 3, 2)
         txt横ひものメモ.Name = "txt横ひものメモ"
-        txt横ひものメモ.Size = New Size(201, 27)
+        txt横ひものメモ.Size = New Size(176, 23)
         txt横ひものメモ.TabIndex = 8
         ' 
         ' lbl横の四角数_単位
         ' 
         lbl横の四角数_単位.AutoSize = True
-        lbl横の四角数_単位.Location = New Point(240, 43)
+        lbl横の四角数_単位.Location = New Point(210, 32)
         lbl横の四角数_単位.Name = "lbl横の四角数_単位"
-        lbl横の四角数_単位.Size = New Size(24, 20)
+        lbl横の四角数_単位.Size = New Size(19, 15)
         lbl横の四角数_単位.TabIndex = 2
         lbl横の四角数_単位.Text = "個"
         ' 
@@ -1468,10 +1561,11 @@ Partial Class frmMain
         tpage縁の始末.Controls.Add(btn削除_側面)
         tpage縁の始末.Controls.Add(btn追加_側面)
         tpage縁の始末.Controls.Add(cmb編みかた名_側面)
-        tpage縁の始末.Location = New Point(4, 29)
+        tpage縁の始末.Location = New Point(4, 24)
+        tpage縁の始末.Margin = New Padding(3, 2, 3, 2)
         tpage縁の始末.Name = "tpage縁の始末"
-        tpage縁の始末.Padding = New Padding(3)
-        tpage縁の始末.Size = New Size(840, 413)
+        tpage縁の始末.Padding = New Padding(3, 2, 3, 2)
+        tpage縁の始末.Size = New Size(734, 306)
         tpage縁の始末.TabIndex = 2
         tpage縁の始末.Text = "縁の始末"
         tpage縁の始末.UseVisualStyleBackColor = True
@@ -1485,29 +1579,31 @@ Partial Class frmMain
         dgv縁の始末.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgv縁の始末.Columns.AddRange(New DataGridViewColumn() {f_i番号, f_s編みかた名, f_s編みひも名, f_iひも番号, f_i何本幅, f_b集計対象外区分, f_s色, f_d高さ, f_d垂直ひも長, f_d周長比率対底の周, f_d周長, f_dひも長, f_dひも長加算, f_iひも本数, f_d厚さ, f_sメモ, f_d連続ひも長, f_s記号, f_bError})
         dgv縁の始末.DataSource = BindingSource縁の始末
-        dgv縁の始末.Location = New Point(6, 6)
+        dgv縁の始末.Location = New Point(5, 4)
+        dgv縁の始末.Margin = New Padding(3, 2, 3, 2)
         dgv縁の始末.Name = "dgv縁の始末"
         dgv縁の始末.RowHeadersWidth = 51
         dgv縁の始末.RowTemplate.Height = 29
-        dgv縁の始末.Size = New Size(826, 345)
+        dgv縁の始末.Size = New Size(723, 259)
         dgv縁の始末.TabIndex = 0
         ' 
         ' lbl編みかた名_側面
         ' 
         lbl編みかた名_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl編みかた名_側面.AutoSize = True
-        lbl編みかた名_側面.Location = New Point(432, 370)
+        lbl編みかた名_側面.Location = New Point(378, 278)
         lbl編みかた名_側面.Name = "lbl編みかた名_側面"
-        lbl編みかた名_側面.Size = New Size(76, 20)
+        lbl編みかた名_側面.Size = New Size(61, 15)
         lbl編みかた名_側面.TabIndex = 2
         lbl編みかた名_側面.Text = "編みかた名"
         ' 
         ' btn削除_側面
         ' 
         btn削除_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btn削除_側面.Location = New Point(6, 357)
+        btn削除_側面.Location = New Point(5, 268)
+        btn削除_側面.Margin = New Padding(3, 2, 3, 2)
         btn削除_側面.Name = "btn削除_側面"
-        btn削除_側面.Size = New Size(111, 46)
+        btn削除_側面.Size = New Size(97, 34)
         btn削除_側面.TabIndex = 1
         btn削除_側面.Text = "削除(&R)"
         btn削除_側面.UseVisualStyleBackColor = True
@@ -1515,9 +1611,10 @@ Partial Class frmMain
         ' btn追加_側面
         ' 
         btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn追加_側面.Location = New Point(721, 357)
+        btn追加_側面.Location = New Point(631, 268)
+        btn追加_側面.Margin = New Padding(3, 2, 3, 2)
         btn追加_側面.Name = "btn追加_側面"
-        btn追加_側面.Size = New Size(111, 46)
+        btn追加_側面.Size = New Size(97, 34)
         btn追加_側面.TabIndex = 4
         btn追加_側面.Text = "追加(&A)"
         btn追加_側面.UseVisualStyleBackColor = True
@@ -1526,18 +1623,20 @@ Partial Class frmMain
         ' 
         cmb編みかた名_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         cmb編みかた名_側面.FormattingEnabled = True
-        cmb編みかた名_側面.Location = New Point(522, 367)
+        cmb編みかた名_側面.Location = New Point(457, 275)
+        cmb編みかた名_側面.Margin = New Padding(3, 2, 3, 2)
         cmb編みかた名_側面.Name = "cmb編みかた名_側面"
-        cmb編みかた名_側面.Size = New Size(184, 28)
+        cmb編みかた名_側面.Size = New Size(162, 23)
         cmb編みかた名_側面.TabIndex = 3
         ' 
         ' tpage追加品
         ' 
         tpage追加品.Controls.Add(editAddParts)
-        tpage追加品.Location = New Point(4, 29)
+        tpage追加品.Location = New Point(4, 24)
+        tpage追加品.Margin = New Padding(3, 2, 3, 2)
         tpage追加品.Name = "tpage追加品"
-        tpage追加品.Padding = New Padding(3)
-        tpage追加品.Size = New Size(840, 413)
+        tpage追加品.Padding = New Padding(3, 2, 3, 2)
+        tpage追加品.Size = New Size(734, 306)
         tpage追加品.TabIndex = 3
         tpage追加品.Text = "追加品"
         tpage追加品.UseVisualStyleBackColor = True
@@ -1546,10 +1645,11 @@ Partial Class frmMain
         ' 
         editAddParts.AutoSize = True
         editAddParts.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        editAddParts.Location = New Point(-3, -3)
+        editAddParts.Location = New Point(-3, -2)
+        editAddParts.Margin = New Padding(3, 2, 3, 2)
         editAddParts.Name = "editAddParts"
-        editAddParts.PanelSize = New Size(840, 413)
-        editAddParts.Size = New Size(846, 419)
+        editAddParts.PanelSize = New Size(735, 310)
+        editAddParts.Size = New Size(741, 314)
         editAddParts.TabIndex = 1
         ' 
         ' tpageメモ他
@@ -1560,10 +1660,11 @@ Partial Class frmMain
         tpageメモ他.Controls.Add(lblタイトル)
         tpageメモ他.Controls.Add(lblメモ)
         tpageメモ他.Controls.Add(txtメモ)
-        tpageメモ他.Location = New Point(4, 29)
+        tpageメモ他.Location = New Point(4, 24)
+        tpageメモ他.Margin = New Padding(3, 2, 3, 2)
         tpageメモ他.Name = "tpageメモ他"
-        tpageメモ他.Padding = New Padding(3)
-        tpageメモ他.Size = New Size(840, 413)
+        tpageメモ他.Padding = New Padding(3, 2, 3, 2)
+        tpageメモ他.Size = New Size(734, 306)
         tpageメモ他.TabIndex = 4
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
@@ -1571,37 +1672,38 @@ Partial Class frmMain
         ' lbl作成者
         ' 
         lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(24, 81)
+        lbl作成者.Location = New Point(21, 61)
         lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(54, 20)
+        lbl作成者.Size = New Size(43, 15)
         lbl作成者.TabIndex = 2
         lbl作成者.Text = "作成者"
         ' 
         ' lblタイトル
         ' 
         lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(24, 17)
+        lblタイトル.Location = New Point(21, 13)
         lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(53, 20)
+        lblタイトル.Size = New Size(43, 15)
         lblタイトル.TabIndex = 0
         lblタイトル.Text = "タイトル"
         ' 
         ' lblメモ
         ' 
         lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 119)
+        lblメモ.Location = New Point(21, 89)
         lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(31, 20)
+        lblメモ.Size = New Size(24, 15)
         lblメモ.TabIndex = 4
         lblメモ.Text = "メモ"
         ' 
         ' tpage横ひも
         ' 
         tpage横ひも.Controls.Add(expand横ひも)
-        tpage横ひも.Location = New Point(4, 29)
+        tpage横ひも.Location = New Point(4, 24)
+        tpage横ひも.Margin = New Padding(3, 2, 3, 2)
         tpage横ひも.Name = "tpage横ひも"
-        tpage横ひも.Padding = New Padding(3)
-        tpage横ひも.Size = New Size(840, 413)
+        tpage横ひも.Padding = New Padding(3, 2, 3, 2)
+        tpage横ひも.Size = New Size(734, 306)
         tpage横ひも.TabIndex = 5
         tpage横ひも.Text = "横ひも"
         tpage横ひも.UseVisualStyleBackColor = True
@@ -1610,19 +1712,21 @@ Partial Class frmMain
         ' 
         expand横ひも.AutoSize = True
         expand横ひも.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        expand横ひも.Location = New Point(-3, -3)
+        expand横ひも.Location = New Point(-3, -2)
+        expand横ひも.Margin = New Padding(3, 2, 3, 2)
         expand横ひも.Name = "expand横ひも"
-        expand横ひも.PanelSize = New Size(840, 413)
-        expand横ひも.Size = New Size(846, 419)
+        expand横ひも.PanelSize = New Size(735, 310)
+        expand横ひも.Size = New Size(741, 314)
         expand横ひも.TabIndex = 0
         ' 
         ' tpage縦ひも
         ' 
         tpage縦ひも.Controls.Add(expand縦ひも)
-        tpage縦ひも.Location = New Point(4, 29)
+        tpage縦ひも.Location = New Point(4, 24)
+        tpage縦ひも.Margin = New Padding(3, 2, 3, 2)
         tpage縦ひも.Name = "tpage縦ひも"
-        tpage縦ひも.Padding = New Padding(3)
-        tpage縦ひも.Size = New Size(840, 413)
+        tpage縦ひも.Padding = New Padding(3, 2, 3, 2)
+        tpage縦ひも.Size = New Size(734, 306)
         tpage縦ひも.TabIndex = 6
         tpage縦ひも.Text = "縦ひも"
         tpage縦ひも.UseVisualStyleBackColor = True
@@ -1631,10 +1735,11 @@ Partial Class frmMain
         ' 
         expand縦ひも.AutoSize = True
         expand縦ひも.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        expand縦ひも.Location = New Point(-3, -3)
+        expand縦ひも.Location = New Point(-3, -2)
+        expand縦ひも.Margin = New Padding(3, 2, 3, 2)
         expand縦ひも.Name = "expand縦ひも"
-        expand縦ひも.PanelSize = New Size(840, 413)
-        expand縦ひも.Size = New Size(846, 419)
+        expand縦ひも.PanelSize = New Size(735, 310)
+        expand縦ひも.Size = New Size(741, 314)
         expand縦ひも.TabIndex = 0
         ' 
         ' tpageプレビュー
@@ -1644,10 +1749,11 @@ Partial Class frmMain
         tpageプレビュー.Controls.Add(btn画像ファイル)
         tpageプレビュー.Controls.Add(btnブラウザ)
         tpageプレビュー.Controls.Add(picプレビュー)
-        tpageプレビュー.Location = New Point(4, 29)
+        tpageプレビュー.Location = New Point(4, 24)
+        tpageプレビュー.Margin = New Padding(3, 2, 3, 2)
         tpageプレビュー.Name = "tpageプレビュー"
-        tpageプレビュー.Padding = New Padding(3)
-        tpageプレビュー.Size = New Size(840, 413)
+        tpageプレビュー.Padding = New Padding(3, 2, 3, 2)
+        tpageプレビュー.Size = New Size(734, 306)
         tpageプレビュー.TabIndex = 7
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
@@ -1656,9 +1762,10 @@ Partial Class frmMain
         ' 
         radうら.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         radうら.AutoSize = True
-        radうら.Location = New Point(109, 372)
+        radうら.Location = New Point(95, 278)
+        radうら.Margin = New Padding(3, 2, 3, 2)
         radうら.Name = "radうら"
-        radうら.Size = New Size(51, 24)
+        radうら.Size = New Size(42, 19)
         radうら.TabIndex = 1
         radうら.Text = "うら"
         radうら.UseVisualStyleBackColor = True
@@ -1668,9 +1775,10 @@ Partial Class frmMain
         radおもて.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         radおもて.AutoSize = True
         radおもて.Checked = True
-        radおもて.Location = New Point(23, 372)
+        radおもて.Location = New Point(20, 278)
+        radおもて.Margin = New Padding(3, 2, 3, 2)
         radおもて.Name = "radおもて"
-        radおもて.Size = New Size(64, 24)
+        radおもて.Size = New Size(53, 19)
         radおもて.TabIndex = 0
         radおもて.TabStop = True
         radおもて.Text = "おもて"
@@ -1679,9 +1787,10 @@ Partial Class frmMain
         ' picプレビュー
         ' 
         picプレビュー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        picプレビュー.Location = New Point(6, 6)
+        picプレビュー.Location = New Point(5, 4)
+        picプレビュー.Margin = New Padding(3, 2, 3, 2)
         picプレビュー.Name = "picプレビュー"
-        picプレビュー.Size = New Size(828, 349)
+        picプレビュー.Size = New Size(724, 262)
         picプレビュー.SizeMode = PictureBoxSizeMode.Zoom
         picプレビュー.TabIndex = 0
         picプレビュー.TabStop = False
@@ -1693,10 +1802,11 @@ Partial Class frmMain
         tpageプレビュー2.Controls.Add(btn画像ファイル2)
         tpageプレビュー2.Controls.Add(btnブラウザ2)
         tpageプレビュー2.Controls.Add(picプレビュー2)
-        tpageプレビュー2.Location = New Point(4, 29)
+        tpageプレビュー2.Location = New Point(4, 24)
+        tpageプレビュー2.Margin = New Padding(3, 2, 3, 2)
         tpageプレビュー2.Name = "tpageプレビュー2"
-        tpageプレビュー2.Padding = New Padding(3)
-        tpageプレビュー2.Size = New Size(840, 413)
+        tpageプレビュー2.Padding = New Padding(3, 2, 3, 2)
+        tpageプレビュー2.Size = New Size(734, 306)
         tpageプレビュー2.TabIndex = 9
         tpageプレビュー2.Text = "プレビュー2"
         tpageプレビュー2.UseVisualStyleBackColor = True
@@ -1706,9 +1816,11 @@ Partial Class frmMain
         grp3D.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         grp3D.Controls.Add(radファイル)
         grp3D.Controls.Add(radビューア)
-        grp3D.Location = New Point(284, 356)
+        grp3D.Location = New Point(248, 267)
+        grp3D.Margin = New Padding(3, 2, 3, 2)
         grp3D.Name = "grp3D"
-        grp3D.Size = New Size(199, 51)
+        grp3D.Padding = New Padding(3, 2, 3, 2)
+        grp3D.Size = New Size(174, 38)
         grp3D.TabIndex = 0
         grp3D.TabStop = False
         grp3D.Text = "3D"
@@ -1716,9 +1828,10 @@ Partial Class frmMain
         ' picプレビュー2
         ' 
         picプレビュー2.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        picプレビュー2.Location = New Point(6, 6)
+        picプレビュー2.Location = New Point(5, 4)
+        picプレビュー2.Margin = New Padding(3, 2, 3, 2)
         picプレビュー2.Name = "picプレビュー2"
-        picプレビュー2.Size = New Size(828, 349)
+        picプレビュー2.Size = New Size(724, 262)
         picプレビュー2.SizeMode = PictureBoxSizeMode.Zoom
         picプレビュー2.TabIndex = 4
         picプレビュー2.TabStop = False
@@ -1730,10 +1843,11 @@ Partial Class frmMain
         tpageひも上下.Controls.Add(nud開始高さ)
         tpageひも上下.Controls.Add(grp縦横の四角)
         tpageひも上下.Controls.Add(editUpDown)
-        tpageひも上下.Location = New Point(4, 29)
+        tpageひも上下.Location = New Point(4, 24)
+        tpageひも上下.Margin = New Padding(3, 2, 3, 2)
         tpageひも上下.Name = "tpageひも上下"
-        tpageひも上下.Padding = New Padding(3)
-        tpageひも上下.Size = New Size(840, 413)
+        tpageひも上下.Padding = New Padding(3, 2, 3, 2)
+        tpageひも上下.Size = New Size(734, 306)
         tpageひも上下.TabIndex = 8
         tpageひも上下.Text = "ひも上下"
         tpageひも上下.UseVisualStyleBackColor = True
@@ -1746,9 +1860,11 @@ Partial Class frmMain
         grp縦横の四角.Controls.Add(chk横の辺)
         grp縦横の四角.Controls.Add(nud垂直に)
         grp縦横の四角.Controls.Add(btn合わせる)
-        grp縦横の四角.Location = New Point(236, 6)
+        grp縦横の四角.Location = New Point(206, 4)
+        grp縦横の四角.Margin = New Padding(3, 2, 3, 2)
         grp縦横の四角.Name = "grp縦横の四角"
-        grp縦横の四角.Size = New Size(436, 84)
+        grp縦横の四角.Padding = New Padding(3, 2, 3, 2)
+        grp縦横の四角.Size = New Size(382, 63)
         grp縦横の四角.TabIndex = 3
         grp縦横の四角.TabStop = False
         grp縦横の四角.Text = "縦横の四角"
@@ -1756,18 +1872,18 @@ Partial Class frmMain
         ' lbl底に
         ' 
         lbl底に.AutoSize = True
-        lbl底に.Location = New Point(203, 39)
+        lbl底に.Location = New Point(178, 29)
         lbl底に.Name = "lbl底に"
-        lbl底に.Size = New Size(36, 20)
+        lbl底に.Size = New Size(28, 15)
         lbl底に.TabIndex = 3
         lbl底に.Text = "底に"
         ' 
         ' lbl垂直に
         ' 
         lbl垂直に.AutoSize = True
-        lbl垂直に.Location = New Point(90, 39)
+        lbl垂直に.Location = New Point(79, 29)
         lbl垂直に.Name = "lbl垂直に"
-        lbl垂直に.Size = New Size(51, 20)
+        lbl垂直に.Size = New Size(40, 15)
         lbl垂直に.TabIndex = 1
         lbl垂直に.Text = "垂直に"
         ' 
@@ -1780,10 +1896,11 @@ Partial Class frmMain
         editUpDown.I上右側面本数 = 0
         editUpDown.I垂直領域四角数 = 0
         editUpDown.I水平領域四角数 = 0
-        editUpDown.Location = New Point(-3, -3)
+        editUpDown.Location = New Point(-3, -2)
+        editUpDown.Margin = New Padding(3, 2, 3, 2)
         editUpDown.Name = "editUpDown"
-        editUpDown.PanelSize = New Size(800, 400)
-        editUpDown.Size = New Size(806, 406)
+        editUpDown.PanelSize = New Size(700, 330)
+        editUpDown.Size = New Size(706, 334)
         editUpDown.TabIndex = 4
         ' 
         ' f_i段数2
@@ -1799,89 +1916,90 @@ Partial Class frmMain
         ' 
         lbl四角ベース.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl四角ベース.AutoSize = True
-        lbl四角ベース.Location = New Point(291, 692)
+        lbl四角ベース.Location = New Point(255, 519)
         lbl四角ベース.Name = "lbl四角ベース"
-        lbl四角ベース.Size = New Size(72, 20)
-        lbl四角ベース.TabIndex = 42
+        lbl四角ベース.Size = New Size(58, 15)
+        lbl四角ベース.TabIndex = 43
         lbl四角ベース.Text = "四角ベース"
         ' 
         ' lbl計算寸法
         ' 
         lbl計算寸法.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法.AutoSize = True
-        lbl計算寸法.Location = New Point(23, 625)
+        lbl計算寸法.Location = New Point(20, 469)
         lbl計算寸法.Name = "lbl計算寸法"
-        lbl計算寸法.Size = New Size(69, 20)
-        lbl計算寸法.TabIndex = 23
+        lbl計算寸法.Size = New Size(55, 15)
+        lbl計算寸法.TabIndex = 24
         lbl計算寸法.Text = "計算寸法"
         ' 
         ' lbl計算寸法縦
         ' 
         lbl計算寸法縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法縦.AutoSize = True
-        lbl計算寸法縦.Location = New Point(501, 660)
+        lbl計算寸法縦.Location = New Point(438, 495)
         lbl計算寸法縦.Name = "lbl計算寸法縦"
-        lbl計算寸法縦.Size = New Size(24, 20)
-        lbl計算寸法縦.TabIndex = 47
+        lbl計算寸法縦.Size = New Size(19, 15)
+        lbl計算寸法縦.TabIndex = 48
         lbl計算寸法縦.Text = "縦"
         ' 
         ' lbl計算寸法高さ
         ' 
         lbl計算寸法高さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法高さ.AutoSize = True
-        lbl計算寸法高さ.Location = New Point(579, 660)
+        lbl計算寸法高さ.Location = New Point(507, 495)
         lbl計算寸法高さ.Name = "lbl計算寸法高さ"
-        lbl計算寸法高さ.Size = New Size(34, 20)
-        lbl計算寸法高さ.TabIndex = 50
+        lbl計算寸法高さ.Size = New Size(27, 15)
+        lbl計算寸法高さ.TabIndex = 51
         lbl計算寸法高さ.Text = "高さ"
         ' 
         ' lbl計算寸法_単位
         ' 
         lbl計算寸法_単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法_単位.AutoSize = True
-        lbl計算寸法_単位.Location = New Point(159, 625)
+        lbl計算寸法_単位.Location = New Point(139, 469)
         lbl計算寸法_単位.Name = "lbl計算寸法_単位"
-        lbl計算寸法_単位.Size = New Size(35, 20)
-        lbl計算寸法_単位.TabIndex = 25
+        lbl計算寸法_単位.Size = New Size(27, 15)
+        lbl計算寸法_単位.TabIndex = 26
         lbl計算寸法_単位.Text = "mm"
         ' 
         ' lbl縁厚さプラス
         ' 
         lbl縁厚さプラス.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl縁厚さプラス.AutoSize = True
-        lbl縁厚さプラス.Location = New Point(291, 723)
+        lbl縁厚さプラス.Location = New Point(255, 542)
         lbl縁厚さプラス.Name = "lbl縁厚さプラス"
-        lbl縁厚さプラス.Size = New Size(89, 20)
-        lbl縁厚さプラス.TabIndex = 43
+        lbl縁厚さプラス.Size = New Size(71, 15)
+        lbl縁厚さプラス.TabIndex = 44
         lbl縁厚さプラス.Text = "縁・厚さプラス"
         ' 
         ' lbl計算寸法横
         ' 
         lbl計算寸法横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法横.AutoSize = True
-        lbl計算寸法横.Location = New Point(412, 660)
+        lbl計算寸法横.Location = New Point(360, 495)
         lbl計算寸法横.Name = "lbl計算寸法横"
-        lbl計算寸法横.Size = New Size(24, 20)
-        lbl計算寸法横.TabIndex = 44
+        lbl計算寸法横.Size = New Size(19, 15)
+        lbl計算寸法横.TabIndex = 45
         lbl計算寸法横.Text = "横"
         ' 
         ' lbl計算寸法周
         ' 
         lbl計算寸法周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法周.AutoSize = True
-        lbl計算寸法周.Location = New Point(674, 660)
+        lbl計算寸法周.Location = New Point(590, 495)
         lbl計算寸法周.Name = "lbl計算寸法周"
-        lbl計算寸法周.Size = New Size(24, 20)
-        lbl計算寸法周.TabIndex = 53
+        lbl計算寸法周.Size = New Size(19, 15)
+        lbl計算寸法周.TabIndex = 54
         lbl計算寸法周.Text = "周"
         ' 
         ' btn終了
         ' 
         btn終了.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn終了.Location = New Point(756, 702)
+        btn終了.Location = New Point(662, 526)
+        btn終了.Margin = New Padding(3, 2, 3, 2)
         btn終了.Name = "btn終了"
-        btn終了.Size = New Size(111, 46)
-        btn終了.TabIndex = 57
+        btn終了.Size = New Size(97, 34)
+        btn終了.TabIndex = 58
         btn終了.Text = "終了(&X)"
         btn終了.UseVisualStyleBackColor = True
         ' 
@@ -1899,62 +2017,64 @@ Partial Class frmMain
         ' cmb基本色
         ' 
         cmb基本色.FormattingEnabled = True
-        cmb基本色.Location = New Point(733, 66)
+        cmb基本色.Location = New Point(641, 50)
+        cmb基本色.Margin = New Padding(3, 2, 3, 2)
         cmb基本色.Name = "cmb基本色"
-        cmb基本色.Size = New Size(130, 28)
+        cmb基本色.Size = New Size(114, 23)
         cmb基本色.TabIndex = 18
         ' 
         ' lbl基本色
         ' 
         lbl基本色.AutoSize = True
-        lbl基本色.Location = New Point(752, 39)
+        lbl基本色.Location = New Point(658, 29)
         lbl基本色.Name = "lbl基本色"
-        lbl基本色.Size = New Size(54, 20)
+        lbl基本色.Size = New Size(43, 15)
         lbl基本色.TabIndex = 17
         lbl基本色.Text = "基本色"
         ' 
         ' lbl横寸法の差
         ' 
         lbl横寸法の差.AutoSize = True
-        lbl横寸法の差.Location = New Point(234, 101)
+        lbl横寸法の差.Location = New Point(205, 76)
         lbl横寸法の差.Name = "lbl横寸法の差"
-        lbl横寸法の差.Size = New Size(81, 20)
+        lbl横寸法の差.Size = New Size(65, 15)
         lbl横寸法の差.TabIndex = 5
         lbl横寸法の差.Text = "横寸法の差"
         ' 
         ' lbl縦寸法の差
         ' 
         lbl縦寸法の差.AutoSize = True
-        lbl縦寸法の差.Location = New Point(351, 101)
+        lbl縦寸法の差.Location = New Point(307, 76)
         lbl縦寸法の差.Name = "lbl縦寸法の差"
-        lbl縦寸法の差.Size = New Size(81, 20)
+        lbl縦寸法の差.Size = New Size(65, 15)
         lbl縦寸法の差.TabIndex = 8
         lbl縦寸法の差.Text = "縦寸法の差"
         ' 
         ' lbl高さ寸法の差
         ' 
         lbl高さ寸法の差.AutoSize = True
-        lbl高さ寸法の差.Location = New Point(479, 101)
+        lbl高さ寸法の差.Location = New Point(419, 76)
         lbl高さ寸法の差.Name = "lbl高さ寸法の差"
-        lbl高さ寸法の差.Size = New Size(91, 20)
+        lbl高さ寸法の差.Size = New Size(73, 15)
         lbl高さ寸法の差.TabIndex = 11
         lbl高さ寸法の差.Text = "高さ寸法の差"
         ' 
         ' txtバンドの種類名
         ' 
         txtバンドの種類名.BorderStyle = BorderStyle.FixedSingle
-        txtバンドの種類名.Location = New Point(19, 99)
+        txtバンドの種類名.Location = New Point(17, 74)
+        txtバンドの種類名.Margin = New Padding(3, 2, 3, 2)
         txtバンドの種類名.Name = "txtバンドの種類名"
         txtバンドの種類名.ReadOnly = True
-        txtバンドの種類名.Size = New Size(181, 27)
+        txtバンドの種類名.Size = New Size(159, 23)
         txtバンドの種類名.TabIndex = 2
         ' 
         ' lbl基本のひも幅length
         ' 
         lbl基本のひも幅length.AutoSize = True
-        lbl基本のひも幅length.Location = New Point(618, 101)
+        lbl基本のひも幅length.Location = New Point(541, 76)
         lbl基本のひも幅length.Name = "lbl基本のひも幅length"
-        lbl基本のひも幅length.Size = New Size(131, 20)
+        lbl基本のひも幅length.Size = New Size(106, 15)
         lbl基本のひも幅length.TabIndex = 15
         lbl基本のひも幅length.Text = "基本のひも幅length"
         ' 
@@ -1962,41 +2082,43 @@ Partial Class frmMain
         ' 
         StatusStrip1.ImageScalingSize = New Size(20, 20)
         StatusStrip1.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel1, ToolStripStatusLabel2})
-        StatusStrip1.Location = New Point(0, 757)
+        StatusStrip1.Location = New Point(0, 571)
         StatusStrip1.Name = "StatusStrip1"
-        StatusStrip1.Size = New Size(886, 26)
-        StatusStrip1.TabIndex = 58
+        StatusStrip1.Padding = New Padding(1, 0, 12, 0)
+        StatusStrip1.Size = New Size(777, 22)
+        StatusStrip1.TabIndex = 59
         StatusStrip1.Text = "StatusStrip1"
         ' 
         ' ToolStripStatusLabel1
         ' 
         ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        ToolStripStatusLabel1.Size = New Size(152, 20)
+        ToolStripStatusLabel1.Size = New Size(119, 17)
         ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
         ' 
         ' ToolStripStatusLabel2
         ' 
         ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        ToolStripStatusLabel2.Size = New Size(152, 20)
+        ToolStripStatusLabel2.Size = New Size(119, 17)
         ToolStripStatusLabel2.Text = "ToolStripStatusLabel2"
         ' 
         ' lbl単位
         ' 
         lbl単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl単位.AutoSize = True
-        lbl単位.Location = New Point(98, 625)
+        lbl単位.Location = New Point(86, 469)
         lbl単位.Name = "lbl単位"
-        lbl単位.Size = New Size(42, 20)
-        lbl単位.TabIndex = 24
+        lbl単位.Size = New Size(34, 15)
+        lbl単位.TabIndex = 25
         lbl単位.Text = "単位:"
         ' 
         ' btnDEBUG
         ' 
         btnDEBUG.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btnDEBUG.Location = New Point(758, 619)
+        btnDEBUG.Location = New Point(663, 464)
+        btnDEBUG.Margin = New Padding(3, 2, 3, 2)
         btnDEBUG.Name = "btnDEBUG"
-        btnDEBUG.Size = New Size(81, 27)
-        btnDEBUG.TabIndex = 59
+        btnDEBUG.Size = New Size(71, 20)
+        btnDEBUG.TabIndex = 60
         btnDEBUG.Text = "DEBUG"
         btnDEBUG.UseVisualStyleBackColor = True
         btnDEBUG.Visible = False
@@ -2209,7 +2331,7 @@ Partial Class frmMain
         ' f_bError
         ' 
         f_bError.DataPropertyName = "f_bError"
-        f_bError.HeaderText = "f_bError"
+        f_bError.HeaderText = "bError"
         f_bError.MinimumWidth = 6
         f_bError.Name = "f_bError"
         f_bError.Visible = False
@@ -2218,9 +2340,10 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(886, 783)
+        ClientSize = New Size(777, 593)
+        Controls.Add(btn一時保存)
         Controls.Add(txt後の三角形の本幅の差)
         Controls.Add(txt四辺形の本幅の差)
         Controls.Add(lbl本幅の差)
@@ -2283,7 +2406,8 @@ Partial Class frmMain
         Controls.Add(MenuStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
-        MinimumSize = New Size(904, 830)
+        Margin = New Padding(3, 2, 3, 2)
+        MinimumSize = New Size(793, 632)
         Name = "frmMain"
         Text = "斜め四角45度"
         CType(BindingSource縁の始末, ComponentModel.ISupportInitialize).EndInit()
@@ -2319,7 +2443,9 @@ Partial Class frmMain
         tpageメモ他.ResumeLayout(False)
         tpageメモ他.PerformLayout()
         tpage横ひも.ResumeLayout(False)
+        tpage横ひも.PerformLayout()
         tpage縦ひも.ResumeLayout(False)
+        tpage縦ひも.PerformLayout()
         tpageプレビュー.ResumeLayout(False)
         tpageプレビュー.PerformLayout()
         CType(picプレビュー, ComponentModel.ISupportInitialize).EndInit()
@@ -2518,6 +2644,8 @@ Partial Class frmMain
     Friend WithEvents chk1回のみ As CheckBox
     Friend WithEvents lbl開始高さ As Label
     Friend WithEvents nud開始高さ As NumericUpDown
+    Friend WithEvents ToolStripMenuItemEditSaveTemporarily As ToolStripMenuItem
+    Friend WithEvents btn一時保存 As Button
     Friend WithEvents f_i番号 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn

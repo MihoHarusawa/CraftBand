@@ -56,6 +56,8 @@ Public Class frmMain
         btnDEBUG.Visible = (clsLog.LogLevel.Debug <= g_clsLog.Level)
 #End If
 
+        frmSaveTemporarily.ClearSaved()
+
         Dim lastFilePath As String
         If Not String.IsNullOrWhiteSpace(_sFilePath) Then
             lastFilePath = _sFilePath
@@ -840,6 +842,19 @@ Public Class frmMain
         End If
     End Sub
 
+    '一時保存
+    Private Sub ToolStripMenuItemEditSaveTemporarily_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditSaveTemporarily.Click
+        SaveTables(_clsDataTables)
+        Dim dlg As New frmSaveTemporarily(_clsDataTables)
+        If dlg.ShowDialog() = DialogResult.OK Then
+            DispTables(_clsDataTables)
+            setStartEditing(True)
+        End If
+    End Sub
+
+    Private Sub btn一時保存_Click(sender As Object, e As EventArgs) Handles btn一時保存.Click
+        ToolStripMenuItemEditSaveTemporarily.PerformClick()
+    End Sub
 
     Private Sub btnリセット_Click(sender As Object, e As EventArgs) Handles btnリセット.Click
         ToolStripMenuItemEditReset.PerformClick()
@@ -985,6 +1000,8 @@ Public Class frmMain
             Exit Sub
         End If
         If _clsDataTables.Load(OpenFileDialog1.FileName) Then
+            frmSaveTemporarily.ClearSaved()
+
             DispTables(_clsDataTables)
             _sFilePath = OpenFileDialog1.FileName
             setStartEditing(True)
@@ -1109,6 +1126,8 @@ Public Class frmMain
                 Exit Sub
             End If
             If _clsDataTables.Load(fname) Then
+                frmSaveTemporarily.ClearSaved()
+
                 DispTables(_clsDataTables)
                 _sFilePath = fname
                 setStartEditing(True)
