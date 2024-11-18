@@ -61,6 +61,25 @@ Public Class clsSquare45Bottom
         End If
     End Function
 
+    '「合わせる」領域を作れればTrue 作れなければmsg #85
+    Function IsEditFittable(ByRef msg As String) As Boolean
+
+        '生成領域のサイズ
+        Dim areasize As Integer = _i横の四角数 + _i縦の四角数 + _i高さ編集四角数 * 2
+        If clsUpDown.cMaxUpdownColumns < areasize Then
+            Dim maxedit As Integer = (clsUpDown.cMaxUpdownColumns - (_i横の四角数 + _i縦の四角数)) \ 2
+            '編集可能な高さの上限は {0} です。
+            msg = String.Format(My.Resources.ErrSquare45BottomMaxHeight, maxedit)
+            Return False
+        End If
+        Me.SetEditCount(areasize, areasize)
+        If Not Is底位置表示 Then
+            Return False
+        End If
+        Return True
+    End Function
+
+
     '設定値の状態
     Private Function calcBasicCount() As Boolean
         _i領域四角数 = _i横の四角数 + _i縦の四角数 + 2 * _i高さ編集四角数
@@ -70,13 +89,14 @@ Public Class clsSquare45Bottom
         End If
         _IsValid = True
 
-        If 0 < _i横の四角数 AndAlso 0 < _i縦の四角数 AndAlso
+        '#85
+        If 0 < (_i横の四角数 + _i縦の四角数) AndAlso
                 _IsOnce AndAlso
                 0 <= _i高さ編集四角数 AndAlso
                 0 < _EditHorizontal AndAlso 0 < _EditVertical AndAlso
                 (_EditHorizontal = _EditVertical) AndAlso
                 (_EditHorizontal = _i領域四角数) AndAlso
-                _i領域四角数 < clsUpDown.cMaxUpdownColumns Then
+                _i領域四角数 <= clsUpDown.cMaxUpdownColumns Then
             _is底位置表示 = True
         Else
             _is底位置表示 = False

@@ -661,6 +661,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  編集可能な高さの上限は {0} です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrSquare45BottomMaxHeight() As String
+            Get
+                Return ResourceManager.GetString("ErrSquare45BottomMaxHeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  チェック対象が正しく設定されていません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrSquare45BottomNoTarget() As String

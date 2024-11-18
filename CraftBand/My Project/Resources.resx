@@ -647,4 +647,8 @@
     <value>側面辺 {0}点の対応を確認しました。</value>
     <comment>ctrSquare45Bottom</comment>
   </data>
+  <data name="ErrSquare45BottomMaxHeight" xml:space="preserve">
+    <value>編集可能な高さの上限は {0} です。</value>
+    <comment>clsSquare45Bottom</comment>
+  </data>
 </root>

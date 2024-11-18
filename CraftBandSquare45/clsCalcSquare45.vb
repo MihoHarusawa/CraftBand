@@ -1097,10 +1097,11 @@ Class clsCalcSquare45
         If Not square45bottom.SetEditHeight(takasa, True) Then
             Return Nothing
         End If
-        '生成領域のサイズ
-        Dim areasize As Integer = _i横の四角数 + _i縦の四角数 + takasa * 2
-        square45bottom.SetEditCount(areasize, areasize)
-        If Not square45bottom.Is底位置表示 Then
+
+        '「合わせる」領域 #85
+        Dim msg As String = Nothing
+        If Not square45bottom.IsEditFittable(msg) Then
+            Me.p_sメッセージ = msg
             Return Nothing
         End If
 

@@ -1517,7 +1517,7 @@ Public Class frmMain
         Dim updown As clsUpDown = _clsCalcSquare45.fitsizeひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value, takasa)
         If updown Is Nothing OrElse Not updown.IsValid(False) Then
             '現在の値では合わせることはできません。
-            MessageBox.Show(My.Resources.MessageCannotSuit, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(My.Resources.MessageCannotSuit & _clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         editUpDown.Replace(updown)
