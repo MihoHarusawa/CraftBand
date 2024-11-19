@@ -12,6 +12,8 @@ Partial Public Class clsCalcSquare45
     Dim _BandPositions(cExpandCount - 1) As CBandPositionList
     '底の形状
     Dim _a底領域 As S四隅
+    '側面高さのキャッシュ値(バンド積み上げ)#84
+    Dim _dバンド側面の高さ As Double
 
 #Region "テクスチャファイル作成用"
     '底の絵のファイル
@@ -127,15 +129,7 @@ Partial Public Class clsCalcSquare45
     '#84 本幅変更時の高さ
     ReadOnly Property p_d側面の高さ As Double
         Get
-            If 0 < p_i同じ本幅 Then
-                Return (g_clsSelectBasics.p_d指定本幅(p_i同じ本幅) + _dひも間のすき間) * ROOT2
-            ElseIf Not p_b長方形である Then
-                '概算
-                Return (p_d底の横長 + p_d底の縦長) * (_d高さの四角数 / (_i横の四角数 + _i縦の四角数))
-            End If
-            'バンドを積み上げた高さ
-            Dim modelImageData = New clsModelSquare45(Me, Nothing)
-            Return modelImageData.CalcHeight()
+            Return _dバンド側面の高さ
         End Get
     End Property
 
@@ -262,6 +256,8 @@ Partial Public Class clsCalcSquare45
         Dim ret As Boolean = True
 
         If is位置計算 Then
+            '側面高さ
+            _dバンド側面の高さ = -1
 
             '縦ひも,横ひもの配置位置
             _BandPositions(emExp._Yoko).CalcBasicPositions(_I基本のひも幅, _dひも間のすき間)
@@ -353,11 +349,20 @@ Partial Public Class clsCalcSquare45
             _BandPositions(emExp._Tate).Set補強ひも長(1, BC.Length)
             _BandPositions(emExp._Tate).Set補強ひも長(2, AD.Length)
 
-            '
-            If Not p_b長方形である Then
+            '側面高さのキャッシュ値(バンド積み上げ)
+            If 0 < p_i同じ本幅 Then
+                'p_b長方形である=true
+                _dバンド側面の高さ = (g_clsSelectBasics.p_d指定本幅(p_i同じ本幅) + _dひも間のすき間) * ROOT2
+            ElseIf Not p_b長方形である Then
+                '非長方形・概算
+                _dバンド側面の高さ = (p_d底の横長 + p_d底の縦長) * (_d高さの四角数 / (_i横の四角数 + _i縦の四角数))
                 '底が長方形になっていません。横{0:f1} ({1:f1})  縦{2:f1} ({3:f1})
                 p_s警告 = String.Format(My.Resources.CalcNoRectangle,
                         p_d底の横長, p_d底の横長(True), p_d底の縦長, p_d底の縦長(True))
+            Else
+                '長方形である
+                Dim modelImageData = New clsModelSquare45(Me, Nothing)
+                _dバンド側面の高さ = modelImageData.CalcHeight()
             End If
 
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CBandPositionList={0}", _BandPositions(emExp._Yoko).ToString)

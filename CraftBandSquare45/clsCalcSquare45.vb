@@ -517,6 +517,7 @@ Class clsCalcSquare45
         sb.AppendFormat("Edge:H({0}) VerticalLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
 
         sb.AppendFormat("WidthChange({0}) IsRectangle({1}) {2}", p_b本幅変更あり, p_b長方形である, _a底領域).AppendLine()
+        sb.AppendFormat("AllSameWidth({0}) HeightByBand({1})", p_i同じ本幅, _dバンド側面の高さ).AppendLine()
         sb.AppendFormat("Up{0:f3}° Left{1:f3}° Bottom{2:f3}° Right{3:f3}°",
                         p_d底の角度(DirectionEnum._上), p_d底の角度(DirectionEnum._左),
                         p_d底の角度(DirectionEnum._下), p_d底の角度(DirectionEnum._右)).AppendLine()
@@ -1417,10 +1418,16 @@ Class clsCalcSquare45
                 .f_dひも長 = .f_d長さ
                 .f_d出力ひも長 = .f_dひも長 + .f_dひも長加算
             Else
-                '通常のひも ※高さ分は固定:高さの四角数 * _d四角の一辺
+                ''通常のひも ※高さ分は固定:高さの四角数 * _d四角の一辺
+                '.f_dひも長 = .f_d長さ +
+                '    g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間 +
+                '    4 * _d高さの四角数 * _d四角の一辺
+                '通常のひも #84
                 .f_dひも長 = .f_d長さ +
                     g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間 +
-                    4 * _d高さの四角数 * _d四角の一辺
+                    2 * p_d四角ベース_高さ * ROOT2
+
+                '係数と加算値
                 .f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 +
                     (_dひも長加算 + _d縁の垂直ひも長) * 2
             End If
