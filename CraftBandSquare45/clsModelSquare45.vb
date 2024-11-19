@@ -1,6 +1,8 @@
-﻿Imports CraftBand
+﻿Imports System.Text
+Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsCalcSquare45
 
@@ -46,6 +48,39 @@ Public Class clsModelSquare45
             _IsDxDySet = False
         Next
     End Sub
+
+    '#84 高さの算出(長方形の場合のみ・前面値)
+    Public Function CalcHeight() As Double
+        If Not _calc.p_b長方形である Then
+            Return -1
+        End If
+
+        '斜め各方向に下からバンドを積む
+        setSideBandStack()
+
+        '高さ=<前面>の<縦>
+        Dim table縦 As tbl縦横展開DataTable = _SideBandStack(enumBasketPlateIdx._front).getBandTable(enumひも種.i_縦, CSideBandStack.emStack._45, True)
+        Dim d高さの四角数 As Double = _calc.p_d高さの四角数
+        Dim dひも間のすき間 As Double = _calc.p_dひも間のすき間
+        Dim dHeight As Double = 0
+
+        Dim rows() As tbl縦横展開Row = table縦.Select(Nothing, "f_iひも番号 ASC")
+        For Each row As tbl縦横展開Row In rows
+            If 1 < d高さの四角数 Then
+                dHeight += g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+                dHeight += dひも間のすき間
+                d高さの四角数 -= 1
+            ElseIf 0 < d高さの四角数 Then
+                Dim d = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + dひも間のすき間
+                dHeight += d * d高さの四角数
+                Exit For
+            Else
+                Exit For
+            End If
+        Next
+
+        Return dHeight * ROOT2
+    End Function
 
     'プレビュー処理
     Public Function CalcModel() As Boolean
@@ -192,7 +227,7 @@ Public Class clsModelSquare45
     '    　　＼／　　　　    
     '    　
     '    　　　
-    '    
+    'バンドの属性    
     Friend Class CBandAttribute
         Dim _i何本幅 As Integer
         Dim _s色 As String
@@ -216,6 +251,7 @@ Public Class clsModelSquare45
         End Function
     End Class
 
+    'バンドの属性リスト
     Friend Class CBandAttributeList
         Inherits List(Of CBandAttribute)
 
@@ -231,6 +267,7 @@ Public Class clsModelSquare45
         End Function
     End Class
 
+    'バンドの属性リスト、45度と135度の両方向
     Private Class CSideBandStack
         '側面を垂直に見た時のひもの角度
         Enum emStack
@@ -564,35 +601,55 @@ Public Class clsModelSquare45
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i高さの切上四角数
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i縦の四角数
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_d高さの四角数") = 0
-        _SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        '_SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
 
         '前面: 底の左上、横×高さ
         _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i横の四角数
         _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i高さの切上四角数
         _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_d高さの四角数") = 0
-        _SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+        '_SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
 
         '右側面: 底の右上、縦×高さ
         _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i高さの切上四角数
         _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i縦の四角数
         _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_d高さの四角数") = 0
-        _SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        '_SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
 
         '背面: 底の右下、横×高さ
         _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i横の四角数
         _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i高さの切上四角数
         _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_d高さの四角数") = 0
-        _SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+        '_SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
 
 
         '斜め各方向に下からバンドを積む
-        set_45()
-        set_135()
+        setSideBandStack()
+        'set_45()
+        'set_135()
+
         '斜めに積まれたデータを各面の縦ひも・横ひもにセット
         setDataFromStack()
 
         '各面に合わせたひも上下
         setPlateUpDown()
+
+        Return True
+    End Function
+
+    '斜め各方向に下からバンドを積む
+    Private Function setSideBandStack() As Boolean
+        '左側面: 底の左下、縦×高さ
+        _SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        '前面: 底の左上、横×高さ
+        _SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+        '右側面: 底の右上、縦×高さ
+        _SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        '背面: 底の右下、横×高さ
+        _SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+
+        '2方向にバンドを積む
+        set_45()
+        set_135()
 
         Return True
     End Function

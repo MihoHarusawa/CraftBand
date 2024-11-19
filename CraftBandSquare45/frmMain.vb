@@ -468,7 +468,7 @@ Public Class frmMain
                 ToolStripStatusLabel2.Text = .p_sメッセージ
             End If
 
-            lbl本幅の差.Visible = False
+            lbl本幅の差.Visible = .p_b本幅変更あり '#84
             txt先の三角形の本幅の差.Visible = False
             txt四辺形の本幅の差.Visible = False
             txt後の三角形の本幅の差.Visible = False

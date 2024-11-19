@@ -10,7 +10,7 @@ Imports CraftBand.Tables.dstOutput
 
 Class clsCalcSquare45
     Const PAI As Double = 3.1416
-    Const ROOT2 As Double = 1.41421356237
+    Friend Const ROOT2 As Double = 1.41421356237
 
     '横と縦の展開
     Enum emExp
@@ -171,12 +171,23 @@ Class clsCalcSquare45
         End Get
     End Property
 
+    ReadOnly Property p_d高さの四角数 As Double
+        Get
+            Return _d高さの四角数
+        End Get
+    End Property
+
+    ReadOnly Property p_dひも間のすき間 As Double
+        Get
+            Return _dひも間のすき間
+        End Get
+    End Property
+
     ReadOnly Property p_i高さの切上四角数 As Integer
         Get
             Return CInt(Math.Ceiling(_d高さの四角数))
         End Get
     End Property
-
 
     ReadOnly Property p_i横ひもの本数 As Integer
         Get
@@ -212,7 +223,11 @@ Class clsCalcSquare45
 
     ReadOnly Property p_d四角ベース_高さ As Double
         Get
-            Return _d四角の対角線 * _d高さの四角数
+            '#84
+            If Not p_b本幅変更あり Then
+                Return _d四角の対角線 * _d高さの四角数
+            End If
+            Return p_d側面の高さ
         End Get
     End Property
 

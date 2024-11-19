@@ -99,6 +99,7 @@ Partial Public Class clsCalcSquare45
 
 #Region "結果表示用"
 
+    '基本のひも幅と不一致がある
     ReadOnly Property p_b本幅変更あり As Boolean
         Get
             If _b縦横を展開する Then
@@ -110,9 +111,41 @@ Partial Public Class clsCalcSquare45
         End Get
     End Property
 
+    '#84 0より大きいとき、すべて同じ本幅の値
+    ReadOnly Property p_i同じ本幅 As Integer
+        Get
+            If 0 < _BandPositions(emExp._Yoko)._同じ本幅 AndAlso
+                0 < _BandPositions(emExp._Tate)._同じ本幅 AndAlso
+                _BandPositions(emExp._Yoko)._同じ本幅 = _BandPositions(emExp._Tate)._同じ本幅 Then
+                Return _BandPositions(emExp._Yoko)._同じ本幅
+            Else
+                Return -1
+            End If
+        End Get
+    End Property
+
+    '#84 本幅変更時の高さ
+    ReadOnly Property p_d側面の高さ As Double
+        Get
+            If 0 < p_i同じ本幅 Then
+                Return (g_clsSelectBasics.p_d指定本幅(p_i同じ本幅) + _dひも間のすき間) * ROOT2
+            ElseIf Not p_b長方形である Then
+                '概算
+                Return (p_d底の横長 + p_d底の縦長) * (_d高さの四角数 / (_i横の四角数 + _i縦の四角数))
+            End If
+            'バンドを積み上げた高さ
+            Dim modelImageData = New clsModelSquare45(Me, Nothing)
+            Return modelImageData.CalcHeight()
+        End Get
+    End Property
+
+    '本幅ベースの長さでチェック
     ReadOnly Property p_b長方形である As Boolean
         Get
             If Not p_b本幅変更あり Then
+                Return True
+            End If
+            If 0 < p_i同じ本幅 Then
                 Return True
             End If
             If _BandPositions(emExp._Yoko)._本幅の計_Z <> _BandPositions(emExp._Tate)._本幅の計_Z Then
@@ -421,6 +454,7 @@ Partial Public Class clsCalcSquare45
 
         '集計結果
         Public _本幅変更あり As Boolean
+        Public _同じ本幅 As Integer '初期値0,不一致はマイナス
 
         Public _本幅の計_M As Integer
         Public _本幅の計_Z As Integer
@@ -557,6 +591,7 @@ Partial Public Class clsCalcSquare45
         Function CalcBasicPositions(ByVal I基本のひも幅 As Integer, ByVal dひも間のすき間 As Double) As Boolean
 
             _本幅変更あり = False
+            _同じ本幅 = 0
             _本幅の計_M = 0
             _本幅の計_Z = 0
             _本幅の計_P = 0
@@ -578,6 +613,13 @@ Partial Public Class clsCalcSquare45
 
                 If row.f_i何本幅 <> I基本のひも幅 Then
                     _本幅変更あり = True
+                End If
+                If _同じ本幅 = 0 Then
+                    _同じ本幅 = row.f_i何本幅
+                ElseIf 0 < _同じ本幅 Then
+                    If _同じ本幅 <> row.f_i何本幅 Then
+                        _同じ本幅 = -1
+                    End If
                 End If
                 If row.f_i位置番号 < 0 Then
                     _本幅の計_M += row.f_i何本幅
@@ -639,7 +681,7 @@ Partial Public Class clsCalcSquare45
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("本幅の計:{0},{1},{2}", _本幅の計_M, _本幅の計_Z, _本幅の計_P)
             If _本幅変更あり Then
-                sb.Append(_Direction).Append("本幅変更あり").AppendLine()
+                sb.Append(_Direction).AppendFormat("本幅変更あり({0})", _同じ本幅).AppendLine()
             Else
                 sb.Append(_Direction).Append("本幅変更なし").AppendLine()
             End If
