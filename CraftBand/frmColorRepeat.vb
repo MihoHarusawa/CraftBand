@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing
 Imports System.Windows.Forms
-Imports CraftBand.clsDataTables
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 
@@ -173,12 +172,24 @@ Friend Class frmColorRepeat
 
 
     Private Sub btn削除_Click(sender As Object, e As EventArgs) Handles btn削除.Click
-        Dim current As System.Data.DataRowView = BindingSourceColorRepeat.Current
-        If current Is Nothing OrElse current.Row Is Nothing Then
+        'Dim current As DataRowView = BindingSourceColorRepeat.Current
+        'If current Is Nothing OrElse current.Row Is Nothing Then
+        '    Exit Sub
+        'End If
+        'current.Row.Delete()
+
+        If 0 < dgvColorRepeat.SelectedRows.Count Then
+            '選択されている行を逆順で削除
+            For Each drow As DataGridViewRow In dgvColorRepeat.SelectedRows.Cast(Of DataGridViewRow).Reverse()
+                dgvColorRepeat.Rows.Remove(drow)
+            Next
+        ElseIf dgvColorRepeat.CurrentCell IsNot Nothing Then
+            'カレントセル行を削除
+            dgvColorRepeat.Rows.RemoveAt(dgvColorRepeat.CurrentCell.RowIndex)
+        Else
             Exit Sub
         End If
 
-        current.Row.Delete()
         _Table.AcceptChanges()
 
         Dim idxseq As Integer = 1 '開始番号
@@ -202,17 +213,79 @@ Friend Class frmColorRepeat
     End Sub
 
     Private Sub add_record()
-        Dim row As dstWork.tblColorRepeatRow = _Table.NewtblColorRepeatRow
-        row.Index = _Table.Rows.Count + 1
-        row.SetColorNull()
-        row.SetLaneNull()
+        'レコード追加
+        Dim newRow As dstWork.tblColorRepeatRow = _Table.NewtblColorRepeatRow
+        newRow.Index = _Table.Rows.Count + 1
+        newRow.SetColorNull()
+        newRow.SetLaneNull()
+        _Table.Rows.Add(newRow)
 
-        _Table.Rows.Add(row)
+        'カレント行
+        Dim curIdx As Integer
+        If BindingSourceColorRepeat.Current Is Nothing OrElse BindingSourceColorRepeat.Current.Row Is Nothing Then
+            Return
+        Else
+            curIdx = BindingSourceColorRepeat.Current.Row("Index")
+        End If
+        _Table.AcceptChanges()
+
+
+        'Index > curIdx のレコードを Index の降順で取得
+        Dim result = _Table.AsEnumerable().
+                        Where(Function(row) row.Field(Of System.Int16)("Index") > curIdx).
+                        OrderByDescending(Function(row) row.Field(Of System.Int16)("Index"))
+
+        '値を後ろにシフト
+        Dim rowNext As dstWork.tblColorRepeatRow = Nothing
+        For Each row As dstWork.tblColorRepeatRow In result
+            If rowNext IsNot Nothing Then
+                rowNext.Color = row.Color
+                rowNext.Lane = row.Lane
+                If row.Index = curIdx + 1 Then
+                    row.SetColorNull()
+                    row.SetLaneNull()
+                    Exit For
+                End If
+            End If
+            rowNext = row
+        Next
+
+        ' 最終レコードでない場合に、カレントを1つ下に移動
+        If BindingSourceColorRepeat.Position < BindingSourceColorRepeat.Count - 1 Then
+            BindingSourceColorRepeat.Position += 1
+        End If
+
     End Sub
 
     Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
         add_record()
         dgvColorRepeat.Refresh()
+    End Sub
+
+    Private Sub btn反転_Click(sender As Object, e As EventArgs) Handles btn反転.Click
+        ' 選択されている行
+        Dim ridxlist As New List(Of Integer)
+        For Each drow As DataGridViewRow In dgvColorRepeat.SelectedRows
+            ridxlist.Add(drow.Index)
+        Next
+        If ridxlist.Count <= 1 Then
+            '2行以上を選択してください。
+            MessageBox.Show(My.Resources.ErrMsgSelectLines, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        ridxlist.Sort()
+
+        For i As Integer = 0 To (ridxlist.Count \ 2) - 1
+            Dim ridx As Integer = ridxlist(i)
+            Dim ridx_ref As Integer = ridxlist(ridxlist.Count - i - 1)
+            Dim obj1 As Object = dgvColorRepeat.Rows(ridx).Cells("DataGridViewColumnLane").Value
+            Dim obj2 As Object = dgvColorRepeat.Rows(ridx).Cells("DataGridViewColumnColor").Value
+            dgvColorRepeat.Rows(ridx).Cells("DataGridViewColumnLane").Value = dgvColorRepeat.Rows(ridx_ref).Cells("DataGridViewColumnLane").Value
+            dgvColorRepeat.Rows(ridx).Cells("DataGridViewColumnColor").Value = dgvColorRepeat.Rows(ridx_ref).Cells("DataGridViewColumnColor").Value
+            dgvColorRepeat.Rows(ridx_ref).Cells("DataGridViewColumnLane").Value = obj1
+            dgvColorRepeat.Rows(ridx_ref).Cells("DataGridViewColumnColor").Value = obj2
+        Next
+
     End Sub
 
     '変更実行ボタン
@@ -286,6 +359,7 @@ Friend Class frmColorRepeat
     Dim _current As Integer = -1
     Private Sub reset_record()
         _current = -1
+        _Table.AcceptChanges()
     End Sub
 
     Private Function next_record() As dstWork.tblColorRepeatRow
@@ -305,4 +379,5 @@ Friend Class frmColorRepeat
         BindingSourceColorRepeat.DataSource = Nothing
         Me.Close() '#70 Me.Hide()
     End Sub
+
 End Class

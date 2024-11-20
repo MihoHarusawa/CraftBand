@@ -513,7 +513,7 @@ Class clsCalcSquare45
         sb.AppendFormat("{0}({1}){2}", Me.GetType.Name, IIf(p_b有効, "Valid", "InValid"), p_sメッセージ).AppendLine()
         sb.AppendFormat("Target:({0},{1},{2}) Lane({3})", _d横_目標, _d縦_目標, _d高さ_目標, _I基本のひも幅).AppendLine()
         sb.AppendFormat("Unit: band({0:f3}/{1:f3}) square({2:f3}/{3:f3})", _dひも幅の一辺, _dひも幅の対角線, _d四角の一辺, _d四角の対角線).AppendLine()
-        sb.AppendFormat("Square: W({0:f3}, {1:f3}) D({2:f3}, {3:f3}) H({4:f3}, {5:f3}) ", _i横の四角数, p_d四角ベース_横, _i縦の四角数, p_d四角ベース_縦, _d高さの四角数, p_d四角ベース_高さ).AppendLine()
+        sb.AppendFormat("Square: W({0}, {1:f3}) D({2}, {3:f3}) H({4:f1}, {5:f3}) ", _i横の四角数, p_d四角ベース_横, _i縦の四角数, p_d四角ベース_縦, _d高さの四角数, p_d四角ベース_高さ).AppendLine()
         sb.AppendFormat("Edge:H({0}) VerticalLength({1}) Thickness({2})", _d縁の高さ, _d縁の垂直ひも長, _d縁の厚さ).AppendLine()
 
         sb.AppendFormat("WidthChange({0}) IsRectangle({1}) {2}", p_b本幅変更あり, p_b長方形である, _a底領域).AppendLine()

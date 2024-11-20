@@ -544,6 +544,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  2行以上を選択してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgSelectLines() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgSelectLines", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}以下の数値を設定してください。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrMsgTooLarge() As String

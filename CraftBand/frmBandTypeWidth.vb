@@ -129,23 +129,25 @@ Public Class frmBandTypeWidth
                 p_s本幅の幅リスト = ""
                 DialogResult = Windows.Forms.DialogResult.OK
             End If
-        End If
 
-        '文字列がある
-        Dim s幅リスト As String = sb.ToString
-        Dim err As String = Nothing
-        If Not Check幅リスト文字列(p_i本幅, p_dバンド幅, s幅リスト, err) Then
-            MessageBox.Show(err, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-
-        '結果
-        If p_s本幅の幅リスト = s幅リスト Then
-            DialogResult = Windows.Forms.DialogResult.Cancel '変更なし
         Else
-            p_s本幅の幅リスト = s幅リスト
-            DialogResult = Windows.Forms.DialogResult.OK
+            '文字列がある
+            Dim s幅リスト As String = sb.ToString
+            Dim err As String = Nothing
+            If Not Check幅リスト文字列(p_i本幅, p_dバンド幅, s幅リスト, err) Then
+                MessageBox.Show(err, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            '結果
+            If p_s本幅の幅リスト = s幅リスト Then
+                DialogResult = Windows.Forms.DialogResult.Cancel '変更なし
+            Else
+                p_s本幅の幅リスト = s幅リスト
+                DialogResult = Windows.Forms.DialogResult.OK
+            End If
+
         End If
+
         Me.Close()
     End Sub
 

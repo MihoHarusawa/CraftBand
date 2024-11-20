@@ -1,7 +1,6 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsMasterTables
 Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsModelSquare45
@@ -433,7 +432,7 @@ Partial Public Class clsCalcSquare45
             sb.AppendFormat("Idx={0} ひも幅({1:f1})", _Idx, m_dひも幅).Append(vbTab)
             sb.AppendFormat("底の四隅:({0})", m_a底の四隅).Append(vbTab)
             If m_row縦横展開 IsNot Nothing Then
-                sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅", m_row縦横展開.f_iひも種, m_row縦横展開.f_iひも番号, m_row縦横展開.f_i位置番号, m_row縦横展開.f_i何本幅)
+                sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅 {4}", m_row縦横展開.f_iひも種, m_row縦横展開.f_iひも番号, m_row縦横展開.f_i位置番号, m_row縦横展開.f_i何本幅, m_row縦横展開.f_s色)
             Else
                 sb.Append("No row縦横展開")
             End If
@@ -686,7 +685,7 @@ Partial Public Class clsCalcSquare45
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("本幅の計:{0},{1},{2}", _本幅の計_M, _本幅の計_Z, _本幅の計_P)
             If _本幅変更あり Then
-                sb.Append(_Direction).AppendFormat("本幅変更あり({0})", _同じ本幅).AppendLine()
+                sb.Append(_Direction).AppendFormat("本幅変更あり(同じ本幅={0})", _同じ本幅).AppendLine()
             Else
                 sb.Append(_Direction).Append("本幅変更なし").AppendLine()
             End If

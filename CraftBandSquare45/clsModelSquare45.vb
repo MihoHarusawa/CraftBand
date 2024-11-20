@@ -662,23 +662,26 @@ Public Class clsModelSquare45
             _data各面(pidx).ResetStartPoint()
             _path各面画像(pidx) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(pidx), CImageDraw.cImageClipFileExtention))
 
-            'Debug用
-            If clsLog.LogLevel.Detail <= g_clsLog.Level Then
-                If Not String.IsNullOrWhiteSpace(MyBase.FilePath) Then
-                    Dim fpath As String = IO.Path.GetFileNameWithoutExtension(MyBase.FilePath) & "-" & _PlateNames(pidx)
-                    fpath = IO.Path.Combine(IO.Path.GetTempPath, fpath)
-                    fpath = IO.Path.ChangeExtension(fpath, IO.Path.GetExtension(MyBase.FilePath))
-                    Try
-                        If _data各面(pidx).Save(fpath) Then
-                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFile={0}", fpath)
-                        Else
-                            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFileError={0}", _data各面(pidx).LastError)
-                        End If
-                    Catch ex As Exception
-                        g_clsLog.LogException(ex, fpath)
-                    End Try
+#If 0 Then 'DEBUG Then
+            'Debug用・生成したデータファイルを保存
+            '※Ver1.6より古いデータは、保存処理で幅が不一致になる可能性があります
+            Dim fdir As String = IO.Path.Combine(IO.Path.GetTempPath, GetShortExeName(g_enumExeName))
+            Dim fpath As String = IO.Path.GetFileNameWithoutExtension(MyBase.FilePath) & "-" & _PlateNames(pidx)
+            fpath = IO.Path.Combine(fdir, fpath)
+            fpath = IO.Path.ChangeExtension(fpath, IO.Path.GetExtension(MyBase.FilePath))
+            Try
+                If Not IO.Directory.Exists(fdir) Then
+                    IO.Directory.CreateDirectory(fdir)
                 End If
-            End If
+                If _data各面(pidx).Save(fpath) Then
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFile={0}", fpath)
+                Else
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "SaveFileError={0}", _data各面(pidx).LastError)
+                End If
+            Catch ex As Exception
+                g_clsLog.LogException(ex, fpath)
+            End Try
+#End If
 
             Dim calcTmp As New clsCalcSquare45(_data各面(pidx), _calc._frmMain)
             calcTmp.p_sBottomPngFilePath(True) = _path各面画像(pidx) 'あれば削除
@@ -689,6 +692,10 @@ Public Class clsModelSquare45
                     '{0}が長方形でないため描画できません。
                     _LastError = String.Format(My.Resources.ModelNoRectangle, BasketPlateString(pidx))
                     ret = False
+                    '
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "getImages:{0} {1}", pidx, LastError)
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "calcTmp={0}", calcTmp.ToString)
+                    'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "calcTmp={0}", calcTmp.dump())
                     Exit For
                 End If
 

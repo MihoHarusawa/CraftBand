@@ -651,4 +651,8 @@
     <value>編集可能な高さの上限は {0} です。</value>
     <comment>clsSquare45Bottom</comment>
   </data>
+  <data name="ErrMsgSelectLines" xml:space="preserve">
+    <value>2行以上を選択してください。</value>
+    <comment>frmColorRepeat</comment>
+  </data>
 </root>
