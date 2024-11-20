@@ -68,7 +68,7 @@ allowing you to organize and manage your recipes as a library.
 
 # Current Binary Version
 
-Installer         1.8.9.1
+Installer         1.8.9.1(1.8.9)
 CraftBand.dll     1.8.9.1 
 CraftBandMesh     1.8.9.1
 CraftBandSqare45  1.5.9.1  
