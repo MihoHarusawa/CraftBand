@@ -1204,6 +1204,15 @@ Public Class frmMain
     Private Sub nudひも長加算_側面_ValueChanged(sender As Object, e As EventArgs) Handles nudひも長加算_側面.ValueChanged
         recalc(CalcCategory.Square_Vert, sender)
     End Sub
+
+    Private Sub chk底とは別_CheckedChanged(sender As Object, e As EventArgs) Handles chk底とは別.CheckedChanged
+        nud高さの目.Visible = chk底とは別.Checked
+        lbl高さの目_単位.Visible = chk底とは別.Checked
+    End Sub
+
+    Private Sub num高さの目_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの目.ValueChanged
+
+    End Sub
 #End Region
 
 #Region "側面"

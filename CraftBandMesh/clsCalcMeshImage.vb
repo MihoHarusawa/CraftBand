@@ -6,10 +6,6 @@ Imports CraftBand.Tables.dstDataTables
 
 Partial Public Class clsCalcMesh
 
-    ''リスト出力時に生成
-    'Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
-    'Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
-
     'プレビュー時に生成
     Dim _imageList側面編みかた As clsImageItemList    '側面のレコードを含む
     Dim _ImageList描画要素 As clsImageItemList '底と側面
