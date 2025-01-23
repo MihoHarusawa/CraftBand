@@ -63,7 +63,8 @@ Class clsCalcSquare
     Private Property _d上端下端の目 As Double '0～1
     Private Property _d最下段の目 As Double '0～1
 
-    Private Property _d目_ひも間のすき間 As Double
+    Private Property _d目_ひも間のすき間_底 As Double    '#86 底の目
+    Private Property _d目_ひも間のすき間_高さ As Double   '#86 高さの目
     Private Property _dひも長係数 As Double
     Private Property _dひも長加算_縦横端 As Double
     Private Property _dひも長加算_側面 As Double
@@ -126,7 +127,8 @@ Class clsCalcSquare
         _d上端下端の目 = -1
         _d最下段の目 = -1
 
-        _d目_ひも間のすき間 = -1
+        _d目_ひも間のすき間_底 = -1
+        _d目_ひも間のすき間_高さ = -1
         _dひも長係数 = -1
         _dひも長加算_縦横端 = -1
         _dひも長加算_側面 = -1
@@ -173,11 +175,21 @@ Class clsCalcSquare
         End Get
     End Property
 
-    'ひも幅+すき間
-    Public ReadOnly Property p_d縦横_四角 As Double
+    '#86 ひも幅+すき間(底と水平)
+    Public ReadOnly Property p_d底縦横_四角 As Double
         Get
-            If 0 <= _d目_ひも間のすき間 AndAlso 0 < _d基本のひも幅 Then
-                Return _d目_ひも間のすき間 + _d基本のひも幅
+            If 0 <= _d目_ひも間のすき間_底 AndAlso 0 < _d基本のひも幅 Then
+                Return _d目_ひも間のすき間_底 + _d基本のひも幅
+            Else
+                Return 0
+            End If
+        End Get
+    End Property
+    '#86 ひも幅+すき間(高さ)
+    Public ReadOnly Property p_d高さ_四角 As Double
+        Get
+            If 0 <= _d目_ひも間のすき間_高さ AndAlso 0 < _d基本のひも幅 Then
+                Return _d目_ひも間のすき間_高さ + _d基本のひも幅
             Else
                 Return 0
             End If
@@ -240,32 +252,32 @@ Class clsCalcSquare
     '表示文字列
     Public ReadOnly Property p_s縦横_目 As String
         Get
-            If 0 < _d目_ひも間のすき間 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d目_ひも間のすき間)
+            If 0 < _d目_ひも間のすき間_底 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d目_ひも間のすき間_底)
             End If
             Return ""
         End Get
     End Property
     Public ReadOnly Property p_s縦横_四角 As String
         Get
-            If 0 < p_d縦横_四角 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d縦横_四角)
+            If 0 < p_d底縦横_四角 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(p_d底縦横_四角)
             End If
             Return ""
         End Get
     End Property
     Public ReadOnly Property p_s対角線_目 As String
         Get
-            If 0 < _d目_ひも間のすき間 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d目_ひも間のすき間 * ROOT2)
+            If 0 < _d目_ひも間のすき間_底 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_d目_ひも間のすき間_底 * ROOT2)
             End If
             Return ""
         End Get
     End Property
     Public ReadOnly Property p_s対角線_四角 As String
         Get
-            If 0 < p_d縦横_四角 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_d縦横_四角) * ROOT2)
+            If 0 < p_d底縦横_四角 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text((p_d底縦横_四角) * ROOT2)
             End If
             Return ""
         End Get
@@ -655,7 +667,9 @@ Class clsCalcSquare
             _i縦の目の数 = .Value("f_i縦の四角数")
             _i高さの目の数 = .Value("f_d高さの四角数")
 
-            _d目_ひも間のすき間 = .Value("f_dひも間のすき間")
+            _d目_ひも間のすき間_底 = .Value("f_dひも間のすき間")
+            _d目_ひも間のすき間_高さ = .Value("f_dひとつのすき間の寸法")
+
             _dひも長係数 = .Value("f_dひも長係数")
             _dひも長加算_縦横端 = .Value("f_d垂直ひも長加算")
             _d左端右端の目 = .Value("f_dひも長加算")
@@ -813,7 +827,7 @@ Class clsCalcSquare
 
     '目標寸法→横・縦・高さの四角数
     Private Function calc_Target() As Boolean
-        If p_d縦横_四角 <= 0 Then
+        If p_d底縦横_四角 <= 0 Then
             Return False
         End If
 
@@ -827,7 +841,7 @@ Class clsCalcSquare
 
     '横寸法から横に並ぶ四角数・偶数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
+        Dim i横の四角数 As Integer = Int((_d横_目標 - _d基本のひも幅) / p_d底縦横_四角) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i横の四角数 Mod 2 <> 0 Then
@@ -835,7 +849,7 @@ Class clsCalcSquare
             End If
         Else
             '外側
-            Do While i横の四角数 * p_d縦横_四角 < (_d横_目標 - _d基本のひも幅)
+            Do While i横の四角数 * p_d底縦横_四角 < (_d横_目標 - _d基本のひも幅)
                 i横の四角数 += 1
             Loop
             If i横の四角数 Mod 2 <> 0 Then
@@ -855,14 +869,14 @@ Class clsCalcSquare
 
     '縦寸法から縦に並ぶ四角数・偶数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_d縦横_四角) '#22
+        Dim i縦の四角数 As Integer = Int((_d縦_目標 - _d基本のひも幅) / p_d底縦横_四角) '#22
         If _Data.p_row目標寸法.Value("f_b内側区分") Then
             '内側
             If i縦の四角数 Mod 2 <> 0 Then
                 i縦の四角数 -= 1
             End If
         Else
-            Do While i縦の四角数 * p_d縦横_四角 < (_d縦_目標 - _d基本のひも幅)
+            Do While i縦の四角数 * p_d底縦横_四角 < (_d縦_目標 - _d基本のひも幅)
                 i縦の四角数 += 1
             Loop
             If i縦の四角数 Mod 2 <> 0 Then
@@ -882,9 +896,9 @@ Class clsCalcSquare
 
     '高さ寸法から高さの四角数
     Private Function calc_Target_高さ()
-        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d目_ひも間のすき間) / p_d縦横_四角)
+        Dim i高さの四角数 As Integer = Int((_d高さ_目標 - _d目_ひも間のすき間_高さ) / p_d高さ_四角)
         If Not _Data.p_row目標寸法.Value("f_b内側区分") Then
-            Do While i高さの四角数 * p_d縦横_四角 < (_d高さ_目標 - _d目_ひも間のすき間)
+            Do While i高さの四角数 * p_d高さ_四角 < (_d高さ_目標 - _d目_ひも間のすき間_高さ)
                 i高さの四角数 += 1
             Loop
         End If
@@ -922,7 +936,7 @@ Class clsCalcSquare
         Dim row As tbl側面Row
         Dim ret As Boolean = True
 
-        If 0 < _d最下段の目 * _d目_ひも間のすき間 Then
+        If 0 < _d最下段の目 * _d目_ひも間のすき間_高さ Then
             '最下段のスペースのみ
             row = clsDataTables.NumberSubRecord(table, cIdxSpace, 1)
             If row Is Nothing Then
@@ -935,8 +949,8 @@ Class clsCalcSquare
             row.f_s編みかた名 = text最下段()
             row.f_s編みひも名 = text高さの目の数()
             row.f_iひも本数 = 0
-            row.f_d高さ = _d最下段の目 * _d目_ひも間のすき間
-            row.f_d垂直ひも長 = _d最下段の目 * _d目_ひも間のすき間
+            row.f_d高さ = _d最下段の目 * _d目_ひも間のすき間_高さ
+            row.f_d垂直ひも長 = _d最下段の目 * _d目_ひも間のすき間_高さ
             row.f_d周長 = 0
             row.f_dひも長 = 0
             row.f_d厚さ = 0
@@ -1031,7 +1045,7 @@ Class clsCalcSquare
             row.f_b集計対象外区分 = True
         Else
             If 0 < row.f_iひも本数 Then
-                row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間)
+                row.f_d高さ = row.f_iひも本数 * (g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_高さ)
                 row.f_d垂直ひも長 = row.f_d高さ
             Else
                 row.Setf_d高さNull()
@@ -1555,9 +1569,9 @@ Class clsCalcSquare
 
         If row.f_iひも種 = enumひも種.i_横 Then
             If row.f_iひも番号 = lastひも番号 Then
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d上端下端の目 * _d目_ひも間のすき間
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d上端下端の目 * _d目_ひも間のすき間_底
             Else
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_底
             End If
             row.f_d長さ = get周の横() + get側面高(2)
             row.f_dひも長 = (get周の横() + get側面高(2)) * _dひも長係数
@@ -1630,11 +1644,11 @@ Class clsCalcSquare
         Dim zero As Integer = p_i横ひもの本数 Mod 2
         Dim row As tbl縦横展開Row
 
-        If 0 < _d上端下端の目 * _d目_ひも間のすき間 Then
+        If 0 < _d上端下端の目 * _d目_ひも間のすき間_底 Then
             row = Find縦横展開Row(_tbl縦横展開_横ひも, enumひも種.i_横 Or enumひも種.i_すき間, 0, True)
             row.f_i位置番号 = pos - 1
             row.f_sひも名 = text上端下端()
-            row.f_d幅 = _d上端下端の目 * _d目_ひも間のすき間
+            row.f_d幅 = _d上端下端の目 * _d目_ひも間のすき間_底
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
@@ -1752,9 +1766,9 @@ Class clsCalcSquare
 
         If row.f_iひも種 = enumひも種.i_縦 Then
             If row.f_iひも番号 = lastひも番号 Then
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d左端右端の目 * _d目_ひも間のすき間
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d左端右端の目 * _d目_ひも間のすき間_底
             Else
-                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間
+                row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_底
             End If
             row.f_d長さ = get周の縦() + get側面高(2)
             row.f_dひも長 = (get周の縦() + get側面高(2)) * _dひも長係数
@@ -1824,12 +1838,12 @@ Class clsCalcSquare
         Dim zero As Integer = p_i縦ひもの本数 Mod 2
         Dim row As tbl縦横展開Row
 
-        If 0 < _d左端右端の目 * _d目_ひも間のすき間 Then
+        If 0 < _d左端右端の目 * _d目_ひも間のすき間_底 Then
             row = Find縦横展開Row(_tbl縦横展開_縦ひも, enumひも種.i_縦 Or enumひも種.i_すき間, 0, True)
             row.f_i位置番号 = pos - 1
             row.f_sひも名 = text左端右端()
             row.Setf_i何本幅Null()
-            row.f_d幅 = _d左端右端の目 * _d目_ひも間のすき間
+            row.f_d幅 = _d左端右端の目 * _d目_ひも間のすき間_底
             row.Setf_dひも長Null()
             row.Setf_d長さNull()
             row.f_d出力ひも長 = 0
@@ -2025,7 +2039,11 @@ Class clsCalcSquare
         row = output.NextNewRow
         row.f_sカテゴリー = text四角数()
         row.f_s編みかた名 = text目_ひも間のすき間()
-        row.f_s高さ = output.outLengthText(_d目_ひも間のすき間)
+        row.f_s高さ = output.outLengthText(_d目_ひも間のすき間_底)
+        If _Data.p_row底_縦横.Value("f_b高さ調整区分") Then '#86
+            row.f_s長さ = output.outLengthText(_d目_ひも間のすき間_高さ)
+        End If
+
 
         '***四角数
         'このカテゴリーは先に行をつくる

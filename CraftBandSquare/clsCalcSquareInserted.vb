@@ -121,6 +121,8 @@ Partial Public Class clsCalcSquare
         If row Is Nothing Then
             Return False
         End If
+        '#86 側面の目の概算用。正確には水平と垂直を見る必要があるところ
+        Dim d目_ひも間のすき間 As Double = Max(_d目_ひも間のすき間_底, _d目_ひも間のすき間_高さ)
 
         Select Case row.f_i配置面
             '-------------------------------------------------
@@ -129,7 +131,7 @@ Partial Public Class clsCalcSquare
                     Case enum角度.i_0度, enum角度.i_90度  '底の横 底の縦 a,c
                         '目を通すなら
                         If (row.f_i中心点 = enum中心点.i_目の中央) AndAlso
-                        _d目_ひも間のすき間 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                        _d目_ひも間のすき間_底 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
@@ -140,7 +142,7 @@ Partial Public Class clsCalcSquare
                             Return False
                         ElseIf (row.f_i中心点 = enum中心点.i_目の中央) Then
                             '目の中央を通すので対角線分の空き
-                            If _d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                            If _d目_ひも間のすき間_底 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
@@ -165,7 +167,7 @@ Partial Public Class clsCalcSquare
                     Case enum角度.i_0度, enum角度.i_90度  '水平の周(全面と同じ)'a,c
                         '目を通すなら
                         If (row.f_i中心点 = enum中心点.i_目の中央) AndAlso
-                        _d目_ひも間のすき間 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                        d目_ひも間のすき間 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
@@ -173,7 +175,7 @@ Partial Public Class clsCalcSquare
                     Case enum角度.i_45度, enum角度.i_135度 'b,d
                         If (row.f_i中心点 = enum中心点.i_目の中央) Then
                             '目の中央を通すので対角線分の空き
-                            If _d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                            If d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
@@ -182,7 +184,7 @@ Partial Public Class clsCalcSquare
 
                     Case enum角度.i_72度, enum角度.i_108度  'f,g
                         If (row.f_i中心点 = enum中心点.i_目の中央) Then
-                            If _d目_ひも間のすき間 * Math.Sqrt(10) / 3 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                            If d目_ひも間のすき間 * Math.Sqrt(10) / 3 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
@@ -190,7 +192,7 @@ Partial Public Class clsCalcSquare
 
                     Case enum角度.i_18度, enum角度.i_162度  'e,,h
                         If (row.f_i中心点 = enum中心点.i_目の中央) Then
-                            If _d目_ひも間のすき間 * Math.Sqrt(10) < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                            If d目_ひも間のすき間 * Math.Sqrt(10) < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
@@ -206,7 +208,7 @@ Partial Public Class clsCalcSquare
                     Case enum角度.i_0度, enum角度.i_90度  '水平の周(側面と同じ) 底の横+底の縦を側面に回す a,c
                         '目を通すなら
                         If (row.f_i中心点 = enum中心点.i_目の中央) AndAlso
-                        _d目_ひも間のすき間 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                        _d目_ひも間のすき間_底 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
@@ -217,7 +219,7 @@ Partial Public Class clsCalcSquare
                             Return False
                         ElseIf (row.f_i中心点 = enum中心点.i_目の中央) Then
                             '目の中央を通すので対角線分の空き
-                            If _d目_ひも間のすき間 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
+                            If _d目_ひも間のすき間_底 * ROOT2 < g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) Then
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
@@ -642,9 +644,9 @@ Partial Public Class clsCalcSquare
             Return No_Double_Value
         End If
         If isUpper Then
-            Return itemYoko.m_rひも位置.y最上 + _d目_ひも間のすき間 * dip
+            Return itemYoko.m_rひも位置.y最上 + _d目_ひも間のすき間_底 * dip
         Else
-            Return itemYoko.m_rひも位置.y最下 - _d目_ひも間のすき間 * dip
+            Return itemYoko.m_rひも位置.y最下 - _d目_ひも間のすき間_底 * dip
         End If
     End Function
 
@@ -801,9 +803,9 @@ Partial Public Class clsCalcSquare
             Return No_Double_Value
         End If
         If isLeft Then
-            Return itemTate.m_rひも位置.x最左 - _d目_ひも間のすき間 * dip
+            Return itemTate.m_rひも位置.x最左 - _d目_ひも間のすき間_底 * dip
         Else
-            Return itemTate.m_rひも位置.x最右 + _d目_ひも間のすき間 * dip
+            Return itemTate.m_rひも位置.x最右 + _d目_ひも間のすき間_底 * dip
         End If
     End Function
 
@@ -924,7 +926,7 @@ Partial Public Class clsCalcSquare
             '1=最初のひもの下,最初のひもの上　～ 最後の縦ひもの上
             If idx = 1 Then
                 '最初のひもの最下位置は、_d最下段の目
-                Return (_d最下段の目 * _d目_ひも間のすき間) - (_d目_ひも間のすき間 / 2)
+                Return (_d最下段の目 * _d目_ひも間のすき間_高さ) - (_d目_ひも間のすき間_高さ / 2)
             Else
                 iTakasa = idx - 1
             End If
@@ -937,7 +939,7 @@ Partial Public Class clsCalcSquare
         If item側面上 Is Nothing OrElse item側面上.m_rひも位置.IsEmpty Then
             Return No_Double_Value
         End If
-        Return (item側面上.m_rひも位置.y最上 + _d目_ひも間のすき間 * dInnerPosition) - getZeroY(1 / 2)
+        Return (item側面上.m_rひも位置.y最上 + _d目_ひも間のすき間_高さ * dInnerPosition) - getZeroY(1 / 2)
     End Function
 
     '4側面を水平に
@@ -1362,11 +1364,11 @@ Partial Public Class clsCalcSquare
 
         '座標値
         '開始位置となるX
-        Dim x_center1 As Double = -(nCorner - 1) * p_d縦横_四角 / 2
+        Dim x_center1 As Double = -(nCorner - 1) * p_d底縦横_四角 / 2
         '角(nCorner)のX
         Dim x_centerCorner As Double = -x_center1
         '角(nCorner=縦の1)のY
-        Dim y_center1 As Double = (nCorner2 - 1) * p_d縦横_四角 / 2
+        Dim y_center1 As Double = (nCorner2 - 1) * p_d底縦横_四角 / 2
 
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "i番号:{0} n点数={1} nCorner={2} nCorner2={3} x_center1={4:0.0} x_centerCorner({5:0.0}) y_center1({6:0.0}) ",
                                   row.f_i番号, n点数, nCorner, nCorner2, x_center1, x_centerCorner, y_center1)
@@ -1384,7 +1386,7 @@ Partial Public Class clsCalcSquare
             If i < nCorner Then
                 '→横にカウント
                 idx = i
-                x_center = x_center1 + p_d縦横_四角 * (idx - 1)
+                x_center = x_center1 + p_d底縦横_四角 * (idx - 1)
                 y_center = y_center1
                 tmp.m_iFlag = 1 '横へ
                 tmp.m_delta = New S差分((x_center + x_line), (y_line - y_center)) 'dx,dy
@@ -1429,7 +1431,7 @@ Partial Public Class clsCalcSquare
                 '↓下にカウント
                 idx = i - nCorner + 1
                 x_center = x_centerCorner
-                y_center = y_center1 - p_d縦横_四角 * (idx - 1)
+                y_center = y_center1 - p_d底縦横_四角 * (idx - 1)
                 tmp.m_iFlag = 0 '下へ
                 tmp.m_delta = New S差分((x_line - x_center), (y_center + y_line)) 'dx,dy
                 tmp.m_d長さ = tmp.m_delta.dX + tmp.m_delta.dY
@@ -1479,7 +1481,7 @@ Partial Public Class clsCalcSquare
         If row.f_i中心点 = enum中心点.i_ひも中央 Then
             d対角線幅 = _d基本のひも幅 * ROOT2 '縦ひも×横ひもを見るべきところを簡易化
         ElseIf row.f_i中心点 = enum中心点.i_目の中央 Then
-            d対角線幅 = _d目_ひも間のすき間 * ROOT2
+            d対角線幅 = _d目_ひも間のすき間_底 * ROOT2
         End If
 
         Dim bRevert As Boolean

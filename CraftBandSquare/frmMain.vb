@@ -153,7 +153,7 @@ Public Class frmMain
             lbl目_ひも間のすき間_単位.Text = unitstr
             lblひも長加算_縦横端_単位.Text = unitstr
             lblひも長加算_側面_単位.Text = unitstr
-
+            lbl高さの目_単位.Text = unitstr
 
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
@@ -413,6 +413,14 @@ Public Class frmMain
             nud上端下端の目.Value = .Value("f_d上端下端の目")
             nud最下段の目.Value = .Value("f_d最下段の目")
 
+            If .Value("f_b高さ調整区分") Then
+                chk底とは別.Checked = True
+                dispValidValueNud(nud高さの目, .Value("f_dひとつのすき間の寸法"))
+            Else
+                chk底とは別.Checked = False
+                dispValidValueNud(nud高さの目, .Value("f_dひも間のすき間"))
+            End If
+
         End With
     End Sub
 
@@ -521,7 +529,7 @@ Public Class frmMain
             '読み取りますが四角数と合わなければ調整されます
             .Value("f_i長い横ひもの本数") = nud横ひもの本数.Value
             .Value("f_i縦ひもの本数") = nud縦ひもの本数.Value
-            '読み取りなし　nud高さの目の数.Value 
+            '読み取りなし　nud編みひもの本数.Value 
 
             .Value("f_dひも間のすき間") = nud目_ひも間のすき間.Value
             .Value("f_dひも長係数") = nudひも長係数.Value
@@ -537,6 +545,13 @@ Public Class frmMain
             .Value("f_d左端右端の目") = nud左端右端の目.Value
             .Value("f_d上端下端の目") = nud上端下端の目.Value
             .Value("f_d最下段の目") = nud最下段の目.Value
+
+            .Value("f_b高さ調整区分") = chk底とは別.Checked
+            If chk底とは別.Checked Then
+                .Value("f_dひとつのすき間の寸法") = nud高さの目.Value
+            Else
+                .Value("f_dひとつのすき間の寸法") = nud目_ひも間のすき間.Value
+            End If
 
         End With
         Return True
@@ -1208,10 +1223,13 @@ Public Class frmMain
     Private Sub chk底とは別_CheckedChanged(sender As Object, e As EventArgs) Handles chk底とは別.CheckedChanged
         nud高さの目.Visible = chk底とは別.Checked
         lbl高さの目_単位.Visible = chk底とは別.Checked
+        If Not chk底とは別.Checked Then
+            nud高さの目.Value = nud目_ひも間のすき間.Value 'with recalc
+        End If
     End Sub
 
-    Private Sub num高さの目_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの目.ValueChanged
-
+    Private Sub nud高さの目_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの目.ValueChanged
+        recalc(CalcCategory.Square_Gap, sender)
     End Sub
 #End Region
 

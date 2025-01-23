@@ -344,7 +344,7 @@ Partial Public Class clsCalcSquare
                 If _b縦横側面を展開する Then
                     row.f_d幅 = r.f_d高さ '個別
                 Else
-                    row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間 '合計なので再計算
+                    row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_高さ '合計なので再計算
                 End If
                 tmptable.Rows.Add(row)
 
