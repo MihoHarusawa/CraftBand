@@ -529,6 +529,36 @@ Public Class clsMasterTables
         End Try
     End Function
 
+    Friend Property MasterDescription As String
+        Get
+            SetAvairableBasics()
+            Return _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s識別情報")
+        End Get
+        Set(value As String)
+            SetAvairableBasics()
+            Dim val As String = _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s識別情報")
+            If val <> value Then
+                _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s識別情報") = value
+                IsDirty = True
+            End If
+        End Set
+    End Property
+
+    Friend Property MasterAppendix As String
+        Get
+            SetAvairableBasics()
+            Return _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s備考")
+        End Get
+        Set(value As String)
+            SetAvairableBasics()
+            Dim val As String = _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s備考")
+            If val <> value Then
+                _dstMasterTables.Tables("tbl基本値").Rows(0).Item("f_s備考") = value
+                IsDirty = True
+            End If
+        End Set
+    End Property
+
 #End Region
 
 #Region "バンドの種類/BandType"

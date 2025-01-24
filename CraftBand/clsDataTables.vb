@@ -217,7 +217,14 @@ Public Class clsDataTables
 
         p_row目標寸法.SetDefaultAll()
         p_row目標寸法.Value("f_sバンドの種類名") = g_clsSelectBasics.p_s対象バンドの種類名
-        p_row目標寸法.Value("f_i基本のひも幅") = g_clsSelectBasics.p_i本幅
+
+        '#87
+        Dim i基本のひも幅 As String = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_i基本のひも幅")
+        If i基本のひも幅 = 0 OrElse g_clsSelectBasics.p_i本幅 < i基本のひも幅 Then
+            i基本のひも幅 = g_clsSelectBasics.p_i本幅
+        End If
+        p_row目標寸法.Value("f_i基本のひも幅") = i基本のひも幅
+
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "SetDefaultValue {0}", p_row目標寸法.ToString)
 
         p_row底_縦横.SetDefaultAll()

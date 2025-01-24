@@ -43,6 +43,8 @@ Namespace Tables
         
         Private tabletblSaveTemporarily As tblSaveTemporarilyDataTable
         
+        Private tabletblDefaultData As tblDefaultDataDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -98,6 +100,9 @@ Namespace Tables
                 End If
                 If (Not (ds.Tables("tblSaveTemporarily")) Is Nothing) Then
                     MyBase.Tables.Add(New tblSaveTemporarilyDataTable(ds.Tables("tblSaveTemporarily")))
+                End If
+                If (Not (ds.Tables("tblDefaultData")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblDefaultDataDataTable(ds.Tables("tblDefaultData")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -208,6 +213,16 @@ Namespace Tables
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblDefaultData() As tblDefaultDataDataTable
+            Get
+                Return Me.tabletblDefaultData
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
          Global.System.ComponentModel.BrowsableAttribute(true),  _
          Global.System.ComponentModel.DesignerSerializationVisibilityAttribute(Global.System.ComponentModel.DesignerSerializationVisibility.Visible)>  _
         Public Overrides Property SchemaSerializationMode() As Global.System.Data.SchemaSerializationMode
@@ -300,6 +315,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblSaveTemporarily")) Is Nothing) Then
                     MyBase.Tables.Add(New tblSaveTemporarilyDataTable(ds.Tables("tblSaveTemporarily")))
                 End If
+                If (Not (ds.Tables("tblDefaultData")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblDefaultDataDataTable(ds.Tables("tblDefaultData")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -386,6 +404,12 @@ Namespace Tables
                     Me.tabletblSaveTemporarily.InitVars
                 End If
             End If
+            Me.tabletblDefaultData = CType(MyBase.Tables("tblDefaultData"),tblDefaultDataDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblDefaultData) Is Nothing) Then
+                    Me.tabletblDefaultData.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -414,6 +438,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblLaneWidth)
             Me.tabletblSaveTemporarily = New tblSaveTemporarilyDataTable()
             MyBase.Tables.Add(Me.tabletblSaveTemporarily)
+            Me.tabletblDefaultData = New tblDefaultDataDataTable()
+            MyBase.Tables.Add(Me.tabletblDefaultData)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -467,6 +493,12 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblSaveTemporarily() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblDefaultData() As Boolean
             Return false
         End Function
         
@@ -554,6 +586,9 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblSaveTemporarilyRowChangeEventHandler(ByVal sender As Object, ByVal e As tblSaveTemporarilyRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblDefaultDataRowChangeEventHandler(ByVal sender As Object, ByVal e As tblDefaultDataRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -4678,6 +4713,399 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblDefaultDataDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblDefaultDataRow)
+            
+            Private columnFileName As Global.System.Data.DataColumn
+            
+            Private columnFilePath As Global.System.Data.DataColumn
+            
+            Private columnExeName As Global.System.Data.DataColumn
+            
+            Private columnBandTypeName As Global.System.Data.DataColumn
+            
+            Private columnTargetWidth As Global.System.Data.DataColumn
+            
+            Private columnTargetDepth As Global.System.Data.DataColumn
+            
+            Private columnTargetHeight As Global.System.Data.DataColumn
+            
+            Private columnBasicBandWidth As Global.System.Data.DataColumn
+            
+            Private columnTitle As Global.System.Data.DataColumn
+            
+            Private columnCreator As Global.System.Data.DataColumn
+            
+            Private columnMemo As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblDefaultData"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property FileNameColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnFileName
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property FilePathColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnFilePath
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property ExeNameColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnExeName
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property BandTypeNameColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnBandTypeName
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property TargetWidthColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnTargetWidth
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property TargetDepthColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnTargetDepth
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property TargetHeightColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnTargetHeight
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property BasicBandWidthColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnBasicBandWidth
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property TitleColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnTitle
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property CreatorColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnCreator
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property MemoColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnMemo
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblDefaultDataRow
+                Get
+                    Return CType(Me.Rows(index),tblDefaultDataRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblDefaultDataRowChanging As tblDefaultDataRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblDefaultDataRowChanged As tblDefaultDataRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblDefaultDataRowDeleting As tblDefaultDataRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblDefaultDataRowDeleted As tblDefaultDataRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblDefaultDataRow(ByVal row As tblDefaultDataRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblDefaultDataRow(ByVal FileName As String, ByVal FilePath As String, ByVal ExeName As String, ByVal BandTypeName As String, ByVal TargetWidth As Short, ByVal TargetDepth As Double, ByVal TargetHeight As Double, ByVal BasicBandWidth As Double, ByVal Title As String, ByVal Creator As String, ByVal Memo As String) As tblDefaultDataRow
+                Dim rowtblDefaultDataRow As tblDefaultDataRow = CType(Me.NewRow,tblDefaultDataRow)
+                Dim columnValuesArray() As Object = New Object() {FileName, FilePath, ExeName, BandTypeName, TargetWidth, TargetDepth, TargetHeight, BasicBandWidth, Title, Creator, Memo}
+                rowtblDefaultDataRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblDefaultDataRow)
+                Return rowtblDefaultDataRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblDefaultDataDataTable = CType(MyBase.Clone,tblDefaultDataDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblDefaultDataDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnFileName = MyBase.Columns("FileName")
+                Me.columnFilePath = MyBase.Columns("FilePath")
+                Me.columnExeName = MyBase.Columns("ExeName")
+                Me.columnBandTypeName = MyBase.Columns("BandTypeName")
+                Me.columnTargetWidth = MyBase.Columns("TargetWidth")
+                Me.columnTargetDepth = MyBase.Columns("TargetDepth")
+                Me.columnTargetHeight = MyBase.Columns("TargetHeight")
+                Me.columnBasicBandWidth = MyBase.Columns("BasicBandWidth")
+                Me.columnTitle = MyBase.Columns("Title")
+                Me.columnCreator = MyBase.Columns("Creator")
+                Me.columnMemo = MyBase.Columns("Memo")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnFileName = New Global.System.Data.DataColumn("FileName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnFileName)
+                Me.columnFilePath = New Global.System.Data.DataColumn("FilePath", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnFilePath)
+                Me.columnExeName = New Global.System.Data.DataColumn("ExeName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnExeName)
+                Me.columnBandTypeName = New Global.System.Data.DataColumn("BandTypeName", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnBandTypeName)
+                Me.columnTargetWidth = New Global.System.Data.DataColumn("TargetWidth", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnTargetWidth)
+                Me.columnTargetDepth = New Global.System.Data.DataColumn("TargetDepth", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnTargetDepth)
+                Me.columnTargetHeight = New Global.System.Data.DataColumn("TargetHeight", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnTargetHeight)
+                Me.columnBasicBandWidth = New Global.System.Data.DataColumn("BasicBandWidth", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnBasicBandWidth)
+                Me.columnTitle = New Global.System.Data.DataColumn("Title", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnTitle)
+                Me.columnCreator = New Global.System.Data.DataColumn("Creator", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnCreator)
+                Me.columnMemo = New Global.System.Data.DataColumn("Memo", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnMemo)
+                Me.columnFileName.DefaultValue = CType("",String)
+                Me.columnFilePath.DefaultValue = CType("",String)
+                Me.columnExeName.DefaultValue = CType("",String)
+                Me.columnBandTypeName.DefaultValue = CType("",String)
+                Me.columnTargetWidth.DefaultValue = CType(0,Short)
+                Me.columnTargetDepth.DefaultValue = CType(0R,Double)
+                Me.columnTargetHeight.DefaultValue = CType(0R,Double)
+                Me.columnBasicBandWidth.DefaultValue = CType(0R,Double)
+                Me.columnTitle.DefaultValue = CType("",String)
+                Me.columnCreator.DefaultValue = CType("",String)
+                Me.columnMemo.DefaultValue = CType("",String)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblDefaultDataRow() As tblDefaultDataRow
+                Return CType(Me.NewRow,tblDefaultDataRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblDefaultDataRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblDefaultDataRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblDefaultDataRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblDefaultDataRowChanged(Me, New tblDefaultDataRowChangeEvent(CType(e.Row,tblDefaultDataRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblDefaultDataRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblDefaultDataRowChanging(Me, New tblDefaultDataRowChangeEvent(CType(e.Row,tblDefaultDataRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblDefaultDataRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblDefaultDataRowDeleted(Me, New tblDefaultDataRowChangeEvent(CType(e.Row,tblDefaultDataRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblDefaultDataRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblDefaultDataRowDeleting(Me, New tblDefaultDataRowChangeEvent(CType(e.Row,tblDefaultDataRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblDefaultDataRow(ByVal row As tblDefaultDataRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblDefaultDataDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -8220,6 +8648,319 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblDefaultDataRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblDefaultData As tblDefaultDataDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblDefaultData = CType(Me.Table,tblDefaultDataDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property FileName() As String
+                Get
+                    If Me.IsFileNameNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.FileNameColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.FileNameColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property FilePath() As String
+                Get
+                    If Me.IsFilePathNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.FilePathColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.FilePathColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property ExeName() As String
+                Get
+                    If Me.IsExeNameNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.ExeNameColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.ExeNameColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property BandTypeName() As String
+                Get
+                    If Me.IsBandTypeNameNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.BandTypeNameColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.BandTypeNameColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property TargetWidth() As Short
+                Get
+                    If Me.IsTargetWidthNull Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.TargetWidthColumn),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.TargetWidthColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property TargetDepth() As Double
+                Get
+                    If Me.IsTargetDepthNull Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.TargetDepthColumn),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.TargetDepthColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property TargetHeight() As Double
+                Get
+                    If Me.IsTargetHeightNull Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.TargetHeightColumn),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.TargetHeightColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property BasicBandWidth() As Double
+                Get
+                    If Me.IsBasicBandWidthNull Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.BasicBandWidthColumn),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.BasicBandWidthColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Title() As String
+                Get
+                    If Me.IsTitleNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.TitleColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.TitleColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Creator() As String
+                Get
+                    If Me.IsCreatorNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.CreatorColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.CreatorColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property Memo() As String
+                Get
+                    If Me.IsMemoNull Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblDefaultData.MemoColumn),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblDefaultData.MemoColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsFileNameNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.FileNameColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetFileNameNull()
+                Me(Me.tabletblDefaultData.FileNameColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsFilePathNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.FilePathColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetFilePathNull()
+                Me(Me.tabletblDefaultData.FilePathColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsExeNameNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.ExeNameColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetExeNameNull()
+                Me(Me.tabletblDefaultData.ExeNameColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsBandTypeNameNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.BandTypeNameColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetBandTypeNameNull()
+                Me(Me.tabletblDefaultData.BandTypeNameColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsTargetWidthNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.TargetWidthColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetTargetWidthNull()
+                Me(Me.tabletblDefaultData.TargetWidthColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsTargetDepthNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.TargetDepthColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetTargetDepthNull()
+                Me(Me.tabletblDefaultData.TargetDepthColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsTargetHeightNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.TargetHeightColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetTargetHeightNull()
+                Me(Me.tabletblDefaultData.TargetHeightColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsBasicBandWidthNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.BasicBandWidthColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetBasicBandWidthNull()
+                Me(Me.tabletblDefaultData.BasicBandWidthColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsTitleNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.TitleColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetTitleNull()
+                Me(Me.tabletblDefaultData.TitleColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsCreatorNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.CreatorColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetCreatorNull()
+                Me(Me.tabletblDefaultData.CreatorColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function IsMemoNull() As Boolean
+                Return Me.IsNull(Me.tabletblDefaultData.MemoColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub SetMemoNull()
+                Me(Me.tabletblDefaultData.MemoColumn) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -8529,6 +9270,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblSaveTemporarilyRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblDefaultDataRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblDefaultDataRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblDefaultDataRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblDefaultDataRow
                 Get
                     Return Me.eventRow
                 End Get

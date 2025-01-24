@@ -126,7 +126,7 @@ Public Class frmBasics
         If OpenFileDialogImport.ShowDialog <> DialogResult.OK Then
             Exit Sub
         End If
-        Dim msg As String
+        Dim msg As String = String.Empty
         If String.Compare(g_clsMasterTables.MasterTablesFilePath, OpenFileDialogImport.FileName, True) = 0 Then
             ''{0}'とは別の設定データファイルを指定してください。
             msg = String.Format(My.Resources.ErrMsgSameMasterTableFile, g_clsMasterTables.MasterTablesFilePath)
@@ -141,8 +141,13 @@ Public Class frmBasics
             MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
+        '#89
+        msg = importMaster.MasterDescription
+        If Not String.IsNullOrEmpty(msg) Then
+            msg += vbCrLf + vbCrLf
+        End If
         '同名データに対しては、読み取り値で上書きしてよろしいですか？(はい=上書き,いいえ=現在値保持)
-        msg = String.Format(My.Resources.AskOverwriteForSame, OpenFileDialogImport.FileName)
+        msg += String.Format(My.Resources.AskOverwriteForSame, OpenFileDialogImport.FileName)
         Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
         If r <> DialogResult.Yes AndAlso r <> DialogResult.No Then
             Exit Sub
@@ -216,5 +221,9 @@ Public Class frmBasics
         __paras.SetLastData("frmBasicsSize", Me.Size)
     End Sub
 
-
+    '#89
+    Private Sub lbl設定データの保存先_Click(sender As Object, e As EventArgs) Handles lbl設定データの保存先.Click
+        Dim dlg As New frmMasterDescription
+        dlg.ShowDialog()
+    End Sub
 End Class

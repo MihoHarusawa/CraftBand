@@ -1124,6 +1124,8 @@ Namespace Tables
             
             Private columnf_dバンド幅 As Global.System.Data.DataColumn
             
+            Private columnf_i基本のひも幅 As Global.System.Data.DataColumn
+            
             Private columnf_s長さと重さ As Global.System.Data.DataColumn
             
             Private columnf_d短い横ひも長のばらつき As Global.System.Data.DataColumn
@@ -1228,6 +1230,14 @@ Namespace Tables
             Public ReadOnly Property f_dバンド幅Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dバンド幅
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_i基本のひも幅Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_i基本のひも幅
                 End Get
             End Property
             
@@ -1464,6 +1474,7 @@ Namespace Tables
                         ByVal f_sバンドの種類名 As String,  _
                         ByVal f_i本幅 As Short,  _
                         ByVal f_dバンド幅 As Double,  _
+                        ByVal f_i基本のひも幅 As String,  _
                         ByVal f_s長さと重さ As String,  _
                         ByVal f_d短い横ひも長のばらつき As Double,  _
                         ByVal f_d縦ひも間の最小間隔 As Double,  _
@@ -1489,7 +1500,7 @@ Namespace Tables
                         ByVal f_s製品情報 As String,  _
                         ByVal f_s備考 As String) As tblバンドの種類Row
                 Dim rowtblバンドの種類Row As tblバンドの種類Row = CType(Me.NewRow,tblバンドの種類Row)
-                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_s長さと重さ, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_d目と数える端の目, f_s本幅の幅リスト, f_s製品情報, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_sバンドの種類名, f_i本幅, f_dバンド幅, f_i基本のひも幅, f_s長さと重さ, f_d短い横ひも長のばらつき, f_d縦ひも間の最小間隔, f_d差しひもの径, f_d差しひも長加算初期値, f_d垂直ひも加算初期値, f_d底の厚さ, f_d立ち上げ時の四角底周の増分, f_d立ち上げ時の楕円底周の増分, f_d楕円底円弧の半径加算, f_d楕円底周の加算, f_dひも間のすき間初期値, f_dひも長係数初期値, f_dひも長加算初期値, f_s色リスト, f_dコマ寸法係数a, f_dコマ寸法係数b, f_dコマ要尺係数a, f_dコマ要尺係数b, f_d四つ畳みひも長加算初期値, f_d目と数える端の目, f_s本幅の幅リスト, f_s製品情報, f_s備考}
                 rowtblバンドの種類Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblバンドの種類Row)
                 Return rowtblバンドの種類Row
@@ -1521,6 +1532,7 @@ Namespace Tables
                 Me.columnf_sバンドの種類名 = MyBase.Columns("f_sバンドの種類名")
                 Me.columnf_i本幅 = MyBase.Columns("f_i本幅")
                 Me.columnf_dバンド幅 = MyBase.Columns("f_dバンド幅")
+                Me.columnf_i基本のひも幅 = MyBase.Columns("f_i基本のひも幅")
                 Me.columnf_s長さと重さ = MyBase.Columns("f_s長さと重さ")
                 Me.columnf_d短い横ひも長のばらつき = MyBase.Columns("f_d短い横ひも長のばらつき")
                 Me.columnf_d縦ひも間の最小間隔 = MyBase.Columns("f_d縦ひも間の最小間隔")
@@ -1556,6 +1568,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_i本幅)
                 Me.columnf_dバンド幅 = New Global.System.Data.DataColumn("f_dバンド幅", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dバンド幅)
+                Me.columnf_i基本のひも幅 = New Global.System.Data.DataColumn("f_i基本のひも幅", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_i基本のひも幅)
                 Me.columnf_s長さと重さ = New Global.System.Data.DataColumn("f_s長さと重さ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s長さと重さ)
                 Me.columnf_d短い横ひも長のばらつき = New Global.System.Data.DataColumn("f_d短い横ひも長のばらつき", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
@@ -1609,6 +1623,7 @@ Namespace Tables
                 Me.columnf_sバンドの種類名.Unique = true
                 Me.columnf_i本幅.DefaultValue = CType(1,Short)
                 Me.columnf_dバンド幅.DefaultValue = CType(1R,Double)
+                Me.columnf_i基本のひも幅.DefaultValue = CType("0",String)
                 Me.columnf_s長さと重さ.DefaultValue = CType("",String)
                 Me.columnf_d短い横ひも長のばらつき.DefaultValue = CType(0R,Double)
                 Me.columnf_d縦ひも間の最小間隔.DefaultValue = CType(0R,Double)
@@ -2384,6 +2399,8 @@ Namespace Tables
             
             Private columnf_sバージョン As Global.System.Data.DataColumn
             
+            Private columnf_s識別情報 As Global.System.Data.DataColumn
+            
             Private columnf_s備考 As Global.System.Data.DataColumn
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -2439,6 +2456,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s識別情報Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s識別情報
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_s備考Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_s備考
@@ -2482,9 +2507,9 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Overloads Function Addtbl基本値Row(ByVal f_s単位 As String, ByVal f_sバージョン As String, ByVal f_s備考 As String) As tbl基本値Row
+            Public Overloads Function Addtbl基本値Row(ByVal f_s単位 As String, ByVal f_sバージョン As String, ByVal f_s識別情報 As String, ByVal f_s備考 As String) As tbl基本値Row
                 Dim rowtbl基本値Row As tbl基本値Row = CType(Me.NewRow,tbl基本値Row)
-                Dim columnValuesArray() As Object = New Object() {f_s単位, f_sバージョン, f_s備考}
+                Dim columnValuesArray() As Object = New Object() {f_s単位, f_sバージョン, f_s識別情報, f_s備考}
                 rowtbl基本値Row.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtbl基本値Row)
                 Return rowtbl基本値Row
@@ -2509,6 +2534,7 @@ Namespace Tables
             Friend Sub InitVars()
                 Me.columnf_s単位 = MyBase.Columns("f_s単位")
                 Me.columnf_sバージョン = MyBase.Columns("f_sバージョン")
+                Me.columnf_s識別情報 = MyBase.Columns("f_s識別情報")
                 Me.columnf_s備考 = MyBase.Columns("f_s備考")
             End Sub
             
@@ -2519,10 +2545,13 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s単位)
                 Me.columnf_sバージョン = New Global.System.Data.DataColumn("f_sバージョン", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sバージョン)
+                Me.columnf_s識別情報 = New Global.System.Data.DataColumn("f_s識別情報", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s識別情報)
                 Me.columnf_s備考 = New Global.System.Data.DataColumn("f_s備考", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s備考)
                 Me.columnf_s単位.DefaultValue = CType("mm",String)
-                Me.columnf_sバージョン.DefaultValue = CType("1.8.3",String)
+                Me.columnf_sバージョン.DefaultValue = CType("1.8.4",String)
+                Me.columnf_s識別情報.DefaultValue = CType("",String)
                 Me.columnf_s備考.DefaultValue = CType("",String)
             End Sub
             
@@ -4419,6 +4448,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_i基本のひも幅() As String
+                Get
+                    If Me.Isf_i基本のひも幅Null Then
+                        Return "0"
+                    Else
+                        Return CType(Me(Me.tabletblバンドの種類.f_i基本のひも幅Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblバンドの種類.f_i基本のひも幅Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s長さと重さ() As String
                 Get
                     If Me.Isf_s長さと重さNull Then
@@ -4799,6 +4843,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dバンド幅Null()
                 Me(Me.tabletblバンドの種類.f_dバンド幅Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_i基本のひも幅Null() As Boolean
+                Return Me.IsNull(Me.tabletblバンドの種類.f_i基本のひも幅Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_i基本のひも幅Null()
+                Me(Me.tabletblバンドの種類.f_i基本のひも幅Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -5753,6 +5809,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s識別情報() As String
+                Get
+                    If Me.Isf_s識別情報Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletbl基本値.f_s識別情報Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletbl基本値.f_s識別情報Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_s備考() As String
                 Get
                     If Me.Isf_s備考Null Then
@@ -5788,6 +5859,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_sバージョンNull()
                 Me(Me.tabletbl基本値.f_sバージョンColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s識別情報Null() As Boolean
+                Return Me.IsNull(Me.tabletbl基本値.f_s識別情報Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s識別情報Null()
+                Me(Me.tabletbl基本値.f_s識別情報Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
