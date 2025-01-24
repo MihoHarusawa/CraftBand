@@ -5,6 +5,9 @@ Imports CraftBand.Tables.dstDataTables
 
 Public Class clsDataTables
 
+    'ファイルダイアログを使わない時用
+    Public Const DataExtention As String = ".xml"
+
     '縁のf_i番号値(1点のみ)
     Public Const cHemNumber As Integer = 999
     '裏側の開始位置(tbl縦横展開)

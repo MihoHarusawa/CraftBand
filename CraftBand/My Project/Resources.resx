@@ -655,4 +655,12 @@
     <value>2行以上を選択してください。</value>
     <comment>frmColorRepeat</comment>
   </data>
+  <data name="MsgLoadDefaultFolder" xml:space="preserve">
+    <value>規定値を保存するフォルダを指定してください。</value>
+    <comment>frmLoadDefault</comment>
+  </data>
+  <data name="MsgLoadDefaultNoFile" xml:space="preserve">
+    <value>現在の規定値保存フォルダ'{0}'には {1} のファイルはありません。</value>
+    <comment>frmLoadDefault</comment>
+  </data>
 </root>

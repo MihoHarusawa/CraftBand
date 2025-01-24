@@ -121,10 +121,6 @@
     <value>編集中のデータを破棄してよろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="AskLoadDefault" xml:space="preserve">
-    <value>規定値をロードします。よろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
   <data name="AskOutput" xml:space="preserve">
     <value>このままリスト出力を行いますか？</value>
     <comment>frmMain</comment>
@@ -139,10 +135,6 @@
   </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">
     <value>編集中のデータを保存しますか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="AskSaveDefault" xml:space="preserve">
-    <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
   <data name="CalcBadRecord" xml:space="preserve">
@@ -242,9 +234,6 @@
     <value>上,下</value>
     <comment>frmMain</comment>
   </data>
-  <data name="DefaultFileName" xml:space="preserve">
-    <value>規定値.xml</value>
-  </data>
   <data name="FormCaption" xml:space="preserve">
     <value>四角底と楕円底 {0}</value>
     <comment>frmMain</comment>
@@ -254,14 +243,6 @@
   </data>
   <data name="LOG_LaneModified" xml:space="preserve">
     <value>本幅数の修正</value>
-  </data>
-  <data name="MessageNoDefaultFile" xml:space="preserve">
-    <value>規定値が保存されていません。先に規定値保存を行ってください。</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageNotExistDefaultFile" xml:space="preserve">
-    <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
-    <comment>frmMain</comment>
   </data>
   <data name="TitleDllError" xml:space="preserve">
     <value>DLLエラー</value>

@@ -1069,6 +1069,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  規定値を保存するフォルダを指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgLoadDefaultFolder() As String
+            Get
+                Return ResourceManager.GetString("MsgLoadDefaultFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  現在の規定値保存フォルダ&apos;{0}&apos;には {1} のファイルはありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgLoadDefaultNoFile() As String
+            Get
+                Return ResourceManager.GetString("MsgLoadDefaultNoFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  フォルダ&apos;{0}&apos; に
         ''' OBJファイル&apos;{1}&apos; および関連ファイル一式を出力しました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>

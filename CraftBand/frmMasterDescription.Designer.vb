@@ -39,7 +39,7 @@ Partial Class frmMasterDescription
         btnキャンセル.Location = New System.Drawing.Point(340, 125)
         btnキャンセル.Name = "btnキャンセル"
         btnキャンセル.Size = New System.Drawing.Size(111, 44)
-        btnキャンセル.TabIndex = 9
+        btnキャンセル.TabIndex = 5
         btnキャンセル.Text = "キャンセル(&C)"
         btnキャンセル.UseVisualStyleBackColor = True
         ' 
@@ -49,7 +49,7 @@ Partial Class frmMasterDescription
         btnOK.Location = New System.Drawing.Point(221, 125)
         btnOK.Name = "btnOK"
         btnOK.Size = New System.Drawing.Size(111, 44)
-        btnOK.TabIndex = 8
+        btnOK.TabIndex = 4
         btnOK.Text = "OK(&O)"
         btnOK.UseVisualStyleBackColor = True
         ' 
@@ -60,7 +60,7 @@ Partial Class frmMasterDescription
         txt識別情報.Multiline = True
         txt識別情報.Name = "txt識別情報"
         txt識別情報.Size = New System.Drawing.Size(368, 30)
-        txt識別情報.TabIndex = 10
+        txt識別情報.TabIndex = 1
         ToolTip1.SetToolTip(txt識別情報, "設定データの識別情報")
         ' 
         ' txt備考
@@ -70,7 +70,7 @@ Partial Class frmMasterDescription
         txt備考.Multiline = True
         txt備考.Name = "txt備考"
         txt備考.Size = New System.Drawing.Size(368, 66)
-        txt備考.TabIndex = 11
+        txt備考.TabIndex = 3
         ' 
         ' lbl識別情報
         ' 
@@ -78,7 +78,7 @@ Partial Class frmMasterDescription
         lbl識別情報.Location = New System.Drawing.Point(12, 12)
         lbl識別情報.Name = "lbl識別情報"
         lbl識別情報.Size = New System.Drawing.Size(65, 19)
-        lbl識別情報.TabIndex = 12
+        lbl識別情報.TabIndex = 0
         lbl識別情報.Text = "識別情報"
         ' 
         ' lbl備考
@@ -88,7 +88,7 @@ Partial Class frmMasterDescription
         lbl備考.Location = New System.Drawing.Point(12, 48)
         lbl備考.Name = "lbl備考"
         lbl備考.Size = New System.Drawing.Size(37, 19)
-        lbl備考.TabIndex = 13
+        lbl備考.TabIndex = 2
         lbl備考.Text = "備考"
         ' 
         ' frmMasterDescription
