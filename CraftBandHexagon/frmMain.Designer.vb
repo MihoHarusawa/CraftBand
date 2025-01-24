@@ -1665,8 +1665,8 @@ Partial Class frmMain
         ' 
         ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
         ToolStripMenuItemEditDefaultFile.Size = New Size(180, 22)
-        ToolStripMenuItemEditDefaultFile.Text = "規定値保存(&F)"
-        ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値を指定します"
+        ToolStripMenuItemEditDefaultFile.Text = "規定値保存フォルダ(&F)"
+        ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値保存フォルダを指定します"
         ' 
         ' ToolStripMenuItemSetting
         ' 

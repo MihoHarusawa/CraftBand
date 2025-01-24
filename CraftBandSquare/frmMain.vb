@@ -652,30 +652,12 @@ Public Class frmMain
 
     '規定値
     Private Sub ToolStripMenuItemEditDefault_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditDefault.Click
-        SaveTables(_clsDataTables)
-        If String.IsNullOrWhiteSpace(My.Settings.DefaultFilePath) Then
-            '規定値が保存されていません。先に規定値保存を行ってください。
-            MessageBox.Show(My.Resources.MessageNoDefaultFile, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Exit Sub
-        End If
-        If Not IO.File.Exists(My.Settings.DefaultFilePath) Then
-            '規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。
-            Dim msg As String = String.Format(My.Resources.MessageNotExistDefaultFile, My.Settings.DefaultFilePath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Exit Sub
-        End If
-        If _clsCalcSquare.IsValidInput() Then
-            '規定値をロードします。よろしいですか？
-            Dim r As DialogResult = MessageBox.Show(My.Resources.AskLoadDefault, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-            If r <> DialogResult.OK Then
-                Exit Sub
-            End If
-        End If
-        If _clsDataTables.Load(My.Settings.DefaultFilePath) Then
+        SaveTables(_clsDataTables) 'for Cancel
+
+        '#88
+        If frmLoadDefault.LoadDefault(My.Settings.DefaultFilePath, _clsDataTables) Then
             ShowDefaultTabControlPage(enumReason._Always)
             DispTables(_clsDataTables)
-        Else
-            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -745,27 +727,10 @@ Public Class frmMain
 
     '規定値保存
     Private Sub ToolStripMenuItemEditDefaultFile_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditDefaultFile.Click
-        '現データの状態を規定値として保存します。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(My.Resources.AskSaveDefault, Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
-        End If
-        Dim fpath As String = My.Settings.DefaultFilePath
-        If String.IsNullOrWhiteSpace(fpath) Then
-            fpath = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                    My.Resources.DefaultFileName)
-        End If
-
-        SaveFileDialog1.FileName = fpath
-        If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
-            Exit Sub
-        End If
-
-        SaveTables(_clsDataTables)
-        If _clsDataTables.Save(SaveFileDialog1.FileName) Then
-            My.Settings.DefaultFilePath = SaveFileDialog1.FileName
-        Else
-            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        '#88
+        Dim strPath As String = My.Settings.DefaultFilePath
+        If frmLoadDefault.DefaultFolder(strPath) Then
+            My.Settings.DefaultFilePath = strPath
         End If
     End Sub
 

@@ -70,15 +70,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  規定値をロードします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property AskLoadDefault() As String
-            Get
-                Return ResourceManager.GetString("AskLoadDefault", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  現編集内容を破棄し{0}と同じにします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskLoadSameAs() As String
@@ -121,15 +112,6 @@ Namespace My.Resources
         Friend ReadOnly Property AskSaveCurrentWork() As String
             Get
                 Return ResourceManager.GetString("AskSaveCurrentWork", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  現データの状態を規定値として保存します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property AskSaveDefault() As String
-            Get
-                Return ResourceManager.GetString("AskSaveDefault", resourceCulture)
             End Get
         End Property
         
@@ -422,15 +404,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  規定値.xml に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property DefaultFileName() As String
-            Get
-                Return ResourceManager.GetString("DefaultFileName", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  0度(水平・横),30度,60度(右斜め),90度,120度(左斜め),150度 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringAngle() As String
@@ -463,24 +436,6 @@ Namespace My.Resources
         Friend ReadOnly Property FormCaption() As String
             Get
                 Return ResourceManager.GetString("FormCaption", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  規定値が保存されていません。先に規定値保存を行ってください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageNoDefaultFile() As String
-            Get
-                Return ResourceManager.GetString("MessageNoDefaultFile", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  規定値保存ファイル&apos;{0}&apos;がありません。再度規定値保存を行ってください。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageNotExistDefaultFile() As String
-            Get
-                Return ResourceManager.GetString("MessageNotExistDefaultFile", resourceCulture)
             End Get
         End Property
         

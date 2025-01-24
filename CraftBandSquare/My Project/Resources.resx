@@ -121,10 +121,6 @@
     <value>編集中のデータを破棄してよろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="AskLoadDefault" xml:space="preserve">
-    <value>規定値をロードします。よろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
   <data name="AskLoadSameAs" xml:space="preserve">
     <value>現編集内容を破棄し{0}と同じにします。よろしいですか？</value>
     <comment>frmMain</comment>
@@ -144,10 +140,6 @@
   </data>
   <data name="AskSaveCurrentWork" xml:space="preserve">
     <value>編集中のデータを保存しますか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="AskSaveDefault" xml:space="preserve">
-    <value>現データの状態を規定値として保存します。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
   <data name="CalcBadRecord" xml:space="preserve">
@@ -200,9 +192,6 @@
     <value>上,下</value>
     <comment>frmMain</comment>
   </data>
-  <data name="DefaultFileName" xml:space="preserve">
-    <value>規定値.xml</value>
-  </data>
   <data name="EnumStringAngle" xml:space="preserve">
     <value>0度(水平・横),45度(右斜め),90度(垂直・縦),135度(左斜め),18度(右3個の上),72度(上3個の右),108度(上3個の左),162度(左3個の上)</value>
     <comment>frmMain</comment>
@@ -221,14 +210,6 @@
   </data>
   <data name="FormCaption" xml:space="preserve">
     <value>四つ目と四角 {0}</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageNoDefaultFile" xml:space="preserve">
-    <value>規定値が保存されていません。先に規定値保存を行ってください。</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="MessageNotExistDefaultFile" xml:space="preserve">
-    <value>規定値保存ファイル'{0}'がありません。再度規定値保存を行ってください。</value>
     <comment>frmMain</comment>
   </data>
   <data name="MessageReplaceError" xml:space="preserve">
