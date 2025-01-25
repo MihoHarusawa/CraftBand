@@ -1,8 +1,13 @@
-﻿Imports CraftBand
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
+Imports System.Xml
+Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
+
+#Const NEW_CODE = True
 
 Partial Public Class clsCalcMesh
 
@@ -12,6 +17,282 @@ Partial Public Class clsCalcMesh
 
     Dim _dPortionOver As Double = New Length(1, "cm").Value '省略部分の長さ
 
+
+#If NEW_CODE Then
+
+
+    Dim _bandPositionListYoko As New CBandPositionList(DirectionIndex._yoko)
+    Dim _bandPositionListTate As New CBandPositionList(DirectionIndex._tate)
+
+
+
+#Region "底ひものセット"
+    '                              終点
+    '     ┌──────┐        ┌┬┐
+    '始点 ├── → ──┤終点    │││
+    '     └──────┘        │↑│並び方向→
+    '      並び方向↓             │││
+    '                             └┴┘
+    '                              始点
+    Enum DirectionIndex
+        _yoko = 0    '横
+        _tate    '縦
+    End Enum
+
+    'バンドの方向                         横ひも→ 　縦ひも↑
+    Shared cDeltaBandDirection() As S差分 = {Unit0, Unit90}
+    'バンドの並び方向(-90)　              横ひも↓　縦ひも→
+    Shared cDeltaAxisDirection() As S差分 = {Unit270, Unit0}
+
+
+    '各バンド
+    Friend Class CBandPosition
+        Friend _parent As CBandPositionList = Nothing   '方向情報
+        Friend m_Index As Integer = -1 '1～要素数
+
+        Friend m_row縦横展開 As tbl縦横展開Row
+
+        Friend m_p中心点 As S実座標 '加算ゼロ時, X軸上/Y軸上
+        Friend m_p始点 As S実座標
+        Friend m_p終点 As S実座標
+
+        Sub New(ByVal row As tbl縦横展開Row)
+            m_row縦横展開 = row
+        End Sub
+
+        '識別情報
+        Friend ReadOnly Property Ident As String
+            Get
+                Return String.Format("Direction({0}) {1}({2})", _parent._DirectionIndex, m_Index, _parent.RevertIdx(m_Index))
+            End Get
+        End Property
+
+        'バンド描画
+        Function ToBand(ByVal d基本のひも幅 As Double) As CBand
+            If m_row縦横展開 Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim band = New CBand(m_row縦横展開)
+
+            'バンド描画位置
+            Dim dひも幅 As Double = m_row縦横展開.f_dVal1
+            band.SetBand(New S線分(m_p始点, m_p終点), dひも幅, _parent.DeltaAxisDirection)
+
+            '記号描画位置
+            Dim mark As enumMarkPosition = enumMarkPosition._なし
+            Dim delta As S差分
+            Dim distance As Double = 0
+            If _parent._DirectionIndex = DirectionIndex._yoko Then
+                '記号を左に
+                If Not String.IsNullOrWhiteSpace(m_row縦横展開.f_s記号) Then
+                    mark = enumMarkPosition._始点の前
+                    delta = New S差分(0, -dひも幅 / 2)
+                    distance = d基本のひも幅
+                End If
+            ElseIf _parent._DirectionIndex = DirectionIndex._tate Then
+                '記号を上に
+                mark = enumMarkPosition._終点の後
+                delta = New S差分(-dひも幅 / 2, 0)
+            End If
+            band.SetMarkPosition(mark, distance, delta)
+
+            Return band
+        End Function
+
+
+        Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("{0} {1} {2}→{3}", Ident, m_p中心点, m_p始点, m_p終点).Append(vbTab)
+            If m_row縦横展開 IsNot Nothing Then
+                sb.AppendFormat("row縦横展開:({0},{1},{2}){3}本幅 ", m_row縦横展開.f_i位置番号, m_row縦横展開.f_iひも種, m_row縦横展開.f_iひも番号, m_row縦横展開.f_i何本幅)
+            End If
+            Return sb.ToString
+        End Function
+
+    End Class
+
+    '各方向のセット
+    Friend Class CBandPositionList
+        Implements IEnumerable(Of CBandPosition)
+
+        'セットに対する定数値
+        Friend _DirectionIndex As DirectionIndex
+        '位置順のリスト
+        Dim _BandList As New List(Of CBandPosition)     '0～要素数-1
+
+
+        'バンドの方向 横ひも→ 　縦ひも↑
+        Friend ReadOnly Property DeltaBandDirection As S差分
+            Get
+                Return cDeltaBandDirection(_DirectionIndex)
+            End Get
+        End Property
+
+        '並びの方向　横ひも↓　縦ひも→
+        Friend ReadOnly Property DeltaAxisDirection As S差分
+            Get
+                Return cDeltaAxisDirection(_DirectionIndex)
+            End Get
+        End Property
+
+        Friend ReadOnly Property Count As Integer
+            Get
+                Return _BandList.Count
+            End Get
+        End Property
+
+        Friend Sub Clear()
+            _BandList.Clear()
+        End Sub
+
+        Friend Sub Add(ByVal bpos As CBandPosition)
+            _BandList.Add(bpos)
+            bpos._parent = Me
+            bpos.m_Index = _BandList.Count '1～要素数
+        End Sub
+
+
+        '位置の逆順　:1～_iひもの本数
+        ReadOnly Property RevertIdx(ByVal ax As Integer) As Integer
+            Get
+                If ax < 1 OrElse _BandList.Count < ax Then
+                    Return -1
+                End If
+                'いずれの角度に対しても、軸方向はひも番号に対して逆
+                Return _BandList.Count - ax + 1
+            End Get
+        End Property
+
+        '指定位置の要素 1～_iひもの本数　で使用
+        Friend ReadOnly Property ByIdx(ByVal idx As Integer) As CBandPosition
+            Get
+                If idx < 1 OrElse _BandList.Count < idx Then
+                    Return Nothing
+                End If
+                Return _BandList(idx - 1)
+            End Get
+        End Property
+
+        '軸方向　:1～_iひもの本数
+        Friend ReadOnly Property ByAxis(ByVal ax As Integer) As CBandPosition
+            Get
+                Return ByIdx(RevertIdx(ax))
+            End Get
+        End Property
+
+
+        Sub New(ByVal didx As DirectionIndex)
+            _DirectionIndex = didx
+        End Sub
+
+        Public Overrides Function ToString() As String
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("Direction={0} DeltaBandDirection={1} DeltaAxisDirection={2} Count={3} ", _DirectionIndex, DeltaBandDirection, DeltaAxisDirection, Count)
+
+            For Each band As CBandPosition In _BandList
+                sb.AppendLine(band.ToString)
+            Next
+            Return sb.ToString
+        End Function
+
+        Public Function GetEnumerator() As IEnumerator(Of CBandPosition) Implements IEnumerable(Of CBandPosition).GetEnumerator
+            Return _BandList.GetEnumerator()
+        End Function
+
+        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return Me.GetEnumerator()
+        End Function
+    End Class
+
+#End Region
+
+    '描画情報
+    Private Function setBandPositionList(ByVal bandPositionList As CBandPositionList, ByVal table As tbl縦横展開DataTable) As Boolean
+        bandPositionList.Clear()
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim pバンド辺中心 As S実座標
+        If bandPositionList._DirectionIndex = DirectionIndex._yoko Then
+            '上の辺の中心
+            pバンド辺中心 = New S実座標(0, p_d縦横の縦 / 2)
+        ElseIf bandPositionList._DirectionIndex = DirectionIndex._tate Then
+            '左の辺の中心
+            pバンド辺中心 = New S実座標(-p_d縦横の横 / 2, 0)
+        Else
+            Return False
+        End If
+
+        Dim cond As String = String.Format("f_i位置番号 < {0}", cBackPosition)
+        Dim rows() As DataRow = table.Select(cond, "f_i位置番号 ASC")
+        If rows Is Nothing OrElse rows.Count = 0 Then
+            Return False
+        End If
+        '位置順(並びの方向へ)
+        For Each row As tbl縦横展開Row In rows
+            Dim bandpos As New CBandPosition(row)
+
+            'f_dVal1 = ひも幅(f_i何本幅) の半分
+            bandpos.m_p中心点 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * (row.f_dVal1 / 2)
+            'f_dVal2 = 先半分の出力ひも長
+            bandpos.m_p始点 = bandpos.m_p中心点 - bandPositionList.DeltaBandDirection * row.f_dVal2
+            'f_dVal3 = 後半分の出力ひも長
+            bandpos.m_p終点 = bandpos.m_p中心点 + bandPositionList.DeltaBandDirection * row.f_dVal3
+
+            bandPositionList.Add(bandpos)
+            '
+            pバンド辺中心 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * row.f_d幅
+        Next
+
+        Return True
+    End Function
+
+
+    '横ひもリストの描画情報
+    Private Function imageList横ひも(ByVal imgList横ひも As clsImageItemList, ByVal table As tbl縦横展開DataTable) As Boolean
+        If imgList横ひも Is Nothing Then
+            Return False
+        End If
+
+        If Not setBandPositionList(_bandPositionListYoko, table) Then
+            Return False
+        End If
+
+        For Each bandpos As CBandPosition In _bandPositionListYoko
+            Dim band As CBand = bandpos.ToBand(_d基本のひも幅)
+            If band IsNot Nothing Then
+                Dim item As New clsImageItem(band, 10, bandpos.m_Index)
+                imgList横ひも.AddItem(item)
+            End If
+        Next
+
+        Return True
+    End Function
+
+    '縦ひもリストの描画情報
+    Private Function imageList縦ひも(ByVal imgList縦ひも As clsImageItemList, ByVal table As tbl縦横展開DataTable) As Boolean
+        If imgList縦ひも Is Nothing Then
+            Return False
+        End If
+
+        If Not setBandPositionList(_bandPositionListTate, table) Then
+            Return False
+        End If
+
+        For Each bandpos As CBandPosition In _bandPositionListTate
+            Dim band As CBand = bandpos.ToBand(_d基本のひも幅)
+            If band IsNot Nothing Then
+                Dim item As New clsImageItem(band, 20, bandpos.m_Index)
+                imgList縦ひも.AddItem(item)
+            End If
+        Next
+
+        Return True
+    End Function
+
+#Else
 
     '横ひもリストの描画情報
     Private Function imageList横ひも(ByVal imgList横ひも As clsImageItemList) As Boolean
@@ -95,6 +376,8 @@ Partial Public Class clsCalcMesh
         Return True
     End Function
 
+#End If
+
     '_imageList側面ひも生成、側面のレコードを含む
     Function imageList側面編みかた(ByVal dひも幅 As Double) As clsImageItemList
         Dim item As clsImageItem
@@ -118,7 +401,7 @@ Partial Public Class clsCalcMesh
             Dim i周数 As Integer = groupRow.GetNameValue("f_i周数") '一致項目
 
             If 0 < nひも本数 Then
-
+                '--- 上 ---
                 'ImageTypeEnum._編みかた・横
                 item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
                 item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, dY)
@@ -138,6 +421,7 @@ Partial Public Class clsCalcMesh
                 item.p_p文字位置 = New S実座標(dひも幅 + p_d外側_横 * d周長比率対底の周 / 2, dY + d高さ / 2)
                 itemlist.AddItem(item)
 
+                '--- 右 ---
                 'ImageTypeEnum._編みかた・縦
                 item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 2)
                 item.m_a四隅.p左上 = New S実座標(dX, +p_d外側_縦 * d周長比率対底の周 / 2)
@@ -154,8 +438,48 @@ Partial Public Class clsCalcMesh
                     Next
                 End If
                 '文字は指定しない
-
                 itemlist.AddItem(item)
+
+#If NEW_CODE Then
+                '--- 下 ---
+                'ImageTypeEnum._編みかた・横
+                item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 3)
+                item.m_a四隅.p左上 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -dY)
+                item.m_a四隅.p右上 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -dY)
+                item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -dY - d高さ)
+                item.m_a四隅.p右下 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -dY - d高さ)
+                '周の区切り
+                If 1 < i周数 Then
+                    For i As Integer = 1 To i周数 - 1
+                        Dim p1 As New S実座標(item.m_a四隅.x最左, -d高さ * (i / i周数) - dY)
+                        Dim p2 As New S実座標(item.m_a四隅.x最右, -d高さ * (i / i周数) - dY)
+                        Dim line As New S線分(p1, p2)
+                        item.m_lineList.Add(line)
+                    Next
+                End If
+                '文字は指定しない
+                itemlist.AddItem(item)
+
+                '--- 左 ---
+                'ImageTypeEnum._編みかた・縦
+                item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 4)
+                item.m_a四隅.p右上 = New S実座標(-dX, +p_d外側_縦 * d周長比率対底の周 / 2)
+                item.m_a四隅.p右下 = New S実座標(-dX, -p_d外側_縦 * d周長比率対底の周 / 2)
+                item.m_a四隅.p左上 = New S実座標(-dX - d高さ, +p_d外側_縦 * d周長比率対底の周 / 2)
+                item.m_a四隅.p左下 = New S実座標(-dX - d高さ, -p_d外側_縦 * d周長比率対底の周 / 2)
+                '周の区切り
+                If 1 < i周数 Then
+                    For i As Integer = 1 To i周数 - 1
+                        Dim p1 As New S実座標(-dX - d高さ * (i / i周数), item.m_a四隅.y最上)
+                        Dim p2 As New S実座標(-dX - d高さ * (i / i周数), item.m_a四隅.y最下)
+                        Dim line As New S線分(p1, p2)
+                        item.m_lineList.Add(line)
+                    Next
+                End If
+                '文字は指定しない
+                itemlist.AddItem(item)
+#End If
+
             End If
             dY += d高さ
             dX += d高さ
@@ -164,6 +488,7 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
+#If Not NEW_CODE Then
     '#52 描画しない色
     Private Function isDrawingItem(ByVal item As clsImageItem) As Boolean
         If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
@@ -174,6 +499,7 @@ Partial Public Class clsCalcMesh
         End If
         Return True
     End Function
+#End If
 
     '底の上下をm_regionListにセット
     Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList) As Boolean
@@ -189,7 +515,33 @@ Partial Public Class clsCalcMesh
         Dim iTate As Integer
         Dim iYoko As Integer
 
+#If NEW_CODE Then
+        iTate = 0
+        For Each itemTate As clsImageItem In _ImageList縦ひも
+            iTate += 1
 
+            iYoko = 0
+            For Each itemYoko As clsImageItem In _ImageList横ひも
+                iYoko += 1
+                If _CUpDown.GetIsDown(iTate, iYoko) Then
+                    itemTate.AddClip(itemYoko)
+                End If
+            Next
+        Next
+
+        iYoko = 0
+        For Each itemYoko As clsImageItem In _ImageList横ひも
+            iYoko += 1
+
+            iTate = 0
+            For Each itemTate As clsImageItem In _ImageList縦ひも
+                iTate += 1
+                If _CUpDown.GetIsUp(iTate, iYoko) Then
+                    itemYoko.AddClip(itemTate)
+                End If
+            Next
+        Next
+#Else
         iTate = 0
         For Each itemTate As clsImageItem In _ImageList縦ひも
             iTate += 1
@@ -219,6 +571,7 @@ Partial Public Class clsCalcMesh
             Next
             'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "itemYoko({0}):{1}", iYoko, itemYoko.m_regionList.ToString)
         Next
+#End If
 
         Return True
     End Function
@@ -269,6 +622,7 @@ Partial Public Class clsCalcMesh
                 aryIndex -= 1
             Next
         End If
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Angle={0}", String.Join(", ", aryAngle.Select(Function(v) v.ToString("F1"))))
 
         Dim a楕円の中心 As S四隅
         a楕円の中心.p左上 = a底の縦横.p左上 + Unit270 * _d最上と最下の短いひもの幅
@@ -366,6 +720,23 @@ Partial Public Class clsCalcMesh
         item.m_a四隅.p右下 = New S実座標(_d高さの合計 + p_d外側_横 / 2, -p_d外側_縦 * d周長比率対底の周 / 2)
         itemlist.AddItem(item)
 
+#If NEW_CODE Then
+        '下の側面
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 3)
+        item.m_a四隅.p左上 = New S実座標(-p_d外側_横 / 2, -p_d外側_縦 / 2)
+        item.m_a四隅.p右上 = New S実座標(+p_d外側_横 / 2, -p_d外側_縦 / 2)
+        item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
+        item.m_a四隅.p右下 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
+        itemlist.AddItem(item)
+
+        '左の側面
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 4)
+        item.m_a四隅.p右上 = New S実座標(-p_d外側_横 / 2, p_d外側_縦 / 2)
+        item.m_a四隅.p右下 = New S実座標(-p_d外側_横 / 2, -p_d外側_縦 / 2)
+        item.m_a四隅.p左上 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, p_d外側_縦 * d周長比率対底の周 / 2)
+        item.m_a四隅.p左下 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, -p_d外側_縦 * d周長比率対底の周 / 2)
+        itemlist.AddItem(item)
+#End If
         Return itemlist
     End Function
 
@@ -388,8 +759,13 @@ Partial Public Class clsCalcMesh
             Return False 'p_sメッセージあり
         End If
 
+#If NEW_CODE Then
+        Dim imgList横ひも As New clsImageItemList()
+        Dim imgList縦ひも As New clsImageItemList()
+#Else
         Dim imgList横ひも As New clsImageItemList(get横展開DataTable())
         Dim imgList縦ひも As New clsImageItemList(get縦展開DataTable())
+#End If
 
 
         '文字サイズ
@@ -398,8 +774,14 @@ Partial Public Class clsCalcMesh
         imgData.setBasics(dひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
         '描画用のデータ追加
+#If NEW_CODE Then
+        Me.imageList横ひも(imgList横ひも, get横展開DataTable())
+        Me.imageList縦ひも(imgList縦ひも, get縦展開DataTable())
+#Else
         Me.imageList横ひも(imgList横ひも)
         Me.imageList縦ひも(imgList縦ひも)
+#End If
+
         If _Data.p_row底_縦横.Value("f_b展開区分") Then
             '描画用のデータ追加
             regionUpDown底(imgList横ひも, imgList縦ひも)
