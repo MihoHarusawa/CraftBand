@@ -10,11 +10,11 @@
     <Company>LaboHarusawa</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>四角・楕円底かごのデザイン</Title>
-    <Copyright>Copyright © LaboHarusawa 2022-2024</Copyright>
+    <Copyright>Copyright © LaboHarusawa 2022-2025</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.8.9.1</FileVersion>
-    <AssemblyVersion>1.8.9.1</AssemblyVersion>
+    <FileVersion>1.8.10.0</FileVersion>
+    <AssemblyVersion>1.8.10.0</AssemblyVersion>
     <Description>四角底と楕円底かごのデザインとサイズ計算</Description>
   </PropertyGroup>
 

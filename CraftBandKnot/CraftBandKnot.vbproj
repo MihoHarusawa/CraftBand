@@ -11,11 +11,11 @@
     <Company>LaboHarusawa</Company>
     <Product>CraftBand</Product>
     <Description>四つ畳み編みかごのデザインとサイズ計算</Description>
-    <Copyright>Copyright © LaboHarusawa 2023-2024</Copyright>
+    <Copyright>Copyright © LaboHarusawa 2023-2025</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
     <ApplicationIcon>IconKnot.ico</ApplicationIcon>
-    <AssemblyVersion>1.4.9.1</AssemblyVersion>
-    <FileVersion>1.4.9.1</FileVersion>
+    <AssemblyVersion>1.4.10.0</AssemblyVersion>
+    <FileVersion>1.4.10.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

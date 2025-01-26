@@ -424,8 +424,10 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
+    '楕円底の差しひも
     Friend Class cls差しひも
 
+        '4つの角
         Class clsCorner
             Dim _lst段のひも数 As New List(Of Integer)
             Dim _n合計ひも数 As Integer = 0
@@ -566,7 +568,7 @@ Partial Public Class clsCalcMesh
             bands(iCorner) = New CBand(groupRow)
             p始点(iCorner) = _a楕円の中心.p右上 + Unit0 * _r差しひも
             bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit0 * dひも長), d幅)
-            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 4)
 
             iひも数 = _clsCorners(iCorner).getDanCount(iDan)
             For iPos As Integer = 1 To iひも数
@@ -583,7 +585,7 @@ Partial Public Class clsCalcMesh
                 bands(iCorner) = New CBand(groupRow)
                 p始点(iCorner) = _a楕円の中心.p左上 + Unit90 * _r差しひも
                 bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit90 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2, Unit180 * (_dひも幅 / 2))
 
                 iひも数 = _clsCorners(iCorner).getDanCount(iDan)
                 For iPos As Integer = 1 To iひも数
@@ -599,7 +601,7 @@ Partial Public Class clsCalcMesh
                 bands(iCorner) = New CBand(groupRow)
                 p始点(iCorner) = _a楕円の中心.p左下 + Unit180 * _r差しひも
                 bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit180 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 * 2, Unit90 * (_dひも幅 / 2))
 
                 iひも数 = _clsCorners(iCorner).getDanCount(iDan)
                 For iPos As Integer = 1 To iひも数
@@ -615,7 +617,7 @@ Partial Public Class clsCalcMesh
                 bands(iCorner) = New CBand(groupRow)
                 p始点(iCorner) = _a楕円の中心.p右下 + Unit270 * _r差しひも
                 bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit270 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 3, Unit270 * (_dひも幅 / 2))
 
                 iひも数 = _clsCorners(iCorner).getDanCount(iDan)
                 For iPos As Integer = 1 To iひも数
