@@ -1,4 +1,5 @@
-﻿Imports CraftBand
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
@@ -628,26 +629,76 @@ Partial Public Class clsCalcMesh
             Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
             Dim dひも長 As Double = groupRow.GetNameValue("f_d連続ひも長")
 
+            Dim iCorner As Integer
+            Dim bands(3) As CBand
+            Dim p始点(3) As S実座標
 
-            Dim a右上ひも As S四隅
-            a右上ひも.p左上 = _a楕円の中心.p右上 + Unit90 * (d幅 / 2) + Unit0 * _r差しひも
-            a右上ひも.p左下 = _a楕円の中心.p右上 + Unit270 * (d幅 / 2) + Unit0 * _r差しひも
-            a右上ひも.p右上 = a右上ひも.p左上 + Unit0 * dひも長
-            a右上ひも.p右下 = a右上ひも.p左下 + Unit0 * dひも長
+            '*右上 : 0 (0度方向から)
+            iCorner = 0
+            bands(iCorner) = New CBand(groupRow)
+            p始点(iCorner) = _a楕円の中心.p右上 + Unit0 * _r差しひも
+            bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit0 * dひも長), d幅)
+            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
 
-            iひも数 = _clsCorners(0).getDanCount(iDan)
+            iひも数 = _clsCorners(iCorner).getDanCount(iDan)
             For iPos As Integer = 1 To iひも数
-                '右上
-                Dim angle As Double = _clsCorners(0).getAngle(iDan, iPos)
-                Dim Item As New clsImageItem(ImageTypeEnum._差しひも, groupRow, iPos)
-                Item.m_a四隅 = a右上ひも.Rotate(_a楕円の中心.p右上, angle)
-                Item.p_p文字位置 = Item.m_a四隅.p右上 + Unit0.Rotate(angle) * (_dひも幅 / 2)
-                itemlist.AddItem(Item)
+                Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
+                Dim band As New CBand(bands(iCorner))
+                band.RotateBand(_a楕円の中心.p右上, angle)
+                Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
+                itemlist.AddItem(item)
+            Next
+
+            '*左上 : 1　(90度方向から)
+            iCorner = 1
+            bands(iCorner) = New CBand(groupRow)
+            p始点(iCorner) = _a楕円の中心.p左上 + Unit90 * _r差しひも
+            bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit90 * dひも長), d幅)
+            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+
+            iひも数 = _clsCorners(iCorner).getDanCount(iDan)
+            For iPos As Integer = 1 To iひも数
+                Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
+                Dim band As New CBand(bands(iCorner))
+                band.RotateBand(_a楕円の中心.p左上, angle)
+                Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
+                itemlist.AddItem(item)
+            Next
+
+            '*左下 : 2　(180度方向から)
+            iCorner = 2
+            bands(iCorner) = New CBand(groupRow)
+            p始点(iCorner) = _a楕円の中心.p左下 + Unit180 * _r差しひも
+            bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit180 * dひも長), d幅)
+            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+
+            iひも数 = _clsCorners(iCorner).getDanCount(iDan)
+            For iPos As Integer = 1 To iひも数
+                Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
+                Dim band As New CBand(bands(iCorner))
+                band.RotateBand(_a楕円の中心.p左下, angle)
+                Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
+                itemlist.AddItem(item)
+            Next
+
+            '*右下 : 3　(270度方向から)
+            iCorner = 3
+            bands(iCorner) = New CBand(groupRow)
+            p始点(iCorner) = _a楕円の中心.p右下 + Unit270 * _r差しひも
+            bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit270 * dひも長), d幅)
+            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2)
+
+            iひも数 = _clsCorners(iCorner).getDanCount(iDan)
+            For iPos As Integer = 1 To iひも数
+                Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
+                Dim band As New CBand(bands(iCorner))
+                band.RotateBand(_a楕円の中心.p右下, angle)
+                Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
+                itemlist.AddItem(item)
             Next
 
             Return True
         End Function
-
     End Class
 #End If
 

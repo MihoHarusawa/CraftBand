@@ -1268,6 +1268,14 @@ Public Class clsImageItem
             _s記号 = row.f_s記号
         End Sub
 
+        Sub New(ByVal groupRow As clsGroupDataRow)
+            _i何本幅 = groupRow.GetNameValue("f_i何本幅")
+            _s色 = groupRow.GetNameValue("f_s色")
+            Dim str As String = groupRow.GetNameValueSum("f_s記号")
+            str += groupRow.GetNameValue("f_s編みかた名")
+            _s記号 = str
+        End Sub
+
         Sub New(ByVal item As CInsertItem)
             _i何本幅 = item.p_i何本幅
             _s色 = item.p_s色
