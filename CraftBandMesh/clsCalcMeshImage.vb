@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
-Imports System.Xml
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
@@ -499,6 +497,158 @@ Partial Public Class clsCalcMesh
         End If
         Return True
     End Function
+
+#Else
+    Friend Class cls差しひも
+
+        Class clsCorner
+            Dim _lst段のひも数 As New List(Of Integer)
+            Dim _n合計ひも数 As Integer = 0
+            Dim _aryAngle() As Double
+
+            '段の追加、ひも数指定
+            Sub addDan(ByVal count As Integer)
+                _lst段のひも数.Add(count)
+                _n合計ひも数 += count
+            End Sub
+
+            '段数確定後の角度計算
+            Function calcAngle() As Boolean
+                If _n合計ひも数 <= 0 Then
+                    Return False
+                End If
+                ReDim _aryAngle(_n合計ひも数)    '0=0,90度までの角度: 1～_n合計ひも数に値  
+
+                Dim aryIndex As Integer
+                If 0 < _n合計ひも数 Then
+                    Dim angle As Double = 90 / (1 + _n合計ひも数)
+                    aryIndex = 1
+                    For i As Integer = 1 To _n合計ひも数 Step 2
+                        _aryAngle(i) = angle * aryIndex
+                        aryIndex += 1
+                    Next
+                    aryIndex = _n合計ひも数
+                    For i As Integer = 2 To _n合計ひも数 Step 2
+                        _aryAngle(i) = angle * aryIndex
+                        aryIndex -= 1
+                    Next
+                End If
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Angle={0}", String.Join(", ", _aryAngle.Select(Function(v) v.ToString("F1"))))
+
+                Return True
+            End Function
+
+            '指定の段のひも数(iDan=0～ )
+            Function getDanCount(ByVal iDan As Integer) As Integer
+                If iDan < 0 OrElse _lst段のひも数.Count <= iDan Then
+                    Return 0
+                End If
+                Return _lst段のひも数(iDan)
+            End Function
+
+            '指定段・位置の角度取得 iPos=1～段のひも数
+            Function getAngle(ByVal iDan As Integer, ByVal iPos As Integer) As Integer
+                If _n合計ひも数 <= 0 Then
+                    Return 0
+                End If
+                Dim iTotal As Integer = 0
+                For i As Integer = 0 To iDan - 1
+                    iTotal += _lst段のひも数(i)
+                Next
+                iTotal += iPos
+
+                If _n合計ひも数 < iTotal Then
+                    Return 0
+                End If
+                Return _aryAngle(iTotal)
+            End Function
+
+        End Class
+
+
+        Dim _a楕円の中心 As S四隅
+        Dim _list As New List(Of clsGroupDataRow)
+        Dim _dひも幅 As Double
+
+        Dim _clsCorners(3) As clsCorner
+
+        Dim _r差しひも As Double = 0
+
+        Sub New(ByVal dひも幅 As Double, ByVal a楕円の中心 As S四隅)
+            _dひも幅 = dひも幅
+            _a楕円の中心 = a楕円の中心
+
+            For i As Integer = 0 To 3
+                _clsCorners(i) = New clsCorner
+            Next
+        End Sub
+
+        Sub AddGroupRow(ByVal groupRow As clsGroupDataRow)
+            _list.Add(groupRow)
+            Dim i差しひも本数 As Integer = groupRow.GetNameValue("f_i差しひも本数")
+
+            '四隅に振り分ける
+            For i As Integer = 0 To 3
+                Dim cnt As Integer = i差しひも本数 \ 4
+                Dim amari As Integer = i差しひも本数 Mod 4
+                If 0 < i AndAlso 0 < amari Then
+                    If i <= amari Then
+                        cnt += 1
+                    End If
+                End If
+                _clsCorners(i).addDan(cnt)
+
+                '0(4の倍数のみ) 1(余り1以上) 2(余り2以上) 3(余り3以上)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:{1}/{2}", i, cnt, i差しひも本数)
+            Next
+
+        End Sub
+
+        Function GetImageItem(ByVal itemlist As clsImageItemList) As Boolean
+
+            For i As Integer = 0 To 3
+                _clsCorners(i).calcAngle()
+            Next
+
+            _r差しひも = 0
+            For iDan As Integer = 0 To _list.Count - 1
+                Dim groupRow As clsGroupDataRow = _list(iDan)
+                getDanItem(itemlist, groupRow, iDan)
+
+                _r差しひも = groupRow.GetNameValue("f_d径の累計")
+            Next
+
+            Return True
+        End Function
+
+        Private Function getDanItem(ByVal itemlist As clsImageItemList, ByVal groupRow As clsGroupDataRow, ByVal iDan As Integer) As Boolean
+
+            Dim iひも数 As Integer '= groupRow.GetNameValue("f_i差しひも本数") \ 4
+            Dim i本幅 As Integer = groupRow.GetNameValue("f_i何本幅")
+            Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
+            Dim dひも長 As Double = groupRow.GetNameValue("f_d連続ひも長")
+
+
+            Dim a右上ひも As S四隅
+            a右上ひも.p左上 = _a楕円の中心.p右上 + Unit90 * (d幅 / 2) + Unit0 * _r差しひも
+            a右上ひも.p左下 = _a楕円の中心.p右上 + Unit270 * (d幅 / 2) + Unit0 * _r差しひも
+            a右上ひも.p右上 = a右上ひも.p左上 + Unit0 * dひも長
+            a右上ひも.p右下 = a右上ひも.p左下 + Unit0 * dひも長
+
+            iひも数 = _clsCorners(0).getDanCount(iDan)
+            For iPos As Integer = 1 To iひも数
+                '右上
+                Dim angle As Double = _clsCorners(0).getAngle(iDan, iPos)
+                Dim Item As New clsImageItem(ImageTypeEnum._差しひも, groupRow, iPos)
+                Item.m_a四隅 = a右上ひも.Rotate(_a楕円の中心.p右上, angle)
+                Item.p_p文字位置 = Item.m_a四隅.p右上 + Unit0.Rotate(angle) * (_dひも幅 / 2)
+                itemlist.AddItem(Item)
+            Next
+
+            Return True
+        End Function
+
+    End Class
 #End If
 
     '底の上下をm_regionListにセット
@@ -605,6 +755,7 @@ Partial Public Class clsCalcMesh
             itemlist.AddItem(item)
         End If
 
+#If Not NEW_CODE Then
         '差しひも
         Dim n角の差しひも数 As Integer = _i垂直ひも数_楕円 \ 4
         Dim aryAngle(n角の差しひも数) As Double
@@ -623,6 +774,7 @@ Partial Public Class clsCalcMesh
             Next
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Angle={0}", String.Join(", ", aryAngle.Select(Function(v) v.ToString("F1"))))
+#End If
 
         Dim a楕円の中心 As S四隅
         a楕円の中心.p左上 = a底の縦横.p左上 + Unit270 * _d最上と最下の短いひもの幅
@@ -630,11 +782,16 @@ Partial Public Class clsCalcMesh
         a楕円の中心.p左下 = a底の縦横.p左下 + Unit90 * _d最上と最下の短いひもの幅
         a楕円の中心.p右下 = a底の縦横.p右下 + Unit90 * _d最上と最下の短いひもの幅
 
+#If NEW_CODE Then
+        Dim sasihimo As New cls差しひも(dひも幅, a楕円の中心)
+#Else
+        aryIndex = 1
+#End If
+
         '番号ごと
         Dim res = (From row As tbl底_楕円Row In _Data.p_tbl底_楕円
                    Select Num = row.f_i番号
                    Order By Num).Distinct
-        aryIndex = 1
         Dim r差しひも As Double = 0
         For Each num As Integer In res
             Dim cond As String = String.Format("f_i番号 = {0}", num)
@@ -644,6 +801,9 @@ Partial Public Class clsCalcMesh
 
             If b差しひも区分 Then
                 '差しひも
+#If NEW_CODE Then
+                sasihimo.AddGroupRow(groupRow)
+#Else
                 Dim iひも数 As Integer = groupRow.GetNameValue("f_i差しひも本数") \ 4
                 Dim i本幅 As Integer = groupRow.GetNameValue("f_i何本幅")
                 Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
@@ -665,6 +825,7 @@ Partial Public Class clsCalcMesh
                     aryIndex += 1
                 Next
                 r差しひも = groupRow.GetNameValue("f_d径の累計")
+#End If
 
             Else
                 '底楕円
@@ -736,6 +897,9 @@ Partial Public Class clsCalcMesh
         item.m_a四隅.p左上 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, p_d外側_縦 * d周長比率対底の周 / 2)
         item.m_a四隅.p左下 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, -p_d外側_縦 * d周長比率対底の周 / 2)
         itemlist.AddItem(item)
+
+        '差しひも
+        sasihimo.GetImageItem(itemlist)
 #End If
         Return itemlist
     End Function
