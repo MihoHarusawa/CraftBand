@@ -1761,16 +1761,27 @@ Public Class frmMain
             Return
         End If
 
-        Cursor.Current = Cursors.WaitCursor
-        _clsImageData = New clsImageData(_sFilePath)
-        ret = _clsCalcMesh.CalcImage(_clsImageData)
-        Cursor.Current = Cursors.Default
+        CalcImageData()
+    End Sub
 
-        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcMesh.p_sメッセージ) Then
-            MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
+    Private Sub CalcImageData()
+        If ToolStripStatusLabel1.Text = "OK" Then
+
+            Dim isUpRightOnly As Boolean = rad右上.Checked
+            Dim isShowSide As Boolean = chk側面.Checked
+
+            Cursor.Current = Cursors.WaitCursor
+            _clsImageData = New clsImageData(_sFilePath)
+            Dim ret As Boolean = _clsCalcMesh.CalcImage(_clsImageData, isUpRightOnly, isShowSide)
+            Cursor.Current = Cursors.Default
+
+            If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcMesh.p_sメッセージ) Then
+                MessageBox.Show(_clsCalcMesh.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+                Exit Sub
+            End If
+            picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
         End If
-        picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
     End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
@@ -1798,6 +1809,19 @@ Public Class frmMain
             MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
+
+    Private Sub rad右上全体_CheckedChanged(sender As Object, e As EventArgs) Handles rad右上.CheckedChanged, rad全体.CheckedChanged
+        If _clsImageData IsNot Nothing Then
+            CalcImageData()
+        End If
+    End Sub
+
+    Private Sub chk側面_CheckedChanged(sender As Object, e As EventArgs) Handles chk側面.CheckedChanged
+        If _clsImageData IsNot Nothing Then
+            CalcImageData()
+        End If
+    End Sub
+
 #End Region
 
 
