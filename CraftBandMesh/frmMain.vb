@@ -1261,8 +1261,10 @@ Public Class frmMain
             grp横置き.Enabled = False
             chk始末ひも.Checked = False
             chk始末ひも.Enabled = False
+            lbl放射状配置.Visible = True
         Else
             grp横置き.Enabled = True
+            lbl放射状配置.Visible = False
         End If
 
     End Sub

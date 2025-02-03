@@ -168,6 +168,7 @@ Partial Class frmMain
         chk縦横を展開する = New CheckBox()
         lbl垂直ひも長加算_単位 = New Label()
         grp縦置き = New GroupBox()
+        lbl放射状配置 = New Label()
         lbl縦置きの計 = New Label()
         lbl縦ひものメモ = New Label()
         txt縦ひものメモ = New TextBox()
@@ -1450,6 +1451,7 @@ Partial Class frmMain
         ' 
         ' grp縦置き
         ' 
+        grp縦置き.Controls.Add(lbl放射状配置)
         grp縦置き.Controls.Add(btn横寸法に合わせる)
         grp縦置き.Controls.Add(lbl縦置きの計)
         grp縦置き.Controls.Add(lbl縦ひものメモ)
@@ -1474,6 +1476,16 @@ Partial Class frmMain
         grp縦置き.TabIndex = 4
         grp縦置き.TabStop = False
         grp縦置き.Text = "縦置き"
+        ' 
+        ' lbl放射状配置
+        ' 
+        lbl放射状配置.AutoSize = True
+        lbl放射状配置.Location = New Point(52, 0)
+        lbl放射状配置.Name = "lbl放射状配置"
+        lbl放射状配置.Size = New Size(87, 19)
+        lbl放射状配置.TabIndex = 8
+        lbl放射状配置.Text = "(放射状配置)"
+        lbl放射状配置.Visible = False
         ' 
         ' lbl縦置きの計
         ' 
@@ -2995,7 +3007,7 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8.0F, 19.0F)
+        AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(951, 751)
         Controls.Add(btn一時保存)
@@ -3361,6 +3373,7 @@ Partial Class frmMain
     Friend WithEvents rad全体 As RadioButton
     Friend WithEvents rad右上 As RadioButton
     Friend WithEvents chk縦ひもを放射状に置く As CheckBox
+    Friend WithEvents lbl放射状配置 As Label
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
