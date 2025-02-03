@@ -1255,6 +1255,18 @@ Public Class frmMain
     Private Sub chk始末ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk始末ひも.CheckedChanged
         recalc(CalcCategory.Vertical, sender)
     End Sub
+
+    Private Sub chk縦ひもを放射状に置く_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦ひもを放射状に置く.CheckedChanged
+        If chk縦ひもを放射状に置く.Checked Then
+            grp横置き.Enabled = False
+            chk始末ひも.Checked = False
+            chk始末ひも.Enabled = False
+        Else
+            grp横置き.Enabled = True
+        End If
+
+    End Sub
+
 #End Region
 
 #Region "底楕円"

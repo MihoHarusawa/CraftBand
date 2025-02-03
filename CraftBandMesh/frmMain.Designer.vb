@@ -127,6 +127,7 @@ Partial Class frmMain
         txt内側_最大周の径 = New TextBox()
         btn展開本幅の同期 = New Button()
         btn一時保存 = New Button()
+        chk縦ひもを放射状に置く = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1138,6 +1139,17 @@ Partial Class frmMain
         ToolTip1.SetToolTip(btn一時保存, "現在の状態を保存/復元します")
         btn一時保存.UseVisualStyleBackColor = True
         ' 
+        ' chk縦ひもを放射状に置く
+        ' 
+        chk縦ひもを放射状に置く.AutoSize = True
+        chk縦ひもを放射状に置く.Location = New Point(471, 20)
+        chk縦ひもを放射状に置く.Name = "chk縦ひもを放射状に置く"
+        chk縦ひもを放射状に置く.Size = New Size(150, 23)
+        chk縦ひもを放射状に置く.TabIndex = 7
+        chk縦ひもを放射状に置く.Text = "縦ひもを放射状に置く"
+        ToolTip1.SetToolTip(chk縦ひもを放射状に置く, "縦ひもを放射状に置いて、菊底を作ります")
+        chk縦ひもを放射状に置く.UseVisualStyleBackColor = True
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1399,6 +1411,7 @@ Partial Class frmMain
         ' 
         ' tpage底縦横
         ' 
+        tpage底縦横.Controls.Add(chk縦ひもを放射状に置く)
         tpage底縦横.Controls.Add(btn展開本幅の同期)
         tpage底縦横.Controls.Add(chk縦横を展開する)
         tpage底縦横.Controls.Add(nud垂直ひも長加算)
@@ -2982,7 +2995,7 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8F, 19F)
+        AutoScaleDimensions = New SizeF(8.0F, 19.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(951, 751)
         Controls.Add(btn一時保存)
@@ -3347,6 +3360,7 @@ Partial Class frmMain
     Friend WithEvents chk側面 As CheckBox
     Friend WithEvents rad全体 As RadioButton
     Friend WithEvents rad右上 As RadioButton
+    Friend WithEvents chk縦ひもを放射状に置く As CheckBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
