@@ -385,6 +385,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  角度,放射状に配置する角度 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ExpandingWidthText() As String
+            Get
+                Return ResourceManager.GetString("ExpandingWidthText", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  四角底と楕円底 {0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property FormCaption() As String

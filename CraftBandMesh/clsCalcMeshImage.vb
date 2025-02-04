@@ -51,7 +51,6 @@ Partial Public Class clsCalcMesh
         Friend m_p中心点 As S実座標 '加算ゼロ時, X軸上/Y軸上
         Friend m_p始点 As S実座標
         Friend m_p終点 As S実座標
-        Friend m_angle As Double '放射状の時
 
         Sub New(ByVal row As tbl縦横展開Row)
             m_row縦横展開 = row
@@ -90,8 +89,10 @@ Partial Public Class clsCalcMesh
             End If
             band.SetBand(New S線分(p始点, m_p終点), dひも幅, _parent.DeltaAxisDirection)
             If _parent._DirectionIndex = DirectionIndex._radial AndAlso _parent._IsUpRightOnly Then
-                band.TrimBandY(_parent._yLimit)
-                band.TrimBandX(_parent._xLimit, m_angle < 90)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} {1}", m_row縦横展開.f_iひも番号, band.ToString)
+                Dim ret1 As Boolean = band.TrimBandY(_parent._yLimit)
+                Dim ret2 As Boolean = band.TrimBandX(_parent._xLimit, m_row縦横展開.f_d幅 < 90)
+                '※角度の差0.3で平行扱いされます
             End If
 
             '記号描画位置
@@ -257,7 +258,6 @@ Partial Public Class clsCalcMesh
         If rows Is Nothing OrElse rows.Count = 0 Then
             Return False
         End If
-        Dim unit_angle As Double = 180 / rows.Count
         '位置順(並びの方向へ)
         For Each row As tbl縦横展開Row In rows
             Dim bandpos As New CBandPosition(row)
@@ -265,8 +265,7 @@ Partial Public Class clsCalcMesh
             If bandPositionList._DirectionIndex = DirectionIndex._radial Then
                 '放射状に配置
                 bandpos.m_p中心点 = pOrigin
-                bandpos.m_angle = 180 - unit_angle * row.f_iひも番号
-                Dim delta As New S差分(bandpos.m_angle)
+                Dim delta As New S差分(row.f_d幅)
                 'f_dVal2 = 先半分の出力ひも長
                 bandpos.m_p始点 = pOrigin - delta * row.f_dVal2
                 'f_dVal3 = 後半分の出力ひも長

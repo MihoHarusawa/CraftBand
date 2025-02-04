@@ -205,6 +205,26 @@ Public Class ctrExpanding
             End If
         Next
     End Sub
+
+    ''幅'列の用途　※Formatは変えません
+    Public Function SetWidthText(ByVal header_tooltip As String) As String
+        'previous
+        Dim header_prv = f_d幅4.HeaderText
+        Dim tooltip_prv = f_d幅4.ToolTipText
+
+        If Not String.IsNullOrWhiteSpace(header_tooltip) Then
+            Dim ary() As String = header_tooltip.Split(",")
+            If 1 <= ary.Length Then
+                f_d幅4.HeaderText = ary(0)
+                If 2 <= ary.Length Then
+                    f_d幅4.ToolTipText = ary(1)
+                End If
+            End If
+        End If
+
+        Return header_prv & "," & tooltip_prv
+    End Function
+
 #End Region
 
 

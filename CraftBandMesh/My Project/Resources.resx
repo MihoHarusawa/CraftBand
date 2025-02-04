@@ -234,6 +234,10 @@
     <value>上,下</value>
     <comment>frmMain</comment>
   </data>
+  <data name="ExpandingWidthText" xml:space="preserve">
+    <value>角度,放射状に配置する角度</value>
+    <comment>frmMain</comment>
+  </data>
   <data name="FormCaption" xml:space="preserve">
     <value>四角底と楕円底 {0}</value>
     <comment>frmMain</comment>

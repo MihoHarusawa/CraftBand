@@ -20,7 +20,6 @@ Public Class frmMain
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
 
-
 #Region "基本的な画面処理"
 
     Dim _Profile_dgv底楕円 As New CDataGridViewProfile(
@@ -1615,21 +1614,34 @@ Public Class frmMain
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
-            If Not TabControl.TabPages.Contains(tpage縦ひも) Then
-                TabControl.TabPages.Add(tpage縦ひも)
+            If chk縦ひもを放射状に置く.Checked Then
+                'RemoveとAdd
+                If TabControl.TabPages.Contains(tpage横ひも) Then
+                    TabControl.TabPages.Remove(tpage横ひも)
+                End If
+                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
+                    TabControl.TabPages.Add(tpage縦ひも)
+                End If
+                '角度の文字列
+                expand縦ひも.SetWidthText(My.Resources.ExpandingWidthText)
+            Else
+                'ともにAdd
+                If Not TabControl.TabPages.Contains(tpage横ひも) Then
+                    TabControl.TabPages.Add(tpage横ひも)
+                End If
+                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
+                    TabControl.TabPages.Add(tpage縦ひも)
+                End If
+                '横ひもの文字列を流用して戻す
+                expand縦ひも.SetWidthText(expand横ひも.SetWidthText(Nothing))
             End If
         Else
-            If TabControl.TabPages.Contains(tpage縦ひも) Then
-                TabControl.TabPages.Remove(tpage縦ひも)
-            End If
-        End If
-        If isExband AndAlso Not chk縦ひもを放射状に置く.Checked Then
-            If Not TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Add(tpage横ひも)
-            End If
-        Else
+            'ともにRemove
             If TabControl.TabPages.Contains(tpage横ひも) Then
                 TabControl.TabPages.Remove(tpage横ひも)
+            End If
+            If TabControl.TabPages.Contains(tpage縦ひも) Then
+                TabControl.TabPages.Remove(tpage縦ひも)
             End If
         End If
     End Sub

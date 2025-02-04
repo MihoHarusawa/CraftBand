@@ -732,48 +732,59 @@ Class clsCalcMesh
             _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
             _b縦ひもを放射状に置く = (0 < .Value("f_i織りタイプ"))
 
-            '横
-            _i長い横ひもの本数 = .Value("f_i長い横ひもの本数")
-            _d横ひも間のすき間 = .Value("f_d横ひも間のすき間")
-
-            _i短い横ひもの本数 = 0
-            If 1 < _i長い横ひもの本数 AndAlso 0 < .Value("f_i短い横ひも") Then
-                _i短い横ひもの本数 = _i長い横ひもの本数 - 1
-            End If
-
             '縦
             _i縦ひもの本数 = .Value("f_i縦ひもの本数")
             _dひとつのすき間の寸法 = .Value("f_dひとつのすき間の寸法")
 
-            '派生値
-            _i垂直ひも数_縦横 = 2 * (_i長い横ひもの本数 + _i縦ひもの本数)
+            If _b縦ひもを放射状に置く Then
+                _i長い横ひもの本数 = 0
+                _d横ひも間のすき間 = 0
+                _i短い横ひもの本数 = 0
+                _i最上と最下の横ひも何本幅 = 0
+                _d最上と最下の短いひもの幅 = 0
 
-            '三択値
-            _i最上と最下の横ひも何本幅 = 0
-            _d最上と最下の短いひもの幅 = 0
-            If 0 < _i長い横ひもの本数 Then
-                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
-                AndAlso 0 < .Value("f_i短い横ひも") Then
-                    _i最上と最下の横ひも何本幅 = .Value("f_i短い横ひも")
-                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
-                End If
-                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
-                AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
-                    _i最上と最下の横ひも何本幅 = .Value("f_i最上と最下の短いひもの幅")
-                    _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
-                End If
+                _i垂直ひも数_縦横 = 2 * _i縦ひもの本数
             Else
-                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
-                AndAlso 0 < .Value("f_i短い横ひも") Then
-                    '{0}を指定するのであれば{1}をセットしてください。
-                    p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
-                    Return False
+
+                '横
+                _i長い横ひもの本数 = .Value("f_i長い横ひもの本数")
+                _d横ひも間のすき間 = .Value("f_d横ひも間のすき間")
+
+                _i短い横ひもの本数 = 0
+                If 1 < _i長い横ひもの本数 AndAlso 0 < .Value("f_i短い横ひも") Then
+                    _i短い横ひもの本数 = _i長い横ひもの本数 - 1
                 End If
-                If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
-                AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
-                    '{0}を指定するのであれば{1}をセットしてください。
-                    p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
-                    Return False
+
+                '派生値
+                _i垂直ひも数_縦横 = 2 * (_i長い横ひもの本数 + _i縦ひもの本数)
+
+                '三択値
+                _i最上と最下の横ひも何本幅 = 0
+                _d最上と最下の短いひもの幅 = 0
+                If 0 < _i長い横ひもの本数 Then
+                    If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
+                    AndAlso 0 < .Value("f_i短い横ひも") Then
+                        _i最上と最下の横ひも何本幅 = .Value("f_i短い横ひも")
+                        _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
+                    End If
+                    If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
+                    AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
+                        _i最上と最下の横ひも何本幅 = .Value("f_i最上と最下の短いひもの幅")
+                        _d最上と最下の短いひもの幅 = g_clsSelectBasics.p_d指定本幅(_i最上と最下の横ひも何本幅)
+                    End If
+                Else
+                    If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_同じ幅 _
+                    AndAlso 0 < .Value("f_i短い横ひも") Then
+                        '{0}を指定するのであれば{1}をセットしてください。
+                        p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
+                        Return False
+                    End If
+                    If .Value("f_i最上と最下の短いひも") = enum最上と最下の短いひも.i_異なる幅 _
+                    AndAlso 0 < .Value("f_i最上と最下の短いひもの幅") Then
+                        '{0}を指定するのであれば{1}をセットしてください。
+                        p_sメッセージ = String.Format(My.Resources.CalcSetHorizontal, text最上と最下の短いひも(), text長い横ひも())
+                        Return False
+                    End If
                 End If
             End If
 
