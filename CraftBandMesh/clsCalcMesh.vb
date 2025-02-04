@@ -61,7 +61,7 @@ Class clsCalcMesh
     Private Property _d垂直ひも長加算 As Double
 
     Private Property _b縦横を展開する As Boolean
-    Private Property _b縦ひもを放射状に置く As Boolean
+    Private Property _enum配置タイプ As enum配置タイプ
     '縦横計算値
     Private Property _d縦横の横 As Double '縦横分のみ,放射状に置く時は径
     Private Property _d縦横の縦 As Double '縦横分のみ,放射状に置く時は径
@@ -103,7 +103,7 @@ Class clsCalcMesh
         _dひとつのすき間の寸法 = -1
         _d垂直ひも長加算 = -1
         _b縦横を展開する = False
-        _b縦ひもを放射状に置く = False
+        _enum配置タイプ = enum配置タイプ.i_縦横
 
         _d縦横の横 = -1
         _d縦横の縦 = -1
@@ -730,13 +730,17 @@ Class clsCalcMesh
         With _Data.p_row底_縦横
             _b縦横を展開する = .Value("f_b展開区分")
             _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
-            _b縦ひもを放射状に置く = (0 < .Value("f_i織りタイプ"))
+            If [Enum].IsDefined(GetType(enum配置タイプ), .Value("f_i織りタイプ")) Then
+                _enum配置タイプ = CType(.Value("f_i織りタイプ"), enum配置タイプ)
+            Else
+                _enum配置タイプ = enum配置タイプ.i_縦横
+            End If
 
             '縦
             _i縦ひもの本数 = .Value("f_i縦ひもの本数")
             _dひとつのすき間の寸法 = .Value("f_dひとつのすき間の寸法")
 
-            If _b縦ひもを放射状に置く Then
+            If _enum配置タイプ <> enum配置タイプ.i_縦横 Then
                 _i長い横ひもの本数 = 0
                 _d横ひも間のすき間 = 0
                 _i短い横ひもの本数 = 0
@@ -1937,7 +1941,7 @@ Class clsCalcMesh
     '集計値更新
     Function calc_集計値(ByVal is横展開 As Boolean, ByVal is縦展開 As Boolean) As Boolean
         '放射状に置く場合
-        If _b縦ひもを放射状に置く Then
+        If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
             Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_Data.p_row底_縦横.Value("f_i縦ひも"))
             _d縦横の垂直ひも間の周 = _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
@@ -1950,6 +1954,9 @@ Class clsCalcMesh
                 _d縦横の横 = _d縦横の縦
                 Return True
             End If
+        ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+
+
         End If
 
         '縦横に置く場合
@@ -1978,7 +1985,7 @@ Class clsCalcMesh
     '底(縦横)設定に基づき縦展開テーブルを作り直す(レコード数増減＆Fix)
     'isRefSaved: True=_Data.p_tbl縦横展開を反映する False=反映しない(非展開値)
     Function renew横展開DataTable(ByVal isRefSaved As Boolean) As Boolean
-        If _b縦ひもを放射状に置く Then
+        If _enum配置タイプ <> enum配置タイプ.i_縦横 Then
             __tbl横展開.Clear()
             Return True
         End If
@@ -2258,7 +2265,7 @@ Class clsCalcMesh
             '#48 位置番号
             Dim postate As Integer = -_i縦ひもの本数 \ 2
             Dim skipzero As Boolean = (_i縦ひもの本数 Mod 2) = 0
-            If _b縦ひもを放射状に置く Then
+            If _enum配置タイプ = enum配置タイプ.i_縦横 Then
                 skipzero = Not skipzero
                 postate = -(_i縦ひもの本数 - 1) \ 2
             End If
@@ -2393,9 +2400,12 @@ Class clsCalcMesh
 
         row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
         If row.f_iひも種 = enumひも種.i_縦 Then
-            If _b縦ひもを放射状に置く Then
-                '角度:180－α～ゼロ
+            If _enum配置タイプ = enum配置タイプ.i_放射状 Then
+                '角度:(180－α)～ゼロ
                 row.f_d幅 = 180 - (180 / _i縦ひもの本数) * row.f_iひも番号
+            ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+                '角度:180－α～ゼロ～-180
+                row.f_d幅 = 180 - (360 / _i縦ひもの本数) * row.f_iひも番号
             Else
                 If row.f_iひも番号 = _i縦ひもの本数 Then
                     row.f_d幅 = row.f_dVal1

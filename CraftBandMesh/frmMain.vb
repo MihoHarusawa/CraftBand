@@ -416,7 +416,11 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp底_縦横 {0}", row底_縦横.ToString)
         With row底_縦横
             chk縦横を展開する.Checked = .Value("f_b展開区分")
-            chk縦ひもを放射状に置く.Checked = (0 < .Value("f_i織りタイプ"))
+            If .Value("f_i織りタイプ") = enum配置タイプ.i_放射状 OrElse .Value("f_i織りタイプ") = enum配置タイプ.i_輪弧 Then
+                cmb配置タイプ.SelectedIndex = .Value("f_i織りタイプ")
+            Else
+                cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横
+            End If
             set底の縦横展開(.Value("f_b展開区分"))
 
             nud長い横ひもの本数.Value = .Value("f_i長い横ひもの本数")
@@ -622,11 +626,7 @@ Public Class frmMain
             .Value("f_b始末ひも区分") = chk始末ひも.Checked
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
-            If chk縦ひもを放射状に置く.Checked Then
-                .Value("f_i織りタイプ") = enum縦ひも配置.i_放射状 '1
-            Else
-                .Value("f_i織りタイプ") = enum縦ひも配置.i_縦横 '0
-            End If
+            .Value("f_i織りタイプ") = cmb配置タイプ.SelectedIndex
 
             .Value("f_b楕円底個別設定") = chk楕円底個別設定.Checked
             .Value("f_d楕円底円弧の半径加算") = nud楕円底円弧の半径加算.Value
@@ -1207,7 +1207,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
-        If chk縦ひもを放射状に置く.Checked Then
+        If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
             nud縦ひもの本数.Increment = 1
             If 1 < nud縦ひもの本数.Value Then
                 txtすき間の点数.Text = nud縦ひもの本数.Value
@@ -1271,8 +1271,8 @@ Public Class frmMain
         recalc(CalcCategory.Vertical, sender)
     End Sub
 
-    Private Sub chk縦ひもを放射状に置く_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦ひもを放射状に置く.CheckedChanged
-        If chk縦ひもを放射状に置く.Checked Then
+    Private Sub cmb配置タイプ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb配置タイプ.SelectedIndexChanged
+        If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
             grp横置き.Enabled = False
             lbl放射状配置.Visible = True
             lbl径.Visible = True
@@ -1614,7 +1614,7 @@ Public Class frmMain
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
-            If chk縦ひもを放射状に置く.Checked Then
+            If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
                 'RemoveとAdd
                 If TabControl.TabPages.Contains(tpage横ひも) Then
                     TabControl.TabPages.Remove(tpage横ひも)

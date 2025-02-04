@@ -33,12 +33,13 @@ Partial Public Class clsCalcMesh
         _yoko = 0   '横
         _tate       '縦
         _radial     '放射状　(縦の代替・横なし)
+        _circle     '輪弧
     End Enum
 
     'バンドの方向                         横ひも→ 　縦ひも↑
     Shared cDeltaBandDirection() As S差分 = {Unit0, Unit90}
-    'バンドの並び方向(-90)　              横ひも↓　縦ひも→　放射状(Zero)
-    Shared cDeltaAxisDirection() As S差分 = {Unit270, Unit0, New S差分(0, 0)}
+    'バンドの並び方向(-90)　              横ひも↓　縦ひも→　放射状(Zero)  輪弧(Zero)
+    Shared cDeltaAxisDirection() As S差分 = {Unit270, Unit0, New S差分(0, 0), New S差分(0, 0)}
 
 
     '展開した各バンド
@@ -151,7 +152,7 @@ Partial Public Class clsCalcMesh
             End Get
         End Property
 
-        '並びの方向　横ひも↓　縦ひも→  放射状(Zero)
+        '並びの方向　横ひも↓　縦ひも→  放射状(Zero)  輪弧(Zero)
         Friend ReadOnly Property DeltaAxisDirection As S差分
             Get
                 Return cDeltaAxisDirection(_DirectionIndex)
@@ -249,6 +250,8 @@ Partial Public Class clsCalcMesh
             pバンド辺中心 = New S実座標(-p_d縦横の横 / 2, 0)
         ElseIf bandPositionList._DirectionIndex = DirectionIndex._radial Then
             'pバンド辺中心は使わない
+        ElseIf bandPositionList._DirectionIndex = DirectionIndex._circle Then
+            'pバンド辺中心は使わない
         Else
             Return False
         End If
@@ -270,6 +273,17 @@ Partial Public Class clsCalcMesh
                 bandpos.m_p始点 = pOrigin - delta * row.f_dVal2
                 'f_dVal3 = 後半分の出力ひも長
                 bandpos.m_p終点 = pOrigin + delta * row.f_dVal3
+
+            ElseIf bandPositionList._DirectionIndex = DirectionIndex._circle Then
+                '輪弧に配置
+                Dim d半径 As Double = 100
+                bandpos.m_p中心点 = pOrigin + New S差分(row.f_d幅) * d半径
+                Dim delta As New S差分(row.f_d幅 - 90)
+                'f_dVal2 = 先半分の出力ひも長
+                bandpos.m_p始点 = bandpos.m_p中心点 - delta * row.f_dVal2
+                'f_dVal3 = 後半分の出力ひも長
+                bandpos.m_p終点 = bandpos.m_p中心点 + delta * row.f_dVal3
+
             Else
                 '縦横に配置
 
@@ -295,7 +309,7 @@ Partial Public Class clsCalcMesh
         If imgList横ひも Is Nothing Then
             Return False
         End If
-        If _b縦ひもを放射状に置く Then
+        If _enum配置タイプ <> enum配置タイプ.i_縦横 Then
             Return True
         End If
 
@@ -320,8 +334,10 @@ Partial Public Class clsCalcMesh
             Return False
         End If
 
-        If _b縦ひもを放射状に置く Then
+        If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             _bandPositionListTate._DirectionIndex = DirectionIndex._radial
+        ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            _bandPositionListTate._DirectionIndex = DirectionIndex._circle
         Else
             _bandPositionListTate._DirectionIndex = DirectionIndex._tate
         End If

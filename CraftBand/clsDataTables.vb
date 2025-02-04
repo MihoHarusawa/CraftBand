@@ -125,9 +125,10 @@ Public Class clsDataTables
         i_単麻の葉 = 2
     End Enum
     'Mesh
-    Public Enum enum縦ひも配置
-        i_縦横 = 0
-        i_放射状 = 1
+    Public Enum enum配置タイプ
+        i_縦横 = 0 '縦横にひもを置く
+        i_放射状 = 1 '縦ひもを放射状に置く
+        i_輪弧 = 2  '縦ひもを輪弧に置く
     End Enum
 
     'tbl縦横展開
