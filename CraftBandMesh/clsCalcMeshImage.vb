@@ -23,24 +23,25 @@ Partial Public Class clsCalcMesh
 
 #Region "底ひものセット"
     '                              終点
-    '     ┌──────┐        ┌┬┐
+    '     ┌──────┐        ┌┬┐               放射状
     '始点 ├── → ──┤終点    │││
-    '     └──────┘        │↑│並び方向→
-    '      並び方向↓             │││
-    '                             └┴┘
+    '     └──────┘        │↑│並び方向→      1 2
+    '      並び方向↓             │││                ↖↑↗               
+    '                             └┴┘                 ・→ n
     '                              始点
     Enum DirectionIndex
-        _yoko = 0    '横
-        _tate    '縦
+        _yoko = 0   '横
+        _tate       '縦
+        _radial     '放射状　(縦の代替・横なし)
     End Enum
 
     'バンドの方向                         横ひも→ 　縦ひも↑
     Shared cDeltaBandDirection() As S差分 = {Unit0, Unit90}
-    'バンドの並び方向(-90)　              横ひも↓　縦ひも→
-    Shared cDeltaAxisDirection() As S差分 = {Unit270, Unit0}
+    'バンドの並び方向(-90)　              横ひも↓　縦ひも→　放射状(Zero)
+    Shared cDeltaAxisDirection() As S差分 = {Unit270, Unit0, New S差分(0, 0)}
 
 
-    '各バンド
+    '展開した各バンド
     Friend Class CBandPosition
         Friend _parent As CBandPositionList = Nothing   '方向情報
         Friend m_Index As Integer = -1 '1～要素数
@@ -50,6 +51,7 @@ Partial Public Class clsCalcMesh
         Friend m_p中心点 As S実座標 '加算ゼロ時, X軸上/Y軸上
         Friend m_p始点 As S実座標
         Friend m_p終点 As S実座標
+        Friend m_angle As Double '放射状の時
 
         Sub New(ByVal row As tbl縦横展開Row)
             m_row縦横展開 = row
@@ -87,6 +89,10 @@ Partial Public Class clsCalcMesh
                 End If
             End If
             band.SetBand(New S線分(p始点, m_p終点), dひも幅, _parent.DeltaAxisDirection)
+            If _parent._DirectionIndex = DirectionIndex._radial AndAlso _parent._IsUpRightOnly Then
+                band.TrimBandY(_parent._yLimit)
+                band.TrimBandX(_parent._xLimit, m_angle < 90)
+            End If
 
             '記号描画位置
             Dim mark As enumMarkPosition = enumMarkPosition._なし
@@ -144,7 +150,7 @@ Partial Public Class clsCalcMesh
             End Get
         End Property
 
-        '並びの方向　横ひも↓　縦ひも→
+        '並びの方向　横ひも↓　縦ひも→  放射状(Zero)
         Friend ReadOnly Property DeltaAxisDirection As S差分
             Get
                 Return cDeltaAxisDirection(_DirectionIndex)
@@ -240,6 +246,8 @@ Partial Public Class clsCalcMesh
         ElseIf bandPositionList._DirectionIndex = DirectionIndex._tate Then
             '左の辺の中心
             pバンド辺中心 = New S実座標(-p_d縦横の横 / 2, 0)
+        ElseIf bandPositionList._DirectionIndex = DirectionIndex._radial Then
+            'pバンド辺中心は使わない
         Else
             Return False
         End If
@@ -249,20 +257,34 @@ Partial Public Class clsCalcMesh
         If rows Is Nothing OrElse rows.Count = 0 Then
             Return False
         End If
+        Dim unit_angle As Double = 180 / rows.Count
         '位置順(並びの方向へ)
         For Each row As tbl縦横展開Row In rows
             Dim bandpos As New CBandPosition(row)
 
-            'f_dVal1 = ひも幅(f_i何本幅) の半分
-            bandpos.m_p中心点 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * (row.f_dVal1 / 2)
-            'f_dVal2 = 先半分の出力ひも長
-            bandpos.m_p始点 = bandpos.m_p中心点 - bandPositionList.DeltaBandDirection * row.f_dVal2
-            'f_dVal3 = 後半分の出力ひも長
-            bandpos.m_p終点 = bandpos.m_p中心点 + bandPositionList.DeltaBandDirection * row.f_dVal3
+            If bandPositionList._DirectionIndex = DirectionIndex._radial Then
+                '放射状に配置
+                bandpos.m_p中心点 = pOrigin
+                bandpos.m_angle = 180 - unit_angle * row.f_iひも番号
+                Dim delta As New S差分(bandpos.m_angle)
+                'f_dVal2 = 先半分の出力ひも長
+                bandpos.m_p始点 = pOrigin - delta * row.f_dVal2
+                'f_dVal3 = 後半分の出力ひも長
+                bandpos.m_p終点 = pOrigin + delta * row.f_dVal3
+            Else
+                '縦横に配置
+
+                'f_dVal1 = ひも幅(f_i何本幅) の半分
+                bandpos.m_p中心点 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * (row.f_dVal1 / 2)
+                'f_dVal2 = 先半分の出力ひも長
+                bandpos.m_p始点 = bandpos.m_p中心点 - bandPositionList.DeltaBandDirection * row.f_dVal2
+                'f_dVal3 = 後半分の出力ひも長
+                bandpos.m_p終点 = bandpos.m_p中心点 + bandPositionList.DeltaBandDirection * row.f_dVal3
+                '
+                pバンド辺中心 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * row.f_d幅
+            End If
 
             bandPositionList.Add(bandpos)
-            '
-            pバンド辺中心 = pバンド辺中心 + bandPositionList.DeltaAxisDirection * row.f_d幅
         Next
 
         Return True
@@ -273,6 +295,9 @@ Partial Public Class clsCalcMesh
     Private Function imageList横ひも(ByVal imgList横ひも As clsImageItemList, ByVal table As tbl縦横展開DataTable, ByVal isUpRightOnly As Boolean) As Boolean
         If imgList横ひも Is Nothing Then
             Return False
+        End If
+        If _b縦ひもを放射状に置く Then
+            Return True
         End If
 
         If Not setBandPositionList(_bandPositionListYoko, table, isUpRightOnly) Then
@@ -294,6 +319,12 @@ Partial Public Class clsCalcMesh
     Private Function imageList縦ひも(ByVal imgList縦ひも As clsImageItemList, ByVal table As tbl縦横展開DataTable, ByVal isUpRightOnly As Boolean) As Boolean
         If imgList縦ひも Is Nothing Then
             Return False
+        End If
+
+        If _b縦ひもを放射状に置く Then
+            _bandPositionListTate._DirectionIndex = DirectionIndex._radial
+        Else
+            _bandPositionListTate._DirectionIndex = DirectionIndex._tate
         End If
 
         If Not setBandPositionList(_bandPositionListTate, table, isUpRightOnly) Then

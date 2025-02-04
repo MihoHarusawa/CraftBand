@@ -435,6 +435,10 @@ Public Class clsImageItem
         Function is平行(ByVal line As S線分) As Boolean
             Return is平行(Me, line)
         End Function
+        Function is平行(ByVal fn As S直線式) As Boolean
+            Dim fm As New S直線式(Me)
+            Return fn.is平行(fm)
+        End Function
 
         Public Overrides Function ToString() As String
             Return String.Format("S線分<{0}-{1}>", p開始, p終了)
@@ -1325,8 +1329,18 @@ Public Class clsImageItem
             End Get
         End Property
 
+        'F→T
+        ReadOnly Property deltaFT As S差分
+            Get
+                Return New S差分(p始点F, p始点T)
+            End Get
+        End Property
+
         'バンドの中心ライン,幅,軸方向の単位差分
         Function SetBand(ByVal line As S線分, ByVal width As Double, ByVal deltaAx As S差分) As Boolean
+            If deltaAx.IsZero Then
+                Return SetBand(line, width)
+            End If
             p始点F = line.p開始 + deltaAx * (-width / 2)
             p終点F = line.p終了 + deltaAx * (-width / 2)
             p始点T = line.p開始 + deltaAx * (width / 2)
@@ -1420,6 +1434,58 @@ Public Class clsImageItem
                 p文字位置 = p文字位置.VertLeft() '位置のみ
             End If
         End Sub
+
+        'Xの始点側を除去, クロスしなければFalse
+        Function TrimBandX(ByVal x As Double, Optional is始点側 As Boolean = True)
+            Dim p始点FT As S実座標 = New S線分(p始点F, p始点T).p中点
+            Dim p終点FT As S実座標 = New S線分(p終点F, p終点T).p中点
+            Dim line As New S線分(p始点FT, p終点FT)
+            Dim fn As New S直線式(Double.PositiveInfinity, x, True)
+            If line.is平行(fn) Then
+                Return False
+            End If
+            Dim p交点 As S実座標 = line.p交点(fn)
+            If p交点.IsZero Then
+                Return False
+            End If
+            Dim halfFT As S差分 = deltaFT * (1 / 2)
+            If is始点側 Then
+                p始点F = p交点 - halfFT
+                p始点T = p交点 + halfFT
+                is始点FT線 = False
+            Else
+                p終点F = p交点 - halfFT
+                p終点T = p交点 + halfFT
+                is終点FT線 = False
+            End If
+            Return True
+        End Function
+
+        'Yの始点側を除去, クロスしなければFalse
+        Function TrimBandY(ByVal y As Double, Optional is始点側 As Boolean = True)
+            Dim p始点FT As S実座標 = New S線分(p始点F, p始点T).p中点
+            Dim p終点FT As S実座標 = New S線分(p終点F, p終点T).p中点
+            Dim line As New S線分(p始点FT, p終点FT)
+            Dim fn As New S直線式(0, y, False)
+            If line.is平行(fn) Then
+                Return False
+            End If
+            Dim p交点 As S実座標 = line.p交点(fn)
+            If p交点.IsZero Then
+                Return False
+            End If
+            Dim halfFT As S差分 = deltaFT * (1 / 2)
+            If is始点側 Then
+                p始点F = p交点 - halfFT
+                p始点T = p交点 + halfFT
+                is始点FT線 = False
+            Else
+                p終点F = p交点 - halfFT
+                p終点T = p交点 + halfFT
+                is終点FT線 = False
+            End If
+            Return True
+        End Function
 
 
         Enum enumMarkPosition

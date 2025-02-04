@@ -417,6 +417,7 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp底_縦横 {0}", row底_縦横.ToString)
         With row底_縦横
             chk縦横を展開する.Checked = .Value("f_b展開区分")
+            chk縦ひもを放射状に置く.Checked = (0 < .Value("f_i織りタイプ"))
             set底の縦横展開(.Value("f_b展開区分"))
 
             nud長い横ひもの本数.Value = .Value("f_i長い横ひもの本数")
@@ -621,6 +622,12 @@ Public Class frmMain
             .Value("f_dひとつのすき間の寸法") = nudひとつのすき間の寸法.Value
             .Value("f_b始末ひも区分") = chk始末ひも.Checked
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
+
+            If chk縦ひもを放射状に置く.Checked Then
+                .Value("f_i織りタイプ") = enum縦ひも配置.i_放射状 '1
+            Else
+                .Value("f_i織りタイプ") = enum縦ひも配置.i_縦横 '0
+            End If
 
             .Value("f_b楕円底個別設定") = chk楕円底個別設定.Checked
             .Value("f_d楕円底円弧の半径加算") = nud楕円底円弧の半径加算.Value
@@ -1201,16 +1208,25 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
-        '奇数推奨
-        If nud縦ひもの本数.Value Mod 2 = 1 Then
-            nud縦ひもの本数.Increment = 2
-        Else
+        If chk縦ひもを放射状に置く.Checked Then
             nud縦ひもの本数.Increment = 1
-        End If
-        If 1 < nud縦ひもの本数.Value Then
-            txtすき間の点数.Text = nud縦ひもの本数.Value - 1
+            If 1 < nud縦ひもの本数.Value Then
+                txtすき間の点数.Text = nud縦ひもの本数.Value
+            Else
+                txtすき間の点数.Text = ""
+            End If
         Else
-            txtすき間の点数.Text = ""
+            '奇数推奨
+            If nud縦ひもの本数.Value Mod 2 = 1 Then
+                nud縦ひもの本数.Increment = 2
+            Else
+                nud縦ひもの本数.Increment = 1
+            End If
+            If 1 < nud縦ひもの本数.Value Then
+                txtすき間の点数.Text = nud縦ひもの本数.Value - 1
+            Else
+                txtすき間の点数.Text = ""
+            End If
         End If
 
         recalc(CalcCategory.Vertical, sender)
@@ -1259,13 +1275,30 @@ Public Class frmMain
     Private Sub chk縦ひもを放射状に置く_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦ひもを放射状に置く.CheckedChanged
         If chk縦ひもを放射状に置く.Checked Then
             grp横置き.Enabled = False
+            lbl放射状配置.Visible = True
+            lbl径.Visible = True
             chk始末ひも.Checked = False
             chk始末ひも.Enabled = False
-            lbl放射状配置.Visible = True
+            chk斜めの補強ひも.Checked = False
+            chk斜めの補強ひも.Enabled = False
+            If 0 < nud縦ひもの本数.Value Then
+                txtすき間の点数.Text = nud縦ひもの本数.Value
+            End If
         Else
             grp横置き.Enabled = True
             lbl放射状配置.Visible = False
+            lbl径.Visible = False
+            chk始末ひも.Enabled = True
+            chk斜めの補強ひも.Enabled = True
+            If 1 < nud縦ひもの本数.Value Then
+                txtすき間の点数.Text = nud縦ひもの本数.Value - 1
+            Else
+                txtすき間の点数.Text = ""
+            End If
         End If
+
+        set底の縦横展開(chk縦横を展開する.Checked)
+        recalc(CalcCategory.Expand, sender)
 
     End Sub
 
@@ -1582,18 +1615,21 @@ Public Class frmMain
     'タブの表示・非表示(タブのインスタンスは保持)
     Private Sub set底の縦横展開(ByVal isExband As Boolean)
         If isExband Then
-            If Not TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Add(tpage横ひも)
-            End If
             If Not TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Add(tpage縦ひも)
             End If
         Else
-            If TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Remove(tpage横ひも)
-            End If
             If TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Remove(tpage縦ひも)
+            End If
+        End If
+        If isExband AndAlso Not chk縦ひもを放射状に置く.Checked Then
+            If Not TabControl.TabPages.Contains(tpage横ひも) Then
+                TabControl.TabPages.Add(tpage横ひも)
+            End If
+        Else
+            If TabControl.TabPages.Contains(tpage横ひも) Then
+                TabControl.TabPages.Remove(tpage横ひも)
             End If
         End If
     End Sub

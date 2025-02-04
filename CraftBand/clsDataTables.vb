@@ -117,11 +117,17 @@ Public Class clsDataTables
         i_右側 = 2
     End Enum
 
+    'Hexagon
     Public Enum enum織りタイプ
         i_なし = -1
         i_3すくみ = 0
         i_3軸織 = 1
         i_単麻の葉 = 2
+    End Enum
+    'Mesh
+    Public Enum enum縦ひも配置
+        i_縦横 = 0
+        i_放射状 = 1
     End Enum
 
     'tbl縦横展開

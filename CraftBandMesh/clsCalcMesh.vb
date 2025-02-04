@@ -24,7 +24,7 @@ Class clsCalcMesh
         '底(縦横)
         Horizontal '横置き項目(底の縦横)
         Vertical '縦置き項目(底の縦横)
-        Expand '縦横展開
+        Expand '縦横展開,縦ひもを放射状に置く
 
         GapFit  'すき間を横寸法に合わせる。画面値更新と再計算
         LaneSync  '展開本幅の同期。底の縦横の本幅に合わせる
@@ -59,10 +59,12 @@ Class clsCalcMesh
     Private Property _i縦ひもの本数 As Integer
     Private Property _dひとつのすき間の寸法 As Double '縦ひも間
     Private Property _d垂直ひも長加算 As Double
+
     Private Property _b縦横を展開する As Boolean
+    Private Property _b縦ひもを放射状に置く As Boolean
     '縦横計算値
-    Private Property _d縦横の横 As Double '縦横分のみ
-    Private Property _d縦横の縦 As Double '縦横分のみ
+    Private Property _d縦横の横 As Double '縦横分のみ,放射状に置く時は径
+    Private Property _d縦横の縦 As Double '縦横分のみ,放射状に置く時は径
     Private Property _i垂直ひも数_縦横 As Integer 'ゼロ以上
     Private Property _d縦横の垂直ひも間の周 As Double '2*(縦+最上と最下の短いひもを除く横)'ゼロ以上
     '底楕円
@@ -101,6 +103,7 @@ Class clsCalcMesh
         _dひとつのすき間の寸法 = -1
         _d垂直ひも長加算 = -1
         _b縦横を展開する = False
+        _b縦ひもを放射状に置く = False
 
         _d縦横の横 = -1
         _d縦横の縦 = -1
@@ -613,7 +616,7 @@ Class clsCalcMesh
                 ret = ret And adjust_縦ひも()
 
 
-            Case CalcCategory.Expand '縦横展開
+            Case CalcCategory.Expand '縦横展開,縦ひもを放射状に置く
                 ret = ret And set_底の縦横() 'CheckBox
                 ret = ret And calc_横ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
@@ -727,6 +730,7 @@ Class clsCalcMesh
         With _Data.p_row底_縦横
             _b縦横を展開する = .Value("f_b展開区分")
             _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
+            _b縦ひもを放射状に置く = (0 < .Value("f_i織りタイプ"))
 
             '横
             _i長い横ひもの本数 = .Value("f_i長い横ひもの本数")
@@ -793,7 +797,7 @@ Class clsCalcMesh
     End Function
 
 
-#Region "縦横"
+#Region "横寸法に合わせる"
 
     '横寸法=(目標寸法-2径)として、間のすき間を算出する
     '　不可時はエラーメッセージで中断。OK時は、画面値を更新し関連再計算
@@ -1921,7 +1925,23 @@ Class clsCalcMesh
 
     '集計値更新
     Function calc_集計値(ByVal is横展開 As Boolean, ByVal is縦展開 As Boolean) As Boolean
+        '放射状に置く場合
+        If _b縦ひもを放射状に置く Then
+            '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
+            Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_Data.p_row底_縦横.Value("f_i縦ひも"))
+            _d縦横の垂直ひも間の周 = _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
+            If _d縦横の垂直ひも間の周 < 0 Then
+                _d縦横の縦 = 0
+                _d縦横の横 = 0
+                Return False
+            Else
+                _d縦横の縦 = _d縦横の垂直ひも間の周 / Math.PI
+                _d縦横の横 = _d縦横の縦
+                Return True
+            End If
+        End If
 
+        '縦横に置く場合
         If is横展開 Then
             _d縦横の縦 = 0
             Dim obj As Object = __tbl横展開.Compute("SUM(f_d幅)", Nothing)
@@ -1947,6 +1967,11 @@ Class clsCalcMesh
     '底(縦横)設定に基づき縦展開テーブルを作り直す(レコード数増減＆Fix)
     'isRefSaved: True=_Data.p_tbl縦横展開を反映する False=反映しない(非展開値)
     Function renew横展開DataTable(ByVal isRefSaved As Boolean) As Boolean
+        If _b縦ひもを放射状に置く Then
+            __tbl横展開.Clear()
+            Return True
+        End If
+
         If Not isRefSaved Then
             __tbl横展開.Clear()
         Else
@@ -2222,6 +2247,10 @@ Class clsCalcMesh
             '#48 位置番号
             Dim postate As Integer = -_i縦ひもの本数 \ 2
             Dim skipzero As Boolean = (_i縦ひもの本数 Mod 2) = 0
+            If _b縦ひもを放射状に置く Then
+                skipzero = Not skipzero
+                postate = -(_i縦ひもの本数 - 1) \ 2
+            End If
             '.Value("f_i縦ひも") は1以上
             If 0 < _i縦ひもの本数 Then
                 For idx As Integer = 1 To _i縦ひもの本数
@@ -2342,6 +2371,7 @@ Class clsCalcMesh
 
         '●セットする値　位置順(右方向)
         'f_d幅   :領域の幅(f_i何本幅分+ひもの右に加えるすき間)　→　この合計が_d縦横の横
+        '        :(_b縦ひもを放射状に置く=true →角度 　合計なし)
         'f_d長さ :_d縦横の縦
         'f_dひも長:(縦ひも)_d縦横の縦 + 2*(底と高さ分の長さ)
         'f_d出力ひも長:f_dひも長 + f_dひも長加算 + f_dひも長加算2
@@ -2352,10 +2382,15 @@ Class clsCalcMesh
 
         row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
         If row.f_iひも種 = enumひも種.i_縦 Then
-            If row.f_iひも番号 = _i縦ひもの本数 Then
-                row.f_d幅 = row.f_dVal1
+            If _b縦ひもを放射状に置く Then
+                '角度:180－α～ゼロ
+                row.f_d幅 = 180 - (180 / _i縦ひもの本数) * row.f_iひも番号
             Else
-                row.f_d幅 = row.f_dVal1 + _dひとつのすき間の寸法
+                If row.f_iひも番号 = _i縦ひもの本数 Then
+                    row.f_d幅 = row.f_dVal1
+                Else
+                    row.f_d幅 = row.f_dVal1 + _dひとつのすき間の寸法
+                End If
             End If
             row.f_d長さ = _d縦横の縦
             row.f_dひも長 = _d縦横の縦 + 2 * (_d径の合計 + _d垂直ひも長合計 + _d垂直ひも長加算)
