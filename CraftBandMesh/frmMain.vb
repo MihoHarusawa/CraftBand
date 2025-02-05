@@ -207,10 +207,7 @@ Public Class frmMain
             Me.f_dひも長2.DefaultCellStyle.Format = format
             Me.f_d連続ひも長2.DefaultCellStyle.Format = format
 
-            If Not chk楕円底個別設定.Checked Then
-                nud楕円底円弧の半径加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
-                nud楕円底周の加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
-            End If
+            chk楕円底個別設定_CheckedChanged(Nothing, Nothing)
 
         End With
 
@@ -383,6 +380,13 @@ Public Class frmMain
         ShowGridSelected(_clsDataTables)
     End Sub
 
+    Private Sub TabControl_Selecting(sender As Object, e As TabControlCancelEventArgs) Handles TabControl.Selecting
+        If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
+            If e.TabPage Is tpage側面 OrElse e.TabPage Is tpage底楕円 Then
+                e.Cancel = True
+            End If
+        End If
+    End Sub
 
     Sub Disp目標寸法(ByVal row目標寸法 As clsDataRow)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp目標寸法() {0}", row目標寸法.ToString)
@@ -448,9 +452,9 @@ Public Class frmMain
             chk始末ひも.Checked = .Value("f_b始末ひも区分")
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
-            chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
             nud楕円底円弧の半径加算.Value = .Value("f_d楕円底円弧の半径加算")
             nud楕円底周の加算.Value = .Value("f_d楕円底周の加算")
+            chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
         End With
     End Sub
 
@@ -1283,6 +1287,7 @@ Public Class frmMain
             If 0 < nud縦ひもの本数.Value Then
                 txtすき間の点数.Text = nud縦ひもの本数.Value
             End If
+
         Else
             grp横置き.Enabled = True
             lbl放射状配置.Visible = False
@@ -1294,6 +1299,14 @@ Public Class frmMain
             Else
                 txtすき間の点数.Text = ""
             End If
+        End If
+
+        If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
+            tpage底楕円.Enabled = False
+            tpage側面.Enabled = False
+        Else
+            tpage底楕円.Enabled = True
+            tpage側面.Enabled = True
         End If
 
         set底の縦横展開(chk縦横を展開する.Checked)
@@ -1428,18 +1441,26 @@ Public Class frmMain
 
     Private Sub chk楕円底個別設定_CheckedChanged(sender As Object, e As EventArgs) Handles chk楕円底個別設定.CheckedChanged
         grp楕円底個別設定.Enabled = chk楕円底個別設定.Checked
-        'nud楕円底円弧の半径加算.Enabled = chk楕円底個別設定.Checked
-        'nud楕円底周の加算.Enabled = chk楕円底個別設定.Checked
+        If Not chk楕円底個別設定.Checked Then
+            If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横 Then
+                nud楕円底円弧の半径加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
+                nud楕円底周の加算.Value = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
+            Else
+                nud楕円底円弧の半径加算.Value = 0
+                nud楕円底周の加算.Value = 0
+            End If
+        End If
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 
-    Private Sub nud楕円底円弧の半径加算_ValueChanged(sender As Object, e As EventArgs)
+    Private Sub nud楕円底円弧の半径加算_ValueChanged(sender As Object, e As EventArgs) Handles nud楕円底円弧の半径加算.ValueChanged
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 
-    Private Sub nud楕円底周の加算_ValueChanged(sender As Object, e As EventArgs)
+    Private Sub nud楕円底周の加算_ValueChanged(sender As Object, e As EventArgs) Handles nud楕円底周の加算.ValueChanged
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
+
 #End Region
 
 #Region "側面"
@@ -1651,6 +1672,7 @@ Public Class frmMain
                 TabControl.TabPages.Remove(tpage縦ひも)
             End If
         End If
+        chk楕円底個別設定_CheckedChanged(Nothing, Nothing)
     End Sub
     Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
         expand横ひも.PanelSize = tpage横ひも.Size
@@ -1923,6 +1945,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 #End Region
 

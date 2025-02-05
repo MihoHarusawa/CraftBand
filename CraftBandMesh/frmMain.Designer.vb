@@ -1097,7 +1097,6 @@ Partial Class frmMain
         ' nud楕円底周の加算
         ' 
         nud楕円底周の加算.DecimalPlaces = 2
-        nud楕円底周の加算.Enabled = False
         nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
         nud楕円底周の加算.Location = New Point(395, 25)
         nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
@@ -1121,7 +1120,6 @@ Partial Class frmMain
         ' nud楕円底円弧の半径加算
         ' 
         nud楕円底円弧の半径加算.DecimalPlaces = 2
-        nud楕円底円弧の半径加算.Enabled = False
         nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
         nud楕円底円弧の半径加算.Location = New Point(168, 24)
         nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})

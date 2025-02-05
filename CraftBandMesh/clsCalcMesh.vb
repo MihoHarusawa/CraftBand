@@ -1346,12 +1346,21 @@ Class clsCalcMesh
     'OUT:  _d径の合計    _i垂直ひも数_楕円  _d底の周
     Private Function calc_底楕円(ByVal category As CalcCategory, ByVal row As tbl底_楕円Row, ByVal dataPropertyName As String) As Boolean
         If _Data.p_tbl底_楕円.Rows.Count = 0 Then
-            'レコードがなければ四角
+            'レコードがない
             _d径の合計 = 0
             _i垂直ひも数_楕円 = 0
-            _d底の周 = _d縦横の垂直ひも間の周 _
+            If _enum配置タイプ = enum配置タイプ.i_放射状 Then
+                _d底の周 = _d縦横の垂直ひも間の周 _
+                + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の楕円底周の増分")
+
+            ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+                'TODO:
+
+            Else 'enum配置タイプ.i_縦横
+                _d底の周 = _d縦横の垂直ひも間の周 _
                 + 4 * _d最上と最下の短いひもの幅 _
                 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分")
+            End If
             Return True
         End If
 
@@ -1397,15 +1406,8 @@ Class clsCalcMesh
         _d径の合計 = compute指定以降の径の合計(0)
 
         '2回目:番号順
-        Dim d楕円底円弧の半径加算 As Double
-        Dim d楕円底周の加算 As Double
-        If _Data.p_row底_縦横.Value("f_b楕円底個別設定") Then
-            d楕円底円弧の半径加算 = _Data.p_row底_縦横.Value("f_d楕円底円弧の半径加算")
-            d楕円底周の加算 = _Data.p_row底_縦横.Value("f_d楕円底周の加算")
-        Else
-            d楕円底円弧の半径加算 = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底円弧の半径加算")
-            d楕円底周の加算 = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d楕円底周の加算")
-        End If
+        Dim d楕円底円弧の半径加算 As Double = _Data.p_row底_縦横.Value("f_d楕円底円弧の半径加算")
+        Dim d楕円底周の加算 As Double = _Data.p_row底_縦横.Value("f_d楕円底周の加算")
         Dim lastNum差しひも As Integer = 0
         Dim prv As tbl底_楕円Row = Nothing
         For Each r As tbl底_楕円Row In _Data.p_tbl底_楕円.Select(Nothing, "f_i番号 ASC ,  f_iひも番号 ASC")
@@ -1434,8 +1436,8 @@ Class clsCalcMesh
     End Function
 
 
-    'IN:    
-    'OUT:   
+    '編みかたマスタを検索してレコード個別にセット
+    ' f_i段数,f_d径,f_iひも本数
     Private Function set_row底楕円(ByVal row As tbl底_楕円Row) As Boolean
         If row.f_b差しひも区分 Then
             '差しひも
@@ -1478,8 +1480,9 @@ Class clsCalcMesh
         Return True
     End Function
 
+    '個別セット後に、先レコードの結果を積み上げ
     'IN:    _d縦横の垂直ひも間の周  _d最上と最下の短いひもの幅  _d径の合計  _i垂直ひも数_縦横
-    'OUT:   
+    'OUT:   f_d径の累計,f_d周長,f_d円弧部分長,f_i差しひも累計,f_d差しひも間のすき間,f_dひも長
     Private Function set_row底楕円_2回目(ByVal d楕円底円弧の半径加算 As Double, ByVal d楕円底周の加算 As Double,
                                     ByVal row As tbl底_楕円Row, ByVal prv As tbl底_楕円Row, ByRef lastNum差しひも As Integer) As Boolean
         Dim d円弧長 As Double = 0
@@ -1581,6 +1584,106 @@ Class clsCalcMesh
         Return True
     End Function
 
+    Private Function set_row底楕円_2回目_放射状(ByVal d楕円底円弧の半径加算 As Double, ByVal d楕円底周の加算 As Double,
+                                    ByVal row As tbl底_楕円Row, ByVal prv As tbl底_楕円Row, ByRef lastNum差しひも As Integer) As Boolean
+        Dim d円弧長 As Double = 0
+        Dim i角の差しひも数 As Integer
+        '最初のレコード
+        If prv Is Nothing Then
+            If row.Isf_d径Null Then
+                row.f_d径の累計 = 0
+                row.f_d周長 = 4 * _d最上と最下の短いひもの幅 + _d縦横の垂直ひも間の周 + d楕円底周の加算
+            Else
+                row.f_d径の累計 = row.f_d径
+                d円弧長 = 2 * System.Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算) _
+                    + System.Math.PI * _d最上と最下の短いひもの幅
+                row.f_d周長 = d円弧長 + _d縦横の垂直ひも間の周 + d楕円底周の加算
+            End If
+            row.f_d円弧部分長 = d円弧長 / 4
+
+            If row.f_b差しひも区分 Then
+                '差しひも
+                row.f_i差しひも累計 = row.f_i差しひも本数
+                i角の差しひも数 = row.f_i差しひも累計 / 4
+                If i角の差しひも数 = 0 Then
+                    row.Setf_d差しひも間のすき間Null()
+                Else
+                    row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))) / (i角の差しひも数 + 1)
+                End If
+                'ひも長は底部分のみをセット
+                row.f_dひも長 = _d径の合計 _
+                    + _d最上と最下の短いひもの幅 _
+                    + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+                lastNum差しひも = row.f_i番号
+            Else
+                '編みひも
+                row.f_i差しひも累計 = 0
+                row.Setf_d差しひも間のすき間Null()
+
+                ' tbl編みかたRow
+                Dim mst As clsPatternDataRow = g_clsMasterTables.GetPatternRecord(row.f_s編みかた名, row.f_iひも番号)
+                If Not mst.IsValid Then
+                    Return True '1回目でNullセット済
+
+                Else
+                    '(issue#5)楕円底の場合は、ひも1幅は自身の本幅
+                    If row.f_b周連続区分 Then
+                        row.f_dひも長 = mst.GetContinuoutBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横, row.f_i周数)
+                    Else
+                        row.f_dひも長 = mst.GetBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横)
+                    End If
+                End If
+
+            End If
+            Return True
+        End If '最初のレコード
+
+        '2番目以降のレコード
+        If row.Isf_d径Null Then
+            row.f_d径の累計 = prv.f_d径の累計
+        Else
+            row.f_d径の累計 = row.f_d径 + prv.f_d径の累計
+        End If
+        d円弧長 = 2 * System.Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算) _
+             + System.Math.PI * _d最上と最下の短いひもの幅
+        row.f_d周長 = d円弧長 + _d縦横の垂直ひも間の周 + d楕円底周の加算
+        row.f_d円弧部分長 = d円弧長 / 4
+
+        If row.f_b差しひも区分 Then
+            '差しひも
+            row.f_i差しひも累計 = prv.f_i差しひも累計 + row.f_i差しひも本数
+            'ひも長は底部分のみをセット
+            row.f_dひも長 = compute指定以降の径の合計(lastNum差しひも) _
+                + _d最上と最下の短いひもの幅 _
+                + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+            lastNum差しひも = row.f_i番号
+
+        Else
+            '編みひも
+            row.f_i差しひも累計 = prv.f_i差しひも累計
+
+            ' tbl編みかたRow
+            Dim mst As clsPatternDataRow = g_clsMasterTables.GetPatternRecord(row.f_s編みかた名, row.f_iひも番号)
+            If mst.IsValid Then
+                '(issue#5)楕円底の場合は、ひも1幅は自身の本幅
+                If row.f_b周連続区分 Then
+                    row.f_dひも長 = mst.GetContinuoutBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横 + row.f_i差しひも累計, row.f_i周数)
+                Else
+                    row.f_dひも長 = mst.GetBandLength(row.f_i何本幅, row.f_d周長, _i垂直ひも数_縦横)
+                End If
+            Else
+                '1回目で処理済
+            End If
+        End If '2番目以降のレコード
+
+        i角の差しひも数 = row.f_i差しひも累計 / 4
+        If i角の差しひも数 = 0 Then
+            row.Setf_d差しひも間のすき間Null()
+        Else
+            row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))) / (i角の差しひも数 + 1)
+        End If
+        Return True
+    End Function
 
 #End Region
 
