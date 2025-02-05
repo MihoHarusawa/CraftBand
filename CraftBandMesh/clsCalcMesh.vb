@@ -78,6 +78,13 @@ Class clsCalcMesh
     Private Property _d垂直ひも長合計 As Double '側面の合計値,ゼロ以上
     Private Property _d厚さの最大値 As Double '厚さの最大値,ゼロ以上
 
+    '輪弧のみ
+    Private Property _dひもの長さ寸法 As Double
+    Private Property _d内円の直径 As Double
+    Private Property _i連続数1 As Integer
+    Private Property _i連続数2 As Integer
+    Private Property _b下上 As Boolean
+
 
     '※ここまでの各、個別集計値については、CalcSizeで正しく得られること。
     '　レコード内のひも長については、1Pass処理値とし、不正確な可能性あり
@@ -123,6 +130,14 @@ Class clsCalcMesh
 
         __tbl横展開.Clear()
         __tbl縦展開.Clear()
+
+        '輪弧のみ
+        _dひもの長さ寸法 = 0
+        _d内円の直径 = 0
+        _i連続数1 = 0
+        _i連続数2 = 0
+        _b下上 = False
+
     End Sub
 
 #Region "プロパティ値"
@@ -730,8 +745,17 @@ Class clsCalcMesh
         With _Data.p_row底_縦横
             _b縦横を展開する = .Value("f_b展開区分")
             _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
-            If [Enum].IsDefined(GetType(enum配置タイプ), .Value("f_i織りタイプ")) Then
-                _enum配置タイプ = CType(.Value("f_i織りタイプ"), enum配置タイプ)
+            If .Value("f_i織りタイプ") = enum配置タイプ.i_放射状 Then
+                _enum配置タイプ = enum配置タイプ.i_放射状
+
+            ElseIf .Value("f_i織りタイプ") = enum配置タイプ.i_輪弧 Then
+                _enum配置タイプ = enum配置タイプ.i_輪弧
+                '輪弧のみ
+                _dひもの長さ寸法 = .Value("f_d左端右端の目")
+                _d内円の直径 = .Value("f_d左端右端の目2")
+                _i連続数1 = .Value("f_i左から何番目")
+                _i連続数2 = .Value("f_i左から何番目2")
+                _b下上 = .Value("f_bひも上下1回区分")
             Else
                 _enum配置タイプ = enum配置タイプ.i_縦横
             End If
@@ -739,6 +763,7 @@ Class clsCalcMesh
             '縦
             _i縦ひもの本数 = .Value("f_i縦ひもの本数")
             _dひとつのすき間の寸法 = .Value("f_dひとつのすき間の寸法")
+
 
             If _enum配置タイプ <> enum配置タイプ.i_縦横 Then
                 _i長い横ひもの本数 = 0
@@ -2511,6 +2536,13 @@ Class clsCalcMesh
             ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
                 '角度:180－α～ゼロ～-180
                 row.f_d幅 = 180 - (360 / _i縦ひもの本数) * row.f_iひも番号
+                row.f_d長さ = _d内円の直径
+                row.f_dひも長 = _dひもの長さ寸法 + 2 * (_d垂直ひも長加算)
+                row.f_dVal2 = (row.f_dひも長 / 2) + row.f_dひも長加算2
+                row.f_dVal3 = (row.f_dひも長 / 2) + row.f_dひも長加算
+                row.f_d出力ひも長 = row.f_dVal2 + row.f_dVal3
+                Return True
+
             Else
                 If row.f_iひも番号 = _i縦ひもの本数 Then
                     row.f_d幅 = row.f_dVal1

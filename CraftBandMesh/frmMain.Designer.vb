@@ -128,6 +128,10 @@ Partial Class frmMain
         nud楕円底円弧の半径加算 = New NumericUpDown()
         lbl楕円底円弧の半径加算 = New Label()
         chk楕円底個別設定 = New CheckBox()
+        nudひもの長さ寸法 = New NumericUpDown()
+        nud内円の直径 = New NumericUpDown()
+        nud連続数1 = New NumericUpDown()
+        nud連続数2 = New NumericUpDown()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -168,14 +172,20 @@ Partial Class frmMain
         chk縦横を展開する = New CheckBox()
         lbl垂直ひも長加算_単位 = New Label()
         grp縦置き = New GroupBox()
+        rad上下 = New RadioButton()
+        rad下上 = New RadioButton()
+        lbl内円の直径_単位 = New Label()
+        lbl内円の直径 = New Label()
+        lblひもの長さ寸法_単位 = New Label()
+        lblひもの長さ寸法 = New Label()
         lbl径 = New Label()
         lbl放射状配置 = New Label()
         lbl縦置きの計 = New Label()
         lbl縦ひものメモ = New Label()
         txt縦ひものメモ = New TextBox()
         lbl縦ひも_単位 = New Label()
-        txt_ひとつのすき間の寸法_本幅分 = New TextBox()
-        lbl_ひとつのすき間の寸法_本幅分 = New Label()
+        txtひとつのすき間の寸法_本幅分 = New TextBox()
+        lblひとつのすき間の寸法_本幅分 = New Label()
         lblひとつのすき間の寸法_単位 = New Label()
         txtすき間の点数 = New TextBox()
         lblすき間の点数_単位 = New Label()
@@ -330,6 +340,10 @@ Partial Class frmMain
         CType(nud垂直ひも長加算, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud楕円底周の加算, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nudひもの長さ寸法, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud内円の直径, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud連続数1, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud連続数2, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         grp目標寸法.SuspendLayout()
         TabControl.SuspendLayout()
@@ -439,7 +453,7 @@ Partial Class frmMain
         ' lbl縦ひもの本数
         ' 
         lbl縦ひもの本数.AutoSize = True
-        lbl縦ひもの本数.Location = New Point(16, 73)
+        lbl縦ひもの本数.Location = New Point(16, 74)
         lbl縦ひもの本数.Name = "lbl縦ひもの本数"
         lbl縦ひもの本数.Size = New Size(84, 19)
         lbl縦ひもの本数.TabIndex = 3
@@ -566,7 +580,7 @@ Partial Class frmMain
         ' lblひとつのすき間の寸法
         ' 
         lblひとつのすき間の寸法.AutoSize = True
-        lblひとつのすき間の寸法.Location = New Point(16, 110)
+        lblひとつのすき間の寸法.Location = New Point(16, 109)
         lblひとつのすき間の寸法.Name = "lblひとつのすき間の寸法"
         lblひとつのすき間の寸法.Size = New Size(127, 19)
         lblひとつのすき間の寸法.TabIndex = 8
@@ -599,7 +613,7 @@ Partial Class frmMain
         ' 
         nudひとつのすき間の寸法.DecimalPlaces = 2
         nudひとつのすき間の寸法.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nudひとつのすき間の寸法.Location = New Point(157, 109)
+        nudひとつのすき間の寸法.Location = New Point(157, 107)
         nudひとつのすき間の寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nudひとつのすき間の寸法.Name = "nudひとつのすき間の寸法"
         nudひとつのすき間の寸法.Size = New Size(69, 26)
@@ -1152,6 +1166,52 @@ Partial Class frmMain
         ToolTip1.SetToolTip(chk楕円底個別設定, "このデータ個別の値を設定する場合はチェックON")
         chk楕円底個別設定.UseVisualStyleBackColor = True
         ' 
+        ' nudひもの長さ寸法
+        ' 
+        nudひもの長さ寸法.Location = New Point(157, 142)
+        nudひもの長さ寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nudひもの長さ寸法.Name = "nudひもの長さ寸法"
+        nudひもの長さ寸法.Size = New Size(69, 26)
+        nudひもの長さ寸法.TabIndex = 19
+        nudひもの長さ寸法.TextAlign = HorizontalAlignment.Right
+        nudひもの長さ寸法.ThousandsSeparator = True
+        ToolTip1.SetToolTip(nudひもの長さ寸法, "1本のひもの長さ")
+        nudひもの長さ寸法.Visible = False
+        ' 
+        ' nud内円の直径
+        ' 
+        nud内円の直径.Location = New Point(157, 177)
+        nud内円の直径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nud内円の直径.Name = "nud内円の直径"
+        nud内円の直径.Size = New Size(69, 26)
+        nud内円の直径.TabIndex = 22
+        nud内円の直径.TextAlign = HorizontalAlignment.Right
+        nud内円の直径.ThousandsSeparator = True
+        ToolTip1.SetToolTip(nud内円の直径, "輪弧の内側の直径")
+        nud内円の直径.Visible = False
+        ' 
+        ' nud連続数1
+        ' 
+        nud連続数1.Location = New Point(285, 179)
+        nud連続数1.Name = "nud連続数1"
+        nud連続数1.Size = New Size(51, 26)
+        nud連続数1.TabIndex = 26
+        nud連続数1.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(nud連続数1, "最初の位置の連続数")
+        nud連続数1.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        nud連続数1.Visible = False
+        ' 
+        ' nud連続数2
+        ' 
+        nud連続数2.Location = New Point(345, 179)
+        nud連続数2.Name = "nud連続数2"
+        nud連続数2.Size = New Size(51, 26)
+        nud連続数2.TabIndex = 27
+        nud連続数2.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(nud連続数2, "次の位置の連続数")
+        nud連続数2.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        nud連続数2.Visible = False
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1452,6 +1512,16 @@ Partial Class frmMain
         ' 
         ' grp縦置き
         ' 
+        grp縦置き.Controls.Add(nud連続数2)
+        grp縦置き.Controls.Add(nud連続数1)
+        grp縦置き.Controls.Add(rad上下)
+        grp縦置き.Controls.Add(rad下上)
+        grp縦置き.Controls.Add(lbl内円の直径_単位)
+        grp縦置き.Controls.Add(nud内円の直径)
+        grp縦置き.Controls.Add(lbl内円の直径)
+        grp縦置き.Controls.Add(lblひもの長さ寸法_単位)
+        grp縦置き.Controls.Add(nudひもの長さ寸法)
+        grp縦置き.Controls.Add(lblひもの長さ寸法)
         grp縦置き.Controls.Add(lbl径)
         grp縦置き.Controls.Add(lbl放射状配置)
         grp縦置き.Controls.Add(btn横寸法に合わせる)
@@ -1463,8 +1533,8 @@ Partial Class frmMain
         grp縦置き.Controls.Add(lbl縦ひも_単位)
         grp縦置き.Controls.Add(lbl縦ひも)
         grp縦置き.Controls.Add(nud縦ひも)
-        grp縦置き.Controls.Add(txt_ひとつのすき間の寸法_本幅分)
-        grp縦置き.Controls.Add(lbl_ひとつのすき間の寸法_本幅分)
+        grp縦置き.Controls.Add(txtひとつのすき間の寸法_本幅分)
+        grp縦置き.Controls.Add(lblひとつのすき間の寸法_本幅分)
         grp縦置き.Controls.Add(lblひとつのすき間の寸法_単位)
         grp縦置き.Controls.Add(lblひとつのすき間の寸法)
         grp縦置き.Controls.Add(txtすき間の点数)
@@ -1478,6 +1548,70 @@ Partial Class frmMain
         grp縦置き.TabIndex = 4
         grp縦置き.TabStop = False
         grp縦置き.Text = "縦置き"
+        ' 
+        ' rad上下
+        ' 
+        rad上下.AutoSize = True
+        rad上下.Location = New Point(346, 146)
+        rad上下.Name = "rad上下"
+        rad上下.Size = New Size(55, 23)
+        rad上下.TabIndex = 25
+        rad上下.Text = "上下"
+        rad上下.UseVisualStyleBackColor = True
+        rad上下.Visible = False
+        ' 
+        ' rad下上
+        ' 
+        rad下上.AutoSize = True
+        rad下上.Checked = True
+        rad下上.Location = New Point(285, 146)
+        rad下上.Name = "rad下上"
+        rad下上.Size = New Size(55, 23)
+        rad下上.TabIndex = 24
+        rad下上.TabStop = True
+        rad下上.Text = "下上"
+        rad下上.UseVisualStyleBackColor = True
+        rad下上.Visible = False
+        ' 
+        ' lbl内円の直径_単位
+        ' 
+        lbl内円の直径_単位.AutoSize = True
+        lbl内円の直径_単位.Location = New Point(231, 183)
+        lbl内円の直径_単位.Name = "lbl内円の直径_単位"
+        lbl内円の直径_単位.Size = New Size(33, 19)
+        lbl内円の直径_単位.TabIndex = 23
+        lbl内円の直径_単位.Text = "mm"
+        lbl内円の直径_単位.Visible = False
+        ' 
+        ' lbl内円の直径
+        ' 
+        lbl内円の直径.AutoSize = True
+        lbl内円の直径.Location = New Point(16, 180)
+        lbl内円の直径.Name = "lbl内円の直径"
+        lbl内円の直径.Size = New Size(76, 19)
+        lbl内円の直径.TabIndex = 21
+        lbl内円の直径.Text = "内円の直径"
+        lbl内円の直径.Visible = False
+        ' 
+        ' lblひもの長さ寸法_単位
+        ' 
+        lblひもの長さ寸法_単位.AutoSize = True
+        lblひもの長さ寸法_単位.Location = New Point(231, 148)
+        lblひもの長さ寸法_単位.Name = "lblひもの長さ寸法_単位"
+        lblひもの長さ寸法_単位.Size = New Size(33, 19)
+        lblひもの長さ寸法_単位.TabIndex = 20
+        lblひもの長さ寸法_単位.Text = "mm"
+        lblひもの長さ寸法_単位.Visible = False
+        ' 
+        ' lblひもの長さ寸法
+        ' 
+        lblひもの長さ寸法.AutoSize = True
+        lblひもの長さ寸法.Location = New Point(16, 144)
+        lblひもの長さ寸法.Name = "lblひもの長さ寸法"
+        lblひもの長さ寸法.Size = New Size(93, 19)
+        lblひもの長さ寸法.TabIndex = 18
+        lblひもの長さ寸法.Text = "ひもの長さ寸法"
+        lblひもの長さ寸法.Visible = False
         ' 
         ' lbl径
         ' 
@@ -1514,7 +1648,7 @@ Partial Class frmMain
         ' lbl縦ひものメモ
         ' 
         lbl縦ひものメモ.AutoSize = True
-        lbl縦ひものメモ.Location = New Point(16, 215)
+        lbl縦ひものメモ.Location = New Point(16, 214)
         lbl縦ひものメモ.Name = "lbl縦ひものメモ"
         lbl縦ひものメモ.Size = New Size(76, 19)
         lbl縦ひものメモ.TabIndex = 15
@@ -1522,7 +1656,7 @@ Partial Class frmMain
         ' 
         ' txt縦ひものメモ
         ' 
-        txt縦ひものメモ.Location = New Point(157, 215)
+        txt縦ひものメモ.Location = New Point(157, 212)
         txt縦ひものメモ.Name = "txt縦ひものメモ"
         txt縦ひものメモ.Size = New Size(239, 26)
         txt縦ひものメモ.TabIndex = 16
@@ -1536,27 +1670,27 @@ Partial Class frmMain
         lbl縦ひも_単位.TabIndex = 2
         lbl縦ひも_単位.Text = "本幅"
         ' 
-        ' txt_ひとつのすき間の寸法_本幅分
+        ' txtひとつのすき間の寸法_本幅分
         ' 
-        txt_ひとつのすき間の寸法_本幅分.Location = New Point(272, 108)
-        txt_ひとつのすき間の寸法_本幅分.Name = "txt_ひとつのすき間の寸法_本幅分"
-        txt_ひとつのすき間の寸法_本幅分.ReadOnly = True
-        txt_ひとつのすき間の寸法_本幅分.Size = New Size(57, 26)
-        txt_ひとつのすき間の寸法_本幅分.TabIndex = 11
+        txtひとつのすき間の寸法_本幅分.Location = New Point(270, 107)
+        txtひとつのすき間の寸法_本幅分.Name = "txtひとつのすき間の寸法_本幅分"
+        txtひとつのすき間の寸法_本幅分.ReadOnly = True
+        txtひとつのすき間の寸法_本幅分.Size = New Size(57, 26)
+        txtひとつのすき間の寸法_本幅分.TabIndex = 11
         ' 
-        ' lbl_ひとつのすき間の寸法_本幅分
+        ' lblひとつのすき間の寸法_本幅分
         ' 
-        lbl_ひとつのすき間の寸法_本幅分.AutoSize = True
-        lbl_ひとつのすき間の寸法_本幅分.Location = New Point(334, 115)
-        lbl_ひとつのすき間の寸法_本幅分.Name = "lbl_ひとつのすき間の寸法_本幅分"
-        lbl_ひとつのすき間の寸法_本幅分.Size = New Size(51, 19)
-        lbl_ひとつのすき間の寸法_本幅分.TabIndex = 12
-        lbl_ひとつのすき間の寸法_本幅分.Text = "本幅分"
+        lblひとつのすき間の寸法_本幅分.AutoSize = True
+        lblひとつのすき間の寸法_本幅分.Location = New Point(334, 110)
+        lblひとつのすき間の寸法_本幅分.Name = "lblひとつのすき間の寸法_本幅分"
+        lblひとつのすき間の寸法_本幅分.Size = New Size(51, 19)
+        lblひとつのすき間の寸法_本幅分.TabIndex = 12
+        lblひとつのすき間の寸法_本幅分.Text = "本幅分"
         ' 
         ' lblひとつのすき間の寸法_単位
         ' 
         lblひとつのすき間の寸法_単位.AutoSize = True
-        lblひとつのすき間の寸法_単位.Location = New Point(231, 111)
+        lblひとつのすき間の寸法_単位.Location = New Point(231, 113)
         lblひとつのすき間の寸法_単位.Name = "lblひとつのすき間の寸法_単位"
         lblひとつのすき間の寸法_単位.Size = New Size(33, 19)
         lblひとつのすき間の寸法_単位.TabIndex = 10
@@ -1564,7 +1698,7 @@ Partial Class frmMain
         ' 
         ' txtすき間の点数
         ' 
-        txtすき間の点数.Location = New Point(272, 72)
+        txtすき間の点数.Location = New Point(270, 72)
         txtすき間の点数.Name = "txtすき間の点数"
         txtすき間の点数.ReadOnly = True
         txtすき間の点数.Size = New Size(57, 26)
@@ -1573,7 +1707,7 @@ Partial Class frmMain
         ' lblすき間の点数_単位
         ' 
         lblすき間の点数_単位.AutoSize = True
-        lblすき間の点数_単位.Location = New Point(334, 79)
+        lblすき間の点数_単位.Location = New Point(334, 75)
         lblすき間の点数_単位.Name = "lblすき間の点数_単位"
         lblすき間の点数_単位.Size = New Size(70, 19)
         lblすき間の点数_単位.TabIndex = 7
@@ -1582,7 +1716,7 @@ Partial Class frmMain
         ' lbl縦ひもの本数_単位
         ' 
         lbl縦ひもの本数_単位.AutoSize = True
-        lbl縦ひもの本数_単位.Location = New Point(231, 79)
+        lbl縦ひもの本数_単位.Location = New Point(231, 78)
         lbl縦ひもの本数_単位.Name = "lbl縦ひもの本数_単位"
         lbl縦ひもの本数_単位.Size = New Size(23, 19)
         lbl縦ひもの本数_単位.TabIndex = 5
@@ -3118,6 +3252,10 @@ Partial Class frmMain
         CType(nud垂直ひも長加算, ComponentModel.ISupportInitialize).EndInit()
         CType(nud楕円底周の加算, ComponentModel.ISupportInitialize).EndInit()
         CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).EndInit()
+        CType(nudひもの長さ寸法, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud内円の直径, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud連続数1, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud連続数2, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         grp目標寸法.ResumeLayout(False)
@@ -3188,8 +3326,8 @@ Partial Class frmMain
     Friend WithEvents TabControl As TabControl
     Friend WithEvents tpage底縦横 As TabPage
     Friend WithEvents grp縦置き As GroupBox
-    Friend WithEvents txt_ひとつのすき間の寸法_本幅分 As TextBox
-    Friend WithEvents lbl_ひとつのすき間の寸法_本幅分 As Label
+    Friend WithEvents txtひとつのすき間の寸法_本幅分 As TextBox
+    Friend WithEvents lblひとつのすき間の寸法_本幅分 As Label
     Friend WithEvents lblひとつのすき間の寸法_単位 As Label
     Friend WithEvents lblひとつのすき間の寸法 As Label
     Friend WithEvents txtすき間の点数 As TextBox
@@ -3398,6 +3536,16 @@ Partial Class frmMain
     Friend WithEvents lbl楕円底円弧の半径加算 As Label
     Friend WithEvents lbl内側から外側へ As Label
     Friend WithEvents chk楕円底個別設定 As CheckBox
+    Friend WithEvents lblひもの長さ寸法_単位 As Label
+    Friend WithEvents nudひもの長さ寸法 As NumericUpDown
+    Friend WithEvents lblひもの長さ寸法 As Label
+    Friend WithEvents lbl内円の直径_単位 As Label
+    Friend WithEvents nud内円の直径 As NumericUpDown
+    Friend WithEvents lbl内円の直径 As Label
+    Friend WithEvents rad上下 As RadioButton
+    Friend WithEvents rad下上 As RadioButton
+    Friend WithEvents nud連続数2 As NumericUpDown
+    Friend WithEvents nud連続数1 As NumericUpDown
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

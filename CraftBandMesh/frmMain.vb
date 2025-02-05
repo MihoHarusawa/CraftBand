@@ -162,12 +162,16 @@ Public Class frmMain
             lbl垂直ひも長加算_単位.Text = unitstr
             lbl楕円底円弧の半径加算_単位.Text = unitstr
             lbl楕円底周の加算_単位.Text = unitstr
+            lblひもの長さ寸法_単位.Text = unitstr
+            lbl内円の直径_単位.Text = unitstr
 
 
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud垂直ひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nudひもの長さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nud内円の直径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nudひとつのすき間の寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nud横ひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
@@ -455,6 +459,13 @@ Public Class frmMain
             nud楕円底円弧の半径加算.Value = .Value("f_d楕円底円弧の半径加算")
             nud楕円底周の加算.Value = .Value("f_d楕円底周の加算")
             chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
+
+            '輪弧のみだがセットする
+            nudひもの長さ寸法.Value = .Value("f_d左端右端の目")
+            nud内円の直径.Value = .Value("f_d左端右端の目2")
+            nud連続数1.Value = .Value("f_i左から何番目")
+            nud連続数2.Value = .Value("f_i左から何番目2")
+            rad下上.Checked = .Value("f_bひも上下1回区分")
         End With
     End Sub
 
@@ -635,6 +646,14 @@ Public Class frmMain
             .Value("f_b楕円底個別設定") = chk楕円底個別設定.Checked
             .Value("f_d楕円底円弧の半径加算") = nud楕円底円弧の半径加算.Value
             .Value("f_d楕円底周の加算") = nud楕円底周の加算.Value
+
+            '輪弧のみだがセットする
+            .Value("f_d左端右端の目") = nudひもの長さ寸法.Value
+            .Value("f_d左端右端の目2") = nud内円の直径.Value
+            .Value("f_i左から何番目") = nud連続数1.Value
+            .Value("f_i左から何番目2") = nud連続数2.Value
+            .Value("f_bひも上下1回区分") = rad下上.Checked
+
         End With
         Return True
     End Function
@@ -1237,9 +1256,9 @@ Public Class frmMain
 
     Private Sub nudひとつのすき間の寸法_ValueChanged(sender As Object, e As EventArgs) Handles nudひとつのすき間の寸法.ValueChanged
         If 0 < nudひとつのすき間の寸法.Value Then
-            txt_ひとつのすき間の寸法_本幅分.Text = New Length(nudひとつのすき間の寸法.Value).ByLaneText
+            txtひとつのすき間の寸法_本幅分.Text = New Length(nudひとつのすき間の寸法.Value).ByLaneText
         Else
-            txt_ひとつのすき間の寸法_本幅分.Text = ""
+            txtひとつのすき間の寸法_本幅分.Text = ""
         End If
 
         recalc(CalcCategory.Vertical, sender)
@@ -1304,9 +1323,49 @@ Public Class frmMain
         If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
             tpage底楕円.Enabled = False
             tpage側面.Enabled = False
+
+            btn横寸法に合わせる.Visible = False
+            chk始末ひも.Visible = False
+            lblひとつのすき間の寸法.Visible = False
+            nudひとつのすき間の寸法.Visible = False
+            lblひとつのすき間の寸法_単位.Visible = False
+            txtひとつのすき間の寸法_本幅分.Visible = False
+            lblひとつのすき間の寸法_本幅分.Visible = False
+
+            lblひもの長さ寸法.Visible = True
+            nudひもの長さ寸法.Visible = True
+            lblひもの長さ寸法_単位.Visible = True
+            lbl内円の直径.Visible = True
+            nud内円の直径.Visible = True
+            lbl内円の直径_単位.Visible = True
+            rad下上.Visible = True
+            rad上下.Visible = True
+            nud連続数1.Visible = True
+            nud連続数2.Visible = True
+
         Else
             tpage底楕円.Enabled = True
             tpage側面.Enabled = True
+
+            btn横寸法に合わせる.Visible = True
+            chk始末ひも.Visible = True
+            lblひとつのすき間の寸法.Visible = True
+            nudひとつのすき間の寸法.Visible = True
+            lblひとつのすき間の寸法_単位.Visible = True
+            txtひとつのすき間の寸法_本幅分.Visible = True
+            lblひとつのすき間の寸法_本幅分.Visible = True
+
+            lblひもの長さ寸法.Visible = False
+            nudひもの長さ寸法.Visible = False
+            lblひもの長さ寸法_単位.Visible = False
+            lbl内円の直径.Visible = False
+            nud内円の直径.Visible = False
+            lbl内円の直径_単位.Visible = False
+            rad下上.Visible = False
+            rad上下.Visible = False
+            nud連続数1.Visible = False
+            nud連続数2.Visible = False
+
         End If
 
         set底の縦横展開(chk縦横を展開する.Checked)
