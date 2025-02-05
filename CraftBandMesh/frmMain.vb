@@ -1392,7 +1392,13 @@ Public Class frmMain
     Private Sub chk差しひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk差しひも.CheckedChanged
         If chk差しひも.Checked Then
             cmb編みかた名_底楕円.Text = ""
-            nud周数_底楕円.Value = 8
+            If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横 Then
+                nud周数_底楕円.Value = 8
+            ElseIf 0 < nud縦ひもの本数.Value Then
+                nud周数_底楕円.Value = nud縦ひもの本数.Value
+            End If
+        Else
+            nud周数_底楕円.Value = 1
         End If
     End Sub
 
@@ -1421,16 +1427,17 @@ Public Class frmMain
     End Sub
 
     Private Sub chk楕円底個別設定_CheckedChanged(sender As Object, e As EventArgs) Handles chk楕円底個別設定.CheckedChanged
-        nud楕円底円弧の半径加算.Enabled = chk楕円底個別設定.Checked
-        nud楕円底周の加算.Enabled = chk楕円底個別設定.Checked
+        grp楕円底個別設定.Enabled = chk楕円底個別設定.Checked
+        'nud楕円底円弧の半径加算.Enabled = chk楕円底個別設定.Checked
+        'nud楕円底周の加算.Enabled = chk楕円底個別設定.Checked
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 
-    Private Sub nud楕円底円弧の半径加算_ValueChanged(sender As Object, e As EventArgs) Handles nud楕円底円弧の半径加算.ValueChanged
+    Private Sub nud楕円底円弧の半径加算_ValueChanged(sender As Object, e As EventArgs)
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 
-    Private Sub nud楕円底周の加算_ValueChanged(sender As Object, e As EventArgs) Handles nud楕円底周の加算.ValueChanged
+    Private Sub nud楕円底周の加算_ValueChanged(sender As Object, e As EventArgs)
         recalc(CalcCategory.Oval, Nothing, Nothing)
     End Sub
 #End Region

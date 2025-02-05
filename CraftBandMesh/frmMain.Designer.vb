@@ -94,11 +94,6 @@ Partial Class frmMain
         lbl横ひも間のすき間 = New Label()
         nud垂直ひも長加算 = New NumericUpDown()
         lbl垂直ひも長加算 = New Label()
-        chk楕円底個別設定 = New CheckBox()
-        nud楕円底円弧の半径加算 = New NumericUpDown()
-        lbl楕円底円弧の半径加算 = New Label()
-        nud楕円底周の加算 = New NumericUpDown()
-        lbl楕円底周の加算 = New Label()
         lbl厚さ = New Label()
         txt厚さ = New TextBox()
         btn規定値 = New Button()
@@ -128,6 +123,11 @@ Partial Class frmMain
         btn展開本幅の同期 = New Button()
         btn一時保存 = New Button()
         cmb配置タイプ = New ComboBox()
+        nud楕円底周の加算 = New NumericUpDown()
+        lbl楕円底周の加算 = New Label()
+        nud楕円底円弧の半径加算 = New NumericUpDown()
+        lbl楕円底円弧の半径加算 = New Label()
+        chk楕円底個別設定 = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -192,6 +192,10 @@ Partial Class frmMain
         lbl長い横ひも_単位 = New Label()
         lbl長い横ひもの本数_単位 = New Label()
         tpage底楕円 = New TabPage()
+        lbl内側から外側へ = New Label()
+        grp楕円底個別設定 = New GroupBox()
+        lbl楕円底周の加算_単位 = New Label()
+        lbl楕円底円弧の半径加算_単位 = New Label()
         lbl周数_底楕円 = New Label()
         lbl編みかた名_底楕円 = New Label()
         chk差しひも = New CheckBox()
@@ -244,9 +248,6 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
-        grp楕円底個別設定 = New GroupBox()
-        lbl楕円底周の加算_単位 = New Label()
-        lbl楕円底円弧の半径加算_単位 = New Label()
         lbl作成者 = New Label()
         lblタイトル = New Label()
         lblメモ = New Label()
@@ -327,8 +328,8 @@ Partial Class frmMain
         CType(nud周数_底楕円, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横ひも間のすき間, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud垂直ひも長加算, ComponentModel.ISupportInitialize).BeginInit()
-        CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud楕円底周の加算, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         grp目標寸法.SuspendLayout()
         TabControl.SuspendLayout()
@@ -337,6 +338,7 @@ Partial Class frmMain
         grp横置き.SuspendLayout()
         CType(nud最上と最下の短いひもの幅, ComponentModel.ISupportInitialize).BeginInit()
         tpage底楕円.SuspendLayout()
+        grp楕円底個別設定.SuspendLayout()
         CType(dgv底楕円, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSource底_楕円, ComponentModel.ISupportInitialize).BeginInit()
         tpage側面.SuspendLayout()
@@ -344,7 +346,6 @@ Partial Class frmMain
         CType(BindingSource側面, ComponentModel.ISupportInitialize).BeginInit()
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
-        grp楕円底個別設定.SuspendLayout()
         tpage横ひも.SuspendLayout()
         tpage縦ひも.SuspendLayout()
         tpageプレビュー.SuspendLayout()
@@ -623,7 +624,7 @@ Partial Class frmMain
         nud周数_底楕円.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         nud周数_底楕円.Name = "nud周数_底楕円"
         nud周数_底楕円.Size = New Size(59, 26)
-        nud周数_底楕円.TabIndex = 8
+        nud周数_底楕円.TabIndex = 11
         ToolTip1.SetToolTip(nud周数_底楕円, "何周追加するか")
         nud周数_底楕円.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
@@ -775,65 +776,6 @@ Partial Class frmMain
         lbl垂直ひも長加算.TabIndex = 0
         lbl垂直ひも長加算.Text = "垂直ひも長加算"
         ToolTip1.SetToolTip(lbl垂直ひも長加算, "差しひもも含めた全ての垂直ひもに加える長さ")
-        ' 
-        ' chk楕円底個別設定
-        ' 
-        chk楕円底個別設定.AutoSize = True
-        chk楕円底個別設定.Location = New Point(102, 23)
-        chk楕円底個別設定.Name = "chk楕円底個別設定"
-        chk楕円底個別設定.Size = New Size(126, 23)
-        chk楕円底個別設定.TabIndex = 0
-        chk楕円底個別設定.Text = "楕円底個別設定"
-        ToolTip1.SetToolTip(chk楕円底個別設定, "このデータ個別の値を設定する場合はチェックON")
-        chk楕円底個別設定.UseVisualStyleBackColor = True
-        ' 
-        ' nud楕円底円弧の半径加算
-        ' 
-        nud楕円底円弧の半径加算.DecimalPlaces = 2
-        nud楕円底円弧の半径加算.Enabled = False
-        nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底円弧の半径加算.Location = New Point(473, 22)
-        nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
-        nud楕円底円弧の半径加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
-        nud楕円底円弧の半径加算.Name = "nud楕円底円弧の半径加算"
-        nud楕円底円弧の半径加算.Size = New Size(69, 26)
-        nud楕円底円弧の半径加算.TabIndex = 2
-        nud楕円底円弧の半径加算.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(nud楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
-        ' 
-        ' lbl楕円底円弧の半径加算
-        ' 
-        lbl楕円底円弧の半径加算.AutoSize = True
-        lbl楕円底円弧の半径加算.Location = New Point(307, 25)
-        lbl楕円底円弧の半径加算.Name = "lbl楕円底円弧の半径加算"
-        lbl楕円底円弧の半径加算.Size = New Size(146, 19)
-        lbl楕円底円弧の半径加算.TabIndex = 1
-        lbl楕円底円弧の半径加算.Text = "楕円底円弧の半径加算"
-        ToolTip1.SetToolTip(lbl楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
-        ' 
-        ' nud楕円底周の加算
-        ' 
-        nud楕円底周の加算.DecimalPlaces = 2
-        nud楕円底周の加算.Enabled = False
-        nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud楕円底周の加算.Location = New Point(725, 22)
-        nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
-        nud楕円底周の加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
-        nud楕円底周の加算.Name = "nud楕円底周の加算"
-        nud楕円底周の加算.Size = New Size(69, 26)
-        nud楕円底周の加算.TabIndex = 5
-        nud楕円底周の加算.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(nud楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
-        ' 
-        ' lbl楕円底周の加算
-        ' 
-        lbl楕円底周の加算.AutoSize = True
-        lbl楕円底周の加算.Location = New Point(593, 25)
-        lbl楕円底周の加算.Name = "lbl楕円底周の加算"
-        lbl楕円底周の加算.Size = New Size(104, 19)
-        lbl楕円底周の加算.TabIndex = 4
-        lbl楕円底周の加算.Text = "楕円底周の加算"
-        ToolTip1.SetToolTip(lbl楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
         ' 
         ' lbl厚さ
         ' 
@@ -1072,7 +1014,7 @@ Partial Class frmMain
         txtメモ.Location = New Point(24, 141)
         txtメモ.Multiline = True
         txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(861, 176)
+        txtメモ.Size = New Size(861, 244)
         txtメモ.TabIndex = 5
         ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
         ' 
@@ -1151,6 +1093,66 @@ Partial Class frmMain
         cmb配置タイプ.Size = New Size(174, 27)
         cmb配置タイプ.TabIndex = 7
         ToolTip1.SetToolTip(cmb配置タイプ, "底ひもの基本的な配置を選びます")
+        ' 
+        ' nud楕円底周の加算
+        ' 
+        nud楕円底周の加算.DecimalPlaces = 2
+        nud楕円底周の加算.Enabled = False
+        nud楕円底周の加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        nud楕円底周の加算.Location = New Point(395, 25)
+        nud楕円底周の加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nud楕円底周の加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
+        nud楕円底周の加算.Name = "nud楕円底周の加算"
+        nud楕円底周の加算.Size = New Size(69, 26)
+        nud楕円底周の加算.TabIndex = 4
+        nud楕円底周の加算.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(nud楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
+        ' 
+        ' lbl楕円底周の加算
+        ' 
+        lbl楕円底周の加算.AutoSize = True
+        lbl楕円底周の加算.Location = New Point(288, 27)
+        lbl楕円底周の加算.Name = "lbl楕円底周の加算"
+        lbl楕円底周の加算.Size = New Size(104, 19)
+        lbl楕円底周の加算.TabIndex = 3
+        lbl楕円底周の加算.Text = "楕円底周の加算"
+        ToolTip1.SetToolTip(lbl楕円底周の加算, "楕円部の周の加減値。斜めカット分のマイナスを設定")
+        ' 
+        ' nud楕円底円弧の半径加算
+        ' 
+        nud楕円底円弧の半径加算.DecimalPlaces = 2
+        nud楕円底円弧の半径加算.Enabled = False
+        nud楕円底円弧の半径加算.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        nud楕円底円弧の半径加算.Location = New Point(168, 24)
+        nud楕円底円弧の半径加算.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nud楕円底円弧の半径加算.Minimum = New Decimal(New Integer() {99999, 0, 0, Integer.MinValue})
+        nud楕円底円弧の半径加算.Name = "nud楕円底円弧の半径加算"
+        nud楕円底円弧の半径加算.Size = New Size(69, 26)
+        nud楕円底円弧の半径加算.TabIndex = 1
+        nud楕円底円弧の半径加算.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(nud楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
+        ' 
+        ' lbl楕円底円弧の半径加算
+        ' 
+        lbl楕円底円弧の半径加算.AutoSize = True
+        lbl楕円底円弧の半径加算.Location = New Point(16, 27)
+        lbl楕円底円弧の半径加算.Name = "lbl楕円底円弧の半径加算"
+        lbl楕円底円弧の半径加算.Size = New Size(146, 19)
+        lbl楕円底円弧の半径加算.TabIndex = 0
+        lbl楕円底円弧の半径加算.Text = "楕円底円弧の半径加算"
+        ToolTip1.SetToolTip(lbl楕円底円弧の半径加算, "円周計算時の半径の加減値。小さくするにはマイナスを設定")
+        ' 
+        ' chk楕円底個別設定
+        ' 
+        chk楕円底個別設定.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        chk楕円底個別設定.AutoSize = True
+        chk楕円底個別設定.Location = New Point(241, 28)
+        chk楕円底個別設定.Name = "chk楕円底個別設定"
+        chk楕円底個別設定.Size = New Size(126, 23)
+        chk楕円底個別設定.TabIndex = 0
+        chk楕円底個別設定.Text = "楕円底個別設定"
+        ToolTip1.SetToolTip(chk楕円底個別設定, "このデータ個別の値を設定する場合はチェックON")
+        chk楕円底個別設定.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1711,6 +1713,9 @@ Partial Class frmMain
         ' 
         ' tpage底楕円
         ' 
+        tpage底楕円.Controls.Add(chk楕円底個別設定)
+        tpage底楕円.Controls.Add(lbl内側から外側へ)
+        tpage底楕円.Controls.Add(grp楕円底個別設定)
         tpage底楕円.Controls.Add(lbl周数_底楕円)
         tpage底楕円.Controls.Add(lbl編みかた名_底楕円)
         tpage底楕円.Controls.Add(chk差しひも)
@@ -1729,6 +1734,49 @@ Partial Class frmMain
         tpage底楕円.Text = "底(楕円)"
         tpage底楕円.UseVisualStyleBackColor = True
         ' 
+        ' lbl内側から外側へ
+        ' 
+        lbl内側から外側へ.AutoSize = True
+        lbl内側から外側へ.Location = New Point(8, 45)
+        lbl内側から外側へ.Name = "lbl内側から外側へ"
+        lbl内側から外側へ.Size = New Size(97, 19)
+        lbl内側から外側へ.TabIndex = 2
+        lbl内側から外側へ.Text = "内側から外側へ"
+        ' 
+        ' grp楕円底個別設定
+        ' 
+        grp楕円底個別設定.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        grp楕円底個別設定.Controls.Add(nud楕円底周の加算)
+        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算_単位)
+        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算)
+        grp楕円底個別設定.Controls.Add(nud楕円底円弧の半径加算)
+        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算_単位)
+        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算)
+        grp楕円底個別設定.Enabled = False
+        grp楕円底個別設定.Location = New Point(378, 3)
+        grp楕円底個別設定.Name = "grp楕円底個別設定"
+        grp楕円底個別設定.Size = New Size(521, 58)
+        grp楕円底個別設定.TabIndex = 1
+        grp楕円底個別設定.TabStop = False
+        ' 
+        ' lbl楕円底周の加算_単位
+        ' 
+        lbl楕円底周の加算_単位.AutoSize = True
+        lbl楕円底周の加算_単位.Location = New Point(470, 27)
+        lbl楕円底周の加算_単位.Name = "lbl楕円底周の加算_単位"
+        lbl楕円底周の加算_単位.Size = New Size(33, 19)
+        lbl楕円底周の加算_単位.TabIndex = 5
+        lbl楕円底周の加算_単位.Text = "mm"
+        ' 
+        ' lbl楕円底円弧の半径加算_単位
+        ' 
+        lbl楕円底円弧の半径加算_単位.AutoSize = True
+        lbl楕円底円弧の半径加算_単位.Location = New Point(243, 27)
+        lbl楕円底円弧の半径加算_単位.Name = "lbl楕円底円弧の半径加算_単位"
+        lbl楕円底円弧の半径加算_単位.Size = New Size(33, 19)
+        lbl楕円底円弧の半径加算_単位.TabIndex = 2
+        lbl楕円底円弧の半径加算_単位.Text = "mm"
+        ' 
         ' lbl周数_底楕円
         ' 
         lbl周数_底楕円.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
@@ -1736,7 +1784,7 @@ Partial Class frmMain
         lbl周数_底楕円.Location = New Point(697, 327)
         lbl周数_底楕円.Name = "lbl周数_底楕円"
         lbl周数_底楕円.Size = New Size(80, 19)
-        lbl周数_底楕円.TabIndex = 7
+        lbl周数_底楕円.TabIndex = 10
         lbl周数_底楕円.Text = "周数/差し数"
         ' 
         ' lbl編みかた名_底楕円
@@ -1746,7 +1794,7 @@ Partial Class frmMain
         lbl編みかた名_底楕円.Location = New Point(459, 327)
         lbl編みかた名_底楕円.Name = "lbl編みかた名_底楕円"
         lbl編みかた名_底楕円.Size = New Size(71, 19)
-        lbl編みかた名_底楕円.TabIndex = 5
+        lbl編みかた名_底楕円.TabIndex = 8
         lbl編みかた名_底楕円.Text = "編みかた名"
         ' 
         ' chk差しひも
@@ -1756,7 +1804,7 @@ Partial Class frmMain
         chk差しひも.Location = New Point(366, 356)
         chk差しひも.Name = "chk差しひも"
         chk差しひも.Size = New Size(74, 23)
-        chk差しひも.TabIndex = 4
+        chk差しひも.TabIndex = 7
         chk差しひも.Text = "差しひも"
         chk差しひも.UseVisualStyleBackColor = True
         ' 
@@ -1766,7 +1814,7 @@ Partial Class frmMain
         btn削除_底楕円.Location = New Point(242, 338)
         btn削除_底楕円.Name = "btn削除_底楕円"
         btn削除_底楕円.Size = New Size(111, 43)
-        btn削除_底楕円.TabIndex = 3
+        btn削除_底楕円.TabIndex = 6
         btn削除_底楕円.Text = "削除(&R)"
         btn削除_底楕円.UseVisualStyleBackColor = True
         ' 
@@ -1776,7 +1824,7 @@ Partial Class frmMain
         btn追加_底楕円.Location = New Point(789, 338)
         btn追加_底楕円.Name = "btn追加_底楕円"
         btn追加_底楕円.Size = New Size(111, 43)
-        btn追加_底楕円.TabIndex = 9
+        btn追加_底楕円.TabIndex = 12
         btn追加_底楕円.Text = "追加(&A)"
         btn追加_底楕円.UseVisualStyleBackColor = True
         ' 
@@ -1786,7 +1834,7 @@ Partial Class frmMain
         btn下へ_底楕円.Location = New Point(125, 338)
         btn下へ_底楕円.Name = "btn下へ_底楕円"
         btn下へ_底楕円.Size = New Size(111, 43)
-        btn下へ_底楕円.TabIndex = 2
+        btn下へ_底楕円.TabIndex = 5
         btn下へ_底楕円.Text = "下へ(&D)"
         btn下へ_底楕円.UseVisualStyleBackColor = True
         ' 
@@ -1796,7 +1844,7 @@ Partial Class frmMain
         btn上へ_底楕円.Location = New Point(8, 338)
         btn上へ_底楕円.Name = "btn上へ_底楕円"
         btn上へ_底楕円.Size = New Size(111, 43)
-        btn上へ_底楕円.TabIndex = 1
+        btn上へ_底楕円.TabIndex = 4
         btn上へ_底楕円.Text = "上へ(&U)"
         btn上へ_底楕円.UseVisualStyleBackColor = True
         ' 
@@ -1807,7 +1855,7 @@ Partial Class frmMain
         cmb編みかた名_底楕円.Location = New Point(459, 355)
         cmb編みかた名_底楕円.Name = "cmb編みかた名_底楕円"
         cmb編みかた名_底楕円.Size = New Size(251, 27)
-        cmb編みかた名_底楕円.TabIndex = 6
+        cmb編みかた名_底楕円.TabIndex = 9
         ' 
         ' dgv底楕円
         ' 
@@ -1818,12 +1866,12 @@ Partial Class frmMain
         dgv底楕円.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgv底楕円.Columns.AddRange(New DataGridViewColumn() {f_i番号1, f_b差しひも区分1, f_i差しひも本数1, f_s編みかた名1, f_s編みひも名1, f_iひも番号1, f_i何本幅1, f_i周数1, f_b集計対象外区分1, f_s色1, f_i段数1, f_b周連続区分1, f_b次周連続区分1, f_d円弧部分長1, f_d径の累計1, f_d差しひも間のすき間1, f_d径1, f_d周長1, f_dひも長1, f_dひも長加算1, f_d連続ひも長1, f_iひも本数1, f_i差しひも累計1, f_s記号1, f_sメモ1, f_bError1})
         dgv底楕円.DataSource = BindingSource底_楕円
-        dgv底楕円.Location = New Point(6, 5)
+        dgv底楕円.Location = New Point(6, 70)
         dgv底楕円.Name = "dgv底楕円"
         dgv底楕円.RowHeadersWidth = 51
         dgv底楕円.RowTemplate.Height = 29
-        dgv底楕円.Size = New Size(893, 312)
-        dgv底楕円.TabIndex = 0
+        dgv底楕円.Size = New Size(893, 247)
+        dgv底楕円.TabIndex = 3
         ' 
         ' f_i番号1
         ' 
@@ -2292,7 +2340,6 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
-        tpageメモ他.Controls.Add(grp楕円底個別設定)
         tpageメモ他.Controls.Add(txt作成者)
         tpageメモ他.Controls.Add(txtタイトル)
         tpageメモ他.Controls.Add(lbl作成者)
@@ -2306,41 +2353,6 @@ Partial Class frmMain
         tpageメモ他.TabIndex = 4
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
-        ' 
-        ' grp楕円底個別設定
-        ' 
-        grp楕円底個別設定.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        grp楕円底個別設定.Controls.Add(nud楕円底周の加算)
-        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算_単位)
-        grp楕円底個別設定.Controls.Add(lbl楕円底周の加算)
-        grp楕円底個別設定.Controls.Add(nud楕円底円弧の半径加算)
-        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算_単位)
-        grp楕円底個別設定.Controls.Add(lbl楕円底円弧の半径加算)
-        grp楕円底個別設定.Controls.Add(chk楕円底個別設定)
-        grp楕円底個別設定.Location = New Point(26, 322)
-        grp楕円底個別設定.Name = "grp楕円底個別設定"
-        grp楕円底個別設定.Size = New Size(859, 58)
-        grp楕円底個別設定.TabIndex = 6
-        grp楕円底個別設定.TabStop = False
-        grp楕円底個別設定.Text = "楕円底"
-        ' 
-        ' lbl楕円底周の加算_単位
-        ' 
-        lbl楕円底周の加算_単位.AutoSize = True
-        lbl楕円底周の加算_単位.Location = New Point(798, 25)
-        lbl楕円底周の加算_単位.Name = "lbl楕円底周の加算_単位"
-        lbl楕円底周の加算_単位.Size = New Size(33, 19)
-        lbl楕円底周の加算_単位.TabIndex = 6
-        lbl楕円底周の加算_単位.Text = "mm"
-        ' 
-        ' lbl楕円底円弧の半径加算_単位
-        ' 
-        lbl楕円底円弧の半径加算_単位.AutoSize = True
-        lbl楕円底円弧の半径加算_単位.Location = New Point(547, 25)
-        lbl楕円底円弧の半径加算_単位.Name = "lbl楕円底円弧の半径加算_単位"
-        lbl楕円底円弧の半径加算_単位.Size = New Size(33, 19)
-        lbl楕円底円弧の半径加算_単位.TabIndex = 3
-        lbl楕円底円弧の半径加算_単位.Text = "mm"
         ' 
         ' lbl作成者
         ' 
@@ -3106,8 +3118,8 @@ Partial Class frmMain
         CType(nud周数_底楕円, ComponentModel.ISupportInitialize).EndInit()
         CType(nud横ひも間のすき間, ComponentModel.ISupportInitialize).EndInit()
         CType(nud垂直ひも長加算, ComponentModel.ISupportInitialize).EndInit()
-        CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).EndInit()
         CType(nud楕円底周の加算, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         grp目標寸法.ResumeLayout(False)
@@ -3122,6 +3134,8 @@ Partial Class frmMain
         CType(nud最上と最下の短いひもの幅, ComponentModel.ISupportInitialize).EndInit()
         tpage底楕円.ResumeLayout(False)
         tpage底楕円.PerformLayout()
+        grp楕円底個別設定.ResumeLayout(False)
+        grp楕円底個別設定.PerformLayout()
         CType(dgv底楕円, ComponentModel.ISupportInitialize).EndInit()
         CType(BindingSource底_楕円, ComponentModel.ISupportInitialize).EndInit()
         tpage側面.ResumeLayout(False)
@@ -3132,8 +3146,6 @@ Partial Class frmMain
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
         tpageメモ他.PerformLayout()
-        grp楕円底個別設定.ResumeLayout(False)
-        grp楕円底個別設定.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage横ひも.PerformLayout()
         tpage縦ひも.ResumeLayout(False)
@@ -3296,13 +3308,6 @@ Partial Class frmMain
     Friend WithEvents lbl縦置きの計 As Label
     Friend WithEvents lbl横置きの計 As Label
     Friend WithEvents lblメモ As Label
-    Friend WithEvents nud楕円底周の加算 As NumericUpDown
-    Friend WithEvents lbl楕円底周の加算_単位 As Label
-    Friend WithEvents lbl楕円底周の加算 As Label
-    Friend WithEvents nud楕円底円弧の半径加算 As NumericUpDown
-    Friend WithEvents lbl楕円底円弧の半径加算_単位 As Label
-    Friend WithEvents lbl楕円底円弧の半径加算 As Label
-    Friend WithEvents chk楕円底個別設定 As CheckBox
     Friend WithEvents lbl厚さ As Label
     Friend WithEvents txt厚さ As TextBox
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
@@ -3347,7 +3352,6 @@ Partial Class frmMain
     Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
-    Friend WithEvents grp楕円底個別設定 As GroupBox
     Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents lbl最大周の径 As Label
     Friend WithEvents txt外側_最大周の径 As TextBox
@@ -3387,6 +3391,15 @@ Partial Class frmMain
     Friend WithEvents lbl放射状配置 As Label
     Friend WithEvents lbl径 As Label
     Friend WithEvents cmb配置タイプ As ComboBox
+    Friend WithEvents grp楕円底個別設定 As GroupBox
+    Friend WithEvents nud楕円底周の加算 As NumericUpDown
+    Friend WithEvents lbl楕円底周の加算_単位 As Label
+    Friend WithEvents lbl楕円底周の加算 As Label
+    Friend WithEvents nud楕円底円弧の半径加算 As NumericUpDown
+    Friend WithEvents lbl楕円底円弧の半径加算_単位 As Label
+    Friend WithEvents lbl楕円底円弧の半径加算 As Label
+    Friend WithEvents lbl内側から外側へ As Label
+    Friend WithEvents chk楕円底個別設定 As CheckBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

@@ -1955,7 +1955,7 @@ Class clsCalcMesh
                 Return True
             End If
         ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
-
+            'TODO:
 
         End If
 
@@ -2265,7 +2265,7 @@ Class clsCalcMesh
             '#48 位置番号
             Dim postate As Integer = -_i縦ひもの本数 \ 2
             Dim skipzero As Boolean = (_i縦ひもの本数 Mod 2) = 0
-            If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            If _enum配置タイプ <> enum配置タイプ.i_縦横 Then
                 skipzero = Not skipzero
                 postate = -(_i縦ひもの本数 - 1) \ 2
             End If
@@ -2288,32 +2288,34 @@ Class clsCalcMesh
             End If
 
             '以降は裏側
-            postate = cBackPosition
-            If .Value("f_b始末ひも区分") Then
-                For idx As Integer = 1 To 2
-                    row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦 Or enumひも種.i_補強, idx, True)
-                    row.f_i位置番号 = postate
-                    row.f_sひも名 = text始末ひも()
-                    row.f_i何本幅 = .Value("f_i縦ひも")
-                    adjust_縦ひも(row, Nothing)
+            If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+                postate = cBackPosition
+                If .Value("f_b始末ひも区分") Then
+                    For idx As Integer = 1 To 2
+                        row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦 Or enumひも種.i_補強, idx, True)
+                        row.f_i位置番号 = postate
+                        row.f_sひも名 = text始末ひも()
+                        row.f_i何本幅 = .Value("f_i縦ひも")
+                        adjust_縦ひも(row, Nothing)
 
-                    row.f_iVal1 = 0 'used
-                    postate += 1
-                Next
-            End If
+                        row.f_iVal1 = 0 'used
+                        postate += 1
+                    Next
+                End If
 
-            If .Value("f_b斜めの補強ひも区分") Then
-                For idx As Integer = 1 To 2
-                    row = Find縦横展開Row(__tbl縦展開, enumひも種.i_斜め Or enumひも種.i_補強, idx, True)
+                If .Value("f_b斜めの補強ひも区分") Then
+                    For idx As Integer = 1 To 2
+                        row = Find縦横展開Row(__tbl縦展開, enumひも種.i_斜め Or enumひも種.i_補強, idx, True)
 
-                    row.f_i位置番号 = postate
-                    row.f_sひも名 = text斜めの補強ひも()
-                    row.f_i何本幅 = _I基本のひも幅
-                    adjust_縦ひも(row, Nothing)
+                        row.f_i位置番号 = postate
+                        row.f_sひも名 = text斜めの補強ひも()
+                        row.f_i何本幅 = _I基本のひも幅
+                        adjust_縦ひも(row, Nothing)
 
-                    row.f_iVal1 = 0 'used
-                    postate += 1
-                Next
+                        row.f_iVal1 = 0 'used
+                        postate += 1
+                    Next
+                End If
             End If
 
         End With
@@ -2389,7 +2391,7 @@ Class clsCalcMesh
 
         '●セットする値　位置順(右方向)
         'f_d幅   :領域の幅(f_i何本幅分+ひもの右に加えるすき間)　→　この合計が_d縦横の横
-        '        :(_b縦ひもを放射状に置く=true →角度 　合計なし)
+        '        :(num配置タイプ.i_放射状.i_輪弧 →角度 　合計なし)
         'f_d長さ :_d縦横の縦
         'f_dひも長:(縦ひも)_d縦横の縦 + 2*(底と高さ分の長さ)
         'f_d出力ひも長:f_dひも長 + f_dひも長加算 + f_dひも長加算2
