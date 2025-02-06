@@ -465,7 +465,11 @@ Public Class frmMain
             nud内円の直径.Value = .Value("f_d左端右端の目2")
             nud連続数1.Value = .Value("f_i左から何番目")
             nud連続数2.Value = .Value("f_i左から何番目2")
-            rad下上.Checked = .Value("f_bひも上下1回区分")
+            If .Value("f_bひも上下1回区分") Then
+                rad上下.Checked = True
+            Else
+                rad下上.Checked = True
+            End If
         End With
     End Sub
 
@@ -1324,6 +1328,7 @@ Public Class frmMain
             tpage底楕円.Enabled = False
             tpage側面.Enabled = False
 
+            btn概算.Enabled = False
             btn横寸法に合わせる.Visible = False
             chk始末ひも.Visible = False
             lblひとつのすき間の寸法.Visible = False
@@ -1347,6 +1352,7 @@ Public Class frmMain
             tpage底楕円.Enabled = True
             tpage側面.Enabled = True
 
+            btn概算.Enabled = True
             btn横寸法に合わせる.Visible = True
             chk始末ひも.Visible = True
             lblひとつのすき間の寸法.Visible = True

@@ -2333,12 +2333,8 @@ Class clsCalcSquare
         output.OutSummery() '間に空行
 
         'メモがあれば追記
-        Dim memo As String = _Data.p_row目標寸法.Value("f_sメモ")
-        If Not String.IsNullOrEmpty(memo) Then
-            output.AddBlankLine()
-            row = output.NextNewRow
-            row.f_sカテゴリー = memo
-        End If
+        output.OutMemo()
+
         Return True
     End Function
 #End Region

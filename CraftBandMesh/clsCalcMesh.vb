@@ -56,6 +56,7 @@ Class clsCalcMesh
     Private Property _i最上と最下の横ひも何本幅 As Integer  '三択から, ゼロはなし
     Private Property _d最上と最下の短いひもの幅 As Double   '〃　※展開タブでは変更不可
     Private Property _d横ひも間のすき間 As Double
+    Private Property _i縦ひも何本幅 As Integer
     Private Property _i縦ひもの本数 As Integer
     Private Property _dひとつのすき間の寸法 As Double '縦ひも間
     Private Property _d垂直ひも長加算 As Double
@@ -106,6 +107,7 @@ Class clsCalcMesh
         _i短い横ひもの本数 = -1
         _i最上と最下の横ひも何本幅 = -1
         _d横ひも間のすき間 = -1
+        _i縦ひも何本幅 = -1
         _i縦ひもの本数 = -1
         _dひとつのすき間の寸法 = -1
         _d垂直ひも長加算 = -1
@@ -761,6 +763,7 @@ Class clsCalcMesh
             End If
 
             '縦
+            _i縦ひも何本幅 = .Value("f_i縦ひも")
             _i縦ひもの本数 = .Value("f_i縦ひもの本数")
             _dひとつのすき間の寸法 = .Value("f_dひとつのすき間の寸法")
 
@@ -893,6 +896,7 @@ Class clsCalcMesh
 
 #Region "概算"
     '目標寸法のキャッシュを参照しながら、_Data.p_row底_縦横にセット
+    '輪弧は対象外
 
     '有効な目標寸法がある
     Public Function isValidTarget(ByVal needTarget As Boolean) As Boolean
@@ -2048,12 +2052,12 @@ Class clsCalcMesh
         '縦縦ひも
         rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_縦, Integer)))
         For Each row As tbl縦横展開Row In rows
-            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i縦ひも")
+            row.f_i何本幅 = _i縦ひも何本幅 ' _Data.p_row底_縦横.Value("f_i縦ひも")
         Next
         '始末ひも
         rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_縦 Or enumひも種.i_補強, Integer)))
         For Each row As tbl縦横展開Row In rows
-            row.f_i何本幅 = _Data.p_row底_縦横.Value("f_i縦ひも")
+            row.f_i何本幅 = _i縦ひも何本幅 ' _Data.p_row底_縦横.Value("f_i縦ひも")
         Next
         '斜めの補強ひも
         rows = __tbl縦展開.Select(String.Format("f_iひも種={0}", CType(enumひも種.i_斜め Or enumひも種.i_補強, Integer)))
@@ -2071,7 +2075,7 @@ Class clsCalcMesh
         '放射状に置く場合
         If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
-            Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_Data.p_row底_縦横.Value("f_i縦ひも"))
+            Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
             _d縦横の垂直ひも間の周 = _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
             If _d縦横の垂直ひも間の周 < 0 Then
                 _d縦横の縦 = 0
@@ -2404,7 +2408,7 @@ Class clsCalcMesh
 
                     row.f_i位置番号 = postate
                     row.f_sひも名 = text縦ひも()
-                    row.f_i何本幅 = .Value("f_i縦ひも")
+                    row.f_i何本幅 = _i縦ひも何本幅 '.Value("f_i縦ひも")
                     adjust_縦ひも(row, Nothing)
 
                     row.f_iVal1 = 0 'used
@@ -2423,7 +2427,7 @@ Class clsCalcMesh
                         row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦 Or enumひも種.i_補強, idx, True)
                         row.f_i位置番号 = postate
                         row.f_sひも名 = text始末ひも()
-                        row.f_i何本幅 = .Value("f_i縦ひも")
+                        row.f_i何本幅 = _i縦ひも何本幅 '.Value("f_i縦ひも")
                         adjust_縦ひも(row, Nothing)
 
                         row.f_iVal1 = 0 'used
@@ -2718,7 +2722,7 @@ Class clsCalcMesh
             Return False
         End If
 
-        Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
+        Dim d垂直ひも長 As Double = _d垂直ひも長合計 + _d垂直ひも長加算 ' _Data.p_row底_縦横.Value("f_d垂直ひも長加算")
 
         set底楕円_連続ひも長(d垂直ひも長)
         set側面_連続ひも長()
@@ -2810,9 +2814,11 @@ Class clsCalcMesh
                         End If
                         Select Case lasttmp.f_sひも名
                             Case text長い横ひも()
-                                row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i長い横ひもの本数"), row.f_s編みひも名)
+                                'row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i長い横ひもの本数"), row.f_s編みひも名)
+                                row.f_s編みひも名 = String.Format("[{0}] {1}", _i長い横ひもの本数, row.f_s編みひも名)
                             Case text縦ひも()
-                                row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i縦ひもの本数"), row.f_s編みひも名)
+                                'row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i縦ひもの本数"), row.f_s編みひも名)
+                                row.f_s編みひも名 = String.Format("[{0}] {1}", _i縦ひもの本数, row.f_s編みひも名)
                         End Select
                     End If
                     row = output.NextNewRow
@@ -3000,12 +3006,8 @@ Class clsCalcMesh
         output.OutSummery() '間に空行
 
         'メモがあれば追記
-        Dim memo As String = _Data.p_row目標寸法.Value("f_sメモ")
-        If Not String.IsNullOrEmpty(memo) Then
-            output.AddBlankLine()
-            row = output.NextNewRow
-            row.f_sカテゴリー = memo
-        End If
+        output.OutMemo()
+
         Return True
     End Function
 #End Region

@@ -2,7 +2,6 @@
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstOutput
 Imports CraftBand.Tables.dstDataTables
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 
 Public Class clsOutput
 
@@ -19,6 +18,7 @@ Public Class clsOutput
 
     Friend DataTitle As String 'タイトル
     Friend DataCreater As String '作成者
+    Friend DataMemo As String 'メモ欄
 
     'ひもの集計
     Dim _clsBandSum As clsBandSum
@@ -243,6 +243,7 @@ Public Class clsOutput
     Function OutBasics(ByVal row目標寸法 As clsDataRow) As Integer
         DataTitle = row目標寸法.Value("f_sタイトル")
         DataCreater = row目標寸法.Value("f_s作成者")
+        DataMemo = row目標寸法.Value("f_sメモ")
 
         NextNewRow()
 
@@ -450,6 +451,26 @@ Public Class clsOutput
 
         Return lines
     End Function
+
+    'メモ
+    Function OutMemo() As Integer
+        Dim lines As Integer = 0
+        If Not String.IsNullOrEmpty(DataMemo) Then
+            NextNewRow()
+            _CurrentRow.f_sカテゴリー = DataMemo
+            lines += 1
+        End If
+        '
+        NextNewRow()
+        Dim viExe As FileVersionInfo = FileVersionInfo.GetVersionInfo(g_clsLog.ExePath)
+        Dim viDll As FileVersionInfo = FileVersionInfo.GetVersionInfo(g_clsLog.DllPath)
+        _CurrentRow.f_s色 = String.Format("{0} ({1})", IO.Path.GetFileName(viExe.FileName), viExe.FileVersion)
+        _CurrentRow.f_s編みかた名 = String.Format("{0} ({1})", IO.Path.GetFileName(viDll.FileName), viDll.FileVersion)
+        _CurrentRow.f_s編みひも名 = IO.Path.GetDirectoryName(viExe.FileName)
+        _CurrentRow.f_sメモ = "Output " & DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+        Return lines + 1
+    End Function
+
 
     Function OutCutListHtml() As String
         Dim sb As New System.Text.StringBuilder
