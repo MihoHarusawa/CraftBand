@@ -1642,6 +1642,7 @@ Public Class clsImageItem
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
+    Public m_is円 As Boolean = False
 
     '縦バンド・横バンド・コマ・付属品
     Public m_dひも幅 As Double
@@ -1690,7 +1691,7 @@ Public Class clsImageItem
 
         _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
 
-        _底枠     'm_a四隅,m_lineList
+        _底枠     'm_a四隅,m_lineList,m_is円
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
         _四隅領域 'm_a四隅,m_lineList
@@ -1698,8 +1699,8 @@ Public Class clsImageItem
         _底枠2     'm_lineList        (Hexagonの底)
 
 
-        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域 (Meshの底)
-        _差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
+        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域 (Meshの底),m_is円
+        '_差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
         '_ひも領域   'm_rowData,m_a四隅,_r文字領域            (旧Squareの差しひも)
 
         _底の中央線  'm_listLine
@@ -1884,7 +1885,7 @@ Public Class clsImageItem
                             chars += m_groupRow.Count '記号数
                             line = 1
                         End If
-                    Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも
+                    Case ImageTypeEnum._底楕円 ', ImageTypeEnum._差しひも
                         If m_groupRow IsNot Nothing Then
                             chars = Len(m_groupRow.GetNameValue("f_s編みかた名")) '差しひもは0
                             chars += 1 '記号1点
@@ -1954,7 +1955,7 @@ Public Class clsImageItem
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._底楕円, ImageTypeEnum._差しひも ', ImageTypeEnum._ひも領域
+            Case ImageTypeEnum._底楕円 ', ImageTypeEnum._差しひも ', ImageTypeEnum._ひも領域
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())

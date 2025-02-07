@@ -184,6 +184,7 @@ Public Class frmMain
             nud短い横ひも.Maximum = maxLane
             nud最上と最下の短いひもの幅.Maximum = maxLane
             nud縦ひも.Maximum = maxLane
+            nud縦ひも_輪弧.Maximum = maxLane
 
             '色リスト
             '#29
@@ -307,6 +308,9 @@ Public Class frmMain
                 Show縦ひも(works)
             Case tpageプレビュー.Name
                 Showプレビュー(works)
+
+            Case tpage輪弧.Name
+                '
             Case Else ' 
 
         End Select
@@ -376,20 +380,14 @@ Public Class frmMain
                 Hide縦ひも(_clsDataTables)
             Case tpageプレビュー.Name
                 Hideプレビュー(_clsDataTables)
+            Case tpage輪弧.Name
+                '
             Case Else ' 
                 '
         End Select
         _CurrentTabControlName = ""
 
         ShowGridSelected(_clsDataTables)
-    End Sub
-
-    Private Sub TabControl_Selecting(sender As Object, e As TabControlCancelEventArgs) Handles TabControl.Selecting
-        If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
-            If e.TabPage Is tpage側面 OrElse e.TabPage Is tpage底楕円 Then
-                e.Cancel = True
-            End If
-        End If
     End Sub
 
     Sub Disp目標寸法(ByVal row目標寸法 As clsDataRow)
@@ -1162,6 +1160,8 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひも_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひも.ValueChanged
+        nud縦ひも_輪弧.Value = nud縦ひも.Value
+
         recalc(CalcCategory.Vertical, sender)
     End Sub
 
@@ -1234,6 +1234,8 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
+        nud縦ひもの本数_輪弧.Value = nud縦ひもの本数.Value
+
         If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
             nud縦ひもの本数.Increment = 1
             If 1 < nud縦ひもの本数.Value Then
@@ -1297,11 +1299,18 @@ Public Class frmMain
     Private Sub chk始末ひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk始末ひも.CheckedChanged
         recalc(CalcCategory.Vertical, sender)
     End Sub
+#End Region
+
+#Region "配置タイプと縦横展開"
+
+    '配置タイプ                  [底(楕円)][側面][底(輪弧)][横ひも][縦ひも][プレビュー]   楕円底個別設定OFF値
+    '　直角に交差(横ひも・縦ひも)    〇       〇      －    展開時  展開時    指定有        バンドの種類参照
+    '　放射状に置く(縦ひも)          〇       〇      －    展開時    －      指定有        ともにゼロ
+    '　輪弧に置く(縦ひも)            －       －      〇    展開時    －      指定無         －
 
     Private Sub cmb配置タイプ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb配置タイプ.SelectedIndexChanged
         If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
             grp横置き.Enabled = False
-            lbl放射状配置.Visible = True
             lbl径.Visible = True
             chk始末ひも.Checked = False
             chk始末ひも.Enabled = False
@@ -1313,7 +1322,6 @@ Public Class frmMain
 
         Else
             grp横置き.Enabled = True
-            lbl放射状配置.Visible = False
             lbl径.Visible = False
             chk始末ひも.Enabled = True
             chk斜めの補強ひも.Enabled = True
@@ -1323,59 +1331,101 @@ Public Class frmMain
                 txtすき間の点数.Text = ""
             End If
         End If
+        lbl放射状配置.Visible = (cmb配置タイプ.SelectedIndex = enum配置タイプ.i_放射状)
 
         If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
-            tpage底楕円.Enabled = False
-            tpage側面.Enabled = False
-
+            grp縦置き.Enabled = False
             btn概算.Enabled = False
-            btn横寸法に合わせる.Visible = False
-            chk始末ひも.Visible = False
-            lblひとつのすき間の寸法.Visible = False
-            nudひとつのすき間の寸法.Visible = False
-            lblひとつのすき間の寸法_単位.Visible = False
-            txtひとつのすき間の寸法_本幅分.Visible = False
-            lblひとつのすき間の寸法_本幅分.Visible = False
 
-            lblひもの長さ寸法.Visible = True
-            nudひもの長さ寸法.Visible = True
-            lblひもの長さ寸法_単位.Visible = True
-            lbl内円の直径.Visible = True
-            nud内円の直径.Visible = True
-            lbl内円の直径_単位.Visible = True
-            rad下上.Visible = True
-            rad上下.Visible = True
-            nud連続数1.Visible = True
-            nud連続数2.Visible = True
-
+            rad右上.Visible = False
+            rad全体.Visible = False
+            chk側面.Visible = False
         Else
-            tpage底楕円.Enabled = True
-            tpage側面.Enabled = True
-
+            grp縦置き.Enabled = True
             btn概算.Enabled = True
-            btn横寸法に合わせる.Visible = True
-            chk始末ひも.Visible = True
-            lblひとつのすき間の寸法.Visible = True
-            nudひとつのすき間の寸法.Visible = True
-            lblひとつのすき間の寸法_単位.Visible = True
-            txtひとつのすき間の寸法_本幅分.Visible = True
-            lblひとつのすき間の寸法_本幅分.Visible = True
 
-            lblひもの長さ寸法.Visible = False
-            nudひもの長さ寸法.Visible = False
-            lblひもの長さ寸法_単位.Visible = False
-            lbl内円の直径.Visible = False
-            nud内円の直径.Visible = False
-            lbl内円の直径_単位.Visible = False
-            rad下上.Visible = False
-            rad上下.Visible = False
-            nud連続数1.Visible = False
-            nud連続数2.Visible = False
-
+            rad右上.Visible = True
+            rad全体.Visible = True
+            chk側面.Visible = True
         End If
 
         set底の縦横展開(chk縦横を展開する.Checked)
         recalc(CalcCategory.Expand, sender)
+    End Sub
+
+    'タブの表示・非表示(タブのインスタンスは保持)
+    Private Sub set底の縦横展開(ByVal isExband As Boolean)
+        If isExband Then
+            If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
+                'RemoveとAdd
+                If TabControl.TabPages.Contains(tpage横ひも) Then
+                    TabControl.TabPages.Remove(tpage横ひも)
+                End If
+                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
+                    TabControl.TabPages.Add(tpage縦ひも)
+                End If
+                '角度の文字列
+                expand縦ひも.SetWidthText(My.Resources.ExpandingWidthText)
+            Else
+                'ともにAdd
+                If Not TabControl.TabPages.Contains(tpage横ひも) Then
+                    TabControl.TabPages.Add(tpage横ひも)
+                End If
+                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
+                    TabControl.TabPages.Add(tpage縦ひも)
+                End If
+                '横ひもの文字列を流用して戻す
+                expand縦ひも.SetWidthText(expand横ひも.SetWidthText(Nothing))
+            End If
+        Else
+            'ともにRemove
+            If TabControl.TabPages.Contains(tpage横ひも) Then
+                TabControl.TabPages.Remove(tpage横ひも)
+            End If
+            If TabControl.TabPages.Contains(tpage縦ひも) Then
+                TabControl.TabPages.Remove(tpage縦ひも)
+            End If
+        End If
+        If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
+            'Remove
+            If TabControl.TabPages.Contains(tpage底楕円) Then
+                TabControl.TabPages.Remove(tpage底楕円)
+            End If
+            If TabControl.TabPages.Contains(tpage側面) Then
+                TabControl.TabPages.Remove(tpage側面)
+            End If
+            'Add
+            If Not TabControl.TabPages.Contains(tpage輪弧) Then
+                TabControl.TabPages.Insert(1, tpage輪弧)
+            End If
+        Else
+            'Remove
+            If TabControl.TabPages.Contains(tpage輪弧) Then
+                TabControl.TabPages.Remove(tpage輪弧)
+            End If
+            'Add
+            If Not TabControl.TabPages.Contains(tpage側面) Then
+                TabControl.TabPages.Insert(1, tpage側面)
+            End If
+            If Not TabControl.TabPages.Contains(tpage底楕円) Then
+                TabControl.TabPages.Insert(1, tpage底楕円)
+            End If
+        End If
+
+        chk楕円底個別設定_CheckedChanged(Nothing, Nothing)
+    End Sub
+
+    Private Sub nud縦ひも_輪弧_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひも_輪弧.ValueChanged
+        nud縦ひも.Value = nud縦ひも_輪弧.Value
+        'recalcは縦ひも側
+    End Sub
+
+    Private Sub nud縦ひもの本数_輪弧_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数_輪弧.ValueChanged
+        nud縦ひもの本数.Value = nud縦ひもの本数_輪弧.Value
+        'recalcは縦ひもの本数側
+    End Sub
+
+    Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nudひもの長さ寸法.ValueChanged
 
     End Sub
 
@@ -1473,7 +1523,7 @@ Public Class frmMain
             If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横 Then
                 nud周数_底楕円.Value = 8
             ElseIf 0 < nud縦ひもの本数.Value Then
-                nud周数_底楕円.Value = nud縦ひもの本数.Value
+                nud周数_底楕円.Value = nud縦ひもの本数.Value * 2
             End If
         Else
             nud周数_底楕円.Value = 1
@@ -1704,41 +1754,7 @@ Public Class frmMain
 #End Region
 
 #Region "縦横展開"
-    'タブの表示・非表示(タブのインスタンスは保持)
-    Private Sub set底の縦横展開(ByVal isExband As Boolean)
-        If isExband Then
-            If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
-                'RemoveとAdd
-                If TabControl.TabPages.Contains(tpage横ひも) Then
-                    TabControl.TabPages.Remove(tpage横ひも)
-                End If
-                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
-                    TabControl.TabPages.Add(tpage縦ひも)
-                End If
-                '角度の文字列
-                expand縦ひも.SetWidthText(My.Resources.ExpandingWidthText)
-            Else
-                'ともにAdd
-                If Not TabControl.TabPages.Contains(tpage横ひも) Then
-                    TabControl.TabPages.Add(tpage横ひも)
-                End If
-                If Not TabControl.TabPages.Contains(tpage縦ひも) Then
-                    TabControl.TabPages.Add(tpage縦ひも)
-                End If
-                '横ひもの文字列を流用して戻す
-                expand縦ひも.SetWidthText(expand横ひも.SetWidthText(Nothing))
-            End If
-        Else
-            'ともにRemove
-            If TabControl.TabPages.Contains(tpage横ひも) Then
-                TabControl.TabPages.Remove(tpage横ひも)
-            End If
-            If TabControl.TabPages.Contains(tpage縦ひも) Then
-                TabControl.TabPages.Remove(tpage縦ひも)
-            End If
-        End If
-        chk楕円底個別設定_CheckedChanged(Nothing, Nothing)
-    End Sub
+
     Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
         expand横ひも.PanelSize = tpage横ひも.Size
     End Sub

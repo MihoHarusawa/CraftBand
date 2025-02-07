@@ -126,9 +126,9 @@ Public Class clsDataTables
     End Enum
     'Mesh
     Public Enum enum配置タイプ
-        i_縦横 = 0 '縦横にひもを置く
-        i_放射状 = 1 '縦ひもを放射状に置く
-        i_輪弧 = 2  '縦ひもを輪弧に置く
+        i_縦横 = 0 '直角に交差(横ひも・縦ひも)
+        i_放射状 = 1 '放射状に置く(縦ひも)
+        i_輪弧 = 2  '輪弧に置く(縦ひも)
     End Enum
 
     'tbl縦横展開

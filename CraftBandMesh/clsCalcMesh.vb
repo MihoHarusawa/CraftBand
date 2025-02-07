@@ -1374,6 +1374,13 @@ Class clsCalcMesh
     'IN:   _d縦横の垂直ひも間の周 _d最上と最下の短いひもの幅
     'OUT:  _d径の合計    _i垂直ひも数_楕円  _d底の周
     Private Function calc_底楕円(ByVal category As CalcCategory, ByVal row As tbl底_楕円Row, ByVal dataPropertyName As String) As Boolean
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            _d底の周 = _d縦横の垂直ひも間の周
+            _d径の合計 = 0
+            _i垂直ひも数_楕円 = 0
+            Return True
+        End If
+
         If _Data.p_tbl底_楕円.Rows.Count = 0 Then
             'レコードがない
             _d径の合計 = 0
@@ -1381,9 +1388,6 @@ Class clsCalcMesh
             If _enum配置タイプ = enum配置タイプ.i_放射状 Then
                 _d底の周 = _d縦横の垂直ひも間の周 _
                 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の楕円底周の増分")
-
-            ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
-                'TODO:
 
             Else 'enum配置タイプ.i_縦横
                 _d底の周 = _d縦横の垂直ひも間の周 _
@@ -1440,7 +1444,11 @@ Class clsCalcMesh
         Dim lastNum差しひも As Integer = 0
         Dim prv As tbl底_楕円Row = Nothing
         For Each r As tbl底_楕円Row In _Data.p_tbl底_楕円.Select(Nothing, "f_i番号 ASC ,  f_iひも番号 ASC")
-            ret = ret And set_row底楕円_2回目(d楕円底円弧の半径加算, d楕円底周の加算, r, prv, lastNum差しひも)
+            If _enum配置タイプ = enum配置タイプ.i_放射状 Then
+                ret = ret And set_row底楕円_2回目_放射状(d楕円底円弧の半径加算, d楕円底周の加算, r, prv, lastNum差しひも)
+            Else
+                ret = ret And set_row底楕円_2回目(d楕円底円弧の半径加算, d楕円底周の加算, r, prv, lastNum差しひも)
+            End If
             prv = r
         Next
 
@@ -1509,7 +1517,7 @@ Class clsCalcMesh
         Return True
     End Function
 
-    '個別セット後に、先レコードの結果を積み上げ
+    '[縦横]個別セット後に、先レコードの結果を積み上げ
     'IN:    _d縦横の垂直ひも間の周  _d最上と最下の短いひもの幅  _d径の合計  _i垂直ひも数_縦横
     'OUT:   f_d径の累計,f_d周長,f_d円弧部分長,f_i差しひも累計,f_d差しひも間のすき間,f_dひも長
     Private Function set_row底楕円_2回目(ByVal d楕円底円弧の半径加算 As Double, ByVal d楕円底周の加算 As Double,
@@ -1612,36 +1620,33 @@ Class clsCalcMesh
         End If
         Return True
     End Function
-
+    '[放射状]個別セット後に、先レコードの結果を積み上げ
     Private Function set_row底楕円_2回目_放射状(ByVal d楕円底円弧の半径加算 As Double, ByVal d楕円底周の加算 As Double,
                                     ByVal row As tbl底_楕円Row, ByVal prv As tbl底_楕円Row, ByRef lastNum差しひも As Integer) As Boolean
         Dim d円弧長 As Double = 0
-        Dim i角の差しひも数 As Integer
+        Dim d角あたり差しひも数 As Double
         '最初のレコード
         If prv Is Nothing Then
             If row.Isf_d径Null Then
-                row.f_d径の累計 = 0
-                row.f_d周長 = 4 * _d最上と最下の短いひもの幅 + _d縦横の垂直ひも間の周 + d楕円底周の加算
+                row.f_d径の累計 = _d縦横の横 / 2
             Else
-                row.f_d径の累計 = row.f_d径
-                d円弧長 = 2 * System.Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算) _
-                    + System.Math.PI * _d最上と最下の短いひもの幅
-                row.f_d周長 = d円弧長 + _d縦横の垂直ひも間の周 + d楕円底周の加算
+                row.f_d径の累計 = (_d縦横の横 / 2) + row.f_d径
             End If
-            row.f_d円弧部分長 = d円弧長 / 4
+            d円弧長 = 2 * Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算)
+            row.f_d周長 = d円弧長 + d楕円底周の加算
+            row.f_d円弧部分長 = (d円弧長 / _i縦ひもの本数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
 
             If row.f_b差しひも区分 Then
                 '差しひも
                 row.f_i差しひも累計 = row.f_i差しひも本数
-                i角の差しひも数 = row.f_i差しひも累計 / 4
-                If i角の差しひも数 = 0 Then
+                d角あたり差しひも数 = row.f_i差しひも累計 / _i縦ひもの本数
+                If d角あたり差しひも数 = 0 Then
                     row.Setf_d差しひも間のすき間Null()
                 Else
-                    row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))) / (i角の差しひも数 + 1)
+                    row.f_d差しひも間のすき間 = row.f_d円弧部分長 - (d角あたり差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))
                 End If
                 'ひも長は底部分のみをセット
                 row.f_dひも長 = _d径の合計 _
-                    + _d最上と最下の短いひもの幅 _
                     + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
                 lastNum差しひも = row.f_i番号
             Else
@@ -1673,17 +1678,15 @@ Class clsCalcMesh
         Else
             row.f_d径の累計 = row.f_d径 + prv.f_d径の累計
         End If
-        d円弧長 = 2 * System.Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算) _
-             + System.Math.PI * _d最上と最下の短いひもの幅
-        row.f_d周長 = d円弧長 + _d縦横の垂直ひも間の周 + d楕円底周の加算
-        row.f_d円弧部分長 = d円弧長 / 4
+        d円弧長 = 2 * Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算)
+        row.f_d周長 = d円弧長 + d楕円底周の加算
+        row.f_d円弧部分長 = (d円弧長 / _i縦ひもの本数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
 
         If row.f_b差しひも区分 Then
             '差しひも
             row.f_i差しひも累計 = prv.f_i差しひも累計 + row.f_i差しひも本数
             'ひも長は底部分のみをセット
             row.f_dひも長 = compute指定以降の径の合計(lastNum差しひも) _
-                + _d最上と最下の短いひもの幅 _
                 + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
             lastNum差しひも = row.f_i番号
 
@@ -1705,11 +1708,11 @@ Class clsCalcMesh
             End If
         End If '2番目以降のレコード
 
-        i角の差しひも数 = row.f_i差しひも累計 / 4
-        If i角の差しひも数 = 0 Then
+        d角あたり差しひも数 = row.f_i差しひも累計 / _i縦ひもの本数
+        If d角あたり差しひも数 = 0 Then
             row.Setf_d差しひも間のすき間Null()
         Else
-            row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))) / (i角の差しひも数 + 1)
+            row.f_d差しひも間のすき間 = row.f_d円弧部分長 - (d角あたり差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))
         End If
         Return True
     End Function
