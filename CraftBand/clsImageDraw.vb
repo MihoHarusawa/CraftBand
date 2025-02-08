@@ -221,6 +221,14 @@ Public Class CImageDraw
         Return New Point(pixcel_X(p.X), pixcel_Y(p.Y))
     End Function
 
+    '線分の2点の配列
+    Function pixcel_lines(line As S線分) As PointF()
+        Dim lst As New List(Of PointF)
+        lst.Add(pixcel_point(line.p開始))
+        lst.Add(pixcel_point(line.p終了))
+        Return lst.ToArray
+    End Function
+
     '四隅の4点の配列
     Function pixcel_lines(sqare As S四隅) As PointF()
         Dim lst As New List(Of PointF)
@@ -298,6 +306,8 @@ Public Class CImageDraw
         _FontSize = pixcel_width(basicbandwidth / 2)
         _Font = New Font(My.Resources.FontNameMark, _FontSize)
 
+        '滑らかな描画
+        _Graphic.SmoothingMode = SmoothingMode.AntiAlias
         'サイズ枠描画
         '_Graphic.DrawRectangle(_Pen_black_thin, 0, 0, width - 1, height - 1)
     End Sub
@@ -769,8 +779,13 @@ Public Class CImageDraw
     End Function
 
     Function draw側面(ByVal item As clsImageItem) As Boolean
-        Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        _Graphic.DrawLines(_Pen_black_thin, points)
+        If item.m_is円 AndAlso item.m_ImageType = ImageTypeEnum._四隅領域 Then
+            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
+            _Graphic.DrawEllipse(_Pen_black_thin, rect)
+        Else
+            Dim points() As PointF = pixcel_lines(item.m_a四隅)
+            _Graphic.DrawLines(_Pen_black_thin, points)
+        End If
         For Each line As S線分 In item.m_lineList
             _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
         Next
@@ -842,44 +857,119 @@ Public Class CImageDraw
     End Function
 
     Function draw底楕円(ByVal item As clsImageItem) As Boolean
-        If item.m_groupRow Is Nothing Then
-            Return False
-        End If
-        'ひも番号1の色
-        Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
-        Dim colset As CPenBrush = GetBandPenBrush(color)
-        If colset Is Nothing OrElse colset.IsNoDrawing Then
-            Return False
-        End If
-        If item.m_is円 Then
-            '円/楕円
-            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
-            _Graphic.DrawEllipse(colset.PenBand, rect)
-
+        Dim colset As CPenBrush = Nothing
+        Dim laps As Integer = 1 '周数
+        If item.m_groupRow IsNot Nothing Then
+            'ひも番号1の色
+            Dim color As String = item.m_groupRow.GetIndexNameValue(1, "f_s色")
+            colset = GetBandPenBrush(color)
+            If colset Is Nothing OrElse colset.IsNoDrawing Then
+                Return False
+            End If
+            laps = item.m_groupRow.GetIndexNameValue(1, "f_i周数")
         Else
-            '周の線
-            If colset.PenBand IsNot Nothing Then
-                For Each line As S線分 In item.m_lineList
-                    _Graphic.DrawLine(colset.PenBand, pixcel_point(line.p開始), pixcel_point(line.p終了))
-                Next
+            '対応レコードがない場合は底枠として描く
+            laps = 1
+        End If
+
+
+        If item.m_is円 Then
+            '円/楕円           ・╭ ╮・ m_a四隅に内接
+            '                  ・╰ ╯・
+            Dim r外接 As S領域 = item.m_a四隅.r外接領域
+            Dim rect As RectangleF = pixcel_rectangle(r外接)
+            If colset Is Nothing Then
+                '底枠
+                _Graphic.DrawEllipse(_Pen_black_thick, rect)
+                Return True
+
+            Else
+                _Graphic.DrawEllipse(colset.PenBand, rect)
+                '塗りつぶし幅の指定があれば
+                If 0 < item.m_dひも幅 Then
+                    '内側を塗りつぶす
+                    Dim r内側 As New S領域(r外接)
+                    r内側.enLarge(-item.m_dひも幅)
+                    If r内側.x幅 = 0 OrElse r内側.y高さ = 0 Then
+                        '円を塗りつぶす
+                        _Graphic.FillEllipse(colset.BrushAlfa, rect)
+                    Else
+                        'ドーナツ
+                        Dim path As New GraphicsPath()
+                        path.AddEllipse(rect)
+                        Dim inner As RectangleF = pixcel_rectangle(r内側)
+                        path.AddEllipse(inner)
+                        _Graphic.FillPath(colset.BrushAlfa, path)
+                    End If
+                    '複数周
+                    If 1 < laps Then
+                        r内側 = New S領域(r外接)
+                        Dim dlap As Double = item.m_dひも幅 / laps
+                        For i As Integer = 1 To laps - 1
+                            r内側.enLarge(-dlap)
+                            If r内側.x幅 = 0 OrElse r内側.y高さ = 0 Then
+                                Exit For
+                            End If
+                            _Graphic.DrawEllipse(colset.PenLane, pixcel_rectangle(r内側))
+                        Next
+                    End If
+                End If
             End If
 
-            '楕円弧
-            Dim centers() As PointF = pixcel_lines(item.m_a四隅)
-            Dim rx As Single = pixcel_width(item.m_lineList(3).p終了.X - item.m_a四隅.p右上.X)
-            Dim ry As Single = pixcel_height(item.m_lineList(0).p開始.Y - item.m_a四隅.p右上.Y)
-            '右上
-            _Graphic.DrawArc(colset.PenBand, centers(0).X - rx, centers(0).Y - ry, rx * 2, ry * 2, 270, 90)
-            '左上
-            _Graphic.DrawArc(colset.PenBand, centers(1).X - rx, centers(1).Y - ry, rx * 2, ry * 2, 180, 90)
-            '左下
-            _Graphic.DrawArc(colset.PenBand, centers(2).X - rx, centers(2).Y - ry, rx * 2, ry * 2, 90, 90)
-            '右下
-            _Graphic.DrawArc(colset.PenBand, centers(3).X - rx, centers(3).Y - ry, rx * 2, ry * 2, 0, 90)
+        Else
+            '底楕円              m_lineList(0)          ※上下左右対称を前提とする
+            '                 ╭    ←─    ╮
+            '                  1・      ・0 
+            '   m_lineList(1)↓  m_a四隅   ↑m_lineList(3) 
+            '                  2・      ・3 
+            '                 ╰    ─→    ╯
+            '                    m_lineList(2)
+
+            Dim rサイズ As S領域
+            '上下左右対称のため右上領域から取得
+            rサイズ.x幅 = (item.m_lineList(3).p終了.X - item.m_a四隅.p右上.X) * 2
+            rサイズ.y高さ = (item.m_lineList(0).p開始.Y - item.m_a四隅.p右上.Y) * 2
+            Dim path As GraphicsPath = getpath(item.m_a四隅, rサイズ)
+
+            If colset Is Nothing Then
+                '底枠
+                _Graphic.DrawPath(_Pen_black_thick, path)
+                Return True
+
+            Else
+                '楕円底
+                _Graphic.DrawPath(colset.PenBand, path)
+
+                '塗りつぶし幅の指定があれば
+                If 0 < item.m_dひも幅 Then
+                    Dim r内サイズ As New S領域(rサイズ)
+                    r内サイズ.enLarge(-item.m_dひも幅)
+                    '幅分小さい楕円
+                    Dim inner As GraphicsPath = getpath(item.m_a四隅, r内サイズ)
+                    '塗りつぶし
+                    Dim clipregion As New Region(path)
+                    clipregion.Exclude(inner)
+                    _Graphic.SetClip(clipregion, CombineMode.Replace)
+                    _Graphic.FillPath(colset.BrushAlfa, path)
+                    _Graphic.ResetClip()
+
+                    '複数周
+                    If 1 < laps Then
+                        r内サイズ = New S領域(rサイズ)
+                        Dim dlap As Double = item.m_dひも幅 / laps
+                        For i As Integer = 1 To laps - 1
+                            r内サイズ.enLarge(-dlap)
+                            Dim lappath As GraphicsPath = getpath(item.m_a四隅, r内サイズ)
+                            _Graphic.DrawPath(colset.PenLane, lappath)
+                        Next
+                    End If
+                End If
+            End If
         End If
 
         '編みかた名
-        If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
+        If Not item.p_p文字位置.IsZero AndAlso
+            colset IsNot Nothing AndAlso colset.BrushSolid IsNot Nothing Then
             Dim p As PointF = pixcel_point(item.p_p文字位置)
             Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
             str += item.m_groupRow.GetNameValue("f_s編みかた名")
@@ -887,6 +977,57 @@ Public Class CImageDraw
         End If
 
         Return True
+    End Function
+
+    Private Function getpath(ByVal a弧の中心 As S四隅, ByVal r外接サイズ As S領域) As GraphicsPath
+        Dim path As New GraphicsPath()
+        '楕円弧 ※座標が上下逆になるため、角度も逆回りになります
+        Dim centers() As PointF = pixcel_lines(a弧の中心)
+        Dim rx As Single = pixcel_width(r外接サイズ.x幅 / 2)
+        Dim ry As Single = pixcel_height(r外接サイズ.y高さ / 2)
+        '右上
+        If rx = 0 Then
+            path.AddLine(centers(0).X, centers(0).Y - ry, centers(0).X, centers(0).Y)
+        ElseIf ry = 0 AndAlso 0 < rx Then
+            path.AddLine(centers(0).X, centers(0).Y, centers(0).X + rx, centers(0).Y)
+        Else
+            path.AddArc(centers(0).X - rx, centers(0).Y - ry, rx * 2, ry * 2, 270, 90)
+        End If
+        path.AddLine(centers(0).X + rx, centers(0).Y, centers(3).X + rx, centers(3).Y)
+
+        '右下
+        If rx = 0 Then
+            path.AddLine(centers(3).X, centers(3).Y, centers(3).X, centers(3).Y + ry)
+        ElseIf ry = 0 AndAlso 0 < rx Then
+            path.AddLine(centers(3).X + rx, centers(3).Y, centers(3).X, centers(3).Y)
+        Else
+            path.AddArc(centers(3).X - rx, centers(3).Y - ry, rx * 2, ry * 2, 0, 90)
+        End If
+        path.AddLine(centers(3).X, centers(3).Y + ry, centers(2).X, centers(2).Y + ry)
+
+        '左下
+        If rx = 0 Then
+            path.AddLine(centers(2).X, centers(2).Y + ry, centers(2).X, centers(2).Y)
+        ElseIf ry = 0 AndAlso 0 < rx Then
+            path.AddLine(centers(2).X, centers(2).Y, centers(2).X - rx, centers(2).Y)
+        Else
+            path.AddArc(centers(2).X - rx, centers(2).Y - ry, rx * 2, ry * 2, 90, 90)
+        End If
+        path.AddLine(centers(2).X - rx, centers(2).Y, centers(1).X - rx, centers(1).Y)
+
+        '左上
+        If rx = 0 Then
+            path.AddLine(centers(1).X, centers(1).Y, centers(1).X, centers(1).Y - ry)
+        ElseIf ry = 0 AndAlso 0 < rx Then
+            path.AddLine(centers(1).X - rx, centers(1).Y, centers(1).X, centers(1).Y)
+        Else
+            path.AddArc(centers(1).X - rx, centers(1).Y - ry, rx * 2, ry * 2, 180, 90)
+        End If
+        path.AddLine(centers(1).X, centers(1).Y - ry, centers(0).X, centers(0).Y - ry)
+
+        path.CloseFigure() ' 閉じる
+
+        Return path
     End Function
 
     'Function draw差しひも(ByVal item As clsImageItem) As Boolean

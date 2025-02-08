@@ -130,12 +130,13 @@ Partial Class frmMain
         chk楕円底個別設定 = New CheckBox()
         nud連続数2 = New NumericUpDown()
         nud連続数1 = New NumericUpDown()
-        nud内円の直径 = New NumericUpDown()
+        nud内円の径 = New NumericUpDown()
         nudひもの長さ寸法 = New NumericUpDown()
         lbl縦ひも_輪弧 = New Label()
         nud縦ひも_輪弧 = New NumericUpDown()
         lbl縦ひもの本数_輪弧 = New Label()
         nud縦ひもの本数_輪弧 = New NumericUpDown()
+        lbl内円の径 = New Label()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -269,14 +270,13 @@ Partial Class frmMain
         rad右上 = New RadioButton()
         picプレビュー = New PictureBox()
         tpage輪弧 = New TabPage()
-        Label1 = New Label()
+        lbl上下の連続数 = New Label()
         lbl縦ひも_輪弧_単位 = New Label()
         lbl縦ひもの本数_輪弧_単位 = New Label()
         lblひもの長さ寸法 = New Label()
         rad上下 = New RadioButton()
         rad下上 = New RadioButton()
         lbl内円の直径_単位 = New Label()
-        lbl内円の直径 = New Label()
         lblひもの長さ寸法_単位 = New Label()
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl内側 = New Label()
@@ -350,7 +350,7 @@ Partial Class frmMain
         CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数2, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数1, ComponentModel.ISupportInitialize).BeginInit()
-        CType(nud内円の直径, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud内円の径, ComponentModel.ISupportInitialize).BeginInit()
         CType(nudひもの長さ寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦ひも_輪弧, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦ひもの本数_輪弧, ComponentModel.ISupportInitialize).BeginInit()
@@ -1197,16 +1197,16 @@ Partial Class frmMain
         ToolTip1.SetToolTip(nud連続数1, "最初の位置の連続数")
         nud連続数1.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
-        ' nud内円の直径
+        ' nud内円の径
         ' 
-        nud内円の直径.Location = New Point(168, 144)
-        nud内円の直径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
-        nud内円の直径.Name = "nud内円の直径"
-        nud内円の直径.Size = New Size(69, 26)
-        nud内円の直径.TabIndex = 10
-        nud内円の直径.TextAlign = HorizontalAlignment.Right
-        nud内円の直径.ThousandsSeparator = True
-        ToolTip1.SetToolTip(nud内円の直径, "輪弧の内側の直径")
+        nud内円の径.Location = New Point(168, 144)
+        nud内円の径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nud内円の径.Name = "nud内円の径"
+        nud内円の径.Size = New Size(69, 26)
+        nud内円の径.TabIndex = 10
+        nud内円の径.TextAlign = HorizontalAlignment.Right
+        nud内円の径.ThousandsSeparator = True
+        ToolTip1.SetToolTip(nud内円の径, "輪弧の内側に作られる円の直径")
         ' 
         ' nudひもの長さ寸法
         ' 
@@ -1258,6 +1258,16 @@ Partial Class frmMain
         nud縦ひもの本数_輪弧.TabIndex = 4
         nud縦ひもの本数_輪弧.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nud縦ひもの本数_輪弧, "左から時計方向に丸く配置する本数")
+        ' 
+        ' lbl内円の径
+        ' 
+        lbl内円の径.AutoSize = True
+        lbl内円の径.Location = New Point(27, 147)
+        lbl内円の径.Name = "lbl内円の径"
+        lbl内円の径.Size = New Size(62, 19)
+        lbl内円の径.TabIndex = 9
+        lbl内円の径.Text = "内円の径"
+        ToolTip1.SetToolTip(lbl内円の径, "輪弧の内側に作られる円の直径")
         ' 
         ' MenuStrip1
         ' 
@@ -2594,7 +2604,7 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
-        tpage輪弧.Controls.Add(Label1)
+        tpage輪弧.Controls.Add(lbl上下の連続数)
         tpage輪弧.Controls.Add(lbl縦ひも_輪弧_単位)
         tpage輪弧.Controls.Add(lbl縦ひも_輪弧)
         tpage輪弧.Controls.Add(nud縦ひも_輪弧)
@@ -2607,8 +2617,8 @@ Partial Class frmMain
         tpage輪弧.Controls.Add(rad上下)
         tpage輪弧.Controls.Add(rad下上)
         tpage輪弧.Controls.Add(lbl内円の直径_単位)
-        tpage輪弧.Controls.Add(nud内円の直径)
-        tpage輪弧.Controls.Add(lbl内円の直径)
+        tpage輪弧.Controls.Add(nud内円の径)
+        tpage輪弧.Controls.Add(lbl内円の径)
         tpage輪弧.Controls.Add(lblひもの長さ寸法_単位)
         tpage輪弧.Controls.Add(nudひもの長さ寸法)
         tpage輪弧.Location = New Point(4, 28)
@@ -2619,14 +2629,14 @@ Partial Class frmMain
         tpage輪弧.Text = "底(輪弧)"
         tpage輪弧.UseVisualStyleBackColor = True
         ' 
-        ' Label1
+        ' lbl上下の連続数
         ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(27, 232)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(51, 19)
-        Label1.TabIndex = 14
-        Label1.Text = "連続数"
+        lbl上下の連続数.AutoSize = True
+        lbl上下の連続数.Location = New Point(27, 232)
+        lbl上下の連続数.Name = "lbl上下の連続数"
+        lbl上下の連続数.Size = New Size(90, 19)
+        lbl上下の連続数.TabIndex = 14
+        lbl上下の連続数.Text = "上下の連続数"
         ' 
         ' lbl縦ひも_輪弧_単位
         ' 
@@ -2685,15 +2695,6 @@ Partial Class frmMain
         lbl内円の直径_単位.Size = New Size(33, 19)
         lbl内円の直径_単位.TabIndex = 11
         lbl内円の直径_単位.Text = "mm"
-        ' 
-        ' lbl内円の直径
-        ' 
-        lbl内円の直径.AutoSize = True
-        lbl内円の直径.Location = New Point(27, 147)
-        lbl内円の直径.Name = "lbl内円の直径"
-        lbl内円の直径.Size = New Size(76, 19)
-        lbl内円の直径.TabIndex = 9
-        lbl内円の直径.Text = "内円の直径"
         ' 
         ' lblひもの長さ寸法_単位
         ' 
@@ -3340,7 +3341,7 @@ Partial Class frmMain
         CType(nud楕円底円弧の半径加算, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数2, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数1, ComponentModel.ISupportInitialize).EndInit()
-        CType(nud内円の直径, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud内円の径, ComponentModel.ISupportInitialize).EndInit()
         CType(nudひもの長さ寸法, ComponentModel.ISupportInitialize).EndInit()
         CType(nud縦ひも_輪弧, ComponentModel.ISupportInitialize).EndInit()
         CType(nud縦ひもの本数_輪弧, ComponentModel.ISupportInitialize).EndInit()
@@ -3639,11 +3640,11 @@ Partial Class frmMain
     Friend WithEvents rad上下 As RadioButton
     Friend WithEvents rad下上 As RadioButton
     Friend WithEvents lbl内円の直径_単位 As Label
-    Friend WithEvents nud内円の直径 As NumericUpDown
-    Friend WithEvents lbl内円の直径 As Label
+    Friend WithEvents nud内円の径 As NumericUpDown
+    Friend WithEvents lbl内円の径 As Label
     Friend WithEvents lblひもの長さ寸法_単位 As Label
     Friend WithEvents nudひもの長さ寸法 As NumericUpDown
-    Friend WithEvents Label1 As Label
+    Friend WithEvents lbl上下の連続数 As Label
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

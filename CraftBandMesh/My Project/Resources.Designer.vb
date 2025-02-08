@@ -196,15 +196,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  縦ひもの本数の指定が正しくありません。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CalcNoHeightCount() As String
-            Get
-                Return ResourceManager.GetString("CalcNoHeightCount", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  処理に必要な情報がありません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoInformation() As String
@@ -327,6 +318,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcTooShortHeight() As String
             Get
                 Return ResourceManager.GetString("CalcTooShortHeight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0} の値 {1} を増やしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcTooSmallValue() As String
+            Get
+                Return ResourceManager.GetString("CalcTooSmallValue", resourceCulture)
             End Get
         End Property
         

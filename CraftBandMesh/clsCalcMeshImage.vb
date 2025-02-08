@@ -1,4 +1,6 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Button
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
@@ -378,8 +380,8 @@ Partial Public Class clsCalcMesh
     End Function
 
 
-    '_imageList側面ひも生成、側面のレコードを含む
-    Function imageList側面編みかた(ByVal dひも幅 As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
+    '_imageList側面ひも生成、側面のレコードを含む　※輪弧では呼ばれない
+    Function imageList側面編みかた(ByVal d横辺ベース As Double, ByVal d縦辺ベース As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
 
@@ -405,10 +407,10 @@ Partial Public Class clsCalcMesh
                     '--- 上 ---
                     'ImageTypeEnum._編みかた・横
                     item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
-                    item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, dY)
-                    item.m_a四隅.p右下 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, dY)
-                    item.m_a四隅.p左上 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, dY + d高さ)
-                    item.m_a四隅.p右上 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, dY + d高さ)
+                    item.m_a四隅.p左下 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, dY)
+                    item.m_a四隅.p右下 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, dY)
+                    item.m_a四隅.p左上 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, dY + d高さ)
+                    item.m_a四隅.p右上 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, dY + d高さ)
                     '周の区切り
                     If 1 < i周数 Then
                         For i As Integer = 1 To i周数 - 1
@@ -419,16 +421,16 @@ Partial Public Class clsCalcMesh
                         Next
                     End If
                     '文字位置
-                    item.p_p文字位置 = New S実座標(dひも幅 + p_d外側_横 * d周長比率対底の周 / 2, dY + d高さ / 2)
+                    item.p_p文字位置 = New S実座標(_d基本のひも幅 + d横辺ベース * d周長比率対底の周 / 2, dY + d高さ / 2)
                     itemlist.AddItem(item)
 
                     '--- 右 ---
                     'ImageTypeEnum._編みかた・縦
                     item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 2)
-                    item.m_a四隅.p左上 = New S実座標(dX, +p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p左下 = New S実座標(dX, -p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p右上 = New S実座標(dX + d高さ, +p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p右下 = New S実座標(dX + d高さ, -p_d外側_縦 * d周長比率対底の周 / 2)
+                    item.m_a四隅.p左上 = New S実座標(dX, +d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p左下 = New S実座標(dX, -d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p右上 = New S実座標(dX + d高さ, +d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p右下 = New S実座標(dX + d高さ, -d縦辺ベース * d周長比率対底の周 / 2)
                     '周の区切り
                     If 1 < i周数 Then
                         For i As Integer = 1 To i周数 - 1
@@ -446,10 +448,10 @@ Partial Public Class clsCalcMesh
                     '--- 下 ---
                     'ImageTypeEnum._編みかた・横
                     item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 3)
-                    item.m_a四隅.p左上 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -dY)
-                    item.m_a四隅.p右上 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -dY)
-                    item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -dY - d高さ)
-                    item.m_a四隅.p右下 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -dY - d高さ)
+                    item.m_a四隅.p左上 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, -dY)
+                    item.m_a四隅.p右上 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, -dY)
+                    item.m_a四隅.p左下 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, -dY - d高さ)
+                    item.m_a四隅.p右下 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, -dY - d高さ)
                     '周の区切り
                     If 1 < i周数 Then
                         For i As Integer = 1 To i周数 - 1
@@ -465,10 +467,10 @@ Partial Public Class clsCalcMesh
                     '--- 左 ---
                     'ImageTypeEnum._編みかた・縦
                     item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 4)
-                    item.m_a四隅.p右上 = New S実座標(-dX, +p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p右下 = New S実座標(-dX, -p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p左上 = New S実座標(-dX - d高さ, +p_d外側_縦 * d周長比率対底の周 / 2)
-                    item.m_a四隅.p左下 = New S実座標(-dX - d高さ, -p_d外側_縦 * d周長比率対底の周 / 2)
+                    item.m_a四隅.p右上 = New S実座標(-dX, +d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p右下 = New S実座標(-dX, -d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p左上 = New S実座標(-dX - d高さ, +d縦辺ベース * d周長比率対底の周 / 2)
+                    item.m_a四隅.p左下 = New S実座標(-dX - d高さ, -d縦辺ベース * d周長比率対底の周 / 2)
                     '周の区切り
                     If 1 < i周数 Then
                         For i As Integer = 1 To i周数 - 1
@@ -493,126 +495,172 @@ Partial Public Class clsCalcMesh
     '楕円底の差しひも
     Friend Class cls差しひも
 
-        '4つの角
+        'ひとつの角
         Class clsCorner
-            Dim _lst段のひも数 As New List(Of Integer)
-            Dim _n合計ひも数 As Integer = 0
-            Dim _aryAngle() As Double
+            Dim m_lst段のひも数 As New List(Of Integer)
+            Dim m_n合計ひも数 As Integer = 0
+            Dim m_aryAngle() As Double
 
-            '段の追加、ひも数指定
-            Sub addDan(ByVal count As Integer)
-                _lst段のひも数.Add(count)
-                _n合計ひも数 += count
+            Dim m_countBand As Integer = 0
+
+            'ひも数を増やす
+            Sub incBand()
+                m_countBand += 1
             End Sub
 
-            '段数確定後の角度計算
-            Function calcAngle() As Boolean
-                If _n合計ひも数 <= 0 Then
+            'ひも数を、段のひも数として追加し、次の段へ
+            Sub nextDan()
+                m_lst段のひも数.Add(m_countBand)
+                m_n合計ひも数 += m_countBand
+                m_countBand = 0
+            End Sub
+
+            '段数確定後の角度計算, 引数は分割対象の角度
+            Function calcAngle(ByVal targetAngle As Double) As Boolean
+                If m_n合計ひも数 <= 0 OrElse targetAngle = 0 Then
                     Return False
                 End If
-                ReDim _aryAngle(_n合計ひも数)    '0=0,90度までの角度: 1～_n合計ひも数に値  
+                ReDim m_aryAngle(m_n合計ひも数)    '0=0,unitAngle未満の角度: 1～_n合計ひも数に値  
 
                 Dim aryIndex As Integer
-                If 0 < _n合計ひも数 Then
-                    Dim angle As Double = 90 / (1 + _n合計ひも数)
+                If 0 < m_n合計ひも数 Then
+                    Dim angle_step As Double = targetAngle / (1 + m_n合計ひも数)
                     aryIndex = 1
-                    For i As Integer = 1 To _n合計ひも数 Step 2
-                        _aryAngle(i) = angle * aryIndex
+                    For i As Integer = 1 To m_n合計ひも数 Step 2
+                        m_aryAngle(i) = angle_step * aryIndex
                         aryIndex += 1
                     Next
-                    aryIndex = _n合計ひも数
-                    For i As Integer = 2 To _n合計ひも数 Step 2
-                        _aryAngle(i) = angle * aryIndex
+                    aryIndex = m_n合計ひも数
+                    For i As Integer = 2 To m_n合計ひも数 Step 2
+                        m_aryAngle(i) = angle_step * aryIndex
                         aryIndex -= 1
                     Next
                 End If
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Angle={0}", String.Join(", ", _aryAngle.Select(Function(v) v.ToString("F1"))))
 
                 Return True
             End Function
 
             '指定の段のひも数(iDan=0～ )
             Function getDanCount(ByVal iDan As Integer) As Integer
-                If iDan < 0 OrElse _lst段のひも数.Count <= iDan Then
+                If iDan < 0 OrElse m_lst段のひも数.Count <= iDan Then
                     Return 0
                 End If
-                Return _lst段のひも数(iDan)
+                Return m_lst段のひも数(iDan)
             End Function
 
             '指定段・位置の角度取得 iPos=1～段のひも数
             Function getAngle(ByVal iDan As Integer, ByVal iPos As Integer) As Integer
-                If _n合計ひも数 <= 0 Then
+                If m_n合計ひも数 <= 0 OrElse m_aryAngle Is Nothing Then
                     Return 0
                 End If
                 Dim iTotal As Integer = 0
                 For i As Integer = 0 To iDan - 1
-                    iTotal += _lst段のひも数(i)
+                    iTotal += m_lst段のひも数(i)
                 Next
                 iTotal += iPos
 
-                If _n合計ひも数 < iTotal Then
+                If m_n合計ひも数 < iTotal OrElse m_aryAngle.Length <= iTotal Then
                     Return 0
                 End If
-                Return _aryAngle(iTotal)
+                Return m_aryAngle(iTotal)
+            End Function
+
+            Overrides Function ToString() As String
+                Dim sb As New System.Text.StringBuilder
+                sb.AppendFormat("合計ひも数={0} 段数={1}({2})", m_n合計ひも数, m_lst段のひも数.Count, String.Join(",", m_lst段のひも数.ToArray))
+                If m_aryAngle IsNot Nothing Then
+                    sb.AppendFormat(" Angle={0}", String.Join(", ", m_aryAngle.Select(Function(v) v.ToString("F1"))))
+                End If
+                Return sb.ToString
             End Function
 
         End Class
 
+        Dim _isUpRightOnly As Boolean '右上描画フラグ
+        Dim _dひも基本幅 As Double
+        Dim _n角の数 As Integer
+        Dim _ary配置点() As S実座標
+        Dim _d開始径 As Double
 
-        Dim _a楕円の中心 As S四隅
-        Dim _list As New List(Of clsGroupDataRow)
-        Dim _dひも幅 As Double
+        'それぞれの角
+        Dim _clsCorners() As clsCorner
 
-        Dim _clsCorners(3) As clsCorner
+        '段のレコード
+        Dim _listGroupDataRow As New List(Of clsGroupDataRow)
+        Dim _d前段の径累計 As Double = 0
 
-        Dim _r差しひも As Double = 0
-
-        Dim _isUpRightOnly As Boolean
+        Dim _idxCorner As Integer = 0 '次に加える角のインデックス
 
 
-        Sub New(ByVal dひも幅 As Double, ByVal a楕円の中心 As S四隅, ByVal isUpRightOnly As Boolean)
-            _dひも幅 = dひも幅
-            _a楕円の中心 = a楕円の中心
+        Private ReadOnly Property p配置点(ByVal idx As Integer) As S実座標
+            Get
+                If _ary配置点 Is Nothing OrElse _ary配置点.Length = 0 Then
+                    Return pOrigin
+                End If
+                If idx < 0 OrElse _ary配置点.Length <= idx Then
+                    Return pOrigin
+                End If
+                Return _ary配置点(idx)
+            End Get
+        End Property
+
+
+        Sub New(ByVal n角の数 As Integer, ByVal dひも幅 As Double, ByVal ary配置点() As S実座標, ByVal d開始径 As Double, ByVal isUpRightOnly As Boolean)
+            _n角の数 = n角の数
+            _dひも基本幅 = dひも幅
+            _ary配置点 = ary配置点
+            _d開始径 = d開始径
             _isUpRightOnly = isUpRightOnly
 
-            For i As Integer = 0 To 3
+            ReDim _clsCorners(_n角の数 - 1)
+            For i As Integer = 0 To _n角の数 - 1
                 _clsCorners(i) = New clsCorner
             Next
         End Sub
 
+        Sub Clear()
+            _listGroupDataRow.Clear()
+            If _clsCorners IsNot Nothing Then
+                Array.Clear(_clsCorners, 0, _clsCorners.Length)
+            End If
+        End Sub
+
         Sub AddGroupRow(ByVal groupRow As clsGroupDataRow)
-            _list.Add(groupRow)
+            _listGroupDataRow.Add(groupRow)
             Dim i差しひも本数 As Integer = groupRow.GetNameValue("f_i差しひも本数")
 
-            '四隅に振り分ける
-            For i As Integer = 0 To 3
-                Dim cnt As Integer = i差しひも本数 \ 4
-                Dim amari As Integer = i差しひも本数 Mod 4
-                If 0 < i AndAlso 0 < amari Then
-                    If i <= amari Then
-                        cnt += 1
-                    End If
+            '各角に振り分ける
+            For i As Integer = 1 To i差しひも本数
+                If _n角の数 <= _idxCorner Then
+                    _idxCorner = 0
                 End If
-                _clsCorners(i).addDan(cnt)
+                _clsCorners(_idxCorner).incBand()
 
-                '0(4の倍数のみ) 1(余り1以上) 2(余り2以上) 3(余り3以上)
-                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:{1}/{2}", i, cnt, i差しひも本数)
+                _idxCorner += 1
+            Next
+            '次の段へ
+            For i As Integer = 0 To _n角の数 - 1
+                _clsCorners(i).nextDan()
             Next
 
         End Sub
 
+        '描画リストに差しひもを追加
         Function GetImageItem(ByVal itemlist As clsImageItemList) As Boolean
-
-            For i As Integer = 0 To 3
-                _clsCorners(i).calcAngle()
+            '各角を、その角の差しひも数で分割
+            For i As Integer = 0 To _n角の数 - 1
+                _clsCorners(i).calcAngle(360 / _n角の数)
+                '
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}:{1}", i, _clsCorners(i).ToString)
             Next
 
-            _r差しひも = 0
-            For iDan As Integer = 0 To _list.Count - 1
-                Dim groupRow As clsGroupDataRow = _list(iDan)
+            '差しひもの描画アイテム
+            _d前段の径累計 = _d開始径
+            For iDan As Integer = 0 To _listGroupDataRow.Count - 1
+                Dim groupRow As clsGroupDataRow = _listGroupDataRow(iDan)
                 getDanItem(itemlist, groupRow, iDan)
 
-                _r差しひも = groupRow.GetNameValue("f_d径の累計")
+                _d前段の径累計 = groupRow.GetNameValue("f_d径の累計")
             Next
 
             Return True
@@ -625,81 +673,41 @@ Partial Public Class clsCalcMesh
             Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
             Dim dひも長 As Double = groupRow.GetNameValue("f_d連続ひも長")
 
-            Dim iCorner As Integer
-            Dim bands(3) As CBand
-            Dim p始点(3) As S実座標
+            Dim bands(_n角の数 - 1) As CBand
+            Dim p始点(_n角の数 - 1) As S実座標
 
-            '*右上 : 0 (0度方向から)
-            iCorner = 0
-            bands(iCorner) = New CBand(groupRow)
-            p始点(iCorner) = _a楕円の中心.p右上 + Unit0 * _r差しひも
-            bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit0 * dひも長), d幅)
-            bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 4)
-
-            iひも数 = _clsCorners(iCorner).getDanCount(iDan)
-            For iPos As Integer = 1 To iひも数
-                Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
-                Dim band As New CBand(bands(iCorner))
-                band.RotateBand(_a楕円の中心.p右上, angle)
-                Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
-                itemlist.AddItem(item)
+            Dim angle開始方向(_n角の数 - 1) As Double
+            For i As Integer = 0 To _n角の数 - 1
+                angle開始方向(i) = (360 / _n角の数) * i
             Next
 
-            If Not _isUpRightOnly Then
-                '*左上 : 1　(90度方向から)
-                iCorner = 1
+            For iCorner As Integer = 0 To _n角の数 - 1
+                '右上の場合は(ゼロから開始して)90度まで
+                If _isUpRightOnly AndAlso 90 <= angle開始方向(iCorner) Then
+                    Exit For
+                End If
+
+                Dim delta As New S差分(angle開始方向(iCorner))
                 bands(iCorner) = New CBand(groupRow)
-                p始点(iCorner) = _a楕円の中心.p左上 + Unit90 * _r差しひも
-                bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit90 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 2, Unit180 * (_dひも幅 / 2))
+                p始点(iCorner) = p配置点(iCorner) + delta * _d前段の径累計
+                bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + delta * dひも長), d幅)
+                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも基本幅 / 4)
 
                 iひも数 = _clsCorners(iCorner).getDanCount(iDan)
                 For iPos As Integer = 1 To iひも数
                     Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
                     Dim band As New CBand(bands(iCorner))
-                    band.RotateBand(_a楕円の中心.p左上, angle)
+                    band.RotateBand(p配置点(iCorner), angle)
                     Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
                     itemlist.AddItem(item)
                 Next
-
-                '*左下 : 2　(180度方向から)
-                iCorner = 2
-                bands(iCorner) = New CBand(groupRow)
-                p始点(iCorner) = _a楕円の中心.p左下 + Unit180 * _r差しひも
-                bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit180 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 * 2, Unit90 * (_dひも幅 / 2))
-
-                iひも数 = _clsCorners(iCorner).getDanCount(iDan)
-                For iPos As Integer = 1 To iひも数
-                    Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
-                    Dim band As New CBand(bands(iCorner))
-                    band.RotateBand(_a楕円の中心.p左下, angle)
-                    Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
-                    itemlist.AddItem(item)
-                Next
-
-                '*右下 : 3　(270度方向から)
-                iCorner = 3
-                bands(iCorner) = New CBand(groupRow)
-                p始点(iCorner) = _a楕円の中心.p右下 + Unit270 * _r差しひも
-                bands(iCorner).SetBand(New S線分(p始点(iCorner), p始点(iCorner) + Unit270 * dひも長), d幅)
-                bands(iCorner).SetMarkPosition(enumMarkPosition._終点の後, _dひも幅 / 3, Unit270 * (_dひも幅 / 2))
-
-                iひも数 = _clsCorners(iCorner).getDanCount(iDan)
-                For iPos As Integer = 1 To iひも数
-                    Dim angle As Double = _clsCorners(iCorner).getAngle(iDan, iPos)
-                    Dim band As New CBand(bands(iCorner))
-                    band.RotateBand(_a楕円の中心.p右下, angle)
-                    Dim item As New clsImageItem(band, iCorner + iDan, iCorner)
-                    itemlist.AddItem(item)
-                Next
-            End If
+            Next
 
             Return True
         End Function
     End Class
 
-    '底の上下をm_regionListにセット
+    '底の編み目を平編みにする
     Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList) As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
             Return False
@@ -743,7 +751,7 @@ Partial Public Class clsCalcMesh
     End Function
 
     '底(楕円と差しひも)と側面枠　※輪弧では呼ばれない
-    Function imageList底と側面枠(ByVal dひも幅 As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
+    Function imageList底(ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
 
@@ -759,24 +767,17 @@ Partial Public Class clsCalcMesh
         a底.p左下 = -a底.p右上
         a底.p右下 = -a底.p左上
 
-        '底
-        If _enum配置タイプ = enum配置タイプ.i_放射状 Then
+        '底の縦横部分
+        If _d径の合計 = 0 Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底枠, 1)
-            item.m_a四隅 = a底の縦横
-            item.m_is円 = True
-            itemlist.AddItem(item)
+            item.m_a四隅 = a底
         Else
-            If _d径の合計 = 0 Then
-                item = New clsImageItem(clsImageItem.ImageTypeEnum._底枠, 1)
-                item.m_a四隅 = a底
-                itemlist.AddItem(item)
-            Else
-                '楕円底は縦横部分
-                item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, 1)
-                item.m_a四隅 = a底の縦横
-                itemlist.AddItem(item)
-            End If
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, 1)
+            item.m_a四隅 = a底の縦横
         End If
+        item.m_is円 = (_enum配置タイプ = enum配置タイプ.i_放射状)
+        itemlist.AddItem(item)
+
 
         Dim a楕円の中心 As S四隅
         a楕円の中心.p左上 = a底の縦横.p左上 + Unit270 * _d最上と最下の短いひもの幅
@@ -784,9 +785,20 @@ Partial Public Class clsCalcMesh
         a楕円の中心.p左下 = a底の縦横.p左下 + Unit90 * _d最上と最下の短いひもの幅
         a楕円の中心.p右下 = a底の縦横.p右下 + Unit90 * _d最上と最下の短いひもの幅
 
-        Dim sasihimo As New cls差しひも(dひも幅, a楕円の中心, isUpRightOnly)
+        Dim sasihimo As cls差しひも
+        If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            Dim ary配置点(3) As S実座標
+            ary配置点(0) = a楕円の中心.Point(0) 'p右上 'A
+            ary配置点(1) = a楕円の中心.Point(1) 'p左上 'B
+            ary配置点(2) = a楕円の中心.Point(2) 'p左下 'C
+            ary配置点(3) = a楕円の中心.Point(3) 'p右下 'D
+            sasihimo = New cls差しひも(4, _d基本のひも幅, ary配置点, 0, isUpRightOnly)
+        Else
+            sasihimo = New cls差しひも(_i縦ひもの本数 * 2, _d基本のひも幅, Nothing, _d縦横の縦 / 2, isUpRightOnly)
+        End If
 
         '番号ごと
+        item = Nothing
         Dim res = (From row As tbl底_楕円Row In _Data.p_tbl底_楕円
                    Select Num = row.f_i番号
                    Order By Num).Distinct
@@ -803,13 +815,14 @@ Partial Public Class clsCalcMesh
 
             Else
                 '底楕円
-                item = New clsImageItem(ImageTypeEnum._底楕円, groupRow, 1)
+                item = New clsImageItem(ImageTypeEnum._底楕円, groupRow, groupRow.GetNameValue("f_i番号"))
 
+                item.m_dひも幅 = groupRow.GetNameValue("f_d径") '1レコード想定
                 Dim d径の累計 As Double = groupRow.GetNameValue("f_d径の累計") '1レコード想定
                 If (_enum配置タイプ = enum配置タイプ.i_放射状) Then
                     item.m_a四隅 = New S四隅(New S領域(New S実座標(-d径の累計, -d径の累計), New S実座標(d径の累計, d径の累計)))
                     item.m_is円 = True
-                    item.p_p文字位置 = New S実座標(0, d径の累計)
+                    item.p_p文字位置 = pOrigin + New S差分(310) * (d径の累計 - _d基本のひも幅)
 
                 Else
                     item.m_a四隅 = a楕円の中心
@@ -830,11 +843,29 @@ Partial Public Class clsCalcMesh
 
                 End If
 
-
                 itemlist.AddItem(item)
             End If
-
         Next
+        '最後の底楕円を底枠描画
+        If item IsNot Nothing Then
+            Dim itemBottomLine As New clsImageItem(ImageTypeEnum._底楕円, CType(Nothing, clsGroupDataRow), 999)
+            itemBottomLine.m_a四隅 = item.m_a四隅
+            itemBottomLine.m_is円 = item.m_is円
+            itemBottomLine.m_lineList.AddRange(item.m_lineList)
+            itemlist.AddItem(itemBottomLine)
+        End If
+
+        '差しひも
+        sasihimo.GetImageItem(itemlist)
+        sasihimo.Clear()
+
+        Return itemlist
+    End Function
+
+    '側面の枠　※輪弧では呼ばれない
+    Function imageList側面枠(ByVal d横辺ベース As Double, ByVal d縦辺ベース As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
+        Dim item As clsImageItem
+        Dim itemlist As New clsImageItemList
 
         '側面の枠
 
@@ -857,45 +888,40 @@ Partial Public Class clsCalcMesh
         If d周長比率対底の周 = 0 Then
             d周長比率対底の周 = 1
         End If
-
         If isShowSide Then
             '上の側面
             item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
-            item.m_a四隅.p左下 = New S実座標(-p_d外側_横 / 2, p_d外側_縦 / 2)
-            item.m_a四隅.p右下 = New S実座標(+p_d外側_横 / 2, p_d外側_縦 / 2)
-            item.m_a四隅.p左上 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, _d高さの合計 + p_d外側_縦 / 2)
-            item.m_a四隅.p右上 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, _d高さの合計 + p_d外側_縦 / 2)
+            item.m_a四隅.p左下 = New S実座標(-d横辺ベース / 2, p_d外側_縦 / 2)
+            item.m_a四隅.p右下 = New S実座標(+d横辺ベース / 2, p_d外側_縦 / 2)
+            item.m_a四隅.p左上 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, _d高さの合計 + p_d外側_縦 / 2)
+            item.m_a四隅.p右上 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, _d高さの合計 + p_d外側_縦 / 2)
             itemlist.AddItem(item)
 
             '右の側面
             item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
-            item.m_a四隅.p左上 = New S実座標(p_d外側_横 / 2, p_d外側_縦 / 2)
-            item.m_a四隅.p左下 = New S実座標(p_d外側_横 / 2, -p_d外側_縦 / 2)
-            item.m_a四隅.p右上 = New S実座標(_d高さの合計 + p_d外側_横 / 2, p_d外側_縦 * d周長比率対底の周 / 2)
-            item.m_a四隅.p右下 = New S実座標(_d高さの合計 + p_d外側_横 / 2, -p_d外側_縦 * d周長比率対底の周 / 2)
+            item.m_a四隅.p左上 = New S実座標(p_d外側_横 / 2, d縦辺ベース / 2)
+            item.m_a四隅.p左下 = New S実座標(p_d外側_横 / 2, -d縦辺ベース / 2)
+            item.m_a四隅.p右上 = New S実座標(_d高さの合計 + p_d外側_横 / 2, d縦辺ベース * d周長比率対底の周 / 2)
+            item.m_a四隅.p右下 = New S実座標(_d高さの合計 + p_d外側_横 / 2, -d縦辺ベース * d周長比率対底の周 / 2)
             itemlist.AddItem(item)
         End If
-
         If Not isUpRightOnly AndAlso isShowSide Then
             '下の側面
             item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 3)
-            item.m_a四隅.p左上 = New S実座標(-p_d外側_横 / 2, -p_d外側_縦 / 2)
-            item.m_a四隅.p右上 = New S実座標(+p_d外側_横 / 2, -p_d外側_縦 / 2)
-            item.m_a四隅.p左下 = New S実座標(-p_d外側_横 * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
-            item.m_a四隅.p右下 = New S実座標(+p_d外側_横 * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
+            item.m_a四隅.p左上 = New S実座標(-d横辺ベース / 2, -p_d外側_縦 / 2)
+            item.m_a四隅.p右上 = New S実座標(+d横辺ベース / 2, -p_d外側_縦 / 2)
+            item.m_a四隅.p左下 = New S実座標(-d横辺ベース * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
+            item.m_a四隅.p右下 = New S実座標(+d横辺ベース * d周長比率対底の周 / 2, -_d高さの合計 - p_d外側_縦 / 2)
             itemlist.AddItem(item)
 
             '左の側面
             item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 4)
-            item.m_a四隅.p右上 = New S実座標(-p_d外側_横 / 2, p_d外側_縦 / 2)
-            item.m_a四隅.p右下 = New S実座標(-p_d外側_横 / 2, -p_d外側_縦 / 2)
-            item.m_a四隅.p左上 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, p_d外側_縦 * d周長比率対底の周 / 2)
-            item.m_a四隅.p左下 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, -p_d外側_縦 * d周長比率対底の周 / 2)
+            item.m_a四隅.p右上 = New S実座標(-p_d外側_横 / 2, d縦辺ベース / 2)
+            item.m_a四隅.p右下 = New S実座標(-p_d外側_横 / 2, -d縦辺ベース / 2)
+            item.m_a四隅.p左上 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, d縦辺ベース * d周長比率対底の周 / 2)
+            item.m_a四隅.p左下 = New S実座標(-_d高さの合計 - p_d外側_横 / 2, -d縦辺ベース * d周長比率対底の周 / 2)
             itemlist.AddItem(item)
         End If
-
-        '差しひも
-        sasihimo.GetImageItem(itemlist)
 
         Return itemlist
     End Function
@@ -914,15 +940,12 @@ Partial Public Class clsCalcMesh
         If Not CalcOutput(outp) Then
             Return False 'p_sメッセージあり
         End If
-
         Dim imgList横ひも As New clsImageItemList()
         Dim imgList縦ひも As New clsImageItemList()
 
 
-        '文字サイズ
-        Dim dひも幅 As Double = _d基本のひも幅 ' g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
         '文字サイズ(基本のひも幅)と基本色
-        imgData.setBasics(dひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
+        imgData.setBasics(_d基本のひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
         '描画用のデータ追加
         Me.imageList横ひも(imgList横ひも, get横展開DataTable(), isUpRightOnly)
@@ -941,15 +964,28 @@ Partial Public Class clsCalcMesh
         imgList縦ひも = Nothing
 
         If _enum配置タイプ <> enum配置タイプ.i_輪弧 Then
+            Dim d横辺ベース As Double = p_d外側_横
+            Dim d縦辺ベース As Double = p_d外側_縦
+            If Not isUpRightOnly Then
+                '全体の場合は周長ベース
+                d横辺ベース = (1 / 2) * _d底の周 * (p_d内側_横 / (p_d内側_横 + p_d内側_縦))
+                d縦辺ベース = (1 / 2) * _d底の周 * (p_d内側_縦 / (p_d内側_横 + p_d内側_縦))
+            End If
+
+            '底(楕円と差しひも)
+            Dim imageList底 As clsImageItemList = Me.imageList底(isUpRightOnly, isShowSide)
+            imgData.MoveList(imageList底)
+            imageList底 = Nothing
+
+            '側面の枠
+            Dim imageList側面枠 As clsImageItemList = Me.imageList側面枠(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
+            imgData.MoveList(imageList側面枠)
+            imageList側面枠 = Nothing
+
             '側面のレコードを含む
-            Dim imageList側面編みかた As clsImageItemList = Me.imageList側面編みかた(dひも幅, isUpRightOnly, isShowSide)
+            Dim imageList側面編みかた As clsImageItemList = Me.imageList側面編みかた(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
             imgData.MoveList(imageList側面編みかた)
             imageList側面編みかた = Nothing
-
-            '底(楕円と差しひも)と側面枠
-            Dim imageList描画要素 As clsImageItemList = imageList底と側面枠(dひも幅, isUpRightOnly, isShowSide)
-            imgData.MoveList(imageList描画要素)
-            imageList描画要素 = Nothing
         End If
 
         '付属品

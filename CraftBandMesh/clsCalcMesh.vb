@@ -1,8 +1,6 @@
 ﻿
 
 Imports System.Reflection
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports System.Xml
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsMasterTables
@@ -24,6 +22,7 @@ Class clsCalcMesh
         '底(縦横)
         Horizontal '横置き項目(底の縦横)
         Vertical '縦置き項目(底の縦横)
+        Circle  '底(輪弧)
         Expand '縦横展開,縦ひもを放射状に置く
 
         GapFit  'すき間を横寸法に合わせる。画面値更新と再計算
@@ -617,6 +616,12 @@ Class clsCalcMesh
                 ret = ret And adjust_横ひも()
                 'calc_横寸法()
 
+            Case CalcCategory.Circle  '底(輪弧)
+                ret = ret And set_底の縦横()
+                ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
+                ret = ret And calc_底楕円(category, Nothing, Nothing)
+                ret = ret And calc_側面(category, Nothing, Nothing)
+
             Case CalcCategory.GapFit     '横寸法に合わせる
                 set_底の縦横()  '念のため
                 Return calc_すき間の寸法()
@@ -747,6 +752,7 @@ Class clsCalcMesh
         With _Data.p_row底_縦横
             _b縦横を展開する = .Value("f_b展開区分")
             _d垂直ひも長加算 = .Value("f_d垂直ひも長加算")
+
             If .Value("f_i織りタイプ") = enum配置タイプ.i_放射状 Then
                 _enum配置タイプ = enum配置タイプ.i_放射状
 
@@ -818,27 +824,76 @@ Class clsCalcMesh
                         Return False
                     End If
                 End If
-            End If
-
-            '値のチェック
-            If _i縦ひもの本数 < 1 Then
-                '縦ひもの本数の指定が正しくありません。
-                p_sメッセージ = My.Resources.CalcNoHeightCount
-                Return False
-            End If
-
-            Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
-            If 0 < d縦ひも間の最小間隔 AndAlso
-                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
-                '縦ひも間のすき間が最小間隔より小さくなっています。
-                p_sメッセージ = My.Resources.CalcNoSpaceHeight
-                Return False
-            End If
-
+            End If '縦横
         End With
+
+        '値のチェック
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            Return check_輪弧()
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            Return check_放射状()
+        Else
+            Return check_縦横()
+        End If
+    End Function
+
+    Private Function check_縦横() As Boolean
+        Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
+        If 0 < d縦ひも間の最小間隔 AndAlso
+                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
+            '縦ひも間のすき間が最小間隔より小さくなっています。
+            p_sメッセージ = My.Resources.CalcNoSpaceHeight
+            Return False
+        End If
+
+        If _i縦ひもの本数 < 1 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
+            Return False
+        End If
+
         Return True
     End Function
 
+    Private Function check_放射状() As Boolean
+        Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
+        If 0 < d縦ひも間の最小間隔 AndAlso
+                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
+            '縦ひも間のすき間が最小間隔より小さくなっています。
+            p_sメッセージ = My.Resources.CalcNoSpaceHeight
+            Return False
+        End If
+
+        If _i縦ひもの本数 < 2 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Private Function check_輪弧() As Boolean
+        If _i縦ひもの本数 < 3 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text輪弧の縦ひも本数(), _i縦ひもの本数)
+            Return False
+        End If
+
+        If _dひもの長さ寸法 < _d基本のひも幅 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, textひもの長さ寸法(), _dひもの長さ寸法)
+            Return False
+        End If
+
+        If _d内円の直径 < _d基本のひも幅 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text内円の径(), _d内円の直径)
+            Return False
+        End If
+
+        Return True
+    End Function
 
 #Region "横寸法に合わせる"
 
@@ -861,8 +916,8 @@ Class clsCalcMesh
 
         Else
             If _i縦ひもの本数 < 2 Then
-                '縦ひもの本数の指定が正しくありません。
-                p_sメッセージ = My.Resources.CalcNoHeightCount
+                '{0} の値 {1} を増やしてください。
+                p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
                 Return False
             End If
 
@@ -2738,7 +2793,11 @@ Class clsCalcMesh
         output.OutBasics(_Data.p_row目標寸法) '空行で終わる
 
         row = output.NextNewRow
-        row.f_sカテゴリー = text底縦横()
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            row.f_sカテゴリー = text底輪弧()
+        Else
+            row.f_sカテゴリー = text底縦横()
+        End If
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
@@ -2755,7 +2814,12 @@ Class clsCalcMesh
                 tmpTable = get横展開DataTable()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
             Else
-                row.f_sタイプ = text縦置き()
+                If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+                ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+                    row.f_sタイプ = text放射状配置()
+                Else 'num配置タイプ.i_縦横
+                    row.f_sタイプ = text縦置き()
+                End If
                 tmpTable = get縦展開DataTable()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
             End If
@@ -2817,10 +2881,8 @@ Class clsCalcMesh
                         End If
                         Select Case lasttmp.f_sひも名
                             Case text長い横ひも()
-                                'row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i長い横ひもの本数"), row.f_s編みひも名)
                                 row.f_s編みひも名 = String.Format("[{0}] {1}", _i長い横ひもの本数, row.f_s編みひも名)
                             Case text縦ひも()
-                                'row.f_s編みひも名 = String.Format("[{0}] {1}", _Data.p_row底_縦横.Value("f_i縦ひもの本数"), row.f_s編みひも名)
                                 row.f_s編みひも名 = String.Format("[{0}] {1}", _i縦ひもの本数, row.f_s編みひも名)
                         End Select
                     End If
@@ -2839,7 +2901,8 @@ Class clsCalcMesh
         output.SetBlankLine() '先に行をつくっているので
 
         '***底楕円
-        If 0 < _Data.p_tbl底_楕円.Rows.Count Then
+        If 0 < _Data.p_tbl底_楕円.Rows.Count AndAlso
+            _enum配置タイプ <> enum配置タイプ.i_輪弧 Then
             row = output.NextNewRow
             row.f_sカテゴリー = text底楕円()
             row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
@@ -2900,7 +2963,8 @@ Class clsCalcMesh
         End If
 
         '***側面
-        If 0 < _Data.p_tbl側面.Rows.Count Then
+        If 0 < _Data.p_tbl側面.Rows.Count AndAlso
+            _enum配置タイプ <> enum配置タイプ.i_輪弧 Then
             row = output.NextNewRow
             row.f_sカテゴリー = text側面()
             row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
@@ -2968,6 +3032,7 @@ Class clsCalcMesh
         row.f_sひも長 = text外側()
         row.f_s高さ = text内側()
         row.f_s長さ = text外側()
+        row.f_s色 = text配置タイプ()
 
         row = output.NextNewRow
         row.f_s色 = text横寸法() & text底()
@@ -3144,6 +3209,39 @@ Class clsCalcMesh
         'dgv側面
         Return _frmMain.f_d垂直ひも長2.HeaderText
     End Function
+
+    Private Function text配置タイプ() As String
+        Return _frmMain.cmb配置タイプ.Text
+    End Function
+
+    Private Function text放射状配置() As String
+        Return _frmMain.lbl放射状配置.Text
+    End Function
+
+    Private Function text底輪弧() As String
+        Return _frmMain.tpage輪弧.Text
+    End Function
+
+    Private Function text輪弧の縦ひも本数() As String
+        Return _frmMain.lbl縦ひもの本数_輪弧.Text
+    End Function
+
+    Private Function text縦ひもの本数() As String
+        Return _frmMain.lbl縦ひもの本数.Text
+    End Function
+
+    Private Function textひもの長さ寸法() As String
+        Return _frmMain.lblひもの長さ寸法.Text
+    End Function
+
+    Private Function text内円の径() As String
+        Return _frmMain.lbl内円の径.Text
+    End Function
+
+    Private Function text上下の連続数() As String
+        Return _frmMain.lbl上下の連続数.Text
+    End Function
+
 #End Region
 
 End Class

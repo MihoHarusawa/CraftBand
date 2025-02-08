@@ -167,9 +167,6 @@
   <data name="CalcNoDefCategory" xml:space="preserve">
     <value>未定義のカテゴリー'{0}'が参照されました。</value>
   </data>
-  <data name="CalcNoHeightCount" xml:space="preserve">
-    <value>縦ひもの本数の指定が正しくありません。</value>
-  </data>
   <data name="CalcNoInformation" xml:space="preserve">
     <value>処理に必要な情報がありません。</value>
   </data>
@@ -211,6 +208,9 @@
   </data>
   <data name="CalcTooShortHeight" xml:space="preserve">
     <value>縦寸法が小さすぎるため横ひもを置けません。</value>
+  </data>
+  <data name="CalcTooSmallValue" xml:space="preserve">
+    <value>{0} の値 {1} を増やしてください。</value>
   </data>
   <data name="CalcWidthOver" xml:space="preserve">
     <value>底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。</value>

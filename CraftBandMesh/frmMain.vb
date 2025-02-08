@@ -171,7 +171,7 @@ Public Class frmMain
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud垂直ひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nudひもの長さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
-            nud内円の直径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nud内円の径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nudひとつのすき間の寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nud横ひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
@@ -250,7 +250,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Expand, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Oval}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Expand, CalcCategory.Horizontal, CalcCategory.Vertical, CalcCategory.Oval, CalcCategory.Circle}.Contains(category) Then
             Save底_縦横(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -460,7 +460,7 @@ Public Class frmMain
 
             '輪弧のみだがセットする
             nudひもの長さ寸法.Value = .Value("f_d左端右端の目")
-            nud内円の直径.Value = .Value("f_d左端右端の目2")
+            nud内円の径.Value = .Value("f_d左端右端の目2")
             nud連続数1.Value = .Value("f_i左から何番目")
             nud連続数2.Value = .Value("f_i左から何番目2")
             If .Value("f_bひも上下1回区分") Then
@@ -651,7 +651,7 @@ Public Class frmMain
 
             '輪弧のみだがセットする
             .Value("f_d左端右端の目") = nudひもの長さ寸法.Value
-            .Value("f_d左端右端の目2") = nud内円の直径.Value
+            .Value("f_d左端右端の目2") = nud内円の径.Value
             .Value("f_i左から何番目") = nud連続数1.Value
             .Value("f_i左から何番目2") = nud連続数2.Value
             .Value("f_bひも上下1回区分") = rad下上.Checked
@@ -1426,7 +1426,11 @@ Public Class frmMain
     End Sub
 
     Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nudひもの長さ寸法.ValueChanged
+        recalc(CalcCategory.Circle, sender)
+    End Sub
 
+    Private Sub nud内円の径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の径.ValueChanged
+        recalc(CalcCategory.Circle, sender)
     End Sub
 
 #End Region

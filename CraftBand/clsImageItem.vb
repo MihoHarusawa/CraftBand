@@ -451,6 +451,17 @@ Public Class clsImageItem
     Class C線分リスト
         Inherits List(Of S線分)
 
+        Sub New()
+            MyBase.New
+        End Sub
+
+        Sub New(ByVal ref As C線分リスト)
+            MyBase.New
+            For Each line As S線分 In ref
+                Me.Add(New S線分(line))
+            Next
+        End Sub
+
         Function Get描画領域() As S領域
             If Me.Count = 0 Then
                 Return Nothing 'ゼロ
@@ -698,12 +709,24 @@ Public Class clsImageItem
             y最下 = 0
         End Sub
 
-        '領域を拡大
+        '領域を拡大(マイナスは縮小)
         Sub enLarge(ByVal delta As Double)
-            p左下.X -= delta
-            p右上.X += delta
-            p右上.Y += delta
-            p左下.Y -= delta
+            If (delta < 0) AndAlso (x幅 < (-delta * 2)) Then
+                Dim midx As Double = (p左下.X + p右上.X) / 2
+                p左下.X = midx
+                p右上.X = midx
+            Else
+                p左下.X -= delta
+                p右上.X += delta
+            End If
+            If (delta < 0) AndAlso (y高さ < (-delta * 2)) Then
+                Dim midy As Double = (p左下.Y + p右上.Y) / 2
+                p右上.Y = midy
+                p左下.Y = midy
+            Else
+                p右上.Y += delta
+                p左下.Y -= delta
+            End If
         End Sub
 
         Property x最左 As Double
@@ -1645,7 +1668,7 @@ Public Class clsImageItem
     Public m_is円 As Boolean = False
 
     '縦バンド・横バンド・コマ・付属品
-    Public m_dひも幅 As Double
+    Public m_dひも幅 As Double = 0
     Public m_rひも位置 As S領域
 
     '縦バンド・横バンド
@@ -1694,14 +1717,13 @@ Public Class clsImageItem
         _底枠     'm_a四隅,m_lineList,m_is円
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
-        _四隅領域 'm_a四隅,m_lineList
+        _四隅領域 'm_a四隅,m_lineList,m_is円
         _全体枠    'm_a四隅
         _底枠2     'm_lineList        (Hexagonの底)
 
 
-        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域 (Meshの底),m_is円
+        _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域,m_is円,m_dひも幅 (Meshの底)
         '_差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
-        '_ひも領域   'm_rowData,m_a四隅,_r文字領域            (旧Squareの差しひも)
 
         _底の中央線  'm_listLine
 
@@ -1897,11 +1919,6 @@ Public Class clsImageItem
                             chars += 1 '"/"分
                             line = 1
                         End If
-                    'Case ImageTypeEnum._ひも領域
-                    '    If m_rowData IsNot Nothing Then
-                    '        chars += 1 '記号1点
-                    '        line = 1
-                    '    End If
                     Case ImageTypeEnum._文字列
                         If m_aryString IsNot Nothing Then
                             For Each Str As String In m_aryString
@@ -1955,7 +1972,7 @@ Public Class clsImageItem
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._底楕円 ', ImageTypeEnum._差しひも ', ImageTypeEnum._ひも領域
+            Case ImageTypeEnum._底楕円 ', ImageTypeEnum._差しひも
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
