@@ -709,6 +709,7 @@ Class clsCalcMesh
         Return ret
     End Function
 
+#Region "データ値のキャッシュとチェック"
     '目標寸法(内側値)をセットする
     Private Function set_目標寸法(ByVal needTarget As Boolean) As Boolean
 
@@ -748,6 +749,7 @@ Class clsCalcMesh
     '                                        底の楕円の計算に使うため
 
     '底(縦横)の基本的な設定値のキャッシュ
+    'OUT: _i垂直ひも数_縦横
     Private Function set_底の縦横() As Boolean
         With _Data.p_row底_縦横
             _b縦横を展開する = .Value("f_b展開区分")
@@ -894,6 +896,7 @@ Class clsCalcMesh
 
         Return True
     End Function
+#End Region
 
 #Region "横寸法に合わせる"
 
@@ -906,35 +909,46 @@ Class clsCalcMesh
 
         Dim target As Double = _d横_目標 - 2 * _d径の合計
 
-        Dim ret As Boolean = False
-        Dim dひとつのすき間の寸法 As Double = -1
-
         If Not isValid横_目標 Then
             '横寸法が指定されていないため、すき間の寸法を計算できません。
             p_sメッセージ = My.Resources.CalcNoTargetWidth
             Return False
+        End If
 
-        Else
-            If _i縦ひもの本数 < 2 Then
-                '{0} の値 {1} を増やしてください。
-                p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
-                Return False
-            End If
+        If _i縦ひもの本数 < 2 Then
+            '{0} の値 {1} を増やしてください。
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
+            Return False
+        End If
 
+        Dim dひとつのすき間の寸法 As Double = -1
+        If _enum配置タイプ = enum配置タイプ.i_縦横 Then
             '縦ひも分の横寸法
-            'Dim band As Double = g_clsSelectBasics.p_d指定本幅(.Value("f_i縦ひも")) * .Value("f_i縦ひもの本数")
-            Dim band As Double = _d縦横の横 - _dひとつのすき間の寸法 * (_i縦ひもの本数 - 1)
-            If target <= band Then
+            Dim band_wid As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) * _i縦ひもの本数
+            If target <= band_wid Then
                 '横寸法が小さすぎるため縦ひもを置けません。
                 p_sメッセージ = My.Resources.CalcNoShortWidth
                 Return False
             End If
+            dひとつのすき間の寸法 = (target - band_wid) / (_i縦ひもの本数 - 1)
 
-            dひとつのすき間の寸法 = (target - band) / (_i縦ひもの本数 - 1)
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            '縦ひも分の周
+            Dim band_circle As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) * 2 * _i縦ひもの本数
+            If target <= (band_circle / Math.PI) Then
+                '横寸法が小さすぎるため縦ひもを置けません。
+                p_sメッセージ = My.Resources.CalcNoShortWidth
+                Return False
+            End If
+            dひとつのすき間の寸法 = (target * Math.PI - band_circle) / (2 * _i縦ひもの本数)
+
+        Else
+            '輪弧では呼び出されないはず
+            Return False
+
         End If
-        'すき間が計算できた
 
-        '警告
+        'すき間が計算できた
         If dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
             '縦ひも間のすき間が最小間隔より小さくなっています。
             p_sメッセージ = My.Resources.CalcNoSpaceHeight
@@ -951,7 +965,7 @@ Class clsCalcMesh
 
 #Region "概算"
     '目標寸法のキャッシュを参照しながら、_Data.p_row底_縦横にセット
-    '輪弧は対象外
+    '輪弧は対象外, 放射状の場合は横寸法に合わせる
 
     '有効な目標寸法がある
     Public Function isValidTarget(ByVal needTarget As Boolean) As Boolean
@@ -999,14 +1013,15 @@ Class clsCalcMesh
 
         '概算不要か？
         If isNear(p_d内側_横, _d横_目標) _
-            AndAlso isNear(p_d内側_縦, _d縦_目標) _
+            AndAlso (_enum配置タイプ <> enum配置タイプ.i_縦横 OrElse isNear(p_d内側_縦, _d縦_目標)) _
             AndAlso isNear(p_d内側_高さ, _d高さ_目標) Then
             'ほぼ目標のサイズになっています。やり直す場合はリセットしてください。
             p_sメッセージ = My.Resources.CalcNoMoreChange
             Return False
         End If
 
-        If isNear(p_d内側_横, _d横_目標) AndAlso isNear(p_d内側_縦, _d縦_目標) Then
+        If isNear(p_d内側_横, _d横_目標) AndAlso
+            (_enum配置タイプ <> enum配置タイプ.i_縦横 OrElse isNear(p_d内側_縦, _d縦_目標)) Then
             '側面のみ
             If 0 < _d高さの合計 Then
                 '入力されている編みかたの周数を調整します。よろしいですか？
@@ -1042,10 +1057,12 @@ Class clsCalcMesh
         End If
 
         If 0 < _d径の合計 Then
-            If _d縦_目標 <= _d径の合計 * 2 Then
-                '底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。
-                p_sメッセージ = String.Format(My.Resources.CalcHeightOver, _d径の合計 * 2)
-                Return False
+            If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+                If _d縦_目標 <= _d径の合計 * 2 Then
+                    '底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。
+                    p_sメッセージ = String.Format(My.Resources.CalcHeightOver, _d径の合計 * 2)
+                    Return False
+                End If
             End If
             If _d横_目標 <= _d径の合計 * 2 Then
                 '底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。
@@ -1054,7 +1071,7 @@ Class clsCalcMesh
             End If
         End If
 
-        Return True
+            Return True
     End Function
 
     Private Function isNear(ByVal d1 As Double, ByVal d2 As Double) As Boolean
@@ -1073,12 +1090,24 @@ Class clsCalcMesh
         '_Data.p_row底_縦横.Value("f_b展開区分") = False  概算ボタンでOFF
 
 
-        If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
-            ret = ret And calc_Target_縦()
+        If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
+                ret = ret And calc_Target_縦()
+            End If
+            If Not isValid計算_縦 OrElse Not isNear(p_d内側_縦, _d縦_目標) Then
+                ret = ret And calc_Target_横()
+            End If
+
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
+                ret = ret And calc_Target_縦_放射状()
+            End If
+
+        Else
+            '輪弧ではよばれないはず
+            Return False
         End If
-        If Not isValid計算_縦 OrElse Not isNear(p_d内側_縦, _d縦_目標) Then
-            ret = ret And calc_Target_横()
-        End If
+
         If Not isValid計算_高さ OrElse Not isNear(p_d内側_高さ, _d高さ_目標) Then
             ret = ret And calc_Target_高さ()
         End If
@@ -1201,6 +1230,33 @@ Class clsCalcMesh
             .Value("f_i縦ひもの本数") = n縦ひもの本数
             .Value("f_dひとつのすき間の寸法") = dひとつのすき間の寸法
             .Value("f_b始末ひも区分") = True
+        End With
+
+        Return True
+    End Function
+
+    '横寸法から縦ひも(横寸法優先)(底楕円が設定されていればその分マイナス)
+    Private Function calc_Target_縦_放射状()
+        Dim d周 As Double = _d横_目標 * Math.PI
+        Dim max_count As Double = (d周 / _d基本のひも幅 / 2) - _i垂直ひも数_楕円
+        If max_count <= 1 Then
+            '横寸法が小さすぎるため縦ひもを置けません。
+            p_sメッセージ = My.Resources.CalcNoShortWidth
+            Return False
+        End If
+
+        '1/2値を4の倍数にする
+        Dim n縦ひもの本数 As Integer = Math.Round((max_count / 2) / 4) * 4
+
+        Dim d縦横の周 As Double = (_d横_目標 - _d径の合計 * 2) * Math.PI
+        Dim dひとつのすき間の寸法 As Double = (d縦横の周 / n縦ひもの本数 / 2) - _d基本のひも幅
+
+        '***結果をセット
+        With _Data.p_row底_縦横
+            '縦ひも
+            .Value("f_i縦ひも") = _I基本のひも幅
+            .Value("f_i縦ひもの本数") = n縦ひもの本数
+            .Value("f_dひとつのすき間の寸法") = dひとつのすき間の寸法
         End With
 
         Return True
@@ -1430,6 +1486,7 @@ Class clsCalcMesh
     'OUT:  _d径の合計    _i垂直ひも数_楕円  _d底の周
     Private Function calc_底楕円(ByVal category As CalcCategory, ByVal row As tbl底_楕円Row, ByVal dataPropertyName As String) As Boolean
         If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            '輪弧は対象外
             _d底の周 = _d縦横の垂直ひも間の周
             _d径の合計 = 0
             _i垂直ひも数_楕円 = 0
@@ -1640,6 +1697,7 @@ Class clsCalcMesh
         row.f_d周長 = d円弧長 + _d縦横の垂直ひも間の周 + d楕円底周の加算
         row.f_d円弧部分長 = d円弧長 / 4
 
+        Dim d差しひもの幅 As Double = _d基本のひも幅
         If row.f_b差しひも区分 Then
             '差しひも
             row.f_i差しひも累計 = prv.f_i差しひも累計 + row.f_i差しひも本数
@@ -1648,6 +1706,7 @@ Class clsCalcMesh
                 + _d最上と最下の短いひもの幅 _
                 + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
             lastNum差しひも = row.f_i番号
+            d差しひもの幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
 
         Else
             '編みひも
@@ -1671,13 +1730,15 @@ Class clsCalcMesh
         If i角の差しひも数 = 0 Then
             row.Setf_d差しひも間のすき間Null()
         Else
-            row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))) / (i角の差しひも数 + 1)
+            row.f_d差しひも間のすき間 = (row.f_d円弧部分長 - (i角の差しひも数 * d差しひもの幅)) / (i角の差しひも数 + 1)
         End If
         Return True
     End Function
     '[放射状]個別セット後に、先レコードの結果を積み上げ
     Private Function set_row底楕円_2回目_放射状(ByVal d楕円底円弧の半径加算 As Double, ByVal d楕円底周の加算 As Double,
                                     ByVal row As tbl底_楕円Row, ByVal prv As tbl底_楕円Row, ByRef lastNum差しひも As Integer) As Boolean
+
+        Dim n角の数 As Integer = _i縦ひもの本数 * 2
         Dim d円弧長 As Double = 0
         Dim d角あたり差しひも数 As Double
         '最初のレコード
@@ -1689,20 +1750,19 @@ Class clsCalcMesh
             End If
             d円弧長 = 2 * Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算)
             row.f_d周長 = d円弧長 + d楕円底周の加算
-            row.f_d円弧部分長 = (d円弧長 / _i縦ひもの本数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
+            row.f_d円弧部分長 = (d円弧長 / n角の数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
 
             If row.f_b差しひも区分 Then
                 '差しひも
                 row.f_i差しひも累計 = row.f_i差しひも本数
-                d角あたり差しひも数 = row.f_i差しひも累計 / _i縦ひもの本数
+                d角あたり差しひも数 = row.f_i差しひも累計 / n角の数
                 If d角あたり差しひも数 = 0 Then
                     row.Setf_d差しひも間のすき間Null()
                 Else
                     row.f_d差しひも間のすき間 = row.f_d円弧部分長 - (d角あたり差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))
                 End If
-                'ひも長は底部分のみをセット
-                row.f_dひも長 = _d径の合計 _
-                    + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+                'ひも長は底部分のみ、ひも幅補正なし
+                row.f_dひも長 = _d径の合計
                 lastNum差しひも = row.f_i番号
             Else
                 '編みひも
@@ -1735,15 +1795,16 @@ Class clsCalcMesh
         End If
         d円弧長 = 2 * Math.PI * (row.f_d径の累計 + d楕円底円弧の半径加算)
         row.f_d周長 = d円弧長 + d楕円底周の加算
-        row.f_d円弧部分長 = (d円弧長 / _i縦ひもの本数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
+        row.f_d円弧部分長 = (d円弧長 / n角の数) - g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
 
+        Dim d差しひもの幅 As Double = _d基本のひも幅
         If row.f_b差しひも区分 Then
             '差しひも
             row.f_i差しひも累計 = prv.f_i差しひも累計 + row.f_i差しひも本数
-            'ひも長は底部分のみをセット
-            row.f_dひも長 = compute指定以降の径の合計(lastNum差しひも) _
-                + g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+            'ひも長は底部分のみ、ひも幅補正なし
+            row.f_dひも長 = compute指定以降の径の合計(lastNum差しひも)
             lastNum差しひも = row.f_i番号
+            d差しひもの幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
 
         Else
             '編みひも
@@ -1763,11 +1824,11 @@ Class clsCalcMesh
             End If
         End If '2番目以降のレコード
 
-        d角あたり差しひも数 = row.f_i差しひも累計 / _i縦ひもの本数
+        d角あたり差しひも数 = row.f_i差しひも累計 / n角の数
         If d角あたり差しひも数 = 0 Then
             row.Setf_d差しひも間のすき間Null()
         Else
-            row.f_d差しひも間のすき間 = row.f_d円弧部分長 - (d角あたり差しひも数 * g_clsSelectBasics.p_d指定本幅(row.f_i何本幅))
+            row.f_d差しひも間のすき間 = row.f_d円弧部分長 - (d角あたり差しひも数 * d差しひもの幅)
         End If
         Return True
     End Function
@@ -2129,12 +2190,13 @@ Class clsCalcMesh
     End Function
 
     '集計値更新
+    'OUT:   _d縦横の垂直ひも間の周,_d縦横の縦,_d縦横の横
     Function calc_集計値(ByVal is横展開 As Boolean, ByVal is縦展開 As Boolean) As Boolean
         '放射状に置く場合
         If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
             Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
-            _d縦横の垂直ひも間の周 = _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
+            _d縦横の垂直ひも間の周 = 2 * _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
             If _d縦横の垂直ひも間の周 < 0 Then
                 _d縦横の縦 = 0
                 _d縦横の横 = 0

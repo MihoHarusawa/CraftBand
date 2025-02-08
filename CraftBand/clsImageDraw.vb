@@ -884,25 +884,30 @@ Public Class CImageDraw
                 Return True
 
             Else
-                _Graphic.DrawEllipse(colset.PenBand, rect)
+                If colset.PenBand IsNot Nothing Then
+                    _Graphic.DrawEllipse(colset.PenBand, rect)
+                End If
                 '塗りつぶし幅の指定があれば
                 If 0 < item.m_dひも幅 Then
                     '内側を塗りつぶす
                     Dim r内側 As New S領域(r外接)
-                    r内側.enLarge(-item.m_dひも幅)
-                    If r内側.x幅 = 0 OrElse r内側.y高さ = 0 Then
-                        '円を塗りつぶす
-                        _Graphic.FillEllipse(colset.BrushAlfa, rect)
-                    Else
-                        'ドーナツ
-                        Dim path As New GraphicsPath()
-                        path.AddEllipse(rect)
-                        Dim inner As RectangleF = pixcel_rectangle(r内側)
-                        path.AddEllipse(inner)
-                        _Graphic.FillPath(colset.BrushAlfa, path)
+                    If colset.BrushAlfa IsNot Nothing Then
+                        r内側.enLarge(-item.m_dひも幅)
+                        If r内側.x幅 = 0 OrElse r内側.y高さ = 0 Then
+                            '円を塗りつぶす
+                            _Graphic.FillEllipse(colset.BrushAlfa, rect)
+                        Else
+                            'ドーナツ
+                            Dim path As New GraphicsPath()
+                            path.AddEllipse(rect)
+                            Dim inner As RectangleF = pixcel_rectangle(r内側)
+                            path.AddEllipse(inner)
+                            _Graphic.FillPath(colset.BrushAlfa, path)
+                        End If
+
                     End If
                     '複数周
-                    If 1 < laps Then
+                    If 1 < laps AndAlso colset.PenLane IsNot Nothing Then
                         r内側 = New S領域(r外接)
                         Dim dlap As Double = item.m_dひも幅 / laps
                         For i As Integer = 1 To laps - 1
@@ -938,23 +943,27 @@ Public Class CImageDraw
 
             Else
                 '楕円底
-                _Graphic.DrawPath(colset.PenBand, path)
+                If colset.PenBand IsNot Nothing Then
+                    _Graphic.DrawPath(colset.PenBand, path)
+                End If
 
                 '塗りつぶし幅の指定があれば
                 If 0 < item.m_dひも幅 Then
                     Dim r内サイズ As New S領域(rサイズ)
-                    r内サイズ.enLarge(-item.m_dひも幅)
-                    '幅分小さい楕円
-                    Dim inner As GraphicsPath = getpath(item.m_a四隅, r内サイズ)
-                    '塗りつぶし
-                    Dim clipregion As New Region(path)
-                    clipregion.Exclude(inner)
-                    _Graphic.SetClip(clipregion, CombineMode.Replace)
-                    _Graphic.FillPath(colset.BrushAlfa, path)
-                    _Graphic.ResetClip()
+                    If colset.BrushAlfa IsNot Nothing Then
+                        r内サイズ.enLarge(-item.m_dひも幅)
+                        '幅分小さい楕円
+                        Dim inner As GraphicsPath = getpath(item.m_a四隅, r内サイズ)
+                        '塗りつぶし
+                        Dim clipregion As New Region(path)
+                        clipregion.Exclude(inner)
+                        _Graphic.SetClip(clipregion, CombineMode.Replace)
+                        _Graphic.FillPath(colset.BrushAlfa, path)
+                        _Graphic.ResetClip()
+                    End If
 
                     '複数周
-                    If 1 < laps Then
+                    If 1 < laps AndAlso colset.PenLane IsNot Nothing Then
                         r内サイズ = New S領域(rサイズ)
                         Dim dlap As Double = item.m_dひも幅 / laps
                         For i As Integer = 1 To laps - 1

@@ -1301,12 +1301,12 @@ Public Class frmMain
     End Sub
 #End Region
 
-#Region "配置タイプと縦横展開"
 
-    '配置タイプ                  [底(楕円)][側面][底(輪弧)][横ひも][縦ひも][プレビュー]   楕円底個別設定OFF値
-    '　直角に交差(横ひも・縦ひも)    〇       〇      －    展開時  展開時    指定有        バンドの種類参照
-    '　放射状に置く(縦ひも)          〇       〇      －    展開時    －      指定有        ともにゼロ
-    '　輪弧に置く(縦ひも)            －       －      〇    展開時    －      指定無         －
+    '配置タイプ                  [底(楕円)][底(輪弧)][横ひも][縦ひも][プレビュー]   楕円底個別設定OFF値
+    '　直角に交差(横ひも・縦ひも)    〇         －    展開時  展開時    指定有        バンドの種類参照
+    '　放射状に置く(縦ひも)          〇         －    展開時    －      指定有        ともにゼロ
+    '　輪弧に置く(縦ひも)            －         〇    展開時    －      指定無         －
+#Region "配置タイプと縦横展開"
 
     Private Sub cmb配置タイプ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb配置タイプ.SelectedIndexChanged
         If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
@@ -1339,14 +1339,12 @@ Public Class frmMain
 
             rad右上.Visible = False
             rad全体.Visible = False
-            chk側面.Visible = False
         Else
             grp縦置き.Enabled = True
             btn概算.Enabled = True
 
             rad右上.Visible = True
             rad全体.Visible = True
-            chk側面.Visible = True
         End If
 
         set底の縦横展開(chk縦横を展開する.Checked)
@@ -1391,9 +1389,6 @@ Public Class frmMain
             If TabControl.TabPages.Contains(tpage底楕円) Then
                 TabControl.TabPages.Remove(tpage底楕円)
             End If
-            If TabControl.TabPages.Contains(tpage側面) Then
-                TabControl.TabPages.Remove(tpage側面)
-            End If
             'Add
             If Not TabControl.TabPages.Contains(tpage輪弧) Then
                 TabControl.TabPages.Insert(1, tpage輪弧)
@@ -1404,9 +1399,6 @@ Public Class frmMain
                 TabControl.TabPages.Remove(tpage輪弧)
             End If
             'Add
-            If Not TabControl.TabPages.Contains(tpage側面) Then
-                TabControl.TabPages.Insert(1, tpage側面)
-            End If
             If Not TabControl.TabPages.Contains(tpage底楕円) Then
                 TabControl.TabPages.Insert(1, tpage底楕円)
             End If
