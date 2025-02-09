@@ -475,6 +475,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        '''</summary>
+        Friend ReadOnly Property rinko() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("rinko", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String

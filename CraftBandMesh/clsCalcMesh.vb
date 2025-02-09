@@ -1,8 +1,10 @@
 ﻿
 
+Imports System.IO
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
@@ -79,11 +81,11 @@ Class clsCalcMesh
     Private Property _d厚さの最大値 As Double '厚さの最大値,ゼロ以上
 
     '輪弧のみ
-    Private Property _dひもの長さ寸法 As Double
-    Private Property _d内円の直径 As Double
-    Private Property _i連続数1 As Integer
-    Private Property _i連続数2 As Integer
-    Private Property _b下上 As Boolean
+    Private Property _d底部分の径 As Double '設定
+    Private Property _d内円の半径 As Double '設定
+    Private Property _i連続数1 As Integer '設定
+    Private Property _i連続数2 As Integer '設定
+    Private Property _d高さの縦ひも長 As Integer '計算
 
 
     '※ここまでの各、個別集計値については、CalcSizeで正しく得られること。
@@ -133,11 +135,11 @@ Class clsCalcMesh
         __tbl縦展開.Clear()
 
         '輪弧のみ
-        _dひもの長さ寸法 = 0
-        _d内円の直径 = 0
+        _d底部分の径 = 0
+        _d内円の半径 = 0
         _i連続数1 = 0
         _i連続数2 = 0
-        _b下上 = False
+        _d高さの縦ひも長 = 0
 
     End Sub
 
@@ -621,6 +623,7 @@ Class clsCalcMesh
                 ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
                 ret = ret And calc_側面(category, Nothing, Nothing)
+                ret = ret And adjust_縦ひも()
 
             Case CalcCategory.GapFit     '横寸法に合わせる
                 set_底の縦横()  '念のため
@@ -761,11 +764,10 @@ Class clsCalcMesh
             ElseIf .Value("f_i織りタイプ") = enum配置タイプ.i_輪弧 Then
                 _enum配置タイプ = enum配置タイプ.i_輪弧
                 '輪弧のみ
-                _dひもの長さ寸法 = .Value("f_d左端右端の目")
-                _d内円の直径 = .Value("f_d左端右端の目2")
+                _d底部分の径 = .Value("f_d左端右端の目")
+                _d内円の半径 = .Value("f_d左端右端の目2")
                 _i連続数1 = .Value("f_i左から何番目")
                 _i連続数2 = .Value("f_i左から何番目2")
-                _b下上 = .Value("f_bひも上下1回区分")
             Else
                 _enum配置タイプ = enum配置タイプ.i_縦横
             End If
@@ -874,15 +876,15 @@ Class clsCalcMesh
             Return False
         End If
 
-        If _dひもの長さ寸法 < _d基本のひも幅 Then
+        If _d底部分の径 < g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) Then
             '{0} の値 {1} を増やしてください。
-            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, textひもの長さ寸法(), _dひもの長さ寸法)
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text底部分の径(), _d底部分の径)
             Return False
         End If
 
-        If _d内円の直径 < _d基本のひも幅 Then
+        If _d内円の半径 < _d基本のひも幅 Then
             '{0} の値 {1} を増やしてください。
-            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text内円の径(), _d内円の直径)
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text内円の半径(), _d内円の半径)
             Return False
         End If
 
@@ -1580,10 +1582,10 @@ Class clsCalcMesh
     'OUT:  _d径の合計    _i垂直ひも数_楕円  _d底の周
     Private Function calc_底楕円(ByVal category As CalcCategory, ByVal row As tbl底_楕円Row, ByVal dataPropertyName As String) As Boolean
         If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
-            '輪弧は対象外
-            _d底の周 = _d縦横の垂直ひも間の周
-            _d径の合計 = 0
+            '輪弧は固定値
+            _d径の合計 = _d底部分の径
             _i垂直ひも数_楕円 = 0
+            _d底の周 = (_d内円の半径 + _d底部分の径) * 2 * Math.PI
             Return True
         End If
 
@@ -2087,6 +2089,19 @@ Class clsCalcMesh
             _d周の最小値 = obj5
         End If
 
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            '高さが確定したので計算可能になった
+            Dim c高さの円 As New S円(_d内円の半径 + _d径の合計 + _d高さの合計)
+            Dim fn As New S直線式(0, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) / 2)
+            Dim ary() As S実座標 = c高さの円.ary直線との交点(fn)
+            If ary Is Nothing OrElse ary.Count < 2 Then
+                _d高さの縦ひも長 = 0
+            Else
+                _d高さの縦ひも長 = New S線分(ary(0), ary(1)).Length
+            End If
+
+        End If
+
         ret = ret And recalc_側面_高さ比率()
         Return ret
     End Function
@@ -2283,11 +2298,11 @@ Class clsCalcMesh
         Return calc_集計値(True, True)
     End Function
 
-    '集計値更新
+    '集計値更新(縦横部分)
     'OUT:   _d縦横の垂直ひも間の周,_d縦横の縦,_d縦横の横
     Function calc_集計値(ByVal is横展開 As Boolean, ByVal is縦展開 As Boolean) As Boolean
-        '放射状に置く場合
         If _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            '放射状に置く場合
             '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
             Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
             _d縦横の垂直ひも間の周 = 2 * _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
@@ -2300,31 +2315,40 @@ Class clsCalcMesh
                 _d縦横の横 = _d縦横の縦
                 Return True
             End If
+
         ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
-            'TODO:
+            '輪弧に置く場合は、専用の設定値
+            _d縦横の縦 = _d内円の半径 * 2
+            _d縦横の横 = _d内円の半径 * 2
+            _d縦横の垂直ひも間の周 = _d内円の半径 * 2 * Math.PI
+            Return True
 
-        End If
-
-        '縦横に置く場合
-        If is横展開 Then
-            _d縦横の縦 = 0
-            Dim obj As Object = __tbl横展開.Compute("SUM(f_d幅)", Nothing)
-            If Not IsDBNull(obj) AndAlso 0 < obj Then
-                _d縦横の縦 = obj
+        ElseIf _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            '縦横に置く場合
+            If is横展開 Then
+                _d縦横の縦 = 0
+                Dim obj As Object = __tbl横展開.Compute("SUM(f_d幅)", Nothing)
+                If Not IsDBNull(obj) AndAlso 0 < obj Then
+                    _d縦横の縦 = obj
+                End If
             End If
-        End If
 
-        If is縦展開 Then
-            _d縦横の横 = 0
-            Dim obj As Object = __tbl縦展開.Compute("SUM(f_d幅)", Nothing)
-            If Not IsDBNull(obj) AndAlso 0 < obj Then
-                _d縦横の横 = obj
+            If is縦展開 Then
+                _d縦横の横 = 0
+                Dim obj As Object = __tbl縦展開.Compute("SUM(f_d幅)", Nothing)
+                If Not IsDBNull(obj) AndAlso 0 < obj Then
+                    _d縦横の横 = obj
+                End If
             End If
-        End If
 
-        _d縦横の垂直ひも間の周 = _d縦横の横 * 2 +
-                                (_d縦横の縦 - (2 * _d最上と最下の短いひもの幅)) * 2
-        Return True
+            _d縦横の垂直ひも間の周 = _d縦横の横 * 2 +
+                                    (_d縦横の縦 - (2 * _d最上と最下の短いひもの幅)) * 2
+
+            Return True
+
+        Else
+            Return False
+        End If
     End Function
 
 #Region "横"
@@ -2725,7 +2749,7 @@ Class clsCalcMesh
 
     '縦ひもの指定レコードの幅と長さをセット
     'Ref:   _dひとつのすき間の寸法,_d垂直ひも長加算,_i縦ひもの本数
-    'IN:    _d縦横の縦,_d径の合計,_d垂直ひも長合計,_d縦横の横(クロス値)
+    'IN:    _d縦横の縦,_d径の合計,_d垂直ひも長合計,_d縦横の横(クロス値),_d高さの縦ひも長(輪弧)
     'OUT:   各レコードのf_d幅,f_d長さ,f_dひも長,f_d出力ひも長
     Function adjust_縦ひも(ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
         If Not String.IsNullOrEmpty(dataPropertyName) Then
@@ -2739,6 +2763,7 @@ Class clsCalcMesh
         'f_d幅   :領域の幅(f_i何本幅分+ひもの右に加えるすき間)　→　この合計が_d縦横の横
         '        :(num配置タイプ.i_放射状.i_輪弧 →角度 　合計なし)
         'f_d長さ :_d縦横の縦
+        '        :(num配置タイプ.i_輪弧 _d高さの縦ひも長)
         'f_dひも長:(縦ひも)_d縦横の縦 + 2*(底と高さ分の長さ)
         'f_d出力ひも長:f_dひも長 + f_dひも長加算 + f_dひも長加算2
         '
@@ -2748,20 +2773,20 @@ Class clsCalcMesh
 
         row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
         If row.f_iひも種 = enumひも種.i_縦 Then
-            If _enum配置タイプ = enum配置タイプ.i_放射状 Then
-                '角度:(180－α)～ゼロ
-                row.f_d幅 = 180 - (180 / _i縦ひもの本数) * row.f_iひも番号
-            ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
                 '角度:180－α～ゼロ～-180
                 row.f_d幅 = 180 - (360 / _i縦ひもの本数) * row.f_iひも番号
-                row.f_d長さ = _d内円の直径
-                row.f_dひも長 = _dひもの長さ寸法 + 2 * (_d垂直ひも長加算)
+                row.f_d長さ = _d高さの縦ひも長   '高さで算出しているので、垂直ひも長分を加える
+                row.f_dひも長 = _d高さの縦ひも長 + 2 * ((_d垂直ひも長合計 - _d高さの合計) + _d垂直ひも長加算)
                 row.f_dVal2 = (row.f_dひも長 / 2) + row.f_dひも長加算2
                 row.f_dVal3 = (row.f_dひも長 / 2) + row.f_dひも長加算
                 row.f_d出力ひも長 = row.f_dVal2 + row.f_dVal3
                 Return True
 
-            Else
+            ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+                '角度:(180－α)～ゼロ
+                row.f_d幅 = 180 - (180 / _i縦ひもの本数) * row.f_iひも番号
+            Else 'enum配置タイプ.i_縦横
                 If row.f_iひも番号 = _i縦ひもの本数 Then
                     row.f_d幅 = row.f_dVal1
                 Else
@@ -3119,8 +3144,7 @@ Class clsCalcMesh
         End If
 
         '***側面
-        If 0 < _Data.p_tbl側面.Rows.Count AndAlso
-            _enum配置タイプ <> enum配置タイプ.i_輪弧 Then
+        If 0 < _Data.p_tbl側面.Rows.Count Then
             row = output.NextNewRow
             row.f_sカテゴリー = text側面()
             row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
@@ -3386,12 +3410,12 @@ Class clsCalcMesh
         Return _frmMain.lbl縦ひもの本数.Text
     End Function
 
-    Private Function textひもの長さ寸法() As String
-        Return _frmMain.lblひもの長さ寸法.Text
+    Private Function text底部分の径() As String
+        Return _frmMain.lbl底部分の径.Text
     End Function
 
-    Private Function text内円の径() As String
-        Return _frmMain.lbl内円の径.Text
+    Private Function text内円の半径() As String
+        Return _frmMain.lbl内円の半径.Text
     End Function
 
     Private Function text上下の連続数() As String

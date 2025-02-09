@@ -773,8 +773,13 @@ Public Class CImageDraw
     End Function
 
     Function draw全体枠(ByVal item As clsImageItem) As Boolean
-        Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        _Graphic.DrawLines(_Pen_black_dot, points)
+        If item.m_is円 Then
+            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
+            _Graphic.DrawEllipse(_Pen_black_thin, rect)
+        Else
+            Dim points() As PointF = pixcel_lines(item.m_a四隅)
+            _Graphic.DrawLines(_Pen_black_dot, points)
+        End If
         Return True
     End Function
 

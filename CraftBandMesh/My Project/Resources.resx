@@ -117,165 +117,169 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AskAbandanCurrentWork" xml:space="preserve">
-    <value>編集中のデータを破棄してよろしいですか？</value>
-    <comment>frmMain</comment>
+  <data name="CalcNoShortWidth" xml:space="preserve">
+    <value>横寸法が小さすぎるため縦ひもを置けません。</value>
   </data>
-  <data name="AskOutput" xml:space="preserve">
-    <value>このままリスト出力を行いますか？</value>
-    <comment>frmMain</comment>
+  <data name="CalcNoCircle" xml:space="preserve">
+    <value>円形のため横寸法と縦寸法は同じになります。</value>
   </data>
   <data name="AskResetAddLengthColor" xml:space="preserve">
     <value>ひも長加算と色をすべてクリアします。よろしいですか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="AskResetInput" xml:space="preserve">
-    <value>目標寸法以外をリセットします。よろしいですか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="AskSaveCurrentWork" xml:space="preserve">
-    <value>編集中のデータを保存しますか？</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="CalcBadRecord" xml:space="preserve">
-    <value>無効レコード(番号={0})</value>
-  </data>
-  <data name="CalcCannotReduce" xml:space="preserve">
-    <value>編みかた'{0}'の周数を減らすことができません。</value>
-  </data>
-  <data name="CalcCircleOver" xml:space="preserve">
-    <value>縦ひもとすき間による円({0:F1})が横寸法以上になっています。</value>
-  </data>
-  <data name="CalcConfirmHight" xml:space="preserve">
-    <value>入力されている編みかたの周数を調整します。よろしいですか？</value>
-  </data>
-  <data name="CalcConfirmOval" xml:space="preserve">
-    <value>[底(楕円)]の最初の編みかたの周数を調整します。よろしいですか？</value>
-  </data>
-  <data name="CalcConfirmPattern" xml:space="preserve">
-    <value>最初に見つかった編みかた(指定する場合は1周セット)で周数を調整します。よろしいですか？</value>
-  </data>
-  <data name="CalcConfirmRecalc" xml:space="preserve">
-    <value>底の縦横を目標に基づき再計算します。よろしいですか？</value>
-  </data>
-  <data name="CalcConfirmRecalcDiameter" xml:space="preserve">
-    <value>底の縦横を目標および底(楕円)の径に基づき再計算します。よろしいですか？</value>
-  </data>
-  <data name="CalcHeightOver" xml:space="preserve">
-    <value>底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。</value>
-  </data>
-  <data name="CalcMsgTopBottomBand" xml:space="preserve">
-    <value>{0}は [{1}] で変更してください。</value>
-  </data>
-  <data name="CalcNoAddNumber" xml:space="preserve">
-    <value>{0}追加用の番号がとれません。</value>
-  </data>
-  <data name="CalcNoBaseBandSet" xml:space="preserve">
-    <value>基本のひも幅を設定してください。</value>
-  </data>
-  <data name="CalcNoChangeVert" xml:space="preserve">
-    <value>横寸法のサイズになっています。縦横の寸法は同じになります。</value>
-  </data>
-  <data name="CalcNoCircle" xml:space="preserve">
-    <value>円形のため横寸法と縦寸法は同じになります。</value>
-  </data>
-  <data name="CalcNoDefCategory" xml:space="preserve">
-    <value>未定義のカテゴリー'{0}'が参照されました。</value>
-  </data>
-  <data name="CalcNoInformation" xml:space="preserve">
-    <value>処理に必要な情報がありません。</value>
-  </data>
-  <data name="CalcNoMaster" xml:space="preserve">
-    <value>{0}'{1}'は登録されていません。</value>
+  <data name="CalcOutTurn" xml:space="preserve">
+    <value>折り返し</value>
   </data>
   <data name="CalcNoMasterPattern" xml:space="preserve">
     <value>{0}の番号{1}で設定にない編みかた名'{2}'(ひも番号{3})が参照されています。</value>
   </data>
-  <data name="CalcNoMoreChange" xml:space="preserve">
-    <value>ほぼ目標のサイズになっています。やり直す場合はリセットしてください。</value>
+  <data name="CalcCircleOver" xml:space="preserve">
+    <value>縦ひもとすき間による円({0:F1})が横寸法以上になっています。</value>
   </data>
-  <data name="CalcNoPatternRecord" xml:space="preserve">
-    <value>編みかたが設定されていないため高さを算出できません。</value>
-  </data>
-  <data name="CalcNoSelect" xml:space="preserve">
-    <value>{0}を指定してください。</value>
-  </data>
-  <data name="CalcNoShortWidth" xml:space="preserve">
-    <value>横寸法が小さすぎるため縦ひもを置けません。</value>
-  </data>
-  <data name="CalcNoSpaceHeight" xml:space="preserve">
-    <value>縦ひも間のすき間が最小間隔より小さくなっています。</value>
-  </data>
-  <data name="CalcNoTargetSet" xml:space="preserve">
-    <value>目標とする縦寸法・横寸法・高さ寸法を設定してください。</value>
-  </data>
-  <data name="CalcNoTargetWidth" xml:space="preserve">
-    <value>横寸法が指定されていないため、すき間の寸法を計算できません。</value>
-  </data>
-  <data name="CalcOutAverageMesh" xml:space="preserve">
-    <value>目の平均</value>
-  </data>
-  <data name="CalcOutTurn" xml:space="preserve">
-    <value>折り返し</value>
-  </data>
-  <data name="CalcSetHorizontal" xml:space="preserve">
-    <value>{0}を指定するのであれば{1}をセットしてください。</value>
-  </data>
-  <data name="CalcSetOvalPattern" xml:space="preserve">
-    <value>すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。</value>
+  <data name="CalcNoDefCategory" xml:space="preserve">
+    <value>未定義のカテゴリー'{0}'が参照されました。</value>
   </data>
   <data name="CalcTooShortHeight" xml:space="preserve">
     <value>縦寸法が小さすぎるため横ひもを置けません。</value>
   </data>
+  <data name="ExpandingWidthText" xml:space="preserve">
+    <value>角度,放射状に配置する角度</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="LOG_LaneModified" xml:space="preserve">
+    <value>本幅数の修正</value>
+  </data>
+  <data name="AskAbandanCurrentWork" xml:space="preserve">
+    <value>編集中のデータを破棄してよろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcNoInformation" xml:space="preserve">
+    <value>処理に必要な情報がありません。</value>
+  </data>
+  <data name="TitleDllError" xml:space="preserve">
+    <value>DLLエラー</value>
+    <comment>mdlMain</comment>
+  </data>
+  <data name="CalcConfirmRecalcDiameter" xml:space="preserve">
+    <value>底の縦横を目標および底(楕円)の径に基づき再計算します。よろしいですか？</value>
+  </data>
   <data name="CalcTooSmallValue" xml:space="preserve">
     <value>{0} の値 {1} を増やしてください。</value>
   </data>
-  <data name="CalcWidthOver" xml:space="preserve">
-    <value>底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。</value>
+  <data name="CalcNoBaseBandSet" xml:space="preserve">
+    <value>基本のひも幅を設定してください。</value>
+  </data>
+  <data name="CalcConfirmOval" xml:space="preserve">
+    <value>[底(楕円)]の最初の編みかたの周数を調整します。よろしいですか？</value>
+  </data>
+  <data name="CalcNoMaster" xml:space="preserve">
+    <value>{0}'{1}'は登録されていません。</value>
+  </data>
+  <data name="CalcNoChangeVert" xml:space="preserve">
+    <value>横寸法のサイズになっています。縦横の寸法は同じになります。</value>
+  </data>
+  <data name="FormCaption" xml:space="preserve">
+    <value>四角底と楕円底 {0}</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcConfirmPattern" xml:space="preserve">
+    <value>最初に見つかった編みかた(指定する場合は1周セット)で周数を調整します。よろしいですか？</value>
+  </data>
+  <data name="CalcNoMoreChange" xml:space="preserve">
+    <value>ほぼ目標のサイズになっています。やり直す場合はリセットしてください。</value>
+  </data>
+  <data name="CalcNoSpaceHeight" xml:space="preserve">
+    <value>縦ひも間のすき間が最小間隔より小さくなっています。</value>
+  </data>
+  <data name="CalcSetHorizontal" xml:space="preserve">
+    <value>{0}を指定するのであれば{1}をセットしてください。</value>
+  </data>
+  <data name="CaptionExpand8To21" xml:space="preserve">
+    <value>上,下</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CaptionExpand4To6" xml:space="preserve">
+    <value>左,右</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcConfirmHight" xml:space="preserve">
+    <value>入力されている編みかたの周数を調整します。よろしいですか？</value>
+  </data>
+  <data name="CalcCannotReduce" xml:space="preserve">
+    <value>編みかた'{0}'の周数を減らすことができません。</value>
+  </data>
+  <data name="CalcNoAddNumber" xml:space="preserve">
+    <value>{0}追加用の番号がとれません。</value>
+  </data>
+  <data name="CalcMsgTopBottomBand" xml:space="preserve">
+    <value>{0}は [{1}] で変更してください。</value>
   </data>
   <data name="CalcZeroPatternHeight" xml:space="preserve">
     <value>編みかた'{0}'の設定を確認してください。</value>
   </data>
-  <data name="CaptionExpand4To6" xml:space="preserve">
-    <value>左,右</value>
+  <data name="CalcBadRecord" xml:space="preserve">
+    <value>無効レコード(番号={0})</value>
+  </data>
+  <data name="CalcNoTargetSet" xml:space="preserve">
+    <value>目標とする縦寸法・横寸法・高さ寸法を設定してください。</value>
+  </data>
+  <data name="CalcNoSelect" xml:space="preserve">
+    <value>{0}を指定してください。</value>
+  </data>
+  <data name="WarningWidthPrime" xml:space="preserve">
+    <value>すき間を横寸法に合わせることができません。</value>
     <comment>frmMain</comment>
   </data>
   <data name="CaptionExpand4To61" xml:space="preserve">
     <value>左,右</value>
     <comment>frmMain</comment>
   </data>
-  <data name="CaptionExpand8To2" xml:space="preserve">
-    <value>上,下</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="CaptionExpand8To21" xml:space="preserve">
-    <value>上,下</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="ExpandingWidthText" xml:space="preserve">
-    <value>角度,放射状に配置する角度</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="FormCaption" xml:space="preserve">
-    <value>四角底と楕円底 {0}</value>
-    <comment>frmMain</comment>
-  </data>
-  <data name="LOG_ColorModified" xml:space="preserve">
-    <value>色の修正</value>
-  </data>
-  <data name="LOG_LaneModified" xml:space="preserve">
-    <value>本幅数の修正</value>
-  </data>
-  <data name="TitleDllError" xml:space="preserve">
-    <value>DLLエラー</value>
-    <comment>mdlMain</comment>
-  </data>
   <data name="TitleException" xml:space="preserve">
     <value>例外発生</value>
     <comment>mdlMain</comment>
   </data>
-  <data name="WarningWidthPrime" xml:space="preserve">
-    <value>すき間を横寸法に合わせることができません。</value>
+  <data name="CaptionExpand8To2" xml:space="preserve">
+    <value>上,下</value>
     <comment>frmMain</comment>
+  </data>
+  <data name="AskResetInput" xml:space="preserve">
+    <value>目標寸法以外をリセットします。よろしいですか？</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcSetOvalPattern" xml:space="preserve">
+    <value>すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。</value>
+  </data>
+  <data name="CalcHeightOver" xml:space="preserve">
+    <value>底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。</value>
+  </data>
+  <data name="CalcConfirmRecalc" xml:space="preserve">
+    <value>底の縦横を目標に基づき再計算します。よろしいですか？</value>
+  </data>
+  <data name="CalcOutAverageMesh" xml:space="preserve">
+    <value>目の平均</value>
+  </data>
+  <data name="LOG_ColorModified" xml:space="preserve">
+    <value>色の修正</value>
+  </data>
+  <data name="AskOutput" xml:space="preserve">
+    <value>このままリスト出力を行いますか？</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcNoTargetWidth" xml:space="preserve">
+    <value>横寸法が指定されていないため、すき間の寸法を計算できません。</value>
+  </data>
+  <data name="AskSaveCurrentWork" xml:space="preserve">
+    <value>編集中のデータを保存しますか？</value>
+    <comment>frmMain</comment>
+  </data>
+  <data name="CalcNoPatternRecord" xml:space="preserve">
+    <value>編みかたが設定されていないため高さを算出できません。</value>
+  </data>
+  <data name="CalcWidthOver" xml:space="preserve">
+    <value>底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="rinko" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rinko.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

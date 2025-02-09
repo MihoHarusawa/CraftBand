@@ -1146,6 +1146,87 @@ Public Class clsImageItem
             End If
         End Function
     End Structure
+
+    Structure S円
+        Public p中心 As S実座標
+        Public d半径 As Double
+
+        Sub New(ByVal p As S実座標, ByVal d As Double)
+            p中心 = p
+            d半径 = Abs(d)
+        End Sub
+
+        Sub New(ByVal d As Double)
+            p中心 = pOrigin
+            d半径 = Abs(d)
+        End Sub
+
+        Function ary直線との交点(fn As S直線式) As S実座標()
+            Dim points As New List(Of S実座標)
+            Dim rx As Double = p中心.X
+            Dim ry As Double = p中心.Y
+
+            If fn.is90 Then
+                ' 垂直線 x = b
+                Dim c As Double = fn.b
+                Dim d As Double = d半径 * d半径 - (c - rx) * (c - rx) ' 判別式
+
+                If d < 0 Then
+                    ' 交点なし
+                ElseIf d = 0 Then
+                    ' 接点
+                    Dim y As Double = ry
+                    points.Add(New S実座標(c, y))
+                Else
+                    ' 交点2つ
+                    Dim sqrtD As Double = Math.Sqrt(d)
+                    points.Add(New S実座標(c, ry + sqrtD))
+                    points.Add(New S実座標(c, ry - sqrtD))
+                End If
+            Else
+                ' 一般的な直線 y = ax + b
+                Dim a1 As Double = 1 + fn.a * fn.a
+                Dim b1 As Double = -2 * rx + 2 * fn.a * (fn.b - ry)
+                Dim c1 As Double = rx * rx + (fn.b - ry) * (fn.b - ry) - d半径 * d半径
+
+                Dim d1 As Double = b1 * b1 - 4 * a1 * c1 ' 判別式
+
+                If d1 < 0 Then
+                    ' 交点なし
+                ElseIf d1 = 0 Then
+                    ' 接点
+                    Dim x As Double = -b1 / (2 * a1)
+                    Dim y As Double = fn.a * x + fn.b
+                    points.Add(New S実座標(x, y))
+                Else
+                    ' 交点2つ
+                    Dim sqrtD As Double = Math.Sqrt(d1)
+                    Dim x1 As Double = (-b1 + sqrtD) / (2 * a1)
+                    Dim x2 As Double = (-b1 - sqrtD) / (2 * a1)
+                    Dim y1 As Double = fn.a * x1 + fn.b
+                    Dim y2 As Double = fn.a * x2 + fn.b
+                    points.Add(New S実座標(x1, y1))
+                    points.Add(New S実座標(x2, y2))
+                End If
+            End If
+
+            Return points.ToArray
+        End Function
+
+        ReadOnly Property r外接領域 As S領域
+            Get
+                Dim r As S領域
+                r.x最左 = p中心.X - d半径
+                r.x最右 = p中心.X + d半径
+                r.y最下 = p中心.Y - d半径
+                r.y最上 = p中心.Y + d半径
+                Return r
+            End Get
+        End Property
+
+    End Structure
+
+
 #End Region
 
     '四つ畳み編み
@@ -1718,7 +1799,7 @@ Public Class clsImageItem
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
         _四隅領域 'm_a四隅,m_lineList,m_is円
-        _全体枠    'm_a四隅
+        _全体枠    'm_a四隅,m_is円
         _底枠2     'm_lineList        (Hexagonの底)
 
 

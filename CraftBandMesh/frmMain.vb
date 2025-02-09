@@ -78,6 +78,7 @@ Public Class frmMain
         'プレビューを先にするため一旦削除
         TabControl.TabPages.Remove(tpage横ひも)
         TabControl.TabPages.Remove(tpage縦ひも)
+        TabControl.TabPages.Remove(tpage輪弧)
 
         '固定のテーブルを設定(対象バンドの変更時にはテーブルの中身を変える)
         f_i何本幅1.DataSource = g_clsSelectBasics.p_tblLane
@@ -162,16 +163,16 @@ Public Class frmMain
             lbl垂直ひも長加算_単位.Text = unitstr
             lbl楕円底円弧の半径加算_単位.Text = unitstr
             lbl楕円底周の加算_単位.Text = unitstr
-            lblひもの長さ寸法_単位.Text = unitstr
-            lbl内円の直径_単位.Text = unitstr
+            lbl底部分の径_単位.Text = unitstr
+            lbl内円の半径_単位.Text = unitstr
 
 
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud縦寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud高さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud垂直ひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
-            nudひもの長さ寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
-            nud内円の径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nud底部分の径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nud内円の半径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nudひとつのすき間の寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nud横ひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
@@ -459,15 +460,10 @@ Public Class frmMain
             chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
 
             '輪弧のみだがセットする
-            nudひもの長さ寸法.Value = .Value("f_d左端右端の目")
-            nud内円の径.Value = .Value("f_d左端右端の目2")
+            nud底部分の径.Value = .Value("f_d左端右端の目")
+            nud内円の半径.Value = .Value("f_d左端右端の目2")
             nud連続数1.Value = .Value("f_i左から何番目")
             nud連続数2.Value = .Value("f_i左から何番目2")
-            If .Value("f_bひも上下1回区分") Then
-                rad上下.Checked = True
-            Else
-                rad下上.Checked = True
-            End If
         End With
     End Sub
 
@@ -650,11 +646,10 @@ Public Class frmMain
             .Value("f_d楕円底周の加算") = nud楕円底周の加算.Value
 
             '輪弧のみだがセットする
-            .Value("f_d左端右端の目") = nudひもの長さ寸法.Value
-            .Value("f_d左端右端の目2") = nud内円の径.Value
+            .Value("f_d左端右端の目") = nud底部分の径.Value
+            .Value("f_d左端右端の目2") = nud内円の半径.Value
             .Value("f_i左から何番目") = nud連続数1.Value
             .Value("f_i左から何番目2") = nud連続数2.Value
-            .Value("f_bひも上下1回区分") = rad下上.Checked
 
         End With
         Return True
@@ -1332,20 +1327,11 @@ Public Class frmMain
             End If
         End If
         lbl放射状配置.Visible = (cmb配置タイプ.SelectedIndex = enum配置タイプ.i_放射状)
+        grp底ひも.Visible = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_放射状)
 
-        If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 Then
-            grp縦置き.Enabled = False
-            btn概算.Enabled = False
-
-            rad右上.Visible = False
-            rad全体.Visible = False
-        Else
-            grp縦置き.Enabled = True
-            btn概算.Enabled = True
-
-            rad右上.Visible = True
-            rad全体.Visible = True
-        End If
+        grp縦置き.Enabled = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_輪弧)
+        btn概算.Enabled = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_輪弧)
+        grp画像.Visible = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_輪弧)
 
         set底の縦横展開(chk縦横を展開する.Checked)
         recalc(CalcCategory.Expand, sender)
@@ -1417,11 +1403,11 @@ Public Class frmMain
         'recalcは縦ひもの本数側
     End Sub
 
-    Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nudひもの長さ寸法.ValueChanged
+    Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud底部分の径.ValueChanged
         recalc(CalcCategory.Circle, sender)
     End Sub
 
-    Private Sub nud内円の径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の径.ValueChanged
+    Private Sub nud内円の径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の半径.ValueChanged
         recalc(CalcCategory.Circle, sender)
     End Sub
 
@@ -1937,10 +1923,16 @@ Public Class frmMain
 
             Dim isUpRightOnly As Boolean = rad右上.Checked
             Dim isShowSide As Boolean = chk側面.Checked
+            Dim updownnone As enumUpDownNone = enumUpDownNone._None
+            If rad底_下上.Checked Then
+                updownnone = enumUpDownNone._DownUp
+            ElseIf rad底_上下.Checked Then
+                updownnone = enumUpDownNone._UpDown
+            End If
 
             Cursor.Current = Cursors.WaitCursor
             _clsImageData = New clsImageData(_sFilePath)
-            Dim ret As Boolean = _clsCalcMesh.CalcImage(_clsImageData, isUpRightOnly, isShowSide)
+            Dim ret As Boolean = _clsCalcMesh.CalcImage(_clsImageData, isUpRightOnly, isShowSide, updownnone)
             Cursor.Current = Cursors.Default
 
             If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcMesh.p_sメッセージ) Then
@@ -1990,6 +1982,11 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub rad底_上下_CheckedChanged(sender As Object, e As EventArgs) Handles rad底_上下なし.CheckedChanged, rad底_上下.CheckedChanged, rad底_下上.CheckedChanged
+        If _clsImageData IsNot Nothing Then
+            CalcImageData()
+        End If
+    End Sub
 #End Region
 
 
@@ -2022,8 +2019,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
-
 #End Region
 
 End Class
