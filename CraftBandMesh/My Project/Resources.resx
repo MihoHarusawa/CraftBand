@@ -140,8 +140,17 @@
   <data name="CalcBadRecord" xml:space="preserve">
     <value>無効レコード(番号={0})</value>
   </data>
+  <data name="CalcCannotReduce" xml:space="preserve">
+    <value>編みかた'{0}'の周数を減らすことができません。</value>
+  </data>
+  <data name="CalcCircleOver" xml:space="preserve">
+    <value>縦ひもとすき間による円({0:F1})が横寸法以上になっています。</value>
+  </data>
   <data name="CalcConfirmHight" xml:space="preserve">
     <value>入力されている編みかたの周数を調整します。よろしいですか？</value>
+  </data>
+  <data name="CalcConfirmOval" xml:space="preserve">
+    <value>[底(楕円)]の最初の編みかたの周数を調整します。よろしいですか？</value>
   </data>
   <data name="CalcConfirmPattern" xml:space="preserve">
     <value>最初に見つかった編みかた(指定する場合は1周セット)で周数を調整します。よろしいですか？</value>
@@ -163,6 +172,12 @@
   </data>
   <data name="CalcNoBaseBandSet" xml:space="preserve">
     <value>基本のひも幅を設定してください。</value>
+  </data>
+  <data name="CalcNoChangeVert" xml:space="preserve">
+    <value>横寸法のサイズになっています。縦横の寸法は同じになります。</value>
+  </data>
+  <data name="CalcNoCircle" xml:space="preserve">
+    <value>円形のため横寸法と縦寸法は同じになります。</value>
   </data>
   <data name="CalcNoDefCategory" xml:space="preserve">
     <value>未定義のカテゴリー'{0}'が参照されました。</value>
@@ -205,6 +220,9 @@
   </data>
   <data name="CalcSetHorizontal" xml:space="preserve">
     <value>{0}を指定するのであれば{1}をセットしてください。</value>
+  </data>
+  <data name="CalcSetOvalPattern" xml:space="preserve">
+    <value>すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。</value>
   </data>
   <data name="CalcTooShortHeight" xml:space="preserve">
     <value>縦寸法が小さすぎるため横ひもを置けません。</value>

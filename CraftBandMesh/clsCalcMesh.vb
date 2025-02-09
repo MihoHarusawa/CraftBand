@@ -616,7 +616,7 @@ Class clsCalcMesh
                 ret = ret And adjust_横ひも()
                 'calc_横寸法()
 
-            Case CalcCategory.Circle  '底(輪弧)
+            Case CalcCategory.Circle  '底(輪弧)タブ
                 ret = ret And set_底の縦横()
                 ret = ret And calc_縦ひも展開(category, Nothing, Nothing)
                 ret = ret And calc_底楕円(category, Nothing, Nothing)
@@ -858,14 +858,6 @@ Class clsCalcMesh
     End Function
 
     Private Function check_放射状() As Boolean
-        Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
-        If 0 < d縦ひも間の最小間隔 AndAlso
-                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
-            '縦ひも間のすき間が最小間隔より小さくなっています。
-            p_sメッセージ = My.Resources.CalcNoSpaceHeight
-            Return False
-        End If
-
         If _i縦ひもの本数 < 2 Then
             '{0} の値 {1} を増やしてください。
             p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
@@ -931,6 +923,11 @@ Class clsCalcMesh
                 Return False
             End If
             dひとつのすき間の寸法 = (target - band_wid) / (_i縦ひもの本数 - 1)
+            If dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
+                '縦ひも間のすき間が最小間隔より小さくなっています。
+                p_sメッセージ = My.Resources.CalcNoSpaceHeight
+                Return False
+            End If
 
         ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
             '縦ひも分の周
@@ -948,13 +945,6 @@ Class clsCalcMesh
 
         End If
 
-        'すき間が計算できた
-        If dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
-            '縦ひも間のすき間が最小間隔より小さくなっています。
-            p_sメッセージ = My.Resources.CalcNoSpaceHeight
-            Return False
-        End If
-
         '結果のセット
         _frmMain.nudひとつのすき間の寸法.Value = dひとつのすき間の寸法 'recalc
 
@@ -964,7 +954,7 @@ Class clsCalcMesh
 #End Region
 
 #Region "概算"
-    '目標寸法のキャッシュを参照しながら、_Data.p_row底_縦横にセット
+    'キャッシュ値・計算済値を参照しながら、_Data.p_row底_縦横にセット
     '輪弧は対象外, 放射状の場合は横寸法に合わせる
 
     '有効な目標寸法がある
@@ -995,11 +985,8 @@ Class clsCalcMesh
 
 
     '目標寸法→底_縦横(チェックと確認)
-    ''' <summary>
-    ''' 
-    ''' </summary>
     ''' <param name="message">確認メッセージ</param>
-    ''' <returns></returns>
+    ''' <returns>True=概算可能 False=不可/不要</returns>
     Public Function CheckTarget(ByRef message As String) As Boolean
         If Not isCalcable() Then
             Return False '概算できない
@@ -1011,17 +998,29 @@ Class clsCalcMesh
         End If
         '有効な入力がある場合
 
+        '確認メッセージ
+        If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            Return checkTarget_縦横(message)
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            Return checkTarget_放射状(message)
+        Else
+            '輪弧では呼ばれないはず
+            Return False
+        End If
+    End Function
+
+    '確認メッセージ、概算不要・不可の場合はFalseを返し、p_sメッセージに理由をセット
+    Private Function checkTarget_縦横(ByRef message As String) As Boolean
         '概算不要か？
-        If isNear(p_d内側_横, _d横_目標) _
-            AndAlso (_enum配置タイプ <> enum配置タイプ.i_縦横 OrElse isNear(p_d内側_縦, _d縦_目標)) _
-            AndAlso isNear(p_d内側_高さ, _d高さ_目標) Then
+        If isNear(p_d内側_横, _d横_目標) AndAlso
+             isNear(p_d内側_縦, _d縦_目標) AndAlso
+             isNear(p_d内側_高さ, _d高さ_目標) Then
             'ほぼ目標のサイズになっています。やり直す場合はリセットしてください。
             p_sメッセージ = My.Resources.CalcNoMoreChange
             Return False
         End If
 
-        If isNear(p_d内側_横, _d横_目標) AndAlso
-            (_enum配置タイプ <> enum配置タイプ.i_縦横 OrElse isNear(p_d内側_縦, _d縦_目標)) Then
+        If isNear(p_d内側_横, _d横_目標) AndAlso isNear(p_d内側_縦, _d縦_目標) Then
             '側面のみ
             If 0 < _d高さの合計 Then
                 '入力されている編みかたの周数を調整します。よろしいですか？
@@ -1040,7 +1039,43 @@ Class clsCalcMesh
                 message = My.Resources.CalcConfirmRecalc
             End If
         End If
+        Return True
+    End Function
 
+    '確認メッセージ、概算不要・不可の場合はFalseを返し、p_sメッセージに理由をセット
+    Private Function checkTarget_放射状(ByRef message As String) As Boolean
+        If isNear(p_d内側_横, _d横_目標) AndAlso isNear(p_d内側_高さ, _d高さ_目標) Then
+            If isNear(p_d内側_縦, _d縦_目標) Then
+                'ほぼ目標のサイズになっています。やり直す場合はリセットしてください。
+                p_sメッセージ = My.Resources.CalcNoMoreChange
+                Return False
+            Else
+                '横寸法のサイズになっています。縦横の寸法は同じになります。
+                p_sメッセージ = My.Resources.CalcNoChangeVert
+                Return False
+            End If
+        End If
+
+        If isNear(p_d内側_横, _d横_目標) Then
+            '側面のみ
+            If 0 < _d高さの合計 Then
+                '入力されている編みかたの周数を調整します。よろしいですか？
+                message = My.Resources.CalcConfirmHight
+            Else
+                '最初に見つかった編みかた(指定する場合は1周セット)で周数を調整します。よろしいですか？
+                message = My.Resources.CalcConfirmPattern
+            End If
+        Else
+            '底(楕円)の周数調整
+            If 0 < _d径の合計 Then
+                '[底(楕円)]の最初の編みかたの周数を調整します。よろしいですか？"
+                message = My.Resources.CalcConfirmOval
+            Else
+                'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。"
+                p_sメッセージ = My.Resources.CalcSetOvalPattern
+                Return False
+            End If
+        End If
         Return True
     End Function
 
@@ -1051,35 +1086,61 @@ Class clsCalcMesh
         Return calc_Target()
     End Function
 
+    '概算可能かどうか
     Private Function isCalcable() As Boolean
         If Not set_目標寸法(True) Then
             Return False
         End If
 
-        If 0 < _d径の合計 Then
-            If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+        If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            '径を固定値として縦横を調整する
+            If 0 < _d径の合計 Then
                 If _d縦_目標 <= _d径の合計 * 2 Then
                     '底(楕円)の径({0})が縦寸法以上になっているため横ひもを置けません。
                     p_sメッセージ = String.Format(My.Resources.CalcHeightOver, _d径の合計 * 2)
                     Return False
                 End If
+                If _d横_目標 <= _d径の合計 * 2 Then
+                    '底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。
+                    p_sメッセージ = String.Format(My.Resources.CalcWidthOver, _d径の合計 * 2)
+                    Return False
+                End If
             End If
-            If _d横_目標 <= _d径の合計 * 2 Then
-                '底(楕円)の径({0})が横寸法以上になっているため縦ひもを置けません。
-                p_sメッセージ = String.Format(My.Resources.CalcWidthOver, _d径の合計 * 2)
+            Return True
+
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            '横無し、縦を固定値として径で調整する
+            If _d横_目標 <= _d縦横の横 Then
+                '縦ひもとすき間による円({0})が横寸法以上になっています。
+                p_sメッセージ = String.Format(My.Resources.CalcCircleOver, _d縦横の横)
                 Return False
             End If
-        End If
-
+            If Not isNear(_d横_目標, _d縦_目標) Then
+                '円形のため横寸法と縦寸法は同じになります。
+                p_sメッセージ = String.Format(My.Resources.CalcNoCircle, _d縦横の横)
+                Return False
+            End If
+            If 0 = _d径の合計 Then
+                'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。
+                p_sメッセージ = My.Resources.CalcSetOvalPattern
+                Return False
+            End If
             Return True
+
+        Else
+            '輪弧は対象外
+            Return False
+        End If
     End Function
+
 
     Private Function isNear(ByVal d1 As Double, ByVal d2 As Double) As Boolean
         If d1 < 0 OrElse d2 < 0 Then
             Return False
         End If
         Dim diff As Double = IIf(d1 < d2, d2 - d1, d1 - d2)
-        Return diff < g_clsSelectBasics.p_lenバンド幅.Value
+        'Return diff < g_clsSelectBasics.p_lenバンド幅.Value
+        Return diff < _d基本のひも幅
     End Function
 
     '目標寸法→底_縦横
@@ -1091,6 +1152,7 @@ Class clsCalcMesh
 
 
         If _enum配置タイプ = enum配置タイプ.i_縦横 Then
+            '横置き・縦置きを計算
             If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
                 ret = ret And calc_Target_縦()
             End If
@@ -1100,7 +1162,8 @@ Class clsCalcMesh
 
         ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
             If Not isValid計算_横 OrElse Not isNear(p_d内側_横, _d横_目標) Then
-                ret = ret And calc_Target_縦_放射状()
+                '底(楕円)の周数調整
+                ret = ret And calc_Target_楕円_放射状()
             End If
 
         Else
@@ -1235,29 +1298,60 @@ Class clsCalcMesh
         Return True
     End Function
 
-    '横寸法から縦ひも(横寸法優先)(底楕円が設定されていればその分マイナス)
-    Private Function calc_Target_縦_放射状()
-        Dim d周 As Double = _d横_目標 * Math.PI
-        Dim max_count As Double = (d周 / _d基本のひも幅 / 2) - _i垂直ひも数_楕円
-        If max_count <= 1 Then
-            '横寸法が小さすぎるため縦ひもを置けません。
-            p_sメッセージ = My.Resources.CalcNoShortWidth
+    '横寸法から底楕円の周数を調整 ※
+    Private Function calc_Target_楕円_放射状()
+        '縦ひもの設定は変えない
+        Dim d径の差分 As Double = ((_d横_目標 - _d縦横の横) / 2) - _d径の合計
+
+        '調整対象の編みかたレコード取得　※グループ集計省略
+        Dim table As tbl底_楕円DataTable = _Data.p_tbl底_楕円
+        If table.Rows.Count = 0 Then
+            'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。"
+            p_sメッセージ = My.Resources.CalcSetOvalPattern
             Return False
         End If
+        Dim row As tbl底_楕円Row = Nothing
+        For Each r As tbl底_楕円Row In table.Rows
+            If Not r.f_b差しひも区分 AndAlso 0 < r.f_i周数 AndAlso 0 < r.f_d径 Then
+                row = r
+                Exit For
+            End If
+        Next
+        If row Is Nothing Then
+            'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。"
+            p_sメッセージ = My.Resources.CalcSetOvalPattern
+            Return False
+        End If
+        Dim d径 As Double = Convert.ToDouble(table.Compute("SUM(f_d径)", $"f_i番号 = {row.f_i番号}"))
 
-        '1/2値を4の倍数にする
-        Dim n縦ひもの本数 As Integer = Math.Round((max_count / 2) / 4) * 4
+        '周数を調整する
+        Dim i調整数 As Integer = CInt(Math.Round(Abs(d径の差分) / (d径 / row.f_i周数)))
+        If i調整数 < 1 Then
+            '径の調整範囲内
+            Return True
+        End If
+        Dim i周数 As Integer
+        If 0 < d径の差分 Then
+            '増やす
+            i周数 = row.f_i周数 + i調整数
+        Else
+            '減らす
+            If row.f_i周数 = 1 Then
+                '編みかた'{0}'の周数を減らすことができません。
+                p_sメッセージ = String.Format(My.Resources.CalcCannotReduce, row.f_s編みかた名)
+                Return False
+            End If
+            i周数 = row.f_i周数 - i調整数
+            If i周数 < 1 Then
+                i周数 = 1
+            End If
+        End If
 
-        Dim d縦横の周 As Double = (_d横_目標 - _d径の合計 * 2) * Math.PI
-        Dim dひとつのすき間の寸法 As Double = (d縦横の周 / n縦ひもの本数 / 2) - _d基本のひも幅
-
-        '***結果をセット
-        With _Data.p_row底_縦横
-            '縦ひも
-            .Value("f_i縦ひも") = _I基本のひも幅
-            .Value("f_i縦ひもの本数") = n縦ひもの本数
-            .Value("f_dひとつのすき間の寸法") = dひとつのすき間の寸法
-        End With
+        '同じ編みかたに適用
+        Dim cond As String = String.Format("f_i番号 = {0} AND f_s編みかた名 = '{1}'", row.f_i番号, row.f_s編みかた名)
+        For Each r As tbl底_楕円Row In table.Select(cond)
+            r.f_i周数 = i周数
+        Next
 
         Return True
     End Function

@@ -115,11 +115,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  編みかた&apos;{0}&apos;の周数を減らすことができません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcCannotReduce() As String
+            Get
+                Return ResourceManager.GetString("CalcCannotReduce", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  縦ひもとすき間による円({0:F1})が横寸法以上になっています。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcCircleOver() As String
+            Get
+                Return ResourceManager.GetString("CalcCircleOver", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  入力されている編みかたの周数を調整します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcConfirmHight() As String
             Get
                 Return ResourceManager.GetString("CalcConfirmHight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  [底(楕円)]の最初の編みかたの周数を調整します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcConfirmOval() As String
+            Get
+                Return ResourceManager.GetString("CalcConfirmOval", resourceCulture)
             End Get
         End Property
         
@@ -183,6 +210,24 @@ Namespace My.Resources
         Friend ReadOnly Property CalcNoBaseBandSet() As String
             Get
                 Return ResourceManager.GetString("CalcNoBaseBandSet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  横寸法のサイズになっています。縦横の寸法は同じになります。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoChangeVert() As String
+            Get
+                Return ResourceManager.GetString("CalcNoChangeVert", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  円形のため横寸法と縦寸法は同じになります。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcNoCircle() As String
+            Get
+                Return ResourceManager.GetString("CalcNoCircle", resourceCulture)
             End Get
         End Property
         
@@ -309,6 +354,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcSetHorizontal() As String
             Get
                 Return ResourceManager.GetString("CalcSetHorizontal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcSetOvalPattern() As String
+            Get
+                Return ResourceManager.GetString("CalcSetOvalPattern", resourceCulture)
             End Get
         End Property
         
