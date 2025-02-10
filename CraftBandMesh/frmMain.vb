@@ -462,8 +462,12 @@ Public Class frmMain
             '輪弧のみだがセットする
             nud底部分の径.Value = .Value("f_d左端右端の目")
             nud内円の半径.Value = .Value("f_d左端右端の目2")
-            nud連続数1.Value = .Value("f_i左から何番目")
-            nud連続数2.Value = .Value("f_i左から何番目2")
+            nud連続数1.Value = .Value("f_iコマ上側の縦ひも")
+            nud連続数2.Value = .Value("f_i左から何番目")
+            nud連続数3.Value = .Value("f_i左から何番目2")
+            nud連続数4.Value = .Value("f_i上から何番目")
+            nud連続数5.Value = .Value("f_i高さのコマ数")
+            nud連続数6.Value = .Value("f_i折り返しコマ数")
         End With
     End Sub
 
@@ -652,6 +656,12 @@ Public Class frmMain
             .Value("f_d左端右端の目2") = nud内円の半径.Value
             .Value("f_i左から何番目") = nud連続数1.Value
             .Value("f_i左から何番目2") = nud連続数2.Value
+            .Value("f_iコマ上側の縦ひも") = nud連続数1.Value
+            .Value("f_i左から何番目") = nud連続数2.Value
+            .Value("f_i左から何番目2") = nud連続数3.Value
+            .Value("f_i上から何番目") = nud連続数4.Value
+            .Value("f_i高さのコマ数") = nud連続数5.Value
+            .Value("f_i折り返しコマ数") = nud連続数6.Value
 
         End With
         Return True

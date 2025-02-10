@@ -83,9 +83,13 @@ Class clsCalcMesh
     '輪弧のみ
     Private Property _d底部分の径 As Double '設定
     Private Property _d内円の半径 As Double '設定
+    Private Property _d高さの輪弧長 As Integer '計算
     Private Property _i連続数1 As Integer '設定
     Private Property _i連続数2 As Integer '設定
-    Private Property _d高さの輪弧長 As Integer '計算
+    Private Property _i連続数3 As Integer '設定
+    Private Property _i連続数4 As Integer '設定
+    Private Property _i連続数5 As Integer '設定
+    Private Property _i連続数6 As Integer '設定
 
 
     '※ここまでの各、個別集計値については、CalcSizeで正しく得られること。
@@ -775,8 +779,13 @@ Class clsCalcMesh
                 '輪弧のみ
                 _d底部分の径 = .Value("f_d左端右端の目")
                 _d内円の半径 = .Value("f_d左端右端の目2")
-                _i連続数1 = .Value("f_i左から何番目")
-                _i連続数2 = .Value("f_i左から何番目2")
+                _i連続数1 = .Value("f_iコマ上側の縦ひも")
+                _i連続数2 = .Value("f_i左から何番目")
+                _i連続数3 = .Value("f_i左から何番目2")
+                _i連続数4 = .Value("f_i上から何番目")
+                _i連続数5 = .Value("f_i高さのコマ数")
+                _i連続数6 = .Value("f_i折り返しコマ数")
+
             Else
                 _enum配置タイプ = enum配置タイプ.i_縦横
             End If

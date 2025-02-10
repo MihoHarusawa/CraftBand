@@ -2,6 +2,7 @@
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
+Imports CraftBand.clsUpDown
 Imports CraftBand.mdlUnit
 Imports CraftBand.Tables.dstDataTables
 
@@ -57,7 +58,7 @@ Partial Public Class clsCalcMesh
         Friend m_p始点 As S実座標
         Friend m_p終点 As S実座標
 
-        Dim m_band As CBand = Nothing
+        Friend m_band As CBand = Nothing
 
         Sub New(ByVal row As tbl縦横展開Row)
             m_row縦横展開 = row
@@ -202,31 +203,11 @@ Partial Public Class clsCalcMesh
         End Sub
 
 #If 0 Then
-        '位置の逆順　:1～_iひもの本数
-        ReadOnly Property RevertIdx(ByVal ax As Integer) As Integer
-            Get
-                If ax < 1 OrElse _BandList.Count < ax Then
-                    Return -1
-                End If
-                'いずれの角度に対しても、軸方向はひも番号に対して逆
-                Return _BandList.Count - ax + 1
-            End Get
-        End Property
-
-        '指定位置の要素 1～_iひもの本数　で使用
+        '指定剰余位置の要素 1～_iひもの本数
         Friend ReadOnly Property ByIdx(ByVal idx As Integer) As CBandPosition
             Get
-                If idx < 1 OrElse _BandList.Count < idx Then
-                    Return Nothing
-                End If
-                Return _BandList(idx - 1)
-            End Get
-        End Property
-
-        '軸方向　:1～_iひもの本数
-        Friend ReadOnly Property ByAxis(ByVal ax As Integer) As CBandPosition
-            Get
-                Return ByIdx(RevertIdx(ax))
+                Dim i As Integer = Modulo(idx - 1, _BandList.Count)
+                Return _BandList(i)
             End Get
         End Property
 #End If
@@ -711,11 +692,18 @@ Partial Public Class clsCalcMesh
         End Function
     End Class
 
-    '底の編み目を平編みにする
+    '底の編み目
     Private Function regionUpDown底(ByVal _ImageList横ひも As clsImageItemList, ByVal _ImageList縦ひも As clsImageItemList, ByVal updownnone As enumUpDownNone) As Boolean
         If updownnone = enumUpDownNone._None Then
             Return True
         End If
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            Return upDown輪弧(_ImageList縦ひも, updownnone)
+        ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
+            Return True '放射状は対象外
+        End If
+
+        'enum配置タイプ.i_縦横(平編み)
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
             Return False
         End If
@@ -754,6 +742,58 @@ Partial Public Class clsCalcMesh
                 iTate += 1
                 If _CUpDown.GetIsUp(iTate, iYoko) Then
                     itemYoko.AddClip(itemTate)
+                End If
+            Next
+        Next
+
+        Return True
+    End Function
+
+    '底の編み目
+    Private Function upDown輪弧(ByVal _ImageList縦ひも As clsImageItemList, ByVal updownnone As enumUpDownNone) As Boolean
+        If updownnone = enumUpDownNone._None Then
+            Return True
+        End If
+        If _ImageList縦ひも Is Nothing Then
+            Return False
+        End If
+
+        Dim i連続数 As Integer = _i連続数1 + _i連続数2 + _i連続数3 + _i連続数4 + _i連続数5 + _i連続数6
+        Dim _CUpDown As New clsUpDown(enumTargetFace.Bottom, i連続数, 1)
+        If Not _CUpDown.IsValid(False) Then 'チェックはMatrix
+            Return True '描画対象外
+        End If
+        For idx As Integer = 1 To _i連続数1
+            _CUpDown.SetIsUp(idx, 1)
+        Next
+        For idx As Integer = 1 To _i連続数3
+            _CUpDown.SetIsUp(_i連続数1 + _i連続数2 + idx, 1)
+        Next
+        For idx As Integer = 1 To _i連続数5
+            _CUpDown.SetIsUp(_i連続数1 + _i連続数2 + _i連続数3 + _i連続数4 + idx, 1)
+        Next
+        If updownnone = enumUpDownNone._DownUp Then
+            _CUpDown.Reverse()
+        End If
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "({0},{1}) UpDown={2}", _i連続数1, _i連続数2, _CUpDown.ToString)
+
+        Dim drawcount As Integer = _ImageList縦ひも.Count / 2
+        If _CUpDown.HorizontalCount < drawcount Then
+            drawcount = _CUpDown.HorizontalCount
+        End If
+        For iBase As Integer = 0 To _ImageList縦ひも.Count - 1
+            Dim itemTate As clsImageItem = _ImageList縦ひも(iBase)
+            For idx As Integer = 1 To drawcount
+                Dim i As Integer = Modulo(iBase + idx, _ImageList縦ひも.Count)
+                Dim band As clsImageItem = _ImageList縦ひも(i)
+                If iBase <> i Then
+                    If _CUpDown.GetIsDown(idx, 1) Then
+                        itemTate.AddClip(band)
+                    Else
+                        band.AddClip(itemTate)
+                    End If
+                Else
+                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "Same iBase({0},{1}) _ImageList縦ひもSame ", iBase, idx)
                 End If
             Next
         Next
@@ -1014,7 +1054,7 @@ Partial Public Class clsCalcMesh
         Me.imageList横ひも(imgList横ひも, get横展開DataTable(), isUpRightOnly)
         Me.imageList縦ひも(imgList縦ひも, get縦展開DataTable(), isUpRightOnly)
 
-        '平編み
+        '底の編み目
         regionUpDown底(imgList横ひも, imgList縦ひも, updownnone)
 
         '中身を移動
