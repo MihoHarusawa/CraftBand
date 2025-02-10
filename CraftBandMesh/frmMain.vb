@@ -522,6 +522,8 @@ Public Class frmMain
             lbl縦置きの計.Text = .p_s縦横の横
             lbl横置きの計.Text = .p_s縦横の縦
 
+            txt輪弧長.Text = .p_s輪弧長
+
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
                 ToolStripStatusLabel2.Text = ""
@@ -1156,6 +1158,7 @@ Public Class frmMain
 
     Private Sub nud縦ひも_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひも.ValueChanged
         nud縦ひも_輪弧.Value = nud縦ひも.Value
+        lbl縦ひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud縦ひも.Value)).TextWithUnit
 
         recalc(CalcCategory.Vertical, sender)
     End Sub
@@ -2010,6 +2013,19 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl側面).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl追加品).ToString())
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(_clsDataTables.p_tbl縦横展開).ToString())
+
+        If Not TabControl.TabPages.Contains(tpage横ひも) Then
+            TabControl.TabPages.Add(tpage横ひも)
+        End If
+        If Not TabControl.TabPages.Contains(tpage縦ひも) Then
+            TabControl.TabPages.Add(tpage縦ひも)
+        End If
+        If Not TabControl.TabPages.Contains(tpage底楕円) Then
+            TabControl.TabPages.Insert(1, tpage底楕円)
+        End If
+        If Not TabControl.TabPages.Contains(tpage輪弧) Then
+            TabControl.TabPages.Insert(1, tpage輪弧)
+        End If
 
     End Sub
     Private Sub setDgvColumnsVisible(ByVal dgv As DataGridView)

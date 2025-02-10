@@ -141,6 +141,7 @@ Partial Class frmMain
         Label1 = New Label()
         Label2 = New Label()
         Label3 = New Label()
+        txt輪弧長 = New TextBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -279,6 +280,8 @@ Partial Class frmMain
         chk側面 = New CheckBox()
         picプレビュー = New PictureBox()
         tpage輪弧 = New TabPage()
+        lbl縦ひも幅length = New Label()
+        lbl輪弧長 = New Label()
         PictureBox2 = New PictureBox()
         lbl上下の連続数 = New Label()
         lbl縦ひも_輪弧_単位 = New Label()
@@ -1292,7 +1295,7 @@ Partial Class frmMain
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(510, 203)
+        Label1.Location = New Point(537, 203)
         Label1.Name = "Label1"
         Label1.Size = New Size(76, 19)
         Label1.TabIndex = 15
@@ -1302,7 +1305,7 @@ Partial Class frmMain
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(603, 143)
+        Label2.Location = New Point(630, 143)
         Label2.Name = "Label2"
         Label2.Size = New Size(76, 19)
         Label2.TabIndex = 16
@@ -1312,12 +1315,24 @@ Partial Class frmMain
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(547, 40)
+        Label3.Location = New Point(574, 40)
         Label3.Name = "Label3"
         Label3.Size = New Size(142, 19)
         Label3.TabIndex = 16
         Label3.Text = "高さ(側面を指定した時)"
         ToolTip1.SetToolTip(Label3, "[側面]として指定した高さ" & vbCrLf & "指定しなければゼロ")
+        ' 
+        ' txt輪弧長
+        ' 
+        txt輪弧長.BackColor = Color.White
+        txt輪弧長.BorderStyle = BorderStyle.FixedSingle
+        txt輪弧長.Location = New Point(649, 347)
+        txt輪弧長.Name = "txt輪弧長"
+        txt輪弧長.ReadOnly = True
+        txt輪弧長.Size = New Size(93, 26)
+        txt輪弧長.TabIndex = 29
+        txt輪弧長.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txt輪弧長, "高さ位置までの輪弧の長さ")
         ' 
         ' MenuStrip1
         ' 
@@ -2709,6 +2724,9 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
+        tpage輪弧.Controls.Add(txt輪弧長)
+        tpage輪弧.Controls.Add(lbl縦ひも幅length)
+        tpage輪弧.Controls.Add(lbl輪弧長)
         tpage輪弧.Controls.Add(Label3)
         tpage輪弧.Controls.Add(Label2)
         tpage輪弧.Controls.Add(Label1)
@@ -2736,11 +2754,29 @@ Partial Class frmMain
         tpage輪弧.Text = "底(輪弧)"
         tpage輪弧.UseVisualStyleBackColor = True
         ' 
+        ' lbl縦ひも幅length
+        ' 
+        lbl縦ひも幅length.AutoSize = True
+        lbl縦ひも幅length.Location = New Point(285, 44)
+        lbl縦ひも幅length.Name = "lbl縦ひも幅length"
+        lbl縦ひも幅length.Size = New Size(98, 19)
+        lbl縦ひも幅length.TabIndex = 19
+        lbl縦ひも幅length.Text = "縦ひも幅length"
+        ' 
+        ' lbl輪弧長
+        ' 
+        lbl輪弧長.AutoSize = True
+        lbl輪弧長.Location = New Point(667, 325)
+        lbl輪弧長.Name = "lbl輪弧長"
+        lbl輪弧長.Size = New Size(51, 19)
+        lbl輪弧長.TabIndex = 18
+        lbl輪弧長.Text = "輪弧長"
+        ' 
         ' PictureBox2
         ' 
         PictureBox2.BorderStyle = BorderStyle.Fixed3D
         PictureBox2.Image = My.Resources.Resources.rinko
-        PictureBox2.Location = New Point(350, 13)
+        PictureBox2.Location = New Point(377, 13)
         PictureBox2.Name = "PictureBox2"
         PictureBox2.Size = New Size(375, 375)
         PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
@@ -3744,6 +3780,9 @@ Partial Class frmMain
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Label3 As Label
+    Friend WithEvents lbl縦ひも幅length As Label
+    Friend WithEvents lbl輪弧長 As Label
+    Friend WithEvents txt輪弧長 As TextBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
