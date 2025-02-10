@@ -140,6 +140,7 @@ Partial Class frmMain
         lbl底部分の径 = New Label()
         Label1 = New Label()
         Label2 = New Label()
+        Label3 = New Label()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1291,7 +1292,7 @@ Partial Class frmMain
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(524, 208)
+        Label1.Location = New Point(510, 203)
         Label1.Name = "Label1"
         Label1.Size = New Size(76, 19)
         Label1.TabIndex = 15
@@ -1300,12 +1301,23 @@ Partial Class frmMain
         ' 
         ' Label2
         ' 
-        Label2.Location = New Point(540, 111)
+        Label2.AutoSize = True
+        Label2.Location = New Point(603, 143)
         Label2.Name = "Label2"
         Label2.Size = New Size(76, 19)
         Label2.TabIndex = 16
         Label2.Text = "底部分の径"
         ToolTip1.SetToolTip(Label2, "内円から立ち上げ位置までの径")
+        ' 
+        ' Label3
+        ' 
+        Label3.AutoSize = True
+        Label3.Location = New Point(547, 40)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(142, 19)
+        Label3.TabIndex = 16
+        Label3.Text = "高さ(側面を指定した時)"
+        ToolTip1.SetToolTip(Label3, "[側面]として指定した高さ" & vbCrLf & "指定しなければゼロ")
         ' 
         ' MenuStrip1
         ' 
@@ -2697,6 +2709,7 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
+        tpage輪弧.Controls.Add(Label3)
         tpage輪弧.Controls.Add(Label2)
         tpage輪弧.Controls.Add(Label1)
         tpage輪弧.Controls.Add(PictureBox2)
@@ -2725,10 +2738,11 @@ Partial Class frmMain
         ' 
         ' PictureBox2
         ' 
+        PictureBox2.BorderStyle = BorderStyle.Fixed3D
         PictureBox2.Image = My.Resources.Resources.rinko
-        PictureBox2.Location = New Point(363, 27)
+        PictureBox2.Location = New Point(350, 13)
         PictureBox2.Name = "PictureBox2"
-        PictureBox2.Size = New Size(375, 347)
+        PictureBox2.Size = New Size(375, 375)
         PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
         PictureBox2.TabIndex = 17
         PictureBox2.TabStop = False
@@ -3007,7 +3021,7 @@ Partial Class frmMain
         ' 
         lbl計算寸法最大縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法最大縦.AutoSize = True
-        lbl計算寸法最大縦.Location = New Point(661, 628)
+        lbl計算寸法最大縦.Location = New Point(672, 628)
         lbl計算寸法最大縦.Name = "lbl計算寸法最大縦"
         lbl計算寸法最大縦.Size = New Size(23, 19)
         lbl計算寸法最大縦.TabIndex = 55
@@ -3017,7 +3031,7 @@ Partial Class frmMain
         ' 
         lbl計算寸法最大横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl計算寸法最大横.AutoSize = True
-        lbl計算寸法最大横.Location = New Point(574, 628)
+        lbl計算寸法最大横.Location = New Point(569, 628)
         lbl計算寸法最大横.Name = "lbl計算寸法最大横"
         lbl計算寸法最大横.Size = New Size(23, 19)
         lbl計算寸法最大横.TabIndex = 51
@@ -3037,11 +3051,11 @@ Partial Class frmMain
         ' 
         lbl最大.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl最大.AutoSize = True
-        lbl最大.Location = New Point(603, 628)
+        lbl最大.Location = New Point(594, 628)
         lbl最大.Name = "lbl最大"
-        lbl最大.Size = New Size(45, 19)
+        lbl最大.Size = New Size(80, 19)
         lbl最大.TabIndex = 54
-        lbl最大.Text = "(最大)"
+        lbl最大.Text = "(最大・最小)"
         ' 
         ' lbl最大周の径
         ' 
@@ -3393,7 +3407,7 @@ Partial Class frmMain
         Controls.Add(MenuStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
-        MinimumSize = New Size(904, 790)
+        MinimumSize = New Size(967, 790)
         Name = "frmMain"
         Text = "四角底と楕円底"
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).EndInit()
@@ -3729,6 +3743,7 @@ Partial Class frmMain
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
+    Friend WithEvents Label3 As Label
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

@@ -85,7 +85,7 @@ Class clsCalcMesh
     Private Property _d内円の半径 As Double '設定
     Private Property _i連続数1 As Integer '設定
     Private Property _i連続数2 As Integer '設定
-    Private Property _d高さの縦ひも長 As Integer '計算
+    Private Property _d高さの輪弧長 As Integer '計算
 
 
     '※ここまでの各、個別集計値については、CalcSizeで正しく得られること。
@@ -139,7 +139,7 @@ Class clsCalcMesh
         _d内円の半径 = 0
         _i連続数1 = 0
         _i連続数2 = 0
-        _d高さの縦ひも長 = 0
+        _d高さの輪弧長 = 0
 
     End Sub
 
@@ -2095,9 +2095,9 @@ Class clsCalcMesh
             Dim fn As New S直線式(0, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) / 2)
             Dim ary() As S実座標 = c高さの円.ary直線との交点(fn)
             If ary Is Nothing OrElse ary.Count < 2 Then
-                _d高さの縦ひも長 = 0
+                _d高さの輪弧長 = 0
             Else
-                _d高さの縦ひも長 = New S線分(ary(0), ary(1)).Length
+                _d高さの輪弧長 = New S線分(ary(0), ary(1)).Length
             End If
 
         End If
@@ -2776,8 +2776,8 @@ Class clsCalcMesh
             If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
                 '角度:180－α～ゼロ～-180
                 row.f_d幅 = 180 - (360 / _i縦ひもの本数) * row.f_iひも番号
-                row.f_d長さ = _d高さの縦ひも長   '高さで算出しているので、垂直ひも長分を加える
-                row.f_dひも長 = _d高さの縦ひも長 + 2 * ((_d垂直ひも長合計 - _d高さの合計) + _d垂直ひも長加算)
+                row.f_d長さ = _d高さの輪弧長   '高さで算出しているので、垂直ひも長分を加える
+                row.f_dひも長 = _d高さの輪弧長 + 2 * ((_d垂直ひも長合計 - _d高さの合計) + _d垂直ひも長加算)
                 row.f_dVal2 = (row.f_dひも長 / 2) + row.f_dひも長加算2
                 row.f_dVal3 = (row.f_dひも長 / 2) + row.f_dひも長加算
                 row.f_d出力ひも長 = row.f_dVal2 + row.f_dVal3
@@ -2996,6 +2996,7 @@ Class clsCalcMesh
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
             Else
                 If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+                    row.f_sタイプ = text縦ひも_輪弧()
                 ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
                     row.f_sタイプ = text放射状配置()
                 Else 'num配置タイプ.i_縦横
@@ -3402,12 +3403,16 @@ Class clsCalcMesh
         Return _frmMain.tpage輪弧.Text
     End Function
 
+    Private Function text縦ひもの本数() As String
+        Return _frmMain.lbl縦ひもの本数.Text
+    End Function
+
     Private Function text輪弧の縦ひも本数() As String
         Return _frmMain.lbl縦ひもの本数_輪弧.Text
     End Function
 
-    Private Function text縦ひもの本数() As String
-        Return _frmMain.lbl縦ひもの本数.Text
+    Private Function text縦ひも_輪弧() As String
+        Return _frmMain.lbl縦ひも_輪弧.Text
     End Function
 
     Private Function text底部分の径() As String
@@ -3421,7 +3426,6 @@ Class clsCalcMesh
     Private Function text上下の連続数() As String
         Return _frmMain.lbl上下の連続数.Text
     End Function
-
 #End Region
 
 End Class

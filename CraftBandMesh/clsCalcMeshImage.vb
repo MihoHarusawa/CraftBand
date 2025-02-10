@@ -1,7 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Button
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Header
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
@@ -11,7 +8,7 @@ Imports CraftBand.Tables.dstDataTables
 
 Partial Public Class clsCalcMesh
     '               
-    '             ┌────┐配置ラインは外側
+    '             ┌────┐配置ラインは外側(底の周+底の厚さ)
     '             │        │↙             【側面図】
     '       ┌──┼────┼──┐           [右上]底辺=外側_横,外側_縦           
     '       │    │╭───╮│    │            '周長比率対底の周'倍の台形を描画
@@ -382,7 +379,7 @@ Partial Public Class clsCalcMesh
     End Function
 
 
-    '_imageList側面ひも生成、側面のレコードを含む　※輪弧では呼ばれない
+    '_imageList側面ひも生成、側面のレコードを含む　
     Function imageList側面編みかた(ByVal d横辺ベース As Double, ByVal d縦辺ベース As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
@@ -996,7 +993,10 @@ Partial Public Class clsCalcMesh
         End If
 
         IsDrawMarkCurrent = Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
-
+        '輪弧は常に全体
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+            isUpRightOnly = False
+        End If
 
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
@@ -1047,15 +1047,17 @@ Partial Public Class clsCalcMesh
             imageList底 = Nothing
         End If
 
-        '側面の枠
-        Dim imageList側面枠 As clsImageItemList = Me.imageList側面枠(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
-        imgData.MoveList(imageList側面枠)
-        imageList側面枠 = Nothing
+        If 0 < _d高さの合計 Then
+            '側面の枠
+            Dim imageList側面枠 As clsImageItemList = Me.imageList側面枠(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
+            imgData.MoveList(imageList側面枠)
+            imageList側面枠 = Nothing
 
-        '側面のレコードを含む
-        Dim imageList側面編みかた As clsImageItemList = Me.imageList側面編みかた(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
-        imgData.MoveList(imageList側面編みかた)
-        imageList側面編みかた = Nothing
+            '側面のレコードを含む
+            Dim imageList側面編みかた As clsImageItemList = Me.imageList側面編みかた(d横辺ベース, d縦辺ベース, isUpRightOnly, isShowSide)
+            imgData.MoveList(imageList側面編みかた)
+            imageList側面編みかた = Nothing
+        End If
 
         '付属品
         AddPartsImage(imgData, _frmMain.editAddParts)
