@@ -647,6 +647,7 @@ Partial Class frmMain
         nudひとつのすき間の寸法.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
         nudひとつのすき間の寸法.Location = New Point(157, 107)
         nudひとつのすき間の寸法.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nudひとつのすき間の寸法.Minimum = New Decimal(New Integer() {9999, 0, 0, Integer.MinValue})
         nudひとつのすき間の寸法.Name = "nudひとつのすき間の寸法"
         nudひとつのすき間の寸法.Size = New Size(69, 26)
         nudひとつのすき間の寸法.TabIndex = 9

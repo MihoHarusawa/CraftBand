@@ -861,8 +861,8 @@ Class clsCalcMesh
 
     Private Function check_縦横() As Boolean
         Dim d縦ひも間の最小間隔 As Double = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d縦ひも間の最小間隔")
-        If 0 < d縦ひも間の最小間隔 AndAlso
-                _dひとつのすき間の寸法 < d縦ひも間の最小間隔 Then
+        If (0 < d縦ひも間の最小間隔 AndAlso _dひとつのすき間の寸法 < d縦ひも間の最小間隔) OrElse
+            _dひとつのすき間の寸法 < 0 Then
             '縦ひも間のすき間が最小間隔より小さくなっています。
             p_sメッセージ = My.Resources.CalcNoSpaceHeight
             Return False
@@ -882,6 +882,16 @@ Class clsCalcMesh
             '{0} の値 {1} を増やしてください。
             p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text縦ひもの本数(), _i縦ひもの本数)
             Return False
+        End If
+        'マイナス時の下限値
+        If _dひとつのすき間の寸法 < 0 Then
+            Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
+            Dim d縦横の垂直ひも間の周 = 2 * _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
+            If d縦横の垂直ひも間の周 < dひも幅 * 4 Then
+                '縦ひも間のすき間が最小間隔より小さくなっています。
+                p_sメッセージ = My.Resources.CalcNoSpaceHeight
+                Return False
+            End If
         End If
 
         Return True
@@ -1129,21 +1139,26 @@ Class clsCalcMesh
             Return True
 
         ElseIf _enum配置タイプ = enum配置タイプ.i_放射状 Then
-            '横無し、縦を固定値として径で調整する
-            If _d横_目標 <= _d縦横の横 Then
-                '縦ひもとすき間による円({0})が横寸法以上になっています。
-                p_sメッセージ = String.Format(My.Resources.CalcCircleOver, _d縦横の横)
-                Return False
-            End If
-            If Not isNear(_d横_目標, _d縦_目標) Then
-                '円形のため横寸法と縦寸法は同じになります。
-                p_sメッセージ = String.Format(My.Resources.CalcNoCircle, _d縦横の横)
-                Return False
-            End If
-            If 0 = _d径の合計 Then
-                'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。
-                p_sメッセージ = My.Resources.CalcSetOvalPattern
-                Return False
+            If isNear(_d横_目標, _d縦横の横) Then
+                '縦横は良しとする
+            Else
+                '縦横に合わせる
+                If Not isNear(_d横_目標, _d縦_目標) Then
+                    '円形のため横寸法と縦寸法は同じになります。
+                    p_sメッセージ = String.Format(My.Resources.CalcNoCircle, _d縦横の横)
+                    Return False
+                End If
+                '縦を固定値として径で調整する
+                If _d横_目標 <= _d縦横の横 Then
+                    '縦ひもとすき間による円({0})が横寸法以上になっています。
+                    p_sメッセージ = String.Format(My.Resources.CalcCircleOver, _d縦横の横)
+                    Return False
+                End If
+                If 0 = _d径の合計 Then
+                    'すき間の寸法を確認し[底(楕円)]に編みかたをセットしてください。
+                    p_sメッセージ = My.Resources.CalcSetOvalPattern
+                    Return False
+                End If
             End If
             Return True
 
@@ -2324,7 +2339,7 @@ Class clsCalcMesh
             '各ひもの幅の計ではなく、'縦ひも'のひも幅の本数倍とする
             Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
             _d縦横の垂直ひも間の周 = 2 * _i縦ひもの本数 * (dひも幅 + _dひとつのすき間の寸法)
-            If _d縦横の垂直ひも間の周 < 0 Then
+            If _d縦横の垂直ひも間の周 < 0 Then '下限値チェック済
                 _d縦横の縦 = 0
                 _d縦横の横 = 0
                 Return False

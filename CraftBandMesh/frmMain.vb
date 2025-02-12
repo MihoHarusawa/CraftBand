@@ -428,7 +428,7 @@ Public Class frmMain
             Else
                 cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横
             End If
-            set底の縦横展開(.Value("f_b展開区分"))
+            set底の縦横展開(.Value("f_b展開区分"), False)
 
             nud長い横ひもの本数.Value = .Value("f_i長い横ひもの本数")
             dispAdjustLane(nud長い横ひも, .Value("f_i長い横ひも"))
@@ -451,7 +451,8 @@ Public Class frmMain
 
             dispAdjustLane(nud縦ひも, .Value("f_i縦ひも"))
             nud縦ひもの本数.Value = .Value("f_i縦ひもの本数")
-            dispValidValueNud(nudひとつのすき間の寸法, .Value("f_dひとつのすき間の寸法"))
+            'dispValidValueNud(nudひとつのすき間の寸法, .Value("f_dひとつのすき間の寸法"))
+            nudひとつのすき間の寸法.Value = .Value("f_dひとつのすき間の寸法")
             chk始末ひも.Checked = .Value("f_b始末ひも区分")
             txt縦ひものメモ.Text = .Value("f_s縦ひものメモ")
 
@@ -1145,7 +1146,7 @@ Public Class frmMain
 #Region "底(縦横)のコントロール"
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横を展開する.CheckedChanged
-        set底の縦横展開(chk縦横を展開する.Checked)
+        set底の縦横展開(chk縦横を展開する.Checked, False)
         btn展開本幅の同期.Visible = chk縦横を展開する.Checked
         recalc(CalcCategory.Expand, sender)
     End Sub
@@ -1346,12 +1347,12 @@ Public Class frmMain
         btn概算.Enabled = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_輪弧)
         grp画像.Visible = (cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_輪弧)
 
-        set底の縦横展開(chk縦横を展開する.Checked)
+        set底の縦横展開(chk縦横を展開する.Checked, cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧)
         recalc(CalcCategory.Expand, sender)
     End Sub
 
     'タブの表示・非表示(タブのインスタンスは保持)
-    Private Sub set底の縦横展開(ByVal isExband As Boolean)
+    Private Sub set底の縦横展開(ByVal isExband As Boolean, ByVal by輪弧 As Boolean)
         If isExband Then
             If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
                 'RemoveとAdd
@@ -1391,6 +1392,9 @@ Public Class frmMain
             'Add
             If Not TabControl.TabPages.Contains(tpage輪弧) Then
                 TabControl.TabPages.Insert(1, tpage輪弧)
+                If by輪弧 Then
+                    TabControl.SelectTab(tpage輪弧.Name)
+                End If
             End If
         Else
             'Remove
