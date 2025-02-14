@@ -460,6 +460,15 @@ Public Class frmMain
             nud楕円底周の加算.Value = .Value("f_d楕円底周の加算")
             chk楕円底個別設定.Checked = .Value("f_b楕円底個別設定")
 
+            Dim radBottom As enumUpDownNone = .Value("f_iひも上下の高さ数")
+            If radBottom = enumUpDownNone._DownUp Then
+                rad底_下上.Checked = True
+            ElseIf radBottom = enumUpDownNone._UpDown Then
+                rad底_上下.Checked = True
+            Else
+                rad底_上下なし.Checked = True
+            End If
+
             '輪弧のみだがセットする
             nud底部分の径.Value = .Value("f_d左端右端の目")
             nud内円の半径.Value = .Value("f_d左端右端の目2")
@@ -651,6 +660,14 @@ Public Class frmMain
             .Value("f_b楕円底個別設定") = chk楕円底個別設定.Checked
             .Value("f_d楕円底円弧の半径加算") = nud楕円底円弧の半径加算.Value
             .Value("f_d楕円底周の加算") = nud楕円底周の加算.Value
+
+            Dim updownnone As enumUpDownNone = enumUpDownNone._None
+            If rad底_下上.Checked Then
+                updownnone = enumUpDownNone._DownUp
+            ElseIf rad底_上下.Checked Then
+                updownnone = enumUpDownNone._UpDown
+            End If
+            .Value("f_iひも上下の高さ数") = CType(updownnone, Integer)
 
             '輪弧のみだがセットする
             .Value("f_d左端右端の目") = nud底部分の径.Value

@@ -1021,8 +1021,8 @@ Partial Public Class clsCalcMesh
 
     Enum enumUpDownNone
         _None
-        _UpDown
         _DownUp
+        _UpDown
     End Enum
     'プレビュー画像生成
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean, ByVal updownnone As enumUpDownNone) As Boolean
