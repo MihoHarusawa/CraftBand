@@ -279,7 +279,7 @@ Partial Public Class clsCalcMesh
 
             ElseIf bandPositionList._DirectionIndex = DirectionIndex._circle Then
                 '輪弧に配置
-                Dim d半径 As Double = _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)
+                Dim d半径 As Double = _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) / 2
                 bandpos.m_p中心点 = pOrigin + New S差分(row.f_d幅) * d半径
                 Dim delta As New S差分(row.f_d幅 - 90)
                 'f_dVal2 = 先半分の出力ひも長
