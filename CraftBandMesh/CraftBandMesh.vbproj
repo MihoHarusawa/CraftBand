@@ -13,9 +13,9 @@
     <Copyright>Copyright © LaboHarusawa 2022-2025</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
-    <FileVersion>1.8.11.0</FileVersion>
-    <AssemblyVersion>1.8.11.0</AssemblyVersion>
-    <Description>四角底と楕円底かごのデザインとサイズ計算</Description>
+    <FileVersion>1.8.12.0</FileVersion>
+    <AssemblyVersion>1.8.12.0</AssemblyVersion>
+    <Description>四角底と楕円底と丸かごのデザインとサイズ計算</Description>
   </PropertyGroup>
 
   <ItemGroup>
