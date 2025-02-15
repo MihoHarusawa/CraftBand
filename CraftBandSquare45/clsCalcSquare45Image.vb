@@ -815,7 +815,7 @@ Partial Public Class clsCalcSquare45
             '全体枠
             Dim d差の半分 As Double = _d四角の一辺 * ((_i横の四角数 - _i縦の四角数) / 2)
             Dim d和の半分 As Double = _d四角の一辺 * (2 * _d高さの四角数 + (_i横の四角数 + _i縦の四角数) / 2) + 2 * (_d縁の高さ / ROOT2)
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, 1)
 
             item.m_a四隅.pA = New S実座標(d差の半分, d和の半分)
             item.m_a四隅.pC = -item.m_a四隅.pA

@@ -1,6 +1,5 @@
 ﻿
 
-Imports System.IO
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
@@ -82,7 +81,7 @@ Class clsCalcMesh
 
     '輪弧のみ
     Private Property _i輪弧の本数 As Integer '底(縦横)の縦ひもの本数
-    Private Property _b二重 As Boolean 'Trueの時は縦ひもの本数を倍にする
+    Private Property _b二枚 As Boolean 'Trueの時は縦ひもの本数を倍にする
     Private Property _d底部分の径 As Double '設定
     Private Property _d内円の半径 As Double '設定
     Private Property _d合わせ位置の半径 As Double '設定
@@ -143,7 +142,7 @@ Class clsCalcMesh
 
         '輪弧のみ
         _i輪弧の本数 = 0
-        _b二重 = False
+        _b二枚 = False
         _d底部分の径 = 0
         _d内円の半径 = 0
         _d合わせ位置の半径 = 0
@@ -788,9 +787,9 @@ Class clsCalcMesh
             ElseIf .Value("f_i織りタイプ") = enum配置タイプ.i_輪弧 Then
                 _enum配置タイプ = enum配置タイプ.i_輪弧
                 '輪弧のみ
-                _b二重 = .Value("f_bひも上下1回区分")
+                _b二枚 = .Value("f_bひも上下1回区分")
                 _i輪弧の本数 = _i縦ひもの本数 'nud輪弧の本数
-                If _b二重 Then
+                If _b二枚 Then
                     _i縦ひもの本数 = _i輪弧の本数 * 2
                 End If
                 _d底部分の径 = .Value("f_d左端右端の目")
@@ -911,9 +910,9 @@ Class clsCalcMesh
     End Function
 
     Private Function check_輪弧() As Boolean
-        If _i縦ひもの本数 < 3 Then
+        If _i輪弧の本数 < 3 Then
             '{0} の値 {1} を増やしてください。
-            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text輪弧の縦ひも本数(), _i縦ひもの本数)
+            p_sメッセージ = String.Format(My.Resources.CalcTooSmallValue, text輪弧の本数(), _i輪弧の本数)
             Return False
         End If
 
@@ -2690,8 +2689,23 @@ Class clsCalcMesh
                 For idx As Integer = 1 To _i縦ひもの本数
                     row = Find縦横展開Row(__tbl縦展開, enumひも種.i_縦, idx, True)
 
-                    row.f_i位置番号 = postate
+                    row.f_i位置番号 = postate '角度はいずれも反時計回り
                     row.f_sひも名 = text縦ひも()
+                    If _enum配置タイプ = enum配置タイプ.i_輪弧 Then
+                        If _b二枚 Then
+                            If idx Mod 2 = 0 Then
+                                '2枚目: -(輪弧の本数-1)～0
+                                row.f_sひも名 = text縦ひも_輪弧_二枚目()
+                                row.f_i位置番号 = -_i輪弧の本数 + (idx / 2)
+                            Else
+                                '1枚目: 1～輪弧の本数 
+                                row.f_sひも名 = text縦ひも_輪弧()
+                                row.f_i位置番号 = (idx + 1) / 2
+                            End If
+                        Else
+                            row.f_sひも名 = text縦ひも_輪弧()
+                        End If
+                    End If
                     row.f_i何本幅 = _i縦ひも何本幅 '.Value("f_i縦ひも")
                     adjust_縦ひも(row, Nothing)
 
@@ -3453,7 +3467,7 @@ Class clsCalcMesh
         Return _frmMain.lbl縦ひもの本数.Text
     End Function
 
-    Private Function text輪弧の縦ひも本数() As String
+    Private Function text輪弧の本数() As String
         Return _frmMain.lbl輪弧の本数.Text
     End Function
 
@@ -3472,6 +3486,11 @@ Class clsCalcMesh
     Private Function text上下の連続数() As String
         Return _frmMain.lbl上下の連続数.Text
     End Function
+
+    Private Function text縦ひも_輪弧_二枚目() As String
+        Return My.Resources.CalcOutTextRinko2nd
+    End Function
+
 #End Region
 
 End Class

@@ -340,6 +340,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  縦ひも(二枚目の輪弧) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutTextRinko2nd() As String
+            Get
+                Return ResourceManager.GetString("CalcOutTextRinko2nd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  折り返し に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutTurn() As String

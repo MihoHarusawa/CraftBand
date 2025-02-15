@@ -150,7 +150,7 @@ Partial Class frmMain
         nud合わせ位置の半径 = New NumericUpDown()
         txt縦ひもの全本数 = New TextBox()
         lbl縦ひもの全本数 = New Label()
-        chk二重 = New CheckBox()
+        chk二枚 = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1429,16 +1429,16 @@ Partial Class frmMain
         lbl縦ひもの全本数.Text = "縦ひもの全本数"
         ToolTip1.SetToolTip(lbl縦ひもの全本数, "縦ひも(輪弧)の全本数")
         ' 
-        ' chk二重
+        ' chk二枚
         ' 
-        chk二重.AutoSize = True
-        chk二重.Location = New Point(285, 76)
-        chk二重.Name = "chk二重"
-        chk二重.Size = New Size(56, 23)
-        chk二重.TabIndex = 7
-        chk二重.Text = "二重"
-        ToolTip1.SetToolTip(chk二重, "2枚を合わせる")
-        chk二重.UseVisualStyleBackColor = True
+        chk二枚.AutoSize = True
+        chk二枚.Location = New Point(285, 76)
+        chk二枚.Name = "chk二枚"
+        chk二枚.Size = New Size(56, 23)
+        chk二枚.TabIndex = 7
+        chk二枚.Text = "二枚"
+        ToolTip1.SetToolTip(chk二枚, "2枚を合わせる")
+        chk二枚.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -2836,7 +2836,7 @@ Partial Class frmMain
         tpage輪弧.Controls.Add(lbl縦ひもの全本数_単位)
         tpage輪弧.Controls.Add(txt縦ひもの全本数)
         tpage輪弧.Controls.Add(lbl縦ひもの全本数)
-        tpage輪弧.Controls.Add(chk二重)
+        tpage輪弧.Controls.Add(chk二枚)
         tpage輪弧.Controls.Add(nud連続数6)
         tpage輪弧.Controls.Add(nud連続数5)
         tpage輪弧.Controls.Add(nud連続数4)
@@ -3927,7 +3927,7 @@ Partial Class frmMain
     Friend WithEvents nud連続数5 As NumericUpDown
     Friend WithEvents nud連続数4 As NumericUpDown
     Friend WithEvents nud連続数3 As NumericUpDown
-    Friend WithEvents chk二重 As CheckBox
+    Friend WithEvents chk二枚 As CheckBox
     Friend WithEvents lbl縦ひもの全本数_単位 As Label
     Friend WithEvents txt縦ひもの全本数 As TextBox
     Friend WithEvents lbl縦ひもの全本数 As Label

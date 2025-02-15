@@ -336,12 +336,10 @@ Partial Public Class clsCalcMesh
             Return False
         End If
 
-        Dim skip_odd As Boolean = False
         If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             _bandPositionListTate._DirectionIndex = DirectionIndex._radial
         ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
             _bandPositionListTate._DirectionIndex = DirectionIndex._circle
-            skip_odd = _b二重
         Else
             _bandPositionListTate._DirectionIndex = DirectionIndex._tate
         End If
@@ -352,8 +350,10 @@ Partial Public Class clsCalcMesh
 
         For i As Integer = 0 To _bandPositionListTate.Count - 1
             Dim bandpos As CBandPosition = _bandPositionListTate(i)
-            If skip_odd AndAlso (i Mod 2) = 1 Then
-                Continue For
+            '輪弧で二枚の場合は1枚目だけ
+            If _enum配置タイプ = enum配置タイプ.i_輪弧 AndAlso _b二枚 AndAlso
+                bandpos.m_row縦横展開.f_i位置番号 <= 0 Then
+                Continue For '2枚目: -(輪弧の本数-1)～0 をスキップ
             End If
             '
             Dim band As CBand = bandpos.ToBand(_d基本のひも幅)
@@ -366,7 +366,28 @@ Partial Public Class clsCalcMesh
         Return True
     End Function
 
+    '縦ひも(輪弧の二枚目)リストの描画情報
+    Private Function imageList輪弧二枚目(ByVal imgList縦ひも As clsImageItemList) As Boolean
+        If _enum配置タイプ <> enum配置タイプ.i_輪弧 OrElse Not _b二枚 Then
+            Return False
+        End If
 
+        '_bandPositionListTateにはセット済
+        For i As Integer = 0 To _bandPositionListTate.Count - 1
+            Dim bandpos As CBandPosition = _bandPositionListTate(i)
+            If 0 < bandpos.m_row縦横展開.f_i位置番号 Then
+                Exit For '2枚目: -(輪弧の本数-1)～0を処理、1枚目(1～)で終わり
+            End If
+            '
+            Dim band As CBand = bandpos.ToBand(_d基本のひも幅)
+            If band IsNot Nothing Then
+                Dim item As New clsImageItem(band, 30, bandpos.m_Index)
+                imgList縦ひも.AddItem(item)
+            End If
+        Next
+
+        Return True
+    End Function
     '_imageList側面ひも生成、側面のレコードを含む　
     Function imageList側面編みかた(ByVal d横辺ベース As Double, ByVal d縦辺ベース As Double, ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
         Dim item As clsImageItem
@@ -808,6 +829,20 @@ Partial Public Class clsCalcMesh
         Return True
     End Function
 
+    Private Function clip輪弧合わせ(ByVal imgList一枚目 As clsImageItemList, ByVal imgList二枚目 As clsImageItemList) As Boolean
+
+        For i2nd As Integer = 0 To imgList二枚目.Count - 1
+            Dim item2nd As clsImageItem = imgList二枚目(i2nd)
+            For i1st As Integer = 0 To imgList一枚目.Count - 1
+                Dim item1st As clsImageItem = imgList一枚目(i1st)
+                item2nd.AddClip(item1st)
+            Next
+            item2nd.AddClip(New S円(pOrigin, _d合わせ位置の半径))
+        Next
+
+        Return True
+    End Function
+
     '底(楕円と差しひも)　※輪弧では呼ばれない
     Function imageList底(ByVal isUpRightOnly As Boolean, ByVal isShowSide As Boolean) As clsImageItemList
         Dim item As clsImageItem
@@ -950,15 +985,15 @@ Partial Public Class clsCalcMesh
         itemlist.AddItem(item)
 
         '合わせ位置
-        If _b二重 AndAlso 0 < _d合わせ位置の半径 Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)
+        If _b二枚 AndAlso 0 < _d合わせ位置の半径 Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, 1)
             item.m_a四隅 = New S四隅(New S円(_d合わせ位置の半径).r外接領域)
             item.m_is円 = True
             itemlist.AddItem(item)
         End If
 
         '全体枠
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, 1)
         item.m_a四隅 = New S四隅(c高さの円.r外接領域)
         item.m_is円 = True
         itemlist.AddItem(item)
@@ -1066,11 +1101,27 @@ Partial Public Class clsCalcMesh
         imgData.setBasics(_d基本のひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
         '描画用のデータ追加
-        Me.imageList横ひも(imgList横ひも, get横展開DataTable(), isUpRightOnly)
-        Me.imageList縦ひも(imgList縦ひも, get縦展開DataTable(), isUpRightOnly)
+        imageList横ひも(imgList横ひも, get横展開DataTable(), isUpRightOnly)
+        imageList縦ひも(imgList縦ひも, get縦展開DataTable(), isUpRightOnly)
 
         '底の編み目
         regionUpDown底(imgList横ひも, imgList縦ひも, updownnone)
+
+        '輪弧の二枚目
+        If _enum配置タイプ = enum配置タイプ.i_輪弧 AndAlso _b二枚 AndAlso
+            0 < _d合わせ位置の半径 Then
+            Dim imgList輪弧2 As New clsImageItemList()
+            imageList輪弧二枚目(imgList輪弧2)
+            '輪弧の編み目
+            upDown輪弧(imgList輪弧2, updownnone)
+            '輪弧の1枚目と2枚目
+            clip輪弧合わせ(imgList縦ひも, imgList輪弧2)
+
+            '中身を移動
+            imgData.MoveList(imgList輪弧2)
+            imgList輪弧2 = Nothing
+        End If
+
 
         '中身を移動
         imgData.MoveList(imgList横ひも)

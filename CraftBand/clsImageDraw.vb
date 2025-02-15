@@ -361,11 +361,14 @@ Public Class CImageDraw
             Case ImageTypeEnum._底枠2
                 Return draw底枠2(item)
 
-            Case ImageTypeEnum._全体枠
-                Return draw全体枠(item)
-
-            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
+            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面
                 Return draw側面(item)
+
+            Case ImageTypeEnum._四隅領域
+                Return draw四隅領域(item)
+
+            Case ImageTypeEnum._四隅領域線
+                Return draw四隅領域線(item)
 
             Case ImageTypeEnum._底の中央線
                 Return draw底の中央線(item)
@@ -610,6 +613,13 @@ Public Class CImageDraw
                 invertedClip.Exclude(path)
             Next
         End If
+        '円は1点のみ
+        If item.m_is円 Then
+            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
+            Dim path As New GraphicsPath()
+            path.AddArc(rect, 0, 360)
+            invertedClip.Exclude(path)
+        End If
 
         ' クリップ領域を新たな領域に設定
         _Graphic.Clip = invertedClip
@@ -752,64 +762,140 @@ Public Class CImageDraw
     End Function
 
     Function draw底枠(ByVal item As clsImageItem) As Boolean
+        Dim ret As Boolean = True
         If item.m_is円 Then
-            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
-            _Graphic.DrawEllipse(_Pen_black_thick, rect)
+            'Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
+            '_Graphic.DrawEllipse(_Pen_black_thick, rect)
+            ret = ret And draw_ellipse(item.m_a四隅.r外接領域, LineTypeEnum._black_thick)
         Else
-            Dim points() As PointF = pixcel_lines(item.m_a四隅)
-            _Graphic.DrawLines(_Pen_black_thick, points)
+            'Dim points() As PointF = pixcel_lines(item.m_a四隅)
+            '_Graphic.DrawLines(_Pen_black_thick, points)
+            ret = ret And draw_area(item.m_a四隅, LineTypeEnum._black_thick)
         End If
-        For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        Next
+        'For Each line As S線分 In item.m_lineList
+        '    _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'Next
+        ret = ret And draw_linelist(item.m_lineList, LineTypeEnum._black_dot)
         Return True
     End Function
 
     Function draw底枠2(ByVal item As clsImageItem) As Boolean
-        For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        Next
-        Return True
-    End Function
-
-    Function draw全体枠(ByVal item As clsImageItem) As Boolean
-        If item.m_is円 Then
-            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
-            _Graphic.DrawEllipse(_Pen_black_thin, rect)
-        Else
-            Dim points() As PointF = pixcel_lines(item.m_a四隅)
-            _Graphic.DrawLines(_Pen_black_dot, points)
-        End If
-        Return True
+        'For Each line As S線分 In item.m_lineList
+        '    _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'Next
+        'Return True
+        Return draw_linelist(item.m_lineList, LineTypeEnum._black_thick)
     End Function
 
     Function draw側面(ByVal item As clsImageItem) As Boolean
-        If item.m_is円 AndAlso item.m_ImageType = ImageTypeEnum._四隅領域 Then
-            Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
-            _Graphic.DrawEllipse(_Pen_black_thin, rect)
+        Dim ret As Boolean = True
+        'Dim points() As PointF = pixcel_lines(item.m_a四隅)
+        '_Graphic.DrawLines(_Pen_black_thin, points)
+        ret = ret And draw_area(item.m_a四隅, LineTypeEnum._black_thin)
+
+        'For Each line As S線分 In item.m_lineList
+        '    _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'Next
+        ret = ret And draw_linelist(item.m_lineList, LineTypeEnum._black_dot)
+        Return ret
+    End Function
+
+    Function draw四隅領域(ByVal item As clsImageItem) As Boolean
+        Dim ret As Boolean = True
+        If item.m_is円 Then
+            ret = ret And draw_ellipse(item.m_a四隅.r外接領域, LineTypeEnum._black_thin)
         Else
-            Dim points() As PointF = pixcel_lines(item.m_a四隅)
-            _Graphic.DrawLines(_Pen_black_thin, points)
+            ret = ret And draw_area(item.m_a四隅, LineTypeEnum._black_thin)
         End If
-        For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        Next
-        Return True
+        ret = ret And draw_linelist(item.m_lineList, LineTypeEnum._black_dot)
+        Return ret
+    End Function
+
+    Function draw四隅領域線(ByVal item As clsImageItem) As Boolean
+        Dim ret As Boolean = True
+        If item.m_is円 Then
+            ret = ret And draw_ellipse(item.m_a四隅.r外接領域, item.m_ltype)
+        Else
+            ret = ret And draw_area(item.m_a四隅, item.m_ltype)
+        End If
+        ret = ret And draw_linelist(item.m_lineList, item.m_ltype)
+        Return ret
     End Function
 
     Function draw底の中央線(ByVal item As clsImageItem) As Boolean
-        For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_red, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'For Each line As S線分 In item.m_lineList
+        '    _Graphic.DrawLine(_Pen_red, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'Next
+        'Return True
+        Return draw_linelist(item.m_lineList, LineTypeEnum._red)
+    End Function
+
+    Function draw折り返し線(ByVal item As clsImageItem) As Boolean
+        'For Each line As S線分 In item.m_lineList
+        '    _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
+        'Next
+        'Return True
+        Return draw_linelist(item.m_lineList, LineTypeEnum._black_thick)
+    End Function
+
+    Private Function draw_linelist(ByVal lineList As C線分リスト, ByVal ltype As LineTypeEnum)
+        For Each line As S線分 In lineList
+            Select Case ltype
+                Case LineTypeEnum._black_thin
+                    _Graphic.DrawLine(_Pen_black_thin, pixcel_point(line.p開始), pixcel_point(line.p終了))
+                Case LineTypeEnum._black_thick
+                    _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
+                Case LineTypeEnum._black_dot
+                    _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+                Case LineTypeEnum._red
+                    _Graphic.DrawLine(_Pen_red, pixcel_point(line.p開始), pixcel_point(line.p終了))
+                Case Else 'nodef
+                    Return False
+            End Select
         Next
         Return True
     End Function
 
-    Function draw折り返し線(ByVal item As clsImageItem) As Boolean
-        For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        Next
+    Private Function draw_area(ByVal area As S四隅, ByVal ltype As LineTypeEnum)
+        If area.IsEmpty Then
+            Return True
+        End If
+        Dim points() As PointF = pixcel_lines(area)
+        Select Case ltype
+            Case LineTypeEnum._black_thin
+                _Graphic.DrawLines(_Pen_black_thin, points)
+            Case LineTypeEnum._black_thick
+                _Graphic.DrawLines(_Pen_black_thick, points)
+            Case LineTypeEnum._black_dot
+                _Graphic.DrawLines(_Pen_black_dot, points)
+            Case LineTypeEnum._red
+                _Graphic.DrawLines(_Pen_red, points)
+            Case Else 'nodef
+                Return False
+        End Select
         Return True
     End Function
+
+    Private Function draw_ellipse(ByVal region As S領域, ByVal ltype As LineTypeEnum)
+        If region.IsEmpty Then
+            Return True
+        End If
+        Dim rect As RectangleF = pixcel_rectangle(region)
+        Select Case ltype
+            Case LineTypeEnum._black_thin
+                _Graphic.DrawEllipse(_Pen_black_thin, rect)
+            Case LineTypeEnum._black_thick
+                _Graphic.DrawEllipse(_Pen_black_thick, rect)
+            Case LineTypeEnum._black_dot
+                _Graphic.DrawEllipse(_Pen_black_dot, rect)
+            Case LineTypeEnum._red
+                _Graphic.DrawEllipse(_Pen_red, rect)
+            Case Else 'nodef
+                Return False
+        End Select
+        Return True
+    End Function
+
 
     Function draw文字列(ByVal item As clsImageItem) As Boolean
         If item.m_aryString Is Nothing OrElse item.m_sizeFont <= 0 Then

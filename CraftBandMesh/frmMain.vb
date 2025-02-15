@@ -471,7 +471,7 @@ Public Class frmMain
             End If
 
             '輪弧のみだがセットする
-            chk二重.Checked = .Value("f_bひも上下1回区分")
+            chk二枚.Checked = .Value("f_bひも上下1回区分")
             nud底部分の径.Value = .Value("f_d左端右端の目")
             nud内円の半径.Value = .Value("f_d左端右端の目2")
             nud合わせ位置の半径.Value = .Value("f_d上端下端の目")
@@ -673,7 +673,7 @@ Public Class frmMain
             .Value("f_iひも上下の高さ数") = CType(updownnone, Integer)
 
             '輪弧のみだがセットする
-            .Value("f_bひも上下1回区分") = chk二重.Checked
+            .Value("f_bひも上下1回区分") = chk二枚.Checked
             .Value("f_d左端右端の目") = nud底部分の径.Value
             .Value("f_d左端右端の目2") = nud内円の半径.Value
             .Value("f_d上端下端の目") = nud合わせ位置の半径.Value
@@ -1439,7 +1439,7 @@ Public Class frmMain
 
     Private Sub nud縦ひもの本数_輪弧_ValueChanged(sender As Object, e As EventArgs) Handles nud輪弧の本数.ValueChanged
         nud縦ひもの本数.Value = nud輪弧の本数.Value
-        If chk二重.Checked Then
+        If chk二枚.Checked Then
             txt縦ひもの全本数.Text = nud輪弧の本数.Value * 2
         Else
             txt縦ひもの全本数.Text = nud輪弧の本数.Value
@@ -1447,9 +1447,9 @@ Public Class frmMain
         'recalcは縦ひもの本数側
     End Sub
 
-    Private Sub chk二重_CheckedChanged(sender As Object, e As EventArgs) Handles chk二重.CheckedChanged
-        nud合わせ位置の半径.Enabled = chk二重.Checked
-        If chk二重.Checked Then
+    Private Sub chk二重_CheckedChanged(sender As Object, e As EventArgs) Handles chk二枚.CheckedChanged
+        nud合わせ位置の半径.Enabled = chk二枚.Checked
+        If chk二枚.Checked Then
             txt縦ひもの全本数.Text = nud輪弧の本数.Value * 2
         Else
             txt縦ひもの全本数.Text = nud輪弧の本数.Value

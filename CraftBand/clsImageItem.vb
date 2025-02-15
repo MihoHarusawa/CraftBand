@@ -1747,6 +1747,7 @@ Public Class clsImageItem
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
     Public m_is円 As Boolean = False
+    Public m_ltype As LineTypeEnum = LineTypeEnum._nodef
 
     '縦バンド・横バンド・コマ・付属品
     Public m_dひも幅 As Double = 0
@@ -1799,7 +1800,7 @@ Public Class clsImageItem
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
         _四隅領域 'm_a四隅,m_lineList,m_is円
-        _全体枠    'm_a四隅,m_is円
+        _四隅領域線    'm_a四隅,m_lineList,m_is円,m_ltype
         _底枠2     'm_lineList        (Hexagonの底)
 
 
@@ -1814,6 +1815,14 @@ Public Class clsImageItem
 
         _横軸線 'm_listLine
         _縦軸線 'm_listLine
+    End Enum
+
+    Enum LineTypeEnum
+        _nodef = 0
+        _black_thin
+        _black_thick
+        _black_dot
+        _red
     End Enum
     '
     Public m_ImageType As ImageTypeEnum = ImageTypeEnum._描画なし
@@ -1966,6 +1975,11 @@ Public Class clsImageItem
             m_clipList.AddRange(item.m_bandList)
         End If
     End Sub
+    Sub AddClip(ByVal circle As S円)
+        '円は今のところ1点のみとする
+        m_is円 = True
+        m_a四隅 = New S四隅(circle.r外接領域)
+    End Sub
 
 
     '文字位置
@@ -2045,11 +2059,11 @@ Public Class clsImageItem
                 r描画領域 = m_rひも位置.get拡大領域(m_dひも幅 / 2)
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
 
-            Case ImageTypeEnum._底枠, ImageTypeEnum._全体枠
+            Case ImageTypeEnum._底枠, ImageTypeEnum._四隅領域, ImageTypeEnum._四隅領域線
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面, ImageTypeEnum._四隅領域
+            Case ImageTypeEnum._横の側面, ImageTypeEnum._縦の側面
                 r描画領域 = m_a四隅.r外接領域
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
