@@ -1396,7 +1396,7 @@ Partial Class frmMain
         lbl合わせ位置の半径.Size = New Size(114, 19)
         lbl合わせ位置の半径.TabIndex = 14
         lbl合わせ位置の半径.Text = "合わせ位置の半径"
-        ToolTip1.SetToolTip(lbl合わせ位置の半径, "二重の輪弧を合わせる位置の半径")
+        ToolTip1.SetToolTip(lbl合わせ位置の半径, "プラス値なら、この半径の円より外側に、二枚目の輪弧を描く")
         ' 
         ' nud合わせ位置の半径
         ' 
@@ -1407,7 +1407,7 @@ Partial Class frmMain
         nud合わせ位置の半径.TabIndex = 15
         nud合わせ位置の半径.TextAlign = HorizontalAlignment.Right
         nud合わせ位置の半径.ThousandsSeparator = True
-        ToolTip1.SetToolTip(nud合わせ位置の半径, "二重の輪弧を合わせる位置の半径")
+        ToolTip1.SetToolTip(nud合わせ位置の半径, "プラス値なら、この半径の円より外側に、二枚目の輪弧を描く")
         ' 
         ' txt縦ひもの全本数
         ' 

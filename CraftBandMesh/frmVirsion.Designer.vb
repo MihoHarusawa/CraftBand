@@ -36,9 +36,9 @@ Partial Class frmVirsion
         ' btn終了
         ' 
         btn終了.DialogResult = DialogResult.OK
-        btn終了.Location = New Point(435, 187)
+        btn終了.Location = New Point(435, 178)
         btn終了.Name = "btn終了"
-        btn終了.Size = New Size(111, 46)
+        btn終了.Size = New Size(111, 44)
         btn終了.TabIndex = 26
         btn終了.Text = "OK(&O)"
         btn終了.UseVisualStyleBackColor = True
@@ -46,64 +46,64 @@ Partial Class frmVirsion
         ' lblExeName
         ' 
         lblExeName.AutoSize = True
-        lblExeName.Location = New Point(116, 20)
+        lblExeName.Location = New Point(116, 19)
         lblExeName.Name = "lblExeName"
-        lblExeName.Size = New Size(110, 20)
+        lblExeName.Size = New Size(104, 19)
         lblExeName.TabIndex = 27
         lblExeName.Text = "CraftBandMesh"
         ' 
         ' lblDescription
         ' 
         lblDescription.AutoSize = True
-        lblDescription.Location = New Point(116, 49)
+        lblDescription.Location = New Point(116, 47)
         lblDescription.Name = "lblDescription"
-        lblDescription.Size = New Size(173, 20)
+        lblDescription.Size = New Size(161, 19)
         lblDescription.TabIndex = 28
         lblDescription.Text = "四角・楕円底かごのデザイン"
         ' 
         ' txtDescription
         ' 
-        txtDescription.Location = New Point(116, 81)
+        txtDescription.Location = New Point(116, 77)
         txtDescription.Multiline = True
         txtDescription.Name = "txtDescription"
         txtDescription.ReadOnly = True
-        txtDescription.Size = New Size(260, 78)
+        txtDescription.Size = New Size(267, 74)
         txtDescription.TabIndex = 30
-        txtDescription.Text = "四角底・楕円底から垂直に立ち上げて、" & vbCrLf & "側面を下から上に編んでいき、" & vbCrLf & "縁の始末をします。"
+        txtDescription.Text = "四角底・楕円底・丸底から垂直に立ち上げて" & vbCrLf & "側面を下から上に編んでいき、" & vbCrLf & "縁の始末をします。"
         ' 
         ' lblVersion
         ' 
         lblVersion.AutoSize = True
-        lblVersion.Location = New Point(116, 174)
+        lblVersion.Location = New Point(116, 165)
         lblVersion.Name = "lblVersion"
-        lblVersion.Size = New Size(56, 20)
+        lblVersion.Size = New Size(53, 19)
         lblVersion.TabIndex = 31
         lblVersion.Text = "version"
         ' 
         ' PictureBox1
         ' 
         PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), Image)
-        PictureBox1.Location = New Point(12, 12)
+        PictureBox1.Location = New Point(12, 11)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(98, 98)
+        PictureBox1.Size = New Size(98, 93)
         PictureBox1.TabIndex = 32
         PictureBox1.TabStop = False
         ' 
         ' lnkLabo
         ' 
         lnkLabo.AutoSize = True
-        lnkLabo.Location = New Point(116, 204)
+        lnkLabo.Location = New Point(116, 194)
         lnkLabo.Name = "lnkLabo"
-        lnkLabo.Size = New Size(302, 20)
+        lnkLabo.Size = New Size(276, 19)
         lnkLabo.TabIndex = 33
         lnkLabo.TabStop = True
         lnkLabo.Text = "https://labo.com/CraftBand/craftbandmesh/"
         ' 
         ' frmVirsion
         ' 
-        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(558, 242)
+        ClientSize = New Size(558, 230)
         Controls.Add(lnkLabo)
         Controls.Add(PictureBox1)
         Controls.Add(lblVersion)
