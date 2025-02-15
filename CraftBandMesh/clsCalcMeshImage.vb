@@ -336,10 +336,12 @@ Partial Public Class clsCalcMesh
             Return False
         End If
 
+        Dim skip_odd As Boolean = False
         If _enum配置タイプ = enum配置タイプ.i_放射状 Then
             _bandPositionListTate._DirectionIndex = DirectionIndex._radial
         ElseIf _enum配置タイプ = enum配置タイプ.i_輪弧 Then
             _bandPositionListTate._DirectionIndex = DirectionIndex._circle
+            skip_odd = _b二重
         Else
             _bandPositionListTate._DirectionIndex = DirectionIndex._tate
         End If
@@ -348,7 +350,12 @@ Partial Public Class clsCalcMesh
             Return False
         End If
 
-        For Each bandpos As CBandPosition In _bandPositionListTate
+        For i As Integer = 0 To _bandPositionListTate.Count - 1
+            Dim bandpos As CBandPosition = _bandPositionListTate(i)
+            If skip_odd AndAlso (i Mod 2) = 1 Then
+                Continue For
+            End If
+            '
             Dim band As CBand = bandpos.ToBand(_d基本のひも幅)
             If band IsNot Nothing Then
                 Dim item As New clsImageItem(band, 20, bandpos.m_Index)
@@ -941,6 +948,14 @@ Partial Public Class clsCalcMesh
         Next
 #End If
         itemlist.AddItem(item)
+
+        '合わせ位置
+        If _b二重 AndAlso 0 < _d合わせ位置の半径 Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)
+            item.m_a四隅 = New S四隅(New S円(_d合わせ位置の半径).r外接領域)
+            item.m_is円 = True
+            itemlist.AddItem(item)
+        End If
 
         '全体枠
         item = New clsImageItem(clsImageItem.ImageTypeEnum._全体枠, 1)

@@ -165,6 +165,7 @@ Public Class frmMain
             lbl楕円底周の加算_単位.Text = unitstr
             lbl底部分の径_単位.Text = unitstr
             lbl内円の半径_単位.Text = unitstr
+            lbl合わせ位置の半径_単位.Text = unitstr
 
 
             nud横寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
@@ -470,8 +471,10 @@ Public Class frmMain
             End If
 
             '輪弧のみだがセットする
+            chk二重.Checked = .Value("f_bひも上下1回区分")
             nud底部分の径.Value = .Value("f_d左端右端の目")
             nud内円の半径.Value = .Value("f_d左端右端の目2")
+            nud合わせ位置の半径.Value = .Value("f_d上端下端の目")
             nud連続数1.Value = .Value("f_iコマ上側の縦ひも")
             nud連続数2.Value = .Value("f_i左から何番目")
             nud連続数3.Value = .Value("f_i左から何番目2")
@@ -670,8 +673,10 @@ Public Class frmMain
             .Value("f_iひも上下の高さ数") = CType(updownnone, Integer)
 
             '輪弧のみだがセットする
+            .Value("f_bひも上下1回区分") = chk二重.Checked
             .Value("f_d左端右端の目") = nud底部分の径.Value
             .Value("f_d左端右端の目2") = nud内円の半径.Value
+            .Value("f_d上端下端の目") = nud合わせ位置の半径.Value
             .Value("f_i左から何番目") = nud連続数1.Value
             .Value("f_i左から何番目2") = nud連続数2.Value
             .Value("f_iコマ上側の縦ひも") = nud連続数1.Value
@@ -1260,7 +1265,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦ひもの本数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数.ValueChanged
-        nud縦ひもの本数_輪弧.Value = nud縦ひもの本数.Value
+        nud輪弧の本数.Value = nud縦ひもの本数.Value
 
         If cmb配置タイプ.SelectedIndex <> enum配置タイプ.i_縦横 Then
             nud縦ひもの本数.Increment = 1
@@ -1432,9 +1437,28 @@ Public Class frmMain
         'recalcは縦ひも側
     End Sub
 
-    Private Sub nud縦ひもの本数_輪弧_ValueChanged(sender As Object, e As EventArgs) Handles nud縦ひもの本数_輪弧.ValueChanged
-        nud縦ひもの本数.Value = nud縦ひもの本数_輪弧.Value
+    Private Sub nud縦ひもの本数_輪弧_ValueChanged(sender As Object, e As EventArgs) Handles nud輪弧の本数.ValueChanged
+        nud縦ひもの本数.Value = nud輪弧の本数.Value
+        If chk二重.Checked Then
+            txt縦ひもの全本数.Text = nud輪弧の本数.Value * 2
+        Else
+            txt縦ひもの全本数.Text = nud輪弧の本数.Value
+        End If
         'recalcは縦ひもの本数側
+    End Sub
+
+    Private Sub chk二重_CheckedChanged(sender As Object, e As EventArgs) Handles chk二重.CheckedChanged
+        nud合わせ位置の半径.Enabled = chk二重.Checked
+        If chk二重.Checked Then
+            txt縦ひもの全本数.Text = nud輪弧の本数.Value * 2
+        Else
+            txt縦ひもの全本数.Text = nud輪弧の本数.Value
+        End If
+        recalc(CalcCategory.Vertical, sender)
+    End Sub
+
+    Private Sub nud合わせ位置の半径_ValueChanged(sender As Object, e As EventArgs) Handles nud合わせ位置の半径.ValueChanged
+        '
     End Sub
 
     Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud底部分の径.ValueChanged
@@ -2066,6 +2090,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 #End Region
 
 End Class

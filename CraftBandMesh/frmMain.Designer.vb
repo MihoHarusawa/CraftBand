@@ -134,8 +134,8 @@ Partial Class frmMain
         nud底部分の径 = New NumericUpDown()
         lbl縦ひも_輪弧 = New Label()
         nud縦ひも_輪弧 = New NumericUpDown()
-        lbl縦ひもの本数_輪弧 = New Label()
-        nud縦ひもの本数_輪弧 = New NumericUpDown()
+        lbl輪弧の本数 = New Label()
+        nud輪弧の本数 = New NumericUpDown()
         lbl内円の半径 = New Label()
         lbl底部分の径 = New Label()
         Label1 = New Label()
@@ -146,6 +146,11 @@ Partial Class frmMain
         nud連続数4 = New NumericUpDown()
         nud連続数5 = New NumericUpDown()
         nud連続数6 = New NumericUpDown()
+        lbl合わせ位置の半径 = New Label()
+        nud合わせ位置の半径 = New NumericUpDown()
+        txt縦ひもの全本数 = New TextBox()
+        lbl縦ひもの全本数 = New Label()
+        chk二重 = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -284,12 +289,14 @@ Partial Class frmMain
         chk側面 = New CheckBox()
         picプレビュー = New PictureBox()
         tpage輪弧 = New TabPage()
+        lbl合わせ位置の半径_単位 = New Label()
+        lbl縦ひもの全本数_単位 = New Label()
         lbl縦ひも幅length = New Label()
         lbl輪弧長 = New Label()
         PictureBox2 = New PictureBox()
         lbl上下の連続数 = New Label()
         lbl縦ひも_輪弧_単位 = New Label()
-        lbl縦ひもの本数_輪弧_単位 = New Label()
+        lbl輪弧の本数_単位 = New Label()
         lbl内円の半径_単位 = New Label()
         lbl底部分の径_単位 = New Label()
         f_i段数2 = New DataGridViewTextBoxColumn()
@@ -367,11 +374,12 @@ Partial Class frmMain
         CType(nud内円の半径, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud底部分の径, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦ひも_輪弧, ComponentModel.ISupportInitialize).BeginInit()
-        CType(nud縦ひもの本数_輪弧, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud輪弧の本数, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数3, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数4, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数5, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud連続数6, ComponentModel.ISupportInitialize).BeginInit()
+        CType(nud合わせ位置の半径, ComponentModel.ISupportInitialize).BeginInit()
         MenuStrip1.SuspendLayout()
         grp目標寸法.SuspendLayout()
         TabControl.SuspendLayout()
@@ -1201,41 +1209,41 @@ Partial Class frmMain
         ' 
         ' nud連続数2
         ' 
-        nud連続数2.Location = New Point(97, 249)
+        nud連続数2.Location = New Point(97, 305)
         nud連続数2.Name = "nud連続数2"
         nud連続数2.Size = New Size(51, 26)
-        nud連続数2.TabIndex = 15
+        nud連続数2.TabIndex = 22
         nud連続数2.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数2, "2番目位置の連続数")
         ' 
         ' nud連続数1
         ' 
         nud連続数1.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数1.Location = New Point(42, 249)
+        nud連続数1.Location = New Point(42, 305)
         nud連続数1.Name = "nud連続数1"
         nud連続数1.Size = New Size(51, 26)
-        nud連続数1.TabIndex = 14
+        nud連続数1.TabIndex = 21
         nud連続数1.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数1, "最初の位置の連続数")
         ' 
         ' nud内円の半径
         ' 
-        nud内円の半径.Location = New Point(168, 121)
+        nud内円の半径.Location = New Point(168, 159)
         nud内円の半径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud内円の半径.Name = "nud内円の半径"
         nud内円の半径.Size = New Size(69, 26)
-        nud内円の半径.TabIndex = 8
+        nud内円の半径.TabIndex = 12
         nud内円の半径.TextAlign = HorizontalAlignment.Right
         nud内円の半径.ThousandsSeparator = True
         ToolTip1.SetToolTip(nud内円の半径, "輪弧の内側に作られる円の半径")
         ' 
         ' nud底部分の径
         ' 
-        nud底部分の径.Location = New Point(168, 155)
+        nud底部分の径.Location = New Point(168, 231)
         nud底部分の径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud底部分の径.Name = "nud底部分の径"
         nud底部分の径.Size = New Size(69, 26)
-        nud底部分の径.TabIndex = 11
+        nud底部分の径.TabIndex = 18
         nud底部分の径.TextAlign = HorizontalAlignment.Right
         nud底部分の径.ThousandsSeparator = True
         ToolTip1.SetToolTip(nud底部分の径, "内円から立ち上げ位置までの径")
@@ -1243,7 +1251,7 @@ Partial Class frmMain
         ' lbl縦ひも_輪弧
         ' 
         lbl縦ひも_輪弧.AutoSize = True
-        lbl縦ひも_輪弧.Location = New Point(27, 40)
+        lbl縦ひも_輪弧.Location = New Point(30, 40)
         lbl縦ひも_輪弧.Name = "lbl縦ひも_輪弧"
         lbl縦ひも_輪弧.Size = New Size(81, 19)
         lbl縦ひも_輪弧.TabIndex = 0
@@ -1261,42 +1269,42 @@ Partial Class frmMain
         ToolTip1.SetToolTip(nud縦ひも_輪弧, "輪弧に配置するひもの幅、計算ベース値")
         nud縦ひも_輪弧.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
-        ' lbl縦ひもの本数_輪弧
+        ' lbl輪弧の本数
         ' 
-        lbl縦ひもの本数_輪弧.AutoSize = True
-        lbl縦ひもの本数_輪弧.Location = New Point(27, 72)
-        lbl縦ひもの本数_輪弧.Name = "lbl縦ひもの本数_輪弧"
-        lbl縦ひもの本数_輪弧.Size = New Size(120, 19)
-        lbl縦ひもの本数_輪弧.TabIndex = 4
-        lbl縦ひもの本数_輪弧.Text = "縦ひも(輪弧)の本数"
-        ToolTip1.SetToolTip(lbl縦ひもの本数_輪弧, "左から時計方向に丸く配置する本数")
+        lbl輪弧の本数.AutoSize = True
+        lbl輪弧の本数.Location = New Point(30, 77)
+        lbl輪弧の本数.Name = "lbl輪弧の本数"
+        lbl輪弧の本数.Size = New Size(76, 19)
+        lbl輪弧の本数.TabIndex = 4
+        lbl輪弧の本数.Text = "輪弧の本数"
+        ToolTip1.SetToolTip(lbl輪弧の本数, "左から時計方向に丸く配置する本数")
         ' 
-        ' nud縦ひもの本数_輪弧
+        ' nud輪弧の本数
         ' 
-        nud縦ひもの本数_輪弧.Location = New Point(168, 70)
-        nud縦ひもの本数_輪弧.Name = "nud縦ひもの本数_輪弧"
-        nud縦ひもの本数_輪弧.Size = New Size(66, 26)
-        nud縦ひもの本数_輪弧.TabIndex = 5
-        nud縦ひもの本数_輪弧.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(nud縦ひもの本数_輪弧, "左から時計方向に丸く配置する本数")
+        nud輪弧の本数.Location = New Point(168, 74)
+        nud輪弧の本数.Name = "nud輪弧の本数"
+        nud輪弧の本数.Size = New Size(66, 26)
+        nud輪弧の本数.TabIndex = 5
+        nud輪弧の本数.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(nud輪弧の本数, "左から時計方向に丸く配置する本数")
         ' 
         ' lbl内円の半径
         ' 
         lbl内円の半径.AutoSize = True
-        lbl内円の半径.Location = New Point(27, 124)
+        lbl内円の半径.Location = New Point(30, 161)
         lbl内円の半径.Name = "lbl内円の半径"
         lbl内円の半径.Size = New Size(76, 19)
-        lbl内円の半径.TabIndex = 7
+        lbl内円の半径.TabIndex = 11
         lbl内円の半径.Text = "内円の半径"
         ToolTip1.SetToolTip(lbl内円の半径, "輪弧の内側に作られる円の半径")
         ' 
         ' lbl底部分の径
         ' 
         lbl底部分の径.AutoSize = True
-        lbl底部分の径.Location = New Point(27, 157)
+        lbl底部分の径.Location = New Point(30, 233)
         lbl底部分の径.Name = "lbl底部分の径"
         lbl底部分の径.Size = New Size(76, 19)
-        lbl底部分の径.TabIndex = 10
+        lbl底部分の径.TabIndex = 17
         lbl底部分の径.Text = "底部分の径"
         ToolTip1.SetToolTip(lbl底部分の径, "内円から立ち上げ位置までの径")
         ' 
@@ -1306,27 +1314,27 @@ Partial Class frmMain
         Label1.Location = New Point(547, 203)
         Label1.Name = "Label1"
         Label1.Size = New Size(76, 19)
-        Label1.TabIndex = 22
+        Label1.TabIndex = 29
         Label1.Text = "内円の半径"
         ToolTip1.SetToolTip(Label1, "輪弧の内側に作られる円の半径")
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(640, 143)
+        Label2.Location = New Point(667, 143)
         Label2.Name = "Label2"
         Label2.Size = New Size(76, 19)
-        Label2.TabIndex = 21
+        Label2.TabIndex = 28
         Label2.Text = "底部分の径"
         ToolTip1.SetToolTip(Label2, "内円から立ち上げ位置までの径")
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(584, 40)
+        Label3.Location = New Point(611, 40)
         Label3.Name = "Label3"
         Label3.Size = New Size(142, 19)
-        Label3.TabIndex = 20
+        Label3.TabIndex = 27
         Label3.Text = "高さ(側面を指定した時)"
         ToolTip1.SetToolTip(Label3, "[側面]として指定した高さ" & vbCrLf & "指定しなければゼロ")
         ' 
@@ -1334,51 +1342,103 @@ Partial Class frmMain
         ' 
         txt輪弧長.BackColor = Color.White
         txt輪弧長.BorderStyle = BorderStyle.FixedSingle
-        txt輪弧長.Location = New Point(659, 347)
+        txt輪弧長.Location = New Point(691, 347)
         txt輪弧長.Name = "txt輪弧長"
         txt輪弧長.ReadOnly = True
         txt輪弧長.Size = New Size(93, 26)
-        txt輪弧長.TabIndex = 24
+        txt輪弧長.TabIndex = 31
         txt輪弧長.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(txt輪弧長, "高さ位置までの輪弧の長さ")
         ' 
         ' nud連続数3
         ' 
         nud連続数3.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数3.Location = New Point(152, 249)
+        nud連続数3.Location = New Point(152, 305)
         nud連続数3.Name = "nud連続数3"
         nud連続数3.Size = New Size(51, 26)
-        nud連続数3.TabIndex = 16
+        nud連続数3.TabIndex = 23
         nud連続数3.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数3, "3番目位置の連続数")
         ' 
         ' nud連続数4
         ' 
-        nud連続数4.Location = New Point(207, 249)
+        nud連続数4.Location = New Point(207, 305)
         nud連続数4.Name = "nud連続数4"
         nud連続数4.Size = New Size(51, 26)
-        nud連続数4.TabIndex = 17
+        nud連続数4.TabIndex = 24
         nud連続数4.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数4, "4番目位置の連続数")
         ' 
         ' nud連続数5
         ' 
         nud連続数5.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数5.Location = New Point(262, 249)
+        nud連続数5.Location = New Point(262, 305)
         nud連続数5.Name = "nud連続数5"
         nud連続数5.Size = New Size(51, 26)
-        nud連続数5.TabIndex = 18
+        nud連続数5.TabIndex = 25
         nud連続数5.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数5, "5番目位置の連続数")
         ' 
         ' nud連続数6
         ' 
-        nud連続数6.Location = New Point(317, 249)
+        nud連続数6.Location = New Point(317, 305)
         nud連続数6.Name = "nud連続数6"
         nud連続数6.Size = New Size(51, 26)
-        nud連続数6.TabIndex = 19
+        nud連続数6.TabIndex = 26
         nud連続数6.TextAlign = HorizontalAlignment.Center
         ToolTip1.SetToolTip(nud連続数6, "6番目位置の連続数")
+        ' 
+        ' lbl合わせ位置の半径
+        ' 
+        lbl合わせ位置の半径.AutoSize = True
+        lbl合わせ位置の半径.Location = New Point(30, 197)
+        lbl合わせ位置の半径.Name = "lbl合わせ位置の半径"
+        lbl合わせ位置の半径.Size = New Size(114, 19)
+        lbl合わせ位置の半径.TabIndex = 14
+        lbl合わせ位置の半径.Text = "合わせ位置の半径"
+        ToolTip1.SetToolTip(lbl合わせ位置の半径, "二重の輪弧を合わせる位置の半径")
+        ' 
+        ' nud合わせ位置の半径
+        ' 
+        nud合わせ位置の半径.Location = New Point(168, 195)
+        nud合わせ位置の半径.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
+        nud合わせ位置の半径.Name = "nud合わせ位置の半径"
+        nud合わせ位置の半径.Size = New Size(69, 26)
+        nud合わせ位置の半径.TabIndex = 15
+        nud合わせ位置の半径.TextAlign = HorizontalAlignment.Right
+        nud合わせ位置の半径.ThousandsSeparator = True
+        ToolTip1.SetToolTip(nud合わせ位置の半径, "二重の輪弧を合わせる位置の半径")
+        ' 
+        ' txt縦ひもの全本数
+        ' 
+        txt縦ひもの全本数.Location = New Point(168, 110)
+        txt縦ひもの全本数.Name = "txt縦ひもの全本数"
+        txt縦ひもの全本数.ReadOnly = True
+        txt縦ひもの全本数.Size = New Size(66, 26)
+        txt縦ひもの全本数.TabIndex = 9
+        txt縦ひもの全本数.TextAlign = HorizontalAlignment.Right
+        ToolTip1.SetToolTip(txt縦ひもの全本数, "縦ひも(輪弧)の全本数")
+        ' 
+        ' lbl縦ひもの全本数
+        ' 
+        lbl縦ひもの全本数.AutoSize = True
+        lbl縦ひもの全本数.Location = New Point(30, 113)
+        lbl縦ひもの全本数.Name = "lbl縦ひもの全本数"
+        lbl縦ひもの全本数.Size = New Size(98, 19)
+        lbl縦ひもの全本数.TabIndex = 8
+        lbl縦ひもの全本数.Text = "縦ひもの全本数"
+        ToolTip1.SetToolTip(lbl縦ひもの全本数, "縦ひも(輪弧)の全本数")
+        ' 
+        ' chk二重
+        ' 
+        chk二重.AutoSize = True
+        chk二重.Location = New Point(285, 76)
+        chk二重.Name = "chk二重"
+        chk二重.Size = New Size(56, 23)
+        chk二重.TabIndex = 7
+        chk二重.Text = "二重"
+        ToolTip1.SetToolTip(chk二重, "2枚を合わせる")
+        chk二重.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -2770,6 +2830,13 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
+        tpage輪弧.Controls.Add(lbl合わせ位置の半径)
+        tpage輪弧.Controls.Add(lbl合わせ位置の半径_単位)
+        tpage輪弧.Controls.Add(nud合わせ位置の半径)
+        tpage輪弧.Controls.Add(lbl縦ひもの全本数_単位)
+        tpage輪弧.Controls.Add(txt縦ひもの全本数)
+        tpage輪弧.Controls.Add(lbl縦ひもの全本数)
+        tpage輪弧.Controls.Add(chk二重)
         tpage輪弧.Controls.Add(nud連続数6)
         tpage輪弧.Controls.Add(nud連続数5)
         tpage輪弧.Controls.Add(nud連続数4)
@@ -2785,9 +2852,9 @@ Partial Class frmMain
         tpage輪弧.Controls.Add(lbl縦ひも_輪弧_単位)
         tpage輪弧.Controls.Add(lbl縦ひも_輪弧)
         tpage輪弧.Controls.Add(nud縦ひも_輪弧)
-        tpage輪弧.Controls.Add(lbl縦ひもの本数_輪弧_単位)
-        tpage輪弧.Controls.Add(lbl縦ひもの本数_輪弧)
-        tpage輪弧.Controls.Add(nud縦ひもの本数_輪弧)
+        tpage輪弧.Controls.Add(lbl輪弧の本数_単位)
+        tpage輪弧.Controls.Add(lbl輪弧の本数)
+        tpage輪弧.Controls.Add(nud輪弧の本数)
         tpage輪弧.Controls.Add(lbl底部分の径)
         tpage輪弧.Controls.Add(nud連続数2)
         tpage輪弧.Controls.Add(nud連続数1)
@@ -2804,10 +2871,28 @@ Partial Class frmMain
         tpage輪弧.Text = "底(輪弧)"
         tpage輪弧.UseVisualStyleBackColor = True
         ' 
+        ' lbl合わせ位置の半径_単位
+        ' 
+        lbl合わせ位置の半径_単位.AutoSize = True
+        lbl合わせ位置の半径_単位.Location = New Point(243, 197)
+        lbl合わせ位置の半径_単位.Name = "lbl合わせ位置の半径_単位"
+        lbl合わせ位置の半径_単位.Size = New Size(33, 19)
+        lbl合わせ位置の半径_単位.TabIndex = 16
+        lbl合わせ位置の半径_単位.Text = "mm"
+        ' 
+        ' lbl縦ひもの全本数_単位
+        ' 
+        lbl縦ひもの全本数_単位.AutoSize = True
+        lbl縦ひもの全本数_単位.Location = New Point(243, 113)
+        lbl縦ひもの全本数_単位.Name = "lbl縦ひもの全本数_単位"
+        lbl縦ひもの全本数_単位.Size = New Size(23, 19)
+        lbl縦ひもの全本数_単位.TabIndex = 10
+        lbl縦ひもの全本数_単位.Text = "本"
+        ' 
         ' lbl縦ひも幅length
         ' 
         lbl縦ひも幅length.AutoSize = True
-        lbl縦ひも幅length.Location = New Point(285, 44)
+        lbl縦ひも幅length.Location = New Point(286, 40)
         lbl縦ひも幅length.Name = "lbl縦ひも幅length"
         lbl縦ひも幅length.Size = New Size(98, 19)
         lbl縦ひも幅length.TabIndex = 3
@@ -2816,17 +2901,17 @@ Partial Class frmMain
         ' lbl輪弧長
         ' 
         lbl輪弧長.AutoSize = True
-        lbl輪弧長.Location = New Point(677, 325)
+        lbl輪弧長.Location = New Point(704, 325)
         lbl輪弧長.Name = "lbl輪弧長"
         lbl輪弧長.Size = New Size(51, 19)
-        lbl輪弧長.TabIndex = 23
+        lbl輪弧長.TabIndex = 30
         lbl輪弧長.Text = "輪弧長"
         ' 
         ' PictureBox2
         ' 
         PictureBox2.BorderStyle = BorderStyle.Fixed3D
         PictureBox2.Image = My.Resources.Resources.rinko
-        PictureBox2.Location = New Point(387, 13)
+        PictureBox2.Location = New Point(414, 13)
         PictureBox2.Name = "PictureBox2"
         PictureBox2.Size = New Size(375, 375)
         PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
@@ -2836,46 +2921,46 @@ Partial Class frmMain
         ' lbl上下の連続数
         ' 
         lbl上下の連続数.AutoSize = True
-        lbl上下の連続数.Location = New Point(30, 215)
+        lbl上下の連続数.Location = New Point(30, 271)
         lbl上下の連続数.Name = "lbl上下の連続数"
         lbl上下の連続数.Size = New Size(90, 19)
-        lbl上下の連続数.TabIndex = 13
+        lbl上下の連続数.TabIndex = 20
         lbl上下の連続数.Text = "上下の連続数"
         ' 
         ' lbl縦ひも_輪弧_単位
         ' 
         lbl縦ひも_輪弧_単位.AutoSize = True
-        lbl縦ひも_輪弧_単位.Location = New Point(242, 44)
+        lbl縦ひも_輪弧_単位.Location = New Point(243, 40)
         lbl縦ひも_輪弧_単位.Name = "lbl縦ひも_輪弧_単位"
         lbl縦ひも_輪弧_単位.Size = New Size(37, 19)
         lbl縦ひも_輪弧_単位.TabIndex = 2
         lbl縦ひも_輪弧_単位.Text = "本幅"
         ' 
-        ' lbl縦ひもの本数_輪弧_単位
+        ' lbl輪弧の本数_単位
         ' 
-        lbl縦ひもの本数_輪弧_単位.AutoSize = True
-        lbl縦ひもの本数_輪弧_単位.Location = New Point(242, 76)
-        lbl縦ひもの本数_輪弧_単位.Name = "lbl縦ひもの本数_輪弧_単位"
-        lbl縦ひもの本数_輪弧_単位.Size = New Size(23, 19)
-        lbl縦ひもの本数_輪弧_単位.TabIndex = 6
-        lbl縦ひもの本数_輪弧_単位.Text = "本"
+        lbl輪弧の本数_単位.AutoSize = True
+        lbl輪弧の本数_単位.Location = New Point(243, 77)
+        lbl輪弧の本数_単位.Name = "lbl輪弧の本数_単位"
+        lbl輪弧の本数_単位.Size = New Size(23, 19)
+        lbl輪弧の本数_単位.TabIndex = 6
+        lbl輪弧の本数_単位.Text = "本"
         ' 
         ' lbl内円の半径_単位
         ' 
         lbl内円の半径_単位.AutoSize = True
-        lbl内円の半径_単位.Location = New Point(242, 127)
+        lbl内円の半径_単位.Location = New Point(243, 161)
         lbl内円の半径_単位.Name = "lbl内円の半径_単位"
         lbl内円の半径_単位.Size = New Size(33, 19)
-        lbl内円の半径_単位.TabIndex = 9
+        lbl内円の半径_単位.TabIndex = 13
         lbl内円の半径_単位.Text = "mm"
         ' 
         ' lbl底部分の径_単位
         ' 
         lbl底部分の径_単位.AutoSize = True
-        lbl底部分の径_単位.Location = New Point(242, 161)
+        lbl底部分の径_単位.Location = New Point(243, 233)
         lbl底部分の径_単位.Name = "lbl底部分の径_単位"
         lbl底部分の径_単位.Size = New Size(33, 19)
-        lbl底部分の径_単位.TabIndex = 12
+        lbl底部分の径_単位.TabIndex = 19
         lbl底部分の径_単位.Text = "mm"
         ' 
         ' f_i段数2
@@ -3517,11 +3602,12 @@ Partial Class frmMain
         CType(nud内円の半径, ComponentModel.ISupportInitialize).EndInit()
         CType(nud底部分の径, ComponentModel.ISupportInitialize).EndInit()
         CType(nud縦ひも_輪弧, ComponentModel.ISupportInitialize).EndInit()
-        CType(nud縦ひもの本数_輪弧, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud輪弧の本数, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数3, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数4, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数5, ComponentModel.ISupportInitialize).EndInit()
         CType(nud連続数6, ComponentModel.ISupportInitialize).EndInit()
+        CType(nud合わせ位置の半径, ComponentModel.ISupportInitialize).EndInit()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
         grp目標寸法.ResumeLayout(False)
@@ -3811,9 +3897,9 @@ Partial Class frmMain
     Friend WithEvents lbl縦ひも_輪弧_単位 As Label
     Friend WithEvents lbl縦ひも_輪弧 As Label
     Friend WithEvents nud縦ひも_輪弧 As NumericUpDown
-    Friend WithEvents lbl縦ひもの本数_輪弧_単位 As Label
-    Friend WithEvents lbl縦ひもの本数_輪弧 As Label
-    Friend WithEvents nud縦ひもの本数_輪弧 As NumericUpDown
+    Friend WithEvents lbl輪弧の本数_単位 As Label
+    Friend WithEvents lbl輪弧の本数 As Label
+    Friend WithEvents nud輪弧の本数 As NumericUpDown
     Friend WithEvents lbl底部分の径 As Label
     Friend WithEvents nud連続数2 As NumericUpDown
     Friend WithEvents nud連続数1 As NumericUpDown
@@ -3841,6 +3927,13 @@ Partial Class frmMain
     Friend WithEvents nud連続数5 As NumericUpDown
     Friend WithEvents nud連続数4 As NumericUpDown
     Friend WithEvents nud連続数3 As NumericUpDown
+    Friend WithEvents chk二重 As CheckBox
+    Friend WithEvents lbl縦ひもの全本数_単位 As Label
+    Friend WithEvents txt縦ひもの全本数 As TextBox
+    Friend WithEvents lbl縦ひもの全本数 As Label
+    Friend WithEvents lbl合わせ位置の半径 As Label
+    Friend WithEvents lbl合わせ位置の半径_単位 As Label
+    Friend WithEvents nud合わせ位置の半径 As NumericUpDown
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
