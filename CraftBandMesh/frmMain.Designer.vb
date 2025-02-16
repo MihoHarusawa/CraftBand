@@ -329,6 +329,10 @@ Partial Class frmMain
         lbl底 = New Label()
         lbl最大 = New Label()
         lbl最大周の径 = New Label()
+        lblCalc1 = New Label()
+        txtCalc1 = New TextBox()
+        txtCalc2 = New TextBox()
+        lblCalc2 = New Label()
         f_i番号2 = New DataGridViewTextBoxColumn()
         f_s編みかた名2 = New DataGridViewTextBoxColumn()
         f_s編みひも名2 = New DataGridViewTextBoxColumn()
@@ -1209,7 +1213,7 @@ Partial Class frmMain
         ' 
         ' nud連続数2
         ' 
-        nud連続数2.Location = New Point(97, 305)
+        nud連続数2.Location = New Point(97, 295)
         nud連続数2.Name = "nud連続数2"
         nud連続数2.Size = New Size(51, 26)
         nud連続数2.TabIndex = 22
@@ -1219,7 +1223,7 @@ Partial Class frmMain
         ' nud連続数1
         ' 
         nud連続数1.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数1.Location = New Point(42, 305)
+        nud連続数1.Location = New Point(42, 295)
         nud連続数1.Name = "nud連続数1"
         nud連続数1.Size = New Size(51, 26)
         nud連続数1.TabIndex = 21
@@ -1353,7 +1357,7 @@ Partial Class frmMain
         ' nud連続数3
         ' 
         nud連続数3.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数3.Location = New Point(152, 305)
+        nud連続数3.Location = New Point(152, 295)
         nud連続数3.Name = "nud連続数3"
         nud連続数3.Size = New Size(51, 26)
         nud連続数3.TabIndex = 23
@@ -1362,7 +1366,7 @@ Partial Class frmMain
         ' 
         ' nud連続数4
         ' 
-        nud連続数4.Location = New Point(207, 305)
+        nud連続数4.Location = New Point(207, 295)
         nud連続数4.Name = "nud連続数4"
         nud連続数4.Size = New Size(51, 26)
         nud連続数4.TabIndex = 24
@@ -1372,7 +1376,7 @@ Partial Class frmMain
         ' nud連続数5
         ' 
         nud連続数5.BackColor = Color.FromArgb(CByte(217), CByte(255), CByte(231))
-        nud連続数5.Location = New Point(262, 305)
+        nud連続数5.Location = New Point(262, 295)
         nud連続数5.Name = "nud連続数5"
         nud連続数5.Size = New Size(51, 26)
         nud連続数5.TabIndex = 25
@@ -1381,7 +1385,7 @@ Partial Class frmMain
         ' 
         ' nud連続数6
         ' 
-        nud連続数6.Location = New Point(317, 305)
+        nud連続数6.Location = New Point(317, 295)
         nud連続数6.Name = "nud連続数6"
         nud連続数6.Size = New Size(51, 26)
         nud連続数6.TabIndex = 26
@@ -2830,6 +2834,10 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
+        tpage輪弧.Controls.Add(txtCalc2)
+        tpage輪弧.Controls.Add(lblCalc2)
+        tpage輪弧.Controls.Add(txtCalc1)
+        tpage輪弧.Controls.Add(lblCalc1)
         tpage輪弧.Controls.Add(lbl合わせ位置の半径)
         tpage輪弧.Controls.Add(lbl合わせ位置の半径_単位)
         tpage輪弧.Controls.Add(nud合わせ位置の半径)
@@ -3237,6 +3245,40 @@ Partial Class frmMain
         lbl最大周の径.Size = New Size(76, 19)
         lbl最大周の径.TabIndex = 58
         lbl最大周の径.Text = "最大周の径"
+        ' 
+        ' lblCalc1
+        ' 
+        lblCalc1.AutoSize = True
+        lblCalc1.Location = New Point(79, 339)
+        lblCalc1.Name = "lblCalc1"
+        lblCalc1.Size = New Size(49, 19)
+        lblCalc1.TabIndex = 32
+        lblCalc1.Text = "Label4"
+        ' 
+        ' txtCalc1
+        ' 
+        txtCalc1.Location = New Point(168, 332)
+        txtCalc1.Name = "txtCalc1"
+        txtCalc1.ReadOnly = True
+        txtCalc1.Size = New Size(69, 26)
+        txtCalc1.TabIndex = 33
+        ' 
+        ' txtCalc2
+        ' 
+        txtCalc2.Location = New Point(168, 359)
+        txtCalc2.Name = "txtCalc2"
+        txtCalc2.ReadOnly = True
+        txtCalc2.Size = New Size(69, 26)
+        txtCalc2.TabIndex = 35
+        ' 
+        ' lblCalc2
+        ' 
+        lblCalc2.AutoSize = True
+        lblCalc2.Location = New Point(79, 366)
+        lblCalc2.Name = "lblCalc2"
+        lblCalc2.Size = New Size(49, 19)
+        lblCalc2.TabIndex = 34
+        lblCalc2.Text = "Label5"
         ' 
         ' f_i番号2
         ' 
@@ -3934,6 +3976,10 @@ Partial Class frmMain
     Friend WithEvents lbl合わせ位置の半径 As Label
     Friend WithEvents lbl合わせ位置の半径_単位 As Label
     Friend WithEvents nud合わせ位置の半径 As NumericUpDown
+    Friend WithEvents txtCalc1 As TextBox
+    Friend WithEvents lblCalc1 As Label
+    Friend WithEvents txtCalc2 As TextBox
+    Friend WithEvents lblCalc2 As Label
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
