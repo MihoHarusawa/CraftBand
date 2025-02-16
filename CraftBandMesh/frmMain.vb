@@ -548,8 +548,13 @@ Public Class frmMain
                 ToolStripStatusLabel1.Text = "NG"
                 ToolStripStatusLabel2.Text = .p_sメッセージ
             End If
-        End With
 
+            '輪弧の中間値
+            If cmb配置タイプ.SelectedIndex = enum配置タイプ.i_輪弧 AndAlso
+                _CurrentTabControlName = tpage輪弧.Name Then
+                calc.dispCalc値()
+            End If
+        End With
     End Sub
 
 
@@ -1447,7 +1452,7 @@ Public Class frmMain
         'recalcは縦ひもの本数側
     End Sub
 
-    Private Sub chk二重_CheckedChanged(sender As Object, e As EventArgs) Handles chk二枚.CheckedChanged
+    Private Sub chk二枚_CheckedChanged(sender As Object, e As EventArgs) Handles chk二枚.CheckedChanged
         nud合わせ位置の半径.Enabled = chk二枚.Checked
         If chk二枚.Checked Then
             txt縦ひもの全本数.Text = nud輪弧の本数.Value * 2
@@ -1458,7 +1463,12 @@ Public Class frmMain
     End Sub
 
     Private Sub nud合わせ位置の半径_ValueChanged(sender As Object, e As EventArgs) Handles nud合わせ位置の半径.ValueChanged
-        '
+        '中間値計算
+        recalc(CalcCategory.Circle, sender)
+    End Sub
+
+    Private Sub nud底部分の径_ValueChanged(sender As Object, e As EventArgs) Handles nud底部分の径.ValueChanged
+        recalc(CalcCategory.Circle, sender)
     End Sub
 
     Private Sub nudひもの長さ寸法_ValueChanged(sender As Object, e As EventArgs) Handles nud底部分の径.ValueChanged
@@ -1468,6 +1478,12 @@ Public Class frmMain
     Private Sub nud内円の径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の半径.ValueChanged
         recalc(CalcCategory.Circle, sender)
     End Sub
+
+    Private Sub nud連続数1_ValueChanged(sender As Object, e As EventArgs) Handles nud連続数1.ValueChanged
+        '中間値計算
+        recalc(CalcCategory.Circle, sender)
+    End Sub
+
 
 #End Region
 

@@ -1065,6 +1065,47 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
+    '輪弧の中間値(テストコード)
+    Sub dispCalc値()
+        _frmMain.lblCalc1.Text = ""
+        _frmMain.lblCalc2.Text = ""
+        _frmMain.txtCalc1.Text = ""
+        _frmMain.txtCalc2.Text = ""
+        _frmMain.lblResult.Text = ""
+        If _enum配置タイプ <> enum配置タイプ.i_輪弧 OrElse Not p_b有効 Then
+            Exit Sub
+        End If
+
+        Dim dig1 As Double = 360 * _i連続数1 / _i輪弧の本数
+        _frmMain.lblCalc1.Text = String.Format("連続数({0})の角度", _i連続数1)
+        _frmMain.txtCalc1.Text = String.Format("{0:F1}", dig1)
+
+        _frmMain.lblCalc2.Text = String.Format("{0}本幅の角度", _i縦ひも何本幅)
+        Dim dig2 As Double
+        Dim ccl As New S円(pOrigin, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅))
+        Dim fn As New S直線式(0, _d内円の半径)
+        Dim p() As S実座標 = ccl.ary直線との交点(fn)
+        If 2 = p.Length Then
+            Dim angle As Double = New S差分(pOrigin, p(0)).Angle
+            If 90 < angle Then
+                dig2 = (angle - 90) * 2
+            Else
+                dig2 = (90 - angle) * 2
+            End If
+            _frmMain.txtCalc2.Text = String.Format("{0:F1}", dig2)
+            If Not _frmMain.rad底_上下なし.Checked AndAlso 0 < _i連続数1 Then
+                If dig1 < dig2 Then
+                    Dim cc As Integer = Math.Ceiling(dig2 / (360 / _i輪弧の本数))
+                    If _i連続数1 < cc Then
+                        _frmMain.lblResult.Text = String.Format("連続数={0}", cc)
+                    End If
+                End If
+            End If
+        Else
+            _frmMain.txtCalc2.Text = "Cannot Calc"
+        End If
+    End Sub
+
 
     '現画像生成時に記号を表示する #60
     Shared IsDrawMarkCurrent As Boolean = True
