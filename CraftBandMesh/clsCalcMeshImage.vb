@@ -1065,7 +1065,7 @@ Partial Public Class clsCalcMesh
         Return itemlist
     End Function
 
-    '輪弧の中間値(テストコード)
+    '輪弧の中間値(仮のテストコード)
     Sub dispCalc値()
         _frmMain.lblCalc1.Text = ""
         _frmMain.lblCalc2.Text = ""
@@ -1097,7 +1097,7 @@ Partial Public Class clsCalcMesh
                 If dig1 < dig2 Then
                     Dim cc As Integer = Math.Ceiling(dig2 / (360 / _i輪弧の本数))
                     If _i連続数1 < cc Then
-                        _frmMain.lblResult.Text = String.Format("連続数={0}", cc)
+                        _frmMain.lblResult.Text = String.Format("推奨連続数({0})", cc)
                     End If
                 End If
             End If

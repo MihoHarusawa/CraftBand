@@ -1463,11 +1463,16 @@ Public Class frmMain
     End Sub
 
     Private Sub nud合わせ位置の半径_ValueChanged(sender As Object, e As EventArgs) Handles nud合わせ位置の半径.ValueChanged
-        '中間値計算
-        recalc(CalcCategory.Circle, sender)
+        If nud合わせ位置の半径.Enabled AndAlso 0 < nud合わせ位置の半径.Value Then
+            lbl合わせ位置の直径.Text = New Length(2 * nud合わせ位置の半径.Value).TextWithUnit
+        Else
+            lbl合わせ位置の直径.Text = ""
+        End If
+        recalc(CalcCategory.Circle, sender) '中間値計算
     End Sub
 
     Private Sub nud底部分の径_ValueChanged(sender As Object, e As EventArgs) Handles nud底部分の径.ValueChanged
+        lbl底部分の直径.Text = New Length(2 * (nud内円の半径.Value + nud底部分の径.Value)).TextWithUnit
         recalc(CalcCategory.Circle, sender)
     End Sub
 
@@ -1475,7 +1480,9 @@ Public Class frmMain
         recalc(CalcCategory.Circle, sender)
     End Sub
 
-    Private Sub nud内円の径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の半径.ValueChanged
+    Private Sub nud内円の半径_ValueChanged(sender As Object, e As EventArgs) Handles nud内円の半径.ValueChanged
+        lbl内円の直径.Text = New Length(2 * nud内円の半径.Value).TextWithUnit
+        lbl底部分の直径.Text = New Length(2 * (nud内円の半径.Value + nud底部分の径.Value)).TextWithUnit
         recalc(CalcCategory.Circle, sender)
     End Sub
 
@@ -2105,6 +2112,10 @@ Public Class frmMain
                 col.Visible = True
             End If
         Next
+    End Sub
+
+    Private Sub lbl縦ひも_輪弧_Click(sender As Object, e As EventArgs) Handles lbl縦ひも_輪弧.Click
+
     End Sub
 
 #End Region
