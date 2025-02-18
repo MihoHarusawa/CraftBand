@@ -140,8 +140,8 @@ Partial Class frmMain
         lbl底部分の径 = New Label()
         Label1 = New Label()
         Label2 = New Label()
-        Label3 = New Label()
-        txt輪弧長 = New TextBox()
+        lblFig高さ = New Label()
+        txtFig輪弧長 = New TextBox()
         nud連続数3 = New NumericUpDown()
         nud連続数4 = New NumericUpDown()
         nud連続数5 = New NumericUpDown()
@@ -155,6 +155,11 @@ Partial Class frmMain
         lbl合わせ位置の直径 = New Label()
         lbl内円の直径 = New Label()
         lbl縦ひも幅length = New Label()
+        Label4 = New Label()
+        lblFig底に対する角度 = New Label()
+        txtFig底に対する角度 = New TextBox()
+        txtFig底の周に対するひも幅の割合 = New TextBox()
+        lblFig底の周に対するひも幅の割合 = New Label()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -300,7 +305,7 @@ Partial Class frmMain
         lblCalc1 = New Label()
         lbl合わせ位置の半径_単位 = New Label()
         lbl縦ひもの全本数_単位 = New Label()
-        lbl輪弧長 = New Label()
+        lblFig輪弧長 = New Label()
         PictureBox2 = New PictureBox()
         lbl上下の連続数 = New Label()
         lbl縦ひも_輪弧_単位 = New Label()
@@ -1319,44 +1324,44 @@ Partial Class frmMain
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(547, 203)
+        Label1.Location = New Point(558, 179)
         Label1.Name = "Label1"
         Label1.Size = New Size(76, 19)
-        Label1.TabIndex = 30
+        Label1.TabIndex = 37
         Label1.Text = "内円の半径"
         ToolTip1.SetToolTip(Label1, "輪弧の内側に作られる円の半径")
         ' 
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(667, 143)
+        Label2.Location = New Point(536, 126)
         Label2.Name = "Label2"
         Label2.Size = New Size(76, 19)
-        Label2.TabIndex = 31
+        Label2.TabIndex = 36
         Label2.Text = "底部分の径"
         ToolTip1.SetToolTip(Label2, "内円から立ち上げ位置までの径")
         ' 
-        ' Label3
+        ' lblFig高さ
         ' 
-        Label3.AutoSize = True
-        Label3.Location = New Point(611, 40)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(142, 19)
-        Label3.TabIndex = 32
-        Label3.Text = "高さ(側面を指定した時)"
-        ToolTip1.SetToolTip(Label3, "[側面]として指定した高さ" & vbCrLf & "指定しなければゼロ")
+        lblFig高さ.AutoSize = True
+        lblFig高さ.Location = New Point(454, 45)
+        lblFig高さ.Name = "lblFig高さ"
+        lblFig高さ.Size = New Size(142, 19)
+        lblFig高さ.TabIndex = 35
+        lblFig高さ.Text = "高さ(側面を指定した時)"
+        ToolTip1.SetToolTip(lblFig高さ, "[側面]として指定した高さ" & vbCrLf & "指定しなければゼロ")
         ' 
-        ' txt輪弧長
+        ' txtFig輪弧長
         ' 
-        txt輪弧長.BackColor = Color.White
-        txt輪弧長.BorderStyle = BorderStyle.FixedSingle
-        txt輪弧長.Location = New Point(691, 347)
-        txt輪弧長.Name = "txt輪弧長"
-        txt輪弧長.ReadOnly = True
-        txt輪弧長.Size = New Size(93, 26)
-        txt輪弧長.TabIndex = 34
-        txt輪弧長.TextAlign = HorizontalAlignment.Center
-        ToolTip1.SetToolTip(txt輪弧長, "高さ位置までの輪弧の長さ")
+        txtFig輪弧長.BackColor = Color.White
+        txtFig輪弧長.BorderStyle = BorderStyle.FixedSingle
+        txtFig輪弧長.Location = New Point(682, 312)
+        txtFig輪弧長.Name = "txtFig輪弧長"
+        txtFig輪弧長.ReadOnly = True
+        txtFig輪弧長.Size = New Size(92, 26)
+        txtFig輪弧長.TabIndex = 42
+        txtFig輪弧長.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txtFig輪弧長, "高さ位置までの輪弧の長さ")
         ' 
         ' nud連続数3
         ' 
@@ -1488,6 +1493,60 @@ Partial Class frmMain
         lbl縦ひも幅length.TabIndex = 3
         lbl縦ひも幅length.Text = "縦ひも幅length"
         ToolTip1.SetToolTip(lbl縦ひも幅length, "幅の寸法")
+        ' 
+        ' Label4
+        ' 
+        Label4.AutoSize = True
+        Label4.Location = New Point(558, 213)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(114, 19)
+        Label4.TabIndex = 38
+        Label4.Text = "合わせ位置の半径"
+        ToolTip1.SetToolTip(Label4, "プラス値なら、この半径の円より外側に、二枚目の輪弧を描く")
+        ' 
+        ' lblFig底に対する角度
+        ' 
+        lblFig底に対する角度.AutoSize = True
+        lblFig底に対する角度.Location = New Point(682, 82)
+        lblFig底に対する角度.Name = "lblFig底に対する角度"
+        lblFig底に対する角度.Size = New Size(98, 19)
+        lblFig底に対する角度.TabIndex = 39
+        lblFig底に対する角度.Text = "底に対する角度"
+        ToolTip1.SetToolTip(lblFig底に対する角度, "底の接線に対する縦ひもの角度")
+        ' 
+        ' txtFig底に対する角度
+        ' 
+        txtFig底に対する角度.BackColor = Color.White
+        txtFig底に対する角度.BorderStyle = BorderStyle.FixedSingle
+        txtFig底に対する角度.Location = New Point(718, 119)
+        txtFig底に対する角度.Name = "txtFig底に対する角度"
+        txtFig底に対する角度.ReadOnly = True
+        txtFig底に対する角度.Size = New Size(64, 26)
+        txtFig底に対する角度.TabIndex = 40
+        txtFig底に対する角度.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txtFig底に対する角度, "底の接線に対する縦ひもの角度")
+        ' 
+        ' txtFig底の周に対するひも幅の割合
+        ' 
+        txtFig底の周に対するひも幅の割合.BackColor = Color.White
+        txtFig底の周に対するひも幅の割合.BorderStyle = BorderStyle.FixedSingle
+        txtFig底の周に対するひも幅の割合.Location = New Point(471, 337)
+        txtFig底の周に対するひも幅の割合.Name = "txtFig底の周に対するひも幅の割合"
+        txtFig底の周に対するひも幅の割合.ReadOnly = True
+        txtFig底の周に対するひも幅の割合.Size = New Size(64, 26)
+        txtFig底の周に対するひも幅の割合.TabIndex = 44
+        txtFig底の周に対するひも幅の割合.TextAlign = HorizontalAlignment.Center
+        ToolTip1.SetToolTip(txtFig底の周に対するひも幅の割合, "輪弧1枚の片側のひもが、底の周に対して占める割合")
+        ' 
+        ' lblFig底の周に対するひも幅の割合
+        ' 
+        lblFig底の周に対するひも幅の割合.AutoSize = True
+        lblFig底の周に対するひも幅の割合.Location = New Point(424, 312)
+        lblFig底の周に対するひも幅の割合.Name = "lblFig底の周に対するひも幅の割合"
+        lblFig底の周に対するひも幅の割合.Size = New Size(170, 19)
+        lblFig底の周に対するひも幅の割合.TabIndex = 43
+        lblFig底の周に対するひも幅の割合.Text = "底の周に対するひも幅の割合"
+        ToolTip1.SetToolTip(lblFig底の周に対するひも幅の割合, "輪弧1枚の片側のひもが、底の周に対して占める割合")
         ' 
         ' MenuStrip1
         ' 
@@ -2879,6 +2938,9 @@ Partial Class frmMain
         ' 
         ' tpage輪弧
         ' 
+        tpage輪弧.Controls.Add(lblFig底の周に対するひも幅の割合)
+        tpage輪弧.Controls.Add(lblFig底に対する角度)
+        tpage輪弧.Controls.Add(Label4)
         tpage輪弧.Controls.Add(lbl底部分の直径)
         tpage輪弧.Controls.Add(lbl合わせ位置の直径)
         tpage輪弧.Controls.Add(lbl内円の直径)
@@ -2898,10 +2960,12 @@ Partial Class frmMain
         tpage輪弧.Controls.Add(nud連続数5)
         tpage輪弧.Controls.Add(nud連続数4)
         tpage輪弧.Controls.Add(nud連続数3)
-        tpage輪弧.Controls.Add(txt輪弧長)
+        tpage輪弧.Controls.Add(txtFig底の周に対するひも幅の割合)
+        tpage輪弧.Controls.Add(txtFig底に対する角度)
+        tpage輪弧.Controls.Add(txtFig輪弧長)
         tpage輪弧.Controls.Add(lbl縦ひも幅length)
-        tpage輪弧.Controls.Add(lbl輪弧長)
-        tpage輪弧.Controls.Add(Label3)
+        tpage輪弧.Controls.Add(lblFig輪弧長)
+        tpage輪弧.Controls.Add(lblFig高さ)
         tpage輪弧.Controls.Add(Label2)
         tpage輪弧.Controls.Add(Label1)
         tpage輪弧.Controls.Add(PictureBox2)
@@ -2934,7 +2998,7 @@ Partial Class frmMain
         lblResult.Location = New Point(247, 366)
         lblResult.Name = "lblResult"
         lblResult.Size = New Size(49, 19)
-        lblResult.TabIndex = 39
+        lblResult.TabIndex = 34
         lblResult.Text = "Label6"
         ' 
         ' txtCalc2
@@ -2943,7 +3007,7 @@ Partial Class frmMain
         txtCalc2.Name = "txtCalc2"
         txtCalc2.ReadOnly = True
         txtCalc2.Size = New Size(69, 26)
-        txtCalc2.TabIndex = 38
+        txtCalc2.TabIndex = 33
         txtCalc2.TextAlign = HorizontalAlignment.Right
         ' 
         ' lblCalc2
@@ -2952,7 +3016,7 @@ Partial Class frmMain
         lblCalc2.Location = New Point(30, 366)
         lblCalc2.Name = "lblCalc2"
         lblCalc2.Size = New Size(49, 19)
-        lblCalc2.TabIndex = 37
+        lblCalc2.TabIndex = 32
         lblCalc2.Text = "Label5"
         ' 
         ' txtCalc1
@@ -2961,7 +3025,7 @@ Partial Class frmMain
         txtCalc1.Name = "txtCalc1"
         txtCalc1.ReadOnly = True
         txtCalc1.Size = New Size(69, 26)
-        txtCalc1.TabIndex = 36
+        txtCalc1.TabIndex = 31
         txtCalc1.TextAlign = HorizontalAlignment.Right
         ' 
         ' lblCalc1
@@ -2970,7 +3034,7 @@ Partial Class frmMain
         lblCalc1.Location = New Point(30, 339)
         lblCalc1.Name = "lblCalc1"
         lblCalc1.Size = New Size(49, 19)
-        lblCalc1.TabIndex = 35
+        lblCalc1.TabIndex = 30
         lblCalc1.Text = "Label4"
         ' 
         ' lbl合わせ位置の半径_単位
@@ -2991,14 +3055,14 @@ Partial Class frmMain
         lbl縦ひもの全本数_単位.TabIndex = 10
         lbl縦ひもの全本数_単位.Text = "本"
         ' 
-        ' lbl輪弧長
+        ' lblFig輪弧長
         ' 
-        lbl輪弧長.AutoSize = True
-        lbl輪弧長.Location = New Point(704, 325)
-        lbl輪弧長.Name = "lbl輪弧長"
-        lbl輪弧長.Size = New Size(51, 19)
-        lbl輪弧長.TabIndex = 33
-        lbl輪弧長.Text = "輪弧長"
+        lblFig輪弧長.AutoSize = True
+        lblFig輪弧長.Location = New Point(667, 290)
+        lblFig輪弧長.Name = "lblFig輪弧長"
+        lblFig輪弧長.Size = New Size(51, 19)
+        lblFig輪弧長.TabIndex = 41
+        lblFig輪弧長.Text = "輪弧長"
         ' 
         ' PictureBox2
         ' 
@@ -4012,10 +4076,10 @@ Partial Class frmMain
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label3 As Label
+    Friend WithEvents lblFig高さ As Label
     Friend WithEvents lbl縦ひも幅length As Label
-    Friend WithEvents lbl輪弧長 As Label
-    Friend WithEvents txt輪弧長 As TextBox
+    Friend WithEvents lblFig輪弧長 As Label
+    Friend WithEvents txtFig輪弧長 As TextBox
     Friend WithEvents nud連続数6 As NumericUpDown
     Friend WithEvents nud連続数5 As NumericUpDown
     Friend WithEvents nud連続数4 As NumericUpDown
@@ -4035,6 +4099,11 @@ Partial Class frmMain
     Friend WithEvents lbl底部分の直径 As Label
     Friend WithEvents lbl合わせ位置の直径 As Label
     Friend WithEvents lbl内円の直径 As Label
+    Friend WithEvents lblFig底に対する角度 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents txtFig底に対する角度 As TextBox
+    Friend WithEvents lblFig底の周に対するひも幅の割合 As Label
+    Friend WithEvents txtFig底の周に対するひも幅の割合 As TextBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

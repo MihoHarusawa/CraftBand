@@ -1072,27 +1072,36 @@ Partial Public Class clsCalcMesh
         _frmMain.txtCalc1.Text = ""
         _frmMain.txtCalc2.Text = ""
         _frmMain.lblResult.Text = ""
+        '図の中
+        _frmMain.txtFig底に対する角度.Text = ""
+        _frmMain.txtFig輪弧長.Text = ""
+        _frmMain.txtFig底の周に対するひも幅の割合.Text = ""
+
         If _enum配置タイプ <> enum配置タイプ.i_輪弧 OrElse Not p_b有効 Then
             Exit Sub
         End If
 
+        '連続数1 の角度
         Dim dig1 As Double = 360 * _i連続数1 / _i輪弧の本数
         _frmMain.lblCalc1.Text = String.Format("連続数({0})の角度", _i連続数1)
         _frmMain.txtCalc1.Text = String.Format("{0:F1}", dig1)
 
-        _frmMain.lblCalc2.Text = String.Format("{0}本幅の角度", _i縦ひも何本幅)
+        '本幅の占有角度
+        _frmMain.lblCalc2.Text = String.Format("{0}本幅の占有角度", _i縦ひも何本幅)
         Dim dig2 As Double
-        Dim ccl As New S円(pOrigin, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅))
-        Dim fn As New S直線式(0, _d内円の半径)
-        Dim p() As S実座標 = ccl.ary直線との交点(fn)
-        If 2 = p.Length Then
-            Dim angle As Double = New S差分(pOrigin, p(0)).Angle
+        Dim circle1 As New S円(pOrigin, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅))
+        Dim fn1 As New S直線式(0, _d内円の半径) 'x軸平行
+        Dim aryP1() As S実座標 = circle1.ary直線との交点(fn1)
+        If 2 = aryP1.Length Then
+            Dim angle As Double = New S差分(pOrigin, aryP1(0)).Angle
             If 90 < angle Then
                 dig2 = (angle - 90) * 2
             Else
                 dig2 = (90 - angle) * 2
             End If
             _frmMain.txtCalc2.Text = String.Format("{0:F1}", dig2)
+
+            '推奨連続数
             If Not _frmMain.rad底_上下なし.Checked AndAlso 0 < _i連続数1 Then
                 If dig1 < dig2 Then
                     Dim cc As Integer = Math.Ceiling(dig2 / (360 / _i輪弧の本数))
@@ -1101,9 +1110,41 @@ Partial Public Class clsCalcMesh
                     End If
                 End If
             End If
-        Else
-            _frmMain.txtCalc2.Text = "Cannot Calc"
         End If
+
+        '*図の中
+        If 0 < _d高さの輪弧長 Then
+            _frmMain.txtFig輪弧長.Text = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(_d高さの輪弧長, False)
+        End If
+
+        '底に対する角度
+        Dim circle底の周 As New S円(pOrigin, _d内円の半径 + _d底部分の径)
+        Dim fn2 As New S直線式(0, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅) / 2) 'x軸平行
+        Dim aryP2() As S実座標 = circle底の周.ary直線との交点(fn2)
+        If 2 = aryP2.Length Then
+            Dim angle As Double = New S差分(pOrigin, aryP2(0)).Angle
+            Dim dig底に対する角度 As Double
+            If 90 < angle Then
+                dig底に対する角度 = angle - 90
+            Else
+                dig底に対する角度 = 90 - angle
+            End If
+            _frmMain.txtFig底に対する角度.Text = String.Format("{0:F1}度", dig底に対する角度)
+        End If
+
+        '底の周に対するひも幅の割合
+        Dim fn3 As New S直線式(0, _d内円の半径) 'x軸平行
+        Dim aryP3() As S実座標 = circle底の周.ary直線との交点(fn3)
+        Dim fn4 As New S直線式(0, _d内円の半径 + g_clsSelectBasics.p_d指定本幅(_i縦ひも何本幅)) 'x軸平行
+        Dim aryP4() As S実座標 = circle底の周.ary直線との交点(fn4)
+        If 2 = aryP3.Length AndAlso 2 = aryP4.Length Then
+            Dim angle3 As Double = New S差分(pOrigin, aryP3(0)).Angle
+            Dim angle4 As Double = New S差分(pOrigin, aryP4(0)).Angle
+            Dim anglediff As Double = Abs(angle3 - angle4)
+            Dim ratio As Double = 100 * (anglediff * _i輪弧の本数) / 360
+            _frmMain.txtFig底の周に対するひも幅の割合.Text = String.Format("{0:F1}％", ratio)
+        End If
+
     End Sub
 
 

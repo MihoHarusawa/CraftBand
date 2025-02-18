@@ -454,17 +454,6 @@ Class clsCalcMesh
         End Get
     End Property
 
-    Public ReadOnly Property p_s輪弧長 As String
-        Get
-            If 0 < _d高さの輪弧長 Then
-                Return g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(_d高さの輪弧長, False)
-            Else
-                Return ""
-            End If
-        End Get
-    End Property
-
-
 
     '値の有無
     Private ReadOnly Property isValid横_目標 As Boolean

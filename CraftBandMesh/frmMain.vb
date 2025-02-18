@@ -174,6 +174,7 @@ Public Class frmMain
             nud垂直ひも長加算.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud底部分の径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
             nud内円の半径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
+            nud合わせ位置の半径.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces
 
             nudひとつのすき間の寸法.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
             nud横ひも間のすき間.DecimalPlaces = .p_unit設定時の寸法単位.DecimalPlaces + 1
@@ -538,8 +539,6 @@ Public Class frmMain
 
             lbl縦置きの計.Text = .p_s縦横の横
             lbl横置きの計.Text = .p_s縦横の縦
-
-            txt輪弧長.Text = .p_s輪弧長
 
             If .p_b有効 Then
                 ToolStripStatusLabel1.Text = "OK"
