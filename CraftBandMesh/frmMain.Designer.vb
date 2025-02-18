@@ -1324,7 +1324,7 @@ Partial Class frmMain
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(558, 179)
+        Label1.Location = New Point(566, 174)
         Label1.Name = "Label1"
         Label1.Size = New Size(76, 19)
         Label1.TabIndex = 37
