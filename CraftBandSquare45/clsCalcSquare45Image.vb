@@ -404,14 +404,14 @@ Partial Public Class clsCalcSquare45
                 If dir = emExp._Yoko Then
                     item.m_rひも位置.y最上 = p中央.Y + item.m_dひも幅 / 2
                     item.m_rひも位置.y最下 = p中央.Y - item.m_dひも幅 / 2
-                    item.m_rひも位置.x最右 = p中央.X + .f_d出力ひも長 / 2
-                    item.m_rひも位置.x最左 = p中央.X - .f_d出力ひも長 / 2
+                    item.m_rひも位置.x最右 = p中央.X + .f_dVal2 '右 .f_d出力ひも長 / 2
+                    item.m_rひも位置.x最左 = p中央.X - .f_dVal1 '左 .f_d出力ひも長 / 2
 
                 ElseIf dir = emExp._Tate Then
                     item.m_rひも位置.x最右 = p中央.X + item.m_dひも幅 / 2
                     item.m_rひも位置.x最左 = p中央.X - item.m_dひも幅 / 2
-                    item.m_rひも位置.y最上 = p中央.Y + .f_d出力ひも長 / 2
-                    item.m_rひも位置.y最下 = p中央.Y - .f_d出力ひも長 / 2
+                    item.m_rひも位置.y最上 = p中央.Y + .f_dVal1 '上.f_d出力ひも長 / 2
+                    item.m_rひも位置.y最下 = p中央.Y - .f_dVal2 '下.f_d出力ひも長 / 2
 
                 End If
             End With

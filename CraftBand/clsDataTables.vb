@@ -518,8 +518,20 @@ Public Class clsDataTables
                     '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
                     getOtherSaved(tmp, row, True) '本幅も転記
                     turn.p_tbl縦横展開.Rows.Add(tmp)
+
+                ElseIf row.f_iひも種 = enumひも種.i_横 Then
+                    '#92 横ひも加算の左右入れ替え(補強ひもは描かないので除外)
+                    Dim tmp As tbl縦横展開Row = turn.p_tbl縦横展開.Newtbl縦横展開Row
+                    tmp.f_iひも種 = enumひも種.i_横
+                    tmp.f_iひも番号 = row.f_iひも番号
+                    '入力対象: f_i何本幅,f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ
+                    getOtherSaved(tmp, row, True) '本幅も転記
+                    tmp.f_dひも長加算 = row.f_dひも長加算2
+                    tmp.f_dひも長加算2 = row.f_dひも長加算
+                    turn.p_tbl縦横展開.Rows.Add(tmp)
+
                 Else
-                    'そのまま
+                    'とりあえずそのまま
                     turn.p_tbl縦横展開.ImportRow(row)
                 End If
             Next

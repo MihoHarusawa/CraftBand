@@ -42,8 +42,8 @@ Public Class frmMain
         editUpDown.FormCaption = Me.Text
         editUpDown.IsSquare45 = True
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, Nothing)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, Nothing)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)

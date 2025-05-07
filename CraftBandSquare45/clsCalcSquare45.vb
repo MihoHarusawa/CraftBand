@@ -9,7 +9,7 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
 Class clsCalcSquare45
-    Const PAI As Double = 3.1416
+    'Const PAI As Double = 3.1416
     Friend Const ROOT2 As Double = 1.41421356237
 
     '横と縦の展開
@@ -1397,10 +1397,7 @@ Class clsCalcSquare45
             Select Case dataPropertyName
                 Case "f_s色"
                     Return False
-                Case "f_dひも長加算2"
-                    row.f_dひも長加算2 = 0 '使わない
-                    Return False
-                Case "f_dひも長加算"
+                Case "f_dひも長加算", "f_dひも長加算2"
                     '再計算は不要
                 Case "f_i何本幅"
                     '長さの再計算
@@ -1411,12 +1408,13 @@ Class clsCalcSquare45
         '本幅の変更、もしくは再計算
         'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
         'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
+        'f_dVal1,f_dVal2 に、中心からの各長さ
         With row
             .f_d幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間
             If is補強ひも(row) Then
                 '補強ひも
                 .f_dひも長 = .f_d長さ
-                .f_d出力ひも長 = .f_dひも長 + .f_dひも長加算
+                .f_d出力ひも長 = .f_dひも長 + .f_dひも長加算 + .f_dひも長加算2 '#92
             Else
                 ''通常のひも ※高さ分は固定:高さの四角数 * _d四角の一辺
                 '.f_dひも長 = .f_d長さ +
@@ -1427,9 +1425,11 @@ Class clsCalcSquare45
                     g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間 +
                     2 * p_d四角ベース_高さ * ROOT2
 
-                '係数と加算値
-                .f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 +
+                '係数と加算値 #92
+                .f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + .f_dひも長加算2 +
                     (_dひも長加算 + _d縁の垂直ひも長) * 2
+                row.f_dVal1 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算 + (_dひも長加算 + _d縁の垂直ひも長)
+                row.f_dVal2 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算2 + (_dひも長加算 + _d縁の垂直ひも長)
             End If
         End With
         Return isNeedRecalc
@@ -1447,7 +1447,7 @@ Class clsCalcSquare45
     '展開テーブルを作り直す レコード数増減＆Fix
     '固定: f_iひも種,f_iひも番号,f_i位置番号,f_sひも名,[f_i何本幅,f_d幅]
     '要計算:f_d長さ
-    '入力値:f_s色,f_dひも長加算,f_i何本幅,f_dひも長加算2(使わない)
+    '入力値:f_s色,f_dひも長加算,f_i何本幅,f_dひも長加算2
     '入力・計算後に再セット:f_d幅,f_dひも長,f_d出力ひも長
     Function renew展開DataTable(ByVal dir As emExp, ByVal isRefSaved As Boolean) As Boolean
         Dim table As tbl縦横展開DataTable = _tbl縦横展開(dir)
@@ -1601,8 +1601,8 @@ Class clsCalcSquare45
                     row.f_s編みかた名 = lasttmp.f_sひも名
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
-                    If lasttmp.f_dひも長加算 <> 0 Then
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算)
+                    If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     'If _Data.p_row底_縦横.Value("f_b展開区分") Then

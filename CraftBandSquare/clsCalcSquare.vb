@@ -1555,10 +1555,11 @@ Class clsCalcSquare
     '横ひもの指定レコードの幅と長さを計算
     'IN:    _d四角ベース_横計,_d四角ベース_高さ計,_d縁の垂直ひも長,_dひも長加算_縦横端,_dひも長係数
     'OUT:   各レコードのf_d長さ,f_dひも長,f_d出力ひも長
+    '       f_dVal1,f_dVal2 に、中心からの各長さ(#92)
     Function adjust_横ひも(ByVal row As tbl縦横展開Row, ByVal lastひも番号 As Integer, ByVal dataPropertyName As String) As Boolean
         If Not String.IsNullOrEmpty(dataPropertyName) Then
             'セル編集操作時
-            row.f_dひも長加算2 = 0 '使わない
+            'row.f_dひも長加算2 = 0 '使わない
             If dataPropertyName = "f_s色" Then
                 If row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_すき間) Then
                     row.Setf_s色Null()
@@ -1577,16 +1578,18 @@ Class clsCalcSquare
             row.f_dひも長 = (get周の横() + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
-                row.f_dひも長加算
+                row.f_dひも長加算 + row.f_dひも長加算2 '#92
+            row.f_dVal1 = (row.f_dひも長) / 2 + row.f_dひも長加算 + (_dひも長加算_縦横端 + _d縁の垂直ひも長)
+            row.f_dVal2 = (row.f_dひも長) / 2 + row.f_dひも長加算2 + (_dひも長加算_縦横端 + _d縁の垂直ひも長)
 
         ElseIf row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_補強) Then
-            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
 
         ElseIf row.f_iひも種 = (enumひも種.i_横 Or enumひも種.i_すき間) Then
             row.Setf_s色Null()
             row.Setf_i何本幅Null()
             row.Setf_dひも長加算Null()
-
+            row.Setf_dひも長加算2Null()
         End If
 
         Return True
@@ -1752,10 +1755,11 @@ Class clsCalcSquare
     '縦ひもの指定レコードの幅と長さを計算
     'IN:    _d四角ベース_縦計,_d四角ベース_高さ計,_d縁の垂直ひも長,_dひも長加算_縦横端,_dひも長係数
     'OUT:   各レコードのf_d長さ,f_dひも長,f_d出力ひも長
+    '       f_dVal1,f_dVal2 に、中心からの各長さ(#92)
     Function adjust_縦ひも(ByVal row As tbl縦横展開Row, ByVal lastひも番号 As Integer, ByVal dataPropertyName As String) As Boolean
         If Not String.IsNullOrEmpty(dataPropertyName) Then
             'セル編集操作時
-            row.f_dひも長加算2 = 0 '使わない
+            'row.f_dひも長加算2 = 0 '使わない
             If dataPropertyName = "f_s色" Then
                 If row.f_iひも種 = (enumひも種.i_縦 Or enumひも種.i_すき間) Then
                     row.Setf_s色Null()
@@ -1774,15 +1778,18 @@ Class clsCalcSquare
             row.f_dひも長 = (get周の縦() + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
-                row.f_dひも長加算
+                row.f_dひも長加算 + row.f_dひも長加算2 '#92
+            row.f_dVal1 = (row.f_dひも長) / 2 + row.f_dひも長加算 + (_dひも長加算_縦横端 + _d縁の垂直ひも長)
+            row.f_dVal2 = (row.f_dひも長) / 2 + row.f_dひも長加算2 + (_dひも長加算_縦横端 + _d縁の垂直ひも長)
 
         ElseIf row.f_iひも種 = (enumひも種.i_縦 Or enumひも種.i_補強) Then
-            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算
+            row.f_d出力ひも長 = row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2
 
         ElseIf row.f_iひも種 = (enumひも種.i_縦 Or enumひも種.i_すき間) Then
             row.Setf_s色Null()
             row.Setf_i何本幅Null()
             row.Setf_dひも長加算Null()
+            row.Setf_dひも長加算2Null()
         End If
 
         Return True
@@ -2112,6 +2119,9 @@ Class clsCalcSquare
                     Else
                         output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                         row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
+                        If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
+                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
+                        End If
                     End If
 
                     row.f_sメモ = sbMemo.ToString

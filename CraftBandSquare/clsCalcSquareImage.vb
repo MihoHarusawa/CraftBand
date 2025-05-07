@@ -248,12 +248,11 @@ Partial Public Class clsCalcSquare
 
             If band.m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
                 Dim bandwidth As S差分 = Unit270 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
-                'Dim d横ひも表示長 As Double = d縁までの固定長
                 Dim d横ひも表示長 As Double = band.m_row縦横展開.f_d出力ひも長
 
-                band.m_rひも位置.p左上 = New S実座標(-d横ひも表示長 / 2, Y横ひも上)
+                '#92 band.m_rひも位置.p左上 = New S実座標(-d横ひも表示長 / 2, Y横ひも上)
+                band.m_rひも位置.p左上 = New S実座標(-band.m_row縦横展開.f_dVal1, Y横ひも上)
                 band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit0 * (d横ひも表示長)
-                'band.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
 
                 AddClipItem(band)
             Else
@@ -293,9 +292,9 @@ Partial Public Class clsCalcSquare
                 'Dim d縦ひも表示長 As Double = d縁までの固定長
                 Dim d縦ひも表示長 As Double = band.m_row縦横展開.f_d出力ひも長
 
-                band.m_rひも位置.p左上 = New S実座標(X縦ひも左, d縦ひも表示長 / 2)
+                '#92 band.m_rひも位置.p左上 = New S実座標(X縦ひも左, d縦ひも表示長 / 2)
+                band.m_rひも位置.p左上 = New S実座標(X縦ひも左, band.m_row縦横展開.f_dVal1)
                 band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit270 * (d縦ひも表示長)
-                'band.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
 
                 AddClipItem(band)
             Else
