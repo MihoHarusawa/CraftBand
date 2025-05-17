@@ -1282,7 +1282,7 @@
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
     <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
-    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
     <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>false</f_bCraftBandSquare>
@@ -1309,7 +1309,7 @@
     <f_dひも長加算初期値>0</f_dひも長加算初期値>
     <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
     <f_d厚さ>0</f_d厚さ>
-    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
     <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
     <f_bCraftBandKnot>false</f_bCraftBandKnot>
     <f_bCraftBandSquare>false</f_bCraftBandSquare>
@@ -2204,6 +2204,36 @@
     <f_d四つ畳みひも長加算初期値>0</f_d四つ畳みひも長加算初期値>
     <f_d目と数える端の目>1</f_d目と数える端の目>
     <f_s本幅の幅リスト>1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,</f_s本幅の幅リスト>
+    <f_s製品情報 />
+    <f_s備考 />
+  </tblバンドの種類>
+  <tblバンドの種類>
+    <f_sバンドの種類名>PPバンド(W幅)</f_sバンドの種類名>
+    <f_i本幅>4</f_i本幅>
+    <f_dバンド幅>30</f_dバンド幅>
+    <f_i基本のひも幅>0</f_i基本のひも幅>
+    <f_s長さと重さ />
+    <f_d短い横ひも長のばらつき>0</f_d短い横ひも長のばらつき>
+    <f_d縦ひも間の最小間隔>0</f_d縦ひも間の最小間隔>
+    <f_d差しひもの径>0</f_d差しひもの径>
+    <f_d差しひも長加算初期値>10</f_d差しひも長加算初期値>
+    <f_d垂直ひも加算初期値>10</f_d垂直ひも加算初期値>
+    <f_d底の厚さ>1</f_d底の厚さ>
+    <f_d立ち上げ時の四角底周の増分>10</f_d立ち上げ時の四角底周の増分>
+    <f_d立ち上げ時の楕円底周の増分>0</f_d立ち上げ時の楕円底周の増分>
+    <f_d楕円底円弧の半径加算>0</f_d楕円底円弧の半径加算>
+    <f_d楕円底周の加算>0</f_d楕円底周の加算>
+    <f_dひも間のすき間初期値>0.2</f_dひも間のすき間初期値>
+    <f_dひも長係数初期値>1</f_dひも長係数初期値>
+    <f_dひも長加算初期値>100</f_dひも長加算初期値>
+    <f_s色リスト>deepイエロー,deepオレンジ,deepクリーム,deepグレー,deepこげ茶,deepシアン,deepナチュラル,deepピンク,deepブラウン,deepマゼンタ,deepライトグレー,deep黄緑,deep黒,deep紺,deep紫,deep深緑,deep青,deep赤,deep茶,deep白,deep緑,イエロー,オレンジ,クリーム,グレー,こげ茶,シアン,ナチュラル,ピンク,ブラウン,マゼンタ,ライトグレー,黄緑,黒,紺,紫,深緑,青,赤,線のみ,線のみ(細),線のみ(中線あり),茶,白,無描画色,緑</f_s色リスト>
+    <f_dコマ寸法係数a>0.9361955873583782</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.11999999999999982</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>1.034733022291343</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>0.0266666666666661</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>100</f_d四つ畳みひも長加算初期値>
+    <f_d目と数える端の目>0.5</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
     <f_s製品情報 />
     <f_s備考 />
   </tblバンドの種類>
@@ -3298,7 +3328,7 @@
   <tbl基本値>
     <f_s単位>mm</f_s単位>
     <f_sバージョン>1.8.4</f_sバージョン>
-    <f_s識別情報>Ver.1.8.11添付</f_s識別情報>
+    <f_s識別情報>Ver.1.8.13添付</f_s識別情報>
     <f_s備考 />
   </tbl基本値>
   <tbl描画色>
