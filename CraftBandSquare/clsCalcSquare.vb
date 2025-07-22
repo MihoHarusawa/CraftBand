@@ -2531,6 +2531,10 @@ Class clsCalcSquare
     Private Function CenterString(ByVal i As Integer) As String
         Return _frmMain.editInsertBand.CenterString(i)
     End Function
+
+    Private Function PositionString(ByVal i As Integer) As String
+        Return _frmMain.editInsertBand.PositionString(i)
+    End Function
 #End Region
 
 End Class

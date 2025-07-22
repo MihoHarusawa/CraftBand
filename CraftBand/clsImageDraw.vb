@@ -428,9 +428,9 @@ Public Class CImageDraw
 
         'CBand描画に移行中
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ subバンド isVirtical:{0},f_s記号:{1}", isVirtical, item.m_row縦横展開.f_s記号)
-        If item.m_regionList IsNot Nothing Then
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "× m_regionList({0})", item.m_regionList.Count)
-        End If
+        'If item.m_regionList IsNot Nothing Then
+        '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "× m_regionList({0})", item.m_regionList.Count)
+        'End If
 
         Dim ret As Boolean = True
         Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
@@ -442,83 +442,83 @@ Public Class CImageDraw
                 widraw = pixcel_height(item.m_rひも位置.y高さ)
             End If
 
-            If item.m_regionList IsNot Nothing AndAlso 0 < item.m_regionList.Count Then
-                '白抜き箇所がある
-                If isVirtical Then
-                    '縦ひも
-                    Dim sublist As C領域リスト = item.m_regionList.CrossingX(item.m_rひも位置.x最左, item.m_rひも位置.x最右)
-                    If 0 < sublist.Count Then
-                        sublist.SortByY()
-                        'Debug.Print(sublist.ToString)
-                        Dim YStart As Double = item.m_rひも位置.y最下
-                        Dim YEnd As Double = item.m_rひも位置.y最上
-                        Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._上)
+            'If item.m_regionList IsNot Nothing AndAlso 0 < item.m_regionList.Count Then
+            '    '白抜き箇所がある
+            '    If isVirtical Then
+            '        '縦ひも
+            '        Dim sublist As C領域リスト = item.m_regionList.CrossingX(item.m_rひも位置.x最左, item.m_rひも位置.x最右)
+            '        If 0 < sublist.Count Then
+            '            sublist.SortByY()
+            '            'Debug.Print(sublist.ToString)
+            '            Dim YStart As Double = item.m_rひも位置.y最下
+            '            Dim YEnd As Double = item.m_rひも位置.y最上
+            '            Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._上)
 
-                        Dim part_r As S領域 = item.m_rひも位置
-                        For Each r As S領域 In sublist
-                            If r.y最下 < YStart Then
-                                '範囲より下なのでスルー
-                            ElseIf YEnd < r.y最上 Then
-                                '範囲より上なので終わり
-                                Exit For
-                            Else
-                                '範囲内
-                                part_r.y最上 = r.y最下
-                                ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
-                                                      widraw, item.m_row縦横展開.f_i何本幅, borderひも)
-                                part_r.y最下 = r.y最上
-                                borderひも = borderひも And Not (DirectionEnum._下)
-                            End If
-                        Next
-                        '
-                        borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._上))
-                        part_r.p右上.Y = YEnd
-                        ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
-                                                      widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+            '            Dim part_r As S領域 = item.m_rひも位置
+            '            For Each r As S領域 In sublist
+            '                If r.y最下 < YStart Then
+            '                    '範囲より下なのでスルー
+            '                ElseIf YEnd < r.y最上 Then
+            '                    '範囲より上なので終わり
+            '                    Exit For
+            '                Else
+            '                    '範囲内
+            '                    part_r.y最上 = r.y最下
+            '                    ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+            '                                          widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+            '                    part_r.y最下 = r.y最上
+            '                    borderひも = borderひも And Not (DirectionEnum._下)
+            '                End If
+            '            Next
+            '            '
+            '            borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._上))
+            '            part_r.p右上.Y = YEnd
+            '            ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+            '                                          widraw, item.m_row縦横展開.f_i何本幅, borderひも)
 
-                    Else
-                        ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
-                    End If
-                Else
-                    '横ひも
-                    Dim sublist As C領域リスト = item.m_regionList.CrossingY(item.m_rひも位置.y最下, item.m_rひも位置.y最上)
-                    If 0 < sublist.Count Then
-                        sublist.SortByX()
-                        'Debug.Print(sublist.ToString)
-                        Dim XStart As Double = item.m_rひも位置.x最左
-                        Dim XEnd As Double = item.m_rひも位置.x最右
-                        Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._右)
+            '        Else
+            '            ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
+            '        End If
+            '    Else
+            '        '横ひも
+            '        Dim sublist As C領域リスト = item.m_regionList.CrossingY(item.m_rひも位置.y最下, item.m_rひも位置.y最上)
+            '        If 0 < sublist.Count Then
+            '            sublist.SortByX()
+            '            'Debug.Print(sublist.ToString)
+            '            Dim XStart As Double = item.m_rひも位置.x最左
+            '            Dim XEnd As Double = item.m_rひも位置.x最右
+            '            Dim borderひも As DirectionEnum = item.m_borderひも And Not (DirectionEnum._右)
 
-                        Dim part_r As S領域 = item.m_rひも位置
-                        For Each r As S領域 In sublist
-                            If r.x最左 < XStart Then
-                                '範囲より左なのでスルー
-                            ElseIf XEnd < r.x最右 Then
-                                '範囲より右なので終わり
-                                Exit For
-                            Else
-                                '範囲内
-                                part_r.x最右 = r.x最左
-                                ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
-                                                      widraw, item.m_row縦横展開.f_i何本幅, borderひも)
-                                part_r.x最左 = r.x最右
-                                borderひも = borderひも And Not (DirectionEnum._左)
-                            End If
-                        Next
-                        '
-                        borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._右))
-                        part_r.p右上.X = XEnd
-                        ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
-                                                      widraw, item.m_row縦横展開.f_i何本幅, borderひも)
-                    Else
-                        ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
-                    End If
-                End If
+            '            Dim part_r As S領域 = item.m_rひも位置
+            '            For Each r As S領域 In sublist
+            '                If r.x最左 < XStart Then
+            '                    '範囲より左なのでスルー
+            '                ElseIf XEnd < r.x最右 Then
+            '                    '範囲より右なので終わり
+            '                    Exit For
+            '                Else
+            '                    '範囲内
+            '                    part_r.x最右 = r.x最左
+            '                    ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+            '                                          widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+            '                    part_r.x最左 = r.x最右
+            '                    borderひも = borderひも And Not (DirectionEnum._左)
+            '                End If
+            '            Next
+            '            '
+            '            borderひも = borderひも Or (item.m_borderひも And (DirectionEnum._右))
+            '            part_r.p右上.X = XEnd
+            '            ret = ret And partバンド(isVirtical, colset, pixcel_rectangle(part_r),
+            '                                          widraw, item.m_row縦横展開.f_i何本幅, borderひも)
+            '        Else
+            '            ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
+            '        End If
+            '    End If
 
-            Else
-                '1本だけのひも
-                ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
-            End If
+            'Else
+            '1本だけのひも
+            ret = ret And partバンド(isVirtical, colset, rect, widraw, item.m_row縦横展開.f_i何本幅, item.m_borderひも)
+            'End If
         End If
 
         '記号
@@ -599,7 +599,12 @@ Public Class CImageDraw
     Function drawバンドセット(ByVal item As clsImageItem) As Boolean
 
         '描かない領域を反転するための新たな領域を作成
-        Dim invertedClip As New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
+        Dim invertedClip As Region
+        If item.m_rDraw.IsEmpty Then
+            invertedClip = New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
+        Else
+            invertedClip = New Region(pixcel_rectangle(item.m_rDraw))
+        End If
 
         If item.m_clipList IsNot Nothing AndAlso 0 < item.m_clipList.Count Then
             For Each clip As CBand In item.m_clipList

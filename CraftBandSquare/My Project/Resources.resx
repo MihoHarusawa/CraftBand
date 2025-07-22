@@ -205,7 +205,7 @@
     <comment>frmMain</comment>
   </data>
   <data name="EnumStringPosition" xml:space="preserve">
-    <value>おもて,うら</value>
+    <value>おもて,うら,とも編み</value>
     <comment>frmMain</comment>
   </data>
   <data name="FormCaption" xml:space="preserve">

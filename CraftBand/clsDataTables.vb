@@ -193,6 +193,7 @@ Public Class clsDataTables
     Public Enum enum差し位置
         i_おもて = 0
         i_うら = 1
+        i_とも編み = 2 '#94
     End Enum
 
     Sub New()

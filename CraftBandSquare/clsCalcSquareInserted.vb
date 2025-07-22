@@ -1,11 +1,9 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandSquare.clsCalcSquare
 
 Partial Public Class clsCalcSquare
     '差しひも保存値
@@ -136,6 +134,11 @@ Partial Public Class clsCalcSquare
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み AndAlso
+                            (row.f_i中心点 = enum中心点.i_目の中央) Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
+                        End If
 
                     Case enum角度.i_45度, enum角度.i_135度 'b,d
                         If (_b横ひも本幅変更 OrElse _b縦ひも本幅変更 OrElse _b側面ひも本幅変更) Then
@@ -148,6 +151,11 @@ Partial Public Class clsCalcSquare
                                 Return False
                             End If
                         End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
+                        End If
+
 
                     Case enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度  'e,f,g,h
                         row.f_s無効理由 = PlateString(enum配置面.i_側面)
@@ -172,6 +180,11 @@ Partial Public Class clsCalcSquare
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み AndAlso
+                            (row.f_i中心点 = enum中心点.i_目の中央) Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
+                        End If
 
                     Case enum角度.i_45度, enum角度.i_135度 'b,d
                         If (row.f_i中心点 = enum中心点.i_目の中央) Then
@@ -180,6 +193,10 @@ Partial Public Class clsCalcSquare
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
+                        End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
                         End If
                         'ひも位置をもとに配置するので本幅変更可能、ひも外の目に対する仮想ひもは無し
 
@@ -190,6 +207,10 @@ Partial Public Class clsCalcSquare
                                 Return False
                             End If
                         End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
+                        End If
 
                     Case enum角度.i_18度, enum角度.i_162度  'e,,h
                         If (row.f_i中心点 = enum中心点.i_目の中央) Then
@@ -197,6 +218,10 @@ Partial Public Class clsCalcSquare
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
+                        End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
                         End If
 
                     Case Else
@@ -213,6 +238,11 @@ Partial Public Class clsCalcSquare
                             row.f_s無効理由 = text何本幅()
                             Return False
                         End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み AndAlso
+                            (row.f_i中心点 = enum中心点.i_目の中央) Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
+                        End If
 
                     Case enum角度.i_45度, enum角度.i_135度 'b,d
                         If (_b横ひも本幅変更 OrElse _b縦ひも本幅変更 OrElse _b側面ひも本幅変更) Then
@@ -224,6 +254,10 @@ Partial Public Class clsCalcSquare
                                 row.f_s無効理由 = text何本幅()
                                 Return False
                             End If
+                        End If
+                        If row.f_i差し位置 = enum差し位置.i_とも編み Then
+                            row.f_s無効理由 = PositionString(enum差し位置.i_とも編み)
+                            Return False
                         End If
 
                     Case enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度  'e,f,g,h
@@ -503,15 +537,22 @@ Partial Public Class clsCalcSquare
             End If
 
             Dim bandlist As CBandList = Nothing
+            '#94
+            Dim imglist As clsImageItemList = Nothing
+            If CType(row.f_i差し位置, enum差し位置) = enum差し位置.i_とも編み Then
+                imglist = New clsImageItemList
+            End If
+            Dim imgitem As clsImageItem
+
             Select Case row.f_i配置面
                 '-------------------------------------------------
                 Case enum配置面.i_底面 'A
                     Select Case row.f_i角度
                         Case enum角度.i_0度  '底の横 a 
-                            image横ひもに差す(bandlist, _InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image横ひもに差す(bandlist, imglist, _InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_90度  '底の縦 c 
-                            image縦ひもに差す(bandlist, _InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
+                            image縦ひもに差す(bandlist, imglist, _InsertExpand.GetOneItem(row), isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.center)
 
                         Case enum角度.i_45度, enum角度.i_135度 'b,d
                             bandlist = imageList底の斜め(row, dInnerPosition)
@@ -523,14 +564,14 @@ Partial Public Class clsCalcSquare
                 Case enum配置面.i_側面 'B
                     Select Case row.f_i角度
                         Case enum角度.i_0度  '水平の周(全面と同じ) a
-                            bandlist = 側面_水平(row, dInnerPosition)
+                            bandlist = 側面_水平(imglist, row, dInnerPosition)
 
                         Case enum角度.i_90度 'c
                             Dim item As CInsertItem = _InsertExpand.GetOneItem(row)
-                            n開始位置 = image縦ひもに差す(bandlist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
-                            n開始位置 = image横ひもに差す(bandlist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
-                            n開始位置 = image縦ひもに差す(bandlist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
-                            n開始位置 = image横ひもに差す(bandlist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
+                            n開始位置 = image縦ひもに差す(bandlist, imglist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '1～縦の本数
+                            n開始位置 = image横ひもに差す(bandlist, imglist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.before) '縦の本数+1 ～横の本数+縦ひも本数
+                            n開始位置 = image縦ひもに差す(bandlist, imglist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after) '横の本数+縦の本数+1 ～ 2*縦の本数+縦の本数
+                            n開始位置 = image横ひもに差す(bandlist, imglist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
 
                         Case enum角度.i_45度, enum角度.i_135度, enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度 'b,d,e,f,g,h★
                             n開始位置 = image縦ひも面を斜めに(bandlist, row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
@@ -543,7 +584,7 @@ Partial Public Class clsCalcSquare
                 Case enum配置面.i_全面 'C
                     Select Case row.f_i角度
                         Case enum角度.i_0度  '水平の周(側面と同じ) a
-                            bandlist = 側面_水平(row, dInnerPosition)
+                            bandlist = 側面_水平(imglist, row, dInnerPosition)
 
                         Case enum角度.i_90度  '底の横+底の縦を側面に回す c
                             If Not _InsertExpand.ContainsKey(row.f_i番号) Then
@@ -553,9 +594,9 @@ Partial Public Class clsCalcSquare
                             For Each tmp As CInsertItem In tmptable
                                 'n開始位置←tmp.m_i開始位置
                                 If tmp.m_iひも種 = enumひも種.i_横 Then
-                                    image横ひもに差す(bandlist, tmp, isCenterBand, dInnerPosition, tmp.m_i開始位置, i何本ごと, draw_position.center) '1～横ひも本数
+                                    image横ひもに差す(bandlist, imglist, tmp, isCenterBand, dInnerPosition, tmp.m_i開始位置, i何本ごと, draw_position.center) '1～横ひも本数
                                 ElseIf tmp.m_iひも種 = enumひも種.i_縦 Then
-                                    image縦ひもに差す(bandlist, tmp, isCenterBand, dInnerPosition, tmp.m_i開始位置, i何本ごと, draw_position.center) '横の本数+1 ～ 横の本数+縦の本数
+                                    image縦ひもに差す(bandlist, imglist, tmp, isCenterBand, dInnerPosition, tmp.m_i開始位置, i何本ごと, draw_position.center) '横の本数+1 ～ 横の本数+縦の本数
                                 End If
                             Next
 
@@ -568,13 +609,20 @@ Partial Public Class clsCalcSquare
 
             End Select
 
-            If bandlist IsNot Nothing AndAlso 0 < bandlist.Count Then
-                Dim item As New clsImageItem(bandlist, 40, row.f_i番号)
+            If imglist IsNot Nothing Then
+                ''#94 とも編みの場合のみ
+                imgList差しひも.MoveList(imglist)
+                imglist = Nothing
+
+            ElseIf bandlist IsNot Nothing AndAlso 0 < bandlist.Count Then
+                Dim item As New clsImageItem(bandlist, IdxDrawInsertBand, row.f_i番号)
                 If CType(row.f_i差し位置, enum差し位置) = enum差し位置.i_うら Then
+                    'うら
                     item.AddClip(_BandListForClip)
                 End If
                 imgList差しひも.AddItem(item)
             End If
+
         Next
 
         Return imgList差しひも
@@ -651,8 +699,8 @@ Partial Public Class clsCalcSquare
         End If
     End Function
 
-    '底の横ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
-    Private Function image横ひもに差す(ByRef bandlist As CBandList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
+    '底の横ひもへの差しひも　bandlistは常時・とも編みの場合のみimglist生成
+    Private Function image横ひもに差す(ByRef bandlist As CBandList, ByRef imglist As clsImageItemList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 Then
             Return -1
         End If
@@ -671,10 +719,8 @@ Partial Public Class clsCalcSquare
             Return n開始位置 - n本数
         End If
 
-        'Dim i本幅 As Integer = drow.Value("p_i何本幅")
         Dim i本幅 As Integer = drow.p_i何本幅
         Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
-        'Dim dひも長 As Double = drow.Value("m_dひも長")
         Dim dひも長 As Double = drow.m_dひも長
 
         'バンド描画位置
@@ -707,11 +753,7 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, drow, i_番号, idx)
             band = New CBand(drow)
-
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(x_left, y_center + d幅 / 2),
-            '                             New S実座標(x_right, y_center - d幅 / 2)))
             band.SetBand(New S実座標(x_left, y_center), New S実座標(x_right, y_center), d幅, DeltaAx横ひも)
 
             If isFirst Then
@@ -728,8 +770,19 @@ Partial Public Class clsCalcSquare
                 isFirst = False
             End If
 
-            '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim iYoko As Integer = idx
+                If draw = draw_position.after Then
+                    iYoko = p_i横ひもの本数 - idx + 1
+                End If
+                Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
+                '
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, drow.p_i番号)
+                imgitem.AddSameClip(itemYoko)
+                imglist.AddItem(imgitem)
+            End If
 
             If i何本ごと = 0 Then
                 Exit For
@@ -810,8 +863,8 @@ Partial Public Class clsCalcSquare
         End If
     End Function
 
-    '底の縦ひもへの差しひも　drow には、tbl差しひもRow もしくは tbl縦横展開Row をセット
-    Private Function image縦ひもに差す(ByRef bandlist As CBandList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
+    '底の縦ひもへの差しひも　bandlistは常時・とも編みの場合のみimglist生成
+    Private Function image縦ひもに差す(ByRef bandlist As CBandList, ByRef imglist As clsImageItemList, ByVal drow As CInsertItem, ByVal isCenterBand As Boolean, ByVal dInnerPosition As Double, ByVal n開始位置 As Integer, ByVal i何本ごと As Integer, ByVal draw As draw_position) As Integer
         If n開始位置 < 1 Then
             Return -1
         End If
@@ -830,10 +883,8 @@ Partial Public Class clsCalcSquare
             Return n開始位置 - n本数
         End If
 
-        'Dim i本幅 As Integer = drow.Value("p_i何本幅")
         Dim i本幅 As Integer = drow.p_i何本幅
         Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
-        'Dim dひも長 As Double = drow.Value("m_dひも長")
         Dim dひも長 As Double = drow.m_dひも長
 
         'バンド描画長
@@ -866,11 +917,7 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmpitem), i_番号, idx)
             band = New CBand(drow)
-
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(x_center - d幅 / 2, y_up),
-            '                             New S実座標(x_center + d幅 / 2, y_down)))
             band.SetBand(New S実座標(x_center, y_up), New S実座標(x_center, y_down), d幅, DeltaAx縦ひも)
 
             If isFirst Then
@@ -887,8 +934,19 @@ Partial Public Class clsCalcSquare
                 isFirst = False
             End If
 
-            '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim iTate As Integer = idx
+                If draw = draw_position.after Then
+                    iTate = p_i縦ひもの本数 - idx + 1
+                End If
+                Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
+                '
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, drow.p_i番号)
+                imgitem.AddSameClip(itemTate)
+                imglist.AddItem(imgitem)
+            End If
 
             If i何本ごと = 0 Then
                 Exit For
@@ -944,10 +1002,7 @@ Partial Public Class clsCalcSquare
     End Function
 
     '4側面を水平に
-    Private Function 側面_水平(ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double) As CBandList
-        'If _ImageList差しひも Is Nothing Then
-        '    Return False
-        'End If
+    Private Function 側面_水平(ByRef imglist As clsImageItemList, ByVal row As tbl差しひもRow, ByVal dInnerPosition As Double) As CBandList
         Dim bandlist As New CBandList
 
         Dim isCenterBand As Boolean = (row.f_i中心点 = enum中心点.i_ひも中央)
@@ -958,7 +1013,6 @@ Partial Public Class clsCalcSquare
         Dim band_x As Double = get周の横(1 / 2)
         Dim band_y As Double = get周の縦(1 / 2)
 
-        'Dim item As clsImageItem
         Dim band As CBand
 
         '本数
@@ -982,48 +1036,58 @@ Partial Public Class clsCalcSquare
             Dim x_center As Double = dxdy + getZeroX(1 / 2)
 
             '*上
-            'item = New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(band_x, y_center + d幅 / 2),
-            '                             New S実座標(-band_x, y_center - d幅 / 2)))
             band = New CBand(row)
             band.SetBand(New S実座標(-band_x, y_center), New S実座標(band_x, y_center), d幅, DeltaAx横ひも)
-
             '#60
             If IsDrawMarkCurrent Then
                 band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後, (_d基本のひも幅 / 2))
             End If
             '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
-
-
-            '*下
-            'item = New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(band_x, -y_center + d幅 / 2),
-            '                             New S実座標(-band_x, -y_center - d幅 / 2)))
-            '_ImageList差しひも.AddItem(item)
-            band = New CBand(row)
-            band.SetBand(New S実座標(-band_x, -y_center), New S実座標(band_x, -y_center), d幅, DeltaAx横ひも)
-            bandlist.Add(band)
-
-
-            '*左
-            'item = New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(-x_center + d幅 / 2, band_y),
-            '                             New S実座標(-x_center - d幅 / 2, -band_y)))
-            '_ImageList差しひも.AddItem(item)
-            band = New CBand(row)
-            band.SetBand(New S実座標(-x_center, band_y), New S実座標(-x_center, -band_y), d幅, DeltaAx縦ひも)
-            bandlist.Add(band)
-
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim itemSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, idx)
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
+                imgitem.AddSameClip(itemSide)
+                imglist.AddItem(imgitem)
+            End If
 
             '*右
-            'item = New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = New S四隅(New S領域(New S実座標(x_center + d幅 / 2, band_y),
-            '                             New S実座標(x_center - d幅 / 2, -band_y)))
-            '_ImageList差しひも.AddItem(item)
             band = New CBand(row)
             band.SetBand(New S実座標(x_center, band_y), New S実座標(x_center, -band_y), d幅, DeltaAx縦ひも)
             bandlist.Add(band)
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim itemSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, idx)
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
+                imgitem.AddSameClip(itemSide)
+                imglist.AddItem(imgitem)
+            End If
+
+            '*下
+            band = New CBand(row)
+            band.SetBand(New S実座標(-band_x, -y_center), New S実座標(band_x, -y_center), d幅, DeltaAx横ひも)
+            bandlist.Add(band)
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim itemSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, idx)
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
+                imgitem.AddSameClip(itemSide)
+                imglist.AddItem(imgitem)
+            End If
+
+            '*左
+            band = New CBand(row)
+            band.SetBand(New S実座標(-x_center, band_y), New S実座標(-x_center, -band_y), d幅, DeltaAx縦ひも)
+            bandlist.Add(band)
+            '#94 とも編み
+            If imglist IsNot Nothing Then
+                Dim itemSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, idx)
+                Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
+                imgitem.AddSameClip(itemSide)
+                imglist.AddItem(imgitem)
+            End If
+
 
             If row.f_i何本ごと = 0 Then
                 Exit For
@@ -1116,25 +1180,16 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            'Dim rBand0 As S領域
             Dim band As New CBand(row)
             If (draw = draw_position.after) Then
-                'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + dRatio * dxdy),
-                '                  New S実座標(x_center + d幅 / 2, y_center - (row.f_dひも長 - dRatio * dxdy)))
                 band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center, y_center - row.f_dひも長), d幅, DeltaAx縦ひも)
                 band.MoveBand(New S差分(0, dRatio * dxdy))
             Else
-                'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + (row.f_dひも長 - dRatio * dxdy)),
-                '                  New S実座標(x_center + d幅 / 2, y_center - dRatio * dxdy))
                 band.SetBand(New S実座標(x_center, y_center + row.f_dひも長), New S実座標(x_center, y_center), d幅, DeltaAx縦ひも)
                 band.MoveBand(New S差分(0, -dRatio * dxdy))
             End If
 
-            'Dim aBand As New S四隅(rBand0)
 
-
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
             band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
@@ -1148,7 +1203,6 @@ Partial Public Class clsCalcSquare
                 isFirst = False
             End If
 
-            '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
 
             If i何本ごと = 0 Then
@@ -1215,24 +1269,15 @@ Partial Public Class clsCalcSquare
                 Continue For
             End If
 
-            'Dim rBand0 As S領域
             Dim band As New CBand(row)
             If (draw = draw_position.after) Then
-                'rBand0 = New S領域(New S実座標(x_center - (row.f_dひも長 - dRatio * dxdy), y_center - d幅 / 2),
-                '                  New S実座標(x_center + dRatio * dxdy, y_center + d幅 / 2))
                 band.SetBand(New S実座標(x_center - row.f_dひも長, y_center), New S実座標(x_center, y_center), d幅, DeltaAx横ひも)
                 band.MoveBand(New S差分(dRatio * dxdy, 0))
             Else
-                'rBand0 = New S領域(New S実座標(x_center - dRatio * dxdy, y_center - d幅 / 2),
-                '                  New S実座標(x_center + (row.f_dひも長 - dRatio * dxdy), y_center + d幅 / 2))
                 band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center + row.f_dひも長, y_center), d幅, DeltaAx横ひも)
                 band.MoveBand(New S差分(-dRatio * dxdy, 0))
             End If
 
-            'Dim aBand As New S四隅(rBand0)
-
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(row), row.f_i番号, idx)
-            'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), dAngle)
             band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
@@ -1246,7 +1291,6 @@ Partial Public Class clsCalcSquare
                 isFirst = False
             End If
 
-            '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
 
             If i何本ごと = 0 Then

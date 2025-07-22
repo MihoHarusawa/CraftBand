@@ -287,7 +287,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  おもて,うら に類似しているローカライズされた文字列を検索します。
+        '''  おもて,うら,とも編み に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property EnumStringPosition() As String
             Get

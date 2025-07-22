@@ -1756,7 +1756,7 @@ Public Class clsImageItem
     '縦バンド・横バンド
     Public m_bNoMark As Boolean = False '記号なし
     Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
-    Public m_regionList As C領域リスト 'クロス表示用
+    'Public m_regionList As C領域リスト 
 
     '線分リスト
     Public m_lineList As New C線分リスト
@@ -1773,6 +1773,7 @@ Public Class clsImageItem
     'バンドセット
     Public m_bandList As CBandList = Nothing
     Public m_clipList As CBandList = Nothing
+    Public m_rDraw As S領域 'この範囲にだけ
 
     'クリップ
     Public m_fpath As String 'jpg
@@ -1948,11 +1949,13 @@ Public Class clsImageItem
             m_bandList.Add(band) '有効なバンドのみ
         End If
     End Sub
-    Sub AddBand(ByVal band As CBand)
+    Sub AddBand(ByVal band As CBand, ByVal idx1 As Integer, ByVal idx2 As Integer)
         If band IsNot Nothing Then
             m_ImageType = ImageTypeEnum._バンドセット
             If m_bandList Is Nothing Then
                 m_bandList = New CBandList
+                m_Index = idx1
+                m_Index2 = idx2
             End If
             m_bandList.Add(band)
         End If
@@ -1983,6 +1986,15 @@ Public Class clsImageItem
         End If
         If item IsNot Nothing AndAlso item.m_bandList IsNot Nothing Then
             m_clipList.AddRange(item.m_bandList)
+        End If
+    End Sub
+    Sub AddSameClip(ByVal item As clsImageItem)
+        'm_ImageType = ImageTypeEnum._バンドセット の想定
+        If m_clipList Is Nothing Then
+            m_clipList = New CBandList
+        End If
+        If item IsNot Nothing AndAlso item.m_clipList IsNot Nothing Then
+            m_clipList.AddRange(item.m_clipList)
         End If
     End Sub
     Sub AddClip(ByVal circle As S円)
@@ -2156,9 +2168,9 @@ Public Class clsImageItem
         End If
         sb.AppendFormat("dひも幅={0} ひも位置:{1}", m_dひも幅, m_rひも位置).AppendLine()
         sb.AppendFormat("bNoMark={0} border:{1}", m_bNoMark, m_borderひも).AppendLine()
-        If m_regionList IsNot Nothing AndAlso 0 < m_regionList.Count Then
-            sb.AppendLine(m_regionList.ToString)
-        End If
+        'If m_regionList IsNot Nothing AndAlso 0 < m_regionList.Count Then
+        '    sb.AppendLine(m_regionList.ToString)
+        'End If
         sb.AppendLine(m_lineList.ToString)
         Return sb.ToString
     End Function
