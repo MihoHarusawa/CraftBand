@@ -1315,7 +1315,7 @@ Public Class clsImageItem
     'バンド
     Class CBand
         '始点→終点 バンドの方向角
-        'F→T　軸方向(幅方向)=バンドの方向角+90
+        'F→T　軸方向(幅方向)=バンドの方向角+90(deltaAx)
         '
         '  始点T(D)┌──────┐終点T(C)
         '          ├── → ──┤
@@ -1948,6 +1948,16 @@ Public Class clsImageItem
             m_bandList.Add(band) '有効なバンドのみ
         End If
     End Sub
+    Sub AddBand(ByVal band As CBand)
+        If band IsNot Nothing Then
+            m_ImageType = ImageTypeEnum._バンドセット
+            If m_bandList Is Nothing Then
+                m_bandList = New CBandList
+            End If
+            m_bandList.Add(band)
+        End If
+    End Sub
+    '
     Sub AddClip(ByVal bandlist As CBandList)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
@@ -2202,7 +2212,8 @@ Public Class clsImageItemList
     End Sub
 
     'レコード対応のアイテム検索
-    Function GetRowItem(ByVal iひも種 As Integer, ByVal iひも番号 As Integer, Optional ByVal create As Boolean = True) As clsImageItem
+    'Function GetRowItem(ByVal iひも種 As Integer, ByVal iひも番号 As Integer, Optional ByVal create As Boolean = True) As clsImageItem
+    Function GetRowItem(ByVal iひも種 As Integer, ByVal iひも番号 As Integer) As clsImageItem
         For Each band As clsImageItem In Me
             If band.m_row縦横展開 Is Nothing Then
                 Continue For
@@ -2211,17 +2222,17 @@ Public Class clsImageItemList
                 Return band
             End If
         Next
-        If create Then
-            'あるはずなので
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsBandList.GetRowItem 追加({0},{1})", iひも種, iひも番号)
-            Dim add As New clsImageItem((New tbl縦横展開DataTable).Newtbl縦横展開Row)
-            add.m_row縦横展開.f_iひも種 = iひも種
-            add.m_row縦横展開.f_iひも番号 = iひも番号
-            Me.AddItem(add)
-            Return add
-        Else
-            Return Nothing
-        End If
+        'If create Then
+        '    'あるはずなので
+        '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsBandList.GetRowItem 追加({0},{1})", iひも種, iひも番号)
+        '    Dim add As New clsImageItem((New tbl縦横展開DataTable).Newtbl縦横展開Row)
+        '    add.m_row縦横展開.f_iひも種 = iひも種
+        '    add.m_row縦横展開.f_iひも番号 = iひも番号
+        '    Me.AddItem(add)
+        '    Return add
+        'Else
+        Return Nothing
+        'End If
     End Function
 
     '位置順にソート

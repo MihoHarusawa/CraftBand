@@ -2,6 +2,7 @@
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare.clsCalcSquare
@@ -1570,27 +1571,13 @@ Partial Public Class clsCalcSquare
     'メインのバンドをクリップ化
     Dim _BandListForClip As New CBandList   'CalcImage開始時にクリア
 
-    Private Function AddClipItem(ByVal item As clsImageItem) As Boolean
-        Dim band As New CBand
-
-        If item.m_ImageType = ImageTypeEnum._横バンド Then
-            band.p始点F = item.m_rひも位置.p左下
-            band.p終点F = item.m_rひも位置.p右下
-            band.p始点T = item.m_rひも位置.p左上
-            band.p終点T = item.m_rひも位置.p右上
-
-        ElseIf item.m_ImageType = ImageTypeEnum._縦バンド Then
-            band.p始点F = item.m_rひも位置.p左上
-            band.p終点F = item.m_rひも位置.p左下
-            band.p始点T = item.m_rひも位置.p右上
-            band.p終点T = item.m_rひも位置.p右下
-
+    Private Function AddClipItem(ByVal band As CBand) As Boolean
+        If band IsNot Nothing Then
+            _BandListForClip.Add(band)
+            Return True
         Else
             Return False
         End If
-
-        _BandListForClip.Add(band)
-        Return True
     End Function
 
 End Class

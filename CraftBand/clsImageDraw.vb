@@ -425,7 +425,13 @@ Public Class CImageDraw
         If colset Is Nothing OrElse colset.IsNoDrawing Then
             Return False
         End If
-        'Debug.Print("{0} {1}", isVirtical, item.m_row縦横展開.f_s記号)
+
+        'CBand描画に移行中
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ subバンド isVirtical:{0},f_s記号:{1}", isVirtical, item.m_row縦横展開.f_s記号)
+        If item.m_regionList IsNot Nothing Then
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "× m_regionList({0})", item.m_regionList.Count)
+        End If
+
         Dim ret As Boolean = True
         Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
         If (isVirtical And (0 < rect.Height)) OrElse (Not isVirtical And (0 < rect.Width)) Then

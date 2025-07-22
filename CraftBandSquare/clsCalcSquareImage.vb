@@ -2,7 +2,7 @@
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsMasterTables
+Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsUpDown
 Imports CraftBand.Tables.dstDataTables
 
@@ -236,31 +236,45 @@ Partial Public Class clsCalcSquare
             Return True
         End If
 
-        'Dim d縁までの固定長 As Double = get周の横() + get側面高(2) + 2 * mdlUnit.Min(_d縁の高さ, _d縁の垂直ひも長)
         Dim Y横ひも上 As Double = p_d四角ベース_縦 / 2
 
         '上から下へ(位置順)
         _ImageList横ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList横ひも
-            If band.m_row縦横展開 Is Nothing Then
+        For Each item As clsImageItem In _ImageList横ひも
+            If item.m_row縦横展開 Is Nothing Then
                 Continue For
             End If
 
-            If band.m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
-                Dim bandwidth As S差分 = Unit270 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
-                Dim d横ひも表示長 As Double = band.m_row縦横展開.f_d出力ひも長
+            If item.m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
+                '始点T　　　　　　　終点T
+                '　　　[□□→□□]
+                '始点F　　　　　　　終点F
+                Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅)
+                Dim bandwidth As S差分 = Unit270 * dひも幅
+                Dim d横ひも表示長 As Double = item.m_row縦横展開.f_d出力ひも長
 
                 '#92 band.m_rひも位置.p左上 = New S実座標(-d横ひも表示長 / 2, Y横ひも上)
-                band.m_rひも位置.p左上 = New S実座標(-band.m_row縦横展開.f_dVal1, Y横ひも上)
-                band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit0 * (d横ひも表示長)
+                item.m_rひも位置.p左上 = New S実座標(-item.m_row縦横展開.f_dVal1, Y横ひも上)
+                item.m_rひも位置.p右下 = item.m_rひも位置.p左上 + bandwidth + Unit0 * (d横ひも表示長)
 
+                Dim band As New CBand(item.m_row縦横展開)
+                band.p始点F = item.m_rひも位置.p左下
+                band.p終点F = item.m_rひも位置.p右下
+                band.p始点T = item.m_rひも位置.p左上
+                band.p終点T = item.m_rひも位置.p右上
+                If IsDrawMarkCurrent Then
+                    '横バンドの左
+                    band.SetMarkPosition(enumMarkPosition._始点Fの前, dひも幅 * 1.4)
+                End If
+
+                item.AddBand(band)
                 AddClipItem(band)
             Else
                 '補強ひもは描画しない
-                band.m_bNoMark = True
+                item.m_ImageType = ImageTypeEnum._描画なし
             End If
             '
-            Y横ひも上 -= band.m_row縦横展開.f_d幅
+            Y横ひも上 -= item.m_row縦横展開.f_d幅
         Next
 
         Return True
@@ -277,31 +291,45 @@ Partial Public Class clsCalcSquare
             Return True
         End If
 
-        'Dim d縁までの固定長 As Double = get周の縦() + get側面高(2) + 2 * mdlUnit.Min(_d縁の高さ, _d縁の垂直ひも長)
         Dim X縦ひも左 As Double = -p_d四角ベース_横 / 2
 
         '左から右へ(位置順)
         _ImageList縦ひも.SortByPosition()
-        For Each band As clsImageItem In _ImageList縦ひも
-            If band.m_row縦横展開 Is Nothing Then
+        For Each item As clsImageItem In _ImageList縦ひも
+            If item.m_row縦横展開 Is Nothing Then
                 Continue For
             End If
 
-            If band.m_row縦横展開.f_iひも種 = enumひも種.i_縦 Then
-                Dim bandwidth As S差分 = Unit0 * g_clsSelectBasics.p_d指定本幅(band.m_row縦横展開.f_i何本幅)
-                'Dim d縦ひも表示長 As Double = d縁までの固定長
-                Dim d縦ひも表示長 As Double = band.m_row縦横展開.f_d出力ひも長
+            If item.m_row縦横展開.f_iひも種 = enumひも種.i_縦 Then
+                '始点F　□　始点T　
+                '　　 　↓
+                '終点F　□　終点T
+                Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅)
+                Dim bandwidth As S差分 = Unit0 * dひも幅
+                Dim d縦ひも表示長 As Double = item.m_row縦横展開.f_d出力ひも長
 
                 '#92 band.m_rひも位置.p左上 = New S実座標(X縦ひも左, d縦ひも表示長 / 2)
-                band.m_rひも位置.p左上 = New S実座標(X縦ひも左, band.m_row縦横展開.f_dVal1)
-                band.m_rひも位置.p右下 = band.m_rひも位置.p左上 + bandwidth + Unit270 * (d縦ひも表示長)
+                item.m_rひも位置.p左上 = New S実座標(X縦ひも左, item.m_row縦横展開.f_dVal1)
+                item.m_rひも位置.p右下 = item.m_rひも位置.p左上 + bandwidth + Unit270 * (d縦ひも表示長)
 
+                Dim band As New CBand(item.m_row縦横展開)
+                band.p始点F = item.m_rひも位置.p左上
+                band.p終点F = item.m_rひも位置.p左下
+                band.p始点T = item.m_rひも位置.p右上
+                band.p終点T = item.m_rひも位置.p右下
+                If IsDrawMarkCurrent Then
+                    '縦バンドの上
+                    band.SetMarkPosition(enumMarkPosition._始点Fの前)
+                End If
+
+                item.AddBand(band)
                 AddClipItem(band)
             Else
-                band.m_bNoMark = True
+                '補強ひもは描画しない
+                item.m_ImageType = ImageTypeEnum._描画なし
             End If
 
-            X縦ひも左 += band.m_row縦横展開.f_d幅
+            X縦ひも左 += item.m_row縦横展開.f_d幅
         Next
 
         Return True
@@ -340,11 +368,14 @@ Partial Public Class clsCalcSquare
                 row.f_dひも長加算 = r.f_dひも長加算
                 row.f_dひも長加算2 = 0
                 row.f_d出力ひも長 = r.f_d連続ひも長
+                row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) 'ひも幅
+
                 If _b縦横側面を展開する Then
                     row.f_d幅 = r.f_d高さ '個別
                 Else
-                    row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_高さ '合計なので再計算
+                    row.f_d幅 = row.f_dVal1 + _d目_ひも間のすき間_高さ 'ひも幅+目、合計なので再計算
                 End If
+
                 tmptable.Rows.Add(row)
 
                 idx += 1
@@ -361,86 +392,103 @@ Partial Public Class clsCalcSquare
 
         Dim item As clsImageItem
 
-        Dim p上ひも左下 As New S実座標(-get周の横(1 / 2), d最下の高さ + getZeroY(1 / 2))
-        Dim p下ひも左上 As New S実座標(-get周の横(1 / 2), -d最下の高さ - getZeroY(1 / 2))
-        Dim p左ひも右上 As New S実座標(-d最下の高さ - getZeroX(1 / 2), get周の縦(1 / 2))
-        Dim p右ひも左上 As New S実座標(d最下の高さ + getZeroX(1 / 2), get周の縦(1 / 2))
+        Dim p上ひも始点F As New S実座標(-get周の横(1 / 2), d最下の高さ + getZeroY(1 / 2))
+        Dim p下ひも始点F As New S実座標(get周の横(1 / 2), -d最下の高さ - getZeroY(1 / 2))
+        Dim p左ひも始点F As New S実座標(-d最下の高さ - getZeroX(1 / 2), -get周の縦(1 / 2))
+        Dim p右ひも始点F As New S実座標(d最下の高さ + getZeroX(1 / 2), get周の縦(1 / 2))
 
         '1～_i高さの目の数
         For i As Integer = 1 To p_i側面ひもの本数
-            '*上
+            '*上(→)
             item = _imageList側面上.GetRowItem(enumひも種.i_側面, i)
             If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面上:{0}", i)
             Else
-                item.m_ImageType = ImageTypeEnum._横バンド
+                '始点T　　　　　　　終点T
+                '　　[□□→(0)□□]　　　↑deltaAx(90)
+                '始点F(*) 　　　　　終点F
 
-                item.m_rひも位置.p左下 = p上ひも左下
-                item.m_rひも位置.p右上 = p上ひも左下 _
-                + Unit90 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit0 * get周の横()
-                item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
+                Dim band As New CBand(item.m_row縦横展開)
+                band.SetBandF(New S線分(p上ひも始点F, p上ひも始点F + Unit0 * get周の横()),
+                    item.m_row縦横展開.f_dVal1, Unit90)
+                band.is始点FT線 = False
+                band.is終点FT線 = False
+                If IsDrawMarkCurrent Then
+                    '横バンドの左
+                    band.SetMarkPosition(enumMarkPosition._始点Fの前, item.m_row縦横展開.f_dVal1) 'ひも幅
+                End If
 
-                AddClipItem(item)
+                item.AddBand(band)
+                item.m_Index2 = 1
+                AddClipItem(band)
 
-                p上ひも左下 = p上ひも左下 + Unit90 * item.m_row縦横展開.f_d幅
+                p上ひも始点F = p上ひも始点F + Unit90 * item.m_row縦横展開.f_d幅
             End If
 
-            '*下
+            '*下(←)
             item = _imageList側面下.GetRowItem(enumひも種.i_側面, i)
             If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面下:{0}", i)
             Else
-                item.m_ImageType = ImageTypeEnum._横バンド
+                '終点F　　　　　始点F(*)　　
+                '　[□□←(180)□□]    ↓deltaAx(270)
+                '終点T　　　　　始点T　　
 
-                item.m_rひも位置.p左上 = p下ひも左上
-                item.m_rひも位置.p右下 = p下ひも左上 _
-                + Unit270 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit0 * get周の横()
-                item.m_borderひも = DirectionEnum._上 Or DirectionEnum._下
-                item.m_bNoMark = True '記号なし
+                Dim band As New CBand(item.m_row縦横展開)
+                band.SetBandF(New S線分(p下ひも始点F, p下ひも始点F + Unit180 * get周の横()),
+                    item.m_row縦横展開.f_dVal1, Unit270)
+                band.is始点FT線 = False
+                band.is終点FT線 = False
 
-                AddClipItem(item)
+                item.AddBand(band)
+                item.m_Index2 = 2
+                AddClipItem(band)
 
-                p下ひも左上 = p下ひも左上 + Unit270 * item.m_row縦横展開.f_d幅
+                p下ひも始点F = p下ひも始点F + Unit270 * item.m_row縦横展開.f_d幅
             End If
 
-            '*左
+            '*左(↑)
             item = _imageList側面左.GetRowItem(enumひも種.i_側面, i)
             If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面左:{0}", i)
             Else
-                item.m_ImageType = ImageTypeEnum._縦バンド
+                '終点T　□　終点F　←deltaAx(180)
+                '　　 　↑(90)
+                '始点T　□　始点F(*)
 
-                item.m_rひも位置.p右上 = p左ひも右上
-                item.m_rひも位置.p左下 = p左ひも右上 _
-                + Unit180 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                + Unit270 * get周の縦()
-                item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
-                item.m_bNoMark = True '記号なし
+                Dim band As New CBand(item.m_row縦横展開)
+                band.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * get周の縦()),
+                    item.m_row縦横展開.f_dVal1, Unit180)
+                band.is始点FT線 = False
+                band.is終点FT線 = False
 
-                AddClipItem(item)
+                item.AddBand(band)
+                item.m_Index2 = 3
+                AddClipItem(band)
 
-                p左ひも右上 = p左ひも右上 + Unit180 * item.m_row縦横展開.f_d幅
+                p左ひも始点F = p左ひも始点F + Unit180 * item.m_row縦横展開.f_d幅
             End If
 
-            '*右
+            '*右(↓)
             item = _imageList側面右.GetRowItem(enumひも種.i_側面, i)
             If item Is Nothing OrElse item.m_row縦横展開 Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "No Record _imageList側面右:{0}", i)
             Else
-                item.m_ImageType = ImageTypeEnum._縦バンド
+                '始点F(*)□　始点T　→deltaAx(0)
+                '　　  　↓(270)
+                '終点F 　□　終点T
 
-                item.m_rひも位置.p左上 = p右ひも左上
-                item.m_rひも位置.p右下 = p右ひも左上 _
-                    + Unit0 * g_clsSelectBasics.p_d指定本幅(item.m_row縦横展開.f_i何本幅) _
-                    + Unit270 * get周の縦()
-                item.m_borderひも = DirectionEnum._左 Or DirectionEnum._右
-                item.m_bNoMark = True '記号なし
+                Dim band As New CBand(item.m_row縦横展開)
+                band.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * get周の縦()),
+                    item.m_row縦横展開.f_dVal1, Unit0)
+                band.is始点FT線 = False
+                band.is終点FT線 = False
 
-                AddClipItem(item)
+                item.AddBand(band)
+                item.m_Index2 = 4
+                AddClipItem(band)
 
-                p右ひも左上 = p右ひも左上 + Unit0 * item.m_row縦横展開.f_d幅
+                p右ひも始点F = p右ひも始点F + Unit0 * item.m_row縦横展開.f_d幅
             End If
         Next
 
@@ -454,42 +502,42 @@ Partial Public Class clsCalcSquare
 
             '*上
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 1)
-            item.m_a四隅.p左下 = p上ひも左下
-            item.m_a四隅.p右下 = p上ひも左下 + Unit0 * get周の横()
-            item.m_a四隅.p左上 = p上ひも左下 + Unit90 * d高さ
-            item.m_a四隅.p右上 = p上ひも左下 + Unit90 * d高さ + Unit0 * get周の横()
+            item.m_a四隅.p左下 = p上ひも始点F
+            item.m_a四隅.p右下 = p上ひも始点F + Unit0 * get周の横()
+            item.m_a四隅.p左上 = p上ひも始点F + Unit90 * d高さ
+            item.m_a四隅.p右上 = p上ひも始点F + Unit90 * d高さ + Unit0 * get周の横()
 
             '文字位置
             '#60
             If IsDrawMarkCurrent Then
-                item.p_p文字位置 = p上ひも左下 + Unit0 * get周の横() + Unit90 * d高さ
+                item.p_p文字位置 = p上ひも始点F + Unit0 * get周の横() + Unit90 * d高さ
             End If
             _imageList側面上.AddItem(item)
 
             '*下
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 2)
-            item.m_a四隅.p左上 = p下ひも左上
-            item.m_a四隅.p右上 = p下ひも左上 + Unit0 * get周の横()
-            item.m_a四隅.p左下 = p下ひも左上 + Unit270 * d高さ
-            item.m_a四隅.p右下 = p下ひも左上 + Unit270 * d高さ + Unit0 * get周の横()
+            item.m_a四隅.p右上 = p下ひも始点F
+            item.m_a四隅.p左上 = p下ひも始点F + Unit180 * get周の横()
+            item.m_a四隅.p右下 = p下ひも始点F + Unit270 * d高さ
+            item.m_a四隅.p左下 = p下ひも始点F + Unit270 * d高さ + Unit180 * get周の横()
             '文字なし
             _imageList側面下.AddItem(item)
 
             '*左
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 3)
-            item.m_a四隅.p右上 = p左ひも右上
-            item.m_a四隅.p左上 = p左ひも右上 + Unit180 * d高さ
-            item.m_a四隅.p右下 = p左ひも右上 + Unit270 * get周の縦()
-            item.m_a四隅.p左下 = p左ひも右上 + Unit180 * d高さ + Unit270 * get周の縦()
+            item.m_a四隅.p右下 = p左ひも始点F
+            item.m_a四隅.p左下 = p左ひも始点F + Unit180 * d高さ
+            item.m_a四隅.p右上 = p左ひも始点F + Unit90 * get周の縦()
+            item.m_a四隅.p左上 = p左ひも始点F + Unit180 * d高さ + Unit90 * get周の縦()
             '文字なし
             _imageList側面左.AddItem(item)
 
             '*右
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, 4)
-            item.m_a四隅.p左上 = p右ひも左上
-            item.m_a四隅.p右上 = p右ひも左上 + Unit0 * d高さ
-            item.m_a四隅.p左下 = p右ひも左上 + Unit270 * get周の縦()
-            item.m_a四隅.p右下 = p右ひも左上 + Unit0 * d高さ + Unit270 * get周の縦()
+            item.m_a四隅.p左上 = p右ひも始点F
+            item.m_a四隅.p右上 = p右ひも始点F + Unit0 * d高さ
+            item.m_a四隅.p左下 = p右ひも始点F + Unit270 * get周の縦()
+            item.m_a四隅.p右下 = p右ひも始点F + Unit0 * d高さ + Unit270 * get周の縦()
             '文字なし
             _imageList側面右.AddItem(item)
 
@@ -645,7 +693,7 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '底の上下をm_regionListにセット
+    '底の上下をAddClip
     Private Function regionUpDown底(ByVal isBackFace As Boolean) As Boolean
         If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
             Return False
@@ -668,13 +716,14 @@ Partial Public Class clsCalcSquare
             If itemTate Is Nothing Then
                 Continue For
             End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
+            'If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
 
             For iYoko As Integer = 1 To p_i横ひもの本数
                 If _CUpDown.GetIsDown(iTate, iYoko, revRange) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
                     If isDrawingItem(itemYoko) Then
-                        itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        'itemTate.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        itemTate.AddClip(itemYoko)
                     End If
                 End If
             Next
@@ -686,13 +735,14 @@ Partial Public Class clsCalcSquare
             If itemYoko Is Nothing Then
                 Continue For
             End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
+            'If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
 
             For iTate As Integer = 1 To p_i縦ひもの本数
                 If _CUpDown.GetIsUp(iTate, iYoko, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
                     If isDrawingItem(itemTate) Then
-                        itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
+                        'itemYoko.m_regionList.Add領域(itemTate.m_rひも位置)
+                        itemYoko.AddClip(itemTate)
                     End If
                 End If
             Next
@@ -703,7 +753,7 @@ Partial Public Class clsCalcSquare
     End Function
 
 
-    '側面(上)の上下をm_regionListにセット
+    '側面(上)の上下をAddClip
     Private Function regionUpDown側面1(ByVal isBackFace As Boolean) As Boolean
         If _ImageList縦ひも Is Nothing OrElse _imageList側面上 Is Nothing Then
             Return False
@@ -729,13 +779,14 @@ Partial Public Class clsCalcSquare
             If itemTate Is Nothing Then
                 Continue For
             End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
+            'If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
 
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(iTate + horzDif, iTakasa, revRange) Then
                     Dim itemUSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, iTakasa)
                     If isDrawingItem(itemUSide) Then
-                        itemTate.m_regionList.Add領域(itemUSide.m_rひも位置)
+                        'itemTate.m_regionList.Add領域(itemUSide.m_rひも位置)
+                        itemTate.AddClip(itemUSide)
                     End If
                 End If
             Next
@@ -747,13 +798,14 @@ Partial Public Class clsCalcSquare
             If itemUSide Is Nothing Then
                 Continue For
             End If
-            If itemUSide.m_regionList Is Nothing Then itemUSide.m_regionList = New C領域リスト
+            'If itemUSide.m_regionList Is Nothing Then itemUSide.m_regionList = New C領域リスト
 
             For iTate As Integer = 1 To p_i縦ひもの本数
                 If _CUpDown.GetIsUp(iTate + horzDif, iTakasa, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
                     If isDrawingItem(itemTate) Then
-                        itemUSide.m_regionList.Add領域(itemTate.m_rひも位置)
+                        'itemUSide.m_regionList.Add領域(itemTate.m_rひも位置)
+                        itemUSide.AddClip(itemTate)
                     End If
                 End If
             Next
@@ -764,7 +816,7 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '側面(右)の上下をm_regionListにセット
+    '側面(右)の上下をAddClip
     Private Function regionUpDown側面2(ByVal isBackFace As Boolean) As Boolean
         If _ImageList横ひも Is Nothing OrElse _imageList側面右 Is Nothing Then
             Return False
@@ -799,13 +851,14 @@ Partial Public Class clsCalcSquare
             If itemYoko Is Nothing Then
                 Continue For
             End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
+            'If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
 
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(iYoko + horzDif, iTakasa, revRange, revRange2) Then
                     Dim itemRSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, iTakasa)
                     If isDrawingItem(itemRSide) Then
-                        itemYoko.m_regionList.Add領域(itemRSide.m_rひも位置)
+                        'itemYoko.m_regionList.Add領域(itemRSide.m_rひも位置)
+                        itemYoko.AddClip(itemRSide)
                     End If
                 End If
             Next
@@ -817,13 +870,14 @@ Partial Public Class clsCalcSquare
             If itemRSide Is Nothing Then
                 Continue For
             End If
-            If itemRSide.m_regionList Is Nothing Then itemRSide.m_regionList = New C領域リスト
+            'If itemRSide.m_regionList Is Nothing Then itemRSide.m_regionList = New C領域リスト
 
             For iYoko As Integer = 1 To p_i横ひもの本数
                 If _CUpDown.GetIsUp(iYoko + horzDif, iTakasa, revRange, revRange2) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
                     If isDrawingItem(itemYoko) Then
-                        itemRSide.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        'itemRSide.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        itemRSide.AddClip(itemYoko)
                     End If
                 End If
             Next
@@ -833,7 +887,7 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '側面(下)の上下をm_regionListにセット
+    '側面(下)の上下をAddClip
     Private Function regionUpDown側面3(ByVal isBackFace As Boolean) As Boolean
         If _ImageList縦ひも Is Nothing OrElse _imageList側面下 Is Nothing Then
             Return False
@@ -859,14 +913,15 @@ Partial Public Class clsCalcSquare
             If itemTate Is Nothing Then
                 Continue For
             End If
-            If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
+            'If itemTate.m_regionList Is Nothing Then itemTate.m_regionList = New C領域リスト
             Dim horzIdx As Integer = p_i縦ひもの本数 - iTate + 1 + horzDif
 
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(horzIdx, iTakasa, revRange) Then
                     Dim itemDSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, iTakasa)
                     If isDrawingItem(itemDSide) Then
-                        itemTate.m_regionList.Add領域(itemDSide.m_rひも位置)
+                        'itemTate.m_regionList.Add領域(itemDSide.m_rひも位置)
+                        itemTate.AddClip(itemDSide)
                     End If
                 End If
             Next
@@ -878,14 +933,15 @@ Partial Public Class clsCalcSquare
             If itemDSide Is Nothing Then
                 Continue For
             End If
-            If itemDSide.m_regionList Is Nothing Then itemDSide.m_regionList = New C領域リスト
+            'If itemDSide.m_regionList Is Nothing Then itemDSide.m_regionList = New C領域リスト
 
             For iTate As Integer = 1 To p_i縦ひもの本数
                 Dim horzIdx As Integer = p_i縦ひもの本数 - iTate + 1 + horzDif
                 If _CUpDown.GetIsUp(horzIdx, iTakasa, revRange) Then
                     Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
                     If isDrawingItem(itemTate) Then
-                        itemDSide.m_regionList.Add領域(itemTate.m_rひも位置)
+                        'itemDSide.m_regionList.Add領域(itemTate.m_rひも位置)
+                        itemDSide.AddClip(itemTate)
                     End If
                 End If
             Next
@@ -895,7 +951,7 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '側面(左)の上下をm_regionListにセット
+    '側面(左)の上下をAddClip
     Private Function regionUpDown側面4(ByVal isBackFace As Boolean) As Boolean
         If _ImageList横ひも Is Nothing OrElse _imageList側面左 Is Nothing Then
             Return False
@@ -929,14 +985,15 @@ Partial Public Class clsCalcSquare
             If itemYoko Is Nothing Then
                 Continue For
             End If
-            If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
+            'If itemYoko.m_regionList Is Nothing Then itemYoko.m_regionList = New C領域リスト
 
             Dim horzIdx As Integer = p_i横ひもの本数 - iYoko + 1 + horzDif
             For iTakasa As Integer = 1 To p_i側面ひもの本数
                 If _CUpDown.GetIsDown(horzIdx, iTakasa, revRange, revRange2) Then
                     Dim itemLSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, iTakasa)
                     If isDrawingItem(itemLSide) Then
-                        itemYoko.m_regionList.Add領域(itemLSide.m_rひも位置)
+                        'itemYoko.m_regionList.Add領域(itemLSide.m_rひも位置)
+                        itemYoko.AddClip(itemLSide)
                     End If
                 End If
             Next
@@ -948,14 +1005,15 @@ Partial Public Class clsCalcSquare
             If itemLSide Is Nothing Then
                 Continue For
             End If
-            If itemLSide.m_regionList Is Nothing Then itemLSide.m_regionList = New C領域リスト
+            'If itemLSide.m_regionList Is Nothing Then itemLSide.m_regionList = New C領域リスト
 
             For iYoko As Integer = 1 To p_i横ひもの本数
                 Dim horzIdx As Integer = p_i横ひもの本数 - iYoko + 1 + horzDif
                 If _CUpDown.GetIsUp(horzIdx, iTakasa, revRange, revRange2) Then
                     Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
                     If isDrawingItem(itemYoko) Then
-                        itemLSide.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        'itemLSide.m_regionList.Add領域(itemYoko.m_rひも位置)
+                        itemLSide.AddClip(itemYoko)
                     End If
                 End If
             Next

@@ -61,19 +61,19 @@ Partial Public Class clsCalcKnot
                     If idx < 0 Then
                         idx = _i横のコマ数 + idx + 1
                     End If
-                    band = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx, False)
+                    band = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
                 Case enumひも種.i_縦
                     '左からidx番目(1～),マイナスは右から(-1～-縦のコマ数)
                     If idx < 0 Then
                         idx = _i縦のコマ数 + idx + 1
                     End If
-                    band = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx, False)
+                    band = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
                 Case enumひも種.i_側面
                     '下からidx番目の色(1～),マイナスは上から(-1～-側面のコマ数)
                     If idx < 0 Then
                         idx = _i高さのコマ数 + _i折り返しコマ数 + idx + 1
                     End If
-                    band = _imageList側面ひも.GetRowItem(enumひも種.i_側面, idx, False)
+                    band = _imageList側面ひも.GetRowItem(enumひも種.i_側面, idx)
             End Select
             If band Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "getBand Err:{0} {1}", pos, idx)
@@ -127,6 +127,9 @@ Partial Public Class clsCalcKnot
         '上から下へ
         For idx As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
             Dim band As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
+            If band Is Nothing Then
+                Continue For
+            End If
             band.m_rひも位置.p右上 = _左上 + band_pos + length0
             band.m_rひも位置.p左下 = _左上 + band_pos + band270
             '
@@ -167,6 +170,9 @@ Partial Public Class clsCalcKnot
         '上側面;左から右へ
         For idx As Integer = 1 To p_i縦ひもの本数 '_i横のコマ数
             Dim band As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
+            If band Is Nothing Then
+                Continue For
+            End If
             band.m_rひも位置.p右上 = _左上 + band_pos + band0
             band.m_rひも位置.p左下 = _左上 + band_pos + length270
 
@@ -235,6 +241,9 @@ Partial Public Class clsCalcKnot
         '下側面:上から下へ
         For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
             Dim band As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
+            If band Is Nothing Then
+                Continue For
+            End If
             band.m_rひも位置.p右上 = _左上 + band_pos + length0
             band.m_rひも位置.p左下 = _左上 + band_pos + band270
             '
