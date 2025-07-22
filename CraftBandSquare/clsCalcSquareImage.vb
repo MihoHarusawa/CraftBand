@@ -43,7 +43,7 @@ Partial Public Class clsCalcSquare
 
 
     '現画像生成時に記号を表示する #60
-    Shared IsDrawMarkCurrent As Boolean = True
+    Dim _IsDrawMarkCurrent As Boolean = True
 
     'CBand描画順
     Const IdxDrawBandYoko As Integer = 8
@@ -89,7 +89,7 @@ Partial Public Class clsCalcSquare
     'isBackFace=trueの時、UpDownを裏面として適用
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
         '記号順が変わるので裏面には表示しない
-        IsDrawMarkCurrent = Not isBackFace AndAlso
+        _IsDrawMarkCurrent = Not isBackFace AndAlso
             Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
 
         If imgData Is Nothing Then
@@ -242,7 +242,7 @@ Partial Public Class clsCalcSquare
             Return False
         End If
 
-        _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも, Not IsDrawMarkCurrent)
+        _ImageList横ひも = New clsImageItemList(_tbl縦横展開_横ひも, Not _IsDrawMarkCurrent)
         If _tbl縦横展開_横ひも.Rows.Count = 0 Then
             Return True
         End If
@@ -273,7 +273,7 @@ Partial Public Class clsCalcSquare
                 band.p終点F = item.m_rひも位置.p右下
                 band.p始点T = item.m_rひも位置.p左上
                 band.p終点T = item.m_rひも位置.p右上
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     '横バンドの左
                     band.SetMarkPosition(enumMarkPosition._始点Fの前, dひも幅 * 1.4)
                 End If
@@ -297,7 +297,7 @@ Partial Public Class clsCalcSquare
             Return False
         End If
 
-        _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも, Not IsDrawMarkCurrent)
+        _ImageList縦ひも = New clsImageItemList(_tbl縦横展開_縦ひも, Not _IsDrawMarkCurrent)
         If _tbl縦横展開_縦ひも.Rows.Count = 0 Then
             Return True
         End If
@@ -328,7 +328,7 @@ Partial Public Class clsCalcSquare
                 band.p終点F = item.m_rひも位置.p左下
                 band.p始点T = item.m_rひも位置.p右上
                 band.p終点T = item.m_rひも位置.p右下
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     '縦バンドの上
                     band.SetMarkPosition(enumMarkPosition._始点Fの前)
                 End If
@@ -396,10 +396,10 @@ Partial Public Class clsCalcSquare
 
 
         '以降参照するのでここでセットする
-        _imageList側面上 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
-        _imageList側面右 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
-        _imageList側面下 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
-        _imageList側面左 = New clsImageItemList(tmptable, Not IsDrawMarkCurrent)
+        _imageList側面上 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
+        _imageList側面右 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
+        _imageList側面下 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
+        _imageList側面左 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
 
         Dim item As clsImageItem
 
@@ -424,7 +424,7 @@ Partial Public Class clsCalcSquare
                     item.m_row縦横展開.f_dVal1, Unit90)
                 band.is始点FT線 = False
                 band.is終点FT線 = False
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     '横バンドの左
                     band.SetMarkPosition(enumMarkPosition._始点Fの前, item.m_row縦横展開.f_dVal1) 'ひも幅
                 End If
@@ -519,7 +519,7 @@ Partial Public Class clsCalcSquare
 
             '文字位置
             '#60
-            If IsDrawMarkCurrent Then
+            If _IsDrawMarkCurrent Then
                 item.p_p文字位置 = p上ひも始点F + Unit0 * get周の横() + Unit90 * d高さ
             End If
             _imageList側面上.AddItem(item)

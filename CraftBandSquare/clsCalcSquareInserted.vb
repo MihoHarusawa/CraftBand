@@ -542,7 +542,6 @@ Partial Public Class clsCalcSquare
             If CType(row.f_i差し位置, enum差し位置) = enum差し位置.i_とも編み Then
                 imglist = New clsImageItemList
             End If
-            Dim imgitem As clsImageItem
 
             Select Case row.f_i配置面
                 '-------------------------------------------------
@@ -758,7 +757,7 @@ Partial Public Class clsCalcSquare
 
             If isFirst Then
                 '#60
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     If (draw = draw_position.before) Then
                         band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後)
                     ElseIf (draw = draw_position.after) Then
@@ -922,7 +921,7 @@ Partial Public Class clsCalcSquare
 
             If isFirst Then
                 '#60
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     If (draw = draw_position.before) Then
                         band.SetMarkPosition(CBand.enumMarkPosition._始点の前)
                     ElseIf (draw = draw_position.after) Then
@@ -1039,7 +1038,7 @@ Partial Public Class clsCalcSquare
             band = New CBand(row)
             band.SetBand(New S実座標(-band_x, y_center), New S実座標(band_x, y_center), d幅, DeltaAx横ひも)
             '#60
-            If IsDrawMarkCurrent Then
+            If _IsDrawMarkCurrent Then
                 band.SetMarkPosition(CBand.enumMarkPosition._終点Fの後, (_d基本のひも幅 / 2))
             End If
             '_ImageList差しひも.AddItem(item)
@@ -1193,7 +1192,7 @@ Partial Public Class clsCalcSquare
             band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     If (draw = draw_position.after) Then
                         band.SetMarkPosition(CBand.enumMarkPosition._終点の後, _d基本のひも幅)
                     Else
@@ -1281,7 +1280,7 @@ Partial Public Class clsCalcSquare
             band.RotateBand(New S実座標(x_center, y_center), dAngle)
             If isFirst Then
                 '#60
-                If IsDrawMarkCurrent Then
+                If _IsDrawMarkCurrent Then
                     If (draw = draw_position.after) Then
                         band.SetMarkPosition(CBand.enumMarkPosition._始点の前, _d基本のひも幅)
                     Else
@@ -1574,7 +1573,7 @@ Partial Public Class clsCalcSquare
             'sign = 0 'for debug
             'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), -45 * sign)
             band.RotateBand(New S実座標(x_center, y_center), -45 * sign)
-            If IsDrawMarkCurrent Then '#60
+            If _IsDrawMarkCurrent Then '#60
                 band.p文字位置 = New S実座標(x_center, y_center)
             End If
 

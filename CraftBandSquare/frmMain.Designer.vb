@@ -205,6 +205,8 @@ Partial Class frmMain
         lblタイトル = New Label()
         lblメモ = New Label()
         tpageプレビュー = New TabPage()
+        chk側面差しひも = New CheckBox()
+        chk底のみ = New CheckBox()
         radうら = New RadioButton()
         radおもて = New RadioButton()
         picプレビュー = New PictureBox()
@@ -722,7 +724,7 @@ Partial Class frmMain
         btn画像ファイル.Location = New Point(607, 343)
         btn画像ファイル.Name = "btn画像ファイル"
         btn画像ファイル.Size = New Size(111, 43)
-        btn画像ファイル.TabIndex = 2
+        btn画像ファイル.TabIndex = 4
         btn画像ファイル.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
         btn画像ファイル.UseVisualStyleBackColor = True
@@ -733,7 +735,7 @@ Partial Class frmMain
         btnブラウザ.Location = New Point(725, 343)
         btnブラウザ.Name = "btnブラウザ"
         btnブラウザ.Size = New Size(111, 43)
-        btnブラウザ.TabIndex = 3
+        btnブラウザ.TabIndex = 5
         btnブラウザ.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
         btnブラウザ.UseVisualStyleBackColor = True
@@ -1359,77 +1361,77 @@ Partial Class frmMain
         ' ToolStripMenuItemEditSelectBand
         ' 
         ToolStripMenuItemEditSelectBand.Name = "ToolStripMenuItemEditSelectBand"
-        ToolStripMenuItemEditSelectBand.Size = New Size(191, 24)
+        ToolStripMenuItemEditSelectBand.Size = New Size(206, 24)
         ToolStripMenuItemEditSelectBand.Text = "バンドの種類選択(&S)"
         ' 
         ' ToolStripSeparator4
         ' 
         ToolStripSeparator4.Name = "ToolStripSeparator4"
-        ToolStripSeparator4.Size = New Size(188, 6)
+        ToolStripSeparator4.Size = New Size(203, 6)
         ' 
         ' ToolStripMenuItemEditSaveTemporarily
         ' 
         ToolStripMenuItemEditSaveTemporarily.Name = "ToolStripMenuItemEditSaveTemporarily"
-        ToolStripMenuItemEditSaveTemporarily.Size = New Size(191, 24)
+        ToolStripMenuItemEditSaveTemporarily.Size = New Size(206, 24)
         ToolStripMenuItemEditSaveTemporarily.Text = "一時保存(&T)"
         ToolStripMenuItemEditSaveTemporarily.ToolTipText = "現在の状態を保存/復元します"
         ' 
         ' ToolStripMenuItemEditReset
         ' 
         ToolStripMenuItemEditReset.Name = "ToolStripMenuItemEditReset"
-        ToolStripMenuItemEditReset.Size = New Size(191, 24)
+        ToolStripMenuItemEditReset.Size = New Size(206, 24)
         ToolStripMenuItemEditReset.Text = "リセット(&R)"
         ToolStripMenuItemEditReset.ToolTipText = "入力した値をクリアします"
         ' 
         ' ToolStripMenuItemEditDefault
         ' 
         ToolStripMenuItemEditDefault.Name = "ToolStripMenuItemEditDefault"
-        ToolStripMenuItemEditDefault.Size = New Size(191, 24)
+        ToolStripMenuItemEditDefault.Size = New Size(206, 24)
         ToolStripMenuItemEditDefault.Text = "規定値(&D)"
         ToolStripMenuItemEditDefault.ToolTipText = "登録した規定値にセットします"
         ' 
         ' ToolStripMenuItemEditCalc
         ' 
         ToolStripMenuItemEditCalc.Name = "ToolStripMenuItemEditCalc"
-        ToolStripMenuItemEditCalc.Size = New Size(191, 24)
+        ToolStripMenuItemEditCalc.Size = New Size(206, 24)
         ToolStripMenuItemEditCalc.Text = "概算(&C)"
         ToolStripMenuItemEditCalc.ToolTipText = "目標寸法と基本のひも幅から底の縦横と側面値を計算します"
         ' 
         ' ToolStripSeparator5
         ' 
         ToolStripSeparator5.Name = "ToolStripSeparator5"
-        ToolStripSeparator5.Size = New Size(188, 6)
+        ToolStripSeparator5.Size = New Size(203, 6)
         ' 
         ' ToolStripMenuItemEditColorChange
         ' 
         ToolStripMenuItemEditColorChange.Name = "ToolStripMenuItemEditColorChange"
-        ToolStripMenuItemEditColorChange.Size = New Size(191, 24)
+        ToolStripMenuItemEditColorChange.Size = New Size(206, 24)
         ToolStripMenuItemEditColorChange.Text = "色の変更(&H)"
         ToolStripMenuItemEditColorChange.ToolTipText = "設定した色を一括で変更できます"
         ' 
         ' ToolStripMenuItemEditColorRepeat
         ' 
         ToolStripMenuItemEditColorRepeat.Name = "ToolStripMenuItemEditColorRepeat"
-        ToolStripMenuItemEditColorRepeat.Size = New Size(191, 24)
+        ToolStripMenuItemEditColorRepeat.Size = New Size(206, 24)
         ToolStripMenuItemEditColorRepeat.Text = "色の繰り返し(&E)"
         ToolStripMenuItemEditColorRepeat.ToolTipText = "繰り返しパターンを適用できます"
         ' 
         ' ToolStripSeparator1
         ' 
         ToolStripSeparator1.Name = "ToolStripSeparator1"
-        ToolStripSeparator1.Size = New Size(188, 6)
+        ToolStripSeparator1.Size = New Size(203, 6)
         ' 
         ' ToolStripMenuItemEditList
         ' 
         ToolStripMenuItemEditList.Name = "ToolStripMenuItemEditList"
-        ToolStripMenuItemEditList.Size = New Size(191, 24)
+        ToolStripMenuItemEditList.Size = New Size(206, 24)
         ToolStripMenuItemEditList.Text = "ひもリスト(&L)"
         ToolStripMenuItemEditList.ToolTipText = "入力値に基づきひも幅と長さのリストを表示します"
         ' 
         ' ToolStripMenuItemEditDefaultFile
         ' 
         ToolStripMenuItemEditDefaultFile.Name = "ToolStripMenuItemEditDefaultFile"
-        ToolStripMenuItemEditDefaultFile.Size = New Size(191, 24)
+        ToolStripMenuItemEditDefaultFile.Size = New Size(206, 24)
         ToolStripMenuItemEditDefaultFile.Text = "規定値保存フォルダ(&F)"
         ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値保存フォルダを指定します"
         ' 
@@ -2018,6 +2020,8 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
+        tpageプレビュー.Controls.Add(chk側面差しひも)
+        tpageプレビュー.Controls.Add(chk底のみ)
         tpageプレビュー.Controls.Add(radうら)
         tpageプレビュー.Controls.Add(radおもて)
         tpageプレビュー.Controls.Add(btn画像ファイル)
@@ -2031,11 +2035,34 @@ Partial Class frmMain
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
         ' 
+        ' chk側面差しひも
+        ' 
+        chk側面差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk側面差しひも.AutoSize = True
+        chk側面差しひも.Location = New Point(284, 353)
+        chk側面差しひも.Name = "chk側面差しひも"
+        chk側面差しひも.Size = New Size(102, 23)
+        chk側面差しひも.TabIndex = 3
+        chk側面差しひも.Text = "側面差しひも"
+        chk側面差しひも.UseVisualStyleBackColor = True
+        chk側面差しひも.Visible = False
+        ' 
+        ' chk底のみ
+        ' 
+        chk底のみ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk底のみ.AutoSize = True
+        chk底のみ.Location = New Point(191, 353)
+        chk底のみ.Name = "chk底のみ"
+        chk底のみ.Size = New Size(65, 23)
+        chk底のみ.TabIndex = 2
+        chk底のみ.Text = "底のみ"
+        chk底のみ.UseVisualStyleBackColor = True
+        ' 
         ' radうら
         ' 
         radうら.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         radうら.AutoSize = True
-        radうら.Location = New Point(109, 353)
+        radうら.Location = New Point(98, 353)
         radうら.Name = "radうら"
         radうら.Size = New Size(46, 23)
         radうら.TabIndex = 1
@@ -2953,6 +2980,8 @@ Partial Class frmMain
     Friend WithEvents lbl高さの目 As Label
     Friend WithEvents lbl高さの目_単位 As Label
     Friend WithEvents chk底とは別 As CheckBox
+    Friend WithEvents chk底のみ As CheckBox
+    Friend WithEvents chk側面差しひも As CheckBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
