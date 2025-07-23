@@ -39,8 +39,8 @@ Public Class clsModelSquare
         Next
     End Sub
 
-    'プレビュー処理
-    Public Function CalcModel() As Boolean
+    'プレビュー処理 引数:差しひも非表示かどうか
+    Public Function CalcModel(ByVal isNoInsert As Boolean) As Boolean
 
         '各面の領域をセットする
         If Not setRegions() Then
@@ -53,7 +53,7 @@ Public Class clsModelSquare
         End If
 
         '画像生成用データから画像生成
-        If Not getImages() Then
+        If Not getImages(isNoInsert) Then
             Return False
         End If
 
@@ -169,7 +169,7 @@ Public Class clsModelSquare
     End Function
 
     '画像生成用データから画像生成
-    Function getImages() As Boolean
+    Function getImages(ByVal isNoInsert As Boolean) As Boolean
 
         Dim ret As Boolean = True
         Dim calcTmp As New clsCalcSquare(_data画像生成用, _calc._frmMain)
@@ -182,7 +182,11 @@ Public Class clsModelSquare
         If calcTmp.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
 
             Dim imgdata As New clsImageData(_PlateNames(0)) '仮の名前で
-            If Not calcTmp.CalcImage(imgdata, False, False, enum差しひも表示._回り込み) Then
+            Dim sasihimo As enum差しひも表示 = enum差しひも表示._回り込み
+            If isNoInsert Then
+                sasihimo = enum差しひも表示._非表示
+            End If
+            If Not calcTmp.CalcImage(imgdata, False, False, sasihimo) Then
                 _LastError = calcTmp.p_sメッセージ
                 ret = False
             Else

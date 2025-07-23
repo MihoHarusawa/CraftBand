@@ -876,6 +876,7 @@ Public Class frmMain
         End If
         '表面プレビュー
         radおもて.Checked = True
+        rad底置き.Checked = True
     End Sub
 
     '新規作成
@@ -1776,7 +1777,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelSquare(_clsCalcSquare, _sFilePath)
-        ret = _clsModelImageData.CalcModel()
+        ret = _clsModelImageData.CalcModel(rad非表示.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
