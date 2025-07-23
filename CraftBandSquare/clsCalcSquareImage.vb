@@ -85,9 +85,14 @@ Partial Public Class clsCalcSquare
 
 #End Region
 
+    Friend Enum enum差しひも表示
+        _非表示
+        _底置き
+        _回り込み
+    End Enum
     'プレビュー画像生成
     'isBackFace=trueの時、UpDownを裏面として適用
-    Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
+    Friend Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean, ByVal is底のみ As Boolean, ByVal sasihimo As enum差しひも表示) As Boolean
         '記号順が変わるので裏面には表示しない
         _IsDrawMarkCurrent = Not isBackFace AndAlso
             Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
@@ -106,9 +111,9 @@ Partial Public Class clsCalcSquare
         _imageList側面下 = Nothing
         _imageList側面右 = Nothing
         _ImageList描画要素 = Nothing
-        '_ImageList差しひも = Nothing
 
-        _BandListForClip.Clear()
+        '_BandListForClip.Clear()
+        imageSetup()
 
         '出力ひもリスト情報
         Dim outp As New clsOutput(imgData.FilePath)
@@ -127,26 +132,29 @@ Partial Public Class clsCalcSquare
         '基本のひも幅(文字サイズ)と基本色
         imgData.setBasics(_d基本のひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
-
-        If Not imageList四側面() Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-            Return False
+        If Not is底のみ Then
+            If Not imageList四側面() Then
+                '処理に必要な情報がありません。
+                p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
+                Return False
+            End If
         End If
         _ImageList描画要素 = imageList底と側面枠()
 
 
         '描画用のデータ追加
         regionUpDown底(isBackFace)
-        regionUpDown側面1(isBackFace)
-        regionUpDown側面2(isBackFace)
-        regionUpDown側面3(isBackFace)
-        regionUpDown側面4(isBackFace)
+        If Not is底のみ Then
+            regionUpDown側面1(isBackFace)
+            regionUpDown側面2(isBackFace)
+            regionUpDown側面3(isBackFace)
+            regionUpDown側面4(isBackFace)
+        End If
 
         Dim imgList差しひも As clsImageItemList = Nothing
-        If Not isBackFace Then
+        If sasihimo <> enum差しひも表示._非表示 AndAlso Not isBackFace AndAlso Not is底のみ Then
             '差しひも
-            imgList差しひも = imageList差しひも()
+            imgList差しひも = imageList差しひも(sasihimo = enum差しひも表示._回り込み)
         End If
 
         '中身を移動
@@ -155,14 +163,16 @@ Partial Public Class clsCalcSquare
         imgData.MoveList(_ImageList縦ひも)
         _ImageList縦ひも = Nothing
 
-        imgData.MoveList(_imageList側面上)
-        imgData.MoveList(_imageList側面右)
-        imgData.MoveList(_imageList側面下)
-        imgData.MoveList(_imageList側面左)
-        _imageList側面上 = Nothing
-        _imageList側面右 = Nothing
-        _imageList側面下 = Nothing
-        _imageList側面左 = Nothing
+        If Not is底のみ Then
+            imgData.MoveList(_imageList側面上)
+            imgData.MoveList(_imageList側面右)
+            imgData.MoveList(_imageList側面下)
+            imgData.MoveList(_imageList側面左)
+            _imageList側面上 = Nothing
+            _imageList側面右 = Nothing
+            _imageList側面下 = Nothing
+            _imageList側面左 = Nothing
+        End If
 
         imgData.MoveList(_ImageList描画要素)
         _ImageList描画要素 = Nothing
@@ -172,7 +182,7 @@ Partial Public Class clsCalcSquare
         End If
         imgList差しひも = Nothing
 
-        If Not isBackFace Then
+        If Not isBackFace AndAlso Not Not is底のみ Then
             '付属品
             AddPartsImage(imgData, _frmMain.editAddParts)
         End If

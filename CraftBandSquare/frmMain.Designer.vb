@@ -205,7 +205,10 @@ Partial Class frmMain
         lblタイトル = New Label()
         lblメモ = New Label()
         tpageプレビュー = New TabPage()
-        chk側面差しひも = New CheckBox()
+        grp差しひも = New GroupBox()
+        rad回り込み = New RadioButton()
+        rad底置き = New RadioButton()
+        rad非表示 = New RadioButton()
         chk底のみ = New CheckBox()
         radうら = New RadioButton()
         radおもて = New RadioButton()
@@ -296,6 +299,7 @@ Partial Class frmMain
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
         tpageプレビュー.SuspendLayout()
+        grp差しひも.SuspendLayout()
         CType(picプレビュー, ComponentModel.ISupportInitialize).BeginInit()
         tpage縦ひも.SuspendLayout()
         tpage横ひも.SuspendLayout()
@@ -2020,7 +2024,7 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
-        tpageプレビュー.Controls.Add(chk側面差しひも)
+        tpageプレビュー.Controls.Add(grp差しひも)
         tpageプレビュー.Controls.Add(chk底のみ)
         tpageプレビュー.Controls.Add(radうら)
         tpageプレビュー.Controls.Add(radおもて)
@@ -2035,23 +2039,56 @@ Partial Class frmMain
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
         ' 
-        ' chk側面差しひも
+        ' grp差しひも
         ' 
-        chk側面差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk側面差しひも.AutoSize = True
-        chk側面差しひも.Location = New Point(284, 353)
-        chk側面差しひも.Name = "chk側面差しひも"
-        chk側面差しひも.Size = New Size(102, 23)
-        chk側面差しひも.TabIndex = 3
-        chk側面差しひも.Text = "側面差しひも"
-        chk側面差しひも.UseVisualStyleBackColor = True
-        chk側面差しひも.Visible = False
+        grp差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        grp差しひも.Controls.Add(rad回り込み)
+        grp差しひも.Controls.Add(rad底置き)
+        grp差しひも.Controls.Add(rad非表示)
+        grp差しひも.Location = New Point(248, 339)
+        grp差しひも.Name = "grp差しひも"
+        grp差しひも.Size = New Size(293, 47)
+        grp差しひも.TabIndex = 3
+        grp差しひも.TabStop = False
+        grp差しひも.Text = "差しひも"
+        ' 
+        ' rad回り込み
+        ' 
+        rad回り込み.AutoSize = True
+        rad回り込み.Location = New Point(199, 17)
+        rad回り込み.Name = "rad回り込み"
+        rad回り込み.Size = New Size(77, 23)
+        rad回り込み.TabIndex = 2
+        rad回り込み.Text = "回り込み"
+        rad回り込み.UseVisualStyleBackColor = True
+        ' 
+        ' rad底置き
+        ' 
+        rad底置き.AutoSize = True
+        rad底置き.Checked = True
+        rad底置き.Location = New Point(123, 17)
+        rad底置き.Name = "rad底置き"
+        rad底置き.Size = New Size(66, 23)
+        rad底置き.TabIndex = 1
+        rad底置き.TabStop = True
+        rad底置き.Text = "底置き"
+        rad底置き.UseVisualStyleBackColor = True
+        ' 
+        ' rad非表示
+        ' 
+        rad非表示.AutoSize = True
+        rad非表示.Location = New Point(42, 17)
+        rad非表示.Name = "rad非表示"
+        rad非表示.Size = New Size(69, 23)
+        rad非表示.TabIndex = 0
+        rad非表示.Text = "非表示"
+        rad非表示.UseVisualStyleBackColor = True
         ' 
         ' chk底のみ
         ' 
         chk底のみ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         chk底のみ.AutoSize = True
-        chk底のみ.Location = New Point(191, 353)
+        chk底のみ.Location = New Point(164, 354)
         chk底のみ.Name = "chk底のみ"
         chk底のみ.Size = New Size(65, 23)
         chk底のみ.TabIndex = 2
@@ -2754,6 +2791,8 @@ Partial Class frmMain
         tpageメモ他.PerformLayout()
         tpageプレビュー.ResumeLayout(False)
         tpageプレビュー.PerformLayout()
+        grp差しひも.ResumeLayout(False)
+        grp差しひも.PerformLayout()
         CType(picプレビュー, ComponentModel.ISupportInitialize).EndInit()
         tpage縦ひも.ResumeLayout(False)
         tpage縦ひも.PerformLayout()
@@ -2981,7 +3020,10 @@ Partial Class frmMain
     Friend WithEvents lbl高さの目_単位 As Label
     Friend WithEvents chk底とは別 As CheckBox
     Friend WithEvents chk底のみ As CheckBox
-    Friend WithEvents chk側面差しひも As CheckBox
+    Friend WithEvents grp差しひも As GroupBox
+    Friend WithEvents rad非表示 As RadioButton
+    Friend WithEvents rad回り込み As RadioButton
+    Friend WithEvents rad底置き As RadioButton
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

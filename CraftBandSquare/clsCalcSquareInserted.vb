@@ -515,7 +515,7 @@ Partial Public Class clsCalcSquare
     '                                                [L]length結果参照
 
     '※プレビュー時に呼び出し(プレビュー処理内でリスト出力後)
-    Private Function imageList差しひも() As clsImageItemList
+    Private Function imageList差しひも(ByVal is回り込み As Boolean) As clsImageItemList
         If 0 = _Data.p_tbl差しひも.Rows.Count Then
             Return Nothing
         End If
@@ -573,10 +573,16 @@ Partial Public Class clsCalcSquare
                             n開始位置 = image横ひもに差す(bandlist, imglist, item, isCenterBand, dInnerPosition, n開始位置, i何本ごと, draw_position.after)  '2*縦の本数+縦の本数+1 ～ 2*横の本数+2*縦の本数
 
                         Case enum角度.i_45度, enum角度.i_135度, enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度 'b,d,e,f,g,h★
-                            n開始位置 = image縦ひも面を斜めに(bandlist, row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
-                            n開始位置 = image横ひも面を斜めに(bandlist, row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
-                            n開始位置 = image縦ひも面を斜めに(bandlist, row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.after)
-                            n開始位置 = image横ひも面を斜めに(bandlist, row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.after)
+                            Dim aryBlist(SIDECOUNT - 1) As CBandList
+                            n開始位置 = image縦ひも面を斜めに(aryBlist(ISIDE0), row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
+                            n開始位置 = image横ひも面を斜めに(aryBlist(ISIDE1), row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.before)
+                            n開始位置 = image縦ひも面を斜めに(aryBlist(ISIDE2), row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.after)
+                            n開始位置 = image横ひも面を斜めに(aryBlist(ISIDE3), row, dInnerPosition, n開始位置, row.f_i何本ごと, draw_position.after)
+                            If is回り込み Then '#95
+                                imglist = imglist斜め加算(aryBlist, row.f_i番号, False)
+                            Else
+                                bandlist = blist加算のみ(aryBlist)
+                            End If
 
                     End Select
                 '-------------------------------------------------
@@ -600,7 +606,17 @@ Partial Public Class clsCalcSquare
                             Next
 
                         Case enum角度.i_45度, enum角度.i_135度 'b,d
-                            bandlist = imageList底の斜め(row, dInnerPosition)
+                            Dim aryBlist(SIDECOUNT - 1) As CBandList
+                            aryBlist(ISIDE0) = imageList底の斜め(row, dInnerPosition)
+                            '#95
+                            If is回り込み Then
+                                aryBlist(ISIDE1) = aryBlist(ISIDE0)
+                                aryBlist(ISIDE2) = aryBlist(ISIDE0)
+                                aryBlist(ISIDE3) = aryBlist(ISIDE0)
+                                imglist = imglist斜め加算(aryBlist, row.f_i番号, True)
+                            Else
+                                bandlist = blist加算のみ(aryBlist)
+                            End If
 
                         Case enum角度.i_18度, enum角度.i_72度, enum角度.i_108度, enum角度.i_162度  'e,f,g,h
                             '対象外
@@ -1097,6 +1113,207 @@ Partial Public Class clsCalcSquare
     End Function
 #End Region
 
+
+    '側面から外にでる差しひもを隣の面に回り込み表示
+    '
+    '    ┌‥‥‥┐                〇‥‥‥┐
+    '    ：      ：                ↓      ：
+    ' (ISIDE0→3)：                ：(ISIDE0→1)
+    '　　：左回り：┌──────┐：右回り：
+    '　　：      ：│　ISIDE0  　│：      ：  
+    '　　：      ↑│　　　　　　│：      ：  
+    '　　└‥‥‥〇●→─────┘└‥‥‥┘        
+    '　　┌───┐┌──────┐●───┐
+    '　　│ISIDE3││┏━━━━┓│↓ISIDE1│
+    '　　│　　　││┃　　　　┃││　　　│
+    '　　│　　　││┃　　　　┃││　　　│
+    '　　│　　　↑│┗━━━━┛││　　　│
+    '　　└───●└──────┘└───┘
+    '　            ┌─────←●
+    '　　　　　　　│　ISIDE2　　│
+    '　　　　　　　│　　　　　　│        
+    '　　　　　　　└──────┘　　　　
+
+    '側面のインデックス
+    Const ISIDE0 As Integer = 0 '上
+    Const ISIDE1 As Integer = 1 '右
+    Const ISIDE2 As Integer = 2 '下
+    Const ISIDE3 As Integer = 3 '左
+    Const SIDECOUNT As Integer = 4
+
+
+    '4側面:全て上向き
+    Dim _ary_r側面(SIDECOUNT - 1) As S領域
+    Dim _r底面 As S領域
+    '右回りのオーバーライン
+    Dim _ary_line面右(SIDECOUNT - 1) As S線分
+    '左回りのオーバーライン
+    Dim _ary_line面左(SIDECOUNT - 1) As S線分
+    '基準点
+    Dim _ary_p左下点(SIDECOUNT - 1) As S実座標
+    '面の幅
+    Dim _ary_d面幅(SIDECOUNT - 1) As Double
+
+    '面の方向
+    Shared _aryUnit() As S差分 = {Unit0, Unit270, Unit180, Unit90}
+
+    Private Sub imageSetup()
+        '4側面:全て上向き　右上,左下
+        _ary_r側面(ISIDE0) = New S領域(
+                                      New S実座標(get周の横(1 / 2), get周の縦(1 / 2) + get側面高(1)),
+                                      New S実座標(-get周の横(1 / 2), get周の縦(1 / 2)))
+
+        _ary_r側面(ISIDE1) = New S領域(
+                                      New S実座標(get周の横(1 / 2) + get側面高(1), get周の縦(1 / 2)),
+                                      New S実座標(get周の横(1 / 2), -get周の縦(1 / 2)))
+        _ary_r側面(ISIDE2) = New S領域(
+                                      New S実座標(get周の横(1 / 2), -get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2), -get周の縦(1 / 2) - get側面高(1)))
+        _ary_r側面(ISIDE3) = New S領域(
+                                      New S実座標(-get周の横(1 / 2), get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2) - get側面高(1), -get周の縦(1 / 2)))
+        _r底面 = New S領域(
+                                      New S実座標(get周の横(1 / 2), get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2), -get周の縦(1 / 2)))
+
+        '右回りのオーバーライン
+        _ary_line面右(ISIDE0) = New S線分(_ary_r側面(ISIDE0).p右下, _ary_r側面(ISIDE0).p右上)
+        _ary_line面右(ISIDE1) = New S線分(_ary_r側面(ISIDE1).p左下, _ary_r側面(ISIDE1).p右下)
+        _ary_line面右(ISIDE2) = New S線分(_ary_r側面(ISIDE2).p左上, _ary_r側面(ISIDE2).p左下)
+        _ary_line面右(ISIDE3) = New S線分(_ary_r側面(ISIDE3).p右上, _ary_r側面(ISIDE3).p左上)
+
+        '左回りのオーバーライン
+        _ary_line面左(ISIDE0) = New S線分(_ary_r側面(ISIDE0).p左上, _ary_r側面(ISIDE0).p左下)
+        _ary_line面左(ISIDE1) = New S線分(_ary_r側面(ISIDE1).p右上, _ary_r側面(ISIDE1).p左上)
+        _ary_line面左(ISIDE2) = New S線分(_ary_r側面(ISIDE2).p右下, _ary_r側面(ISIDE2).p右上)
+        _ary_line面左(ISIDE3) = New S線分(_ary_r側面(ISIDE3).p左下, _ary_r側面(ISIDE3).p右下)
+
+        '基準点
+        _ary_p左下点(ISIDE0) = _ary_r側面(ISIDE0).p左下
+        _ary_p左下点(ISIDE1) = _ary_r側面(ISIDE1).p左上
+        _ary_p左下点(ISIDE2) = _ary_r側面(ISIDE2).p右上
+        _ary_p左下点(ISIDE3) = _ary_r側面(ISIDE3).p右下
+
+        '面の幅
+        _ary_d面幅(ISIDE0) = _ary_r側面(ISIDE0).x幅
+        _ary_d面幅(ISIDE1) = _ary_r側面(ISIDE1).y高さ
+        _ary_d面幅(ISIDE2) = _ary_r側面(ISIDE2).x幅
+        _ary_d面幅(ISIDE3) = _ary_r側面(ISIDE3).y高さ
+
+
+        'メインバンドのクリップ領域
+        _BandListForClip.Clear()
+
+    End Sub
+
+    Private Function iNext(ByVal i As Integer) As Integer
+        Return (i + 1) Mod SIDECOUNT
+    End Function
+
+    Private Function iPrev(ByVal i As Integer) As Integer
+        Return Modulo(i - 1, SIDECOUNT)
+    End Function
+
+    'そのまま加えた バンドリスト
+    Private Function blist加算のみ(ByVal aryBlist() As CBandList) As CBandList
+        Dim bandlist As New CBandList
+        For Each blist As CBandList In aryBlist
+            If blist IsNot Nothing Then
+                bandlist.AddRange(blist)
+                blist = Nothing
+            End If
+        Next
+        Return bandlist
+    End Function
+
+    '回り込みを加え、4側面領域に描画リスト
+    Private Function imglist斜め加算(ByVal aryBlist() As CBandList, ByVal i番号 As Integer, ByVal isDrawBottom As Boolean) As clsImageItemList
+        Dim imglist As New clsImageItemList
+        '回り込みを加えた4側面のバンドリスト
+        Dim aryBlistRound(SIDECOUNT - 1) As CBandList
+
+        '底面の描画 ISIDE0
+        If isDrawBottom Then
+            For Each band As CBand In aryBlist(ISIDE0)
+                band.p文字位置.Zero()
+            Next
+            Dim imgitem As New clsImageItem(aryBlist(ISIDE0), IdxDrawInsertBand, i番号)
+            imgitem.m_rDraw = _r底面
+            imglist.AddItem(imgitem)
+        End If
+
+        'そのままの位置
+        For ipl As Integer = ISIDE0 To ISIDE3
+            aryBlistRound(ipl) = New CBandList
+            If aryBlist(ipl) IsNot Nothing Then
+                aryBlistRound(ipl).AddRange(aryBlist(ipl))
+            End If
+        Next
+
+        For ipl As Integer = ISIDE0 To ISIDE3
+            If aryBlist(ipl) Is Nothing Then
+                Continue For
+            End If
+            For Each band As CBand In aryBlist(ipl)
+                Dim line As S線分 = band.line始点終点
+
+                '右回りのオーバー分
+                If Not line.p交点(_ary_line面右(ipl)).IsZero Then
+
+                    Dim dup As New CBand(band)
+                    dup.p文字位置.Zero()
+                    Dim icur As Integer = ipl
+                    Do
+                        Dim iNx As Integer = iNext(icur)
+                        dup.RotateBand(_ary_p左下点(icur), -90)
+                        Dim delta As New S差分(_ary_p左下点(icur), _ary_p左下点(iNx) - _aryUnit(iNx) * _ary_d面幅(icur))
+                        dup.MoveBand(delta)
+                        aryBlistRound(iNx).Add(dup)
+
+                        icur = iNx
+                        dup = New CBand(dup)
+                    Loop Until dup.line始点終点.p交点(_ary_line面右(icur)).IsZero
+
+                End If
+
+                '左回りのオーバー分
+                If Not line.p交点(_ary_line面左(ipl)).IsZero Then
+
+                    Dim dup As New CBand(band)
+                    dup.p文字位置.Zero()
+                    Dim icur As Integer = ipl
+
+                    Do
+                        Dim iPv As Integer = iPrev(icur)
+                        dup.RotateBand(_ary_p左下点(icur), 90)
+                        Dim delta As New S差分(_ary_p左下点(icur), _ary_p左下点(iPv) + _aryUnit(iPv) * _ary_d面幅(iPv))
+                        dup.MoveBand(delta)
+                        aryBlistRound(iPv).Add(dup)
+
+                        icur = iPv
+                        dup = New CBand(dup)
+                    Loop Until dup.line始点終点.p交点(_ary_line面左(icur)).IsZero
+
+                End If
+
+            Next
+            aryBlist(ipl) = Nothing
+        Next
+
+        '面内にのみ描画
+        For ipl As Integer = ISIDE0 To ISIDE3
+            If 0 < aryBlistRound(ipl).Count Then
+                Dim imgitem As New clsImageItem(aryBlistRound(ipl), IdxDrawInsertBand, i番号)
+#If 1 Then
+                imgitem.m_rDraw = _ary_r側面(ipl)
+#End If
+                imglist.AddItem(imgitem)
+            End If
+        Next
+        Return imglist
+    End Function
+
+
 #Region "側面4面を斜めに"
     'Angle:90度から何度傾けるか Ratio:長さ/高さ
     Private Function angle_ratio(ByVal i角度 As enum角度, ByRef dAngle As Double, ByRef dRatio As Double) As Boolean
@@ -1545,7 +1762,6 @@ Partial Public Class clsCalcSquare
         Dim tmptable As CInsertItemList = _InsertExpand.GetList(row.f_i番号)
         For Each tmp As CInsertItem In tmptable
 
-            'Dim item As New clsImageItem(ImageTypeEnum._ひも領域, New clsDataRow(tmp), row.p_i番号, tmp.m_iひも番号)
             Dim band As New CBand(tmp)
 
             Dim x_center As Double = tmp.m_pCenter.X
@@ -1554,39 +1770,28 @@ Partial Public Class clsCalcSquare
             Dim dy As Double = tmp.m_delta.dY
             Dim sign As Integer = 1
 
-            'Dim rBand0 As S領域
             If (0 < tmp.m_iFlag) Then '横へ
-                'rBand0 = New S領域(New S実座標(x_center - d幅 / 2, y_center + ROOT2 * dy),
-                '                  New S実座標(x_center + d幅 / 2, y_center - tmp.m_dひも長 + ROOT2 * dy))
                 band.SetBand(New S実座標(x_center, y_center), New S実座標(x_center, y_center - tmp.m_dひも長), d幅, DeltaAx縦ひも)
                 band.MoveBand(New S差分(0, ROOT2 * dy))
             Else
-                'rBand0 = New S領域(New S実座標(x_center - tmp.m_dひも長 + ROOT2 * dx, y_center + d幅 / 2),
-                '                  New S実座標(x_center + ROOT2 * dx, y_center - d幅 / 2))
                 band.SetBand(New S実座標(x_center - tmp.m_dひも長, y_center), New S実座標(x_center, y_center), d幅, DeltaAx横ひも)
                 band.MoveBand(New S差分(ROOT2 * dx, 0))
                 sign = -1
             End If
 
-            'Dim aBand As New S四隅(rBand0)
 
-            'sign = 0 'for debug
-            'item.m_a四隅 = aBand.Rotate(New S実座標(x_center, y_center), -45 * sign)
             band.RotateBand(New S実座標(x_center, y_center), -45 * sign)
             If _IsDrawMarkCurrent Then '#60
                 band.p文字位置 = New S実座標(x_center, y_center)
             End If
 
             If bRevert Then
-                'item.m_a四隅 = item.m_a四隅.VertLeft()
                 band.VertLeftBand()
             Else
                 band.p文字位置 = band.p文字位置 + Unit270 * d幅
             End If
-            'item.m_a四隅 = item.m_a四隅 + delta
             band.MoveBand(delta)
 
-            '_ImageList差しひも.AddItem(item)
             bandlist.Add(band)
         Next
 
@@ -1604,15 +1809,13 @@ Partial Public Class clsCalcSquare
     '                                               │││
     '                                       終点F(B)└┴┘終点T(C)
     '
-
-
     'F→T
     Dim DeltaAx横ひも As S差分 = Unit90
     Dim DeltaAx縦ひも As S差分 = Unit0
 
 
-    'メインのバンドをクリップ化
-    Dim _BandListForClip As New CBandList   'CalcImage開始時にクリア
+    'メインバンドのクリップ領域
+    Dim _BandListForClip As New CBandList   'CalcImage開始時にimageSetup()でクリア
 
     Private Function AddClipItem(ByVal band As CBand) As Boolean
         If band IsNot Nothing Then

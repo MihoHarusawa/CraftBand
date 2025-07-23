@@ -159,8 +159,8 @@ Public Class clsModelSquare
         '生成用データ
         _data画像生成用 = New clsDataTables(_calc._Data)
 
-        '差しひもなし
-        _data画像生成用.p_tbl差しひも.Clear()
+        '差しひも(#95)
+        '_data画像生成用.p_tbl差しひも.Clear()
 
         '追加品なし
         _data画像生成用.p_tbl追加品.Clear()
@@ -182,7 +182,7 @@ Public Class clsModelSquare
         If calcTmp.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
 
             Dim imgdata As New clsImageData(_PlateNames(0)) '仮の名前で
-            If Not calcTmp.CalcImage(imgdata, False) Then
+            If Not calcTmp.CalcImage(imgdata, False, False, enum差しひも表示._回り込み) Then
                 _LastError = calcTmp.p_sメッセージ
                 ret = False
             Else

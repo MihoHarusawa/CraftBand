@@ -1668,6 +1668,10 @@ Public Class frmMain
         _clsImageData = Nothing
 
         SaveTables(_clsDataTables)
+        '#95
+        grp差しひも.Visible = ((0 < _clsDataTables.p_tbl差しひも.Count) AndAlso
+                                Not chk底のみ.Checked AndAlso Not radうら.Checked)
+
         Dim ret As Boolean = _clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
         Disp計算結果(_clsCalcSquare) 'NGはToolStripに表示
         If Not ret Then
@@ -1685,9 +1689,19 @@ Public Class frmMain
                 Return  '先にOKならOKのはずだが
             End If
         End If
+        '#95
+        Dim sasihimo As enum差しひも表示 = enum差しひも表示._非表示
+        If grp差しひも.Visible Then
+            If rad回り込み.Checked Then
+                sasihimo = enum差しひも表示._回り込み
+            ElseIf rad底置き.Checked Then
+                sasihimo = enum差しひも表示._底置き
+            End If
+        End If
+
         Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
-        ret = calc.CalcImage(_clsImageData, isBackFace)
+        ret = calc.CalcImage(_clsImageData, isBackFace, chk底のみ.Checked, sasihimo)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
@@ -1724,6 +1738,21 @@ Public Class frmMain
     End Sub
 
     Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged ', radうら.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        Showプレビュー()
+    End Sub
+
+    Private Sub chk底のみ_CheckedChanged(sender As Object, e As EventArgs) Handles chk底のみ.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        Showプレビュー()
+    End Sub
+
+    '#95
+    Private Sub rad差しひも_CheckedChanged(sender As Object, e As EventArgs) Handles rad非表示.CheckedChanged, rad底置き.CheckedChanged, rad回り込み.CheckedChanged
         If _clsImageData Is Nothing Then
             Return
         End If

@@ -1432,6 +1432,13 @@ Public Class clsImageItem
                 Return New S差分(p始点F, p終点F)
             End Get
         End Property
+        ReadOnly Property line始点終点 As S線分
+            Get
+                Dim p始点FT中 As S実座標 = New S線分(p始点F, p始点T).p中点
+                Dim p終点FT中 As S実座標 = New S線分(p終点F, p終点T).p中点
+                Return New S線分(p始点FT中, p終点FT中)
+            End Get
+        End Property
 
         'F→T
         ReadOnly Property deltaFT As S差分
