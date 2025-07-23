@@ -5,6 +5,8 @@ Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
 
+#Const CLIP = 0
+
 Partial Public Class clsCalcSquare
     '差しひも保存値
     Dim _InsertExpand As New clsInsertExpand
@@ -793,6 +795,9 @@ Partial Public Class clsCalcSquare
                     iYoko = p_i横ひもの本数 - idx + 1
                 End If
                 Dim itemYoko As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, iYoko)
+#If CLIP Then
+                itemYoko.AddClip(band)
+#End If
                 '
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, drow.p_i番号)
                 imgitem.AddSameClip(itemYoko)
@@ -957,6 +962,9 @@ Partial Public Class clsCalcSquare
                     iTate = p_i縦ひもの本数 - idx + 1
                 End If
                 Dim itemTate As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, iTate)
+#If CLIP Then
+                itemTate.AddClip(band)
+#End If
                 '
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, drow.p_i番号)
                 imgitem.AddSameClip(itemTate)
@@ -1062,6 +1070,9 @@ Partial Public Class clsCalcSquare
             '#94 とも編み
             If imglist IsNot Nothing Then
                 Dim itemSide As clsImageItem = _imageList側面上.GetRowItem(enumひも種.i_側面, idx)
+#If CLIP Then
+                itemSide.AddClip(band)
+#End If
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
                 imgitem.AddSameClip(itemSide)
                 imglist.AddItem(imgitem)
@@ -1074,6 +1085,9 @@ Partial Public Class clsCalcSquare
             '#94 とも編み
             If imglist IsNot Nothing Then
                 Dim itemSide As clsImageItem = _imageList側面右.GetRowItem(enumひも種.i_側面, idx)
+#If CLIP Then
+                itemSide.AddClip(band)
+#End If
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
                 imgitem.AddSameClip(itemSide)
                 imglist.AddItem(imgitem)
@@ -1086,6 +1100,9 @@ Partial Public Class clsCalcSquare
             '#94 とも編み
             If imglist IsNot Nothing Then
                 Dim itemSide As clsImageItem = _imageList側面下.GetRowItem(enumひも種.i_側面, idx)
+#If CLIP Then
+                itemSide.AddClip(band)
+#End If
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
                 imgitem.AddSameClip(itemSide)
                 imglist.AddItem(imgitem)
@@ -1098,6 +1115,9 @@ Partial Public Class clsCalcSquare
             '#94 とも編み
             If imglist IsNot Nothing Then
                 Dim itemSide As clsImageItem = _imageList側面左.GetRowItem(enumひも種.i_側面, idx)
+#If CLIP Then
+                itemSide.AddClip(band)
+#End If
                 Dim imgitem As New clsImageItem(band, IdxDrawInsertOnBand, row.f_i番号)
                 imgitem.AddSameClip(itemSide)
                 imglist.AddItem(imgitem)
