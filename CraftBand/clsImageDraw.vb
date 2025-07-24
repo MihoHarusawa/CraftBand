@@ -391,9 +391,6 @@ Public Class CImageDraw
             Case ImageTypeEnum._底楕円
                 Return draw底楕円(item)
 
-            'Case ImageTypeEnum._差しひも
-            '    Return draw差しひも(item)
-
             Case ImageTypeEnum._付属品
                 Return draw付属品(item)
 
@@ -775,38 +772,21 @@ Public Class CImageDraw
     Function draw底枠(ByVal item As clsImageItem) As Boolean
         Dim ret As Boolean = True
         If item.m_is円 Then
-            'Dim rect As RectangleF = pixcel_rectangle(item.m_a四隅.r外接領域)
-            '_Graphic.DrawEllipse(_Pen_black_thick, rect)
             ret = ret And draw_ellipse(item.m_a四隅.r外接領域, LineTypeEnum._black_thick)
         Else
-            'Dim points() As PointF = pixcel_lines(item.m_a四隅)
-            '_Graphic.DrawLines(_Pen_black_thick, points)
             ret = ret And draw_area(item.m_a四隅, LineTypeEnum._black_thick)
         End If
-        'For Each line As S線分 In item.m_lineList
-        '    _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        'Next
         ret = ret And draw_linelist(item.m_lineList, LineTypeEnum._black_dot)
         Return True
     End Function
 
     Function draw底枠2(ByVal item As clsImageItem) As Boolean
-        'For Each line As S線分 In item.m_lineList
-        '    _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        'Next
-        'Return True
         Return draw_linelist(item.m_lineList, LineTypeEnum._black_thick)
     End Function
 
     Function draw側面(ByVal item As clsImageItem) As Boolean
         Dim ret As Boolean = True
-        'Dim points() As PointF = pixcel_lines(item.m_a四隅)
-        '_Graphic.DrawLines(_Pen_black_thin, points)
         ret = ret And draw_area(item.m_a四隅, LineTypeEnum._black_thin)
-
-        'For Each line As S線分 In item.m_lineList
-        '    _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        'Next
         ret = ret And draw_linelist(item.m_lineList, LineTypeEnum._black_dot)
         Return ret
     End Function
@@ -834,18 +814,10 @@ Public Class CImageDraw
     End Function
 
     Function draw底の中央線(ByVal item As clsImageItem) As Boolean
-        'For Each line As S線分 In item.m_lineList
-        '    _Graphic.DrawLine(_Pen_red, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        'Next
-        'Return True
         Return draw_linelist(item.m_lineList, LineTypeEnum._red)
     End Function
 
     Function draw折り返し線(ByVal item As clsImageItem) As Boolean
-        'For Each line As S線分 In item.m_lineList
-        '    _Graphic.DrawLine(_Pen_black_thick, pixcel_point(line.p開始), pixcel_point(line.p終了))
-        'Next
-        'Return True
         Return draw_linelist(item.m_lineList, LineTypeEnum._black_thick)
     End Function
 
@@ -1140,36 +1112,6 @@ Public Class CImageDraw
 
         Return path
     End Function
-
-    'Function draw差しひも(ByVal item As clsImageItem) As Boolean
-    '    If item.m_groupRow Is Nothing Then
-    '        Return False
-    '    End If
-    '    'グループの色
-    '    Dim color As String = item.m_groupRow.GetNameValue("f_s色")
-    '    Dim colset As CPenBrush = GetBandPenBrush(color)
-    '    If colset Is Nothing OrElse colset.IsNoDrawing Then
-    '        Return False
-    '    End If
-    '    'ひもの領域
-    '    Dim points() As PointF = pixcel_lines(item.m_a四隅)
-    '    If colset.BrushAlfa IsNot Nothing Then
-    '        _Graphic.FillPolygon(colset.BrushAlfa, points)
-    '    End If
-    '    If colset.PenBand IsNot Nothing Then
-    '        _Graphic.DrawLines(colset.PenBand, points)
-    '    End If
-
-    '    '編みかた名
-    '    If Not item.p_p文字位置.IsZero AndAlso colset.BrushSolid IsNot Nothing Then
-    '        Dim p As PointF = pixcel_point(item.p_p文字位置)
-    '        Dim str As String = item.m_groupRow.GetNameValueSum("f_s記号")
-    '        str += item.m_groupRow.GetNameValue("f_s編みかた名")
-    '        _Graphic.DrawString(str, _Font, colset.BrushSolid, p)
-    '    End If
-
-    '    Return True
-    'End Function
 
     Function draw付属品(ByVal item As clsImageItem) As Boolean
         If item.m_row追加品 Is Nothing Then
