@@ -1258,7 +1258,7 @@ Partial Public Class clsCalcSquare
                 band.p文字位置.Zero()
             Next
             Dim imgitem As New clsImageItem(aryBlist(ISIDE0), IdxDrawInsertBand, i番号)
-            imgitem.m_rDraw = _r底面
+            imgitem.SetDrawArea(_r底面)
             imglist.AddItem(imgitem)
         End If
 
@@ -1325,7 +1325,7 @@ Partial Public Class clsCalcSquare
             If 0 < aryBlistRound(ipl).Count Then
                 Dim imgitem As New clsImageItem(aryBlistRound(ipl), IdxDrawInsertBand, i番号)
 #If 1 Then
-                imgitem.m_rDraw = _ary_r側面(ipl)
+                imgitem.SetDrawArea(_ary_r側面(ipl))
 #End If
                 imglist.AddItem(imgitem)
             End If

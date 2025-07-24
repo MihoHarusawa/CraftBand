@@ -1778,9 +1778,9 @@ Public Class clsImageItem
     Public m_knot As CKnot = Nothing
 
     'バンドセット
-    Public m_bandList As CBandList = Nothing
-    Public m_clipList As CBandList = Nothing
-    Public m_rDraw As S領域 'この範囲にだけ
+    Friend m_bandList As CBandList = Nothing
+    Friend m_clipList As CBandList = Nothing
+    Friend m_aDraw As S四隅 '指定があればこの範囲にだけ
 
     'クリップ
     Public m_fpath As String 'jpg
@@ -1936,6 +1936,7 @@ Public Class clsImageItem
 
     End Sub
 
+    '*バンドの描画
     'バンドセット
     Sub New(ByVal bandlist As CBandList, ByVal idx1 As Integer, ByVal idx2 As Integer)
         m_ImageType = ImageTypeEnum._バンドセット
@@ -1947,6 +1948,7 @@ Public Class clsImageItem
             m_bandList = bandlist
         End If
     End Sub
+    'バンド
     Sub New(ByVal band As CBand, ByVal idx1 As Integer, ByVal idx2 As Integer)
         m_ImageType = ImageTypeEnum._バンドセット
         m_Index = idx1
@@ -1956,6 +1958,7 @@ Public Class clsImageItem
             m_bandList.Add(band) '有効なバンドのみ
         End If
     End Sub
+    'バンド化
     Sub AddBand(ByVal band As CBand, ByVal idx1 As Integer, ByVal idx2 As Integer)
         If band IsNot Nothing Then
             m_ImageType = ImageTypeEnum._バンドセット
@@ -1967,7 +1970,7 @@ Public Class clsImageItem
             m_bandList.Add(band)
         End If
     End Sub
-    '
+    'バンドセットの下に描画
     Sub AddClip(ByVal bandlist As CBandList)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
@@ -1977,6 +1980,7 @@ Public Class clsImageItem
             m_clipList.AddRange(bandlist)
         End If
     End Sub
+    'バンドの下に描画
     Sub AddClip(ByVal band As CBand)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
@@ -1986,6 +1990,7 @@ Public Class clsImageItem
             m_clipList.Add(band)
         End If
     End Sub
+    'バンドの下に描画
     Sub AddClip(ByVal item As clsImageItem)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
@@ -1995,6 +2000,7 @@ Public Class clsImageItem
             m_clipList.AddRange(item.m_bandList)
         End If
     End Sub
+    'とも編み
     Sub AddSameClip(ByVal item As clsImageItem)
         'm_ImageType = ImageTypeEnum._バンドセット の想定
         If m_clipList Is Nothing Then
@@ -2004,10 +2010,15 @@ Public Class clsImageItem
             m_clipList.AddRange(item.m_clipList)
         End If
     End Sub
+    '円を抜く
     Sub AddClip(ByVal circle As S円)
         '円は今のところ1点のみとする
         m_is円 = True
         m_a四隅 = New S四隅(circle.r外接領域)
+    End Sub
+    '描画領域を限定
+    Sub SetDrawArea(ByVal r As S領域)
+        m_aDraw = New S四隅(r)
     End Sub
 
 

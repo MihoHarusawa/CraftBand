@@ -597,10 +597,12 @@ Public Class CImageDraw
 
         '描かない領域を反転するための新たな領域を作成
         Dim invertedClip As Region
-        If item.m_rDraw.IsEmpty Then
+        If item.m_aDraw.IsEmpty Then
             invertedClip = New Region(New Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height))
         Else
-            invertedClip = New Region(pixcel_rectangle(item.m_rDraw))
+            Dim area As New GraphicsPath()
+            area.AddPolygon(pixcel_lines(item.m_aDraw))
+            invertedClip = New Region(area)
         End If
 
         If item.m_clipList IsNot Nothing AndAlso 0 < item.m_clipList.Count Then
