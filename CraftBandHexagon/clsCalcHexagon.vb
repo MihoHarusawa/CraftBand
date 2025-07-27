@@ -1558,6 +1558,20 @@ Class clsCalcHexagon
 #End Region
 
 #Region "底のひも展開"
+
+    'f_iVal1:
+    'f_iVal2:
+    'f_iVal3:
+    'f_iVal4:
+    'f_dVal1:バンド描画時の加算値
+    'f_dVal2:バンド描画時の加算値
+    'f_dVal3:
+    'f_dVal4:
+    'f_sVal1:
+    'f_sVal2:
+
+
+
     Dim __tbl縦横展開(cAngleCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
     Private ReadOnly Property p_tbl縦横展開(ByVal aidx As AngleIndex) As tbl縦横展開DataTable
         Get

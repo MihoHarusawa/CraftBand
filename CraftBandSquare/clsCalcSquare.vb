@@ -1415,6 +1415,19 @@ Class clsCalcSquare
 #End Region
 
 #Region "横ひも・縦ひも展開"
+
+    'f_iVal1:
+    'f_iVal2:
+    'f_iVal3:
+    'f_iVal4:
+    'f_dVal1:バンド描画時の長さ
+    'f_dVal2:バンド描画時の長さ
+    'f_dVal3:
+    'f_dVal4:
+    'f_sVal1:
+    'f_sVal2:
+
+
     Dim _tbl縦横展開_横ひも As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
     Dim _tbl縦横展開_縦ひも As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
 

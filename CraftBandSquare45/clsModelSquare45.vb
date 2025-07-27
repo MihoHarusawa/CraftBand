@@ -1,8 +1,6 @@
-﻿Imports System.Text
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
-Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsCalcSquare45
 
@@ -49,14 +47,14 @@ Public Class clsModelSquare45
         Next
     End Sub
 
-    '#84 高さの算出(長方形の場合のみ・前面値)
+    '#84 高さの算出(長方形の場合のみ・前面値)　※Calcの長さ計算用,プレビュー2には使わない
     Public Function CalcHeight() As Double
         If Not _calc.p_b長方形である Then
             Return -1
         End If
 
         '斜め各方向に下からバンドを積む
-        setSideBandStack()
+        setSideBandStack(_calc.p_i高さの切上四角数, False)
 
         '高さ=<前面>の<縦>
         Dim table縦 As tbl縦横展開DataTable = _SideBandStack(enumBasketPlateIdx._front).getBandTable(enumひも種.i_縦, CSideBandStack.emStack._45, True)
@@ -82,21 +80,39 @@ Public Class clsModelSquare45
         Return dHeight * ROOT2
     End Function
 
+
+    Private Enum enumOriProc
+        _none
+        _before
+        _after
+    End Enum
+
+
     'プレビュー処理
-    Public Function CalcModel() As Boolean
+    Public Function CalcModel(ByVal isOriAfter As Boolean) As Boolean
+        Clear()
         If Not _calc.p_b長方形である Then
             '{0}が長方形でないため描画できません。
             _LastError = String.Format(My.Resources.ModelNoRectangle, BasketPlateString(enumBasketPlateIdx._bottom))
             Return False
         End If
 
+        Dim oriProc As enumOriProc = enumOriProc._none
+        If _calc.p_is折りカラー処理 Then
+            If isOriAfter Then
+                oriProc = enumOriProc._after
+            Else
+                oriProc = enumOriProc._before
+            End If
+        End If
+
         '各面の領域をセットする
-        If Not setRegions() Then
+        If Not setRegions(oriProc) Then
             Return False
         End If
 
         '各面に対応した画像用dataの初期化と四角数
-        If Not setDataEachPlate() Then
+        If Not setDataEachPlate(oriProc) Then
             Return False
         End If
 
@@ -160,7 +176,7 @@ Public Class clsModelSquare45
     '　　┌──┬────┬──┬────┐    
     '　　│　　│　　　　│　　│　　　　│    ↑　　　
     '　　│　　│　　　　│　　│　　　　│    │　　　
-    '　　│　　│　　　　│　　│　　　　│　takasa　　
+    '　　│　　│　　　　│　　│　　　　│　takasa　　(#96,折りカラー＆beforeは倍の高さ)
     '　　│　　│　　　　│　　│　　　　│    ↓　　　　
     '　　●──┼────┼──┴────┘    
     '　　　　　│　 (0)　│                    ↑  
@@ -170,13 +186,16 @@ Public Class clsModelSquare45
 
 
     '各面の領域をセットする
-    Private Function setRegions() As Boolean
+    Private Function setRegions(ByVal oriProc As enumOriProc) As Boolean
         '底の横
         Dim yoko As Double = _calc.p_d底の横長
         '底の縦
         Dim tate As Double = _calc.p_d底の縦長
         '高さ
         Dim takasa As Double = _calc.p_d四角ベース_高さ
+        If oriProc = enumOriProc._before Then
+            takasa *= 2
+        End If
 
         Dim p下 As S実座標 = pOrigin
         Dim p上 As S実座標 = pOrigin + Unit90 * takasa
@@ -231,11 +250,26 @@ Public Class clsModelSquare45
     Friend Class CBandAttribute
         Dim _i何本幅 As Integer
         Dim _s色 As String
+        '#96
+        Dim _b折り重ね As Boolean = False
+        Dim _s重ね色 As String
 
-        Sub New(ByVal row As tbl縦横展開Row)
+        Sub New(ByVal row As tbl縦横展開Row, ByVal isTerminal As Boolean)
             If row IsNot Nothing Then
                 _i何本幅 = row.f_i何本幅
                 _s色 = row.f_s色
+                '#96
+                If isTerminal Then
+                    If row.f_iVal2 = 1 Then
+                        _b折り重ね = True
+                        _s重ね色 = row.f_sVal2
+                    End If
+                Else
+                    If row.f_iVal1 = 1 Then
+                        _b折り重ね = True
+                        _s重ね色 = row.f_sVal1
+                    End If
+                End If
             End If
         End Sub
 
@@ -243,11 +277,20 @@ Public Class clsModelSquare45
             If row IsNot Nothing Then
                 row.f_i何本幅 = _i何本幅
                 row.f_s色 = _s色
+                '#96
+                If _b折り重ね Then
+                    row.f_i描画種 = enum描画種.i_重ねる
+                    row.f_s色2 = _s重ね色
+                End If
             End If
         End Sub
 
         Overrides Function ToString() As String
-            Return String.Format("[{0}]{1}", _i何本幅, _s色)
+            If _b折り重ね Then
+                Return String.Format("[{0}]{1}<{2}", _i何本幅, _s色, _s重ね色)
+            Else
+                Return String.Format("[{0}]{1}", _i何本幅, _s色)
+            End If
         End Function
     End Class
 
@@ -342,20 +385,20 @@ Public Class clsModelSquare45
     Private Function set_45()
         Dim base(3) As CBandAttributeList
 
-        '横ひも,順方向,縦の四角数,後半
-        base(0) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i縦の四角数, True)
+        '横ひも,順方向,縦の四角数,後半,左側(非端)
+        base(0) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i縦の四角数, True, False)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 0, base(0))
 
-        '縦ひも,順方向,横の四角数,後半
-        base(1) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i横の四角数, True)
+        '縦ひも,順方向,横の四角数,後半,下側(端)
+        base(1) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i横の四角数, True, True)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 1, base(1))
 
-        '横ひも,逆方向,縦の四角数,前半
-        base(2) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i縦の四角数, False)
+        '横ひも,逆方向,縦の四角数,前半,右側(端)
+        base(2) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i縦の四角数, False, True)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 2, base(2))
 
-        '縦ひも,逆方向,横の四角数,前半
-        base(3) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i横の四角数, False)
+        '縦ひも,逆方向,横の四角数,前半,上側(非端)
+        base(3) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i横の四角数, False, False)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_45 base({0}) {1}", 3, base(3))
 
         For iData As Integer = 1 To cBasketPlateCount - 1
@@ -373,20 +416,20 @@ Public Class clsModelSquare45
     Private Function set_135()
         Dim base(3) As CBandAttributeList
 
-        '縦ひも,逆方向,縦の四角数,前半
-        base(0) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i縦の四角数, False)
+        '縦ひも,逆方向,縦の四角数,前半,下側(端)
+        base(0) = _calc.getBandAttributeList(emExp._Tate, True, _calc.p_i縦の四角数, False, True)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 0, base(0))
 
-        '横ひも,逆方向,横の四角数,前半
-        base(1) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i横の四角数, False)
+        '横ひも,逆方向,横の四角数,前半,左側(非端)
+        base(1) = _calc.getBandAttributeList(emExp._Yoko, True, _calc.p_i横の四角数, False, False)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 1, base(1))
 
-        '縦ひも,順方向,縦の四角数,後半
-        base(2) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i縦の四角数, True)
+        '縦ひも,順方向,縦の四角数,後半,上側(非端)
+        base(2) = _calc.getBandAttributeList(emExp._Tate, False, _calc.p_i縦の四角数, True, False)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 2, base(2))
 
-        '横ひも,順方向,横の四角数,後半
-        base(3) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i横の四角数, True)
+        '横ひも,順方向,横の四角数,後半,右側(端)
+        base(3) = _calc.getBandAttributeList(emExp._Yoko, False, _calc.p_i横の四角数, True, True)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "set_135 base({0}) {1}", 3, base(3))
 
         For iData As Integer = 1 To cBasketPlateCount - 1
@@ -463,7 +506,7 @@ Public Class clsModelSquare45
     Dim _dxdyStart(cBasketPlateCount - 1) As SDXDY
 
     '各面に合わせたひも上下
-    Function setPlateUpDown() As Boolean
+    Function setPlateUpDown(ByVal n高さの四角数 As Integer) As Boolean
         Dim updown As New clsUpDown   'CheckBoxTableは使わない
         If Not _calc._Data.ToClsUpDown(updown) OrElse Not updown.IsValid(False) Then 'チェックはMatrix
             updown.Reset(0)
@@ -497,7 +540,7 @@ Public Class clsModelSquare45
             If leftside.TrimTopLeft(0, _calc.p_i横の四角数 + updown_takasa) Then
                 _data各面(pidx).FromClsUpDown(leftside)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
-                _dxdyStart(pidx).dx = _calc.p_i高さの切上四角数 - updown_takasa
+                _dxdyStart(pidx).dx = n高さの四角数 - updown_takasa
                 _dxdyStart(pidx).dy = 0
             Else
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
@@ -510,8 +553,8 @@ Public Class clsModelSquare45
             _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
             _data各面(pidx).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
             '(高さの四角-updown高さ)点から開始
-            _dxdyStart(pidx).dx = _calc.p_i高さの切上四角数 - updown_takasa
-            _dxdyStart(pidx).dy = _calc.p_i高さの切上四角数 - updown_takasa
+            _dxdyStart(pidx).dx = n高さの四角数 - updown_takasa
+            _dxdyStart(pidx).dy = n高さの四角数 - updown_takasa
 
             '右側面: 底の右上、縦×高さ
             pidx = enumBasketPlateIdx._rightside
@@ -521,7 +564,7 @@ Public Class clsModelSquare45
                 _data各面(pidx).FromClsUpDown(rightside)
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
                 _dxdyStart(pidx).dx = 0
-                _dxdyStart(pidx).dy = _calc.p_i高さの切上四角数 - updown_takasa
+                _dxdyStart(pidx).dy = n高さの四角数 - updown_takasa
             Else
                 _data各面(pidx).p_row底_縦横.Value("f_iひも上下の高さ数") = -1
             End If
@@ -552,21 +595,21 @@ Public Class clsModelSquare45
 
             '左側面: 底の左下、縦×高さ
             Dim leftside As New clsUpDown(updown)
-            leftside.Shift(-_calc.p_i高さの切上四角数, _calc.p_i横の四角数)
+            leftside.Shift(-n高さの四角数, _calc.p_i横の四角数)
             _data各面(enumBasketPlateIdx._leftside).FromClsUpDown(leftside)
             _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
             _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '前面: 底の左上、横×高さ
             Dim front As New clsUpDown(updown)
-            front.Shift(-_calc.p_i高さの切上四角数, -_calc.p_i高さの切上四角数)
+            front.Shift(-n高さの四角数, -n高さの四角数)
             _data各面(enumBasketPlateIdx._front).FromClsUpDown(front)
             _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
             _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
 
             '右側面: 底の右上、縦×高さ
             Dim rightside As New clsUpDown(updown)
-            rightside.Shift(_calc.p_i横の四角数, -_calc.p_i高さの切上四角数)
+            rightside.Shift(_calc.p_i横の四角数, -n高さの四角数)
             _data各面(enumBasketPlateIdx._rightside).FromClsUpDown(rightside)
             _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_iひも上下の高さ数") = 0
             _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_dひも長加算") = dAddEnd '#80
@@ -584,10 +627,11 @@ Public Class clsModelSquare45
 
 
     '各面に対応した画像用dataの初期化と四角数
-    Function setDataEachPlate() As Boolean
+    Private Function setDataEachPlate(ByVal oriProc As enumOriProc) As Boolean
         '画像用データ
         _data各面(enumBasketPlateIdx._bottom) = New clsDataTables(_calc._Data)
         _data各面(enumBasketPlateIdx._bottom).p_tbl追加品.Clear()
+        _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_b折りカラー区分") = False
 
         For pidx As Integer = 1 To cBasketPlateCount - 1
             _data各面(pidx) = New clsDataTables(_data各面(enumBasketPlateIdx._bottom))
@@ -597,55 +641,63 @@ Public Class clsModelSquare45
         _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStackは使わない
 
+        Dim n高さの四角数 As Integer = _calc.p_i高さの切上四角数
+        If oriProc = enumOriProc._before Then
+            n高さの四角数 = _calc.p_d高さの四角数 * 2
+        Else
+            n高さの四角数 = _calc.p_i高さの切上四角数
+        End If
+
         '左側面: 底の左下、縦×高さ
-        _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i高さの切上四角数
+        _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i横の四角数") = n高さの四角数
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i縦の四角数
         _data各面(enumBasketPlateIdx._leftside).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
 
         '前面: 底の左上、横×高さ
         _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i横の四角数
-        _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i高さの切上四角数
+        _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_i縦の四角数") = n高さの四角数
         _data各面(enumBasketPlateIdx._front).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
 
         '右側面: 底の右上、縦×高さ
-        _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i高さの切上四角数
+        _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_i横の四角数") = n高さの四角数
         _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i縦の四角数
         _data各面(enumBasketPlateIdx._rightside).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
 
         '背面: 底の右下、横×高さ
         _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_i横の四角数") = _calc.p_i横の四角数
-        _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_i縦の四角数") = _calc.p_i高さの切上四角数
+        _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_i縦の四角数") = n高さの四角数
         _data各面(enumBasketPlateIdx._back).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
 
 
         '斜め各方向に下からバンドを積む
-        setSideBandStack()
-        'set_45()
-        'set_135()
+        setSideBandStack(n高さの四角数, oriProc = enumOriProc._after)
 
         '斜めに積まれたデータを各面の縦ひも・横ひもにセット
         setDataFromStack()
 
         '各面に合わせたひも上下
-        setPlateUpDown()
+        setPlateUpDown(n高さの四角数)
 
         Return True
     End Function
 
     '斜め各方向に下からバンドを積む
-    Private Function setSideBandStack() As Boolean
+    Private Function setSideBandStack(ByVal n高さの四角数 As Integer, ByVal isOriColor As Boolean) As Boolean
         '左側面: 底の左下、縦×高さ
-        _SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        _SideBandStack(enumBasketPlateIdx._leftside) = New CSideBandStack(n高さの四角数, _calc.p_i縦の四角数)
         '前面: 底の左上、横×高さ
-        _SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+        _SideBandStack(enumBasketPlateIdx._front) = New CSideBandStack(_calc.p_i横の四角数, n高さの四角数)
         '右側面: 底の右上、縦×高さ
-        _SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(_calc.p_i高さの切上四角数, _calc.p_i縦の四角数)
+        _SideBandStack(enumBasketPlateIdx._rightside) = New CSideBandStack(n高さの四角数, _calc.p_i縦の四角数)
         '背面: 底の右下、横×高さ
-        _SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, _calc.p_i高さの切上四角数)
+        _SideBandStack(enumBasketPlateIdx._back) = New CSideBandStack(_calc.p_i横の四角数, n高さの四角数)
+
+        '#96 バンドの折り返し色初期化
+        _calc.set縦横展開Color(isOriColor, True) '外側の色
 
         '2方向にバンドを積む
         set_45()
@@ -662,7 +714,7 @@ Public Class clsModelSquare45
             _data各面(pidx).ResetStartPoint()
             _path各面画像(pidx) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(pidx), CImageDraw.cImageClipFileExtention))
 
-#If 0 Then 'DEBUG Then
+#If 1 Then 'DEBUG Then
             'Debug用・生成したデータファイルを保存
             '※Ver1.6より古いデータは、保存処理で幅が不一致になる可能性があります
             Dim fdir As String = IO.Path.Combine(IO.Path.GetTempPath, GetShortExeName(g_enumExeName))

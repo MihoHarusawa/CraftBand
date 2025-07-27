@@ -1,6 +1,4 @@
 ﻿
-Imports System.IO
-Imports System.Windows
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
@@ -265,6 +263,8 @@ Public Class frmMain
                 Showプレビュー2()
             Case tpageひも上下.Name
                 Showひも上下(works)
+            Case tpage折りカラー.Name
+                Show折りカラー()
             Case Else ' 
 
         End Select
@@ -286,7 +286,7 @@ Public Class frmMain
         End If
         Dim needreset As Boolean = reason.HasFlag(enumReason._Always)
         If Not needreset AndAlso reason.HasFlag(enumReason._GridDropdown) Then
-            If {tpage縁の始末.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name}.Contains(_CurrentTabControlName) Then
+            If {tpage縁の始末.Name, tpage追加品.Name, tpage横ひも.Name, tpage縦ひも.Name, tpage折りカラー.Name}.Contains(_CurrentTabControlName) Then
                 needreset = True
             End If
         End If
@@ -336,6 +336,8 @@ Public Class frmMain
                 Hideプレビュー2()
             Case tpageひも上下.Name
                 Hideひも上下(_clsDataTables)
+            Case tpage折りカラー.Name
+                Hide折りカラー()
             Case Else ' 
                 '
         End Select
@@ -376,6 +378,7 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp四角 {0}", row底_縦横.ToString)
         With row底_縦横
             chk縦横を展開する.Checked = .Value("f_b展開区分")
+            chk折りカラー編み.Checked = .Value("f_b折りカラー区分")
             set底の縦横展開(.Value("f_b展開区分"))
 
             dispValidValueNud(nudひも間のすき間, .Value("f_dひも間のすき間")) 'マイナス不可
@@ -529,6 +532,9 @@ Public Class frmMain
         If _CurrentTabControlName = tpageひも上下.Name Then
             saveひも上下(works, False)
         End If
+        If _CurrentTabControlName = tpage折りカラー.Name Then
+            save折りカラー()
+        End If
 
         Return True
     End Function
@@ -566,6 +572,8 @@ Public Class frmMain
             .Value("f_s縦ひものメモ") = txt縦ひものメモ.Text
 
             .Value("f_d高さの四角数") = nud高さの四角数.Value
+            .Value("f_b折りカラー区分") = chk折りカラー編み.Checked
+
 
             .Value("f_bひも上下1回区分") = chk1回のみ.Checked
             .Value("f_iひも上下の高さ数") = nud開始高さ.Value
@@ -889,6 +897,7 @@ Public Class frmMain
         End If
         '表面プレビュー
         radおもて.Checked = True
+        radBefore.Checked = True
     End Sub
 
     '新規作成
@@ -1063,13 +1072,18 @@ Public Class frmMain
         set底の縦横展開(chk縦横を展開する.Checked)
         recalc(CalcCategory.Square_Expand, sender)
     End Sub
+    '
+    Private Sub chk折りカラー編み_CheckedChanged(sender As Object, e As EventArgs) Handles chk折りカラー編み.CheckedChanged
+        set底の縦横展開(chk縦横を展開する.Checked)
+        recalc(CalcCategory.Square_Expand, sender)
+    End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
         If nud基本のひも幅.Value = 0 Then
             nud基本のひも幅.Value = g_clsSelectBasics.p_i本幅
         End If
         lbl基本のひも幅length.Text = New Length(g_clsSelectBasics.p_d指定本幅(nud基本のひも幅.Value)).TextWithUnit
-        ShowDefaultTabControlPage(enumReason._Preview) '色と本幅数変更の可能性
+        ShowDefaultTabControlPage(enumReason._Always)
 
         recalc(CalcCategory.Target_Band, sender)
     End Sub
@@ -1239,9 +1253,6 @@ Public Class frmMain
             If Not TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Add(tpage縦ひも)
             End If
-            'If Not TabControl.TabPages.Contains(tpageひも上下) Then
-            '    TabControl.TabPages.Add(tpageひも上下)
-            'End If
         Else
             If TabControl.TabPages.Contains(tpage横ひも) Then
                 TabControl.TabPages.Remove(tpage横ひも)
@@ -1249,10 +1260,21 @@ Public Class frmMain
             If TabControl.TabPages.Contains(tpage縦ひも) Then
                 TabControl.TabPages.Remove(tpage縦ひも)
             End If
-            'If TabControl.TabPages.Contains(tpageひも上下) Then
-            '    TabControl.TabPages.Remove(tpageひも上下)
-            'End If
         End If
+        '
+        chk折りカラー編み.Visible = isExband
+        If isExband AndAlso chk折りカラー編み.Checked Then
+            If Not TabControl.TabPages.Contains(tpage折りカラー) Then
+                TabControl.TabPages.Add(tpage折りカラー)
+            End If
+            grp折り返し.Visible = True
+        Else
+            If TabControl.TabPages.Contains(tpage折りカラー) Then
+                TabControl.TabPages.Remove(tpage折りカラー)
+            End If
+            grp折り返し.Visible = False
+        End If
+
     End Sub
 
     Private Sub tpage横ひも_Resize(sender As Object, e As EventArgs) Handles tpage横ひも.Resize
@@ -1409,6 +1431,200 @@ Public Class frmMain
     Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable(True)
     End Sub
+
+#End Region
+
+#Region "折りカラー"'#96
+    Sub Show折りカラー()
+        'タブ切り替えタイミングのため、表示は更新済
+        If Not _clsCalcSquare45.p_is折りカラー処理 Then
+            MessageBox.Show("本幅の変更があるため対象外となります", Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            dgvOriColor.Visible = False
+            Exit Sub
+        End If
+        SetReadonlyColumnVisibility(0)
+
+        Dim oriColorTable As dstWork.tblOriColorDataTable = _clsCalcSquare45.GetOriColorTable()
+        If oriColorTable IsNot Nothing Then
+            dgvOriColor.DataSource = oriColorTable
+            dgvOriColor.Refresh()
+            dgvOriColor.Visible = True
+        End If
+    End Sub
+
+    Function Hide折りカラー() As Boolean
+        Dim ret As Boolean = save折りカラー()
+        dgvOriColor.Visible = False
+        dgvOriColor.DataSource = Nothing
+        Return ret
+    End Function
+
+    Function save折りカラー() As Boolean
+        Dim oriColorTable As dstWork.tblOriColorDataTable = dgvOriColor.DataSource
+        If oriColorTable Is Nothing Then
+            Return False
+        Else
+            Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
+        End If
+    End Function
+
+
+    Dim _formatHeader As New StringFormat() With {.Alignment = StringAlignment.Center, .LineAlignment = StringAlignment.Near}
+    Dim _bgBrushR As New SolidBrush(Color.LightGreen)
+    Dim _bgBrushL As New SolidBrush(Color.LightBlue)
+
+    'ヘッダーを2段表示
+    Private Sub dgvOriColor_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvOriColor.CellPainting
+        ' ヘッダーセルのみを対象とする
+        If e.RowIndex = -1 AndAlso e.ColumnIndex >= 0 Then
+            Dim headerText As String = dgvOriColor.Columns(e.ColumnIndex).HeaderText
+            If headerText Is Nothing Then
+                Exit Sub
+            End If
+
+            If headerText.Contains(":") Then
+                e.Handled = True  ' 標準描画を抑制
+
+                ' 文字を上下に分割
+                Dim parts = headerText.Split(":"c)
+                If 3 <= parts.Length Then
+                    '背景色の塗りつぶし
+                    If parts(0) = "R" Then
+                        e.Graphics.FillRectangle(_bgBrushR, e.CellBounds)
+                    ElseIf parts(0) = "L" Then
+                        e.Graphics.FillRectangle(_bgBrushL, e.CellBounds)
+                    End If
+                    ' 上段描画
+                    e.Graphics.DrawString(parts(1), e.CellStyle.Font, Brushes.Black,
+                                      New RectangleF(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height / 2),
+                                      _formatHeader)
+                    ' 下段描画
+                    _formatHeader.LineAlignment = StringAlignment.Far
+                    e.Graphics.DrawString(parts(2), e.CellStyle.Font, Brushes.Black,
+                                      New RectangleF(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height),
+                                      _formatHeader)
+                    ' 枠線を描画
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.Border)
+                End If
+            End If
+            ' ":"がない場合は、通常描画（何もしない）
+        End If
+    End Sub
+
+    Private Sub dgvOriColor_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvOriColor.CellValueChanged
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
+        ' チェックボックスの列のみ処理
+        If (dgvOriColor.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
+            Return
+        End If
+        ' 編集結果をレコードに反映
+        dgvOriColor.EndEdit()
+
+        ' 対応するDataRowを取得（DataTableから直接）
+        Dim rowIndex As Integer = e.RowIndex
+        Dim drv As DataRowView = CType(dgvOriColor.Rows(rowIndex).DataBoundItem, DataRowView)
+        Dim dataRow As DataRow = drv.Row
+        Dim fieldName As String = dgvOriColor.Columns(e.ColumnIndex).DataPropertyName
+
+        If _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow) Then
+            dgvOriColor.Refresh()
+        End If
+    End Sub
+
+    'チェック操作後即時更新
+    Private Sub dgvOriColor_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles dgvOriColor.CurrentCellDirtyStateChanged
+        If dgvOriColor.IsCurrentCellDirty Then
+            dgvOriColor.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        End If
+    End Sub
+
+    Private Sub dgvOriColor_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgvOriColor.CellEndEdit
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
+        ' チェックボックスは処理済
+        If (dgvOriColor.Columns(e.ColumnIndex).ValueType = GetType(Boolean)) Then
+            Return
+        End If
+
+        ' 対応するDataRowを取得（DataTableから直接）
+        Dim rowIndex As Integer = e.RowIndex
+        Dim drv As DataRowView = CType(dgvOriColor.Rows(rowIndex).DataBoundItem, DataRowView)
+        Dim dataRow As DataRow = drv.Row
+        Dim fieldName As String = dgvOriColor.Columns(e.ColumnIndex).DataPropertyName
+
+        _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow)
+    End Sub
+
+    'チェックオフ
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        If dgvOriColor.Visible AndAlso dgvOriColor.DataSource IsNot Nothing Then
+            If _clsCalcSquare45.ClearOriColor(dgvOriColor.DataSource) Then
+                dgvOriColor.Refresh()
+            End If
+        Else
+            _clsCalcSquare45.ClearOriColor(Nothing) '全展開レコード
+        End If
+    End Sub
+
+    'カラムの表示をトグル
+    Private Sub btn詳細表示_Click(sender As Object, e As EventArgs) Handles btn詳細表示.Click
+        If Not dgvOriColor.Visible OrElse dgvOriColor.DataSource Is Nothing Then
+            Exit Sub
+        End If
+        SetReadonlyColumnVisibility(-1)
+    End Sub
+
+    'ColIndexDetail より右のカラムを表示/非表示/トグルする
+    'mode: -1: トグル（現在の表示状態を反転）/0: 非表示/1: 表示
+    Private Sub SetReadonlyColumnVisibility(ByVal mode As Integer)
+        If dgvOriColor Is Nothing Then Exit Sub
+
+        Const ColIndexDetail As Integer = 11
+
+        Dim newVisible As Boolean
+        Select Case mode
+            Case 0
+                newVisible = False
+            Case 1
+                newVisible = True
+            Case -1
+                ' トグル用に、対象列の Visible 状態を基準に反転
+                newVisible = Not dgvOriColor.Columns(ColIndexDetail).Visible
+            Case Else
+                Exit Sub ' 無効な mode の場合は何もしない
+        End Select
+
+        ' 対象カラムの Visible を設定
+        For i As Integer = ColIndexDetail To dgvOriColor.Columns.Count - 1
+            dgvOriColor.Columns(i).Visible = newVisible
+        Next
+    End Sub
+
+    Private Sub SetSelectedCheckCells(ByVal bVal As Boolean)
+        ' 編集確定しておく
+        dgvOriColor.EndEdit()
+
+        For Each cell As DataGridViewCell In dgvOriColor.SelectedCells
+            ' 対象セルがBoolean型で、ReadOnlyでない場合のみ処理
+            If TypeOf cell.Value Is Boolean AndAlso Not cell.ReadOnly Then
+                cell.Value = bVal
+            End If
+        Next
+
+        ' 編集反映
+        dgvOriColor.EndEdit()
+    End Sub
+    Private Sub btn選択をON_折り_Click(sender As Object, e As EventArgs) Handles btn選択をON_折り.Click
+        If 0 < dgvOriColor.SelectedCells.Count Then
+            SetSelectedCheckCells(True)
+        End If
+    End Sub
+
+    Private Sub btn選択をOFF_折り_Click(sender As Object, e As EventArgs) Handles btn選択をOFF_折り.Click
+        If 0 < dgvOriColor.SelectedCells.Count Then
+            SetSelectedCheckCells(False)
+        End If
+    End Sub
+
 
 #End Region
 
@@ -1573,10 +1789,11 @@ Public Class frmMain
         If Not ret Then
             Return
         End If
+        grp折り返し.Enabled = _clsCalcSquare45.p_is折りカラー処理
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelSquare45(_clsCalcSquare45, _sFilePath)
-        ret = _clsModelImageData.CalcModel()
+        ret = _clsModelImageData.CalcModel(radAfter.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
@@ -1620,6 +1837,29 @@ Public Class frmMain
             MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
+
+    '#96 Before/After 変更
+    Private Sub radBeforeAfter_CheckedChanged(sender As Object, e As EventArgs) Handles radBefore.CheckedChanged, radAfter.CheckedChanged
+        'プレビュー2処理後に呼び出される
+        If _clsModelImageData Is Nothing Then
+            Return
+        End If
+        If Not _clsCalcSquare45.p_is折りカラー処理 Then
+            grp折り返し.Enabled = False
+            Return
+        End If
+        '
+        Cursor.Current = Cursors.WaitCursor
+        Dim ret As Boolean = _clsModelImageData.CalcModel(radAfter.Checked)
+        Cursor.Current = Cursors.Default
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
+            MessageBox.Show(_clsModelImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+    End Sub
+
 #End Region
 
 #Region "DEBUG"
@@ -1631,6 +1871,7 @@ Public Class frmMain
             editAddParts.SetDgvColumnsVisible()
             expand横ひも.SetDgvColumnsVisible()
             expand縦ひも.SetDgvColumnsVisible()
+            setDgvColumnsVisible(dgvOriColor)
             bVisible = True
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())
@@ -1650,7 +1891,6 @@ Public Class frmMain
             End If
         Next
     End Sub
-
 #End Region
 
 End Class

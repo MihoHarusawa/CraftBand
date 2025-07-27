@@ -1265,6 +1265,20 @@ Class clsCalcKnot
 
 
 #Region "縦横展開"
+
+    'f_iVal1:
+    'f_iVal2:
+    'f_iVal3:
+    'f_iVal4:
+    'f_dVal1:
+    'f_dVal2:
+    'f_dVal3:
+    'f_dVal4:
+    'f_sVal1:
+    'f_sVal2:
+
+
+
     '横ひもの展開テーブル作成 ※入力値ベース
     'OUT:   _ImageList横ひも
     Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable

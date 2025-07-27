@@ -2254,6 +2254,18 @@ Class clsCalcMesh
 
 #Region "縦横展開"
 
+    'f_iVal1:renew時のフラグ
+    'f_iVal2:
+    'f_iVal3:
+    'f_iVal4:
+    'f_dVal1:ひも幅(f_i何本幅)
+    'f_dVal2:下半分の出力ひも長
+    'f_dVal3:上半分の出力ひも長
+    'f_dVal4:
+    'f_sVal1:
+    'f_sVal2:
+
+
     '縦横の展開DataTable
     '　非展開時 :タブ非表示。加算・色なし、固定幅。底(縦横)全てを反映した状態で保持
     '　展開時   :タブに表示。底(縦横)の変更時、既存レコードは保持

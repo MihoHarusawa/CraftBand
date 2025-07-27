@@ -45,6 +45,8 @@ Namespace Tables
         
         Private tabletblDefaultData As tblDefaultDataDataTable
         
+        Private tabletblOriColor As tblOriColorDataTable
+        
         Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -103,6 +105,9 @@ Namespace Tables
                 End If
                 If (Not (ds.Tables("tblDefaultData")) Is Nothing) Then
                     MyBase.Tables.Add(New tblDefaultDataDataTable(ds.Tables("tblDefaultData")))
+                End If
+                If (Not (ds.Tables("tblOriColor")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblOriColorDataTable(ds.Tables("tblOriColor")))
                 End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
@@ -223,6 +228,16 @@ Namespace Tables
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false),  _
+         Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+        Public ReadOnly Property tblOriColor() As tblOriColorDataTable
+            Get
+                Return Me.tabletblOriColor
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
          Global.System.ComponentModel.BrowsableAttribute(true),  _
          Global.System.ComponentModel.DesignerSerializationVisibilityAttribute(Global.System.ComponentModel.DesignerSerializationVisibility.Visible)>  _
         Public Overrides Property SchemaSerializationMode() As Global.System.Data.SchemaSerializationMode
@@ -318,6 +333,9 @@ Namespace Tables
                 If (Not (ds.Tables("tblDefaultData")) Is Nothing) Then
                     MyBase.Tables.Add(New tblDefaultDataDataTable(ds.Tables("tblDefaultData")))
                 End If
+                If (Not (ds.Tables("tblOriColor")) Is Nothing) Then
+                    MyBase.Tables.Add(New tblOriColorDataTable(ds.Tables("tblOriColor")))
+                End If
                 Me.DataSetName = ds.DataSetName
                 Me.Prefix = ds.Prefix
                 Me.Namespace = ds.Namespace
@@ -410,6 +428,12 @@ Namespace Tables
                     Me.tabletblDefaultData.InitVars
                 End If
             End If
+            Me.tabletblOriColor = CType(MyBase.Tables("tblOriColor"),tblOriColorDataTable)
+            If (initTable = true) Then
+                If (Not (Me.tabletblOriColor) Is Nothing) Then
+                    Me.tabletblOriColor.InitVars
+                End If
+            End If
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -440,6 +464,8 @@ Namespace Tables
             MyBase.Tables.Add(Me.tabletblSaveTemporarily)
             Me.tabletblDefaultData = New tblDefaultDataDataTable()
             MyBase.Tables.Add(Me.tabletblDefaultData)
+            Me.tabletblOriColor = New tblOriColorDataTable()
+            MyBase.Tables.Add(Me.tabletblOriColor)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -499,6 +525,12 @@ Namespace Tables
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Private Function ShouldSerializetblDefaultData() As Boolean
+            Return false
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Private Function ShouldSerializetblOriColor() As Boolean
             Return false
         End Function
         
@@ -589,6 +621,9 @@ Namespace Tables
         
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
         Public Delegate Sub tblDefaultDataRowChangeEventHandler(ByVal sender As Object, ByVal e As tblDefaultDataRowChangeEvent)
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Delegate Sub tblOriColorRowChangeEventHandler(ByVal sender As Object, ByVal e As tblOriColorRowChangeEvent)
         
         '''<summary>
         '''Represents the strongly named DataTable class.
@@ -5106,6 +5141,734 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents the strongly named DataTable class.
+        '''</summary>
+        <Global.System.Serializable(),  _
+         Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+        Partial Public Class tblOriColorDataTable
+            Inherits Global.System.Data.TypedTableBase(Of tblOriColorRow)
+            
+            Private columnf_index As Global.System.Data.DataColumn
+            
+            Private columnf_iPlate As Global.System.Data.DataColumn
+            
+            Private columnf_iPosition As Global.System.Data.DataColumn
+            
+            Private columnf_s面名 As Global.System.Data.DataColumn
+            
+            Private columnf_s位置 As Global.System.Data.DataColumn
+            
+            Private columnf_s色_45 As Global.System.Data.DataColumn
+            
+            Private columnf_iひも種_45 As Global.System.Data.DataColumn
+            
+            Private columnf_sひも名_45 As Global.System.Data.DataColumn
+            
+            Private columnf_iひも番号_45 As Global.System.Data.DataColumn
+            
+            Private columnf_bTerminal_45 As Global.System.Data.DataColumn
+            
+            Private columnf_s端_45 As Global.System.Data.DataColumn
+            
+            Private columnf_dひも長加算_45 As Global.System.Data.DataColumn
+            
+            Private columnf_sゼロ面名_45 As Global.System.Data.DataColumn
+            
+            Private columnf_iゼロ位置_45 As Global.System.Data.DataColumn
+            
+            Private columnf_s色_135 As Global.System.Data.DataColumn
+            
+            Private columnf_iひも種_135 As Global.System.Data.DataColumn
+            
+            Private columnf_sひも名_135 As Global.System.Data.DataColumn
+            
+            Private columnf_iひも番号_135 As Global.System.Data.DataColumn
+            
+            Private columnf_bTerminal_135 As Global.System.Data.DataColumn
+            
+            Private columnf_s端_135 As Global.System.Data.DataColumn
+            
+            Private columnf_dひも長加算_135 As Global.System.Data.DataColumn
+            
+            Private columnf_sゼロ面名_135 As Global.System.Data.DataColumn
+            
+            Private columnf_iゼロ位置_135 As Global.System.Data.DataColumn
+            
+            Private columnf_b外側_45 As Global.System.Data.DataColumn
+            
+            Private columnf_s外側色_45 As Global.System.Data.DataColumn
+            
+            Private columnf_s外側色_135 As Global.System.Data.DataColumn
+            
+            Private columnf_b外側_135 As Global.System.Data.DataColumn
+            
+            Private columnf_b内側_135 As Global.System.Data.DataColumn
+            
+            Private columnf_s内側色_135 As Global.System.Data.DataColumn
+            
+            Private columnf_s内側色_45 As Global.System.Data.DataColumn
+            
+            Private columnf_b内側_45 As Global.System.Data.DataColumn
+            
+            Private columnf_bEdited As Global.System.Data.DataColumn
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New()
+                MyBase.New
+                Me.TableName = "tblOriColor"
+                Me.BeginInit
+                Me.InitClass
+                Me.EndInit
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal table As Global.System.Data.DataTable)
+                MyBase.New
+                Me.TableName = table.TableName
+                If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                    Me.CaseSensitive = table.CaseSensitive
+                End If
+                If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                    Me.Locale = table.Locale
+                End If
+                If (table.Namespace <> table.DataSet.Namespace) Then
+                    Me.Namespace = table.Namespace
+                End If
+                Me.Prefix = table.Prefix
+                Me.MinimumCapacity = table.MinimumCapacity
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
+                Me.InitVars
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_indexColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_index
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iPlateColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iPlate
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iPositionColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iPosition
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s面名Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s面名
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s位置Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s位置
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s色_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s色_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iひも種_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iひも種_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sひも名_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sひも名_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iひも番号_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iひも番号_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_bTerminal_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_bTerminal_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s端_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s端_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも長加算_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも長加算_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sゼロ面名_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sゼロ面名_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iゼロ位置_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iゼロ位置_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s色_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s色_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iひも種_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iひも種_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sひも名_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sひも名_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iひも番号_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iひも番号_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_bTerminal_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_bTerminal_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s端_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s端_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_dひも長加算_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_dひも長加算_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_sゼロ面名_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_sゼロ面名_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iゼロ位置_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iゼロ位置_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b外側_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b外側_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s外側色_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s外側色_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s外側色_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s外側色_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b外側_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b外側_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b内側_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b内側_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s内側色_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s内側色_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_s内側色_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_s内側色_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_b内側_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_b内側_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_bEditedColumn() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_bEdited
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0"),  _
+             Global.System.ComponentModel.Browsable(false)>  _
+            Public ReadOnly Property Count() As Integer
+                Get
+                    Return Me.Rows.Count
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Default ReadOnly Property Item(ByVal index As Integer) As tblOriColorRow
+                Get
+                    Return CType(Me.Rows(index),tblOriColorRow)
+                End Get
+            End Property
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblOriColorRowChanging As tblOriColorRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblOriColorRowChanged As tblOriColorRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblOriColorRowDeleting As tblOriColorRowChangeEventHandler
+            
+            <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Event tblOriColorRowDeleted As tblOriColorRowChangeEventHandler
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Sub AddtblOriColorRow(ByVal row As tblOriColorRow)
+                Me.Rows.Add(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overloads Function AddtblOriColorRow( _
+                        ByVal f_index As Integer,  _
+                        ByVal f_iPlate As Short,  _
+                        ByVal f_iPosition As Short,  _
+                        ByVal f_s面名 As String,  _
+                        ByVal f_s位置 As String,  _
+                        ByVal f_s色_45 As String,  _
+                        ByVal f_iひも種_45 As Short,  _
+                        ByVal f_sひも名_45 As String,  _
+                        ByVal f_iひも番号_45 As Short,  _
+                        ByVal f_bTerminal_45 As Boolean,  _
+                        ByVal f_s端_45 As String,  _
+                        ByVal f_dひも長加算_45 As Double,  _
+                        ByVal f_sゼロ面名_45 As String,  _
+                        ByVal f_iゼロ位置_45 As Short,  _
+                        ByVal f_s色_135 As String,  _
+                        ByVal f_iひも種_135 As Short,  _
+                        ByVal f_sひも名_135 As String,  _
+                        ByVal f_iひも番号_135 As Short,  _
+                        ByVal f_bTerminal_135 As Boolean,  _
+                        ByVal f_s端_135 As String,  _
+                        ByVal f_dひも長加算_135 As Double,  _
+                        ByVal f_sゼロ面名_135 As String,  _
+                        ByVal f_iゼロ位置_135 As Short,  _
+                        ByVal f_b外側_45 As Boolean,  _
+                        ByVal f_s外側色_45 As String,  _
+                        ByVal f_s外側色_135 As String,  _
+                        ByVal f_b外側_135 As Boolean,  _
+                        ByVal f_b内側_135 As Boolean,  _
+                        ByVal f_s内側色_135 As String,  _
+                        ByVal f_s内側色_45 As String,  _
+                        ByVal f_b内側_45 As Boolean,  _
+                        ByVal f_bEdited As Boolean) As tblOriColorRow
+                Dim rowtblOriColorRow As tblOriColorRow = CType(Me.NewRow,tblOriColorRow)
+                Dim columnValuesArray() As Object = New Object() {f_index, f_iPlate, f_iPosition, f_s面名, f_s位置, f_s色_45, f_iひも種_45, f_sひも名_45, f_iひも番号_45, f_bTerminal_45, f_s端_45, f_dひも長加算_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_iひも種_135, f_sひも名_135, f_iひも番号_135, f_bTerminal_135, f_s端_135, f_dひも長加算_135, f_sゼロ面名_135, f_iゼロ位置_135, f_b外側_45, f_s外側色_45, f_s外側色_135, f_b外側_135, f_b内側_135, f_s内側色_135, f_s内側色_45, f_b内側_45, f_bEdited}
+                rowtblOriColorRow.ItemArray = columnValuesArray
+                Me.Rows.Add(rowtblOriColorRow)
+                Return rowtblOriColorRow
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function FindByf_index(ByVal f_index As Integer) As tblOriColorRow
+                Return CType(Me.Rows.Find(New Object() {f_index}),tblOriColorRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Overrides Function Clone() As Global.System.Data.DataTable
+                Dim cln As tblOriColorDataTable = CType(MyBase.Clone,tblOriColorDataTable)
+                cln.InitVars
+                Return cln
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+                Return New tblOriColorDataTable()
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub InitVars()
+                Me.columnf_index = MyBase.Columns("f_index")
+                Me.columnf_iPlate = MyBase.Columns("f_iPlate")
+                Me.columnf_iPosition = MyBase.Columns("f_iPosition")
+                Me.columnf_s面名 = MyBase.Columns("f_s面名")
+                Me.columnf_s位置 = MyBase.Columns("f_s位置")
+                Me.columnf_s色_45 = MyBase.Columns("f_s色_45")
+                Me.columnf_iひも種_45 = MyBase.Columns("f_iひも種_45")
+                Me.columnf_sひも名_45 = MyBase.Columns("f_sひも名_45")
+                Me.columnf_iひも番号_45 = MyBase.Columns("f_iひも番号_45")
+                Me.columnf_bTerminal_45 = MyBase.Columns("f_bTerminal_45")
+                Me.columnf_s端_45 = MyBase.Columns("f_s端_45")
+                Me.columnf_dひも長加算_45 = MyBase.Columns("f_dひも長加算_45")
+                Me.columnf_sゼロ面名_45 = MyBase.Columns("f_sゼロ面名_45")
+                Me.columnf_iゼロ位置_45 = MyBase.Columns("f_iゼロ位置_45")
+                Me.columnf_s色_135 = MyBase.Columns("f_s色_135")
+                Me.columnf_iひも種_135 = MyBase.Columns("f_iひも種_135")
+                Me.columnf_sひも名_135 = MyBase.Columns("f_sひも名_135")
+                Me.columnf_iひも番号_135 = MyBase.Columns("f_iひも番号_135")
+                Me.columnf_bTerminal_135 = MyBase.Columns("f_bTerminal_135")
+                Me.columnf_s端_135 = MyBase.Columns("f_s端_135")
+                Me.columnf_dひも長加算_135 = MyBase.Columns("f_dひも長加算_135")
+                Me.columnf_sゼロ面名_135 = MyBase.Columns("f_sゼロ面名_135")
+                Me.columnf_iゼロ位置_135 = MyBase.Columns("f_iゼロ位置_135")
+                Me.columnf_b外側_45 = MyBase.Columns("f_b外側_45")
+                Me.columnf_s外側色_45 = MyBase.Columns("f_s外側色_45")
+                Me.columnf_s外側色_135 = MyBase.Columns("f_s外側色_135")
+                Me.columnf_b外側_135 = MyBase.Columns("f_b外側_135")
+                Me.columnf_b内側_135 = MyBase.Columns("f_b内側_135")
+                Me.columnf_s内側色_135 = MyBase.Columns("f_s内側色_135")
+                Me.columnf_s内側色_45 = MyBase.Columns("f_s内側色_45")
+                Me.columnf_b内側_45 = MyBase.Columns("f_b内側_45")
+                Me.columnf_bEdited = MyBase.Columns("f_bEdited")
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Private Sub InitClass()
+                Me.columnf_index = New Global.System.Data.DataColumn("f_index", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_index)
+                Me.columnf_iPlate = New Global.System.Data.DataColumn("f_iPlate", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iPlate)
+                Me.columnf_iPosition = New Global.System.Data.DataColumn("f_iPosition", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iPosition)
+                Me.columnf_s面名 = New Global.System.Data.DataColumn("f_s面名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s面名)
+                Me.columnf_s位置 = New Global.System.Data.DataColumn("f_s位置", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s位置)
+                Me.columnf_s色_45 = New Global.System.Data.DataColumn("f_s色_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s色_45)
+                Me.columnf_iひも種_45 = New Global.System.Data.DataColumn("f_iひも種_45", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iひも種_45)
+                Me.columnf_sひも名_45 = New Global.System.Data.DataColumn("f_sひも名_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sひも名_45)
+                Me.columnf_iひも番号_45 = New Global.System.Data.DataColumn("f_iひも番号_45", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iひも番号_45)
+                Me.columnf_bTerminal_45 = New Global.System.Data.DataColumn("f_bTerminal_45", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_bTerminal_45)
+                Me.columnf_s端_45 = New Global.System.Data.DataColumn("f_s端_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s端_45)
+                Me.columnf_dひも長加算_45 = New Global.System.Data.DataColumn("f_dひも長加算_45", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも長加算_45)
+                Me.columnf_sゼロ面名_45 = New Global.System.Data.DataColumn("f_sゼロ面名_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sゼロ面名_45)
+                Me.columnf_iゼロ位置_45 = New Global.System.Data.DataColumn("f_iゼロ位置_45", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iゼロ位置_45)
+                Me.columnf_s色_135 = New Global.System.Data.DataColumn("f_s色_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s色_135)
+                Me.columnf_iひも種_135 = New Global.System.Data.DataColumn("f_iひも種_135", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iひも種_135)
+                Me.columnf_sひも名_135 = New Global.System.Data.DataColumn("f_sひも名_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sひも名_135)
+                Me.columnf_iひも番号_135 = New Global.System.Data.DataColumn("f_iひも番号_135", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iひも番号_135)
+                Me.columnf_bTerminal_135 = New Global.System.Data.DataColumn("f_bTerminal_135", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_bTerminal_135)
+                Me.columnf_s端_135 = New Global.System.Data.DataColumn("f_s端_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s端_135)
+                Me.columnf_dひも長加算_135 = New Global.System.Data.DataColumn("f_dひも長加算_135", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_dひも長加算_135)
+                Me.columnf_sゼロ面名_135 = New Global.System.Data.DataColumn("f_sゼロ面名_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_sゼロ面名_135)
+                Me.columnf_iゼロ位置_135 = New Global.System.Data.DataColumn("f_iゼロ位置_135", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iゼロ位置_135)
+                Me.columnf_b外側_45 = New Global.System.Data.DataColumn("f_b外側_45", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b外側_45)
+                Me.columnf_s外側色_45 = New Global.System.Data.DataColumn("f_s外側色_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s外側色_45)
+                Me.columnf_s外側色_135 = New Global.System.Data.DataColumn("f_s外側色_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s外側色_135)
+                Me.columnf_b外側_135 = New Global.System.Data.DataColumn("f_b外側_135", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b外側_135)
+                Me.columnf_b内側_135 = New Global.System.Data.DataColumn("f_b内側_135", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b内側_135)
+                Me.columnf_s内側色_135 = New Global.System.Data.DataColumn("f_s内側色_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s内側色_135)
+                Me.columnf_s内側色_45 = New Global.System.Data.DataColumn("f_s内側色_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s内側色_45)
+                Me.columnf_b内側_45 = New Global.System.Data.DataColumn("f_b内側_45", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_b内側_45)
+                Me.columnf_bEdited = New Global.System.Data.DataColumn("f_bEdited", GetType(Boolean), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_bEdited)
+                Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnf_index}, true))
+                Me.columnf_index.AllowDBNull = false
+                Me.columnf_index.Unique = true
+                Me.columnf_index.DefaultValue = CType(0,Integer)
+                Me.columnf_iPlate.DefaultValue = CType(0,Short)
+                Me.columnf_iPosition.DefaultValue = CType(0,Short)
+                Me.columnf_s面名.DefaultValue = CType("",String)
+                Me.columnf_s位置.DefaultValue = CType("",String)
+                Me.columnf_s色_45.DefaultValue = CType("",String)
+                Me.columnf_iひも種_45.DefaultValue = CType(0,Short)
+                Me.columnf_sひも名_45.DefaultValue = CType("",String)
+                Me.columnf_iひも番号_45.DefaultValue = CType(0,Short)
+                Me.columnf_bTerminal_45.DefaultValue = CType(false,Boolean)
+                Me.columnf_s端_45.DefaultValue = CType("",String)
+                Me.columnf_dひも長加算_45.DefaultValue = CType(0R,Double)
+                Me.columnf_sゼロ面名_45.DefaultValue = CType("",String)
+                Me.columnf_iゼロ位置_45.DefaultValue = CType(0,Short)
+                Me.columnf_s色_135.DefaultValue = CType("",String)
+                Me.columnf_iひも種_135.DefaultValue = CType(0,Short)
+                Me.columnf_sひも名_135.DefaultValue = CType("",String)
+                Me.columnf_iひも番号_135.DefaultValue = CType(0,Short)
+                Me.columnf_bTerminal_135.DefaultValue = CType(false,Boolean)
+                Me.columnf_s端_135.DefaultValue = CType("",String)
+                Me.columnf_dひも長加算_135.DefaultValue = CType(0R,Double)
+                Me.columnf_sゼロ面名_135.DefaultValue = CType("",String)
+                Me.columnf_iゼロ位置_135.DefaultValue = CType(0,Short)
+                Me.columnf_b外側_45.DefaultValue = CType(false,Boolean)
+                Me.columnf_s外側色_45.DefaultValue = CType("",String)
+                Me.columnf_s外側色_135.DefaultValue = CType("",String)
+                Me.columnf_b外側_135.DefaultValue = CType(false,Boolean)
+                Me.columnf_b内側_135.DefaultValue = CType(false,Boolean)
+                Me.columnf_s内側色_135.DefaultValue = CType("",String)
+                Me.columnf_s内側色_45.DefaultValue = CType("",String)
+                Me.columnf_b内側_45.DefaultValue = CType(false,Boolean)
+                Me.columnf_bEdited.DefaultValue = CType(false,Boolean)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function NewtblOriColorRow() As tblOriColorRow
+                Return CType(Me.NewRow,tblOriColorRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+                Return New tblOriColorRow(builder)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Function GetRowType() As Global.System.Type
+                Return GetType(tblOriColorRow)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanged(e)
+                If (Not (Me.tblOriColorRowChangedEvent) Is Nothing) Then
+                    RaiseEvent tblOriColorRowChanged(Me, New tblOriColorRowChangeEvent(CType(e.Row,tblOriColorRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowChanging(e)
+                If (Not (Me.tblOriColorRowChangingEvent) Is Nothing) Then
+                    RaiseEvent tblOriColorRowChanging(Me, New tblOriColorRowChangeEvent(CType(e.Row,tblOriColorRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleted(e)
+                If (Not (Me.tblOriColorRowDeletedEvent) Is Nothing) Then
+                    RaiseEvent tblOriColorRowDeleted(Me, New tblOriColorRowChangeEvent(CType(e.Row,tblOriColorRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+                MyBase.OnRowDeleting(e)
+                If (Not (Me.tblOriColorRowDeletingEvent) Is Nothing) Then
+                    RaiseEvent tblOriColorRowDeleting(Me, New tblOriColorRowChangeEvent(CType(e.Row,tblOriColorRow), e.Action))
+                End If
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub RemovetblOriColorRow(ByVal row As tblOriColorRow)
+                Me.Rows.Remove(row)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+                Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+                Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+                Dim ds As dstWork = New dstWork()
+                Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+                any1.MinOccurs = New Decimal(0)
+                any1.MaxOccurs = Decimal.MaxValue
+                any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any1)
+                Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+                any2.MinOccurs = New Decimal(1)
+                any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+                sequence.Items.Add(any2)
+                Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute1.Name = "namespace"
+                attribute1.FixedValue = ds.Namespace
+                type.Attributes.Add(attribute1)
+                Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+                attribute2.Name = "tableTypeName"
+                attribute2.FixedValue = "tblOriColorDataTable"
+                type.Attributes.Add(attribute2)
+                type.Particle = sequence
+                Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+                If xs.Contains(dsSchema.TargetNamespace) Then
+                    Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                    Try 
+                        Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                        dsSchema.Write(s1)
+                        Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                        Do While schemas.MoveNext
+                            schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                            s2.SetLength(0)
+                            schema.Write(s2)
+                            If (s1.Length = s2.Length) Then
+                                s1.Position = 0
+                                s2.Position = 0
+                                
+                                Do While ((s1.Position <> s1.Length)  _
+                                            AndAlso (s1.ReadByte = s2.ReadByte))
+                                    
+                                    
+                                Loop
+                                If (s1.Position = s1.Length) Then
+                                    Return type
+                                End If
+                            End If
+                            
+                        Loop
+                    Finally
+                        If (Not (s1) Is Nothing) Then
+                            s1.Close
+                        End If
+                        If (Not (s2) Is Nothing) Then
+                            s2.Close
+                        End If
+                    End Try
+                End If
+                xs.Add(dsSchema)
+                Return type
+            End Function
+        End Class
+        
+        '''<summary>
         '''Represents strongly named DataRow class.
         '''</summary>
         Partial Public Class tblColorRow
@@ -8961,6 +9724,870 @@ Namespace Tables
         End Class
         
         '''<summary>
+        '''Represents strongly named DataRow class.
+        '''</summary>
+        Partial Public Class tblOriColorRow
+            Inherits Global.System.Data.DataRow
+            
+            Private tabletblOriColor As tblOriColorDataTable
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+                MyBase.New(rb)
+                Me.tabletblOriColor = CType(Me.Table,tblOriColorDataTable)
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_index() As Integer
+                Get
+                    Return CType(Me(Me.tabletblOriColor.f_indexColumn),Integer)
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_indexColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iPlate() As Short
+                Get
+                    If Me.Isf_iPlateNull Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iPlateColumn),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iPlateColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iPosition() As Short
+                Get
+                    If Me.Isf_iPositionNull Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iPositionColumn),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iPositionColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s面名() As String
+                Get
+                    If Me.Isf_s面名Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s面名Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s面名Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s位置() As String
+                Get
+                    If Me.Isf_s位置Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s位置Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s位置Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s色_45() As String
+                Get
+                    If Me.Isf_s色_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s色_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s色_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iひも種_45() As Short
+                Get
+                    If Me.Isf_iひも種_45Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iひも種_45Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iひも種_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sひも名_45() As String
+                Get
+                    If Me.Isf_sひも名_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_sひも名_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_sひも名_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iひも番号_45() As Short
+                Get
+                    If Me.Isf_iひも番号_45Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iひも番号_45Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iひも番号_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_bTerminal_45() As Boolean
+                Get
+                    If Me.Isf_bTerminal_45Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_bTerminal_45Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_bTerminal_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s端_45() As String
+                Get
+                    If Me.Isf_s端_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s端_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s端_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも長加算_45() As Double
+                Get
+                    If Me.Isf_dひも長加算_45Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_dひも長加算_45Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_dひも長加算_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sゼロ面名_45() As String
+                Get
+                    If Me.Isf_sゼロ面名_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_sゼロ面名_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_sゼロ面名_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iゼロ位置_45() As Short
+                Get
+                    If Me.Isf_iゼロ位置_45Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iゼロ位置_45Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iゼロ位置_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s色_135() As String
+                Get
+                    If Me.Isf_s色_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s色_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s色_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iひも種_135() As Short
+                Get
+                    If Me.Isf_iひも種_135Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iひも種_135Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iひも種_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sひも名_135() As String
+                Get
+                    If Me.Isf_sひも名_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_sひも名_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_sひも名_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iひも番号_135() As Short
+                Get
+                    If Me.Isf_iひも番号_135Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iひも番号_135Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iひも番号_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_bTerminal_135() As Boolean
+                Get
+                    If Me.Isf_bTerminal_135Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_bTerminal_135Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_bTerminal_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s端_135() As String
+                Get
+                    If Me.Isf_s端_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s端_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s端_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_dひも長加算_135() As Double
+                Get
+                    If Me.Isf_dひも長加算_135Null Then
+                        Return 0R
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_dひも長加算_135Column),Double)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_dひも長加算_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_sゼロ面名_135() As String
+                Get
+                    If Me.Isf_sゼロ面名_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_sゼロ面名_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_sゼロ面名_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iゼロ位置_135() As Short
+                Get
+                    If Me.Isf_iゼロ位置_135Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iゼロ位置_135Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iゼロ位置_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b外側_45() As Boolean
+                Get
+                    If Me.Isf_b外側_45Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_b外側_45Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_b外側_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s外側色_45() As String
+                Get
+                    If Me.Isf_s外側色_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s外側色_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s外側色_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s外側色_135() As String
+                Get
+                    If Me.Isf_s外側色_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s外側色_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s外側色_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b外側_135() As Boolean
+                Get
+                    If Me.Isf_b外側_135Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_b外側_135Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_b外側_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b内側_135() As Boolean
+                Get
+                    If Me.Isf_b内側_135Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_b内側_135Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_b内側_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s内側色_135() As String
+                Get
+                    If Me.Isf_s内側色_135Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s内側色_135Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s内側色_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_s内側色_45() As String
+                Get
+                    If Me.Isf_s内側色_45Null Then
+                        Return ""
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_s内側色_45Column),String)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_s内側色_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_b内側_45() As Boolean
+                Get
+                    If Me.Isf_b内側_45Null Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_b内側_45Column),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_b内側_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_bEdited() As Boolean
+                Get
+                    If Me.Isf_bEditedNull Then
+                        Return false
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_bEditedColumn),Boolean)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_bEditedColumn) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iPlateNull() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iPlateColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iPlateNull()
+                Me(Me.tabletblOriColor.f_iPlateColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iPositionNull() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iPositionColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iPositionNull()
+                Me(Me.tabletblOriColor.f_iPositionColumn) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s面名Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s面名Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s面名Null()
+                Me(Me.tabletblOriColor.f_s面名Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s位置Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s位置Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s位置Null()
+                Me(Me.tabletblOriColor.f_s位置Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s色_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s色_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s色_45Null()
+                Me(Me.tabletblOriColor.f_s色_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iひも種_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iひも種_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iひも種_45Null()
+                Me(Me.tabletblOriColor.f_iひも種_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_sひも名_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_sひも名_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_sひも名_45Null()
+                Me(Me.tabletblOriColor.f_sひも名_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iひも番号_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iひも番号_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iひも番号_45Null()
+                Me(Me.tabletblOriColor.f_iひも番号_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_bTerminal_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_bTerminal_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_bTerminal_45Null()
+                Me(Me.tabletblOriColor.f_bTerminal_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s端_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s端_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s端_45Null()
+                Me(Me.tabletblOriColor.f_s端_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも長加算_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_dひも長加算_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも長加算_45Null()
+                Me(Me.tabletblOriColor.f_dひも長加算_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_sゼロ面名_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_sゼロ面名_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_sゼロ面名_45Null()
+                Me(Me.tabletblOriColor.f_sゼロ面名_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iゼロ位置_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iゼロ位置_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iゼロ位置_45Null()
+                Me(Me.tabletblOriColor.f_iゼロ位置_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s色_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s色_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s色_135Null()
+                Me(Me.tabletblOriColor.f_s色_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iひも種_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iひも種_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iひも種_135Null()
+                Me(Me.tabletblOriColor.f_iひも種_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_sひも名_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_sひも名_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_sひも名_135Null()
+                Me(Me.tabletblOriColor.f_sひも名_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iひも番号_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iひも番号_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iひも番号_135Null()
+                Me(Me.tabletblOriColor.f_iひも番号_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_bTerminal_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_bTerminal_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_bTerminal_135Null()
+                Me(Me.tabletblOriColor.f_bTerminal_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s端_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s端_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s端_135Null()
+                Me(Me.tabletblOriColor.f_s端_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_dひも長加算_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_dひも長加算_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_dひも長加算_135Null()
+                Me(Me.tabletblOriColor.f_dひも長加算_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_sゼロ面名_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_sゼロ面名_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_sゼロ面名_135Null()
+                Me(Me.tabletblOriColor.f_sゼロ面名_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iゼロ位置_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iゼロ位置_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iゼロ位置_135Null()
+                Me(Me.tabletblOriColor.f_iゼロ位置_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b外側_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_b外側_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b外側_45Null()
+                Me(Me.tabletblOriColor.f_b外側_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s外側色_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s外側色_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s外側色_45Null()
+                Me(Me.tabletblOriColor.f_s外側色_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s外側色_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s外側色_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s外側色_135Null()
+                Me(Me.tabletblOriColor.f_s外側色_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b外側_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_b外側_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b外側_135Null()
+                Me(Me.tabletblOriColor.f_b外側_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b内側_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_b内側_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b内側_135Null()
+                Me(Me.tabletblOriColor.f_b内側_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s内側色_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s内側色_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s内側色_135Null()
+                Me(Me.tabletblOriColor.f_s内側色_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_s内側色_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_s内側色_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_s内側色_45Null()
+                Me(Me.tabletblOriColor.f_s内側色_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_b内側_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_b内側_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_b内側_45Null()
+                Me(Me.tabletblOriColor.f_b内側_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_bEditedNull() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_bEditedColumn)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_bEditedNull()
+                Me(Me.tabletblOriColor.f_bEditedColumn) = Global.System.Convert.DBNull
+            End Sub
+        End Class
+        
+        '''<summary>
         '''Row event argument class
         '''</summary>
         <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
@@ -9306,6 +10933,42 @@ Namespace Tables
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property Row() As tblDefaultDataRow
+                Get
+                    Return Me.eventRow
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+                Get
+                    Return Me.eventAction
+                End Get
+            End Property
+        End Class
+        
+        '''<summary>
+        '''Row event argument class
+        '''</summary>
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+        Public Class tblOriColorRowChangeEvent
+            Inherits Global.System.EventArgs
+            
+            Private eventRow As tblOriColorRow
+            
+            Private eventAction As Global.System.Data.DataRowAction
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub New(ByVal row As tblOriColorRow, ByVal action As Global.System.Data.DataRowAction)
+                MyBase.New
+                Me.eventRow = row
+                Me.eventAction = action
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property Row() As tblOriColorRow
                 Get
                     Return Me.eventRow
                 End Get

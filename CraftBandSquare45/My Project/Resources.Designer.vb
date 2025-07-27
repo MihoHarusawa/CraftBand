@@ -250,6 +250,42 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  内折り に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionOriInside() As String
+            Get
+                Return ResourceManager.GetString("CaptionOriInside", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  外折り に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionOriOutside() As String
+            Get
+                Return ResourceManager.GetString("CaptionOriOutside", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  底面,左側面,前面,右側面,背面 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionPlateNames() As String
+            Get
+                Return ResourceManager.GetString("CaptionPlateNames", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  端 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionTerminal() As String
+            Get
+                Return ResourceManager.GetString("CaptionTerminal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  斜め四角45度 {0} に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property FormCaption() As String

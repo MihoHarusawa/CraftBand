@@ -109,7 +109,7 @@ Partial Class ctrExpanding
         btnリセット.Name = "btnリセット"
         btnリセット.Size = New System.Drawing.Size(111, 46)
         btnリセット.TabIndex = 2
-        btnリセット.Text = "リセット(&R)"
+        btnリセット.Text = "リセット(&C)"
         ToolTip1.SetToolTip(btnリセット, "変更をリセットし初期状態に戻します")
         btnリセット.UseVisualStyleBackColor = True
         ' 

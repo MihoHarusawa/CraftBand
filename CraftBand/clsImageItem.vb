@@ -1335,6 +1335,9 @@ Public Class clsImageItem
         Public _i何本幅 As Integer
         Public _s色 As String
         Public _s記号 As String
+        '
+        Friend _s色2 As String
+        Friend _i描画種 As enum描画種 = enum描画種.i_指定なし
 
         Sub New(ByVal ref As CBand)
             aバンド位置 = ref.aバンド位置
@@ -1344,6 +1347,9 @@ Public Class clsImageItem
             _i何本幅 = ref._i何本幅
             _s色 = ref._s色
             _s記号 = ref._s記号
+
+            _s色2 = ref._s色2
+            _i描画種 = ref._i描画種
         End Sub
 
         Sub New()
@@ -1513,6 +1519,26 @@ Public Class clsImageItem
             Return True
         End Function
 
+        '幅の伸縮(中点を中心に)
+        Function SetWideRatio(ByVal ratio As Double) As Boolean
+            If ratio = 1 Then
+                Return True
+            End If
+            Dim p中点始点 As S実座標 = New S線分(p始点F, p始点T).p中点
+            Dim deltaF始点 As S差分 = (New S差分(p中点始点, p始点F)) * ratio
+            Dim deltaT始点 As S差分 = (New S差分(p中点始点, p始点T)) * ratio
+            p始点F = p中点始点 + deltaF始点
+            p始点T = p中点始点 + deltaT始点
+
+            Dim p中点終点 As S実座標 = New S線分(p終点F, p終点T).p中点
+            Dim deltaF終点 As S差分 = (New S差分(p中点終点, p終点F)) * ratio
+            Dim deltaT終点 As S差分 = (New S差分(p中点終点, p終点T)) * ratio
+            p終点F = p中点終点 + deltaF終点
+            p終点T = p中点終点 + deltaT終点
+
+            Return True
+        End Function
+
         '位置を移動
         Sub MoveBand(ByVal delta As S差分)
             aバンド位置 = aバンド位置 + delta
@@ -1669,6 +1695,11 @@ Public Class clsImageItem
             Return True
         End Function
 
+        '色2と描画方法
+        Sub SetColorDraw(ByVal s色2 As String, ByVal i描画種 As enum描画種)
+            _s色2 = s色2
+            _i描画種 = i描画種
+        End Sub
 
 
         Function Get描画領域() As S領域
@@ -1685,6 +1716,7 @@ Public Class clsImageItem
             sb.AppendFormat("[A]始点F{0}{4}[D]始点T{1} : [B]終点F{2}{5}[C]終点T{3} ", p始点F, p始点T, p終点F, p終点T,
                             IIf(is始点FT線, "=", "."), IIf(is終点FT線, "=", "."))
             sb.AppendFormat("_i何本幅={0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
+            sb.AppendFormat(" _s色2={0} _i描画種={1}", _s色2, _i描画種)
             Return sb.ToString
         End Function
     End Class

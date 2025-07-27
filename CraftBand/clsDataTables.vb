@@ -151,6 +151,11 @@ Public Class clsDataTables
         i_補強 = &H80
         i_すき間 = &H1
     End Enum
+    '描画種
+    Public Enum enum描画種
+        i_指定なし = 0
+        i_重ねる
+    End Enum
 
     'tbl差しひも
     Public Enum enum配置面
@@ -673,6 +678,12 @@ Public Class clsDataTables
                 this.f_dひも長加算2 = 0
                 this.f_s色 = ""
                 this.f_sメモ = ""
+                this.f_b外側区分 = False
+                this.f_b外側区分2 = False
+                this.f_b内側区分 = False
+                this.f_b内側区分2 = False
+                this.f_s色2 = ""
+                this.f_i描画種 = enum描画種.i_指定なし
                 If isget何本幅 Then
                     this.f_i何本幅 = 1
                 End If
@@ -691,6 +702,12 @@ Public Class clsDataTables
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "skip tbl縦横展開Row({0}:{1}).f_s色={2}", other.f_sひも名, other.f_iひも番号, other.f_s色)
                 End If
                 this.f_sメモ = other.f_sメモ
+                this.f_b外側区分 = other.f_b外側区分
+                this.f_b外側区分2 = other.f_b外側区分2
+                this.f_b内側区分 = other.f_b内側区分
+                this.f_b内側区分2 = other.f_b内側区分2
+                this.f_s色2 = other.f_s色2
+                this.f_i描画種 = other.f_i描画種
 
                 'f_i何本幅
                 If isget何本幅 Then
@@ -704,6 +721,7 @@ Public Class clsDataTables
                         this.f_i何本幅 = other.f_i何本幅
                     End If
                 End If
+
             End If
             Return True
 

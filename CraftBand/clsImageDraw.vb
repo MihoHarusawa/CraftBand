@@ -658,10 +658,26 @@ Public Class CImageDraw
         End If
 
         Dim ret As Boolean = True
-        'ひもの領域
+
+        '重ねバンド
+        Dim draw_over As Boolean = (band._i描画種 = clsDataTables.enum描画種.i_重ねる)
+        If draw_over Then
+            Dim colset2 As CPenBrush = GetBandPenBrush(band._s色2)
+            If colset2 Is Nothing OrElse colset2.IsNoDrawing Then
+                draw_over = False
+            End If
+        End If
+
+        'ひもの領域を塗りつぶす
         Dim points() As PointF = pixcel_lines(band.aバンド位置)
         If colset.BrushAlfa IsNot Nothing Then
+#If 1 Then
+            If Not draw_over Then
+                _Graphic.FillPolygon(colset.BrushAlfa, points)
+            End If
+#Else
             _Graphic.FillPolygon(colset.BrushAlfa, points)
+#End If
         End If
 
         Dim p始点F As PointF = points(CBand.i_始点F)
@@ -678,22 +694,33 @@ Public Class CImageDraw
         p始点F = New PointF(points(CBand.i_始点F).X + wid_dx, points(CBand.i_始点F).Y + wid_dy)
         p始点T = New PointF(points(CBand.i_始点T).X - wid_dx, points(CBand.i_始点T).Y - wid_dy)
         p終点F = New PointF(points(CBand.i_終点F).X + wid_dx, points(CBand.i_終点F).Y + wid_dy)
-        'p終点T = New PointF(points(CBand.i_終点T).X - wid_dx, points(CBand.i_終点T).Y - wid_dy)
+        p終点T = New PointF(points(CBand.i_終点T).X - wid_dx, points(CBand.i_終点T).Y - wid_dy)
 
-        '本幅線
-        Dim i何本幅 As Integer = band._i何本幅
-        If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
-            Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
-            Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
-            Dim pStart As PointF = p始点F
-            Dim pEnd As PointF = p終点F
-            For i As Integer = 1 To i何本幅 - 1
-                pStart.X += dx
-                pStart.Y += dy
-                pEnd.X += dx
-                pEnd.Y += dy
-                _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
-            Next
+        If draw_over Then
+
+            Dim bandover As New CBand(band)
+            bandover._s色 = band._s色2
+            bandover._i描画種 = clsDataTables.enum描画種.i_指定なし
+            bandover.p文字位置.Zero()
+            bandover.SetWideRatio(0.85) 'とりあえずの固定値
+            ret = drawバンド(bandover)
+
+        Else
+            '本幅線
+            Dim i何本幅 As Integer = band._i何本幅
+            If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
+                Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
+                Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
+                Dim pStart As PointF = p始点F
+                Dim pEnd As PointF = p終点F
+                For i As Integer = 1 To i何本幅 - 1
+                    pStart.X += dx
+                    pStart.Y += dy
+                    pEnd.X += dx
+                    pEnd.Y += dy
+                    _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
+                Next
+            End If
         End If
 
         'バンド枠

@@ -3,6 +3,7 @@ Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsUpDown
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsModelSquare45
 
@@ -50,8 +51,8 @@ Partial Public Class clsCalcSquare45
         _is_updown_start_set = Not ((idx_x = 0) AndAlso (idx_y = 0))
     End Sub
 
-    'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分
-    Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean) As CBandAttributeList
+    'iExp:縦/横  isReverse:逆方向  count:点数 isFromLast:後半部分 isTerminal:端の側
+    Friend Function getBandAttributeList(ByVal iExp As emExp, ByVal isReverse As Boolean, ByVal count As Integer, ByVal isFromLast As Boolean, ByVal isTerminal As Boolean) As CBandAttributeList
         Dim balist As New CBandAttributeList
 
         '開始位置
@@ -70,7 +71,7 @@ Partial Public Class clsCalcSquare45
             End If
 
             If band IsNot Nothing AndAlso band.m_row縦横展開 IsNot Nothing Then
-                Dim ba As New CBandAttribute(band.m_row縦横展開)
+                Dim ba As New CBandAttribute(band.m_row縦横展開, isTerminal)
                 balist.Add(ba)
             Else
                 'あるはず・スペースフォルダとして
@@ -84,19 +85,112 @@ Partial Public Class clsCalcSquare45
         Return balist
     End Function
 
+    '両端のバンド色をf_sVal1,f_sVal2,f_iVal1,f_iVal2にセットする
+    Friend Function set縦横展開Color(ByVal isOriColor As Boolean, ByVal is外側 As Boolean) As Boolean
+
+        '補強ひもも含め全てクリア
+        For Each r As tbl縦横展開Row In get横展開DataTable()
+            r.f_iVal1 = 0
+            r.f_iVal2 = 0
+            r.f_sVal1 = ""
+            r.f_sVal2 = ""
+        Next
+        For Each r As tbl縦横展開Row In get縦展開DataTable()
+            r.f_iVal1 = 0
+            r.f_iVal2 = 0
+            r.f_sVal1 = ""
+            r.f_sVal2 = ""
+        Next
+
+        If isOriColor Then
+            '側面を構成する全バンド
+            Dim oriTable As dstWork.tblOriColorDataTable = GetOriColorTable()
+            If oriTable Is Nothing Then
+                Return False
+            End If
+            '
+            For Each oriRow As dstWork.tblOriColorRow In oriTable
+                If is外側 Then
+                    If oriRow.f_b外側_135 Then
+                        '135度を45度に重ねる
+                        Dim r45 As tbl縦横展開Row = find縦横展開Row(oriRow.f_iひも種_45, oriRow.f_iひも番号_45)
+                        If r45 IsNot Nothing Then
+                            If oriRow.f_bTerminal_45 Then
+                                r45.f_iVal2 = 1
+                                r45.f_sVal2 = oriRow.f_s外側色_45
+                            Else
+                                r45.f_iVal1 = 1
+                                r45.f_sVal1 = oriRow.f_s外側色_45
+                            End If
+                        End If
+                    End If
+                    If oriRow.f_b外側_45 Then
+                        '45度を135度に重ねる
+                        Dim r135 As tbl縦横展開Row = find縦横展開Row(oriRow.f_iひも種_135, oriRow.f_iひも番号_135)
+                        If r135 IsNot Nothing Then
+                            If oriRow.f_bTerminal_135 Then
+                                r135.f_iVal2 = 1
+                                r135.f_sVal2 = oriRow.f_s外側色_135
+                            Else
+                                r135.f_iVal1 = 1
+                                r135.f_sVal1 = oriRow.f_s外側色_135
+                            End If
+                        End If
+                    End If
+
+                Else
+                    If oriRow.f_b内側_135 Then
+                        '135度を45度に重ねる
+                        Dim r45 As tbl縦横展開Row = find縦横展開Row(oriRow.f_iひも種_45, oriRow.f_iひも番号_45)
+                        If r45 IsNot Nothing Then
+                            If oriRow.f_bTerminal_45 Then
+                                r45.f_iVal2 = 1
+                                r45.f_sVal2 = oriRow.f_s内側色_45
+                            Else
+                                r45.f_iVal1 = 1
+                                r45.f_sVal1 = oriRow.f_s内側色_45
+                            End If
+                        End If
+                    End If
+                    If oriRow.f_b内側_45 Then
+                        '45度を135度に重ねる
+                        Dim r135 As tbl縦横展開Row = find縦横展開Row(oriRow.f_iひも種_135, oriRow.f_iひも番号_135)
+                        If r135 IsNot Nothing Then
+                            If oriRow.f_bTerminal_135 Then
+                                r135.f_iVal2 = 1
+                                r135.f_sVal2 = oriRow.f_s内側色_135
+                            Else
+                                r135.f_iVal1 = 1
+                                r135.f_sVal1 = oriRow.f_s内側色_135
+                            End If
+                        End If
+                    End If
+
+                End If
+
+            Next
+
+        End If
+
+        Return True
+    End Function
+
+
+
 #End Region
 
+    '【外側から見た図】
     '
-    '　横のひも番号　右上(A)             縦ひも X→  右上       左上              右上
-    '　　①　　　　　／＼　　　　　　 　　　　 　／│             __________________
-    '　　②　　　横／　　＼縦　　　　 　　　／││ │             ＼______________／
-    '　　③　↑+Y／　　　　＼右下(D) 　　　│ ││ │               ______________
-    '　　④　│／　　　　　／　　　　　／││ ││ │         ↑    ＼__________／
-    '　　..　│＼左上(B) ／　　　　　　＼││ ││ │　　　　　　　　 　____
-    '　　　　│　＼　　／　　　　　　 　　　＼││ │　　　　横ひも Y 　＼／
-    '　　　　│　　＼／　左下(C)　　　　　　　 　＼│ 
-    '　　　　●─────→+X                         右下                       
-    '縦のひも番号①②③④...
+    '横のひも番号    右上(A)            縦ひも X→→ 右上   
+    '    ①          ／＼                            ／│      端:No              左上              右上   
+    '    ②  +Y  横／    ＼縦                   ／││ │ (上)ひも長加算            __________________   ひも番号
+    '    ③  ↑  ／        ＼右下(D)           │ ││ │       ↑                  ＼______________／     ①
+    '    ④  │／          ／              ／││ ││ │       │                    ______________       ②
+    '    ..  │＼左上(B) ／                ＼││ ││ │       ↓                 ↑ ＼__________／       ③
+    '        │  ＼    ／                       ＼││ │ (下)ひも長加算2          ↑      ____
+    '        │    ＼／  左下(C)                     ＼│      端:Yes          横ひも Y    ＼／
+    '        ●─────→+X         ひも番号①②③ 右下                  (左)ひも長加算  ←─→  (右)ひも長加算2         
+    '縦のひも番号①②③④...                                                   端:No                    端:Yes
 
 
 #Region "結果表示用"
@@ -434,6 +528,7 @@ Partial Public Class clsCalcSquare45
             Dim band As New CBand(m_row縦横展開)
 
             Dim p中央 As S実座標 = m_a底の四隅.p中央
+            Dim index1 As Integer
             With m_row縦横展開
                 If dir = emExp._Yoko Then
                     '左→右
@@ -447,6 +542,7 @@ Partial Public Class clsCalcSquare45
                         '横バンドの左
                         band.SetMarkPosition(enumMarkPosition._始点Fの前, m_dひも幅 * 1.4)
                     End If
+                    index1 = 2 'ImageTypeEnum._横バンド
 
                 ElseIf dir = emExp._Tate Then
                     '下→上
@@ -460,11 +556,20 @@ Partial Public Class clsCalcSquare45
                         '縦バンドの上
                         band.SetMarkPosition(enumMarkPosition._終点Tの後)
                     End If
+                    index1 = 1 'ImageTypeEnum._縦バンド
+
+                Else
+                    Return Nothing
 
                 End If
             End With
 
-            Dim imgItem As clsImageItem = New clsImageItem(band, dir, idx)
+            '#96
+            If m_row縦横展開.f_i描画種 = enum描画種.i_重ねる Then
+                band.SetColorDraw(m_row縦横展開.f_s色2, enum描画種.i_重ねる)
+            End If
+
+            Dim imgItem As clsImageItem = New clsImageItem(band, index1, idx)
             imgItem.m_row縦横展開 = m_row縦横展開 'for GetRowItem,isDrawingItem
             Return imgItem
         End Function

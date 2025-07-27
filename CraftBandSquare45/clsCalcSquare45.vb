@@ -1,10 +1,9 @@
-﻿
-
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
@@ -69,6 +68,7 @@ Class clsCalcSquare45
     Private Property _dひも長係数 As Double 'nudゼロ以上
     Private Property _dひも長加算 As Double 'プラスマイナス可
     Private Property _b縦横を展開する As Boolean
+    Private Property _b折りカラー編み As Boolean
 
 
     '縁の始末
@@ -100,6 +100,7 @@ Class clsCalcSquare45
         _dひも長係数 = 0
         _dひも長加算 = 0
         _b縦横を展開する = False
+        _b折りカラー編み = False
 
         _d縁の高さ = 0
         _d縁の垂直ひも長 = 0
@@ -183,9 +184,22 @@ Class clsCalcSquare45
         End Get
     End Property
 
+    ReadOnly Property p_b高さ半四角 As Boolean
+        Get
+            Dim frac As Double = _d高さの四角数 - Math.Floor(_d高さの四角数)
+            Return 0.3 < frac AndAlso frac < 0.7
+        End Get
+    End Property
+
     ReadOnly Property p_i高さの切上四角数 As Integer
         Get
-            Return CInt(Math.Ceiling(_d高さの四角数))
+            'Return CInt(Math.Ceiling(_d高さの四角数))
+            Dim i As Integer = CInt(Math.Floor(_d高さの四角数))
+            Dim frac As Double = _d高さの四角数 - Math.Floor(_d高さの四角数)
+            If 0.3 < frac Then
+                i += 1
+            End If
+            Return i
         End Get
     End Property
 
@@ -455,6 +469,14 @@ Class clsCalcSquare45
         End Get
     End Property
 
+    '#96 折りカラー編み処理対象
+    ReadOnly Property p_is折りカラー処理 As Boolean
+        Get
+            Return _b折りカラー編み AndAlso Not p_b本幅変更あり
+        End Get
+    End Property
+
+
     '追加品の参照値 #63
     Function getAddPartsRefValues() As Double()
         Dim values(12) As Double
@@ -695,6 +717,7 @@ Class clsCalcSquare45
             _dひも長係数 = .Value("f_dひも長係数") '
             _dひも長加算 = .Value("f_dひも長加算") '
             _b縦横を展開する = .Value("f_b展開区分")
+            _b折りカラー編み = _b縦横を展開する AndAlso .Value("f_b折りカラー区分")
         End With
 
         _d四角の一辺 = _dひも幅の一辺 + _dひも間のすき間
@@ -1286,6 +1309,17 @@ Class clsCalcSquare45
 
 #Region "横ひも・縦ひも展開"
 
+    'f_iVal1:(1)非端側の重ね色あり
+    'f_iVal2:(1)端側の色重ね色あり
+    'f_iVal3:
+    'f_iVal4:
+    'f_dVal1:中心からのバンドの長さ
+    'f_dVal2:中心からのバンドの長さ(端側)
+    'f_dVal3:
+    'f_dVal4:
+    'f_sVal1:非端側の重ね色
+    'f_sVal2:端側の重ね色
+
     'New時に作成、以降は存在が前提
     '入力変更イベントで内容を更新し、常に最新の状態を保持する
     Dim _tbl縦横展開(cExpandCount - 1) As tbl縦横展開DataTable
@@ -1309,6 +1343,7 @@ Class clsCalcSquare45
     Private Shared Function is補強ひも(ByVal row As tbl縦横展開Row) As Boolean
         Return is補強ひも(row.f_iひも種)
     End Function
+
 
 
     '横ひもの_tbl縦横展開 を取得。isReset=Trueでリセット
@@ -1416,10 +1451,6 @@ Class clsCalcSquare45
                 .f_dひも長 = .f_d長さ
                 .f_d出力ひも長 = .f_dひも長 + .f_dひも長加算 + .f_dひも長加算2 '#92
             Else
-                ''通常のひも ※高さ分は固定:高さの四角数 * _d四角の一辺
-                '.f_dひも長 = .f_d長さ +
-                '    g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間 +
-                '    4 * _d高さの四角数 * _d四角の一辺
                 '通常のひも #84
                 .f_dひも長 = .f_d長さ +
                     g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間 +
@@ -1430,6 +1461,17 @@ Class clsCalcSquare45
                     (_dひも長加算 + _d縁の垂直ひも長) * 2
                 row.f_dVal1 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算 + (_dひも長加算 + _d縁の垂直ひも長)
                 row.f_dVal2 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算2 + (_dひも長加算 + _d縁の垂直ひも長)
+                '#96
+                If p_is折りカラー処理 Then
+                    If row.f_b内側区分 OrElse row.f_b外側区分 Then
+                        row.f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                        row.f_dVal1 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                    End If
+                    If row.f_b内側区分2 OrElse row.f_b外側区分2 Then
+                        row.f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                        row.f_dVal2 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                    End If
+                End If
             End If
         End With
         Return isNeedRecalc
@@ -1463,7 +1505,7 @@ Class clsCalcSquare45
 
         'ひも分のレコード作成 (セットする以外は初期値)
         For idx As Integer = 1 To p_iひもの本数
-            row = Find縦横展開Row(table, _処理のひも種(dir), idx, True)
+            row = clsDataTables.Find縦横展開Row(table, _処理のひも種(dir), idx, True)
 
             row.f_i位置番号 = p_i位置番号(idx)
             If dir = emExp._Yoko Then
@@ -1479,7 +1521,7 @@ Class clsCalcSquare45
         Dim pos As Integer = cBackPosition
         If _Data.p_row底_縦横.Value(_補強フィールド名(dir)) Then
             For idx As Integer = 1 To 2
-                row = Find縦横展開Row(table, _補強のひも種(dir), idx, True)
+                row = clsDataTables.Find縦横展開Row(table, _補強のひも種(dir), idx, True)
 
                 row.f_i位置番号 = pos
                 row.f_sひも名 = text縦の補強ひも()
@@ -1493,11 +1535,11 @@ Class clsCalcSquare45
                 pos += 1
             Next
         Else
-            row = Find縦横展開Row(table, _補強のひも種(dir), 1, False)
+            row = clsDataTables.Find縦横展開Row(table, _補強のひも種(dir), 1, False)
             If row IsNot Nothing Then
                 row.Delete()
             End If
-            row = Find縦横展開Row(table, _補強のひも種(dir), 2, False)
+            row = clsDataTables.Find縦横展開Row(table, _補強のひも種(dir), 2, False)
             If row IsNot Nothing Then
                 row.Delete()
             End If
@@ -1513,6 +1555,416 @@ Class clsCalcSquare45
     End Function
 
 
+#End Region
+
+#Region "折りカラー"'#96
+
+    '側面のバンド1本(縦ひも/横ひものいずれかの端)
+    Structure SSideUpBand
+        Public iPlate As Integer
+        Public iPosition As Integer
+        '
+        Public iひも種 As enumひも種
+        Public iひも番号 As Integer
+        Public bTerminal As Boolean '端はTrue
+    End Structure
+
+    Class CSideUpBandList
+        Inherits List(Of SSideUpBand)
+
+        Function ShiftAt(ByVal idx As Integer, ByVal shift As Integer) As SSideUpBand
+            Dim i As Integer = Modulo(idx + shift, Me.Count)
+            Return Me(i)
+        End Function
+    End Class
+
+    Private Function find縦横展開Row(ByVal sband As SSideUpBand) As tbl縦横展開Row
+        Return find縦横展開Row(sband.iひも種, sband.iひも番号)
+    End Function
+
+    Private Function find縦横展開Row(ByVal iひも種 As enumひも種, ByVal iひも番号 As Integer) As tbl縦横展開Row
+        If iひも種 = enumひも種.i_横 Then
+            Return clsDataTables.Find縦横展開Row(get横展開DataTable(), enumひも種.i_横, iひも番号, False)
+
+        ElseIf iひも種 = enumひも種.i_縦 Then
+            Return clsDataTables.Find縦横展開Row(get縦展開DataTable(), enumひも種.i_縦, iひも番号, False)
+
+        End If
+        Return Nothing
+    End Function
+
+    '側面位置のひも配置
+    Private Function setSideBandZero(ByVal list45 As CSideUpBandList, ByVal list135 As CSideUpBandList) As Boolean
+        If p_i縦の四角数 = 0 OrElse p_i横の四角数 = 0 Then
+            Return False
+        End If
+
+        Dim sband45 As SSideUpBand
+        Dim sband135 As SSideUpBand
+
+        '左側面(1)
+        For i As Integer = 1 To p_i縦の四角数
+            '45度
+            sband45 = New SSideUpBand
+            sband45.iPlate = 1 '左側面(1)
+            sband45.iPosition = i
+            '横・後ろから逆順・非端
+            sband45.iひも種 = enumひも種.i_横
+            sband45.iひも番号 = p_i横ひもの本数 - i + 1
+            sband45.bTerminal = False
+            list45.Add(sband45)
+
+            '135度
+            sband135 = New SSideUpBand
+            sband135.iPlate = 1 '左側面(1)
+            sband135.iPosition = i
+            '縦・始めから逆順・端
+            sband135.iひも種 = enumひも種.i_縦
+            sband135.iひも番号 = p_i縦の四角数 - i + 1
+            sband135.bTerminal = True
+            list135.Add(sband135)
+        Next
+
+        '前面(2)
+        For i As Integer = 1 To p_i横の四角数
+            '45度
+            sband45 = New SSideUpBand
+            sband45.iPlate = 2 '前面(2)
+            sband45.iPosition = i
+            '縦・始めから正順・非端
+            sband45.iひも種 = enumひも種.i_縦
+            sband45.iひも番号 = i
+            sband45.bTerminal = False
+            list45.Add(sband45)
+
+            '135度
+            sband135 = New SSideUpBand
+            sband135.iPlate = 2 '前面(2)
+            sband135.iPosition = i
+            '横・始めから逆順・非端
+            sband135.iひも種 = enumひも種.i_横
+            sband135.iひも番号 = p_i横の四角数 - i + 1
+            sband135.bTerminal = False
+            list135.Add(sband135)
+        Next
+
+        '右側面(3)
+        For i As Integer = 1 To p_i縦の四角数
+            '45度
+            sband45 = New SSideUpBand
+            sband45.iPlate = 3 '右側面(3)
+            sband45.iPosition = i
+            '横・始めから正順・端
+            sband45.iひも種 = enumひも種.i_横
+            sband45.iひも番号 = i
+            sband45.bTerminal = True
+            list45.Add(sband45)
+
+            '135度
+            sband135 = New SSideUpBand
+            sband135.iPlate = 3 '右側面(3)
+            sband135.iPosition = i
+            '縦・後ろに正順・非端
+            sband135.iひも種 = enumひも種.i_縦
+            sband135.iひも番号 = p_i横ひもの本数 - p_i縦の四角数 + i
+            sband135.bTerminal = False
+            list135.Add(sband135)
+        Next
+
+        '背面(4)
+        For i As Integer = 1 To p_i横の四角数
+            '45度
+            sband45 = New SSideUpBand
+            sband45.iPlate = 4 '背面(4)
+            sband45.iPosition = i
+            '縦・後ろから逆順・端
+            sband45.iひも種 = enumひも種.i_縦
+            sband45.iひも番号 = p_i縦ひもの本数 - i + 1
+            sband45.bTerminal = True
+            list45.Add(sband45)
+
+            '135度
+            sband135 = New SSideUpBand
+            sband135.iPlate = 4 '背面(4)
+            sband135.iPosition = i
+            '横・後ろに正順・端
+            sband135.iひも種 = enumひも種.i_横
+            sband135.iひも番号 = p_i縦の四角数 + i
+            sband135.bTerminal = True
+            list135.Add(sband135)
+        Next
+
+        Return True
+    End Function
+
+    '現高さ位置の側面のひも配置
+    Public Function GetOriColorTable() As dstWork.tblOriColorDataTable
+        Dim list45 As New CSideUpBandList
+        Dim list135 As New CSideUpBandList
+        If Not setSideBandZero(list45, list135) Then
+            Return Nothing
+        End If
+
+        Dim plateNames() As String = My.Resources.CaptionPlateNames.Split(",")
+        Dim sideBandCount As Integer = list45.Count
+        Dim dHalf As Single = IIf(p_b高さ半四角, -0.5, 0)
+        Dim n倍の高さ As Integer = _d高さの四角数 * 2
+        Dim nShift45 As Integer = -((n倍の高さ + 1) \ 2)
+        Dim nShift135 As Integer = n倍の高さ \ 2
+
+        Dim oritable As New dstWork.tblOriColorDataTable
+        Dim row As dstWork.tblOriColorRow
+        For index As Integer = 0 To sideBandCount - 1
+            row = oritable.NewtblOriColorRow
+
+            row.f_index = index
+            row.f_iPlate = list45(index).iPlate
+            row.f_iPosition = list45(index).iPosition
+            row.f_s面名 = plateNames(row.f_iPlate)
+            row.f_s位置 = (list45(index).iPosition + dHalf).ToString
+
+            '45度位置
+            Dim sband45 As SSideUpBand = list45.ShiftAt(index, nShift45)
+            Dim r45 As tbl縦横展開Row = find縦横展開Row(sband45)
+            If r45 IsNot Nothing Then
+                row.f_iひも種_45 = sband45.iひも種
+                row.f_iひも番号_45 = sband45.iひも番号
+                row.f_bTerminal_45 = sband45.bTerminal
+                row.f_s端_45 = text端名(sband45.iひも種, sband45.bTerminal)
+                row.f_s色_45 = r45.f_s色
+                row.f_sひも名_45 = r45.f_sひも名
+                If sband45.bTerminal Then
+                    row.f_b外側_45 = r45.f_b外側区分2
+                    row.f_b内側_45 = r45.f_b内側区分2
+                    row.f_dひも長加算_45 = r45.f_dひも長加算2
+                Else
+                    row.f_b外側_45 = r45.f_b外側区分
+                    row.f_b内側_45 = r45.f_b内側区分
+                    row.f_dひも長加算_45 = r45.f_dひも長加算
+                End If
+                row.f_sゼロ面名_45 = plateNames(sband45.iPlate)
+                row.f_iゼロ位置_45 = sband45.iPosition
+
+            End If
+
+            '135度位置
+            Dim sband135 As SSideUpBand = list135.ShiftAt(index, nShift135)
+            Dim r135 As tbl縦横展開Row = find縦横展開Row(sband135)
+            If r135 IsNot Nothing Then
+                row.f_iひも種_135 = sband135.iひも種
+                row.f_iひも番号_135 = sband135.iひも番号
+                row.f_bTerminal_135 = sband135.bTerminal
+                row.f_s端_135 = text端名(sband135.iひも種, sband135.bTerminal)
+                row.f_s色_135 = r135.f_s色
+                row.f_sひも名_135 = r135.f_sひも名
+                If sband135.bTerminal Then
+                    row.f_b外側_135 = r135.f_b外側区分2
+                    row.f_b内側_135 = r135.f_b内側区分2
+                    row.f_dひも長加算_135 = r135.f_dひも長加算2
+                Else
+                    row.f_b外側_135 = r135.f_b外側区分
+                    row.f_b内側_135 = r135.f_b内側区分
+                    row.f_dひも長加算_135 = r135.f_dひも長加算
+                End If
+                row.f_sゼロ面名_135 = plateNames(sband135.iPlate)
+                row.f_iゼロ位置_135 = sband135.iPosition
+
+            End If
+
+            '外側
+            If row.f_b外側_135 Then
+                row.f_s外側色_45 = row.f_s色_135
+                row.f_b内側_45 = False '念のため
+            Else
+                row.f_s外側色_45 = row.f_s色_45
+            End If
+            If row.f_b外側_45 Then
+                row.f_s外側色_135 = row.f_s色_45
+                row.f_b内側_135 = False '念のため
+            Else
+                row.f_s外側色_135 = row.f_s色_135
+            End If
+
+            '内側
+            If row.f_b内側_135 Then
+                row.f_s内側色_45 = row.f_s色_135
+            Else
+                row.f_s内側色_45 = row.f_s色_45
+            End If
+            If row.f_b内側_45 Then
+                row.f_s内側色_135 = row.f_s色_45
+            Else
+                row.f_s内側色_135 = row.f_s色_135
+            End If
+
+            row.f_bEdited = False
+            oritable.Rows.Add(row)
+        Next
+
+
+        Return oritable
+    End Function
+
+    Public Function OriColor_RecordChanged(ByVal fldname As String, ByVal row As dstWork.tblOriColorRow) As Boolean
+        If String.IsNullOrEmpty(fldname) OrElse row Is Nothing Then
+            Return False
+        End If
+        Debug.Print("FieldName({0}) Record({1}) {2}", fldname, row.f_index, Now())
+
+
+        Select Case fldname
+            Case "f_b外側_135"
+                If row.f_b外側_135 Then
+                    row.f_s外側色_45 = row.f_s色_135
+                    '同時NG
+                    If row.f_b内側_135 Then
+                        row.f_b内側_135 = False
+                        row.f_s内側色_45 = row.f_s色_45
+                    End If
+                Else
+                    row.f_s外側色_45 = row.f_s色_45
+                End If
+
+            Case "f_b外側_45"
+                If row.f_b外側_45 Then
+                    row.f_s外側色_135 = row.f_s色_45
+                    '同時NG
+                    If row.f_b内側_45 Then
+                        row.f_b内側_45 = False
+                        row.f_s内側色_135 = row.f_s色_135
+                    End If
+                Else
+                    row.f_s外側色_135 = row.f_s色_135
+                End If
+
+            Case "f_b内側_135"
+                If row.f_b内側_135 Then
+                    row.f_s内側色_45 = row.f_s色_135
+                    '同時NG
+                    If row.f_b外側_135 Then
+                        row.f_b外側_135 = False
+                        row.f_s外側色_45 = row.f_s色_45
+                    End If
+                Else
+                    row.f_s内側色_45 = row.f_s色_45
+                End If
+
+            Case "f_b内側_45"
+                If row.f_b内側_45 Then
+                    row.f_s内側色_135 = row.f_s色_45
+                    '同時NG
+                    If row.f_b外側_45 Then
+                        row.f_b外側_45 = False
+                        row.f_s外側色_135 = row.f_s色_135
+                    End If
+                Else
+                    row.f_s内側色_135 = row.f_s色_135
+                End If
+
+            Case "f_dひも長加算_45"
+            Case "f_dひも長加算_135"
+
+            Case Else
+                Return False
+        End Select
+
+        row.f_bEdited = True
+        Return True
+    End Function
+
+    Public Function ClearOriColor(ByVal table As dstWork.tblOriColorDataTable) As Boolean
+        If table IsNot Nothing Then
+            'テーブル指定の場合
+            For Each row As dstWork.tblOriColorRow In table
+                '外側
+                If row.f_b外側_135 Then
+                    row.f_b外側_135 = False
+                    row.f_s外側色_45 = row.f_s色_45
+                    row.f_bEdited = True
+                End If
+                If row.f_b外側_45 Then
+                    row.f_b外側_45 = False
+                    row.f_s外側色_135 = row.f_s色_135
+                    row.f_bEdited = True
+                End If
+
+                '内側
+                If row.f_b内側_135 Then
+                    row.f_b内側_135 = False
+                    row.f_s内側色_45 = row.f_s色_135
+                    row.f_bEdited = True
+                End If
+                If row.f_b内側_45 Then
+                    row.f_b内側_45 = False
+                    row.f_s内側色_135 = row.f_s色_135
+                    row.f_bEdited = True
+                End If
+            Next
+        Else
+            '全展開レコード
+            Dim changed As Boolean = False
+            For Each row As tbl縦横展開Row In get横展開DataTable()
+                row.f_b外側区分2 = False
+                row.f_b内側区分2 = False
+                row.f_b外側区分 = False
+                row.f_b内側区分 = False
+            Next
+            For Each row As tbl縦横展開Row In get縦展開DataTable()
+                row.f_b外側区分2 = False
+                row.f_b内側区分2 = False
+                row.f_b外側区分 = False
+                row.f_b内側区分 = False
+            Next
+            'save横展開DataTable(changed)
+            'save縦展開DataTable(changed)
+        End If
+
+        Return True
+    End Function
+
+    Public Function SaveOriColorTable(ByVal table As dstWork.tblOriColorDataTable) As Boolean
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Return False
+        End If
+
+        Dim changed As Boolean = False
+        For Each row As dstWork.tblOriColorRow In table
+            If Not row.f_bEdited Then
+                Continue For
+            End If
+
+            Dim r45 As tbl縦横展開Row = find縦横展開Row(row.f_iひも種_45, row.f_iひも番号_45)
+            If r45 IsNot Nothing Then
+                If row.f_bTerminal_45 Then
+                    r45.f_b外側区分2 = row.f_b外側_45
+                    r45.f_b内側区分2 = row.f_b内側_45
+                    r45.f_dひも長加算2 = row.f_dひも長加算_45
+                Else
+                    r45.f_b外側区分 = row.f_b外側_45
+                    r45.f_b内側区分 = row.f_b内側_45
+                    r45.f_dひも長加算 = row.f_dひも長加算_45
+                End If
+            End If
+
+            Dim r135 As tbl縦横展開Row = find縦横展開Row(row.f_iひも種_135, row.f_iひも番号_135)
+            If r135 IsNot Nothing Then
+                If row.f_bTerminal_135 Then
+                    r135.f_b外側区分2 = row.f_b外側_135
+                    r135.f_b内側区分2 = row.f_b内側_135
+                    r135.f_dひも長加算2 = row.f_dひも長加算_135
+                Else
+                    r135.f_b外側区分 = row.f_b外側_135
+                    r135.f_b内側区分 = row.f_b内側_135
+                    r135.f_dひも長加算 = row.f_dひも長加算_135
+                End If
+            End If
+            changed = True
+        Next
+
+        save横展開DataTable(changed)
+        save縦展開DataTable(changed)
+        Return changed
+    End Function
 #End Region
 
 #Region "リスト出力"
@@ -1538,6 +1990,9 @@ Class clsCalcSquare45
         row.f_sカテゴリー = text四角数()
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        If p_is折りカラー処理 Then
+            row.f_s編みかた名 = text折りカラー編み()
+        End If
 
         '***底の縦横
         'このカテゴリーは先に行をつくる
@@ -1586,7 +2041,9 @@ Class clsCalcSquare45
                     tmp = tmps(i)
                 End If
                 If tmp IsNot Nothing AndAlso
-                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 Then
+                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 AndAlso
+                    lasttmp.f_b内側区分 = tmp.f_b内側区分 AndAlso lasttmp.f_b内側区分2 = tmp.f_b内側区分2 AndAlso
+                    lasttmp.f_b外側区分 = tmp.f_b外側区分 AndAlso lasttmp.f_b外側区分2 = tmp.f_b外側区分2 Then
                     '同じひも種・記号の継続
                     contcount += 1
                     If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
@@ -1599,6 +2056,18 @@ Class clsCalcSquare45
                 Else
                     '異なるので、まず先のレコードをまとめ出力
                     row.f_s編みかた名 = lasttmp.f_sひも名
+                    If p_is折りカラー処理 Then
+                        If lasttmp.f_b外側区分 Then
+                            row.f_s編みかた名 += String.Format(" {0}({1})", text外折り(), text端名(lasttmp.f_iひも種, False))
+                        ElseIf lasttmp.f_b内側区分 Then
+                            row.f_s編みかた名 += String.Format(" {0}({1})", text内折り(), text端名(lasttmp.f_iひも種, False))
+                        End If
+                        If lasttmp.f_b外側区分2 Then
+                            row.f_s編みかた名 += String.Format(" {0}({1})", text外折り(), text端名(lasttmp.f_iひも種, True))
+                        ElseIf lasttmp.f_b内側区分2 Then
+                            row.f_s編みかた名 += String.Format(" {0}({1})", text内折り(), text端名(lasttmp.f_iひも種, True))
+                        End If
+                    End If
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                     If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
@@ -1733,7 +2202,6 @@ Class clsCalcSquare45
         Return _frmMain.tpage四角数.Text
     End Function
 
-
     Private Function text追加品() As String
         Return _frmMain.tpage追加品.Text
     End Function
@@ -1817,6 +2285,48 @@ Class clsCalcSquare45
     Private Function text垂直ひも数() As String
         Return _frmMain.lbl垂直ひも数.Text
     End Function
+
+
+    Shared _ary左右() As String = My.Resources.CaptionExpand4To6.Split(",")
+    Shared _ary上下() As String = My.Resources.CaptionExpand8To2.Split(",")
+
+    Private Function text折りカラー編み() As String
+        Return _frmMain.chk折りカラー編み.Text
+    End Function
+
+    Private Function text横端名(ByVal isTerminal As Boolean) As String
+        If isTerminal Then
+            Return _ary左右(1) & My.Resources.CaptionTerminal  '右
+        Else
+            Return _ary左右(0) & My.Resources.CaptionTerminal '左
+        End If
+    End Function
+
+    Private Function text縦端名(ByVal isTerminal As Boolean) As String
+        If isTerminal Then
+            Return _ary上下(1) & My.Resources.CaptionTerminal '下
+        Else
+            Return _ary上下(0) & My.Resources.CaptionTerminal '上
+        End If
+    End Function
+
+    Private Function text端名(ByVal iひも種 As enumひも種, ByVal isTerminal As Boolean) As String
+        If iひも種 = enumひも種.i_横 Then
+            Return text横端名(isTerminal)
+        ElseIf iひも種 = enumひも種.i_縦 Then
+            Return text縦端名(isTerminal)
+        End If
+        Return Nothing
+    End Function
+
+    Private Function text外折り() As String
+        Return My.Resources.CaptionOriOutside
+    End Function
+
+    Private Function text内折り() As String
+        Return My.Resources.CaptionOriInside
+    End Function
+
 #End Region
 
 End Class
