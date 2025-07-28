@@ -990,6 +990,7 @@ Public Class clsMasterTables
         i_なし = 0
         i_左下
         i_中心
+        i_座標
 
     End Enum
 
@@ -1008,6 +1009,8 @@ Public Class clsMasterTables
         i_上半円_周
         i_横線
         i_縦線
+        i_線分
+        i_点
     End Enum
 
     Shared _描画位置table As dstWork.tblEnumDataTable = Nothing

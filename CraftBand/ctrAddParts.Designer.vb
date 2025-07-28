@@ -66,9 +66,10 @@ Partial Class ctrAddParts
         f_iひも本数3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_d出力ひも長3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_s記号3 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_i描画位置3 = New Windows.Forms.DataGridViewComboBoxColumn()
         f_b描画区分3 = New Windows.Forms.DataGridViewCheckBoxColumn()
+        f_i描画位置3 = New Windows.Forms.DataGridViewComboBoxColumn()
         f_d描画厚3 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s座標 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i描画形状3 = New Windows.Forms.DataGridViewComboBoxColumn()
         f_sメモ3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_bError3 = New Windows.Forms.DataGridViewCheckBoxColumn()
@@ -96,16 +97,16 @@ Partial Class ctrAddParts
         Panel.Enabled = False
         Panel.Location = New System.Drawing.Point(3, 3)
         Panel.Name = "Panel"
-        Panel.Size = New System.Drawing.Size(840, 413)
+        Panel.Size = New System.Drawing.Size(840, 392)
         Panel.TabIndex = 0
         ' 
         ' lbl長さ_単位
         ' 
         lbl長さ_単位.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
         lbl長さ_単位.AutoSize = True
-        lbl長さ_単位.Location = New System.Drawing.Point(599, 346)
+        lbl長さ_単位.Location = New System.Drawing.Point(599, 329)
         lbl長さ_単位.Name = "lbl長さ_単位"
-        lbl長さ_単位.Size = New System.Drawing.Size(39, 20)
+        lbl長さ_単位.Size = New System.Drawing.Size(37, 19)
         lbl長さ_単位.TabIndex = 20
         lbl長さ_単位.Text = "単位"
         ' 
@@ -114,10 +115,10 @@ Partial Class ctrAddParts
         nud長さ.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
         nud長さ.DecimalPlaces = 2
         nud長さ.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
-        nud長さ.Location = New System.Drawing.Point(559, 377)
+        nud長さ.Location = New System.Drawing.Point(559, 358)
         nud長さ.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         nud長さ.Name = "nud長さ"
-        nud長さ.Size = New System.Drawing.Size(86, 27)
+        nud長さ.Size = New System.Drawing.Size(86, 26)
         nud長さ.TabIndex = 19
         ToolTip1.SetToolTip(nud長さ, "付属品の寸法")
         ' 
@@ -125,9 +126,9 @@ Partial Class ctrAddParts
         ' 
         lbl長さ.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
         lbl長さ.AutoSize = True
-        lbl長さ.Location = New System.Drawing.Point(559, 346)
+        lbl長さ.Location = New System.Drawing.Point(559, 329)
         lbl長さ.Name = "lbl長さ"
-        lbl長さ.Size = New System.Drawing.Size(34, 20)
+        lbl長さ.Size = New System.Drawing.Size(32, 19)
         lbl長さ.TabIndex = 18
         lbl長さ.Text = "長さ"
         ' 
@@ -135,9 +136,9 @@ Partial Class ctrAddParts
         ' 
         lbl点数.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
         lbl点数.AutoSize = True
-        lbl点数.Location = New System.Drawing.Point(651, 346)
+        lbl点数.Location = New System.Drawing.Point(651, 329)
         lbl点数.Name = "lbl点数"
-        lbl点数.Size = New System.Drawing.Size(39, 20)
+        lbl点数.Size = New System.Drawing.Size(37, 19)
         lbl点数.TabIndex = 21
         lbl点数.Text = "点数"
         ' 
@@ -145,18 +146,18 @@ Partial Class ctrAddParts
         ' 
         lbl付属品名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
         lbl付属品名.AutoSize = True
-        lbl付属品名.Location = New System.Drawing.Point(369, 346)
+        lbl付属品名.Location = New System.Drawing.Point(369, 329)
         lbl付属品名.Name = "lbl付属品名"
-        lbl付属品名.Size = New System.Drawing.Size(69, 20)
+        lbl付属品名.Size = New System.Drawing.Size(65, 19)
         lbl付属品名.TabIndex = 16
         lbl付属品名.Text = "付属品名"
         ' 
         ' nud点数
         ' 
         nud点数.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        nud点数.Location = New System.Drawing.Point(651, 377)
+        nud点数.Location = New System.Drawing.Point(651, 358)
         nud点数.Name = "nud点数"
-        nud点数.Size = New System.Drawing.Size(60, 27)
+        nud点数.Size = New System.Drawing.Size(60, 26)
         nud点数.TabIndex = 22
         ToolTip1.SetToolTip(nud点数, "追加する点数")
         nud点数.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -164,9 +165,9 @@ Partial Class ctrAddParts
         ' btn削除_追加品
         ' 
         btn削除_追加品.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn削除_追加品.Location = New System.Drawing.Point(243, 358)
+        btn削除_追加品.Location = New System.Drawing.Point(243, 340)
         btn削除_追加品.Name = "btn削除_追加品"
-        btn削除_追加品.Size = New System.Drawing.Size(111, 46)
+        btn削除_追加品.Size = New System.Drawing.Size(111, 44)
         btn削除_追加品.TabIndex = 15
         btn削除_追加品.Text = "削除(&R)"
         ToolTip1.SetToolTip(btn削除_追加品, "選択した行を削除します")
@@ -175,9 +176,9 @@ Partial Class ctrAddParts
         ' btn追加_追加品
         ' 
         btn追加_追加品.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn追加_追加品.Location = New System.Drawing.Point(722, 358)
+        btn追加_追加品.Location = New System.Drawing.Point(722, 340)
         btn追加_追加品.Name = "btn追加_追加品"
-        btn追加_追加品.Size = New System.Drawing.Size(111, 46)
+        btn追加_追加品.Size = New System.Drawing.Size(111, 44)
         btn追加_追加品.TabIndex = 23
         btn追加_追加品.Text = "追加(&A)"
         ToolTip1.SetToolTip(btn追加_追加品, "付属品を追加します")
@@ -186,9 +187,9 @@ Partial Class ctrAddParts
         ' btn下へ_追加品
         ' 
         btn下へ_追加品.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn下へ_追加品.Location = New System.Drawing.Point(126, 358)
+        btn下へ_追加品.Location = New System.Drawing.Point(126, 340)
         btn下へ_追加品.Name = "btn下へ_追加品"
-        btn下へ_追加品.Size = New System.Drawing.Size(111, 46)
+        btn下へ_追加品.Size = New System.Drawing.Size(111, 44)
         btn下へ_追加品.TabIndex = 14
         btn下へ_追加品.Text = "下へ(&D)"
         ToolTip1.SetToolTip(btn下へ_追加品, "選択した行を下に移動します")
@@ -197,9 +198,9 @@ Partial Class ctrAddParts
         ' btn上へ_追加品
         ' 
         btn上へ_追加品.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn上へ_追加品.Location = New System.Drawing.Point(9, 358)
+        btn上へ_追加品.Location = New System.Drawing.Point(9, 340)
         btn上へ_追加品.Name = "btn上へ_追加品"
-        btn上へ_追加品.Size = New System.Drawing.Size(111, 46)
+        btn上へ_追加品.Size = New System.Drawing.Size(111, 44)
         btn上へ_追加品.TabIndex = 13
         btn上へ_追加品.Text = "上へ(&U)"
         ToolTip1.SetToolTip(btn上へ_追加品, "選択した行を上に移動します")
@@ -209,9 +210,9 @@ Partial Class ctrAddParts
         ' 
         cmb付属品名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
         cmb付属品名.FormattingEnabled = True
-        cmb付属品名.Location = New System.Drawing.Point(369, 376)
+        cmb付属品名.Location = New System.Drawing.Point(369, 357)
         cmb付属品名.Name = "cmb付属品名"
-        cmb付属品名.Size = New System.Drawing.Size(184, 28)
+        cmb付属品名.Size = New System.Drawing.Size(184, 27)
         cmb付属品名.TabIndex = 17
         ToolTip1.SetToolTip(cmb付属品名, "追加したい付属品名を選択します")
         ' 
@@ -222,13 +223,13 @@ Partial Class ctrAddParts
         dgv追加品.AutoGenerateColumns = False
         dgv追加品.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv追加品.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_d縦対横比率, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_i描画位置3, f_b描画区分3, f_d描画厚3, f_i描画形状3, f_sメモ3, f_bError3})
+        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_d縦対横比率, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_b描画区分3, f_i描画位置3, f_d描画厚3, f_s座標, f_i描画形状3, f_sメモ3, f_bError3})
         dgv追加品.DataSource = BindingSource追加品
         dgv追加品.Location = New System.Drawing.Point(6, 8)
         dgv追加品.Name = "dgv追加品"
         dgv追加品.RowHeadersWidth = 51
         dgv追加品.RowTemplate.Height = 29
-        dgv追加品.Size = New System.Drawing.Size(828, 327)
+        dgv追加品.Size = New System.Drawing.Size(828, 311)
         dgv追加品.TabIndex = 12
         ' 
         ' BindingSource追加品
@@ -429,18 +430,6 @@ Partial Class ctrAddParts
         f_s記号3.Visible = False
         f_s記号3.Width = 125
         ' 
-        ' f_i描画位置3
-        ' 
-        f_i描画位置3.DataPropertyName = "f_i描画位置"
-        f_i描画位置3.HeaderText = "描画位置"
-        f_i描画位置3.MinimumWidth = 6
-        f_i描画位置3.Name = "f_i描画位置3"
-        f_i描画位置3.ReadOnly = True
-        f_i描画位置3.Resizable = Windows.Forms.DataGridViewTriState.True
-        f_i描画位置3.ToolTipText = "画像に描画する場合はその位置を指定"
-        f_i描画位置3.Visible = False
-        f_i描画位置3.Width = 125
-        ' 
         ' f_b描画区分3
         ' 
         f_b描画区分3.DataPropertyName = "f_b描画区分"
@@ -449,6 +438,16 @@ Partial Class ctrAddParts
         f_b描画区分3.Name = "f_b描画区分3"
         f_b描画区分3.ToolTipText = "プレビュー図に描画する場合チェック"
         f_b描画区分3.Width = 125
+        ' 
+        ' f_i描画位置3
+        ' 
+        f_i描画位置3.DataPropertyName = "f_i描画位置"
+        f_i描画位置3.HeaderText = "描画位置"
+        f_i描画位置3.MinimumWidth = 6
+        f_i描画位置3.Name = "f_i描画位置3"
+        f_i描画位置3.Resizable = Windows.Forms.DataGridViewTriState.True
+        f_i描画位置3.ToolTipText = "画像に描画する場合はその位置を指定"
+        f_i描画位置3.Width = 125
         ' 
         ' f_d描画厚3
         ' 
@@ -461,6 +460,15 @@ Partial Class ctrAddParts
         f_d描画厚3.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_d描画厚3.ToolTipText = "画像に描画する場合の厚さ(幅)"
         f_d描画厚3.Width = 125
+        ' 
+        ' f_s座標
+        ' 
+        f_s座標.DataPropertyName = "f_s座標"
+        f_s座標.HeaderText = "座標"
+        f_s座標.Name = "f_s座標"
+        f_s座標.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        f_s座標.ToolTipText = "x , y の形式で指定してください"
+        f_s座標.Visible = False
         ' 
         ' f_i描画形状3
         ' 
@@ -494,12 +502,12 @@ Partial Class ctrAddParts
         ' 
         ' ctrAddParts
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
         AutoSizeMode = Windows.Forms.AutoSizeMode.GrowAndShrink
         Controls.Add(Panel)
         Name = "ctrAddParts"
-        Size = New System.Drawing.Size(872, 454)
+        Size = New System.Drawing.Size(872, 431)
         Panel.ResumeLayout(False)
         Panel.PerformLayout()
         CType(nud長さ, ComponentModel.ISupportInitialize).EndInit()
@@ -542,9 +550,10 @@ Partial Class ctrAddParts
     Friend WithEvents f_iひも本数3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_d出力ひも長3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s記号3 As Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents f_i描画位置3 As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents f_b描画区分3 As Windows.Forms.DataGridViewCheckBoxColumn
+    Friend WithEvents f_i描画位置3 As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents f_d描画厚3 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_s座標 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i描画形状3 As Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents f_sメモ3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_bError3 As Windows.Forms.DataGridViewCheckBoxColumn

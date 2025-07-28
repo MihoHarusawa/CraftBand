@@ -42,6 +42,7 @@ Public Class ctrAddParts
     Dim _FormCaption As String
     Dim _TabPageName As String
     Dim _RefLenTable As New dstWork.tblEnumDataTable
+    Dim _colIndexCood As Integer = -1
 
     '参照値 #63
     Friend Shared _Refvalues() As Double   '(0)は有効フラグ
@@ -172,9 +173,11 @@ Public Class ctrAddParts
         setOptions()
         setBasics()
         _Calc.setData(works)
-        If Not _Calc.recalc_追加品() Then
+        Dim isNeedCood As Boolean = False
+        If Not _Calc.recalc_追加品(isNeedCood) Then
             RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
         End If
+        showCood(isNeedCood, True)
 
         BindingSource追加品.DataSource = works.p_tbl追加品
         BindingSource追加品.Sort = "f_i番号 , f_iひも番号"
@@ -201,7 +204,8 @@ Public Class ctrAddParts
     Function SetRefValueAndCheckError(ByVal works As clsDataTables, ByVal refvalues() As Double) As String
         _Refvalues = refvalues
         _Calc.setData(works)
-        If Not _Calc.recalc_追加品() Then
+        Dim dmy As Boolean
+        If Not _Calc.recalc_追加品(dmy) Then
             Return _Calc.p_sメッセージ
         End If
         Return Nothing
@@ -268,9 +272,32 @@ Public Class ctrAddParts
 
         '※フォームのデザイン時にもLoadされますので、グローバル参照値は参照できない
 
+        '"座標"のカラム番号
+        For Each col As DataGridViewColumn In dgv追加品.Columns
+            If col.DataPropertyName = "f_s座標" Then
+                _colIndexCood = col.Index
+                Exit For
+            End If
+        Next
+
         _isLoadingData = False 'Designer.vb描画完了
     End Sub
 
+    '「座標」カラムの表示
+    Private Sub showCood(ByVal isNeedCood As Boolean, Optional ByVal asSpecified As Boolean = False)
+        If _colIndexCood < 0 Then 'ゼロより大
+            Return
+        End If
+        If asSpecified Then
+            '指示通りにする
+            dgv追加品.Columns(_colIndexCood).Visible = isNeedCood
+        Else
+            '既に表示されていたら残す
+            If isNeedCood Then
+                dgv追加品.Columns(_colIndexCood).Visible = True
+            End If
+        End If
+    End Sub
 
     Private Sub btn追加_追加品_Click(sender As Object, e As EventArgs) Handles btn追加_追加品.Click
         Dim table As tbl追加品DataTable = Nothing
@@ -285,9 +312,11 @@ Public Class ctrAddParts
             row) Then
 
             dgv追加品.NumberPositionsSelect(row.f_i番号)
-            If Not _Calc.calc_追加品(row, "f_i点数") Then
+            Dim isNeedCood As Boolean = False
+            If Not _Calc.calc_追加品(row, "f_i点数", isNeedCood) Then
                 RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
             End If
+            showCood(isNeedCood)
 
         Else
             MessageBox.Show(_Calc.p_sメッセージ, _FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -346,7 +375,8 @@ Public Class ctrAddParts
 
         clsDataTables.RemoveNumberFromTable(table, number)
         clsDataTables.FillNumber(table) '#16
-        If Not _Calc.calc_追加品(Nothing, Nothing) Then
+        Dim dmy As Boolean '座標表示は残す
+        If Not _Calc.calc_追加品(Nothing, Nothing, dmy) Then
             RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
         Else
             RaiseEvent AddPartsError(Me, New AddPartsEventArgs(Nothing)) 'OK
@@ -362,11 +392,14 @@ Public Class ctrAddParts
         End If
 
         Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv追加品_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv追加品_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
+        '他のセル値に反映
         If _Calc.IsDataPropertyName追加品(DataPropertyName) Then
-            If Not _Calc.calc_追加品(current.Row, DataPropertyName) Then
+            Dim isNeedCood As Boolean = False
+            If Not _Calc.calc_追加品(current.Row, DataPropertyName, isNeedCood) Then
                 RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
             End If
+            showCood(isNeedCood)
         End If
     End Sub
 
@@ -432,6 +465,7 @@ Public Class ctrAddParts
             groupRow.SetNameIndexValue("f_b描画区分", grpMst, "f_b描画区分初期値")
             groupRow.SetNameIndexValue("f_d描画厚", grpMst, "f_d描画厚初期値")
             groupRow.SetNameIndexValue("f_b集計対象外区分", grpMst, "f_b集計対象外区分初期値")
+            groupRow.SetNameIndexValue("f_i描画位置", grpMst, "f_i描画位置") '#97
 
             Dim first As Boolean = True
             For Each drow As clsDataRow In groupRow
@@ -447,41 +481,46 @@ Public Class ctrAddParts
         End Function
 
         '更新処理が必要なフィールド名
-        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ", "f_i長さ参照", "f_dひも長加算"}
+        Dim _fields追加品() As String = {"f_i何本幅", "f_i点数", "f_d長さ", "f_i長さ参照", "f_dひも長加算", "f_i描画位置"}
         Function IsDataPropertyName追加品(ByVal name As String) As Boolean
             Return _fields追加品.Contains(name)
         End Function
 
-        Function calc_追加品(ByVal row As tbl追加品Row, ByVal dataPropertyName As String) As Boolean
+        Function calc_追加品(ByVal row As tbl追加品Row, ByVal dataPropertyName As String, ByRef isNeedCood As Boolean) As Boolean
             Dim ret As Boolean = True
             If row IsNot Nothing Then
                 '追加もしくは更新
                 Dim cond As String = String.Format("f_i番号 = {0}", row.f_i番号)
                 Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond), "f_iひも番号")
+
                 If dataPropertyName = "f_i点数" Then
-                    Dim i点数 As Integer = row.f_i点数
-                    groupRow.SetNameValue("f_i点数", i点数)
-                ElseIf dataPropertyName = "f_i長さ参照" Then '#63
-                    Dim d長さ As Double
-                    Dim d縦対横比率 As Double
-                    If isRefValue(row.f_i長さ参照, d長さ, d縦対横比率) Then
-                        row.f_d長さ = d長さ
-                        row.f_d縦対横比率 = d縦対横比率
+                        Dim i点数 As Integer = row.f_i点数
+                        groupRow.SetNameValue("f_i点数", i点数)
+                    ElseIf dataPropertyName = "f_i長さ参照" Then '#63
+                        Dim d長さ As Double
+                        Dim d縦対横比率 As Double
+                        If isRefValue(row.f_i長さ参照, d長さ, d縦対横比率) Then
+                            row.f_d長さ = d長さ
+                            row.f_d縦対横比率 = d縦対横比率
+                        End If
+                    ElseIf dataPropertyName = "f_d長さ" Then
+                        row.f_i長さ参照 = 0 '入力値
+                        row.f_d縦対横比率 = getAspectRatio()
                     End If
-                ElseIf dataPropertyName = "f_d長さ" Then
-                    row.f_i長さ参照 = 0 '入力値
-                    row.f_d縦対横比率 = getAspectRatio()
-                End If
                 ret = ret And set_groupRow追加品(groupRow)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Change: {0}", groupRow.ToString)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Change: {0}", groupRow.ToString)
+                If enum描画位置.i_座標 <= groupRow.GetNameValueMax("f_i描画位置") Then '最終値
+                    isNeedCood = True
+                End If
+
             Else
                 '削除, 念のため他一式チェック
-                ret = recalc_追加品()
+                ret = recalc_追加品(isNeedCood)
             End If
             Return ret
         End Function
 
-        Function recalc_追加品() As Boolean
+        Function recalc_追加品(ByRef isNeedCood As Boolean) As Boolean
             Dim res = (From row As tbl追加品Row In _Data.p_tbl追加品
                        Select Num = row.f_i番号
                        Order By Num).Distinct
@@ -491,6 +530,9 @@ Public Class ctrAddParts
                 Dim cond As String = String.Format("f_i番号 = {0}", num)
                 Dim groupRow = New clsGroupDataRow(_Data.p_tbl追加品.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
                 ret = ret And set_groupRow追加品(groupRow)
+                If enum描画位置.i_座標 <= groupRow.GetNameValueMax("f_i描画位置") Then '最終値
+                    isNeedCood = True
+                End If
             Next
 
             Return ret
@@ -513,7 +555,6 @@ Public Class ctrAddParts
                 Return False
             Else
                 Dim ret As Boolean = True
-
                 Dim i直前の何本幅 As Integer = 0
                 For Each drow As clsDataRow In groupRow
                     'Ver1.7.3以前のデータ対応
@@ -547,7 +588,10 @@ Public Class ctrAddParts
 
                             '常にマスタ参照
                             drow.Value("f_i描画形状") = mst.Value("f_i描画形状")
-                            drow.Value("f_i描画位置") = mst.Value("f_i描画位置")
+                            '#97
+                            If drow.IsNull("f_i描画位置") Then
+                                drow.Value("f_i描画位置") = mst.Value("f_i描画位置")
+                            End If
 
                             'Ver1.7.3以前のデータ対応
                             If drow.IsNull("f_d描画厚") Then

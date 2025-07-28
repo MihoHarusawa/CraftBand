@@ -472,7 +472,7 @@ Class clsCalcSquare45
     '#96 折りカラー編み処理対象
     ReadOnly Property p_is折りカラー処理 As Boolean
         Get
-            Return _b折りカラー編み AndAlso Not p_b本幅変更あり
+            Return _b折りカラー編み AndAlso 0 < _d高さの四角数 AndAlso Not p_b本幅変更あり
         End Get
     End Property
 
@@ -1705,7 +1705,6 @@ Class clsCalcSquare45
             Return Nothing
         End If
 
-        Dim plateNames() As String = My.Resources.CaptionPlateNames.Split(",")
         Dim sideBandCount As Integer = list45.Count
         Dim dHalf As Single = IIf(p_b高さ半四角, -0.5, 0)
         Dim n倍の高さ As Integer = _d高さの四角数 * 2
@@ -1720,7 +1719,7 @@ Class clsCalcSquare45
             row.f_index = index
             row.f_iPlate = list45(index).iPlate
             row.f_iPosition = list45(index).iPosition
-            row.f_s面名 = plateNames(row.f_iPlate)
+            row.f_s面名 = clsImageData.BasketPlateString(row.f_iPlate)
             row.f_s位置 = (list45(index).iPosition + dHalf).ToString
 
             '45度位置
@@ -1742,7 +1741,7 @@ Class clsCalcSquare45
                     row.f_b内側_45 = r45.f_b内側区分
                     row.f_dひも長加算_45 = r45.f_dひも長加算
                 End If
-                row.f_sゼロ面名_45 = plateNames(sband45.iPlate)
+                row.f_sゼロ面名_45 = clsImageData.BasketPlateString(sband45.iPlate)
                 row.f_iゼロ位置_45 = sband45.iPosition
 
             End If
@@ -1766,7 +1765,7 @@ Class clsCalcSquare45
                     row.f_b内側_135 = r135.f_b内側区分
                     row.f_dひも長加算_135 = r135.f_dひも長加算
                 End If
-                row.f_sゼロ面名_135 = plateNames(sband135.iPlate)
+                row.f_sゼロ面名_135 = clsImageData.BasketPlateString(sband135.iPlate)
                 row.f_iゼロ位置_135 = sband135.iPosition
 
             End If

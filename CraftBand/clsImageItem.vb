@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Runtime.ConstrainedExecution
 Imports System.Text
 Imports System.Windows.Forms
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
@@ -137,6 +138,43 @@ Public Class clsImageItem
         Public Overrides Function ToString() As String
             Return String.Format("({0:f1},{1:f1})", X, Y)
         End Function
+
+        Public Function FromString(ByVal obj As Object) As Boolean
+            '空やNullは原点とします
+            If obj Is Nothing OrElse IsDBNull(obj) Then
+                Zero()
+                Return True
+            End If
+            Dim str As String = CStr(obj)
+            If String.IsNullOrWhiteSpace(str) Then
+                Zero()
+                Return True
+            End If
+
+            '文字列処理
+            str = str.Trim()
+            If str.StartsWith("(") AndAlso str.EndsWith(")") Then
+                str = str.Substring(1, str.Length - 2).Trim()
+            End If
+
+            '文字があるのに形式が合わなければNG
+            Dim parts = str.Split(","c)
+            If parts.Length <> 2 Then
+                Return False
+            End If
+
+            '数値に変換（小数・マイナス対応）
+            Dim xVal As Double, yVal As Double
+            If Double.TryParse(parts(0).Trim(), Globalization.NumberStyles.Float, Globalization.CultureInfo.InvariantCulture, xVal) AndAlso
+               Double.TryParse(parts(1).Trim(), Globalization.NumberStyles.Float, Globalization.CultureInfo.InvariantCulture, yVal) Then
+                X = xVal
+                Y = yVal
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
     End Structure
 
     'delta:差分
@@ -676,9 +714,10 @@ Public Class clsImageItem
     Structure S領域
         Implements IComparable(Of S領域)
 
-        Public p右上 As S実座標
+        Public p右上 As S実座標 '※直接セットする場合は位置関係に注意のこと
         Public p左下 As S実座標
 
+        '位置関係を使う場合はこちら
         Sub New(ByVal p1 As S実座標, ByVal p2 As S実座標)
             x最左 = mdlUnit.Min(p1.X, p2.X)
             x最右 = mdlUnit.Max(p1.X, p2.X)
@@ -700,6 +739,11 @@ Public Class clsImageItem
                 Return p右上.IsZero AndAlso p左下.IsZero
             End Get
         End Property
+
+        Function IsDot() As Boolean
+            Return p右上.Near(p左下)
+        End Function
+
 
         '原点の四方に描画の想定
         Sub Clear()
@@ -813,57 +857,69 @@ Public Class clsImageItem
             End Get
         End Property
 
+        'もとの位置関係によらず関係性保証
+        ReadOnly Property 外接領域 As S領域
+            Get
+                Dim r As S領域
+                r.x最左 = mdlUnit.Min(p右上.X, p左下.X)
+                r.x最右 = mdlUnit.Max(p右上.X, p左下.X)
+                r.y最下 = mdlUnit.Min(p右上.Y, p左下.Y)
+                r.y最上 = mdlUnit.Max(p右上.Y, p左下.Y)
+                Return r
+            End Get
+        End Property
+
         '両方を含む領域
         Function get拡大領域(ByVal cur As S領域) As S領域
             Dim large As S領域
-            large.x最左 = mdlUnit.Min(x最左, cur.x最左)
-            large.x最右 = mdlUnit.Max(x最右, cur.x最右)
-            large.y最下 = mdlUnit.Min(y最下, cur.y最下)
-            large.y最上 = mdlUnit.Max(y最上, cur.y最上)
+            large.x最左 = mdlUnit.Min(p右上.X, p左下.X, cur.p右上.X, cur.p左下.X)
+            large.x最右 = mdlUnit.Max(p右上.X, p左下.X, cur.p右上.X, cur.p左下.X)
+            large.y最下 = mdlUnit.Min(p右上.Y, p左下.Y, cur.p右上.Y, cur.p左下.Y)
+            large.y最上 = mdlUnit.Max(p右上.Y, p左下.Y, cur.p右上.Y, cur.p左下.Y)
             Return large
         End Function
 
         Function get拡大領域(ByVal cur As S四隅) As S領域
-            Dim large As S領域
-            large.x最左 = mdlUnit.Min(x最左, cur.x最左)
-            large.x最右 = mdlUnit.Max(x最右, cur.x最右)
-            large.y最下 = mdlUnit.Min(y最下, cur.y最下)
-            large.y最上 = mdlUnit.Max(y最上, cur.y最上)
+            Dim large As S領域 = 外接領域
+            large.x最左 = mdlUnit.Min(large.x最左, cur.x最左)
+            large.x最右 = mdlUnit.Max(large.x最右, cur.x最右)
+            large.y最下 = mdlUnit.Min(large.y最下, cur.y最下)
+            large.y最上 = mdlUnit.Max(large.y最上, cur.y最上)
             Return large
         End Function
 
         Function get拡大領域(ByVal p As S実座標) As S領域
-            Dim large As S領域
-            large.x最左 = mdlUnit.Min(x最左, p.X)
-            large.x最右 = mdlUnit.Max(x最右, p.X)
-            large.y最下 = mdlUnit.Min(y最下, p.Y)
-            large.y最上 = mdlUnit.Max(y最上, p.Y)
+            Dim large As S領域 = 外接領域
+            large.x最左 = mdlUnit.Min(large.x最左, p.X)
+            large.x最右 = mdlUnit.Max(large.x最右, p.X)
+            large.y最下 = mdlUnit.Min(large.y最下, p.Y)
+            large.y最上 = mdlUnit.Max(large.y最上, p.Y)
             Return large
         End Function
 
         'マイナス値もそのまま処理します
         Function get拡大領域(ByVal width As Double) As S領域
-            Dim large As S領域
-            large.x最左 = x最左 - width
-            large.x最右 = x最右 + width
-            large.y最下 = y最下 - width
-            large.y最上 = y最上 + width
+            Dim large As S領域 = 外接領域
+            large.x最左 = large.x最左 - width
+            large.x最右 = large.x最右 + width
+            large.y最下 = large.y最下 - width
+            large.y最上 = large.y最上 + width
             Return large
         End Function
 
-
         '領域内の点か？
         Function isInner(ByVal p As S実座標) As Boolean
-            If p.X < x最左 AndAlso Not NearlyEqual(x最左, p.X) Then
+            Dim large As S領域 = 外接領域
+            If p.X < large.x最左 AndAlso Not NearlyEqual(large.x最左, p.X) Then
                 Return False
             End If
-            If x最右 < p.X AndAlso Not NearlyEqual(x最右, p.X) Then
+            If large.x最右 < p.X AndAlso Not NearlyEqual(large.x最右, p.X) Then
                 Return False
             End If
-            If p.Y < y最下 AndAlso Not NearlyEqual(y最下, p.Y) Then
+            If p.Y < large.y最下 AndAlso Not NearlyEqual(large.y最下, p.Y) Then
                 Return False
             End If
-            If y最上 < p.Y AndAlso Not NearlyEqual(y最上, p.Y) Then
+            If large.y最上 < p.Y AndAlso Not NearlyEqual(large.y最上, p.Y) Then
                 Return False
             End If
             Return True
@@ -2128,8 +2184,10 @@ Public Class clsImageItem
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._付属品
-                r描画領域 = m_rひも位置.get拡大領域(m_dひも幅 / 2)
+                Debug.Print("m_dひも幅({0}) m_rひも位置 {1}", m_dひも幅, m_rひも位置.ToString)
+                r描画領域 = m_rひも位置.get拡大領域(m_dひも幅)
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
+                Debug.Print("r描画領域({0}) ", r描画領域.ToString)
 
             Case ImageTypeEnum._底枠, ImageTypeEnum._四隅領域, ImageTypeEnum._四隅領域線
                 r描画領域 = m_a四隅.r外接領域

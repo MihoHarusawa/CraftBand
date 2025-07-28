@@ -1438,7 +1438,8 @@ Public Class frmMain
     Sub Show折りカラー()
         'タブ切り替えタイミングのため、表示は更新済
         If Not _clsCalcSquare45.p_is折りカラー処理 Then
-            MessageBox.Show("本幅の変更があるため対象外となります", Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            '折りカラー処理できません。高さをセットし本幅を一致させてください。
+            MessageBox.Show(My.Resources.MsgCannotOricolor, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             dgvOriColor.Visible = False
             Exit Sub
         End If
@@ -1460,12 +1461,17 @@ Public Class frmMain
     End Function
 
     Function save折りカラー() As Boolean
-        Dim oriColorTable As dstWork.tblOriColorDataTable = dgvOriColor.DataSource
-        If oriColorTable Is Nothing Then
+        Try
+            Dim oriColorTable As dstWork.tblOriColorDataTable = dgvOriColor.DataSource
+            If oriColorTable Is Nothing Then
+                Return False
+            Else
+                Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
+            End If
+
+        Catch ex As Exception
             Return False
-        Else
-            Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
-        End If
+        End Try
     End Function
 
 
@@ -1698,7 +1704,7 @@ Public Class frmMain
         Dim updown As clsUpDown = _clsCalcSquare45.fitsizeひも上下(chk横の辺.Checked, nud垂直に.Value, nud底に.Value, takasa)
         If updown Is Nothing OrElse Not updown.IsValid(False) Then
             '現在の値では合わせることはできません。
-            MessageBox.Show(My.Resources.MessageCannotSuit & _clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(My.Resources.MsgCannotSuit & _clsCalcSquare45.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
         editUpDown.Replace(updown)

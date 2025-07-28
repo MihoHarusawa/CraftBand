@@ -191,7 +191,7 @@
     <value>編集中のデータを保存しますか？</value>
     <comment>frmMain</comment>
   </data>
-  <data name="MessageCannotSuit" xml:space="preserve">
+  <data name="MsgCannotSuit" xml:space="preserve">
     <value>現在の値では合わせることはできません。</value>
     <comment>frmMain</comment>
   </data>
@@ -222,9 +222,6 @@
   <data name="MsgCannotEdit" xml:space="preserve">
     <value>現在の値で編集することはできません。</value>
   </data>
-  <data name="CaptionPlateNames" xml:space="preserve">
-    <value>底面,左側面,前面,右側面,背面</value>
-  </data>
   <data name="CaptionTerminal" xml:space="preserve">
     <value>端</value>
   </data>
@@ -233,5 +230,9 @@
   </data>
   <data name="CaptionOriOutside" xml:space="preserve">
     <value>外折り</value>
+  </data>
+  <data name="MsgCannotOricolor" xml:space="preserve">
+    <value>折りカラー処理できません。高さをセットし本幅を一致させてください。</value>
+    <comment>frmMain</comment>
   </data>
 </root>

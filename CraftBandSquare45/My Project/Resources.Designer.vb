@@ -268,15 +268,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  底面,左側面,前面,右側面,背面 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property CaptionPlateNames() As String
-            Get
-                Return ResourceManager.GetString("CaptionPlateNames", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  端 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionTerminal() As String
@@ -313,15 +304,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  現在の値では合わせることはできません。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property MessageCannotSuit() As String
-            Get
-                Return ResourceManager.GetString("MessageCannotSuit", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  側面の高さが異なるため直方体になりません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ModelDiffHeight() As String
@@ -354,6 +336,24 @@ Namespace My.Resources
         Friend ReadOnly Property MsgCannotEdit() As String
             Get
                 Return ResourceManager.GetString("MsgCannotEdit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  折りカラー処理できません。高さをセットし本幅を一致させてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgCannotOricolor() As String
+            Get
+                Return ResourceManager.GetString("MsgCannotOricolor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  現在の値では合わせることはできません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgCannotSuit() As String
+            Get
+                Return ResourceManager.GetString("MsgCannotSuit", resourceCulture)
             End Get
         End Property
         

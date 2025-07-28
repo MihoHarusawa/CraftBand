@@ -714,7 +714,7 @@ Public Class clsModelSquare45
             _data各面(pidx).ResetStartPoint()
             _path各面画像(pidx) = IO.Path.Combine(IO.Path.GetTempPath, IO.Path.ChangeExtension(_PlateNames(pidx), CImageDraw.cImageClipFileExtention))
 
-#If 1 Then 'DEBUG Then
+#If 0 Then 'DEBUG Then
             'Debug用・生成したデータファイルを保存
             '※Ver1.6より古いデータは、保存処理で幅が不一致になる可能性があります
             Dim fdir As String = IO.Path.Combine(IO.Path.GetTempPath, GetShortExeName(g_enumExeName))

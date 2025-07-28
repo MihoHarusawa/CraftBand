@@ -85,11 +85,11 @@ Partial Class frmOptions
         dgvData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgvData.Columns.AddRange(New DataGridViewColumn() {f_s付属品名, f_iひも番号, f_s付属品ひも名, f_b巻きひも区分, f_i本幅初期値, f_iひも数, f_d長さ比率対ひも1, f_d長さ加減対ひも1, f_dひも長比率対長さ, f_dひも長加算, f_d巻きの厚み, f_d巻き回数比率, f_dひも長加算初期値, f_b集計対象外区分初期値, f_i描画位置, f_i描画形状, f_d描画厚初期値, f_b描画区分初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
         dgvData.DataSource = BindingSource付属品
-        dgvData.Location = New System.Drawing.Point(12, 32)
+        dgvData.Location = New System.Drawing.Point(12, 30)
         dgvData.Name = "dgvData"
         dgvData.RowHeadersWidth = 51
         dgvData.RowTemplate.Height = 29
-        dgvData.Size = New System.Drawing.Size(731, 166)
+        dgvData.Size = New System.Drawing.Size(731, 158)
         dgvData.TabIndex = 2
         ' 
         ' BindingSource付属品
@@ -102,7 +102,7 @@ Partial Class frmOptions
         lbl設定時の寸法単位.AutoSize = True
         lbl設定時の寸法単位.Location = New System.Drawing.Point(62, -2)
         lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
-        lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
+        lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 19)
         lbl設定時の寸法単位.TabIndex = 1
         ' 
         ' lbl単位
@@ -110,7 +110,7 @@ Partial Class frmOptions
         lbl単位.AutoSize = True
         lbl単位.Location = New System.Drawing.Point(14, -2)
         lbl単位.Name = "lbl単位"
-        lbl単位.Size = New System.Drawing.Size(42, 20)
+        lbl単位.Size = New System.Drawing.Size(40, 19)
         lbl単位.TabIndex = 0
         lbl単位.Text = "単位:"
         ' 
@@ -118,9 +118,9 @@ Partial Class frmOptions
         ' 
         btnキャンセル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
         btnキャンセル.DialogResult = DialogResult.Cancel
-        btnキャンセル.Location = New System.Drawing.Point(632, 211)
+        btnキャンセル.Location = New System.Drawing.Point(632, 200)
         btnキャンセル.Name = "btnキャンセル"
-        btnキャンセル.Size = New System.Drawing.Size(111, 46)
+        btnキャンセル.Size = New System.Drawing.Size(111, 44)
         btnキャンセル.TabIndex = 8
         btnキャンセル.Text = "キャンセル(&C)"
         ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
@@ -129,9 +129,9 @@ Partial Class frmOptions
         ' btnOK
         ' 
         btnOK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnOK.Location = New System.Drawing.Point(513, 211)
+        btnOK.Location = New System.Drawing.Point(513, 200)
         btnOK.Name = "btnOK"
-        btnOK.Size = New System.Drawing.Size(111, 46)
+        btnOK.Size = New System.Drawing.Size(111, 44)
         btnOK.TabIndex = 7
         btnOK.Text = "OK(&O)"
         ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
@@ -140,9 +140,9 @@ Partial Class frmOptions
         ' btnひも追加
         ' 
         btnひも追加.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnひも追加.Location = New System.Drawing.Point(333, 211)
+        btnひも追加.Location = New System.Drawing.Point(333, 200)
         btnひも追加.Name = "btnひも追加"
-        btnひも追加.Size = New System.Drawing.Size(111, 46)
+        btnひも追加.Size = New System.Drawing.Size(111, 44)
         btnひも追加.TabIndex = 6
         btnひも追加.Text = "ひも追加(&A)"
         ToolTip1.SetToolTip(btnひも追加, "新たな付属品名を追加、" & vbCrLf & "もしくは既存の付属品名に付属品ひもを追加")
@@ -152,27 +152,27 @@ Partial Class frmOptions
         ' 
         lbl付属品名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl付属品名.AutoSize = True
-        lbl付属品名.Location = New System.Drawing.Point(134, 225)
+        lbl付属品名.Location = New System.Drawing.Point(134, 214)
         lbl付属品名.Name = "lbl付属品名"
-        lbl付属品名.Size = New System.Drawing.Size(69, 20)
+        lbl付属品名.Size = New System.Drawing.Size(65, 19)
         lbl付属品名.TabIndex = 4
         lbl付属品名.Text = "付属品名"
         ' 
         ' txt付属品名
         ' 
         txt付属品名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txt付属品名.Location = New System.Drawing.Point(216, 222)
+        txt付属品名.Location = New System.Drawing.Point(216, 211)
         txt付属品名.Name = "txt付属品名"
-        txt付属品名.Size = New System.Drawing.Size(101, 27)
+        txt付属品名.Size = New System.Drawing.Size(101, 26)
         txt付属品名.TabIndex = 5
         ToolTip1.SetToolTip(txt付属品名, "付属品の名前")
         ' 
         ' btn削除
         ' 
         btn削除.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btn削除.Location = New System.Drawing.Point(14, 211)
+        btn削除.Location = New System.Drawing.Point(14, 200)
         btn削除.Name = "btn削除"
-        btn削除.Size = New System.Drawing.Size(111, 46)
+        btn削除.Size = New System.Drawing.Size(111, 44)
         btn削除.TabIndex = 3
         btn削除.Text = "削除(&D)"
         ToolTip1.SetToolTip(btn削除, "選択している付属品を削除します")
@@ -340,7 +340,7 @@ Partial Class frmOptions
         f_i描画位置.Name = "f_i描画位置"
         f_i描画位置.Resizable = DataGridViewTriState.True
         f_i描画位置.SortMode = DataGridViewColumnSortMode.Automatic
-        f_i描画位置.ToolTipText = "プレビュー図に描画する位置"
+        f_i描画位置.ToolTipText = "プレビュー図に描画する位置の初期値"
         f_i描画位置.Width = 125
         ' 
         ' f_i描画形状
@@ -430,9 +430,9 @@ Partial Class frmOptions
         ' 
         ' frmOptions
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New System.Drawing.Size(755, 266)
+        ClientSize = New System.Drawing.Size(757, 260)
         Controls.Add(btn削除)
         Controls.Add(lbl付属品名)
         Controls.Add(txt付属品名)
@@ -442,7 +442,7 @@ Partial Class frmOptions
         Controls.Add(lbl設定時の寸法単位)
         Controls.Add(lbl単位)
         Controls.Add(dgvData)
-        MinimumSize = New System.Drawing.Size(773, 313)
+        MinimumSize = New System.Drawing.Size(773, 299)
         Name = "frmOptions"
         StartPosition = FormStartPosition.CenterParent
         Text = "付属品"

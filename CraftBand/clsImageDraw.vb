@@ -1273,6 +1273,14 @@ Public Class CImageDraw
                     _Graphic.DrawLine(colset.PenBand, New Point(rect.Left, rect.Top), New Point(rect.Left, rect.Bottom))
                 End If
 
+            Case enum描画形状.i_線分, enum描画形状.i_点
+                Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+                If colset.PenBand IsNot Nothing Then
+                    Dim penTmp As New Pen(colset.PenBand.Color)
+                    penTmp.Width = Math.Max(1, CInt(Math.Round(item.m_dひも幅)))
+                    _Graphic.DrawLine(penTmp, New Point(rect.Left, rect.Bottom), New Point(rect.Right, rect.Top))
+                End If
+
         End Select
 
         '付属品名
