@@ -663,4 +663,8 @@
     <value>現在の規定値保存フォルダ'{0}'には {1} のファイルはありません。</value>
     <comment>frmLoadDefault</comment>
   </data>
+  <data name="ErrGridAskClear" xml:space="preserve">
+    <value>再入力しますか？(はい=再入力,いいえ=クリア)</value>
+    <comment>ctrDataGridView</comment>
+  </data>
 </root>

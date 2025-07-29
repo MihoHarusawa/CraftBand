@@ -185,20 +185,34 @@ Public Class ctrDataGridView
             End If
         End If
 
-        'comboBoxのDelete値(#78)
-        Dim comboBox = TryCast(Me.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
-        If comboBox IsNot Nothing AndAlso comboBox.Value = 0 Then
-            Me.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = DBNull.Value
-            e.ThrowException = False
-                Exit Sub
-            End If
 
-        '受け付けない(要・再入力)
         '{0}行目<{1}> データエラー{2}{3}
         Dim msg As String = String.Format(My.Resources.ErrGridData, e.RowIndex + 1, Me.Columns(e.ColumnIndex).HeaderText,
                                  vbCrLf, e.Exception.Message)
-        MessageBox.Show(msg, messageTitle(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        e.Cancel = True
+
+        'comboBoxのDelete値(#78)
+        Dim comboBox = TryCast(Me.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
+        If comboBox IsNot Nothing Then
+            If 0 < comboBox.Value Then
+                '未定義の値が追加された新しいデータを開こうとしたと思われる
+                MessageBox.Show(msg, messageTitle(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+            Me.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = DBNull.Value
+            e.ThrowException = False
+            Exit Sub
+        End If
+
+        '再入力しますか？(はい=再入力,いいえ=クリア)
+        msg = msg & vbCrLf & My.Resources.ErrGridAskClear
+        If DialogResult.Yes <> MessageBox.Show(msg, messageTitle(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) Then
+            Dim resval As Object = MyGridDataRow.DefaultValue(Me.Columns(e.ColumnIndex).DataPropertyName)
+            If e.Context.HasFlag(DataGridViewDataErrorContexts.Commit) Then
+                Me.CancelEdit() ' 編集をキャンセル
+                Me(e.ColumnIndex, e.RowIndex).Value = resval
+                Exit Sub
+            End If
+        End If
+        e.Cancel = True '再入力
     End Sub
 
     '書式設定

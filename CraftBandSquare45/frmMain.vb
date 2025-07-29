@@ -109,6 +109,8 @@ Public Class frmMain
             Me.expand横ひも.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridTate
             Me.expand縦ひも.SetColumnWidthFromString(colwid)
+            colwid = My.Settings.frmMainGridOriColor
+            'Me.dgvOriColor.SetColumnWidthFromString(colwid)
         End If
 
         setStartEditing()

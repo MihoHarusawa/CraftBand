@@ -46,7 +46,7 @@ Public Class clsDataRow
                     'NullValue値はとれないので、'空の値'を返す
                     Select Case col.DataType.ToString
                         Case "System.String"
-                            Return ""
+                            Return String.Empty
                         Case "System.Int16", "System.Int32", "System.UInt32"
                             Return 0
                         Case "System.Double"
@@ -128,7 +128,7 @@ Public Class clsDataRow
 
     Public ReadOnly Property ContainsName(ByVal name As String) As Boolean
         Get
-            If Not IsValid Then
+            If Not IsValid OrElse String.IsNullOrWhiteSpace(name) Then
                 Return False
             End If
             Return _DataRow.Table.Columns.Contains(name)
@@ -165,6 +165,17 @@ Public Class clsDataRow
             End If
         End Get
     End Property
+
+    Friend ReadOnly Property DataTypeName(ByVal name As String) As String
+        Get
+            If ContainsName(name) Then
+                Dim col As DataColumn = _DataRow.Table.Columns(name)
+                Return col.DataType.ToString
+            End If
+            Return String.Empty
+        End Get
+    End Property
+
 
     'デフォルト値を返す
     Public ReadOnly Property DefaultValue(ByVal name As String) As Object

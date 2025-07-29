@@ -421,6 +421,7 @@ Public Class ctrAddParts
             _Data = data
         End Sub
 
+        'マスタ参照して、登録分のレコードを追加し初期値をセット
         Function add_追加品(ByVal nameselect As String,
                          ByVal i何本幅 As Integer, ByVal d長さ As Double, ByVal i点数 As Integer,
                          ByRef row As tbl追加品Row) As Boolean
@@ -475,6 +476,7 @@ Public Class ctrAddParts
                 If first Then
                     first = False
                 End If
+                drow.Value("f_bシステム区分") = False '初期値だが念のため
             Next
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Option Add: {0}", groupRow.ToString)
             Return True
@@ -538,7 +540,12 @@ Public Class ctrAddParts
             Return ret
         End Function
 
+        '既存レコードに対するマスタ参照　チェック＆更新・校正
         Private Function set_groupRow追加品(ByVal groupRow As clsGroupDataRow) As Boolean
+            If groupRow.NameValueContainsTrue("f_bシステム区分") Then
+                Return True
+            End If
+
             '点数は一致項目
             Dim i点数 As Integer = groupRow.GetNameValue("f_i点数")
 

@@ -418,6 +418,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  再入力しますか？(はい=再入力,いいえ=クリア) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrGridAskClear() As String
+            Get
+                Return ResourceManager.GetString("ErrGridAskClear", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  実測値の不足もしくは値のエラーのため計算できなかった係数があります。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrGridCoeff() As String

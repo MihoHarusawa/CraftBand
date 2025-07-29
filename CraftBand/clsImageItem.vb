@@ -1887,10 +1887,10 @@ Public Class clsImageItem
         _コマ     'm_row縦横展開,m_row縦横展開2,m_rひも位置,m_knot
         _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
 
+        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
+
         _画像保存   'm_a四隅
         _画像貼付   'm_a四隅
-
-        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
 
         _底枠     'm_a四隅,m_lineList,m_is円
         _横の側面   'm_a四隅,m_lineList

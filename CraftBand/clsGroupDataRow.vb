@@ -136,7 +136,7 @@ Public Class clsGroupDataRow
         Return kv.Value.Value(name)
     End Function
 
-    '指定名のフィールドの最大値を返す
+    '指定名のフィールドの最大値を返す ※booleanでは使わないこと
     Function GetNameValueMax(ByVal name As String) As Object
         If Me.Count = 0 Then
             Return Nothing
@@ -154,7 +154,7 @@ Public Class clsGroupDataRow
         Return val
     End Function
 
-    '指定名のフィールドの合計値を返す
+    '指定名のフィールドの合計値を返す ※booleanでは使わないこと
     Function GetNameValueSum(ByVal name As String) As Object
         If Me.Count = 0 Then
             Return Nothing
@@ -168,6 +168,18 @@ Public Class clsGroupDataRow
             End If
         Next
         Return sum
+    End Function
+
+    '指定名のフィールドにTrueがある ※boolean専用
+    Function NameValueContainsTrue(ByVal name As String) As Boolean
+        For Each drow As clsDataRow In _map.Values
+            If drow.DataTypeName(name) = "System.Boolean" Then '他の型だと例外
+                If drow.Value(name) Then
+                    Return True
+                End If
+            End If
+        Next
+        Return False
     End Function
 
     '指定名のフィールド値をセットする(全レコード同じ)

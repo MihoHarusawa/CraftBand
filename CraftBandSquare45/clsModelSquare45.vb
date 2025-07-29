@@ -1,6 +1,7 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
+Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsCalcSquare45
 
