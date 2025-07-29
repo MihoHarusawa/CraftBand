@@ -44,6 +44,7 @@ Public Class CImageDraw
     Private _Pen_black_thick As Pen = Nothing
     Private _Pen_black_dot As Pen = Nothing
     Private _Pen_red As Pen = Nothing
+    Private _Pen_blue As Pen = Nothing
     Private _Brush_black As SolidBrush = Nothing
 
     Private _Font As Font
@@ -296,6 +297,7 @@ Public Class CImageDraw
         _Pen_black_dot = New Pen(Drawing.Color.Black, cThinPenWidth)
         _Pen_black_dot.DashStyle = Drawing2D.DashStyle.Dot
         _Pen_red = New Pen(Drawing.Color.Red, cThickPenWidth)
+        _Pen_blue = New Pen(Drawing.Color.Blue, cThickPenWidth)
         _Brush_black = New SolidBrush(Drawing.Color.Black)
 
         'ひも描画用
@@ -847,7 +849,11 @@ Public Class CImageDraw
     End Function
 
     Function draw折り返し線(ByVal item As clsImageItem) As Boolean
-        Return draw_linelist(item.m_lineList, LineTypeEnum._black_thick)
+        Dim ltype As LineTypeEnum = item.m_ltype
+        If ltype = LineTypeEnum._nodef Then
+            ltype = LineTypeEnum._red
+        End If
+        Return draw_linelist(item.m_lineList, ltype)
     End Function
 
     Private Function draw_linelist(ByVal lineList As C線分リスト, ByVal ltype As LineTypeEnum)
@@ -861,6 +867,8 @@ Public Class CImageDraw
                     _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
                 Case LineTypeEnum._red
                     _Graphic.DrawLine(_Pen_red, pixcel_point(line.p開始), pixcel_point(line.p終了))
+                Case LineTypeEnum._blue
+                    _Graphic.DrawLine(_Pen_blue, pixcel_point(line.p開始), pixcel_point(line.p終了))
                 Case Else 'nodef
                     Return False
             End Select
@@ -882,6 +890,8 @@ Public Class CImageDraw
                 _Graphic.DrawLines(_Pen_black_dot, points)
             Case LineTypeEnum._red
                 _Graphic.DrawLines(_Pen_red, points)
+            Case LineTypeEnum._blue
+                _Graphic.DrawLines(_Pen_blue, points)
             Case Else 'nodef
                 Return False
         End Select
@@ -902,6 +912,8 @@ Public Class CImageDraw
                 _Graphic.DrawEllipse(_Pen_black_dot, rect)
             Case LineTypeEnum._red
                 _Graphic.DrawEllipse(_Pen_red, rect)
+            Case LineTypeEnum._blue
+                _Graphic.DrawEllipse(_Pen_blue, rect)
             Case Else 'nodef
                 Return False
         End Select
@@ -1407,6 +1419,7 @@ Public Class CImageDraw
                     _Pen_black_thick.Dispose()
                     _Pen_black_dot.Dispose()
                     _Pen_red.Dispose()
+                    _Pen_blue.Dispose()
                     _Brush_black.Dispose()
                     _Font.Dispose()
 

@@ -16,7 +16,7 @@
     <Shape ID="DesignTable:tblLaneWidth" ZOrder="4" X="89" Y="639" Height="102" Width="161" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="98" />
     <Shape ID="DesignTable:tblSaveTemporarily" ZOrder="3" X="967" Y="635" Height="105" Width="174" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
     <Shape ID="DesignTable:tblDefaultData" ZOrder="2" X="963" Y="764" Height="274" Width="162" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="270" />
-    <Shape ID="DesignTable:tblOriColor" ZOrder="1" X="467" Y="309" Height="605" Width="190" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="601" />
+    <Shape ID="DesignTable:tblOriColor" ZOrder="1" X="467" Y="309" Height="781" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="777" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

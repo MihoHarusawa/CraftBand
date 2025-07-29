@@ -133,6 +133,11 @@ Class clsCalcSquare45
         End Get
     End Property
 
+    ReadOnly Property p_dひも幅の対角線 As Double
+        Get
+            Return _dひも幅の対角線
+        End Get
+    End Property
     ReadOnly Property p_sひも幅の対角線 As String
         Get
             If 0 < _dひも幅の一辺 Then
@@ -151,6 +156,11 @@ Class clsCalcSquare45
         End Get
     End Property
 
+    ReadOnly Property p_d四角の対角線 As Double
+        Get
+            Return _d四角の対角線
+        End Get
+    End Property
     ReadOnly Property p_s四角の対角線 As String
         Get
             If 0 < _d四角の対角線 Then
@@ -1741,6 +1751,7 @@ Class clsCalcSquare45
                     row.f_b内側_45 = r45.f_b内側区分
                     row.f_dひも長加算_45 = r45.f_dひも長加算
                 End If
+                row.f_iゼロ面_45 = sband45.iPlate
                 row.f_sゼロ面名_45 = clsImageData.BasketPlateString(sband45.iPlate)
                 row.f_iゼロ位置_45 = sband45.iPosition
 
@@ -1765,6 +1776,7 @@ Class clsCalcSquare45
                     row.f_b内側_135 = r135.f_b内側区分
                     row.f_dひも長加算_135 = r135.f_dひも長加算
                 End If
+                row.f_iゼロ面_135 = sband135.iPlate
                 row.f_sゼロ面名_135 = clsImageData.BasketPlateString(sband135.iPlate)
                 row.f_iゼロ位置_135 = sband135.iPosition
 

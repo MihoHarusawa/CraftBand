@@ -5172,6 +5172,8 @@ Namespace Tables
             
             Private columnf_dひも長加算_45 As Global.System.Data.DataColumn
             
+            Private columnf_iゼロ面_45 As Global.System.Data.DataColumn
+            
             Private columnf_sゼロ面名_45 As Global.System.Data.DataColumn
             
             Private columnf_iゼロ位置_45 As Global.System.Data.DataColumn
@@ -5189,6 +5191,8 @@ Namespace Tables
             Private columnf_s端_135 As Global.System.Data.DataColumn
             
             Private columnf_dひも長加算_135 As Global.System.Data.DataColumn
+            
+            Private columnf_iゼロ面_135 As Global.System.Data.DataColumn
             
             Private columnf_sゼロ面名_135 As Global.System.Data.DataColumn
             
@@ -5345,6 +5349,14 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iゼロ面_45Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iゼロ面_45
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public ReadOnly Property f_sゼロ面名_45Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_sゼロ面名_45
@@ -5412,6 +5424,14 @@ Namespace Tables
             Public ReadOnly Property f_dひも長加算_135Column() As Global.System.Data.DataColumn
                 Get
                     Return Me.columnf_dひも長加算_135
+                End Get
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public ReadOnly Property f_iゼロ面_135Column() As Global.System.Data.DataColumn
+                Get
+                    Return Me.columnf_iゼロ面_135
                 End Get
             End Property
             
@@ -5553,6 +5573,7 @@ Namespace Tables
                         ByVal f_bTerminal_45 As Boolean,  _
                         ByVal f_s端_45 As String,  _
                         ByVal f_dひも長加算_45 As Double,  _
+                        ByVal f_iゼロ面_45 As Short,  _
                         ByVal f_sゼロ面名_45 As String,  _
                         ByVal f_iゼロ位置_45 As Short,  _
                         ByVal f_s色_135 As String,  _
@@ -5562,6 +5583,7 @@ Namespace Tables
                         ByVal f_bTerminal_135 As Boolean,  _
                         ByVal f_s端_135 As String,  _
                         ByVal f_dひも長加算_135 As Double,  _
+                        ByVal f_iゼロ面_135 As Short,  _
                         ByVal f_sゼロ面名_135 As String,  _
                         ByVal f_iゼロ位置_135 As Short,  _
                         ByVal f_b外側_45 As Boolean,  _
@@ -5574,7 +5596,7 @@ Namespace Tables
                         ByVal f_b内側_45 As Boolean,  _
                         ByVal f_bEdited As Boolean) As tblOriColorRow
                 Dim rowtblOriColorRow As tblOriColorRow = CType(Me.NewRow,tblOriColorRow)
-                Dim columnValuesArray() As Object = New Object() {f_index, f_iPlate, f_iPosition, f_s面名, f_s位置, f_s色_45, f_iひも種_45, f_sひも名_45, f_iひも番号_45, f_bTerminal_45, f_s端_45, f_dひも長加算_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_iひも種_135, f_sひも名_135, f_iひも番号_135, f_bTerminal_135, f_s端_135, f_dひも長加算_135, f_sゼロ面名_135, f_iゼロ位置_135, f_b外側_45, f_s外側色_45, f_s外側色_135, f_b外側_135, f_b内側_135, f_s内側色_135, f_s内側色_45, f_b内側_45, f_bEdited}
+                Dim columnValuesArray() As Object = New Object() {f_index, f_iPlate, f_iPosition, f_s面名, f_s位置, f_s色_45, f_iひも種_45, f_sひも名_45, f_iひも番号_45, f_bTerminal_45, f_s端_45, f_dひも長加算_45, f_iゼロ面_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_iひも種_135, f_sひも名_135, f_iひも番号_135, f_bTerminal_135, f_s端_135, f_dひも長加算_135, f_iゼロ面_135, f_sゼロ面名_135, f_iゼロ位置_135, f_b外側_45, f_s外側色_45, f_s外側色_135, f_b外側_135, f_b内側_135, f_s内側色_135, f_s内側色_45, f_b内側_45, f_bEdited}
                 rowtblOriColorRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblOriColorRow)
                 Return rowtblOriColorRow
@@ -5615,6 +5637,7 @@ Namespace Tables
                 Me.columnf_bTerminal_45 = MyBase.Columns("f_bTerminal_45")
                 Me.columnf_s端_45 = MyBase.Columns("f_s端_45")
                 Me.columnf_dひも長加算_45 = MyBase.Columns("f_dひも長加算_45")
+                Me.columnf_iゼロ面_45 = MyBase.Columns("f_iゼロ面_45")
                 Me.columnf_sゼロ面名_45 = MyBase.Columns("f_sゼロ面名_45")
                 Me.columnf_iゼロ位置_45 = MyBase.Columns("f_iゼロ位置_45")
                 Me.columnf_s色_135 = MyBase.Columns("f_s色_135")
@@ -5624,6 +5647,7 @@ Namespace Tables
                 Me.columnf_bTerminal_135 = MyBase.Columns("f_bTerminal_135")
                 Me.columnf_s端_135 = MyBase.Columns("f_s端_135")
                 Me.columnf_dひも長加算_135 = MyBase.Columns("f_dひも長加算_135")
+                Me.columnf_iゼロ面_135 = MyBase.Columns("f_iゼロ面_135")
                 Me.columnf_sゼロ面名_135 = MyBase.Columns("f_sゼロ面名_135")
                 Me.columnf_iゼロ位置_135 = MyBase.Columns("f_iゼロ位置_135")
                 Me.columnf_b外側_45 = MyBase.Columns("f_b外側_45")
@@ -5664,6 +5688,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s端_45)
                 Me.columnf_dひも長加算_45 = New Global.System.Data.DataColumn("f_dひも長加算_45", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算_45)
+                Me.columnf_iゼロ面_45 = New Global.System.Data.DataColumn("f_iゼロ面_45", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iゼロ面_45)
                 Me.columnf_sゼロ面名_45 = New Global.System.Data.DataColumn("f_sゼロ面名_45", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sゼロ面名_45)
                 Me.columnf_iゼロ位置_45 = New Global.System.Data.DataColumn("f_iゼロ位置_45", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
@@ -5682,6 +5708,8 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s端_135)
                 Me.columnf_dひも長加算_135 = New Global.System.Data.DataColumn("f_dひも長加算_135", GetType(Double), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_dひも長加算_135)
+                Me.columnf_iゼロ面_135 = New Global.System.Data.DataColumn("f_iゼロ面_135", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_iゼロ面_135)
                 Me.columnf_sゼロ面名_135 = New Global.System.Data.DataColumn("f_sゼロ面名_135", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sゼロ面名_135)
                 Me.columnf_iゼロ位置_135 = New Global.System.Data.DataColumn("f_iゼロ位置_135", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
@@ -5719,6 +5747,7 @@ Namespace Tables
                 Me.columnf_bTerminal_45.DefaultValue = CType(false,Boolean)
                 Me.columnf_s端_45.DefaultValue = CType("",String)
                 Me.columnf_dひも長加算_45.DefaultValue = CType(0R,Double)
+                Me.columnf_iゼロ面_45.DefaultValue = CType(0,Short)
                 Me.columnf_sゼロ面名_45.DefaultValue = CType("",String)
                 Me.columnf_iゼロ位置_45.DefaultValue = CType(0,Short)
                 Me.columnf_s色_135.DefaultValue = CType("",String)
@@ -5728,6 +5757,7 @@ Namespace Tables
                 Me.columnf_bTerminal_135.DefaultValue = CType(false,Boolean)
                 Me.columnf_s端_135.DefaultValue = CType("",String)
                 Me.columnf_dひも長加算_135.DefaultValue = CType(0R,Double)
+                Me.columnf_iゼロ面_135.DefaultValue = CType(0,Short)
                 Me.columnf_sゼロ面名_135.DefaultValue = CType("",String)
                 Me.columnf_iゼロ位置_135.DefaultValue = CType(0,Short)
                 Me.columnf_b外側_45.DefaultValue = CType(false,Boolean)
@@ -9916,6 +9946,21 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iゼロ面_45() As Short
+                Get
+                    If Me.Isf_iゼロ面_45Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iゼロ面_45Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iゼロ面_45Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_sゼロ面名_45() As String
                 Get
                     If Me.Isf_sゼロ面名_45Null Then
@@ -10046,6 +10091,21 @@ Namespace Tables
                 End Get
                 Set
                     Me(Me.tabletblOriColor.f_dひも長加算_135Column) = value
+                End Set
+            End Property
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Property f_iゼロ面_135() As Short
+                Get
+                    If Me.Isf_iゼロ面_135Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletblOriColor.f_iゼロ面_135Column),Short)
+                    End If
+                End Get
+                Set
+                    Me(Me.tabletblOriColor.f_iゼロ面_135Column) = value
                 End Set
             End Property
             
@@ -10348,6 +10408,18 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iゼロ面_45Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iゼロ面_45Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iゼロ面_45Null()
+                Me(Me.tabletblOriColor.f_iゼロ面_45Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Function Isf_sゼロ面名_45Null() As Boolean
                 Return Me.IsNull(Me.tabletblOriColor.f_sゼロ面名_45Column)
             End Function
@@ -10452,6 +10524,18 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Sub Setf_dひも長加算_135Null()
                 Me(Me.tabletblOriColor.f_dひも長加算_135Column) = Global.System.Convert.DBNull
+            End Sub
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Function Isf_iゼロ面_135Null() As Boolean
+                Return Me.IsNull(Me.tabletblOriColor.f_iゼロ面_135Column)
+            End Function
+            
+            <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+             Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
+            Public Sub Setf_iゼロ面_135Null()
+                Me(Me.tabletblOriColor.f_iゼロ面_135Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

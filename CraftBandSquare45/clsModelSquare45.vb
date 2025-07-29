@@ -2,6 +2,7 @@
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
+Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandSquare45.clsCalcSquare45
 
@@ -9,7 +10,6 @@ Public Class clsModelSquare45
     Inherits clsImageData
 
     Shared _PlateNames() As String = {"bottom", "leftside", "front", "rightside", "back"}
-    Shared _PlateAngle() As Integer = {45, 135, 45, -45, -135}
 
     '現対象
     Dim _calc As clsCalcSquare45
@@ -118,7 +118,7 @@ Public Class clsModelSquare45
         End If
 
         '画像用dataから画像生成
-        If Not getImages() Then
+        If Not getImages(oriProc) Then
             Return False
         End If
 
@@ -133,7 +133,7 @@ Public Class clsModelSquare45
         setBasics(_calc.p_dひも幅の一辺, _calc._Data.p_row目標寸法.Value("f_s基本色"))
 
         '絵の貼付と面枠描画
-        MoveList(imageList側面展開図())
+        MoveList(imageList側面展開図(oriProc))
 
         'ファイル作成
         If Not MakeImage(outp) Then
@@ -175,10 +175,10 @@ Public Class clsModelSquare45
     '      (1)      (2)     (3)     (4)
     '　　 ────────────────  .... fuchi   
     '　　┌──┬────┬──┬────┐    
-    '　　│　　│　　　　│　　│　　　　│    ↑　　　
-    '　　│　　│　　　　│　　│　　　　│    │　　　
-    '　　│　　│　　　　│　　│　　　　│　takasa　　(#96,折りカラー＆beforeは倍の高さ)
-    '　　│　　│　　　　│　　│　　　　│    ↓　　　　
+    '　　│　　│　　　　│　　│　　　　│    ↑　　　(#96,折りカラー)
+    '　　│　　│　　　　│　　│　　　　│    │　　　  なし:   そのまま高さ(0.5あり)
+    '　　│　　│　　　　│　　│　　　　│　takasa　　  before: 倍の高さ    (0.5なし)
+    '　　│　　│　　　　│　　│　　　　│    ↓　　　　after:  そのまま高さ(0.5あり)
     '　　●──┼────┼──┴────┘    
     '　　　　　│　 (0)　│                    ↑  
     '　　　　　│_bottom │                   tate 
@@ -227,12 +227,12 @@ Public Class clsModelSquare45
 
 #Region "側面に回り込んで積まれるバンド"
     '    
-    '                　　　　　　／＼　
-    '                      高さ／　　＼縦　
-    '     　　　／＼　　     ／ -45°←＼
-    '     　横／　　＼高さ ／　　　　  ／　
-    '       ／→45°　＼   ＼ 右側面 ／　　
-    '     ／　　　　　／     ＼　  ／　　　
+    '                　　　　　　／⋱　
+    '                      高さ／　　⋱縦　
+    '     　　　⋰＼　　     ／ -45°←⋱
+    '     　横⋰　　＼高さ ／　　　　   ／　
+    '       ⋰ →45°　＼   ＼ 右側面 ／　　
+    '     ⋰　　　　 　／     ＼　  ／　　　
     '     ＼ 前面   ／  ／＼　 ＼／　　　　
     '     　＼　　／横／　　＼縦　　　　
     '     　　＼／　／→45度　＼ 
@@ -240,11 +240,11 @@ Public Class clsModelSquare45
     '    　　　　＼  底    ／ ／＼　　　　　　
     '    　　　／＼＼　　／ ／横　＼高さ　　　
     '    高さ／　　＼＼／ ／-135↑←＼
-    '      ／↑→135 ＼ ／　　　　 　／　
-    '    ／　　　　　／　＼ 背面   ／　　
-    '    ＼左側面  ／　  　＼　　／　　　
-    '    縦＼　　／　　　　　＼／　　　　
-    '    　　＼／　　　　    
+    '      ／↑→135 ＼ ／　　　　 　⋰　
+    '    ／　　　　　／　＼ 背面   ⋰　　
+    '    ⋱左側面  ／　   　＼　　⋰　　　
+    '    縦⋱　　／　　　　 　＼⋰　　　　
+    '    　　⋱／　　　　    
     '    　
     '    　　　
     'バンドの属性    
@@ -642,7 +642,8 @@ Public Class clsModelSquare45
         _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_d高さの四角数") = 0
         '_SideBandStackは使わない
 
-        Dim n高さの四角数 As Integer = _calc.p_i高さの切上四角数
+        '底の0.5は作れないので整数値
+        Dim n高さの四角数 As Integer
         If oriProc = enumOriProc._before Then
             n高さの四角数 = _calc.p_d高さの四角数 * 2
         Else
@@ -708,7 +709,7 @@ Public Class clsModelSquare45
     End Function
 
     '画像用dataから画像生成
-    Function getImages() As Boolean
+    Private Function getImages(ByVal oriProc As enumOriProc) As Boolean
 
         Dim ret As Boolean = True
         For pidx As Integer = 0 To cBasketPlateCount - 1
@@ -735,10 +736,12 @@ Public Class clsModelSquare45
                 g_clsLog.LogException(ex, fpath)
             End Try
 #End If
-
+            Dim isTrimHalf As Boolean = (0 < pidx) AndAlso (oriProc = enumOriProc._after) AndAlso _calc.p_b高さ半四角
             Dim calcTmp As New clsCalcSquare45(_data各面(pidx), _calc._frmMain)
+            '画像ファイル名
             calcTmp.p_sBottomPngFilePath(True) = _path各面画像(pidx) 'あれば削除
-            calcTmp.p_dBottomPngRotateAngle = _PlateAngle(pidx)
+            '面と0.5四角の有無を指定
+            calcTmp.setBottomPngPlateIndex(pidx, isTrimHalf)
 
             If calcTmp.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
                 If Not calcTmp.p_b長方形である Then
@@ -773,6 +776,9 @@ Public Class clsModelSquare45
                     '底と前面と背面
                     _delta画像サイズ(pidx) = New S差分(calcTmp.p_d底の横長, calcTmp.p_d底の縦長)
                 End If
+                If isTrimHalf Then
+                    _delta画像サイズ(pidx).dY += -calcTmp.p_d四角の対角線 / 2
+                End If
 
                 imgdata.Clear()
                 If Not ret Then
@@ -787,7 +793,7 @@ Public Class clsModelSquare45
 #End Region
 
     '絵の貼付と面枠描画
-    Function imageList側面展開図() As clsImageItemList
+    Private Function imageList側面展開図(ByVal oriProc As enumOriProc) As clsImageItemList
 
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
@@ -825,8 +831,106 @@ Public Class clsModelSquare45
         item.m_fpath = _path各面画像(enumBasketPlateIdx._bottom)
         itemlist.AddItem(item)
 
+        '折りカラーの折り返し線
+        If oriProc <> enumOriProc._none Then
+
+            '2倍高さ表示時のライン
+            If oriProc = enumOriProc._before Then
+                item = New clsImageItem(clsImageItem.ImageTypeEnum._折り返し線, 0)
+                item.m_lineList = New C線分リスト
+
+                Dim p1 As New S実座標(0, _calc.p_d四角ベース_高さ)
+                Dim p2 As New S実座標((_calc.p_d底の横長 + _calc.p_d底の縦長) * 2, _calc.p_d四角ベース_高さ)
+                line = New S線分(p1, p2)
+                item.m_lineList.Add(line)
+
+                item.m_ltype = LineTypeEnum._black_thin
+                itemlist.AddItem(item)
+            End If
+
+            '個別バンドのライン
+            addOriLine(Nothing, 0, 0, 0) '計算の初期値
+            Dim oriTable As dstWork.tblOriColorDataTable = _calc.GetOriColorTable()
+            If oriTable IsNot Nothing Then
+                Dim lineList外側 As New C線分リスト
+                Dim lineList内側 As New C線分リスト
+
+                For Each oriRow As dstWork.tblOriColorRow In oriTable
+                    If oriRow.f_b外側_135 OrElse oriRow.f_b外側_45 Then
+                        '縁の折り返しライン
+                        addOriLine(lineList外側, oriRow.f_iPlate, oriRow.f_iPosition, False)
+
+                        '折り返し表示時は下のラインも表示
+                        If oriProc = enumOriProc._after Then
+                            If oriRow.f_b外側_45 Then
+                                addOriLine(lineList外側, oriRow.f_iゼロ面_135, oriRow.f_iゼロ位置_135, True)
+                            End If
+                            If oriRow.f_b外側_135 Then
+                                addOriLine(lineList外側, oriRow.f_iゼロ面_45, oriRow.f_iゼロ位置_45, True)
+                            End If
+                        End If
+
+                    End If
+
+                    If oriRow.f_b内側_135 OrElse oriRow.f_b内側_45 Then
+                        '縁の折り返しラインだけ
+                        addOriLine(lineList内側, oriRow.f_iPlate, oriRow.f_iPosition, False)
+                    End If
+                Next
+
+                If 0 < lineList外側.Count Then
+                    item = New clsImageItem(clsImageItem.ImageTypeEnum._折り返し線, 2)
+                    item.m_lineList = lineList外側
+                    item.m_ltype = LineTypeEnum._red
+                    itemlist.AddItem(item)
+                End If
+
+                If 0 < lineList内側.Count Then
+                    item = New clsImageItem(clsImageItem.ImageTypeEnum._折り返し線, 1)
+                    item.m_lineList = lineList内側
+                    item.m_ltype = LineTypeEnum._blue
+                    itemlist.AddItem(item)
+                End If
+            End If
+        End If
+
         Return itemlist
     End Function
+
+    Private Sub addOriLine(ByVal llist As C線分リスト, ByVal plateIdx As Integer, ByVal position As Double, ByVal is底 As Boolean)
+        '初期化で保持する変数
+        Static deltaBand As S差分
+        Static dHalf As Single
+        Static dSpace As Double
+        Static dYY As Double = _calc.p_d四角ベース_高さ
+        Static aryLen() As Double
+
+        'Nothing指定は初期化
+        If llist Is Nothing Then
+            deltaBand = New S差分(_calc.p_sひも幅の対角線, 0)
+            dHalf = IIf(_calc.p_b高さ半四角, -0.5, 0)
+            dSpace = (_calc.p_d四角の対角線 - _calc.p_sひも幅の対角線) / 2
+            aryLen = {0, 0, _calc.p_d底の縦長, _calc.p_d底の縦長 + _calc.p_d底の横長, _calc.p_d底の横長 + _calc.p_d底の縦長 * 2}
+            Return
+        End If
+
+        '線分を追加
+        Dim dy As Double = IIf(is底, 0, dYY)
+        Dim dx As Double = aryLen(plateIdx) + dSpace
+        Dim x As Double = IIf(is底, position - 1, position - 1 + dHalf)
+        dx += x * _calc.p_d四角の対角線
+        Dim p1 As New S実座標(dx, dy)
+        Dim p2 As S実座標 = p1 + deltaBand
+        If 0 <= p1.X Then
+            Dim line As S線分 = New S線分(p1, p2)
+            llist.Add(line)
+        Else
+            Dim line As S線分 = New S線分(New S実座標(0, p1.Y), p2)
+            llist.Add(line)
+            line = New S線分(p1, New S実座標(0, p1.Y))
+            llist.Add(line + New S差分(_calc.p_d底の横長 * 2 + _calc.p_d底の縦長 * 2, 0))
+        End If
+    End Sub
 
 End Class
 

@@ -1913,12 +1913,14 @@ Public Class clsImageItem
         _縦軸線 'm_listLine
     End Enum
 
+    'システム色
     Enum LineTypeEnum
         _nodef = 0
         _black_thin
         _black_thick
         _black_dot
         _red
+        _blue
     End Enum
     '
     Public m_ImageType As ImageTypeEnum = ImageTypeEnum._描画なし

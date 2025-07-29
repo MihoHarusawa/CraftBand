@@ -38,8 +38,21 @@ Partial Public Class clsCalcSquare45
             End If
         End Set
     End Property
-    '底の絵の回転角度
-    Property p_dBottomPngRotateAngle As Double
+
+    ''底の絵の回転角度
+    'Dim _dBottomPngRotateAngle As Double
+    '底の絵からバンド半分小さくするか
+    Dim _isBottomPngTrimHalfBand As Boolean
+    '側面順の回転角度
+    Shared _PlateAngle() As Integer = {45, 135, 45, -45, -135}
+    Dim _idxBottomPngPlate As enumBasketPlateIdx
+
+    '面と0.5四角の有無を指定
+    Friend Sub setBottomPngPlateIndex(ByVal plateIdx As enumBasketPlateIdx, ByVal isTrimHalf As Boolean)
+        _idxBottomPngPlate = plateIdx
+        '_dBottomPngRotateAngle = _PlateAngle(plateIdx)
+        _isBottomPngTrimHalfBand = isTrimHalf
+    End Sub
 
     'UpDownの適用開始位置
     Dim _is_updown_start_set As Boolean = False
@@ -192,6 +205,10 @@ Partial Public Class clsCalcSquare45
     '        ●─────→+X         ひも番号①②③ 右下                  (左)ひも長加算  ←─→  (右)ひも長加算2         
     '縦のひも番号①②③④...                                                   端:No                    端:Yes
 
+    '
+    '重ねたバンドの表示については、
+    '・f_i描画種,f_s色2がセットされていれば、常に重ね表示(折りカラーによらず)
+    '・通常の入力・編集処理においては、現状、これらのフィールドは不可視
 
 #Region "結果表示用"
 
@@ -987,9 +1004,31 @@ Partial Public Class clsCalcSquare45
         '底の画像
         If Not String.IsNullOrWhiteSpace(p_sBottomPngFilePath(False)) Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 1)
-            item.m_a四隅 = _a底領域
             item.m_fpath = p_sBottomPngFilePath(False)
-            item.m_angle = p_dBottomPngRotateAngle
+            item.m_angle = _PlateAngle(_idxBottomPngPlate)
+            item.m_a四隅 = _a底領域
+
+            If _isBottomPngTrimHalfBand Then '0.5高さの分を縮める
+                Dim delta As S差分 = New S差分(_d四角の対角線 / 2, 0).Rotate(_PlateAngle(_idxBottomPngPlate) - 90) '0度から回転
+                If _idxBottomPngPlate = enumBasketPlateIdx._leftside Then
+                    'B,C
+                    item.m_a四隅.pB = item.m_a四隅.pB + delta
+                    item.m_a四隅.pC = item.m_a四隅.pC + delta
+                ElseIf _idxBottomPngPlate = enumBasketPlateIdx._front Then
+                    'A,B
+                    item.m_a四隅.pA = item.m_a四隅.pA + delta
+                    item.m_a四隅.pB = item.m_a四隅.pB + delta
+                ElseIf _idxBottomPngPlate = enumBasketPlateIdx._rightside Then
+                    'D,A
+                    item.m_a四隅.pD = item.m_a四隅.pD + delta
+                    item.m_a四隅.pA = item.m_a四隅.pA + delta
+                ElseIf _idxBottomPngPlate = enumBasketPlateIdx._back Then
+                    'C,D
+                    item.m_a四隅.pC = item.m_a四隅.pC + delta
+                    item.m_a四隅.pD = item.m_a四隅.pD + delta
+                End If
+
+            End If
             itemlist.AddItem(item)
         End If
 
