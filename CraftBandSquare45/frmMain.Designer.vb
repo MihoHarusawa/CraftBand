@@ -224,7 +224,7 @@ Partial Class frmMain
         lbl垂直に = New Label()
         editUpDown = New ctrEditUpDown()
         tpage折りカラー = New TabPage()
-        dgvOriColor = New DataGridView()
+        dgv折りカラー = New ctrDataGridView()
         BindingSource折りカラー = New BindingSource(components)
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl四角ベース = New Label()
@@ -312,7 +312,7 @@ Partial Class frmMain
         tpageひも上下.SuspendLayout()
         grp縦横の四角.SuspendLayout()
         tpage折りカラー.SuspendLayout()
-        CType(dgvOriColor, ComponentModel.ISupportInitialize).BeginInit()
+        CType(dgv折りカラー, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSource折りカラー, ComponentModel.ISupportInitialize).BeginInit()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
@@ -2179,7 +2179,7 @@ Partial Class frmMain
         tpage折りカラー.Controls.Add(btn選択をON_折り)
         tpage折りカラー.Controls.Add(btn詳細表示)
         tpage折りカラー.Controls.Add(btnClear)
-        tpage折りカラー.Controls.Add(dgvOriColor)
+        tpage折りカラー.Controls.Add(dgv折りカラー)
         tpage折りカラー.Location = New Point(4, 28)
         tpage折りカラー.Name = "tpage折りカラー"
         tpage折りカラー.Padding = New Padding(3)
@@ -2188,12 +2188,13 @@ Partial Class frmMain
         tpage折りカラー.Text = "折りカラー"
         tpage折りカラー.UseVisualStyleBackColor = True
         ' 
-        ' dgvOriColor
+        ' dgv折りカラー
         ' 
-        dgvOriColor.AllowUserToAddRows = False
-        dgvOriColor.AllowUserToDeleteRows = False
-        dgvOriColor.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        dgvOriColor.AutoGenerateColumns = False
+        dgv折りカラー.AllowUserToAddRows = False
+        dgv折りカラー.AllowUserToDeleteRows = False
+        dgv折りカラー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        dgv折りカラー.AutoGenerateColumns = False
+        dgv折りカラー.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle12.BackColor = SystemColors.Control
         DataGridViewCellStyle12.Font = New Font("Yu Gothic UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
@@ -2201,16 +2202,16 @@ Partial Class frmMain
         DataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight
         DataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText
         DataGridViewCellStyle12.WrapMode = DataGridViewTriState.True
-        dgvOriColor.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle12
-        dgvOriColor.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvOriColor.Columns.AddRange(New DataGridViewColumn() {f_b外側_135, f_s外側色_45, f_s外側色_135, f_b外側_45, f_s面名, f_s位置, f_b内側_135, f_s内側色_45, f_s内側色_135, f_b内側_45, f_bEdited, f_s面名2, f_s位置2, f_s色_45, f_sひも名_45, f_iひも番号_45, f_s端_45, f_dひも長加算_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_sひも名_135, f_iひも番号_135, f_s端_135, f_dひも長加算_135, f_sゼロ面名_135, f_iゼロ位置_135})
-        dgvOriColor.DataSource = BindingSource折りカラー
-        dgvOriColor.Location = New Point(6, 6)
-        dgvOriColor.Name = "dgvOriColor"
-        dgvOriColor.RowTemplate.Height = 28
-        dgvOriColor.Size = New Size(828, 330)
-        dgvOriColor.TabIndex = 0
-        dgvOriColor.Visible = False
+        dgv折りカラー.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle12
+        dgv折りカラー.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgv折りカラー.Columns.AddRange(New DataGridViewColumn() {f_b外側_135, f_s外側色_45, f_s外側色_135, f_b外側_45, f_s面名, f_s位置, f_b内側_135, f_s内側色_45, f_s内側色_135, f_b内側_45, f_bEdited, f_s面名2, f_s位置2, f_s色_45, f_sひも名_45, f_iひも番号_45, f_s端_45, f_dひも長加算_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_sひも名_135, f_iひも番号_135, f_s端_135, f_dひも長加算_135, f_sゼロ面名_135, f_iゼロ位置_135})
+        dgv折りカラー.DataSource = BindingSource折りカラー
+        dgv折りカラー.Location = New Point(6, 6)
+        dgv折りカラー.Name = "dgv折りカラー"
+        dgv折りカラー.RowTemplate.Height = 28
+        dgv折りカラー.Size = New Size(828, 330)
+        dgv折りカラー.TabIndex = 0
+        dgv折りカラー.Visible = False
         ' 
         ' BindingSource折りカラー
         ' 
@@ -2525,6 +2526,7 @@ Partial Class frmMain
         ' f_s面名2
         ' 
         f_s面名2.DataPropertyName = "f_s面名"
+        DataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle15.BackColor = SystemColors.Control
         f_s面名2.DefaultCellStyle = DataGridViewCellStyle15
         f_s面名2.HeaderText = "面名"
@@ -2535,6 +2537,7 @@ Partial Class frmMain
         ' f_s位置2
         ' 
         f_s位置2.DataPropertyName = "f_s位置"
+        DataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle16.BackColor = SystemColors.Control
         f_s位置2.DefaultCellStyle = DataGridViewCellStyle16
         f_s位置2.HeaderText = "位置"
@@ -2780,7 +2783,7 @@ Partial Class frmMain
         grp縦横の四角.ResumeLayout(False)
         grp縦横の四角.PerformLayout()
         tpage折りカラー.ResumeLayout(False)
-        CType(dgvOriColor, ComponentModel.ISupportInitialize).EndInit()
+        CType(dgv折りカラー, ComponentModel.ISupportInitialize).EndInit()
         CType(BindingSource折りカラー, ComponentModel.ISupportInitialize).EndInit()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
@@ -2992,7 +2995,7 @@ Partial Class frmMain
     Friend WithEvents f_bError As DataGridViewCheckBoxColumn
     Friend WithEvents chk折りカラー編み As CheckBox
     Friend WithEvents tpage折りカラー As TabPage
-    Friend WithEvents dgvOriColor As DataGridView
+    Friend WithEvents dgv折りカラー As ctrDataGridView
     Friend WithEvents btnClear As Button
     Friend WithEvents grp折り返し As GroupBox
     Friend WithEvents radAfter As RadioButton

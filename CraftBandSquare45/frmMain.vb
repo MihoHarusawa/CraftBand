@@ -29,11 +29,18 @@ Public Class frmMain
             Nothing,
             enumAction._Modify_i何本幅 Or enumAction._Modify_s色 Or enumAction._BackColorReadOnlyYellow Or enumAction._RowHeight_iひも番号
             )
+    Dim _Profile_dgv折りカラー As New CDataGridViewProfile(
+            (New dstWork.tblOriColorDataTable),
+            Nothing,
+             enumAction._BackColorReadOnlyYellow
+            )
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         _Profile_dgv縁の始末.FormCaption = Me.Text
         dgv縁の始末.SetProfile(_Profile_dgv縁の始末)
+        _Profile_dgv折りカラー.FormCaption = Me.Text
+        dgv折りカラー.SetProfile(_Profile_dgv折りカラー)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
         setAddPartsRefNames()
@@ -110,7 +117,7 @@ Public Class frmMain
             colwid = My.Settings.frmMainGridTate
             Me.expand縦ひも.SetColumnWidthFromString(colwid)
             colwid = My.Settings.frmMainGridOriColor
-            'Me.dgvOriColor.SetColumnWidthFromString(colwid)
+            Me.dgv折りカラー.SetColumnWidthFromString(colwid)
         End If
 
         setStartEditing()
@@ -125,6 +132,7 @@ Public Class frmMain
             End If
         End If
 
+        My.Settings.frmMainGridOriColor = Me.dgv折りカラー.GetColumnWidthString()
         My.Settings.frmMainGridSide = Me.dgv縁の始末.GetColumnWidthString()
         My.Settings.frmMainGridOptions = Me.editAddParts.GetColumnWidthString()
         My.Settings.frmMainGridYoko = Me.expand横ひも.GetColumnWidthString()
@@ -1442,50 +1450,49 @@ Public Class frmMain
         If Not _clsCalcSquare45.p_is折りカラー処理 Then
             '折りカラー処理できません。高さをセットし本幅を一致させてください。
             MessageBox.Show(My.Resources.MsgCannotOricolor, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            dgvOriColor.Visible = False
+            dgv折りカラー.Visible = False
             Exit Sub
         End If
         SetReadonlyColumnVisibility(0)
 
         Dim oriColorTable As dstWork.tblOriColorDataTable = _clsCalcSquare45.GetOriColorTable()
         If oriColorTable IsNot Nothing Then
-            dgvOriColor.DataSource = oriColorTable
-            dgvOriColor.Refresh()
-            dgvOriColor.Visible = True
+            BindingSource折りカラー.DataSource = oriColorTable
+            BindingSource折りカラー.Sort = "f_index"
+
+            dgv折りカラー.Refresh()
+            dgv折りカラー.Visible = True
         End If
     End Sub
 
     Function Hide折りカラー() As Boolean
         Dim ret As Boolean = save折りカラー()
-        dgvOriColor.Visible = False
-        dgvOriColor.DataSource = Nothing
+        dgv折りカラー.Visible = False
+        BindingSource折りカラー.Sort = Nothing
+        BindingSource折りカラー.DataSource = Nothing
         Return ret
     End Function
 
     Function save折りカラー() As Boolean
-        Try
-            Dim oriColorTable As dstWork.tblOriColorDataTable = dgvOriColor.DataSource
-            If oriColorTable Is Nothing Then
-                Return False
-            Else
-                Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
-            End If
-
-        Catch ex As Exception
+        Dim oriColorTable As dstWork.tblOriColorDataTable = BindingSource折りカラー.DataSource
+        If oriColorTable Is Nothing Then
             Return False
-        End Try
+        Else
+            Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
+        End If
     End Function
 
+#Region "グリッドイベント"
 
     Dim _formatHeader As New StringFormat() With {.Alignment = StringAlignment.Center, .LineAlignment = StringAlignment.Near}
     Dim _bgBrushR As New SolidBrush(Color.LightGreen)
     Dim _bgBrushL As New SolidBrush(Color.LightBlue)
 
     'ヘッダーを2段表示
-    Private Sub dgvOriColor_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgvOriColor.CellPainting
+    Private Sub dgv折りカラー_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgv折りカラー.CellPainting
         ' ヘッダーセルのみを対象とする
         If e.RowIndex = -1 AndAlso e.ColumnIndex >= 0 Then
-            Dim headerText As String = dgvOriColor.Columns(e.ColumnIndex).HeaderText
+            Dim headerText As String = dgv折りカラー.Columns(e.ColumnIndex).HeaderText
             If headerText Is Nothing Then
                 Exit Sub
             End If
@@ -1519,54 +1526,55 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgvOriColor_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvOriColor.CellValueChanged
+    Private Sub dgv折りカラー_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv折りカラー.CellValueChanged
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
         ' チェックボックスの列のみ処理
-        If (dgvOriColor.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
+        If (dgv折りカラー.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
             Return
         End If
         ' 編集結果をレコードに反映
-        dgvOriColor.EndEdit()
+        dgv折りカラー.EndEdit()
 
         ' 対応するDataRowを取得（DataTableから直接）
         Dim rowIndex As Integer = e.RowIndex
-        Dim drv As DataRowView = CType(dgvOriColor.Rows(rowIndex).DataBoundItem, DataRowView)
+        Dim drv As DataRowView = CType(dgv折りカラー.Rows(rowIndex).DataBoundItem, DataRowView)
         Dim dataRow As DataRow = drv.Row
-        Dim fieldName As String = dgvOriColor.Columns(e.ColumnIndex).DataPropertyName
+        Dim fieldName As String = dgv折りカラー.Columns(e.ColumnIndex).DataPropertyName
 
         If _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow) Then
-            dgvOriColor.Refresh()
+            dgv折りカラー.Refresh()
         End If
     End Sub
 
     'チェック操作後即時更新
-    Private Sub dgvOriColor_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles dgvOriColor.CurrentCellDirtyStateChanged
-        If dgvOriColor.IsCurrentCellDirty Then
-            dgvOriColor.CommitEdit(DataGridViewDataErrorContexts.Commit)
+    Private Sub dgv折りカラー_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles dgv折りカラー.CurrentCellDirtyStateChanged
+        If dgv折りカラー.IsCurrentCellDirty Then
+            dgv折りカラー.CommitEdit(DataGridViewDataErrorContexts.Commit)
         End If
     End Sub
 
-    Private Sub dgvOriColor_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgvOriColor.CellEndEdit
+    Private Sub dgv折りカラー_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgv折りカラー.CellEndEdit
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
         ' チェックボックスは処理済
-        If (dgvOriColor.Columns(e.ColumnIndex).ValueType = GetType(Boolean)) Then
+        If (dgv折りカラー.Columns(e.ColumnIndex).ValueType = GetType(Boolean)) Then
             Return
         End If
 
         ' 対応するDataRowを取得（DataTableから直接）
         Dim rowIndex As Integer = e.RowIndex
-        Dim drv As DataRowView = CType(dgvOriColor.Rows(rowIndex).DataBoundItem, DataRowView)
+        Dim drv As DataRowView = CType(dgv折りカラー.Rows(rowIndex).DataBoundItem, DataRowView)
         Dim dataRow As DataRow = drv.Row
-        Dim fieldName As String = dgvOriColor.Columns(e.ColumnIndex).DataPropertyName
+        Dim fieldName As String = dgv折りカラー.Columns(e.ColumnIndex).DataPropertyName
 
         _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow)
     End Sub
+#End Region
 
     'チェックオフ
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        If dgvOriColor.Visible AndAlso dgvOriColor.DataSource IsNot Nothing Then
-            If _clsCalcSquare45.ClearOriColor(dgvOriColor.DataSource) Then
-                dgvOriColor.Refresh()
+        If dgv折りカラー.Visible AndAlso BindingSource折りカラー.DataSource IsNot Nothing Then
+            If _clsCalcSquare45.ClearOriColor(BindingSource折りカラー.DataSource) Then
+                dgv折りカラー.Refresh()
             End If
         Else
             _clsCalcSquare45.ClearOriColor(Nothing) '全展開レコード
@@ -1575,16 +1583,16 @@ Public Class frmMain
 
     'カラムの表示をトグル
     Private Sub btn詳細表示_Click(sender As Object, e As EventArgs) Handles btn詳細表示.Click
-        If Not dgvOriColor.Visible OrElse dgvOriColor.DataSource Is Nothing Then
+        If Not dgv折りカラー.Visible OrElse BindingSource折りカラー.DataSource Is Nothing Then
             Exit Sub
         End If
         SetReadonlyColumnVisibility(-1)
     End Sub
 
-    'ColIndexDetail より右のカラムを表示/非表示/トグルする
+    'ColIndexDetail より右のカラムを表示/非表示/トグルする　※Debug用はその前に置く
     'mode: -1: トグル（現在の表示状態を反転）/0: 非表示/1: 表示
     Private Sub SetReadonlyColumnVisibility(ByVal mode As Integer)
-        If dgvOriColor Is Nothing Then Exit Sub
+        If dgv折りカラー Is Nothing Then Exit Sub
 
         Const ColIndexDetail As Integer = 11
 
@@ -1596,22 +1604,22 @@ Public Class frmMain
                 newVisible = True
             Case -1
                 ' トグル用に、対象列の Visible 状態を基準に反転
-                newVisible = Not dgvOriColor.Columns(ColIndexDetail).Visible
+                newVisible = Not dgv折りカラー.Columns(ColIndexDetail).Visible
             Case Else
                 Exit Sub ' 無効な mode の場合は何もしない
         End Select
 
         ' 対象カラムの Visible を設定
-        For i As Integer = ColIndexDetail To dgvOriColor.Columns.Count - 1
-            dgvOriColor.Columns(i).Visible = newVisible
+        For i As Integer = ColIndexDetail To dgv折りカラー.Columns.Count - 1
+            dgv折りカラー.Columns(i).Visible = newVisible
         Next
     End Sub
 
     Private Sub SetSelectedCheckCells(ByVal bVal As Boolean)
         ' 編集確定しておく
-        dgvOriColor.EndEdit()
+        dgv折りカラー.EndEdit()
 
-        For Each cell As DataGridViewCell In dgvOriColor.SelectedCells
+        For Each cell As DataGridViewCell In dgv折りカラー.SelectedCells
             ' 対象セルがBoolean型で、ReadOnlyでない場合のみ処理
             If TypeOf cell.Value Is Boolean AndAlso Not cell.ReadOnly Then
                 cell.Value = bVal
@@ -1619,16 +1627,16 @@ Public Class frmMain
         Next
 
         ' 編集反映
-        dgvOriColor.EndEdit()
+        dgv折りカラー.EndEdit()
     End Sub
     Private Sub btn選択をON_折り_Click(sender As Object, e As EventArgs) Handles btn選択をON_折り.Click
-        If 0 < dgvOriColor.SelectedCells.Count Then
+        If 0 < dgv折りカラー.SelectedCells.Count Then
             SetSelectedCheckCells(True)
         End If
     End Sub
 
     Private Sub btn選択をOFF_折り_Click(sender As Object, e As EventArgs) Handles btn選択をOFF_折り.Click
-        If 0 < dgvOriColor.SelectedCells.Count Then
+        If 0 < dgv折りカラー.SelectedCells.Count Then
             SetSelectedCheckCells(False)
         End If
     End Sub
@@ -1879,7 +1887,7 @@ Public Class frmMain
             editAddParts.SetDgvColumnsVisible()
             expand横ひも.SetDgvColumnsVisible()
             expand縦ひも.SetDgvColumnsVisible()
-            setDgvColumnsVisible(dgvOriColor)
+            setDgvColumnsVisible(dgv折りカラー)
             bVisible = True
         End If
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "DEBUG:{0}", g_clsSelectBasics.dump())

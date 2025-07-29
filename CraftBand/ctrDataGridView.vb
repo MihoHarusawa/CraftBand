@@ -224,7 +224,11 @@ Public Class ctrDataGridView
             'R/O背景色
             If _Profile.Actions.HasFlag(enumAction._BackColorReadOnlyYellow) Then
                 If Me.Rows(e.RowIndex).Cells(e.ColumnIndex).ReadOnly Then
-                    e.CellStyle.BackColor = Color.LightYellow
+                    '色設定がなければ
+                    Dim colStyle = Me.Columns(e.ColumnIndex).DefaultCellStyle
+                    If colStyle.BackColor = Color.Empty OrElse colStyle.BackColor.ToArgb = Me.DefaultCellStyle.BackColor.ToArgb Then
+                        e.CellStyle.BackColor = Color.LightYellow
+                    End If
                 End If
             End If
             'ひも番号の行の高さと背景色
@@ -355,7 +359,7 @@ Public Class ctrDataGridView
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
         If Not DeleteLines(Me) Then
             SetDefaultWritableCell(Me, MyGridDataRow)
-            '
+            'DataSourceはBindingSource
             If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
                 Me.DataSource.Current.row.acceptchanges()
             End If
