@@ -14,8 +14,8 @@
     <Description>六つ目かごのデザインとサイズ計算</Description>
     <Copyright>Copyright © LaboHarusawa 2025</Copyright>
     <PackageIcon>IconHexagon.ico</PackageIcon>
-    <AssemblyVersion>1.0.13.0</AssemblyVersion>
-    <FileVersion>1.0.13.0</FileVersion>
+    <AssemblyVersion>1.0.14.0</AssemblyVersion>
+    <FileVersion>1.0.14.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
