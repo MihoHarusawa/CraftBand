@@ -1123,6 +1123,7 @@ Public Class frmMain
     End Sub
 
     Private Sub nud高さの四角数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの四角数.ValueChanged
+        txt折り返しの高さ数.Text = nud高さの四角数.Value
         recalc(CalcCategory.Square_Vert, sender)
     End Sub
 
@@ -1446,22 +1447,30 @@ Public Class frmMain
 
 #Region "折りカラー"'#96
     Sub Show折りカラー()
+        txt折り返し数.Text = ""
+        SetReadonlyColumnVisibility(0)
+
         'タブ切り替えタイミングのため、表示は更新済
         If Not _clsCalcSquare45.p_is折りカラー処理 Then
             '折りカラー処理できません。高さをセットし本幅を一致させてください。
             MessageBox.Show(My.Resources.MsgCannotOricolor, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            BindingSource折りカラー.Sort = Nothing
+            BindingSource折りカラー.DataSource = Nothing
             dgv折りカラー.Visible = False
+            timer折りカラー.Enabled = False
             Exit Sub
         End If
-        SetReadonlyColumnVisibility(0)
 
         Dim oriColorTable As dstWork.tblOriColorDataTable = _clsCalcSquare45.GetOriColorTable()
         If oriColorTable IsNot Nothing Then
+            txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
+
             BindingSource折りカラー.DataSource = oriColorTable
             BindingSource折りカラー.Sort = "f_index"
 
             dgv折りカラー.Refresh()
             dgv折りカラー.Visible = True
+            timer折りカラー.Enabled = True
         End If
     End Sub
 
@@ -1470,16 +1479,16 @@ Public Class frmMain
         dgv折りカラー.Visible = False
         BindingSource折りカラー.Sort = Nothing
         BindingSource折りカラー.DataSource = Nothing
+        timer折りカラー.Enabled = False
         Return ret
     End Function
 
     Function save折りカラー() As Boolean
-        Dim oriColorTable As dstWork.tblOriColorDataTable = BindingSource折りカラー.DataSource
-        If oriColorTable Is Nothing Then
-            Return False
-        Else
+        Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
+        If oriColorTable IsNot Nothing Then
             Return _clsCalcSquare45.SaveOriColorTable(oriColorTable)
         End If
+        Return False
     End Function
 
 #Region "グリッドイベント"
@@ -1487,6 +1496,7 @@ Public Class frmMain
     Dim _formatHeader As New StringFormat() With {.Alignment = StringAlignment.Center, .LineAlignment = StringAlignment.Near}
     Dim _bgBrushR As New SolidBrush(Color.LightGreen)
     Dim _bgBrushL As New SolidBrush(Color.LightBlue)
+    Const ColIndexDetail As Integer = 11
 
     'ヘッダーを2段表示
     Private Sub dgv折りカラー_CellPainting(sender As Object, e As DataGridViewCellPaintingEventArgs) Handles dgv折りカラー.CellPainting
@@ -1526,10 +1536,11 @@ Public Class frmMain
         End If
     End Sub
 
+    'チェックオン/オフ、色表示変更を伴う
     Private Sub dgv折りカラー_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv折りカラー.CellValueChanged
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
         ' チェックボックスの列のみ処理
-        If (dgv折りカラー.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
+        If ColIndexDetail < e.ColumnIndex OrElse (dgv折りカラー.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
             Return
         End If
         ' 編集結果をレコードに反映
@@ -1542,17 +1553,21 @@ Public Class frmMain
         Dim fieldName As String = dgv折りカラー.Columns(e.ColumnIndex).DataPropertyName
 
         If _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow) Then
-            dgv折りカラー.Refresh()
+            'dgv折りカラー.Refresh()
+            ' 変更があったのでタイマーをリセット
+            timer折りカラー.Stop()
+            timer折りカラー.Start()
         End If
     End Sub
 
     'チェック操作後即時更新
     Private Sub dgv折りカラー_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles dgv折りカラー.CurrentCellDirtyStateChanged
-        If dgv折りカラー.IsCurrentCellDirty Then
+        If TypeOf dgv折りカラー.CurrentCell Is DataGridViewCheckBoxCell Then
             dgv折りカラー.CommitEdit(DataGridViewDataErrorContexts.Commit)
         End If
     End Sub
 
+    'セル編集、Editのマーク
     Private Sub dgv折りカラー_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgv折りカラー.CellEndEdit
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
         ' チェックボックスは処理済
@@ -1568,20 +1583,41 @@ Public Class frmMain
 
         _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow)
     End Sub
+
+    'チェック数を遅延カウント
+    Private Sub timer折り返しカウント_Tick(sender As Object, e As EventArgs) Handles timer折りカラー.Tick
+        timer折りカラー.Stop()
+        dgv折りカラー.Refresh()
+
+        txt折り返し数.Text = ""
+        Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
+        If oriColorTable IsNot Nothing Then
+            txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
+        End If
+    End Sub
+
 #End Region
 
-    'チェックオフ
+    'クリアボタン
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
-        If dgv折りカラー.Visible AndAlso BindingSource折りカラー.DataSource IsNot Nothing Then
-            If _clsCalcSquare45.ClearOriColor(BindingSource折りカラー.DataSource) Then
-                dgv折りカラー.Refresh()
+        If dgv折りカラー.Visible Then
+
+            txt折り返し数.Text = ""
+            Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
+            If oriColorTable IsNot Nothing Then
+                If _clsCalcSquare45.ClearOriColor(oriColorTable) Then
+                    dgv折りカラー.Refresh()
+                    'ゼロのはずだが
+                    txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
+                End If
             End If
+
         Else
             _clsCalcSquare45.ClearOriColor(Nothing) '全展開レコード
         End If
     End Sub
 
-    'カラムの表示をトグル
+    '詳細表示ボタン、カラムの表示をトグル
     Private Sub btn詳細表示_Click(sender As Object, e As EventArgs) Handles btn詳細表示.Click
         If Not dgv折りカラー.Visible OrElse BindingSource折りカラー.DataSource Is Nothing Then
             Exit Sub
@@ -1589,12 +1625,28 @@ Public Class frmMain
         SetReadonlyColumnVisibility(-1)
     End Sub
 
-    'ColIndexDetail より右のカラムを表示/非表示/トグルする　※Debug用はその前に置く
+    '選択をONボタン
+    Private Sub btn選択をON_折り_Click(sender As Object, e As EventArgs) Handles btn選択をON_折り.Click
+        If 0 < dgv折りカラー.SelectedCells.Count Then
+            SetSelectedCheckCells(True)
+        End If
+    End Sub
+
+    '選択をOFFボタン
+    Private Sub btn選択をOFF_折り_Click(sender As Object, e As EventArgs) Handles btn選択をOFF_折り.Click
+        If 0 < dgv折りカラー.SelectedCells.Count Then
+            SetSelectedCheckCells(False)
+        End If
+    End Sub
+
+
+    '詳細表示切替
+    'ColIndexDetail より右のカラムを表示/非表示/トグルする　※Debug用カラムはその前に置くこと!
     'mode: -1: トグル（現在の表示状態を反転）/0: 非表示/1: 表示
     Private Sub SetReadonlyColumnVisibility(ByVal mode As Integer)
-        If dgv折りカラー Is Nothing Then Exit Sub
-
-        Const ColIndexDetail As Integer = 11
+        If Not dgv折りカラー.Visible Then
+            Exit Sub
+        End If
 
         Dim newVisible As Boolean
         Select Case mode
@@ -1615,6 +1667,7 @@ Public Class frmMain
         Next
     End Sub
 
+    '選択されたチェックボックスを引数の状態にする
     Private Sub SetSelectedCheckCells(ByVal bVal As Boolean)
         ' 編集確定しておく
         dgv折りカラー.EndEdit()
@@ -1628,17 +1681,7 @@ Public Class frmMain
 
         ' 編集反映
         dgv折りカラー.EndEdit()
-    End Sub
-    Private Sub btn選択をON_折り_Click(sender As Object, e As EventArgs) Handles btn選択をON_折り.Click
-        If 0 < dgv折りカラー.SelectedCells.Count Then
-            SetSelectedCheckCells(True)
-        End If
-    End Sub
-
-    Private Sub btn選択をOFF_折り_Click(sender As Object, e As EventArgs) Handles btn選択をOFF_折り.Click
-        If 0 < dgv折りカラー.SelectedCells.Count Then
-            SetSelectedCheckCells(False)
-        End If
+        dgv折りカラー.Refresh()
     End Sub
 
 

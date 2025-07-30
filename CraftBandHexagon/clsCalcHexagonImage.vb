@@ -2871,7 +2871,7 @@ Partial Public Class clsCalcHexagon
 
     'プレビュータブのCheckBox値
     Public Class CDispImageChecked
-        Private _checked(cAngleCount) As Boolean
+        Private _checked(cAngleCount + 1) As Boolean
 
         Public Sub New()
         End Sub
@@ -2892,6 +2892,15 @@ Partial Public Class clsCalcHexagon
             End Get
             Set(value As Boolean)
                 _checked(cAngleCount) = value
+            End Set
+        End Property
+
+        Public Property Insert As Boolean
+            Get
+                Return _checked(cAngleCount + 1)
+            End Get
+            Set(value As Boolean)
+                _checked(cAngleCount + 1) = value
             End Set
         End Property
 
@@ -2964,8 +2973,8 @@ Partial Public Class clsCalcHexagon
         Dim imageList描画要素 As clsImageItemList = imageList底と側面枠(checked.Side)
 
 
-        '差しひもはおもて全描画時(うらはレコード無だが念のため
-        If Not isBackFace AndAlso checked.IsSetAll Then
+        '差しひも(うらは呼出し時にOFF)
+        If checked.Insert Then
             Dim imgList差しひも As clsImageItemList = imageList差しひも(bandListForClip差しひも)
             imgData.MoveList(imgList差しひも)
         End If

@@ -393,7 +393,7 @@ Public Class CImageDraw
             Case ImageTypeEnum._底楕円
                 Return draw底楕円(item)
 
-            Case ImageTypeEnum._付属品
+            Case ImageTypeEnum._付属品, ImageTypeEnum._付属品0
                 Return draw付属品(item)
 
             Case ImageTypeEnum._横軸線

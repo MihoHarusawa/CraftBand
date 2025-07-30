@@ -1976,6 +1976,23 @@ Class clsCalcSquare45
         save縦展開DataTable(changed)
         Return changed
     End Function
+
+    Public Function CountCheckedOriColorTable(ByVal table As dstWork.tblOriColorDataTable) As Integer
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Return 0
+        End If
+
+        Dim count As Integer =
+            (From row In table.AsEnumerable()
+             Select CInt(row.Field(Of Boolean)("f_b外側_45")) +
+                CInt(row.Field(Of Boolean)("f_b内側_45")) +
+                CInt(row.Field(Of Boolean)("f_b外側_135")) +
+                CInt(row.Field(Of Boolean)("f_b内側_135"))
+             ).Sum()
+
+        Return -count
+    End Function
+
 #End Region
 
 #Region "リスト出力"

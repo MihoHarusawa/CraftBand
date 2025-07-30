@@ -1887,10 +1887,11 @@ Public Class clsImageItem
         _コマ     'm_row縦横展開,m_row縦横展開2,m_rひも位置,m_knot
         _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
 
-        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
+        _付属品0   'システム用。_付属品と同処理・保存画像に描画
 
-        _画像保存   'm_a四隅
         _画像貼付   'm_a四隅
+        _折り返し線 'm_listLine
+        _画像保存   'm_a四隅
 
         _底枠     'm_a四隅,m_lineList,m_is円
         _横の側面   'm_a四隅,m_lineList
@@ -1899,13 +1900,11 @@ Public Class clsImageItem
         _四隅領域線    'm_a四隅,m_lineList,m_is円,m_ltype
         _底枠2     'm_lineList        (Hexagonの底)
 
-
         _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域,m_is円,m_dひも幅 (Meshの底)
         '_差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
 
         _底の中央線  'm_listLine
-
-        _折り返し線 'm_listLine
+        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
 
         _文字列 'm_p位置,_r文字領域
 
@@ -2138,7 +2137,7 @@ Public Class clsImageItem
                             chars += 1 '記号1点
                             line = 1
                         End If
-                    Case ImageTypeEnum._付属品
+                    Case ImageTypeEnum._付属品, ImageTypeEnum._付属品0
                         If m_row追加品 IsNot Nothing Then
                             chars = Len(m_row追加品.f_s付属品名) + Len(m_row追加品.f_s付属品ひも名) + Len(m_row追加品.f_s記号)
                             chars += 1 '"/"分
@@ -2185,7 +2184,7 @@ Public Class clsImageItem
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
-            Case ImageTypeEnum._付属品
+            Case ImageTypeEnum._付属品, ImageTypeEnum._付属品0
                 Debug.Print("m_dひも幅({0}) m_rひも位置 {1}", m_dひも幅, m_rひも位置.ToString)
                 r描画領域 = m_rひも位置.get拡大領域(m_dひも幅)
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む

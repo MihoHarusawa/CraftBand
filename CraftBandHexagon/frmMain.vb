@@ -1849,6 +1849,7 @@ Public Class frmMain
     Private Sub Showプレビュー(works As clsDataTables)
         picプレビュー.Image = Nothing
         _clsImageData = Nothing
+        chk差しひも.Enabled = (0 < _clsDataTables.p_tbl差しひも.Rows.Count) AndAlso radおもて.Checked
 
         SaveTables(_clsDataTables)
         Dim ret As Boolean = _clsCalcHexagon.CalcSize(CalcCategory.NewData, Nothing, Nothing)
@@ -1880,6 +1881,7 @@ Public Class frmMain
                 '入れ替え
                 checked(cIdxAngle60) = chk斜め120度.Checked
                 checked(cIdxAngle120) = chk斜め60度.Checked
+                checked.Insert = False
             Else
                 'おもて
                 data = _clsDataTables
@@ -1887,6 +1889,7 @@ Public Class frmMain
                 'そのまま
                 checked(cIdxAngle60) = chk斜め60度.Checked
                 checked(cIdxAngle120) = chk斜め120度.Checked
+                checked.Insert = chk差しひも.Enabled AndAlso chk差しひも.Checked
             End If
 
             Cursor.Current = Cursors.WaitCursor
@@ -1904,7 +1907,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub chkひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横ひも.CheckedChanged, chk斜め60度.CheckedChanged, chk斜め120度.CheckedChanged, chk側面.CheckedChanged
+    Private Sub chkひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横ひも.CheckedChanged, chk斜め60度.CheckedChanged, chk斜め120度.CheckedChanged, chk側面.CheckedChanged, chk差しひも.CheckedChanged
         If _clsImageData Is Nothing Then
             Return
         End If
@@ -1913,6 +1916,7 @@ Public Class frmMain
 
     '※斜めひも「同数」時のみ表示される
     Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged ' radうら.CheckedChanged
+        chk差しひも.Enabled = (0 < _clsDataTables.p_tbl差しひも.Rows.Count) AndAlso radおもて.Checked
         If _clsImageData Is Nothing Then
             Return
         End If
@@ -1925,6 +1929,7 @@ Public Class frmMain
         chk斜め60度.Checked = True
         chk斜め120度.Checked = True
         chk側面.Checked = True
+        chk差しひも.Checked = False
     End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
