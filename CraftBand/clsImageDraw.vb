@@ -1110,9 +1110,9 @@ Public Class CImageDraw
         Dim rx As Single = pixcel_width(r外接サイズ.x幅 / 2)
         Dim ry As Single = pixcel_height(r外接サイズ.y高さ / 2)
         '右上
-        If rx = 0 Then
+        If NearlyEqual(rx, 0) Then
             path.AddLine(centers(0).X, centers(0).Y - ry, centers(0).X, centers(0).Y)
-        ElseIf ry = 0 AndAlso 0 < rx Then
+        ElseIf NearlyEqual(ry, 0) AndAlso 0 < rx Then
             path.AddLine(centers(0).X, centers(0).Y, centers(0).X + rx, centers(0).Y)
         Else
             path.AddArc(centers(0).X - rx, centers(0).Y - ry, rx * 2, ry * 2, 270, 90)
@@ -1120,9 +1120,9 @@ Public Class CImageDraw
         path.AddLine(centers(0).X + rx, centers(0).Y, centers(3).X + rx, centers(3).Y)
 
         '右下
-        If rx = 0 Then
+        If NearlyEqual(rx, 0) Then
             path.AddLine(centers(3).X, centers(3).Y, centers(3).X, centers(3).Y + ry)
-        ElseIf ry = 0 AndAlso 0 < rx Then
+        ElseIf NearlyEqual(ry, 0) AndAlso 0 < rx Then
             path.AddLine(centers(3).X + rx, centers(3).Y, centers(3).X, centers(3).Y)
         Else
             path.AddArc(centers(3).X - rx, centers(3).Y - ry, rx * 2, ry * 2, 0, 90)
@@ -1130,9 +1130,9 @@ Public Class CImageDraw
         path.AddLine(centers(3).X, centers(3).Y + ry, centers(2).X, centers(2).Y + ry)
 
         '左下
-        If rx = 0 Then
+        If NearlyEqual(rx, 0) Then
             path.AddLine(centers(2).X, centers(2).Y + ry, centers(2).X, centers(2).Y)
-        ElseIf ry = 0 AndAlso 0 < rx Then
+        ElseIf NearlyEqual(ry, 0) AndAlso 0 < rx Then
             path.AddLine(centers(2).X, centers(2).Y, centers(2).X - rx, centers(2).Y)
         Else
             path.AddArc(centers(2).X - rx, centers(2).Y - ry, rx * 2, ry * 2, 90, 90)
@@ -1140,9 +1140,9 @@ Public Class CImageDraw
         path.AddLine(centers(2).X - rx, centers(2).Y, centers(1).X - rx, centers(1).Y)
 
         '左上
-        If rx = 0 Then
+        If NearlyEqual(rx, 0) Then
             path.AddLine(centers(1).X, centers(1).Y, centers(1).X, centers(1).Y - ry)
-        ElseIf ry = 0 AndAlso 0 < rx Then
+        ElseIf NearlyEqual(ry, 0) AndAlso 0 < rx Then
             path.AddLine(centers(1).X - rx, centers(1).Y, centers(1).X, centers(1).Y)
         Else
             path.AddArc(centers(1).X - rx, centers(1).Y - ry, rx * 2, ry * 2, 180, 90)
@@ -1370,7 +1370,7 @@ Public Class CImageDraw
             End If
 
             '※角度は、BitMap に対してそのまま適用
-            Dim savepng As New CSavePng
+            Dim savepng As New CSavePng(item.m_alfa)
             Dim ret As Boolean = savepng.CopyRotateAndSaveToPNG(Canvas, pixcel_lines(item.m_a四隅), item.m_angle, item.m_fpath)
 
             'エラーにしない(結果はファイルの有無で判断)
@@ -1459,6 +1459,18 @@ Public Class CImageDraw
 
     '指定の領域を切り出し、回転して画像ファイルを作る
     Private Class CSavePng
+        Dim _alfaWhite As Integer    '完全白の透明度 0=完全透明～255
+
+        Sub New(ByVal alfa As Integer)
+            If alfa < 0 Then
+                _alfaWhite = 0
+            ElseIf 255 < alfa Then
+                _alfaWhite = 255
+            Else
+                _alfaWhite = alfa
+            End If
+        End Sub
+
         Function CopyRotateAndSaveToPNG(originalBitmap As Bitmap, points() As PointF, angle As Single, outputFilePath As String) As Boolean
             '外接矩形を取得
             Dim path As New Drawing2D.GraphicsPath()
@@ -1519,7 +1531,27 @@ Public Class CImageDraw
                 g.DrawImage(rotatedBitmap, 0, 0, centerRectangle, GraphicsUnit.Pixel)
             End Using
 
-            '4. 結果をファイルに保存
+            '4. 白を透明にする処理を追加
+            Dim rect As New Rectangle(0, 0, finalBitmap.Width, finalBitmap.Height)
+            Dim bmpData As Imaging.BitmapData = finalBitmap.LockBits(rect, Imaging.ImageLockMode.ReadWrite, Imaging.PixelFormat.Format32bppArgb)
+
+            Dim ptr As IntPtr = bmpData.Scan0
+            Dim bytes As Integer = Math.Abs(bmpData.Stride) * finalBitmap.Height
+            Dim rgba(bytes - 1) As Byte
+            Runtime.InteropServices.Marshal.Copy(ptr, rgba, 0, bytes)
+
+            For i As Integer = 0 To bytes - 4 Step 4
+                Dim b As Byte = rgba(i)
+                Dim g As Byte = rgba(i + 1)
+                Dim r As Byte = rgba(i + 2)
+                If r = 255 AndAlso g = 255 AndAlso b = 255 Then '完全白
+                    rgba(i + 3) = _alfaWhite  '完全透明～不透明
+                End If
+            Next
+            Runtime.InteropServices.Marshal.Copy(rgba, 0, ptr, bytes)
+            finalBitmap.UnlockBits(bmpData)
+
+            '5. 結果をファイルに保存
             finalBitmap.Save(outputFilePath, Imaging.ImageFormat.Png)
 
             ' リソース解放

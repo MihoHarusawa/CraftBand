@@ -58,10 +58,11 @@ Public Module mdlAddPartsImage
                     '各、iひも番号
                     For isub As Integer = iFrom To iTo
                         Dim row As tbl追加品Row = rows(isub)
-                        '同位置のみ対象
+                        '同位置のみ対象→異なってもよい
                         'If row.f_i描画位置 <> first描画位置 Then
-                        '    Continue For
-                        'End If
+                        If row.f_i描画位置 = enum描画位置.i_なし Then
+                            Continue For
+                        End If
                         isCenter = (row.f_i描画位置 <> enum描画位置.i_左下)
 
                         '文字表示

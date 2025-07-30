@@ -1873,6 +1873,7 @@ Public Class clsImageItem
     'クリップ
     Public m_fpath As String 'jpg
     Public m_angle As Double
+    Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明
 
 
     '描画タイプ(描画順)
@@ -1890,7 +1891,7 @@ Public Class clsImageItem
         _付属品0   'システム用。_付属品と同処理・保存画像に描画
 
         _画像貼付   'm_a四隅
-        _折り返し線 'm_listLine
+        '_折り返し線 'm_listLine
         _画像保存   'm_a四隅
 
         _底枠     'm_a四隅,m_lineList,m_is円
@@ -1899,9 +1900,9 @@ Public Class clsImageItem
         _四隅領域 'm_a四隅,m_lineList,m_is円
         _四隅領域線    'm_a四隅,m_lineList,m_is円,m_ltype
         _底枠2     'm_lineList        (Hexagonの底)
-
         _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域,m_is円,m_dひも幅 (Meshの底)
-        '_差しひも   'm_groupRow,m_a四隅,_r文字領域           (Meshの底)
+
+        _折り返し線 'm_listLine
 
         _底の中央線  'm_listLine
         _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域

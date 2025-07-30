@@ -25,22 +25,22 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim DataGridViewCellStyle17 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle19 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle25 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle26 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle27 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle28 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle29 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle30 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle31 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle32 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         BindingSource縁の始末 = New BindingSource(components)
         ToolTip1 = New ToolTip(components)
@@ -229,6 +229,32 @@ Partial Class frmMain
         txt折り返しの高さ数 = New TextBox()
         lbl折り返しの高さ数 = New Label()
         dgv折りカラー = New ctrDataGridView()
+        BindingSource折りカラー = New BindingSource(components)
+        f_i段数2 = New DataGridViewTextBoxColumn()
+        lbl四角ベース = New Label()
+        lbl計算寸法 = New Label()
+        lbl計算寸法縦 = New Label()
+        lbl計算寸法高さ = New Label()
+        lbl計算寸法_単位 = New Label()
+        lbl縁厚さプラス = New Label()
+        lbl計算寸法横 = New Label()
+        lbl計算寸法周 = New Label()
+        btn終了 = New Button()
+        OpenFileDialog1 = New OpenFileDialog()
+        SaveFileDialog1 = New SaveFileDialog()
+        cmb基本色 = New ComboBox()
+        lbl基本色 = New Label()
+        lbl横寸法の差 = New Label()
+        lbl縦寸法の差 = New Label()
+        lbl高さ寸法の差 = New Label()
+        txtバンドの種類名 = New TextBox()
+        lbl基本のひも幅length = New Label()
+        StatusStrip1 = New StatusStrip()
+        ToolStripStatusLabel1 = New ToolStripStatusLabel()
+        ToolStripStatusLabel2 = New ToolStripStatusLabel()
+        lbl単位 = New Label()
+        btnDEBUG = New Button()
+        timer折りカラー = New Timer(components)
         f_b外側_135 = New DataGridViewCheckBoxColumn()
         f_s外側色_45 = New DataGridViewTextBoxColumn()
         f_s外側色_135 = New DataGridViewTextBoxColumn()
@@ -256,32 +282,6 @@ Partial Class frmMain
         f_dひも長加算_135 = New DataGridViewTextBoxColumn()
         f_sゼロ面名_135 = New DataGridViewTextBoxColumn()
         f_iゼロ位置_135 = New DataGridViewTextBoxColumn()
-        BindingSource折りカラー = New BindingSource(components)
-        f_i段数2 = New DataGridViewTextBoxColumn()
-        lbl四角ベース = New Label()
-        lbl計算寸法 = New Label()
-        lbl計算寸法縦 = New Label()
-        lbl計算寸法高さ = New Label()
-        lbl計算寸法_単位 = New Label()
-        lbl縁厚さプラス = New Label()
-        lbl計算寸法横 = New Label()
-        lbl計算寸法周 = New Label()
-        btn終了 = New Button()
-        OpenFileDialog1 = New OpenFileDialog()
-        SaveFileDialog1 = New SaveFileDialog()
-        cmb基本色 = New ComboBox()
-        lbl基本色 = New Label()
-        lbl横寸法の差 = New Label()
-        lbl縦寸法の差 = New Label()
-        lbl高さ寸法の差 = New Label()
-        txtバンドの種類名 = New TextBox()
-        lbl基本のひも幅length = New Label()
-        StatusStrip1 = New StatusStrip()
-        ToolStripStatusLabel1 = New ToolStripStatusLabel()
-        ToolStripStatusLabel2 = New ToolStripStatusLabel()
-        lbl単位 = New Label()
-        btnDEBUG = New Button()
-        timer折りカラー = New Timer(components)
         CType(BindingSource縁の始末, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -1656,8 +1656,8 @@ Partial Class frmMain
         ' f_i番号
         ' 
         f_i番号.DataPropertyName = "f_i番号"
-        DataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i番号.DefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i番号.DefaultCellStyle = DataGridViewCellStyle1
         f_i番号.HeaderText = "番号"
         f_i番号.MinimumWidth = 6
         f_i番号.Name = "f_i番号"
@@ -1688,8 +1688,8 @@ Partial Class frmMain
         ' f_iひも番号
         ' 
         f_iひも番号.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも番号.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも番号.DefaultCellStyle = DataGridViewCellStyle2
         f_iひも番号.HeaderText = "ひも番号"
         f_iひも番号.MinimumWidth = 6
         f_iひも番号.Name = "f_iひも番号"
@@ -1700,8 +1700,8 @@ Partial Class frmMain
         ' f_i何本幅
         ' 
         f_i何本幅.DataPropertyName = "f_i何本幅"
-        DataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter
-        f_i何本幅.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
+        f_i何本幅.DefaultCellStyle = DataGridViewCellStyle3
         f_i何本幅.HeaderText = "何本幅"
         f_i何本幅.MinimumWidth = 6
         f_i何本幅.Name = "f_i何本幅"
@@ -1728,10 +1728,10 @@ Partial Class frmMain
         ' f_d高さ
         ' 
         f_d高さ.DataPropertyName = "f_d高さ"
-        DataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle20.Format = "N2"
-        DataGridViewCellStyle20.NullValue = Nothing
-        f_d高さ.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.Format = "N2"
+        DataGridViewCellStyle4.NullValue = Nothing
+        f_d高さ.DefaultCellStyle = DataGridViewCellStyle4
         f_d高さ.HeaderText = "高さ"
         f_d高さ.MinimumWidth = 6
         f_d高さ.Name = "f_d高さ"
@@ -1742,10 +1742,10 @@ Partial Class frmMain
         ' f_d垂直ひも長
         ' 
         f_d垂直ひも長.DataPropertyName = "f_d垂直ひも長"
-        DataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle21.Format = "N2"
-        DataGridViewCellStyle21.NullValue = Nothing
-        f_d垂直ひも長.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle5.Format = "N2"
+        DataGridViewCellStyle5.NullValue = Nothing
+        f_d垂直ひも長.DefaultCellStyle = DataGridViewCellStyle5
         f_d垂直ひも長.HeaderText = "垂直ひも長"
         f_d垂直ひも長.MinimumWidth = 6
         f_d垂直ひも長.Name = "f_d垂直ひも長"
@@ -1765,10 +1765,10 @@ Partial Class frmMain
         ' f_d周長
         ' 
         f_d周長.DataPropertyName = "f_d周長"
-        DataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle22.Format = "N2"
-        DataGridViewCellStyle22.NullValue = Nothing
-        f_d周長.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.Format = "N2"
+        DataGridViewCellStyle6.NullValue = Nothing
+        f_d周長.DefaultCellStyle = DataGridViewCellStyle6
         f_d周長.HeaderText = "周長"
         f_d周長.MinimumWidth = 6
         f_d周長.Name = "f_d周長"
@@ -1779,10 +1779,10 @@ Partial Class frmMain
         ' f_dひも長
         ' 
         f_dひも長.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle23.Format = "N2"
-        DataGridViewCellStyle23.NullValue = Nothing
-        f_dひも長.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle7.Format = "N2"
+        DataGridViewCellStyle7.NullValue = Nothing
+        f_dひも長.DefaultCellStyle = DataGridViewCellStyle7
         f_dひも長.HeaderText = "ひも長"
         f_dひも長.MinimumWidth = 6
         f_dひも長.Name = "f_dひも長"
@@ -1793,8 +1793,8 @@ Partial Class frmMain
         ' f_dひも長加算
         ' 
         f_dひも長加算.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算.DefaultCellStyle = DataGridViewCellStyle8
         f_dひも長加算.HeaderText = "ひも長加算"
         f_dひも長加算.MinimumWidth = 6
         f_dひも長加算.Name = "f_dひも長加算"
@@ -1805,8 +1805,8 @@ Partial Class frmMain
         ' f_iひも本数
         ' 
         f_iひも本数.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも本数.DefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも本数.DefaultCellStyle = DataGridViewCellStyle9
         f_iひも本数.HeaderText = "ひも本数"
         f_iひも本数.MinimumWidth = 6
         f_iひも本数.Name = "f_iひも本数"
@@ -1817,9 +1817,9 @@ Partial Class frmMain
         ' f_d厚さ
         ' 
         f_d厚さ.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle26.NullValue = Nothing
-        f_d厚さ.DefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle10.NullValue = Nothing
+        f_d厚さ.DefaultCellStyle = DataGridViewCellStyle10
         f_d厚さ.HeaderText = "厚さ"
         f_d厚さ.MinimumWidth = 6
         f_d厚さ.Name = "f_d厚さ"
@@ -1839,10 +1839,10 @@ Partial Class frmMain
         ' f_d連続ひも長
         ' 
         f_d連続ひも長.DataPropertyName = "f_d連続ひも長"
-        DataGridViewCellStyle27.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle27.Format = "N2"
-        DataGridViewCellStyle27.NullValue = Nothing
-        f_d連続ひも長.DefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle11.Format = "N2"
+        DataGridViewCellStyle11.NullValue = Nothing
+        f_d連続ひも長.DefaultCellStyle = DataGridViewCellStyle11
         f_d連続ひも長.HeaderText = "f_d連続ひも長"
         f_d連続ひも長.MinimumWidth = 6
         f_d連続ひも長.Name = "f_d連続ひも長"
@@ -2245,14 +2245,14 @@ Partial Class frmMain
         dgv折りカラー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         dgv折りカラー.AutoGenerateColumns = False
         dgv折りカラー.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle28.BackColor = SystemColors.Control
-        DataGridViewCellStyle28.Font = New Font("Yu Gothic UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
-        DataGridViewCellStyle28.ForeColor = SystemColors.WindowText
-        DataGridViewCellStyle28.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle28.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle28.WrapMode = DataGridViewTriState.True
-        dgv折りカラー.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle28
+        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle12.BackColor = SystemColors.Control
+        DataGridViewCellStyle12.Font = New Font("Yu Gothic UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        DataGridViewCellStyle12.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle12.WrapMode = DataGridViewTriState.True
+        dgv折りカラー.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle12
         dgv折りカラー.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgv折りカラー.Columns.AddRange(New DataGridViewColumn() {f_b外側_135, f_s外側色_45, f_s外側色_135, f_b外側_45, f_s面名, f_s位置, f_b内側_135, f_s内側色_45, f_s内側色_135, f_b内側_45, f_bEdited, f_s面名2, f_s位置2, f_s色_45, f_sひも名_45, f_iひも番号_45, f_s端_45, f_dひも長加算_45, f_sゼロ面名_45, f_iゼロ位置_45, f_s色_135, f_sひも名_135, f_iひも番号_135, f_s端_135, f_dひも長加算_135, f_sゼロ面名_135, f_iゼロ位置_135})
         dgv折りカラー.DataSource = BindingSource折りカラー
@@ -2262,234 +2262,6 @@ Partial Class frmMain
         dgv折りカラー.Size = New Size(828, 301)
         dgv折りカラー.TabIndex = 4
         dgv折りカラー.Visible = False
-        ' 
-        ' f_b外側_135
-        ' 
-        f_b外側_135.DataPropertyName = "f_b外側_135"
-        f_b外側_135.HeaderText = "L:(135)↖:外側に折る"
-        f_b外側_135.Name = "f_b外側_135"
-        f_b外側_135.Width = 80
-        ' 
-        ' f_s外側色_45
-        ' 
-        f_s外側色_45.DataPropertyName = "f_s外側色_45"
-        f_s外側色_45.HeaderText = "R:(45)↙:外側色"
-        f_s外側色_45.Name = "f_s外側色_45"
-        f_s外側色_45.ReadOnly = True
-        f_s外側色_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_s外側色_135
-        ' 
-        f_s外側色_135.DataPropertyName = "f_s外側色_135"
-        f_s外側色_135.HeaderText = "L:(135)↘:外側色"
-        f_s外側色_135.Name = "f_s外側色_135"
-        f_s外側色_135.ReadOnly = True
-        f_s外側色_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_b外側_45
-        ' 
-        f_b外側_45.DataPropertyName = "f_b外側_45"
-        f_b外側_45.HeaderText = "R:(45)↗:外側に折る"
-        f_b外側_45.Name = "f_b外側_45"
-        f_b外側_45.Width = 80
-        ' 
-        ' f_s面名
-        ' 
-        f_s面名.DataPropertyName = "f_s面名"
-        DataGridViewCellStyle29.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle29.BackColor = SystemColors.Control
-        f_s面名.DefaultCellStyle = DataGridViewCellStyle29
-        f_s面名.HeaderText = "面名"
-        f_s面名.Name = "f_s面名"
-        f_s面名.ReadOnly = True
-        f_s面名.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_s面名.Width = 150
-        ' 
-        ' f_s位置
-        ' 
-        f_s位置.DataPropertyName = "f_s位置"
-        DataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle30.BackColor = SystemColors.Control
-        f_s位置.DefaultCellStyle = DataGridViewCellStyle30
-        f_s位置.HeaderText = "位置"
-        f_s位置.Name = "f_s位置"
-        f_s位置.ReadOnly = True
-        f_s位置.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_b内側_135
-        ' 
-        f_b内側_135.DataPropertyName = "f_b内側_135"
-        f_b内側_135.HeaderText = "L:(135)↖:内側に折る"
-        f_b内側_135.Name = "f_b内側_135"
-        f_b内側_135.Width = 80
-        ' 
-        ' f_s内側色_45
-        ' 
-        f_s内側色_45.DataPropertyName = "f_s内側色_45"
-        f_s内側色_45.HeaderText = "L:[(45)↙]:内側色"
-        f_s内側色_45.Name = "f_s内側色_45"
-        f_s内側色_45.ReadOnly = True
-        f_s内側色_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_s内側色_135
-        ' 
-        f_s内側色_135.DataPropertyName = "f_s内側色_135"
-        f_s内側色_135.HeaderText = "R:[(135)↘]:内側色"
-        f_s内側色_135.Name = "f_s内側色_135"
-        f_s内側色_135.ReadOnly = True
-        f_s内側色_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_b内側_45
-        ' 
-        f_b内側_45.DataPropertyName = "f_b内側_45"
-        f_b内側_45.HeaderText = "R:(45)↗:内側に折る"
-        f_b内側_45.Name = "f_b内側_45"
-        f_b内側_45.Width = 80
-        ' 
-        ' f_bEdited
-        ' 
-        f_bEdited.DataPropertyName = "f_bEdited"
-        f_bEdited.HeaderText = "f_bEdited"
-        f_bEdited.Name = "f_bEdited"
-        f_bEdited.Visible = False
-        ' 
-        ' f_s面名2
-        ' 
-        f_s面名2.DataPropertyName = "f_s面名"
-        DataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle31.BackColor = SystemColors.Control
-        f_s面名2.DefaultCellStyle = DataGridViewCellStyle31
-        f_s面名2.HeaderText = "面名"
-        f_s面名2.Name = "f_s面名2"
-        f_s面名2.ReadOnly = True
-        f_s面名2.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_s位置2
-        ' 
-        f_s位置2.DataPropertyName = "f_s位置"
-        DataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle32.BackColor = SystemColors.Control
-        f_s位置2.DefaultCellStyle = DataGridViewCellStyle32
-        f_s位置2.HeaderText = "位置"
-        f_s位置2.Name = "f_s位置2"
-        f_s位置2.ReadOnly = True
-        f_s位置2.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_s色_45
-        ' 
-        f_s色_45.DataPropertyName = "f_s色_45"
-        f_s色_45.HeaderText = "R:(45)↙:色"
-        f_s色_45.Name = "f_s色_45"
-        f_s色_45.ReadOnly = True
-        f_s色_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_sひも名_45
-        ' 
-        f_sひも名_45.DataPropertyName = "f_sひも名_45"
-        f_sひも名_45.HeaderText = "R:(45)↙:ひも名"
-        f_sひも名_45.Name = "f_sひも名_45"
-        f_sひも名_45.ReadOnly = True
-        f_sひも名_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_iひも番号_45
-        ' 
-        f_iひも番号_45.DataPropertyName = "f_iひも番号_45"
-        f_iひも番号_45.HeaderText = "R:(45)↙:ひも番号"
-        f_iひも番号_45.Name = "f_iひも番号_45"
-        f_iひも番号_45.ReadOnly = True
-        f_iひも番号_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iひも番号_45.Width = 80
-        ' 
-        ' f_s端_45
-        ' 
-        f_s端_45.DataPropertyName = "f_s端_45"
-        f_s端_45.HeaderText = "R:(45)↙:端"
-        f_s端_45.Name = "f_s端_45"
-        f_s端_45.ReadOnly = True
-        f_s端_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_s端_45.Width = 70
-        ' 
-        ' f_dひも長加算_45
-        ' 
-        f_dひも長加算_45.DataPropertyName = "f_dひも長加算_45"
-        f_dひも長加算_45.HeaderText = "R:(45)↙:ひも長加算"
-        f_dひも長加算_45.Name = "f_dひも長加算_45"
-        f_dひも長加算_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_sゼロ面名_45
-        ' 
-        f_sゼロ面名_45.DataPropertyName = "f_sゼロ面名_45"
-        f_sゼロ面名_45.HeaderText = "R:(45)↙:ゼロ面名"
-        f_sゼロ面名_45.Name = "f_sゼロ面名_45"
-        f_sゼロ面名_45.ReadOnly = True
-        f_sゼロ面名_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_iゼロ位置_45
-        ' 
-        f_iゼロ位置_45.DataPropertyName = "f_iゼロ位置_45"
-        f_iゼロ位置_45.HeaderText = "R:(45)↙:ゼロ位置"
-        f_iゼロ位置_45.Name = "f_iゼロ位置_45"
-        f_iゼロ位置_45.ReadOnly = True
-        f_iゼロ位置_45.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iゼロ位置_45.Width = 70
-        ' 
-        ' f_s色_135
-        ' 
-        f_s色_135.DataPropertyName = "f_s色_135"
-        f_s色_135.HeaderText = "L:(135)↘:色"
-        f_s色_135.Name = "f_s色_135"
-        f_s色_135.ReadOnly = True
-        f_s色_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_sひも名_135
-        ' 
-        f_sひも名_135.DataPropertyName = "f_sひも名_135"
-        f_sひも名_135.HeaderText = "L:(135)↘:ひも名"
-        f_sひも名_135.Name = "f_sひも名_135"
-        f_sひも名_135.ReadOnly = True
-        f_sひも名_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_iひも番号_135
-        ' 
-        f_iひも番号_135.DataPropertyName = "f_iひも番号_135"
-        f_iひも番号_135.HeaderText = "L:(135)↘:ひも番号"
-        f_iひも番号_135.Name = "f_iひも番号_135"
-        f_iひも番号_135.ReadOnly = True
-        f_iひも番号_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iひも番号_135.Width = 80
-        ' 
-        ' f_s端_135
-        ' 
-        f_s端_135.DataPropertyName = "f_s端_135"
-        f_s端_135.HeaderText = "L:(135)↘:端"
-        f_s端_135.Name = "f_s端_135"
-        f_s端_135.ReadOnly = True
-        f_s端_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_s端_135.Width = 70
-        ' 
-        ' f_dひも長加算_135
-        ' 
-        f_dひも長加算_135.DataPropertyName = "f_dひも長加算_135"
-        f_dひも長加算_135.HeaderText = "L:(135)↘:ひも長加算"
-        f_dひも長加算_135.Name = "f_dひも長加算_135"
-        f_dひも長加算_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_sゼロ面名_135
-        ' 
-        f_sゼロ面名_135.DataPropertyName = "f_sゼロ面名_135"
-        f_sゼロ面名_135.HeaderText = "L:(135)↘:ゼロ面名"
-        f_sゼロ面名_135.Name = "f_sゼロ面名_135"
-        f_sゼロ面名_135.ReadOnly = True
-        f_sゼロ面名_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        ' 
-        ' f_iゼロ位置_135
-        ' 
-        f_iゼロ位置_135.DataPropertyName = "f_iゼロ位置_135"
-        f_iゼロ位置_135.HeaderText = "L:(135)↘:ゼロ位置"
-        f_iゼロ位置_135.Name = "f_iゼロ位置_135"
-        f_iゼロ位置_135.ReadOnly = True
-        f_iゼロ位置_135.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iゼロ位置_135.Width = 70
         ' 
         ' BindingSource折りカラー
         ' 
@@ -2714,6 +2486,250 @@ Partial Class frmMain
         ' timer折りカラー
         ' 
         timer折りカラー.Interval = 300
+        ' 
+        ' f_b外側_135
+        ' 
+        f_b外側_135.DataPropertyName = "f_b外側_135"
+        f_b外側_135.HeaderText = "L:(135)↖:外側に折る"
+        f_b外側_135.Name = "f_b外側_135"
+        f_b外側_135.Width = 80
+        ' 
+        ' f_s外側色_45
+        ' 
+        f_s外側色_45.DataPropertyName = "f_s外側色_45"
+        f_s外側色_45.HeaderText = "R:(45)↙:外側色"
+        f_s外側色_45.Name = "f_s外側色_45"
+        f_s外側色_45.ReadOnly = True
+        f_s外側色_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        ' 
+        ' f_s外側色_135
+        ' 
+        f_s外側色_135.DataPropertyName = "f_s外側色_135"
+        f_s外側色_135.HeaderText = "L:(135)↘:外側色"
+        f_s外側色_135.Name = "f_s外側色_135"
+        f_s外側色_135.ReadOnly = True
+        f_s外側色_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        ' 
+        ' f_b外側_45
+        ' 
+        f_b外側_45.DataPropertyName = "f_b外側_45"
+        f_b外側_45.HeaderText = "R:(45)↗:外側に折る"
+        f_b外側_45.Name = "f_b外側_45"
+        f_b外側_45.Width = 80
+        ' 
+        ' f_s面名
+        ' 
+        f_s面名.DataPropertyName = "f_s面名"
+        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle13.BackColor = SystemColors.Control
+        f_s面名.DefaultCellStyle = DataGridViewCellStyle13
+        f_s面名.HeaderText = "面名"
+        f_s面名.Name = "f_s面名"
+        f_s面名.ReadOnly = True
+        f_s面名.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s面名.Width = 150
+        ' 
+        ' f_s位置
+        ' 
+        f_s位置.DataPropertyName = "f_s位置"
+        DataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle14.BackColor = SystemColors.Control
+        f_s位置.DefaultCellStyle = DataGridViewCellStyle14
+        f_s位置.HeaderText = "位置"
+        f_s位置.Name = "f_s位置"
+        f_s位置.ReadOnly = True
+        f_s位置.SortMode = DataGridViewColumnSortMode.NotSortable
+        ' 
+        ' f_b内側_135
+        ' 
+        f_b内側_135.DataPropertyName = "f_b内側_135"
+        f_b内側_135.HeaderText = "L:(135)↖:内側に折る"
+        f_b内側_135.Name = "f_b内側_135"
+        f_b内側_135.Width = 80
+        ' 
+        ' f_s内側色_45
+        ' 
+        f_s内側色_45.DataPropertyName = "f_s内側色_45"
+        f_s内側色_45.HeaderText = "L:[(45)↙]:内側色"
+        f_s内側色_45.Name = "f_s内側色_45"
+        f_s内側色_45.ReadOnly = True
+        f_s内側色_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        ' 
+        ' f_s内側色_135
+        ' 
+        f_s内側色_135.DataPropertyName = "f_s内側色_135"
+        f_s内側色_135.HeaderText = "R:[(135)↘]:内側色"
+        f_s内側色_135.Name = "f_s内側色_135"
+        f_s内側色_135.ReadOnly = True
+        f_s内側色_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        ' 
+        ' f_b内側_45
+        ' 
+        f_b内側_45.DataPropertyName = "f_b内側_45"
+        f_b内側_45.HeaderText = "R:(45)↗:内側に折る"
+        f_b内側_45.Name = "f_b内側_45"
+        f_b内側_45.Width = 80
+        ' 
+        ' f_bEdited
+        ' 
+        f_bEdited.DataPropertyName = "f_bEdited"
+        f_bEdited.HeaderText = "f_bEdited"
+        f_bEdited.Name = "f_bEdited"
+        f_bEdited.Visible = False
+        ' 
+        ' f_s面名2
+        ' 
+        f_s面名2.DataPropertyName = "f_s面名"
+        DataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle15.BackColor = SystemColors.Control
+        f_s面名2.DefaultCellStyle = DataGridViewCellStyle15
+        f_s面名2.HeaderText = "面名"
+        f_s面名2.Name = "f_s面名2"
+        f_s面名2.ReadOnly = True
+        f_s面名2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s面名2.Visible = False
+        ' 
+        ' f_s位置2
+        ' 
+        f_s位置2.DataPropertyName = "f_s位置"
+        DataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle16.BackColor = SystemColors.Control
+        f_s位置2.DefaultCellStyle = DataGridViewCellStyle16
+        f_s位置2.HeaderText = "位置"
+        f_s位置2.Name = "f_s位置2"
+        f_s位置2.ReadOnly = True
+        f_s位置2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s位置2.Visible = False
+        ' 
+        ' f_s色_45
+        ' 
+        f_s色_45.DataPropertyName = "f_s色_45"
+        f_s色_45.HeaderText = "R:(45)↙:色"
+        f_s色_45.Name = "f_s色_45"
+        f_s色_45.ReadOnly = True
+        f_s色_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s色_45.Visible = False
+        ' 
+        ' f_sひも名_45
+        ' 
+        f_sひも名_45.DataPropertyName = "f_sひも名_45"
+        f_sひも名_45.HeaderText = "R:(45)↙:ひも名"
+        f_sひも名_45.Name = "f_sひも名_45"
+        f_sひも名_45.ReadOnly = True
+        f_sひも名_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sひも名_45.Visible = False
+        ' 
+        ' f_iひも番号_45
+        ' 
+        f_iひも番号_45.DataPropertyName = "f_iひも番号_45"
+        f_iひも番号_45.HeaderText = "R:(45)↙:ひも番号"
+        f_iひも番号_45.Name = "f_iひも番号_45"
+        f_iひも番号_45.ReadOnly = True
+        f_iひも番号_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iひも番号_45.Visible = False
+        f_iひも番号_45.Width = 80
+        ' 
+        ' f_s端_45
+        ' 
+        f_s端_45.DataPropertyName = "f_s端_45"
+        f_s端_45.HeaderText = "R:(45)↙:端"
+        f_s端_45.Name = "f_s端_45"
+        f_s端_45.ReadOnly = True
+        f_s端_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s端_45.Visible = False
+        f_s端_45.Width = 70
+        ' 
+        ' f_dひも長加算_45
+        ' 
+        f_dひも長加算_45.DataPropertyName = "f_dひも長加算_45"
+        f_dひも長加算_45.HeaderText = "R:(45)↙:ひも長加算"
+        f_dひも長加算_45.Name = "f_dひも長加算_45"
+        f_dひも長加算_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_dひも長加算_45.Visible = False
+        ' 
+        ' f_sゼロ面名_45
+        ' 
+        f_sゼロ面名_45.DataPropertyName = "f_sゼロ面名_45"
+        f_sゼロ面名_45.HeaderText = "R:(45)↙:ゼロ面名"
+        f_sゼロ面名_45.Name = "f_sゼロ面名_45"
+        f_sゼロ面名_45.ReadOnly = True
+        f_sゼロ面名_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sゼロ面名_45.Visible = False
+        ' 
+        ' f_iゼロ位置_45
+        ' 
+        f_iゼロ位置_45.DataPropertyName = "f_iゼロ位置_45"
+        f_iゼロ位置_45.HeaderText = "R:(45)↙:ゼロ位置"
+        f_iゼロ位置_45.Name = "f_iゼロ位置_45"
+        f_iゼロ位置_45.ReadOnly = True
+        f_iゼロ位置_45.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iゼロ位置_45.Visible = False
+        f_iゼロ位置_45.Width = 70
+        ' 
+        ' f_s色_135
+        ' 
+        f_s色_135.DataPropertyName = "f_s色_135"
+        f_s色_135.HeaderText = "L:(135)↘:色"
+        f_s色_135.Name = "f_s色_135"
+        f_s色_135.ReadOnly = True
+        f_s色_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s色_135.Visible = False
+        ' 
+        ' f_sひも名_135
+        ' 
+        f_sひも名_135.DataPropertyName = "f_sひも名_135"
+        f_sひも名_135.HeaderText = "L:(135)↘:ひも名"
+        f_sひも名_135.Name = "f_sひも名_135"
+        f_sひも名_135.ReadOnly = True
+        f_sひも名_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sひも名_135.Visible = False
+        ' 
+        ' f_iひも番号_135
+        ' 
+        f_iひも番号_135.DataPropertyName = "f_iひも番号_135"
+        f_iひも番号_135.HeaderText = "L:(135)↘:ひも番号"
+        f_iひも番号_135.Name = "f_iひも番号_135"
+        f_iひも番号_135.ReadOnly = True
+        f_iひも番号_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iひも番号_135.Visible = False
+        f_iひも番号_135.Width = 80
+        ' 
+        ' f_s端_135
+        ' 
+        f_s端_135.DataPropertyName = "f_s端_135"
+        f_s端_135.HeaderText = "L:(135)↘:端"
+        f_s端_135.Name = "f_s端_135"
+        f_s端_135.ReadOnly = True
+        f_s端_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s端_135.Visible = False
+        f_s端_135.Width = 70
+        ' 
+        ' f_dひも長加算_135
+        ' 
+        f_dひも長加算_135.DataPropertyName = "f_dひも長加算_135"
+        f_dひも長加算_135.HeaderText = "L:(135)↘:ひも長加算"
+        f_dひも長加算_135.Name = "f_dひも長加算_135"
+        f_dひも長加算_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_dひも長加算_135.Visible = False
+        ' 
+        ' f_sゼロ面名_135
+        ' 
+        f_sゼロ面名_135.DataPropertyName = "f_sゼロ面名_135"
+        f_sゼロ面名_135.HeaderText = "L:(135)↘:ゼロ面名"
+        f_sゼロ面名_135.Name = "f_sゼロ面名_135"
+        f_sゼロ面名_135.ReadOnly = True
+        f_sゼロ面名_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sゼロ面名_135.Visible = False
+        ' 
+        ' f_iゼロ位置_135
+        ' 
+        f_iゼロ位置_135.DataPropertyName = "f_iゼロ位置_135"
+        f_iゼロ位置_135.HeaderText = "L:(135)↘:ゼロ位置"
+        f_iゼロ位置_135.Name = "f_iゼロ位置_135"
+        f_iゼロ位置_135.ReadOnly = True
+        f_iゼロ位置_135.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iゼロ位置_135.Visible = False
+        f_iゼロ位置_135.Width = 70
         ' 
         ' frmMain
         ' 
@@ -3062,6 +3078,11 @@ Partial Class frmMain
     Friend WithEvents btn詳細表示 As Button
     Friend WithEvents btn選択をOFF_折り As Button
     Friend WithEvents btn選択をON_折り As Button
+    Friend WithEvents lbl折り返しの高さ数 As Label
+    Friend WithEvents txt折り返しの高さ数 As TextBox
+    Friend WithEvents txt折り返し数 As TextBox
+    Friend WithEvents lbl折り返し数 As Label
+    Friend WithEvents timer折りカラー As Timer
     Friend WithEvents f_b外側_135 As DataGridViewCheckBoxColumn
     Friend WithEvents f_s外側色_45 As DataGridViewTextBoxColumn
     Friend WithEvents f_s外側色_135 As DataGridViewTextBoxColumn
@@ -3089,9 +3110,4 @@ Partial Class frmMain
     Friend WithEvents f_dひも長加算_135 As DataGridViewTextBoxColumn
     Friend WithEvents f_sゼロ面名_135 As DataGridViewTextBoxColumn
     Friend WithEvents f_iゼロ位置_135 As DataGridViewTextBoxColumn
-    Friend WithEvents lbl折り返しの高さ数 As Label
-    Friend WithEvents txt折り返しの高さ数 As TextBox
-    Friend WithEvents txt折り返し数 As TextBox
-    Friend WithEvents lbl折り返し数 As Label
-    Friend WithEvents timer折りカラー As Timer
 End Class

@@ -3325,10 +3325,172 @@
     <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
     <f_s備考 />
   </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(2点)</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>1点目の位置</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>0</f_d描画厚初期値>
+    <f_b描画区分初期値>false</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(2点)</f_s付属品名>
+    <f_iひも番号>2</f_iひも番号>
+    <f_s付属品ひも名>2点目の位置と色・幅</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_d長さ比率対ひも1>1</f_d長さ比率対ひも1>
+    <f_d長さ加減対ひも1>0</f_d長さ加減対ひも1>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>1</f_d描画厚初期値>
+    <f_b描画区分初期値>false</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(4点)</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>1点目の位置</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>0</f_d描画厚初期値>
+    <f_b描画区分初期値>true</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(4点)</f_s付属品名>
+    <f_iひも番号>2</f_iひも番号>
+    <f_s付属品ひも名>2点目の位置と色・幅</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_d長さ比率対ひも1>1</f_d長さ比率対ひも1>
+    <f_d長さ加減対ひも1>0</f_d長さ加減対ひも1>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>1</f_d描画厚初期値>
+    <f_b描画区分初期値>false</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(4点)</f_s付属品名>
+    <f_iひも番号>3</f_iひも番号>
+    <f_s付属品ひも名>3点目の位置と色・幅</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_d長さ比率対ひも1>1</f_d長さ比率対ひも1>
+    <f_d長さ加減対ひも1>0</f_d長さ加減対ひも1>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>1</f_d描画厚初期値>
+    <f_b描画区分初期値>false</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(4点)</f_s付属品名>
+    <f_iひも番号>4</f_iひも番号>
+    <f_s付属品ひも名>4点目の位置と色・幅</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_d長さ比率対ひも1>1</f_d長さ比率対ひも1>
+    <f_d長さ加減対ひも1>0</f_d長さ加減対ひも1>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>15</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>1</f_d描画厚初期値>
+    <f_b描画区分初期値>false</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
+  <tbl付属品>
+    <f_s付属品名>補助線(線分)</f_s付属品名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s付属品ひも名>開始点と長さと角度</f_s付属品ひも名>
+    <f_b巻きひも区分>false</f_b巻きひも区分>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>1</f_iひも数>
+    <f_dひも長比率対長さ>1</f_dひも長比率対長さ>
+    <f_dひも長加算>0</f_dひも長加算>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>true</f_b集計対象外区分初期値>
+    <f_i描画形状>14</f_i描画形状>
+    <f_i描画位置>3</f_i描画位置>
+    <f_d描画厚初期値>1</f_d描画厚初期値>
+    <f_b描画区分初期値>true</f_b描画区分初期値>
+    <f_bCraftBandMesh>true</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>true</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>true</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
+    <f_s備考 />
+  </tbl付属品>
   <tbl基本値>
     <f_s単位>mm</f_s単位>
     <f_sバージョン>1.8.4</f_sバージョン>
-    <f_s識別情報>Ver.1.8.13添付</f_s識別情報>
+    <f_s識別情報>Ver.1.8.14添付</f_s識別情報>
     <f_s備考 />
   </tbl基本値>
   <tbl描画色>
@@ -3465,7 +3627,7 @@
     <f_i青>179</f_i青>
     <f_d線幅>2</f_d線幅>
     <f_d中線幅>1</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色 />
     <f_s製品情報 />
@@ -3479,7 +3641,7 @@
     <f_i青>0</f_i青>
     <f_d線幅>3</f_d線幅>
     <f_d中線幅>0</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色 />
     <f_s製品情報 />
@@ -3493,7 +3655,7 @@
     <f_i青>0</f_i青>
     <f_d線幅>3</f_d線幅>
     <f_d中線幅>2</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色 />
     <f_s製品情報 />
@@ -3647,7 +3809,7 @@
     <f_i青>0</f_i青>
     <f_d線幅>1</f_d線幅>
     <f_d中線幅>10</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色>170</f_s中線色>
     <f_s製品情報 />
@@ -3661,7 +3823,7 @@
     <f_i青>0</f_i青>
     <f_d線幅>1</f_d線幅>
     <f_d中線幅>10</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色>170</f_s中線色>
     <f_s製品情報 />
@@ -3689,7 +3851,7 @@
     <f_i青>0</f_i青>
     <f_d線幅>1</f_d線幅>
     <f_d中線幅>0</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色>230</f_s線色>
     <f_s中線色 />
     <f_s製品情報 />
@@ -3717,7 +3879,7 @@
     <f_i青>160</f_i青>
     <f_d線幅>1</f_d線幅>
     <f_d中線幅>10</f_d中線幅>
-    <f_i透明度>0</f_i透明度>
+    <f_i透明度>2</f_i透明度>
     <f_s線色 />
     <f_s中線色>170</f_s中線色>
     <f_s製品情報 />
