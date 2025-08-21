@@ -1087,6 +1087,28 @@ Partial Public Class clsCalcSquare45
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
+        '#98 2倍高さライン
+        If p_is折りカラー処理 Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
+            Dim bt_sq As Double = p_d四角ベース_縦 / ROOT2
+            Dim sd_sq As Double = p_d四角ベース_高さ * ROOT2
+            Dim sq As Double = bt_sq + 2 * sd_sq
+            If p下クロス点.X < p上クロス点.X Then
+                item.m_a四隅.pA = p上クロス点 + Unit90 * sq
+                item.m_a四隅.pB = p下クロス点 + Unit180 * sq
+                item.m_a四隅.pC = p下クロス点 + Unit270 * sq
+                item.m_a四隅.pD = p上クロス点 + Unit0 * sq
+            Else
+                item.m_a四隅.pA = p上クロス点 + Unit90 * sq
+                item.m_a四隅.pB = p上クロス点 + Unit180 * sq
+                item.m_a四隅.pC = p下クロス点 + Unit270 * sq
+                item.m_a四隅.pD = p下クロス点 + Unit0 * sq
+            End If
+            item.m_ltype = LineTypeEnum._black_dot
+            itemlist.AddItem(item)
+        End If
+
+
         Return itemlist
     End Function
 

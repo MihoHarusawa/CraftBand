@@ -534,6 +534,11 @@ Public Class clsDataTables
                     getOtherSaved(tmp, row, True) '本幅も転記
                     tmp.f_dひも長加算 = row.f_dひも長加算2
                     tmp.f_dひも長加算2 = row.f_dひも長加算
+                    '#98 左右入れ替え
+                    tmp.f_b内側区分 = row.f_b内側区分2
+                    tmp.f_b内側区分2 = row.f_b内側区分
+                    tmp.f_b外側区分 = row.f_b外側区分2
+                    tmp.f_b外側区分2 = row.f_b外側区分
                     turn.p_tbl縦横展開.Rows.Add(tmp)
 
                 Else
