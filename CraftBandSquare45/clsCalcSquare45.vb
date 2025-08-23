@@ -1993,6 +1993,10 @@ Class clsCalcSquare45
         Return -count
     End Function
 
+    Public Shared Function IsColorChangeable(ByVal r As dstWork.tblOriColorRow) As Boolean
+        Return r.f_s色_45 <> r.f_s色_135
+    End Function
+
 #End Region
 
 #Region "リスト出力"

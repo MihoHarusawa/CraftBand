@@ -1596,6 +1596,38 @@ Public Class frmMain
         End If
     End Sub
 
+    '入れ替えチェックの背景色(#99)
+    Private Sub dgv折りカラー_CellFormatting(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellFormattingEventArgs) Handles dgv折りカラー.CellFormatting
+        If e.ColumnIndex > ColIndexDetail Then
+            Exit Sub
+        End If
+        If TypeOf dgv折りカラー.Columns(e.ColumnIndex) IsNot DataGridViewCheckBoxColumn Then
+            Exit Sub
+        End If
+
+        ' 行に対応付けられたDataRowを取得
+        Dim dgv As DataGridView = DirectCast(sender, DataGridView)
+        Dim dr As DataRowView = DirectCast(dgv.Rows(e.RowIndex).DataBoundItem, DataRowView)
+        If dr Is Nothing Then
+            ' DataRowが取得できない場合は処理をスキップ
+            Exit Sub
+        End If
+
+        '同色は折りカラーでは入れ替え不可
+        If Not IsColorChangeable(dr.Row) Then
+            e.CellStyle.BackColor = Color.LightGray
+        Else
+            ' 条件を満たさない場合、デフォルトの色に戻す
+            e.CellStyle.BackColor = dgv.DefaultCellStyle.BackColor
+            e.CellStyle.ForeColor = dgv.DefaultCellStyle.ForeColor
+        End If
+    End Sub
+
+    '折りカラーによる入れ替え可(#99)
+    Private Function IsColorChangeable(ByVal r As DataRow) As Boolean
+        Return (r.Field(Of String)("f_s色_45") <> r.Field(Of String)("f_s色_135"))
+    End Function
+
 #End Region
 
     'クリアボタン
