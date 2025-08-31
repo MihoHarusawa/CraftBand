@@ -154,6 +154,13 @@ Public Class ctrDataGridView
         If e.Exception Is Nothing Then
             Exit Sub
         End If
+        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
+            Exit Sub
+        End If
+        'DataPropertyNameがない列は無視
+        If String.IsNullOrEmpty(Me.Columns(e.ColumnIndex).DataPropertyName) Then
+            Exit Sub
+        End If
 
         If _Profile IsNot Nothing Then
             If _Profile.Actions.HasFlag(enumAction._Modify_i何本幅) Then

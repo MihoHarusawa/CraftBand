@@ -61,6 +61,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  現在の画像をクリアしますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskClearCurrentTexture() As String
+            Get
+                Return ResourceManager.GetString("AskClearCurrentTexture", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  色&lt;{0}&gt;はクリアされます。よろしいですか？
         '''(残す場合は&apos;対象&apos;のチェックを外してください) に類似しているローカライズされた文字列を検索します。
         '''</summary>
@@ -540,6 +549,24 @@ Namespace My.Resources
         Friend ReadOnly Property ErrMasterTableFileCancel() As String
             Get
                 Return ResourceManager.GetString("ErrMasterTableFileCancel", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  画像ファイル&apos;{0}&apos;を読み取れませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgColorBadTexture() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgColorBadTexture", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  画像のサイズ({0})が大きすぎます。小さくしてください に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property ErrMsgColorFileTooLarge() As String
+            Get
+                Return ResourceManager.GetString("ErrMsgColorFileTooLarge", resourceCulture)
             End Get
         End Property
         

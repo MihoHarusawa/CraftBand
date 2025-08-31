@@ -1307,6 +1307,9 @@ Public Class clsMasterTables
         Public BandTypeName As String 'バンドの種類名
         Public Product As String '製品情報
         Public Appendix As String '備考
+        '#100
+        Public TextureString As String 'テクスチャ文字列
+        Public TextureInfo As String 'テクスチャ情報
 
         Public ReadOnly Property IsEmptyBandType As Boolean
             Get
@@ -1320,6 +1323,8 @@ Public Class clsMasterTables
             Appendix = row.f_s備考
             BandTypeName = row.f_sバンドの種類名
             Product = row.f_s製品情報
+            TextureString = row.f_s画像文字列 'DbNullはNothing
+            TextureInfo = row.f_s画像情報 'DbNullはNothing
 
             '基本色と塗りつぶし色
             BaseColor = RgbColor(row.f_i赤, row.f_i緑, row.f_i青)
@@ -1371,6 +1376,8 @@ Public Class clsMasterTables
             row.f_sバンドの種類名 = BandTypeName
             row.f_s色 = Name
             row.f_s備考 = Appendix
+            row.f_s画像文字列 = TextureString 'DbNullはNothing
+            row.f_s画像情報 = TextureInfo 'DbNullはNothing
             Return True
         End Function
 
@@ -1459,7 +1466,8 @@ Public Class clsMasterTables
         Public Function IsSameColor(other As clsColorRecordSet) As Boolean
             Return BrushAlfaColor = other.BrushAlfaColor AndAlso LanePenColor = other.LanePenColor AndAlso
                 FramePenColor = other.FramePenColor AndAlso BaseColor = other.BaseColor AndAlso
-            FramePenWidth = other.FramePenWidth AndAlso LanePenWidth = other.LanePenWidth
+            FramePenWidth = other.FramePenWidth AndAlso LanePenWidth = other.LanePenWidth AndAlso
+            TextureInfo = other.TextureInfo AndAlso TextureString = other.TextureString
         End Function
 
         '色名とバンドの種類以外を比較
@@ -1468,10 +1476,10 @@ Public Class clsMasterTables
         End Function
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}{1}({2}):R({3}) G({4}) B({5}) Alfa({6}) Frame({7}:{8}) Lane({9}:{10}) [{11}]{12}",
+            Return String.Format("{0}{1}({2}):R({3}) G({4}) B({5}) Alfa({6}) Frame({7}:{8}) Lane({9}:{10}) [{11}]{12} Image:{13}",
                                  IIf(IsNoDrawing, "-", "+"),
                                  Name, BandTypeName, BaseColor.R, BaseColor.G, BaseColor.B, BrushAlfaColor.A,
-                                 FramePenWidth, FramePenColorString, LanePenWidth, LanePenColorString, Product, Appendix)
+                                 FramePenWidth, FramePenColorString, LanePenWidth, LanePenColorString, Product, Appendix, TextureInfo)
         End Function
     End Class
 

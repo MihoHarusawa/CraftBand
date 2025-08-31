@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
+Imports System.Reflection.Metadata
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -99,6 +100,7 @@ Public Class CImageDraw
         Friend BrushSolid As SolidBrush = Nothing '記号色
         Friend BrushAlfa As SolidBrush = Nothing '内部塗りつぶし色
         Friend PenWidth As Single = 0 'ペンの幅
+        Friend BrushTexture As TextureBrush = Nothing 'テクスチャ画像
 
         Sub New(ByVal drcol As clsColorRecordSet)
             If drcol IsNot Nothing Then
@@ -115,6 +117,16 @@ Public Class CImageDraw
                 If Not drcol.BrushAlfaColor.IsEmpty Then
                     BrushAlfa = New SolidBrush(drcol.BrushAlfaColor)
                 End If
+                ' テクスチャ画像
+                If Not String.IsNullOrWhiteSpace(drcol.TextureString) Then
+                    Dim img As Image = frmColor.CompressedBase64ToImage(drcol.TextureString)
+                    If img IsNot Nothing Then
+                        Dim bmp As New Bitmap(img) ' メモリ上に複製
+                        img.Dispose()              ' 元画像は解放してOK
+                        BrushTexture = New TextureBrush(bmp)
+                        ' bmpはBrushTextureが管理するのでDisposeしない
+                    End If
+                End If
             Else
                 'デフォルトの一式
                 PenBand = New Pen(Color.Black, cThickPenWidth)
@@ -122,6 +134,7 @@ Public Class CImageDraw
                 PenLane = New Pen(Color.Gray, cThinPenWidth)
                 BrushSolid = New SolidBrush(Color.Black)
             End If
+
         End Sub
 
         '描画されない値(#52)
@@ -142,6 +155,7 @@ Public Class CImageDraw
                     If PenBand IsNot Nothing Then PenBand.Dispose()
                     If BrushSolid IsNot Nothing Then BrushSolid.Dispose()
                     If BrushAlfa IsNot Nothing Then BrushAlfa.Dispose()
+                    If BrushTexture IsNot Nothing Then BrushTexture.Dispose()
                 End If
 
                 ' TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
@@ -673,13 +687,29 @@ Public Class CImageDraw
         'ひもの領域を塗りつぶす
         Dim points() As PointF = pixcel_lines(band.aバンド位置)
         If colset.BrushAlfa IsNot Nothing Then
-#If 1 Then
-            If Not draw_over Then
-                _Graphic.FillPolygon(colset.BrushAlfa, points)
+            If Not draw_over Then '色を重ね塗りする場合はこの条件を外してください
+                '#100
+                If colset.BrushTexture IsNot Nothing Then
+                    'テクスチャがある場合
+                    If colset.BrushTexture IsNot Nothing Then
+                        'バンドの方向
+                        Dim angle As Single = -CInt(band.delta始点終点.Angle) '丸める
+                        '配置基点
+                        Dim posX As Single = pixcel_X(band.p始点F.X)
+                        Dim posY As Single = pixcel_Y(band.p始点F.Y)
+                        'テクスチャの回転
+                        Dim m As New Drawing2D.Matrix()
+                        m.RotateAt(angle, New PointF(posX, posY))
+                        colset.BrushTexture.Transform = m
+                        '塗りつぶし
+                        _Graphic.FillPolygon(colset.BrushTexture, points)
+                        'Transformをリセット（他の描画への影響防止）
+                        colset.BrushTexture.ResetTransform()
+                    End If
+                Else
+                    _Graphic.FillPolygon(colset.BrushAlfa, points)
+                End If
             End If
-#Else
-            _Graphic.FillPolygon(colset.BrushAlfa, points)
-#End If
         End If
 
         Dim p始点F As PointF = points(CBand.i_始点F)

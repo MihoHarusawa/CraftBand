@@ -1,4 +1,7 @@
 ﻿Imports System.Drawing
+Imports System.Drawing.Imaging
+Imports System.IO
+Imports System.IO.Compression
 Imports System.Windows.Forms
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstMasterTables
@@ -8,6 +11,7 @@ Imports CraftBand.Tables.dstMasterTables
 ''' </summary>
 Public Class frmColor
     Dim cColDispColor As Integer = 5 '色を表示するカラム
+    Dim cColTexture As Integer = 11 '画像を表示するカラム
 
     Shared _ColorFiledNames() As String = {"f_i赤", "f_i緑", "f_i青"}
     Dim _ColorFiledColumnIndex() As Integer
@@ -15,6 +19,9 @@ Public Class frmColor
     Dim _table As tbl描画色DataTable
     Dim _NameColumnIndex As Integer = -1
     Dim _BandTypeNameIndex As Integer = -1
+    '#100
+    Dim _TextureInfoIndex As Integer = -1
+    Dim _TextureStringIndex As Integer = -1
 
     Dim _MyProfile As New CDataGridViewProfile(
             (New tbl描画色DataTable),
@@ -40,6 +47,10 @@ Public Class frmColor
                 _ColorFiledColumnIndex(1) = col.Index
             ElseIf col.DataPropertyName = _ColorFiledNames(2) Then
                 _ColorFiledColumnIndex(2) = col.Index
+            ElseIf col.DataPropertyName = "f_s画像情報" Then
+                _TextureInfoIndex = col.Index
+            ElseIf col.DataPropertyName = "f_s画像文字列" Then
+                _TextureStringIndex = col.Index
             End If
         Next
 
@@ -159,6 +170,26 @@ Public Class frmColor
             End If
             Exit Sub
         End If
+
+        '画像表示のセル
+        If e.ColumnIndex = cColTexture Then
+            Dim val As Object = dgv.Rows(e.RowIndex).Cells(_TextureStringIndex).Value
+            If val IsNot Nothing AndAlso Not IsDBNull(val) AndAlso Not String.IsNullOrWhiteSpace(val.ToString) Then
+                Try
+                    Dim img As Image = CompressedBase64ToImage(val.ToString)
+                    e.Value = img
+                    e.FormattingApplied = True
+                Catch ex As Exception
+                    e.Value = New Bitmap(1, 1) ' 空画像で×を消す
+                    e.FormattingApplied = True
+                End Try
+            Else
+                e.Value = New Bitmap(1, 1) ' 空画像で×を消す
+                e.FormattingApplied = True
+            End If
+            Exit Sub
+        End If
+
     End Sub
 
     Private Sub dgvData_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellValueChanged
@@ -250,4 +281,123 @@ Public Class frmColor
             cmbバンドの種類名.Text = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_BandTypeNameIndex).Value
         End If
     End Sub
+
+    '画像ボタン #100
+    Private Sub btn画像_Click(sender As Object, e As EventArgs) Handles btn画像.Click
+        '画像カラムがカレントの時のみ有効
+        If dgvData.CurrentCell Is Nothing OrElse dgvData.CurrentCell.ColumnIndex <> cColTexture Then
+            Exit Sub
+        End If
+
+        'png画像を選択
+        If OpenFileDialogPng.ShowDialog() <> DialogResult.OK Then
+            'もし現レコードのf_s画像文字列があれば、クリアするか問い合わせる
+            Dim val As Object = dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureStringIndex).Value
+            If val IsNot Nothing AndAlso Not IsDBNull(val) AndAlso Not String.IsNullOrWhiteSpace(val.ToString) Then
+                '現在の画像をクリアしますか？
+                If MessageBox.Show(My.Resources.AskClearCurrentTexture, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureStringIndex).Value = DBNull.Value
+                    dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureInfoIndex).Value = DBNull.Value
+                    dgvData.Refresh()
+                End If
+            End If
+            Exit Sub
+        End If
+
+        '選択されたファイルパス
+        Dim filepath As String = OpenFileDialogPng.FileName
+        If Not System.IO.File.Exists(filepath) Then
+            Exit Sub
+        End If
+
+        '画像ファイルを読み取り、BASE64に変換して、現レコードのf_s画像文字列に設定
+        Const MaxImageStringLen As Integer = 1024 * 100 '100K
+        Dim img As Image = Nothing
+        Try
+            img = Image.FromFile(filepath)
+            Dim b64 As String = ImageToCompressedBase64(img, Imaging.ImageFormat.Png)
+            If b64.Length > MaxImageStringLen Then
+                '画像のサイズ({0})が大きすぎます。小さくしてください。
+                Dim msg As String = String.Format(My.Resources.ErrMsgColorFileTooLarge, b64.Length)
+                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            'セット
+            dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureStringIndex).Value = b64
+            dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureInfoIndex).Value = String.Format("{0},{1}({2})", img.Width, img.Height, b64.Length)
+            dgvData.Refresh()
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "frmColor.btn画像_Click")
+            '画像ファイル'{0}'を読み取れませんでした。
+            Dim msg As String = String.Format(My.Resources.ErrMsgColorBadTexture, filepath)
+            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            'クリア
+            dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureStringIndex).Value = DBNull.Value
+            dgvData.Rows(dgvData.CurrentRow.Index).Cells(_TextureInfoIndex).Value = DBNull.Value
+            dgvData.Refresh()
+            Exit Sub
+        End Try
+    End Sub
+
+    ' 画像→圧縮→BASE64文字列
+    Shared Function ImageToCompressedBase64(img As Image, format As ImageFormat) As String
+        Using msImg As New MemoryStream()
+            img.Save(msImg, format)
+            Dim imageBytes As Byte() = msImg.ToArray()
+            Using msZip As New MemoryStream()
+                Using gz As New GZipStream(msZip, CompressionMode.Compress)
+                    gz.Write(imageBytes, 0, imageBytes.Length)
+                End Using
+                Return Convert.ToBase64String(msZip.ToArray())
+            End Using
+        End Using
+    End Function
+
+    ' BASE64文字列→解凍→画像
+    Shared Function CompressedBase64ToImage(base64String As String) As Image
+        Try
+            Dim zipBytes As Byte() = Convert.FromBase64String(base64String)
+            Using msZip As New MemoryStream(zipBytes)
+                Using gz As New GZipStream(msZip, CompressionMode.Decompress)
+                    Using msImg As New MemoryStream()
+                        gz.CopyTo(msImg)
+                        msImg.Position = 0
+                        Dim img As Image = Image.FromStream(msImg)
+                        Return img
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "frmColor.CompressedBase64ToImage", base64String)
+            Return Nothing
+        End Try
+    End Function
+
+    Private Sub dgvData_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellDoubleClick
+        ' 画像カラムのセルがダブルクリックされた場合のみ
+        If e.ColumnIndex = cColTexture AndAlso e.RowIndex >= 0 Then
+            ' btn画像_Click を呼び出す
+            btn画像_Click(btn画像, EventArgs.Empty)
+        End If
+    End Sub
+
+    '色選択
+    Private Sub lblColor_Click(sender As Object, e As EventArgs) Handles lblColor.Click
+        Dim cd As New ColorDialog
+        cd.AllowFullOpen = True
+        cd.AnyColor = True
+        cd.FullOpen = True
+        cd.SolidColorOnly = False
+        cd.Color = lblColor.BackColor
+        If OpenFileDialogPng.ShowDialog() <> DialogResult.OK Then
+            Exit Sub
+        End If
+        lblColor.BackColor = cd.Color
+        nud赤.Value = cd.Color.R
+        nud緑.Value = cd.Color.G
+        nud青.Value = cd.Color.B
+    End Sub
+
 End Class

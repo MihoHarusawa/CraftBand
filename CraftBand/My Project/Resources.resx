@@ -667,4 +667,16 @@
     <value>再入力しますか？(はい=再入力,いいえ=クリア)</value>
     <comment>ctrDataGridView</comment>
   </data>
+  <data name="AskClearCurrentTexture" xml:space="preserve">
+    <value>現在の画像をクリアしますか？</value>
+    <comment>frmColor</comment>
+  </data>
+  <data name="ErrMsgColorBadTexture" xml:space="preserve">
+    <value>画像ファイル'{0}'を読み取れませんでした。</value>
+    <comment>frmColor</comment>
+  </data>
+  <data name="ErrMsgColorFileTooLarge" xml:space="preserve">
+    <value>画像のサイズ({0})が大きすぎます。小さくしてください</value>
+    <comment>frmColor</comment>
+  </data>
 </root>
