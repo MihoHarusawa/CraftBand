@@ -182,7 +182,7 @@ Partial Public Class clsCalcSquare
         End If
         imgList差しひも = Nothing
 
-        If Not isBackFace AndAlso Not Not is底のみ Then
+        If Not isBackFace AndAlso Not is底のみ Then
             '付属品
             AddPartsImage(imgData, _frmMain.editAddParts)
         End If

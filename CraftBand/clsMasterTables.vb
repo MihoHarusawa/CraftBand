@@ -1476,10 +1476,14 @@ Public Class clsMasterTables
         End Function
 
         Public Overrides Function ToString() As String
-            Return String.Format("{0}{1}({2}):R({3}) G({4}) B({5}) Alfa({6}) Frame({7}:{8}) Lane({9}:{10}) [{11}]{12} Image:{13}",
+            Dim str As String = String.Format("{0}{1}({2}):R({3}) G({4}) B({5}) Alfa({6}) Frame({7}:{8}) Lane({9}:{10}) [{11}]{12}",
                                  IIf(IsNoDrawing, "-", "+"),
                                  Name, BandTypeName, BaseColor.R, BaseColor.G, BaseColor.B, BrushAlfaColor.A,
-                                 FramePenWidth, FramePenColorString, LanePenWidth, LanePenColorString, Product, Appendix, TextureInfo)
+                                 FramePenWidth, FramePenColorString, LanePenWidth, LanePenColorString, Product, Appendix)
+            If Not String.IsNullOrEmpty(TextureString) Then
+                str &= " IMAGE:" & TextureInfo & TextureString.Substring(0, Math.Min(20, TextureString.Length))
+            End If
+            Return str
         End Function
     End Class
 

@@ -254,7 +254,11 @@ Public Class clsImageItem
                 Return 0
             End If
             If dX = 0 Then
-                Return 90
+                If 0 < dY Then
+                    Return 90
+                Else
+                    Return 270
+                End If
             End If
             Dim angleRad As Double = System.Math.Atan2(dY, dX)
             Return angleRad * (180 / System.Math.PI)
@@ -1771,6 +1775,7 @@ Public Class clsImageItem
             Dim sb As New StringBuilder
             sb.AppendFormat("[A]始点F{0}{4}[D]始点T{1} : [B]終点F{2}{5}[C]終点T{3} ", p始点F, p始点T, p終点F, p終点T,
                             IIf(is始点FT線, "=", "."), IIf(is終点FT線, "=", "."))
+            sb.AppendFormat("角度={0} ", delta始点終点.Angle)
             sb.AppendFormat("_i何本幅={0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
             sb.AppendFormat(" _s色2={0} _i描画種={1}", _s色2, _i描画種)
             Return sb.ToString

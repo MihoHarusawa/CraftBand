@@ -693,13 +693,12 @@ Public Class CImageDraw
                     'テクスチャがある場合
                     If colset.BrushTexture IsNot Nothing Then
                         'バンドの方向
-                        Dim angle As Single = -CInt(band.delta始点終点.Angle) '丸める
+                        Dim angle As Single = -CInt(band.delta始点終点.Angle) '丸めて反転
                         '配置基点
-                        Dim posX As Single = pixcel_X(band.p始点F.X)
-                        Dim posY As Single = pixcel_Y(band.p始点F.Y)
+                        Dim pos As PointF = pixcel_point(band.p始点F)
                         'テクスチャの回転
                         Dim m As New Drawing2D.Matrix()
-                        m.RotateAt(angle, New PointF(posX, posY))
+                        m.RotateAt(angle, pos)
                         colset.BrushTexture.Transform = m
                         '塗りつぶし
                         _Graphic.FillPolygon(colset.BrushTexture, points)
