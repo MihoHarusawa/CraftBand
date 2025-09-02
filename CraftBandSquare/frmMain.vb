@@ -1579,6 +1579,7 @@ Public Class frmMain
 
         editUpDown.Is側面_下から上へ = rad下から上へ.Checked '側面のタブ
         editUpDown.I上右側面本数 = _clsCalcSquare.p_i垂直ひも半数 '下左側面の開始パターン取得用
+        editUpDown.I縦ひもの本数 = _clsCalcSquare.p_i縦ひもの本数 'カラム番号表示用
 
         _CurrentTargetFace = enumTargetFace.NoDef
         If rad側面_上右.Checked Then

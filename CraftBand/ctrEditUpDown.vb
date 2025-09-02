@@ -45,6 +45,7 @@ Public Class ctrEditUpDown
     Public Property I水平領域四角数 As Integer '剰余数計算用
     Public Property I垂直領域四角数 As Integer '〃
     Public Property I上右側面本数 As Integer = 0 'Reset時の下左初期値
+    Public Property I縦ひもの本数 As Integer 'カラム番号表示用
     'Square45
     Public Property IsSquare45 As Boolean = False
     Public _clsSquare45Bottom As clsSquare45Bottom
@@ -295,8 +296,10 @@ Public Class ctrEditUpDown
     Private Function getIndexPosition(ByVal idx As Integer) As String
         If IsSquare45 AndAlso _clsSquare45Bottom IsNot Nothing AndAlso _clsSquare45Bottom.Is底位置表示 Then
             Return _clsSquare45Bottom.GetIndexPosition(idx)
-        Else
+        ElseIf idx <= I縦ひもの本数 Then
             Return idx.ToString
+        Else
+            Return (idx - I縦ひもの本数).ToString
         End If
     End Function
 
