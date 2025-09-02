@@ -2,6 +2,7 @@
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Reflection.Metadata
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -423,12 +424,18 @@ Public Class CImageDraw
     End Function
 
     Function draw横バンド(ByVal item As clsImageItem) As Boolean
-        Return subバンド(item, False)
+        'Return subバンド(item, False)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw横バンド f_s記号:{0}", item.m_row縦横展開.f_s記号)
+        Return False
     End Function
 
     Function draw縦バンド(ByVal item As clsImageItem) As Boolean
-        Return subバンド(item, True)
+        'Return subバンド(item, True)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw縦バンド f_s記号:{01}", item.m_row縦横展開.f_s記号)
+        Return False
     End Function
+
+#If 0 Then
 
     Function subバンド(ByVal item As clsImageItem, ByVal isVirtical As Boolean) As Boolean
         If item.m_row縦横展開 Is Nothing Then
@@ -608,6 +615,7 @@ Public Class CImageDraw
         End If
         Return True
     End Function
+#End If
 
     Function drawバンドセット(ByVal item As clsImageItem) As Boolean
 
@@ -684,93 +692,98 @@ Public Class CImageDraw
             End If
         End If
 
-        'ひもの領域を塗りつぶす
-        Dim points() As PointF = pixcel_lines(band.aバンド位置)
-        If colset.BrushAlfa IsNot Nothing Then
-            If Not draw_over Then '色を重ね塗りする場合はこの条件を外してください
-                '#100
-                If colset.BrushTexture IsNot Nothing Then
-                    'テクスチャがある場合
+        If band.deltaFT.IsZero Then
+            'バンド幅がゼロ、knot で記号表示のみの場合
+            'バンド描画をスキップ
+        Else
+            'ひもの領域を塗りつぶす
+            Dim points() As PointF = pixcel_lines(band.aバンド位置)
+            If colset.BrushAlfa IsNot Nothing Then
+                If Not draw_over Then '色を重ね塗りする場合はこの条件を外してください
+                    '#100
                     If colset.BrushTexture IsNot Nothing Then
-                        'バンドの方向
-                        Dim angle As Single = -CInt(band.delta始点終点.Angle) '丸めて反転
-                        '配置基点
-                        Dim pos As PointF = pixcel_point(band.p始点F)
-                        'テクスチャの回転
-                        Dim m As New Drawing2D.Matrix()
-                        m.RotateAt(angle, pos)
-                        colset.BrushTexture.Transform = m
-                        '塗りつぶし
-                        _Graphic.FillPolygon(colset.BrushTexture, points)
-                        'Transformをリセット（他の描画への影響防止）
-                        colset.BrushTexture.ResetTransform()
+                        'テクスチャがある場合
+                        If colset.BrushTexture IsNot Nothing Then
+                            'バンドの方向
+                            Dim angle As Single = -CInt(band.delta始点終点.Angle) '丸めて反転
+                            '配置基点
+                            Dim pos As PointF = pixcel_point(band.p始点F)
+                            'テクスチャの回転
+                            Dim m As New Drawing2D.Matrix()
+                            m.RotateAt(angle, pos)
+                            colset.BrushTexture.Transform = m
+                            '塗りつぶし
+                            _Graphic.FillPolygon(colset.BrushTexture, points)
+                            'Transformをリセット（他の描画への影響防止）
+                            colset.BrushTexture.ResetTransform()
+                        End If
+                    Else
+                        _Graphic.FillPolygon(colset.BrushAlfa, points)
                     End If
-                Else
-                    _Graphic.FillPolygon(colset.BrushAlfa, points)
                 End If
             End If
-        End If
 
-        Dim p始点F As PointF = points(CBand.i_始点F)
-        Dim p始点T As PointF = points(CBand.i_始点T)
-        Dim p終点F As PointF
-        Dim p終点T As PointF
+            Dim p始点F As PointF = points(CBand.i_始点F)
+            Dim p始点T As PointF = points(CBand.i_始点T)
+            Dim p終点F As PointF
+            Dim p終点T As PointF
 
-        'バンドの枠線幅 ※pixcel変換により角度が変わるので再計算
-        Dim ftlen As Single = Math.Sqrt((p始点T.X - p始点F.X) ^ 2 + (p始点T.Y - p始点F.Y) ^ 2)
-        Dim wid_dx As Single = colset.PenWidth * (p始点T.X - p始点F.X) / ftlen
-        Dim wid_dy As Single = colset.PenWidth * (p始点T.Y - p始点F.Y) / ftlen
+            'バンドの枠線幅 ※pixcel変換により角度が変わるので再計算
+            Dim ftlen As Single = Math.Sqrt((p始点T.X - p始点F.X) ^ 2 + (p始点T.Y - p始点F.Y) ^ 2)
+            Dim wid_dx As Single = colset.PenWidth * (p始点T.X - p始点F.X) / ftlen
+            Dim wid_dy As Single = colset.PenWidth * (p始点T.Y - p始点F.Y) / ftlen
 
-        'バンド方向に、枠線幅分内側に入ったライン
-        p始点F = New PointF(points(CBand.i_始点F).X + wid_dx, points(CBand.i_始点F).Y + wid_dy)
-        p始点T = New PointF(points(CBand.i_始点T).X - wid_dx, points(CBand.i_始点T).Y - wid_dy)
-        p終点F = New PointF(points(CBand.i_終点F).X + wid_dx, points(CBand.i_終点F).Y + wid_dy)
-        p終点T = New PointF(points(CBand.i_終点T).X - wid_dx, points(CBand.i_終点T).Y - wid_dy)
+            'バンド方向に、枠線幅分内側に入ったライン
+            p始点F = New PointF(points(CBand.i_始点F).X + wid_dx, points(CBand.i_始点F).Y + wid_dy)
+            p始点T = New PointF(points(CBand.i_始点T).X - wid_dx, points(CBand.i_始点T).Y - wid_dy)
+            p終点F = New PointF(points(CBand.i_終点F).X + wid_dx, points(CBand.i_終点F).Y + wid_dy)
+            p終点T = New PointF(points(CBand.i_終点T).X - wid_dx, points(CBand.i_終点T).Y - wid_dy)
 
-        If draw_over Then
+            If draw_over Then
 
-            Dim bandover As New CBand(band)
-            bandover._s色 = band._s色2
-            bandover._i描画種 = clsDataTables.enum描画種.i_指定なし
-            bandover.p文字位置.Zero()
-            bandover.SetWideRatio(0.85) 'とりあえずの固定値
-            ret = drawバンド(bandover)
+                Dim bandover As New CBand(band)
+                bandover._s色 = band._s色2
+                bandover._i描画種 = clsDataTables.enum描画種.i_指定なし
+                bandover.p文字位置.Zero()
+                bandover.SetWideRatio(0.85) 'とりあえずの固定値
+                ret = drawバンド(bandover)
 
-        Else
-            '本幅線
-            Dim i何本幅 As Integer = band._i何本幅
-            If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
-                Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
-                Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
-                Dim pStart As PointF = p始点F
-                Dim pEnd As PointF = p終点F
-                For i As Integer = 1 To i何本幅 - 1
-                    pStart.X += dx
-                    pStart.Y += dy
-                    pEnd.X += dx
-                    pEnd.Y += dy
-                    _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
-                Next
+            Else
+                '本幅線
+                Dim i何本幅 As Integer = band._i何本幅
+                If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
+                    Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
+                    Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
+                    Dim pStart As PointF = p始点F
+                    Dim pEnd As PointF = p終点F
+                    For i As Integer = 1 To i何本幅 - 1
+                        pStart.X += dx
+                        pStart.Y += dy
+                        pEnd.X += dx
+                        pEnd.Y += dy
+                        _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
+                    Next
+                End If
             End If
-        End If
 
-        'バンド枠
-        If colset.PenBand IsNot Nothing Then
-            Dim wid_half_dx As Single = wid_dx / 2
-            Dim wid_half_dy As Single = wid_dy / 2
-            'バンド方向に、1/2枠線幅分内側に入ったライン
-            p始点F = New PointF(points(CBand.i_始点F).X + wid_half_dx, points(CBand.i_始点F).Y + wid_half_dy)
-            p始点T = New PointF(points(CBand.i_始点T).X - wid_half_dx, points(CBand.i_始点T).Y - wid_half_dy)
-            p終点F = New PointF(points(CBand.i_終点F).X + wid_half_dx, points(CBand.i_終点F).Y + wid_half_dy)
-            p終点T = New PointF(points(CBand.i_終点T).X - wid_half_dx, points(CBand.i_終点T).Y - wid_half_dy)
-            _Graphic.DrawLine(colset.PenBand, p始点F, p終点F)
-            _Graphic.DrawLine(colset.PenBand, p始点T, p終点T)
+            'バンド枠
+            If colset.PenBand IsNot Nothing Then
+                Dim wid_half_dx As Single = wid_dx / 2
+                Dim wid_half_dy As Single = wid_dy / 2
+                'バンド方向に、1/2枠線幅分内側に入ったライン
+                p始点F = New PointF(points(CBand.i_始点F).X + wid_half_dx, points(CBand.i_始点F).Y + wid_half_dy)
+                p始点T = New PointF(points(CBand.i_始点T).X - wid_half_dx, points(CBand.i_始点T).Y - wid_half_dy)
+                p終点F = New PointF(points(CBand.i_終点F).X + wid_half_dx, points(CBand.i_終点F).Y + wid_half_dy)
+                p終点T = New PointF(points(CBand.i_終点T).X - wid_half_dx, points(CBand.i_終点T).Y - wid_half_dy)
+                _Graphic.DrawLine(colset.PenBand, p始点F, p終点F)
+                _Graphic.DrawLine(colset.PenBand, p始点T, p終点T)
 
-            If band.is始点FT線 Then
-                _Graphic.DrawLine(colset.PenBand, points(CBand.i_始点F), points(CBand.i_始点T))
-            End If
-            If band.is終点FT線 Then
-                _Graphic.DrawLine(colset.PenBand, points(CBand.i_終点F), points(CBand.i_終点T))
+                If band.is始点FT線 Then
+                    _Graphic.DrawLine(colset.PenBand, points(CBand.i_始点F), points(CBand.i_始点T))
+                End If
+                If band.is終点FT線 Then
+                    _Graphic.DrawLine(colset.PenBand, points(CBand.i_終点F), points(CBand.i_終点T))
+                End If
             End If
         End If
 
@@ -790,7 +803,13 @@ Public Class CImageDraw
         Dim polygon As PointF() = pixcel_lines(a)
         '塗りつぶし
         If colset.BrushAlfa IsNot Nothing Then
-            _Graphic.FillPolygon(colset.BrushAlfa, polygon)
+            '#100
+            If colset.BrushTexture IsNot Nothing Then
+                'テクスチャがある場合
+                _Graphic.FillPolygon(colset.BrushTexture, polygon)
+            Else
+                _Graphic.FillPolygon(colset.BrushAlfa, polygon)
+            End If
         End If
 
         'バンド

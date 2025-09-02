@@ -1,8 +1,9 @@
 ﻿Imports CraftBand
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsDataTables
-Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.clsImageData
+Imports CraftBand.clsImageItem
+Imports CraftBand.clsImageItem.CBand
+Imports CraftBand.Tables.dstDataTables
 
 Partial Public Class clsCalcKnot
 
@@ -19,6 +20,12 @@ Partial Public Class clsCalcKnot
     Dim _ImageListコマ As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底や側面の展開図
     Dim _ImageList開始位置 As clsImageItemList
+
+    Const IdxDrawBandYoko As Integer = 8
+    Const IdxDrawBandTate As Integer = 9
+    Const IdxDrawBandSide0 As Integer = 10
+    Const IdxDrawBandStart As Integer = 15
+
 
 #Region "テクスチャファイル作成用"
     '絵のファイル
@@ -126,16 +133,28 @@ Partial Public Class clsCalcKnot
 
         '上から下へ
         For idx As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-            Dim band As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
-            If band Is Nothing Then
+            Dim item As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
+            If item Is Nothing Then
                 Continue For
             End If
-            band.m_rひも位置.p右上 = _左上 + band_pos + length0
-            band.m_rひも位置.p左下 = _左上 + band_pos + band270
+            item.m_rひも位置.p右上 = _左上 + band_pos + length0
+            item.m_rひも位置.p左下 = _左上 + band_pos + band270
+
+            'バンド化
+            '始点T(D)　　 　　　終点T(C)
+            '　　[□□→(0)□□]　　　↑deltaAx(90)
+            '始点F(A) 　　　　　終点F(B)
+            Dim band As New CBand(item.m_row縦横展開)
+            band.aバンド位置 = New S四隅(item.m_rひも位置.p左下, item.m_rひも位置.p右下, item.m_rひも位置.p右上, item.m_rひも位置.p左上)
+            item.AddBand(band, IdxDrawBandYoko, idx)
+            '裏表・バンド幅変更なし
+            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                band.SetMarkPosition(enumMarkPosition._始点の前, dひも幅 * 2.5, Unit270 * dひも幅 * 1.3)
+            End If
             '
             For j = 1 To _i高さのコマ数 + _i折り返しコマ数
-                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, band.m_row縦横展開, getBand(enumひも種.i_側面, -j), dひも幅, isKnotLeft)
-                addコマ(_左上_右側面 + Unit0 * (j - 1) * _dコマベース寸法, band.m_row縦横展開, getBand(enumひも種.i_側面, j), dひも幅, isKnotLeft)
+                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, -j), dひも幅, isKnotLeft)
+                addコマ(_左上_右側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, j), dひも幅, isKnotLeft)
             Next
             _左上 = _左上 + (Unit270 * _dコマベース寸法)
             _左上_右側面 = _左上_右側面 + (Unit270 * _dコマベース寸法)
@@ -169,16 +188,28 @@ Partial Public Class clsCalcKnot
 
         '上側面;左から右へ
         For idx As Integer = 1 To p_i縦ひもの本数 '_i横のコマ数
-            Dim band As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
-            If band Is Nothing Then
+            Dim item As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
+            If item Is Nothing Then
                 Continue For
             End If
-            band.m_rひも位置.p右上 = _左上 + band_pos + band0
-            band.m_rひも位置.p左下 = _左上 + band_pos + length270
+            item.m_rひも位置.p右上 = _左上 + band_pos + band0
+            item.m_rひも位置.p左下 = _左上 + band_pos + length270
+
+            'バンド化
+            '始点F(A)□　始点T(D)　→deltaAx(0)
+            '　　  　↓(270)
+            '終点F(B)□　終点T(C)
+            Dim band As New CBand(item.m_row縦横展開)
+            band.aバンド位置 = New S四隅(item.m_rひも位置.p左上, item.m_rひも位置.p左下, item.m_rひも位置.p右下, item.m_rひも位置.p右上)
+            item.AddBand(band, IdxDrawBandTate, idx)
+            '裏表・バンド幅変更なし
+            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                band.SetMarkPosition(enumMarkPosition._始点の前, dひも幅 * 0.5, Unit180 * dひも幅 * 1.3)
+            End If
 
             '底のコマ
             For j As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-                addコマ(_左上_底 + Unit270 * (j - 1) * _dコマベース寸法, getBand(enumひも種.i_横, j), band.m_row縦横展開, dひも幅, isKnotLeft)
+                addコマ(_左上_底 + Unit270 * (j - 1) * _dコマベース寸法, getBand(enumひも種.i_横, j), item.m_row縦横展開, dひも幅, isKnotLeft)
             Next
 
             _左上 = _左上 + (Unit0 * _dコマベース寸法)
@@ -240,16 +271,29 @@ Partial Public Class clsCalcKnot
 
         '下側面:上から下へ
         For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-            Dim band As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
-            If band Is Nothing Then
+            Dim item As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
+            If item Is Nothing Then
                 Continue For
             End If
-            band.m_rひも位置.p右上 = _左上 + band_pos + length0
-            band.m_rひも位置.p左下 = _左上 + band_pos + band270
+            item.m_rひも位置.p右上 = _左上 + band_pos + length0
+            item.m_rひも位置.p左下 = _左上 + band_pos + band270
+
+            'バンド化
+            '始点T(D)　　 　　　終点T(C)
+            '　　[□□→(0)□□]　　　↑deltaAx(90)
+            '始点F(A) 　　　　　終点F(B)
+            Dim band As New CBand(item.m_row縦横展開)
+            band.aバンド位置 = New S四隅(item.m_rひも位置.p左下, item.m_rひも位置.p右下, item.m_rひも位置.p右上, item.m_rひも位置.p左上)
+            item.AddBand(band, IdxDrawBandSide0, i)
+            '裏表・バンド幅変更なし
+            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+                band.SetMarkPosition(enumMarkPosition._始点の前, dひも幅 * 3, Unit270 * dひも幅 * 1.3)
+            End If
+
             '
             For j = 1 To p_i縦ひもの本数 '_i横のコマ数
-                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, band.m_row縦横展開, getBand(enumひも種.i_縦, j), dひも幅, isKnotLeft)
-                addコマ(_左下_上側面 + Unit0 * (j - 1) * _dコマベース寸法, band.m_row縦横展開, getBand(enumひも種.i_縦, j), dひも幅, isKnotLeft)
+                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j), dひも幅, isKnotLeft)
+                addコマ(_左下_上側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j), dひも幅, isKnotLeft)
             Next
             '
             _左上 = _左上 + (Unit270 * _dコマベース寸法)
@@ -550,6 +594,7 @@ Partial Public Class clsCalcKnot
 
         'コマに続くバンド
         If True Then
+            '*左右
             Dim item1 As New clsImageItem(startInfo.row横展開, True) '右
             Dim item2 As New clsImageItem(startInfo.row横展開, True) '左
             item1.m_dひも幅 = dひも幅
@@ -563,9 +608,22 @@ Partial Public Class clsCalcKnot
             End If
             item1.m_rひも位置.p右上 = New S実座標(item1.m_rひも位置.p左下.X + dバンド長, item1.m_rひも位置.p左下.Y + dひも幅)
             item2.m_rひも位置.p左下 = New S実座標(item2.m_rひも位置.p右上.X - dバンド長, item2.m_rひも位置.p右上.Y - dひも幅)
+
+            'バンド化
+            '始点T(D)　　 　　　終点T(C)
+            '　　[□□→(0)□□]　　　↑deltaAx(90)
+            '始点F(A) 　　　　　終点F(B)
+            Dim band1 As New CBand(startInfo.row横展開)
+            Dim band2 As New CBand(startInfo.row横展開)
+            band1.aバンド位置 = New S四隅(item1.m_rひも位置.p左下, item1.m_rひも位置.p右下, item1.m_rひも位置.p右上, item1.m_rひも位置.p左上)
+            band2.aバンド位置 = New S四隅(item2.m_rひも位置.p左下, item2.m_rひも位置.p右下, item2.m_rひも位置.p右上, item2.m_rひも位置.p左上)
+            item1.AddBand(band1, IdxDrawBandStart, 1)
+            item2.AddBand(band2, IdxDrawBandStart, 2)
+
             itemlist.AddItem(item1)
             itemlist.AddItem(item2)
 
+            '*上下
             Dim item3 As New clsImageItem(startInfo.row縦展開, True) '上
             Dim item4 As New clsImageItem(startInfo.row縦展開, True) '下
             item3.m_dひも幅 = dひも幅
@@ -579,6 +637,18 @@ Partial Public Class clsCalcKnot
             End If
             item3.m_rひも位置.p右上 = New S実座標(item3.m_rひも位置.p左下.X + dひも幅, item3.m_rひも位置.p左下.Y + dバンド長)
             item4.m_rひも位置.p左下 = New S実座標(item4.m_rひも位置.p右上.X - dひも幅, item4.m_rひも位置.p右上.Y - dバンド長)
+
+            'バンド化
+            '始点F(A)□　始点T(D)　→deltaAx(0)
+            '　　  　↓(270)
+            '終点F(B)□　終点T(C)
+            Dim band3 As New CBand(startInfo.row縦展開)
+            Dim band4 As New CBand(startInfo.row縦展開)
+            band3.aバンド位置 = New S四隅(item3.m_rひも位置.p左上, item3.m_rひも位置.p左下, item3.m_rひも位置.p右下, item3.m_rひも位置.p右上)
+            band4.aバンド位置 = New S四隅(item4.m_rひも位置.p左上, item4.m_rひも位置.p左下, item4.m_rひも位置.p右下, item4.m_rひも位置.p右上)
+            item3.AddBand(band3, IdxDrawBandStart, 3)
+            item4.AddBand(band4, IdxDrawBandStart, 4)
+
             itemlist.AddItem(item3)
             itemlist.AddItem(item4)
         End If
