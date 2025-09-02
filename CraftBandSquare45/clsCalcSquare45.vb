@@ -1933,6 +1933,50 @@ Class clsCalcSquare45
         Return True
     End Function
 
+    '外側反転
+    Public Function RevertOriColor(ByVal table As dstWork.tblOriColorDataTable, ByRef idx As Integer) As Boolean
+        idx = -1
+        If table Is Nothing OrElse table.Rows.Count = 0 Then
+            Return False
+        End If
+
+        '外側の45,135のチェック一致
+        For Each row As dstWork.tblOriColorRow In table
+            If row.f_b外側_135 <> row.f_b外側_45 Then
+                idx = row.f_index
+                Return False
+            End If
+        Next
+
+        '反転操作
+        For Each row As dstWork.tblOriColorRow In table
+            '外側の一致は確認済みなので45ベースで反転させる
+            Dim b外側 As Boolean = Not row.f_b外側_45
+            row.f_b外側_45 = b外側
+            row.f_b外側_135 = b外側
+            '内側はその逆
+            row.f_b内側_135 = Not b外側
+            row.f_b内側_45 = Not b外側
+
+            If b外側 Then
+                row.f_s外側色_45 = row.f_s色_135
+                row.f_s外側色_135 = row.f_s色_45
+                row.f_s内側色_45 = row.f_s色_45
+                row.f_s内側色_135 = row.f_s色_135
+            Else
+                row.f_s外側色_45 = row.f_s色_45
+                row.f_s外側色_135 = row.f_s色_135
+                row.f_s内側色_45 = row.f_s色_135
+                row.f_s内側色_135 = row.f_s色_45
+            End If
+
+            row.f_bEdited = True
+        Next
+
+        Return True
+    End Function
+
+
     Public Function SaveOriColorTable(ByVal table As dstWork.tblOriColorDataTable) As Boolean
         If table Is Nothing OrElse table.Rows.Count = 0 Then
             Return False
@@ -1977,20 +2021,23 @@ Class clsCalcSquare45
         Return changed
     End Function
 
-    Public Function CountCheckedOriColorTable(ByVal table As dstWork.tblOriColorDataTable) As Integer
+    Public Function CountCheckedOriColorTable(ByVal table As dstWork.tblOriColorDataTable) As String
         If table Is Nothing OrElse table.Rows.Count = 0 Then
-            Return 0
+            Return String.Empty
         End If
 
-        Dim count As Integer =
+        Dim count0 As Integer =
             (From row In table.AsEnumerable()
              Select CInt(row.Field(Of Boolean)("f_b外側_45")) +
-                CInt(row.Field(Of Boolean)("f_b内側_45")) +
-                CInt(row.Field(Of Boolean)("f_b外側_135")) +
+                CInt(row.Field(Of Boolean)("f_b外側_135"))
+             ).Sum()
+        Dim count1 As Integer =
+            (From row In table.AsEnumerable()
+             Select CInt(row.Field(Of Boolean)("f_b内側_45")) +
                 CInt(row.Field(Of Boolean)("f_b内側_135"))
              ).Sum()
 
-        Return -count
+        Return String.Format("{0},{1}", count0, count1)
     End Function
 
     Public Shared Function IsColorChangeable(ByVal r As dstWork.tblOriColorRow) As Boolean

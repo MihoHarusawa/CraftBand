@@ -282,6 +282,17 @@ Public Class frmColor
         End If
     End Sub
 
+    '画像カラムのセルが選択されたときにのみ画像ボタンを表示
+    Private Sub dgvData_SelectionChanged(sender As Object, e As EventArgs) Handles dgvData.SelectionChanged
+        If dgvData.SelectedCells.Count = 1 AndAlso
+           dgvData.CurrentCell IsNot Nothing AndAlso
+           dgvData.CurrentCell.ColumnIndex = cColTexture Then
+            btn画像.Visible = True
+        Else
+            btn画像.Visible = False
+        End If
+    End Sub
+
     '画像ボタン #100
     Private Sub btn画像_Click(sender As Object, e As EventArgs) Handles btn画像.Click
         '画像カラムがカレントの時のみ有効
@@ -375,8 +386,8 @@ Public Class frmColor
         End Try
     End Function
 
+    ' 画像カラムのセルがダブルクリックされた
     Private Sub dgvData_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvData.CellDoubleClick
-        ' 画像カラムのセルがダブルクリックされた場合のみ
         If e.ColumnIndex = cColTexture AndAlso e.RowIndex >= 0 Then
             ' btn画像_Click を呼び出す
             btn画像_Click(btn画像, EventArgs.Empty)
@@ -391,7 +402,7 @@ Public Class frmColor
         cd.FullOpen = True
         cd.SolidColorOnly = False
         cd.Color = lblColor.BackColor
-        If OpenFileDialogPng.ShowDialog() <> DialogResult.OK Then
+        If cd.ShowDialog() <> DialogResult.OK Then
             Exit Sub
         End If
         lblColor.BackColor = cd.Color

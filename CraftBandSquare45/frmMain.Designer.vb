@@ -126,6 +126,7 @@ Partial Class frmMain
         btn詳細表示 = New Button()
         btn選択をON_折り = New Button()
         btn選択をOFF_折り = New Button()
+        btn外側反転 = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -224,37 +225,13 @@ Partial Class frmMain
         lbl垂直に = New Label()
         editUpDown = New ctrEditUpDown()
         tpage折りカラー = New TabPage()
-        txt折り返し数 = New TextBox()
-        lbl折り返し数 = New Label()
+        lbl折り返し数_内側 = New Label()
+        txt折り返し数_内側 = New TextBox()
+        txt折り返し数_外側 = New TextBox()
+        lbl折り返し数_外側 = New Label()
         txt折り返しの高さ数 = New TextBox()
         lbl折り返しの高さ数 = New Label()
         dgv折りカラー = New ctrDataGridView()
-        BindingSource折りカラー = New BindingSource(components)
-        f_i段数2 = New DataGridViewTextBoxColumn()
-        lbl四角ベース = New Label()
-        lbl計算寸法 = New Label()
-        lbl計算寸法縦 = New Label()
-        lbl計算寸法高さ = New Label()
-        lbl計算寸法_単位 = New Label()
-        lbl縁厚さプラス = New Label()
-        lbl計算寸法横 = New Label()
-        lbl計算寸法周 = New Label()
-        btn終了 = New Button()
-        OpenFileDialog1 = New OpenFileDialog()
-        SaveFileDialog1 = New SaveFileDialog()
-        cmb基本色 = New ComboBox()
-        lbl基本色 = New Label()
-        lbl横寸法の差 = New Label()
-        lbl縦寸法の差 = New Label()
-        lbl高さ寸法の差 = New Label()
-        txtバンドの種類名 = New TextBox()
-        lbl基本のひも幅length = New Label()
-        StatusStrip1 = New StatusStrip()
-        ToolStripStatusLabel1 = New ToolStripStatusLabel()
-        ToolStripStatusLabel2 = New ToolStripStatusLabel()
-        lbl単位 = New Label()
-        btnDEBUG = New Button()
-        timer折りカラー = New Timer(components)
         f_b外側_135 = New DataGridViewCheckBoxColumn()
         f_s外側色_45 = New DataGridViewTextBoxColumn()
         f_s外側色_135 = New DataGridViewTextBoxColumn()
@@ -282,6 +259,32 @@ Partial Class frmMain
         f_dひも長加算_135 = New DataGridViewTextBoxColumn()
         f_sゼロ面名_135 = New DataGridViewTextBoxColumn()
         f_iゼロ位置_135 = New DataGridViewTextBoxColumn()
+        BindingSource折りカラー = New BindingSource(components)
+        f_i段数2 = New DataGridViewTextBoxColumn()
+        lbl四角ベース = New Label()
+        lbl計算寸法 = New Label()
+        lbl計算寸法縦 = New Label()
+        lbl計算寸法高さ = New Label()
+        lbl計算寸法_単位 = New Label()
+        lbl縁厚さプラス = New Label()
+        lbl計算寸法横 = New Label()
+        lbl計算寸法周 = New Label()
+        btn終了 = New Button()
+        OpenFileDialog1 = New OpenFileDialog()
+        SaveFileDialog1 = New SaveFileDialog()
+        cmb基本色 = New ComboBox()
+        lbl基本色 = New Label()
+        lbl横寸法の差 = New Label()
+        lbl縦寸法の差 = New Label()
+        lbl高さ寸法の差 = New Label()
+        txtバンドの種類名 = New TextBox()
+        lbl基本のひも幅length = New Label()
+        StatusStrip1 = New StatusStrip()
+        ToolStripStatusLabel1 = New ToolStripStatusLabel()
+        ToolStripStatusLabel2 = New ToolStripStatusLabel()
+        lbl単位 = New Label()
+        btnDEBUG = New Button()
+        timer折りカラー = New Timer(components)
         CType(BindingSource縁の始末, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -1094,7 +1097,7 @@ Partial Class frmMain
         radビューア.Checked = True
         radビューア.Location = New Point(29, 18)
         radビューア.Name = "radビューア"
-        radビューア.Size = New Size(66, 23)
+        radビューア.Size = New Size(65, 23)
         radビューア.TabIndex = 0
         radビューア.TabStop = True
         radビューア.Text = "ビューア"
@@ -1159,7 +1162,7 @@ Partial Class frmMain
         btnClear.Location = New Point(6, 344)
         btnClear.Name = "btnClear"
         btnClear.Size = New Size(111, 43)
-        btnClear.TabIndex = 5
+        btnClear.TabIndex = 8
         btnClear.Text = "クリア(&C)"
         ToolTip1.SetToolTip(btnClear, "全てのチェックをクリアします")
         btnClear.UseVisualStyleBackColor = True
@@ -1194,7 +1197,7 @@ Partial Class frmMain
         btn詳細表示.Location = New Point(723, 342)
         btn詳細表示.Name = "btn詳細表示"
         btn詳細表示.Size = New Size(111, 43)
-        btn詳細表示.TabIndex = 8
+        btn詳細表示.TabIndex = 0
         btn詳細表示.Text = "詳細表示(&D)"
         ToolTip1.SetToolTip(btn詳細表示, "ひもの詳細情報の表示を切り替えます")
         btn詳細表示.UseVisualStyleBackColor = True
@@ -1205,9 +1208,9 @@ Partial Class frmMain
         btn選択をON_折り.Location = New Point(123, 344)
         btn選択をON_折り.Name = "btn選択をON_折り"
         btn選択をON_折り.Size = New Size(111, 43)
-        btn選択をON_折り.TabIndex = 6
+        btn選択をON_折り.TabIndex = 9
         btn選択をON_折り.Text = "選択をON(&A)"
-        ToolTip1.SetToolTip(btn選択をON_折り, "全てのチェックをクリアします")
+        ToolTip1.SetToolTip(btn選択をON_折り, "選択領域内のチェックをONにします")
         btn選択をON_折り.UseVisualStyleBackColor = True
         ' 
         ' btn選択をOFF_折り
@@ -1216,10 +1219,21 @@ Partial Class frmMain
         btn選択をOFF_折り.Location = New Point(240, 344)
         btn選択をOFF_折り.Name = "btn選択をOFF_折り"
         btn選択をOFF_折り.Size = New Size(111, 43)
-        btn選択をOFF_折り.TabIndex = 7
+        btn選択をOFF_折り.TabIndex = 10
         btn選択をOFF_折り.Text = "選択をOFF(&Z)"
-        ToolTip1.SetToolTip(btn選択をOFF_折り, "全てのチェックをクリアします")
+        ToolTip1.SetToolTip(btn選択をOFF_折り, "選択領域内のチェックをOFFにします")
         btn選択をOFF_折り.UseVisualStyleBackColor = True
+        ' 
+        ' btn外側反転
+        ' 
+        btn外側反転.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        btn外側反転.Location = New Point(357, 344)
+        btn外側反転.Name = "btn外側反転"
+        btn外側反転.Size = New Size(111, 43)
+        btn外側反転.TabIndex = 11
+        btn外側反転.Text = "外側反転(&R)"
+        ToolTip1.SetToolTip(btn外側反転, "外側45と135が同時にONならば反転します")
+        btn外側反転.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -2045,7 +2059,7 @@ Partial Class frmMain
         radおもて.Checked = True
         radおもて.Location = New Point(23, 353)
         radおもて.Name = "radおもて"
-        radおもて.Size = New Size(59, 23)
+        radおもて.Size = New Size(58, 23)
         radおもて.TabIndex = 0
         radおもて.TabStop = True
         radおもて.Text = "おもて"
@@ -2181,8 +2195,11 @@ Partial Class frmMain
         ' 
         ' tpage折りカラー
         ' 
-        tpage折りカラー.Controls.Add(txt折り返し数)
-        tpage折りカラー.Controls.Add(lbl折り返し数)
+        tpage折りカラー.Controls.Add(lbl折り返し数_内側)
+        tpage折りカラー.Controls.Add(txt折り返し数_内側)
+        tpage折りカラー.Controls.Add(btn外側反転)
+        tpage折りカラー.Controls.Add(txt折り返し数_外側)
+        tpage折りカラー.Controls.Add(lbl折り返し数_外側)
         tpage折りカラー.Controls.Add(txt折り返しの高さ数)
         tpage折りカラー.Controls.Add(lbl折り返しの高さ数)
         tpage折りカラー.Controls.Add(btn選択をOFF_折り)
@@ -2198,25 +2215,45 @@ Partial Class frmMain
         tpage折りカラー.Text = "折りカラー"
         tpage折りカラー.UseVisualStyleBackColor = True
         ' 
-        ' txt折り返し数
+        ' lbl折り返し数_内側
         ' 
-        txt折り返し数.BackColor = SystemColors.Control
-        txt折り返し数.BorderStyle = BorderStyle.None
-        txt折り返し数.Location = New Point(277, 8)
-        txt折り返し数.Name = "txt折り返し数"
-        txt折り返し数.ReadOnly = True
-        txt折り返し数.Size = New Size(76, 19)
-        txt折り返し数.TabIndex = 3
-        txt折り返し数.Text = "折り返し数"
+        lbl折り返し数_内側.AutoSize = True
+        lbl折り返し数_内側.Location = New Point(374, 8)
+        lbl折り返し数_内側.Name = "lbl折り返し数_内側"
+        lbl折り返し数_内側.Size = New Size(40, 19)
+        lbl折り返し数_内側.TabIndex = 5
+        lbl折り返し数_内側.Text = "内側:"
         ' 
-        ' lbl折り返し数
+        ' txt折り返し数_内側
         ' 
-        lbl折り返し数.AutoSize = True
-        lbl折り返し数.Location = New Point(204, 8)
-        lbl折り返し数.Name = "lbl折り返し数"
-        lbl折り返し数.Size = New Size(74, 19)
-        lbl折り返し数.TabIndex = 2
-        lbl折り返し数.Text = "折り返し数:"
+        txt折り返し数_内側.BackColor = SystemColors.Control
+        txt折り返し数_内側.BorderStyle = BorderStyle.None
+        txt折り返し数_内側.Location = New Point(414, 8)
+        txt折り返し数_内側.Name = "txt折り返し数_内側"
+        txt折り返し数_内側.ReadOnly = True
+        txt折り返し数_内側.Size = New Size(56, 19)
+        txt折り返し数_内側.TabIndex = 6
+        txt折り返し数_内側.Text = "内側"
+        ' 
+        ' txt折り返し数_外側
+        ' 
+        txt折り返し数_外側.BackColor = SystemColors.Control
+        txt折り返し数_外側.BorderStyle = BorderStyle.None
+        txt折り返し数_外側.Location = New Point(312, 8)
+        txt折り返し数_外側.Name = "txt折り返し数_外側"
+        txt折り返し数_外側.ReadOnly = True
+        txt折り返し数_外側.Size = New Size(56, 19)
+        txt折り返し数_外側.TabIndex = 4
+        txt折り返し数_外側.Text = "外側"
+        ' 
+        ' lbl折り返し数_外側
+        ' 
+        lbl折り返し数_外側.AutoSize = True
+        lbl折り返し数_外側.Location = New Point(204, 8)
+        lbl折り返し数_外側.Name = "lbl折り返し数_外側"
+        lbl折り返し数_外側.Size = New Size(106, 19)
+        lbl折り返し数_外側.TabIndex = 3
+        lbl折り返し数_外側.Text = "折り返し数 外側:"
         ' 
         ' txt折り返しの高さ数
         ' 
@@ -2260,232 +2297,8 @@ Partial Class frmMain
         dgv折りカラー.Name = "dgv折りカラー"
         dgv折りカラー.RowTemplate.Height = 28
         dgv折りカラー.Size = New Size(828, 301)
-        dgv折りカラー.TabIndex = 4
+        dgv折りカラー.TabIndex = 7
         dgv折りカラー.Visible = False
-        ' 
-        ' BindingSource折りカラー
-        ' 
-        BindingSource折りカラー.DataMember = "tblOriColor"
-        BindingSource折りカラー.DataSource = GetType(Tables.dstWork)
-        ' 
-        ' f_i段数2
-        ' 
-        f_i段数2.DataPropertyName = "f_i段数"
-        f_i段数2.HeaderText = "段数"
-        f_i段数2.MinimumWidth = 6
-        f_i段数2.Name = "f_i段数2"
-        f_i段数2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i段数2.Width = 125
-        ' 
-        ' lbl四角ベース
-        ' 
-        lbl四角ベース.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl四角ベース.AutoSize = True
-        lbl四角ベース.Location = New Point(291, 657)
-        lbl四角ベース.Name = "lbl四角ベース"
-        lbl四角ベース.Size = New Size(69, 19)
-        lbl四角ベース.TabIndex = 43
-        lbl四角ベース.Text = "四角ベース"
-        ' 
-        ' lbl計算寸法
-        ' 
-        lbl計算寸法.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法.AutoSize = True
-        lbl計算寸法.Location = New Point(23, 594)
-        lbl計算寸法.Name = "lbl計算寸法"
-        lbl計算寸法.Size = New Size(65, 19)
-        lbl計算寸法.TabIndex = 24
-        lbl計算寸法.Text = "計算寸法"
-        ' 
-        ' lbl計算寸法縦
-        ' 
-        lbl計算寸法縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法縦.AutoSize = True
-        lbl計算寸法縦.Location = New Point(501, 627)
-        lbl計算寸法縦.Name = "lbl計算寸法縦"
-        lbl計算寸法縦.Size = New Size(23, 19)
-        lbl計算寸法縦.TabIndex = 48
-        lbl計算寸法縦.Text = "縦"
-        ' 
-        ' lbl計算寸法高さ
-        ' 
-        lbl計算寸法高さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法高さ.AutoSize = True
-        lbl計算寸法高さ.Location = New Point(579, 627)
-        lbl計算寸法高さ.Name = "lbl計算寸法高さ"
-        lbl計算寸法高さ.Size = New Size(32, 19)
-        lbl計算寸法高さ.TabIndex = 51
-        lbl計算寸法高さ.Text = "高さ"
-        ' 
-        ' lbl計算寸法_単位
-        ' 
-        lbl計算寸法_単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法_単位.AutoSize = True
-        lbl計算寸法_単位.Location = New Point(159, 594)
-        lbl計算寸法_単位.Name = "lbl計算寸法_単位"
-        lbl計算寸法_単位.Size = New Size(33, 19)
-        lbl計算寸法_単位.TabIndex = 26
-        lbl計算寸法_単位.Text = "mm"
-        ' 
-        ' lbl縁厚さプラス
-        ' 
-        lbl縁厚さプラス.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl縁厚さプラス.AutoSize = True
-        lbl縁厚さプラス.Location = New Point(291, 687)
-        lbl縁厚さプラス.Name = "lbl縁厚さプラス"
-        lbl縁厚さプラス.Size = New Size(85, 19)
-        lbl縁厚さプラス.TabIndex = 44
-        lbl縁厚さプラス.Text = "縁・厚さプラス"
-        ' 
-        ' lbl計算寸法横
-        ' 
-        lbl計算寸法横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法横.AutoSize = True
-        lbl計算寸法横.Location = New Point(411, 627)
-        lbl計算寸法横.Name = "lbl計算寸法横"
-        lbl計算寸法横.Size = New Size(23, 19)
-        lbl計算寸法横.TabIndex = 45
-        lbl計算寸法横.Text = "横"
-        ' 
-        ' lbl計算寸法周
-        ' 
-        lbl計算寸法周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl計算寸法周.AutoSize = True
-        lbl計算寸法周.Location = New Point(674, 627)
-        lbl計算寸法周.Name = "lbl計算寸法周"
-        lbl計算寸法周.Size = New Size(23, 19)
-        lbl計算寸法周.TabIndex = 54
-        lbl計算寸法周.Text = "周"
-        ' 
-        ' btn終了
-        ' 
-        btn終了.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn終了.Location = New Point(757, 666)
-        btn終了.Name = "btn終了"
-        btn終了.Size = New Size(111, 43)
-        btn終了.TabIndex = 58
-        btn終了.Text = "終了(&X)"
-        btn終了.UseVisualStyleBackColor = True
-        ' 
-        ' OpenFileDialog1
-        ' 
-        OpenFileDialog1.FileName = "OpenFileDialog1"
-        OpenFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        OpenFileDialog1.Title = "データを読み取るファイルを指定してください"
-        ' 
-        ' SaveFileDialog1
-        ' 
-        SaveFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        SaveFileDialog1.Title = "データを保存するファイルを指定してください"
-        ' 
-        ' cmb基本色
-        ' 
-        cmb基本色.FormattingEnabled = True
-        cmb基本色.Location = New Point(733, 63)
-        cmb基本色.Name = "cmb基本色"
-        cmb基本色.Size = New Size(130, 27)
-        cmb基本色.TabIndex = 18
-        ' 
-        ' lbl基本色
-        ' 
-        lbl基本色.AutoSize = True
-        lbl基本色.Location = New Point(752, 37)
-        lbl基本色.Name = "lbl基本色"
-        lbl基本色.Size = New Size(51, 19)
-        lbl基本色.TabIndex = 17
-        lbl基本色.Text = "基本色"
-        ' 
-        ' lbl横寸法の差
-        ' 
-        lbl横寸法の差.AutoSize = True
-        lbl横寸法の差.Location = New Point(234, 96)
-        lbl横寸法の差.Name = "lbl横寸法の差"
-        lbl横寸法の差.Size = New Size(76, 19)
-        lbl横寸法の差.TabIndex = 5
-        lbl横寸法の差.Text = "横寸法の差"
-        ' 
-        ' lbl縦寸法の差
-        ' 
-        lbl縦寸法の差.AutoSize = True
-        lbl縦寸法の差.Location = New Point(351, 96)
-        lbl縦寸法の差.Name = "lbl縦寸法の差"
-        lbl縦寸法の差.Size = New Size(76, 19)
-        lbl縦寸法の差.TabIndex = 8
-        lbl縦寸法の差.Text = "縦寸法の差"
-        ' 
-        ' lbl高さ寸法の差
-        ' 
-        lbl高さ寸法の差.AutoSize = True
-        lbl高さ寸法の差.Location = New Point(479, 96)
-        lbl高さ寸法の差.Name = "lbl高さ寸法の差"
-        lbl高さ寸法の差.Size = New Size(85, 19)
-        lbl高さ寸法の差.TabIndex = 11
-        lbl高さ寸法の差.Text = "高さ寸法の差"
-        ' 
-        ' txtバンドの種類名
-        ' 
-        txtバンドの種類名.BorderStyle = BorderStyle.FixedSingle
-        txtバンドの種類名.Location = New Point(19, 94)
-        txtバンドの種類名.Name = "txtバンドの種類名"
-        txtバンドの種類名.ReadOnly = True
-        txtバンドの種類名.Size = New Size(181, 26)
-        txtバンドの種類名.TabIndex = 2
-        ' 
-        ' lbl基本のひも幅length
-        ' 
-        lbl基本のひも幅length.AutoSize = True
-        lbl基本のひも幅length.Location = New Point(618, 96)
-        lbl基本のひも幅length.Name = "lbl基本のひも幅length"
-        lbl基本のひも幅length.Size = New Size(123, 19)
-        lbl基本のひも幅length.TabIndex = 15
-        lbl基本のひも幅length.Text = "基本のひも幅length"
-        ' 
-        ' StatusStrip1
-        ' 
-        StatusStrip1.ImageScalingSize = New Size(20, 20)
-        StatusStrip1.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel1, ToolStripStatusLabel2})
-        StatusStrip1.Location = New Point(0, 727)
-        StatusStrip1.Name = "StatusStrip1"
-        StatusStrip1.Size = New Size(888, 24)
-        StatusStrip1.TabIndex = 59
-        StatusStrip1.Text = "StatusStrip1"
-        ' 
-        ' ToolStripStatusLabel1
-        ' 
-        ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        ToolStripStatusLabel1.Size = New Size(140, 19)
-        ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
-        ' 
-        ' ToolStripStatusLabel2
-        ' 
-        ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        ToolStripStatusLabel2.Size = New Size(140, 19)
-        ToolStripStatusLabel2.Text = "ToolStripStatusLabel2"
-        ' 
-        ' lbl単位
-        ' 
-        lbl単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl単位.AutoSize = True
-        lbl単位.Location = New Point(98, 594)
-        lbl単位.Name = "lbl単位"
-        lbl単位.Size = New Size(40, 19)
-        lbl単位.TabIndex = 25
-        lbl単位.Text = "単位:"
-        ' 
-        ' btnDEBUG
-        ' 
-        btnDEBUG.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btnDEBUG.Location = New Point(758, 588)
-        btnDEBUG.Name = "btnDEBUG"
-        btnDEBUG.Size = New Size(81, 25)
-        btnDEBUG.TabIndex = 60
-        btnDEBUG.Text = "DEBUG"
-        btnDEBUG.UseVisualStyleBackColor = True
-        btnDEBUG.Visible = False
-        ' 
-        ' timer折りカラー
-        ' 
-        timer折りカラー.Interval = 300
         ' 
         ' f_b外側_135
         ' 
@@ -2731,10 +2544,234 @@ Partial Class frmMain
         f_iゼロ位置_135.Visible = False
         f_iゼロ位置_135.Width = 70
         ' 
+        ' BindingSource折りカラー
+        ' 
+        BindingSource折りカラー.DataMember = "tblOriColor"
+        BindingSource折りカラー.DataSource = GetType(Tables.dstWork)
+        ' 
+        ' f_i段数2
+        ' 
+        f_i段数2.DataPropertyName = "f_i段数"
+        f_i段数2.HeaderText = "段数"
+        f_i段数2.MinimumWidth = 6
+        f_i段数2.Name = "f_i段数2"
+        f_i段数2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_i段数2.Width = 125
+        ' 
+        ' lbl四角ベース
+        ' 
+        lbl四角ベース.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl四角ベース.AutoSize = True
+        lbl四角ベース.Location = New Point(291, 657)
+        lbl四角ベース.Name = "lbl四角ベース"
+        lbl四角ベース.Size = New Size(69, 19)
+        lbl四角ベース.TabIndex = 43
+        lbl四角ベース.Text = "四角ベース"
+        ' 
+        ' lbl計算寸法
+        ' 
+        lbl計算寸法.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法.AutoSize = True
+        lbl計算寸法.Location = New Point(23, 594)
+        lbl計算寸法.Name = "lbl計算寸法"
+        lbl計算寸法.Size = New Size(65, 19)
+        lbl計算寸法.TabIndex = 24
+        lbl計算寸法.Text = "計算寸法"
+        ' 
+        ' lbl計算寸法縦
+        ' 
+        lbl計算寸法縦.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法縦.AutoSize = True
+        lbl計算寸法縦.Location = New Point(501, 627)
+        lbl計算寸法縦.Name = "lbl計算寸法縦"
+        lbl計算寸法縦.Size = New Size(23, 19)
+        lbl計算寸法縦.TabIndex = 48
+        lbl計算寸法縦.Text = "縦"
+        ' 
+        ' lbl計算寸法高さ
+        ' 
+        lbl計算寸法高さ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法高さ.AutoSize = True
+        lbl計算寸法高さ.Location = New Point(579, 627)
+        lbl計算寸法高さ.Name = "lbl計算寸法高さ"
+        lbl計算寸法高さ.Size = New Size(32, 19)
+        lbl計算寸法高さ.TabIndex = 51
+        lbl計算寸法高さ.Text = "高さ"
+        ' 
+        ' lbl計算寸法_単位
+        ' 
+        lbl計算寸法_単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法_単位.AutoSize = True
+        lbl計算寸法_単位.Location = New Point(159, 594)
+        lbl計算寸法_単位.Name = "lbl計算寸法_単位"
+        lbl計算寸法_単位.Size = New Size(33, 19)
+        lbl計算寸法_単位.TabIndex = 26
+        lbl計算寸法_単位.Text = "mm"
+        ' 
+        ' lbl縁厚さプラス
+        ' 
+        lbl縁厚さプラス.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl縁厚さプラス.AutoSize = True
+        lbl縁厚さプラス.Location = New Point(291, 687)
+        lbl縁厚さプラス.Name = "lbl縁厚さプラス"
+        lbl縁厚さプラス.Size = New Size(85, 19)
+        lbl縁厚さプラス.TabIndex = 44
+        lbl縁厚さプラス.Text = "縁・厚さプラス"
+        ' 
+        ' lbl計算寸法横
+        ' 
+        lbl計算寸法横.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法横.AutoSize = True
+        lbl計算寸法横.Location = New Point(411, 627)
+        lbl計算寸法横.Name = "lbl計算寸法横"
+        lbl計算寸法横.Size = New Size(23, 19)
+        lbl計算寸法横.TabIndex = 45
+        lbl計算寸法横.Text = "横"
+        ' 
+        ' lbl計算寸法周
+        ' 
+        lbl計算寸法周.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl計算寸法周.AutoSize = True
+        lbl計算寸法周.Location = New Point(674, 627)
+        lbl計算寸法周.Name = "lbl計算寸法周"
+        lbl計算寸法周.Size = New Size(23, 19)
+        lbl計算寸法周.TabIndex = 54
+        lbl計算寸法周.Text = "周"
+        ' 
+        ' btn終了
+        ' 
+        btn終了.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btn終了.Location = New Point(757, 666)
+        btn終了.Name = "btn終了"
+        btn終了.Size = New Size(111, 43)
+        btn終了.TabIndex = 58
+        btn終了.Text = "終了(&X)"
+        btn終了.UseVisualStyleBackColor = True
+        ' 
+        ' OpenFileDialog1
+        ' 
+        OpenFileDialog1.FileName = "OpenFileDialog1"
+        OpenFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
+        OpenFileDialog1.Title = "データを読み取るファイルを指定してください"
+        ' 
+        ' SaveFileDialog1
+        ' 
+        SaveFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
+        SaveFileDialog1.Title = "データを保存するファイルを指定してください"
+        ' 
+        ' cmb基本色
+        ' 
+        cmb基本色.FormattingEnabled = True
+        cmb基本色.Location = New Point(733, 63)
+        cmb基本色.Name = "cmb基本色"
+        cmb基本色.Size = New Size(130, 27)
+        cmb基本色.TabIndex = 18
+        ' 
+        ' lbl基本色
+        ' 
+        lbl基本色.AutoSize = True
+        lbl基本色.Location = New Point(752, 37)
+        lbl基本色.Name = "lbl基本色"
+        lbl基本色.Size = New Size(51, 19)
+        lbl基本色.TabIndex = 17
+        lbl基本色.Text = "基本色"
+        ' 
+        ' lbl横寸法の差
+        ' 
+        lbl横寸法の差.AutoSize = True
+        lbl横寸法の差.Location = New Point(234, 96)
+        lbl横寸法の差.Name = "lbl横寸法の差"
+        lbl横寸法の差.Size = New Size(76, 19)
+        lbl横寸法の差.TabIndex = 5
+        lbl横寸法の差.Text = "横寸法の差"
+        ' 
+        ' lbl縦寸法の差
+        ' 
+        lbl縦寸法の差.AutoSize = True
+        lbl縦寸法の差.Location = New Point(351, 96)
+        lbl縦寸法の差.Name = "lbl縦寸法の差"
+        lbl縦寸法の差.Size = New Size(76, 19)
+        lbl縦寸法の差.TabIndex = 8
+        lbl縦寸法の差.Text = "縦寸法の差"
+        ' 
+        ' lbl高さ寸法の差
+        ' 
+        lbl高さ寸法の差.AutoSize = True
+        lbl高さ寸法の差.Location = New Point(479, 96)
+        lbl高さ寸法の差.Name = "lbl高さ寸法の差"
+        lbl高さ寸法の差.Size = New Size(85, 19)
+        lbl高さ寸法の差.TabIndex = 11
+        lbl高さ寸法の差.Text = "高さ寸法の差"
+        ' 
+        ' txtバンドの種類名
+        ' 
+        txtバンドの種類名.BorderStyle = BorderStyle.FixedSingle
+        txtバンドの種類名.Location = New Point(19, 94)
+        txtバンドの種類名.Name = "txtバンドの種類名"
+        txtバンドの種類名.ReadOnly = True
+        txtバンドの種類名.Size = New Size(181, 26)
+        txtバンドの種類名.TabIndex = 2
+        ' 
+        ' lbl基本のひも幅length
+        ' 
+        lbl基本のひも幅length.AutoSize = True
+        lbl基本のひも幅length.Location = New Point(618, 96)
+        lbl基本のひも幅length.Name = "lbl基本のひも幅length"
+        lbl基本のひも幅length.Size = New Size(123, 19)
+        lbl基本のひも幅length.TabIndex = 15
+        lbl基本のひも幅length.Text = "基本のひも幅length"
+        ' 
+        ' StatusStrip1
+        ' 
+        StatusStrip1.ImageScalingSize = New Size(20, 20)
+        StatusStrip1.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel1, ToolStripStatusLabel2})
+        StatusStrip1.Location = New Point(0, 727)
+        StatusStrip1.Name = "StatusStrip1"
+        StatusStrip1.Size = New Size(888, 24)
+        StatusStrip1.TabIndex = 59
+        StatusStrip1.Text = "StatusStrip1"
+        ' 
+        ' ToolStripStatusLabel1
+        ' 
+        ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        ToolStripStatusLabel1.Size = New Size(140, 19)
+        ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        ' 
+        ' ToolStripStatusLabel2
+        ' 
+        ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        ToolStripStatusLabel2.Size = New Size(140, 19)
+        ToolStripStatusLabel2.Text = "ToolStripStatusLabel2"
+        ' 
+        ' lbl単位
+        ' 
+        lbl単位.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl単位.AutoSize = True
+        lbl単位.Location = New Point(98, 594)
+        lbl単位.Name = "lbl単位"
+        lbl単位.Size = New Size(40, 19)
+        lbl単位.TabIndex = 25
+        lbl単位.Text = "単位:"
+        ' 
+        ' btnDEBUG
+        ' 
+        btnDEBUG.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        btnDEBUG.Location = New Point(758, 588)
+        btnDEBUG.Name = "btnDEBUG"
+        btnDEBUG.Size = New Size(81, 25)
+        btnDEBUG.TabIndex = 60
+        btnDEBUG.Text = "DEBUG"
+        btnDEBUG.UseVisualStyleBackColor = True
+        btnDEBUG.Visible = False
+        ' 
+        ' timer折りカラー
+        ' 
+        timer折りカラー.Interval = 300
+        ' 
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8F, 19F)
+        AutoScaleDimensions = New SizeF(8.0F, 19.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(888, 751)
         Controls.Add(btn一時保存)
@@ -3080,8 +3117,8 @@ Partial Class frmMain
     Friend WithEvents btn選択をON_折り As Button
     Friend WithEvents lbl折り返しの高さ数 As Label
     Friend WithEvents txt折り返しの高さ数 As TextBox
-    Friend WithEvents txt折り返し数 As TextBox
-    Friend WithEvents lbl折り返し数 As Label
+    Friend WithEvents txt折り返し数_外側 As TextBox
+    Friend WithEvents lbl折り返し数_外側 As Label
     Friend WithEvents timer折りカラー As Timer
     Friend WithEvents f_b外側_135 As DataGridViewCheckBoxColumn
     Friend WithEvents f_s外側色_45 As DataGridViewTextBoxColumn
@@ -3110,4 +3147,7 @@ Partial Class frmMain
     Friend WithEvents f_dひも長加算_135 As DataGridViewTextBoxColumn
     Friend WithEvents f_sゼロ面名_135 As DataGridViewTextBoxColumn
     Friend WithEvents f_iゼロ位置_135 As DataGridViewTextBoxColumn
+    Friend WithEvents btn外側反転 As Button
+    Friend WithEvents txt折り返し数_内側 As TextBox
+    Friend WithEvents lbl折り返し数_内側 As Label
 End Class

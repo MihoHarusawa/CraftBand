@@ -1447,7 +1447,8 @@ Public Class frmMain
 
 #Region "折りカラー"'#96
     Sub Show折りカラー()
-        txt折り返し数.Text = ""
+        txt折り返し数_外側.Text = ""
+        txt折り返し数_内側.Text = ""
         SetReadonlyColumnVisibility(0)
 
         'タブ切り替えタイミングのため、表示は更新済
@@ -1463,7 +1464,11 @@ Public Class frmMain
 
         Dim oriColorTable As dstWork.tblOriColorDataTable = _clsCalcSquare45.GetOriColorTable()
         If oriColorTable IsNot Nothing Then
-            txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
+            Dim ary() As String = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).Split(",")
+            If 2 <= ary.Length Then
+                txt折り返し数_外側.Text = ary(0)
+                txt折り返し数_内側.Text = ary(1)
+            End If
 
             BindingSource折りカラー.DataSource = oriColorTable
             BindingSource折りカラー.Sort = "f_index"
@@ -1589,10 +1594,15 @@ Public Class frmMain
         timer折りカラー.Stop()
         dgv折りカラー.Refresh()
 
-        txt折り返し数.Text = ""
+        txt折り返し数_外側.Text = ""
+        txt折り返し数_内側.Text = ""
         Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
         If oriColorTable IsNot Nothing Then
-            txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
+            Dim ary() As String = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).Split(",")
+            If 2 <= ary.Length Then
+                txt折り返し数_外側.Text = ary(0)
+                txt折り返し数_内側.Text = ary(1)
+            End If
         End If
     End Sub
 
@@ -1634,13 +1644,12 @@ Public Class frmMain
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         If dgv折りカラー.Visible Then
 
-            txt折り返し数.Text = ""
+            txt折り返し数_外側.Text = ""
+            txt折り返し数_内側.Text = ""
             Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
             If oriColorTable IsNot Nothing Then
                 If _clsCalcSquare45.ClearOriColor(oriColorTable) Then
                     dgv折りカラー.Refresh()
-                    'ゼロのはずだが
-                    txt折り返し数.Text = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).ToString
                 End If
             End If
 
@@ -1668,6 +1677,31 @@ Public Class frmMain
     Private Sub btn選択をOFF_折り_Click(sender As Object, e As EventArgs) Handles btn選択をOFF_折り.Click
         If 0 < dgv折りカラー.SelectedCells.Count Then
             SetSelectedCheckCells(False)
+        End If
+    End Sub
+
+    '外側反転ボタン
+    Private Sub btn外側反転_Click(sender As Object, e As EventArgs) Handles btn外側反転.Click
+        If dgv折りカラー.Visible Then
+
+            Dim oriColorTable As dstWork.tblOriColorDataTable = TryCast(BindingSource折りカラー.DataSource, dstWork.tblOriColorDataTable)
+            If oriColorTable IsNot Nothing Then
+                Dim idx As Integer = -1
+                If _clsCalcSquare45.RevertOriColor(oriColorTable, idx) Then
+                    dgv折りカラー.Refresh()
+                    Dim ary() As String = _clsCalcSquare45.CountCheckedOriColorTable(oriColorTable).Split(",")
+                    If 2 <= ary.Length Then
+                        txt折り返し数_外側.Text = ary(0)
+                        txt折り返し数_内側.Text = ary(1)
+                    End If
+
+                ElseIf 0 <= idx Then
+                    'idx行を選択する
+                    dgv折りカラー.ClearSelection()
+                    dgv折りカラー.Rows(idx).Selected = True
+                End If
+            End If
+
         End If
     End Sub
 
@@ -1982,6 +2016,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 #End Region
 
 End Class

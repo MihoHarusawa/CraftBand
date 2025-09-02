@@ -304,7 +304,11 @@ Public Class clsUpDown
                     Return cMaxUpdownColumns '読める分は読んだ
                 End If
                 If String.IsNullOrWhiteSpace(line) Then
-                    Continue For
+                    If y < lines.Count Then
+                        Continue For '全0扱い
+                    Else
+                        Return y - 1 '終端の空行は無視  
+                    End If
                 End If
                 For x As Integer = 1 To clsUpDown.cMaxUpdownColumns
                     If line.Count < x Then

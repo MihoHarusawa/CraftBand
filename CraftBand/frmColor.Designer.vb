@@ -28,6 +28,22 @@ Partial Class frmColor
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         BindingSource描画色 = New System.Windows.Forms.BindingSource(components)
         dgvData = New ctrDataGridView()
+        Fs色DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        fsバンドの種類名ComboBoxColumn = New Windows.Forms.DataGridViewComboBoxColumn()
+        Fi赤DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fi緑DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fi青DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        disp = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_i透明度 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_d線幅 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s線色 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_d中線幅 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s中線色 = New Windows.Forms.DataGridViewTextBoxColumn()
+        Texture = New Windows.Forms.DataGridViewImageColumn()
+        f_s画像情報 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s画像文字列 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s製品情報 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_s備考 = New Windows.Forms.DataGridViewTextBoxColumn()
         btnキャンセル = New Windows.Forms.Button()
         btnOK = New Windows.Forms.Button()
         txt色 = New Windows.Forms.TextBox()
@@ -45,22 +61,6 @@ Partial Class frmColor
         btn画像 = New Windows.Forms.Button()
         lblバンドの種類名 = New Windows.Forms.Label()
         OpenFileDialogPng = New Windows.Forms.OpenFileDialog()
-        Fs色DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
-        fsバンドの種類名ComboBoxColumn = New Windows.Forms.DataGridViewComboBoxColumn()
-        Fi赤DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
-        Fi緑DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
-        Fi青DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
-        disp = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_i透明度 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_d線幅 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_s線色 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_d中線幅 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_s中線色 = New Windows.Forms.DataGridViewTextBoxColumn()
-        Texture = New Windows.Forms.DataGridViewImageColumn()
-        f_s画像情報 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_s画像文字列 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_s製品情報 = New Windows.Forms.DataGridViewTextBoxColumn()
-        f_s備考 = New Windows.Forms.DataGridViewTextBoxColumn()
         CType(BindingSource描画色, ComponentModel.ISupportInitialize).BeginInit()
         CType(dgvData, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud赤, ComponentModel.ISupportInitialize).BeginInit()
@@ -88,168 +88,6 @@ Partial Class frmColor
         dgvData.RowTemplate.Height = 29
         dgvData.Size = New System.Drawing.Size(1010, 122)
         dgvData.TabIndex = 0
-        ' 
-        ' btnキャンセル
-        ' 
-        btnキャンセル.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btnキャンセル.DialogResult = Windows.Forms.DialogResult.Cancel
-        btnキャンセル.Location = New System.Drawing.Point(910, 155)
-        btnキャンセル.Name = "btnキャンセル"
-        btnキャンセル.Size = New System.Drawing.Size(111, 44)
-        btnキャンセル.TabIndex = 15
-        btnキャンセル.Text = "キャンセル(&C)"
-        ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
-        btnキャンセル.UseVisualStyleBackColor = True
-        ' 
-        ' btnOK
-        ' 
-        btnOK.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btnOK.Location = New System.Drawing.Point(793, 155)
-        btnOK.Name = "btnOK"
-        btnOK.Size = New System.Drawing.Size(111, 44)
-        btnOK.TabIndex = 14
-        btnOK.Text = "OK(&O)"
-        ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
-        btnOK.UseVisualStyleBackColor = True
-        ' 
-        ' txt色
-        ' 
-        txt色.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
-        txt色.Location = New System.Drawing.Point(68, 169)
-        txt色.Name = "txt色"
-        txt色.Size = New System.Drawing.Size(31, 26)
-        txt色.TabIndex = 3
-        ToolTip1.SetToolTip(txt色, "色の名前")
-        ' 
-        ' nud赤
-        ' 
-        nud赤.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        nud赤.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        nud赤.Location = New System.Drawing.Point(321, 170)
-        nud赤.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
-        nud赤.Name = "nud赤"
-        nud赤.Size = New System.Drawing.Size(61, 26)
-        nud赤.TabIndex = 7
-        ToolTip1.SetToolTip(nud赤, "赤の値、0～255")
-        ' 
-        ' nud緑
-        ' 
-        nud緑.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        nud緑.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        nud緑.Location = New System.Drawing.Point(388, 170)
-        nud緑.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
-        nud緑.Name = "nud緑"
-        nud緑.Size = New System.Drawing.Size(61, 26)
-        nud緑.TabIndex = 9
-        ToolTip1.SetToolTip(nud緑, "緑の値、0～255")
-        ' 
-        ' nud青
-        ' 
-        nud青.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        nud青.Increment = New Decimal(New Integer() {10, 0, 0, 0})
-        nud青.Location = New System.Drawing.Point(455, 170)
-        nud青.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
-        nud青.Name = "nud青"
-        nud青.Size = New System.Drawing.Size(61, 26)
-        nud青.TabIndex = 11
-        ToolTip1.SetToolTip(nud青, "青の値、0～255")
-        ' 
-        ' lbl色
-        ' 
-        lbl色.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        lbl色.AutoSize = True
-        lbl色.Location = New System.Drawing.Point(86, 142)
-        lbl色.Name = "lbl色"
-        lbl色.Size = New System.Drawing.Size(23, 19)
-        lbl色.TabIndex = 2
-        lbl色.Text = "色"
-        ' 
-        ' lbl赤
-        ' 
-        lbl赤.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        lbl赤.AutoSize = True
-        lbl赤.Location = New System.Drawing.Point(321, 142)
-        lbl赤.Name = "lbl赤"
-        lbl赤.Size = New System.Drawing.Size(23, 19)
-        lbl赤.TabIndex = 6
-        lbl赤.Text = "赤"
-        ' 
-        ' lbl緑
-        ' 
-        lbl緑.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        lbl緑.AutoSize = True
-        lbl緑.Location = New System.Drawing.Point(388, 142)
-        lbl緑.Name = "lbl緑"
-        lbl緑.Size = New System.Drawing.Size(23, 19)
-        lbl緑.TabIndex = 8
-        lbl緑.Text = "緑"
-        ' 
-        ' lbl青
-        ' 
-        lbl青.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        lbl青.AutoSize = True
-        lbl青.Location = New System.Drawing.Point(455, 142)
-        lbl青.Name = "lbl青"
-        lbl青.Size = New System.Drawing.Size(23, 19)
-        lbl青.TabIndex = 10
-        lbl青.Text = "青"
-        ' 
-        ' btn追加
-        ' 
-        btn追加.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn追加.Location = New System.Drawing.Point(522, 155)
-        btn追加.Name = "btn追加"
-        btn追加.Size = New System.Drawing.Size(111, 44)
-        btn追加.TabIndex = 12
-        btn追加.Text = "更新/追加(&A)"
-        ToolTip1.SetToolTip(btn追加, "同名は更新、新たな名前は追加します")
-        btn追加.UseVisualStyleBackColor = True
-        ' 
-        ' lblColor
-        ' 
-        lblColor.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        lblColor.BorderStyle = Windows.Forms.BorderStyle.Fixed3D
-        lblColor.Location = New System.Drawing.Point(12, 155)
-        lblColor.Name = "lblColor"
-        lblColor.Size = New System.Drawing.Size(50, 44)
-        lblColor.TabIndex = 1
-        ToolTip1.SetToolTip(lblColor, "現在の設定色")
-        ' 
-        ' cmbバンドの種類名
-        ' 
-        cmbバンドの種類名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        cmbバンドの種類名.FormattingEnabled = True
-        cmbバンドの種類名.Location = New System.Drawing.Point(103, 169)
-        cmbバンドの種類名.Name = "cmbバンドの種類名"
-        cmbバンドの種類名.Size = New System.Drawing.Size(212, 27)
-        cmbバンドの種類名.TabIndex = 5
-        ToolTip1.SetToolTip(cmbバンドの種類名, "通常は'-' バンドの種類を特定した色を指定したい場合のみ指定")
-        ' 
-        ' btn画像
-        ' 
-        btn画像.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn画像.Location = New System.Drawing.Point(639, 155)
-        btn画像.Name = "btn画像"
-        btn画像.Size = New System.Drawing.Size(111, 44)
-        btn画像.TabIndex = 13
-        btn画像.Text = "画像(&T)"
-        ToolTip1.SetToolTip(btn画像, "テクスチャ画像を指定します")
-        btn画像.UseVisualStyleBackColor = True
-        ' 
-        ' lblバンドの種類名
-        ' 
-        lblバンドの種類名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        lblバンドの種類名.AutoSize = True
-        lblバンドの種類名.Location = New System.Drawing.Point(122, 142)
-        lblバンドの種類名.Name = "lblバンドの種類名"
-        lblバンドの種類名.Size = New System.Drawing.Size(93, 19)
-        lblバンドの種類名.TabIndex = 4
-        lblバンドの種類名.Text = "バンドの種類名"
-        ' 
-        ' OpenFileDialogPng
-        ' 
-        OpenFileDialogPng.Filter = "PNGファイル (*.png)|*.png"
-        OpenFileDialogPng.Title = "テクスチャ画像ファイルを指定してください"
         ' 
         ' Fs色DataGridViewTextBoxColumn
         ' 
@@ -402,6 +240,170 @@ Partial Class frmColor
         f_s備考.MinimumWidth = 6
         f_s備考.Name = "f_s備考"
         f_s備考.Width = 125
+        ' 
+        ' btnキャンセル
+        ' 
+        btnキャンセル.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btnキャンセル.DialogResult = Windows.Forms.DialogResult.Cancel
+        btnキャンセル.Location = New System.Drawing.Point(910, 155)
+        btnキャンセル.Name = "btnキャンセル"
+        btnキャンセル.Size = New System.Drawing.Size(111, 44)
+        btnキャンセル.TabIndex = 15
+        btnキャンセル.Text = "キャンセル(&C)"
+        ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
+        btnキャンセル.UseVisualStyleBackColor = True
+        ' 
+        ' btnOK
+        ' 
+        btnOK.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btnOK.Location = New System.Drawing.Point(793, 155)
+        btnOK.Name = "btnOK"
+        btnOK.Size = New System.Drawing.Size(111, 44)
+        btnOK.TabIndex = 14
+        btnOK.Text = "OK(&O)"
+        ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
+        btnOK.UseVisualStyleBackColor = True
+        ' 
+        ' txt色
+        ' 
+        txt色.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
+        txt色.Location = New System.Drawing.Point(68, 169)
+        txt色.Name = "txt色"
+        txt色.Size = New System.Drawing.Size(31, 26)
+        txt色.TabIndex = 3
+        ToolTip1.SetToolTip(txt色, "色の名前")
+        ' 
+        ' nud赤
+        ' 
+        nud赤.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        nud赤.Increment = New Decimal(New Integer() {10, 0, 0, 0})
+        nud赤.Location = New System.Drawing.Point(321, 170)
+        nud赤.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
+        nud赤.Name = "nud赤"
+        nud赤.Size = New System.Drawing.Size(61, 26)
+        nud赤.TabIndex = 7
+        ToolTip1.SetToolTip(nud赤, "赤の値、0～255")
+        ' 
+        ' nud緑
+        ' 
+        nud緑.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        nud緑.Increment = New Decimal(New Integer() {10, 0, 0, 0})
+        nud緑.Location = New System.Drawing.Point(388, 170)
+        nud緑.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
+        nud緑.Name = "nud緑"
+        nud緑.Size = New System.Drawing.Size(61, 26)
+        nud緑.TabIndex = 9
+        ToolTip1.SetToolTip(nud緑, "緑の値、0～255")
+        ' 
+        ' nud青
+        ' 
+        nud青.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        nud青.Increment = New Decimal(New Integer() {10, 0, 0, 0})
+        nud青.Location = New System.Drawing.Point(455, 170)
+        nud青.Maximum = New Decimal(New Integer() {255, 0, 0, 0})
+        nud青.Name = "nud青"
+        nud青.Size = New System.Drawing.Size(61, 26)
+        nud青.TabIndex = 11
+        ToolTip1.SetToolTip(nud青, "青の値、0～255")
+        ' 
+        ' lbl色
+        ' 
+        lbl色.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
+        lbl色.AutoSize = True
+        lbl色.Location = New System.Drawing.Point(86, 142)
+        lbl色.Name = "lbl色"
+        lbl色.Size = New System.Drawing.Size(23, 19)
+        lbl色.TabIndex = 2
+        lbl色.Text = "色"
+        ' 
+        ' lbl赤
+        ' 
+        lbl赤.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        lbl赤.AutoSize = True
+        lbl赤.Location = New System.Drawing.Point(321, 142)
+        lbl赤.Name = "lbl赤"
+        lbl赤.Size = New System.Drawing.Size(23, 19)
+        lbl赤.TabIndex = 6
+        lbl赤.Text = "赤"
+        ' 
+        ' lbl緑
+        ' 
+        lbl緑.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        lbl緑.AutoSize = True
+        lbl緑.Location = New System.Drawing.Point(388, 142)
+        lbl緑.Name = "lbl緑"
+        lbl緑.Size = New System.Drawing.Size(23, 19)
+        lbl緑.TabIndex = 8
+        lbl緑.Text = "緑"
+        ' 
+        ' lbl青
+        ' 
+        lbl青.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        lbl青.AutoSize = True
+        lbl青.Location = New System.Drawing.Point(455, 142)
+        lbl青.Name = "lbl青"
+        lbl青.Size = New System.Drawing.Size(23, 19)
+        lbl青.TabIndex = 10
+        lbl青.Text = "青"
+        ' 
+        ' btn追加
+        ' 
+        btn追加.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btn追加.Location = New System.Drawing.Point(522, 155)
+        btn追加.Name = "btn追加"
+        btn追加.Size = New System.Drawing.Size(111, 44)
+        btn追加.TabIndex = 12
+        btn追加.Text = "更新/追加(&A)"
+        ToolTip1.SetToolTip(btn追加, "同名は更新、新たな名前は追加します")
+        btn追加.UseVisualStyleBackColor = True
+        ' 
+        ' lblColor
+        ' 
+        lblColor.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
+        lblColor.BorderStyle = Windows.Forms.BorderStyle.FixedSingle
+        lblColor.FlatStyle = Windows.Forms.FlatStyle.Popup
+        lblColor.Location = New System.Drawing.Point(12, 155)
+        lblColor.Name = "lblColor"
+        lblColor.Size = New System.Drawing.Size(50, 44)
+        lblColor.TabIndex = 1
+        ToolTip1.SetToolTip(lblColor, "現在の設定色、クリックで変更可")
+        ' 
+        ' cmbバンドの種類名
+        ' 
+        cmbバンドの種類名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        cmbバンドの種類名.FormattingEnabled = True
+        cmbバンドの種類名.Location = New System.Drawing.Point(103, 169)
+        cmbバンドの種類名.Name = "cmbバンドの種類名"
+        cmbバンドの種類名.Size = New System.Drawing.Size(212, 27)
+        cmbバンドの種類名.TabIndex = 5
+        ToolTip1.SetToolTip(cmbバンドの種類名, "通常は'-' バンドの種類を特定した色を指定したい場合のみ指定")
+        ' 
+        ' btn画像
+        ' 
+        btn画像.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btn画像.Location = New System.Drawing.Point(639, 155)
+        btn画像.Name = "btn画像"
+        btn画像.Size = New System.Drawing.Size(111, 44)
+        btn画像.TabIndex = 13
+        btn画像.Text = "画像(&T)"
+        ToolTip1.SetToolTip(btn画像, "テクスチャ画像を指定します")
+        btn画像.UseVisualStyleBackColor = True
+        btn画像.Visible = False
+        ' 
+        ' lblバンドの種類名
+        ' 
+        lblバンドの種類名.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        lblバンドの種類名.AutoSize = True
+        lblバンドの種類名.Location = New System.Drawing.Point(122, 142)
+        lblバンドの種類名.Name = "lblバンドの種類名"
+        lblバンドの種類名.Size = New System.Drawing.Size(93, 19)
+        lblバンドの種類名.TabIndex = 4
+        lblバンドの種類名.Text = "バンドの種類名"
+        ' 
+        ' OpenFileDialogPng
+        ' 
+        OpenFileDialogPng.Filter = "PNGファイル (*.png)|*.png"
+        OpenFileDialogPng.Title = "テクスチャ画像ファイルを指定してください"
         ' 
         ' frmColor
         ' 
