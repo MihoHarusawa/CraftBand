@@ -1,5 +1,5 @@
 # CraftBandMesh / CraftBandMesh.exe
-縦横(+楕円)の底、プラス側面を編む方式のサイズ計算を行うアプリです。
+縦横(+楕円)・丸・輪弧の底、プラス側面を編む方式のサイズ計算を行うアプリです。
 データベース化したバンドの種類や編みかた・付属品から選択して組み合わせられますので、
 クラフトバンド/紙バンドのオリジナルレシピが簡単に作成できます。
 プレビュー機能で、底ひもの配置間隔や側面の編みかたのバランスを確認できます。
@@ -8,6 +8,7 @@
 北欧編みや斜め網代など、縦横に組んだ底を、交差方向に対して45度で立ち上げる方式のサイズ計算を行うアプリです。
 プレビュー機能もついていますので、配置が簡単に確認できます。
 画像は等倍で生成しますので、印刷すれば型紙として使うこともできます。
+折りカラー編み(OriColorWeave)にも対応しました。
 
 # CraftBandKnot / CraftBandKnot.exe
 四つ畳み編み(石畳編み/ノット編み/2本結び)のサイズ計算を行うアプリです。
@@ -39,6 +40,7 @@ xmlによるデータベース、編集用フォームなどの共通ライブ�
 * でき上がり寸法を見ながら、ひも幅やひも数を変えることで、自分の好きなサイズに作れます。
 * 手持ちのひもの長さに合わせて、サイズを決めることができます。
 * ひもに色を設定することで、色ごとのカットリストを出力することができます。
+* バンド色と幅の並び・上下交差パターンの組み合わせをシミュレーションできます。
 
 
 The CraftBandMesh series is a collection of applications designed for creating baskets 
@@ -68,13 +70,13 @@ allowing you to organize and manage your recipes as a library.
 
 # Current Binary Version
 
-Installer         1.8.14
-CraftBand.dll     1.8.14.0
-CraftBandMesh     1.8.14.0
-CraftBandSqare45  1.5.14.0  
-CraftBandKnot     1.4.14.0
-CraftBandSquare   1.3.14.0
-CraftBandHexagon  1.0.14.0
+Installer         1.8.15
+CraftBand.dll     1.8.15.0
+CraftBandMesh     1.8.15.0
+CraftBandSqare45  1.5.15.0  
+CraftBandKnot     1.4.15.0
+CraftBandSquare   1.3.15.0
+CraftBandHexagon  1.0.15.0
 
 # Usage
 
