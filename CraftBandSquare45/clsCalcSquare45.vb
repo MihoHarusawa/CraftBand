@@ -2037,7 +2037,7 @@ Class clsCalcSquare45
                 CInt(row.Field(Of Boolean)("f_b内側_135"))
              ).Sum()
 
-        Return String.Format("{0},{1}", count0, count1)
+        Return String.Format("{0},{1}", -count0, -count1)
     End Function
 
     Public Shared Function IsColorChangeable(ByVal r As dstWork.tblOriColorRow) As Boolean
