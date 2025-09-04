@@ -1629,31 +1629,53 @@ Public Class frmMain
     Private Sub btn先と同じ_Click(sender As Object, e As EventArgs) Handles btn先と同じ.Click
         Dim prvS As String
         Dim prv As enumTargetFace
+        Dim nxtS As String
+        Dim nxt As enumTargetFace
         Select Case _CurrentTargetFace
             Case enumTargetFace.Side12
                 prv = enumTargetFace.Bottom
                 prvS = rad底.Text
+                nxt = enumTargetFace.Side34
+                nxtS = rad側面_下左.Text
             Case enumTargetFace.Side34
                 prv = enumTargetFace.Side12
                 prvS = rad側面_上右.Text
+                nxt = enumTargetFace.Bottom
+                nxtS = rad底.Text
             Case Else 'bottom
                 prv = enumTargetFace.Side34
                 prvS = rad側面_下左.Text
+                nxt = enumTargetFace.Side12
+                nxtS = rad側面_上右.Text
         End Select
-        '現編集内容を破棄し{0}と同じにします。よろしいですか？
-        Dim r As DialogResult = MessageBox.Show(String.Format(My.Resources.AskLoadSameAs, prvS),
-                                                Me.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-        If r <> DialogResult.OK Then
-            Exit Sub
-        End If
-
-        Dim updown As New clsUpDown(prv)
-        If _clsDataTables.ToClsUpDown(updown) Then
-            editUpDown.Replace(updown)
-        Else
-            '{0}のデータを表示できませんでした。
-            MessageBox.Show(String.Format(My.Resources.MessageReplaceError, prvS),
+        '現編集内容を破棄し{0}と同じにしますか？ (はい={0} いいえ={1} と同じ)
+        Dim r As DialogResult = MessageBox.Show(String.Format(My.Resources.AskLoadSameAs, prvS, nxtS),
+                                                Me.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+        If r = DialogResult.Yes Then
+            'はい=先と同じ
+            Dim updown As New clsUpDown(prv)
+            If _clsDataTables.ToClsUpDown(updown) Then
+                editUpDown.Replace(updown)
+            Else
+                '{0}のデータを表示できませんでした。
+                MessageBox.Show(String.Format(My.Resources.MessageReplaceError, prvS),
                             Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+
+        ElseIf r = DialogResult.No Then
+            'いいえ=次と同じ
+            Dim updown As New clsUpDown(nxt)
+            If _clsDataTables.ToClsUpDown(updown) Then
+                editUpDown.Replace(updown)
+            Else
+                '{0}のデータを表示できませんでした。
+                MessageBox.Show(String.Format(My.Resources.MessageReplaceError, nxtS),
+                            Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+
+        Else
+            'キャンセル
+            Exit Sub
         End If
     End Sub
 

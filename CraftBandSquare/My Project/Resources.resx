@@ -122,7 +122,8 @@
     <comment>frmMain</comment>
   </data>
   <data name="AskLoadSameAs" xml:space="preserve">
-    <value>現編集内容を破棄し{0}と同じにします。よろしいですか？</value>
+    <value>現編集内容を破棄し{0}と同じにしますか？
+(はい={0} いいえ={1} と同じ)</value>
     <comment>frmMain</comment>
   </data>
   <data name="AskOutput" xml:space="preserve">

@@ -70,7 +70,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  現編集内容を破棄し{0}と同じにします。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  現編集内容を破棄し{0}と同じにしますか？
+        '''(はい={0} いいえ={1} と同じ) に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskLoadSameAs() As String
             Get
