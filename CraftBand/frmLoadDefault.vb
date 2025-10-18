@@ -79,8 +79,8 @@ Public Class frmLoadDefault
 
         '指定されたフォルダ内のすべてのファイルを取得
         For Each fileInfo As FileInfo In directoryInfo.GetFiles()
-            '拡張子が".xml"のファイルのみ
-            If Not fileInfo.Extension.Equals(clsDataTables.DataExtention, StringComparison.OrdinalIgnoreCase) Then
+            '対象拡張子のファイルのみ(#102)
+            If Not clsDataTables.IsDataExtention(fileInfo.Extension) Then
                 Continue For
             End If
             '現EXEで読めるデータ

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmVirsion
+Partial Class frmVersion
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
@@ -22,7 +22,7 @@ Partial Class frmVirsion
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmVirsion))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmVersion))
         btn終了 = New Button()
         lblExeName = New Label()
         lblDescription = New Label()
@@ -36,9 +36,9 @@ Partial Class frmVirsion
         ' btn終了
         ' 
         btn終了.DialogResult = DialogResult.OK
-        btn終了.Location = New Point(435, 187)
+        btn終了.Location = New Point(428, 178)
         btn終了.Name = "btn終了"
-        btn終了.Size = New Size(111, 46)
+        btn終了.Size = New Size(111, 44)
         btn終了.TabIndex = 26
         btn終了.Text = "OK(&O)"
         btn終了.UseVisualStyleBackColor = True
@@ -46,64 +46,64 @@ Partial Class frmVirsion
         ' lblExeName
         ' 
         lblExeName.AutoSize = True
-        lblExeName.Location = New Point(116, 20)
+        lblExeName.Location = New Point(107, 19)
         lblExeName.Name = "lblExeName"
-        lblExeName.Size = New Size(135, 20)
+        lblExeName.Size = New Size(60, 19)
         lblExeName.TabIndex = 27
-        lblExeName.Text = "CraftBandHexagon"
+        lblExeName.Text = "CbMesh"
         ' 
         ' lblDescription
         ' 
         lblDescription.AutoSize = True
-        lblDescription.Location = New Point(116, 49)
+        lblDescription.Location = New Point(107, 47)
         lblDescription.Name = "lblDescription"
-        lblDescription.Size = New Size(132, 20)
+        lblDescription.Size = New Size(184, 19)
         lblDescription.TabIndex = 28
-        lblDescription.Text = "六つ目かごのデザイン"
+        lblDescription.Text = "CraftBandMeshシリーズの起動"
         ' 
         ' txtDescription
         ' 
-        txtDescription.Location = New Point(116, 81)
+        txtDescription.Location = New Point(107, 77)
         txtDescription.Multiline = True
         txtDescription.Name = "txtDescription"
         txtDescription.ReadOnly = True
-        txtDescription.Size = New Size(260, 78)
+        txtDescription.Size = New Size(280, 74)
         txtDescription.TabIndex = 30
-        txtDescription.Text = "六つ目" & vbCrLf & "60度ごと3方向にバンドを組むと" & vbCrLf & "中に六角形の「六つ目」ができます。"
+        txtDescription.Text = "シリーズの各アプリについて" & vbCrLf & " データから起動 / 個別に起動 / データの識別" & vbCrLf
         ' 
         ' lblVersion
         ' 
         lblVersion.AutoSize = True
-        lblVersion.Location = New Point(116, 174)
+        lblVersion.Location = New Point(107, 165)
         lblVersion.Name = "lblVersion"
-        lblVersion.Size = New Size(56, 20)
+        lblVersion.Size = New Size(53, 19)
         lblVersion.TabIndex = 31
         lblVersion.Text = "version"
         ' 
         ' PictureBox1
         ' 
         PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), Image)
-        PictureBox1.Location = New Point(12, 12)
+        PictureBox1.Location = New Point(12, 11)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(98, 98)
+        PictureBox1.Size = New Size(60, 60)
         PictureBox1.TabIndex = 32
         PictureBox1.TabStop = False
         ' 
         ' lnkLabo
         ' 
         lnkLabo.AutoSize = True
-        lnkLabo.Location = New Point(116, 204)
+        lnkLabo.Location = New Point(107, 194)
         lnkLabo.Name = "lnkLabo"
-        lnkLabo.Size = New Size(324, 20)
+        lnkLabo.Size = New Size(236, 19)
         lnkLabo.TabIndex = 33
         lnkLabo.TabStop = True
-        lnkLabo.Text = "https://labo.com/CraftBand/craftbandhexagon/"
+        lnkLabo.Text = "https://labo.com/CraftBand/CbMesh/"
         ' 
-        ' frmVirsion
+        ' frmVersion
         ' 
-        AutoScaleDimensions = New SizeF(8F, 20F)
+        AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(558, 242)
+        ClientSize = New Size(548, 230)
         Controls.Add(lnkLabo)
         Controls.Add(PictureBox1)
         Controls.Add(lblVersion)
@@ -115,7 +115,7 @@ Partial Class frmVirsion
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
         MinimizeBox = False
-        Name = "frmVirsion"
+        Name = "frmVersion"
         StartPosition = FormStartPosition.CenterParent
         Text = "バージョン情報"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()

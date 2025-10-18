@@ -5,8 +5,19 @@ Imports CraftBand.Tables.dstDataTables
 
 Public Class clsDataTables
 
-    'ファイルダイアログを使わない時用
-    Public Const DataExtention As String = ".xml"
+    'ファイルの拡張子(#102)
+    Public Const DataExtention As String = ".cbmesh"
+    Const DataExtention0 As String = ".xml" '旧バージョン互換
+
+    Public Shared Function IsDataExtention(ByVal fpath As String) As Boolean
+        Dim ext As String = IO.Path.GetExtension(fpath)
+        If ext.Equals(DataExtention, StringComparison.OrdinalIgnoreCase) OrElse
+         ext.Equals(DataExtention0, StringComparison.OrdinalIgnoreCase) Then
+            Return True
+        End If
+        Return False
+    End Function
+
 
     '縁のf_i番号値(1点のみ)
     Public Const cHemNumber As Integer = 999
@@ -297,49 +308,86 @@ Public Class clsDataTables
         End Get
     End Property
 
-    'ファイル読み取り、エラーはLastError・元データは不変
-    Public Function Load(ByVal fpath As String) As Boolean
+
+    'ファイル読み取り・元データは不変、エラーはLastError(#102)
+    Public Shared Function PreLoad(ByVal fpath As String, ByRef ename As enumExeName, ByRef errmsg As String) As dstDataTables
+        ename = enumExeName.Nodef
         If Not IO.File.Exists(fpath) Then
-            Return False
+            '指定されたファイル'{0}'が存在しません。
+            errmsg = String.Format(My.Resources.WarningFileNoExist, fpath)
+            Return Nothing
         End If
 
+        'dstDataTablesに読み取る
         Using tmpDataTable As New dstDataTables
             Try
                 Dim readmode As System.Data.XmlReadMode = tmpDataTable.ReadXml(fpath, System.Data.XmlReadMode.IgnoreSchema)
             Catch ex As Exception
                 '指定されたファイル'{0}'は読み取れませんでした。
-                _LastError = String.Format(My.Resources.WarningBadWorkData, fpath)
-                g_clsLog.LogException(ex, "clsDataTables.Load", fpath)
-                Return False
+                errmsg = String.Format(My.Resources.WarningBadWorkData, fpath)
+                g_clsLog.LogException(ex, "clsDataTables.PreLoad", fpath)
+                Return Nothing
             End Try
 
             '各、少なくとも1レコードがあること
             If tmpDataTable.Tables("tbl目標寸法").Rows.Count = 0 OrElse
                 tmpDataTable.Tables("tbl底_縦横").Rows.Count = 0 Then
-                '指定された'{0}'は{1}用のファイルではありません。
-                _LastError = String.Format(My.Resources.ErrBadFormat, fpath, g_enumExeName.ToString)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) No Default Record", fpath)
-                Return False
+                '指定された'{0}'はデータファイルではありません。
+                errmsg = String.Format(My.Resources.WarningNoDataFile, fpath)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.PreLoad({0}) No Default Record", fpath)
+                Return Nothing
             End If
 
-            '2レコードはある
+            'レコードの存在チェック済み
             Dim rowTmp As clsDataRow = New clsDataRow(tmpDataTable.Tables("tbl目標寸法").Rows(0))
-            If 0 <> String.Compare(rowTmp.Value("f_sEXE名"), g_enumExeName.ToString, True) Then
-                '指定されたファイル'{0}'は{1}用です。{2}では使えません。
-                _LastError = String.Format(My.Resources.ErrOnotherFormat, fpath, rowTmp.Value("f_sEXE名"), g_enumExeName.ToString)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Exe in File'{1}' <> '{2}", fpath, rowTmp.Value("f_sEXE名"), g_enumExeName.ToString)
-                Return False
-            End If
-            If 0 <> String.Compare(rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str, True) Then
-                '単位はログのみ
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Unit in File'{1}' <> '{2}", fpath, rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str)
-            End If
+            Dim exename As String = rowTmp.Value("f_sEXE名")
+            For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
+                If [String].Compare(exename, enumExe.ToString, True) = 0 Then
+                    ename = enumExe
+                    Return tmpDataTable.Copy
+                End If
+            Next
 
-            '入れ替える
-            _dstDataTables.Clear()
-            _dstDataTables.Dispose()
-            _dstDataTables = tmpDataTable.Copy
+            '指定された'{0}'はデータファイルではありません。
+            errmsg = String.Format(My.Resources.WarningNoDataFile, fpath)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.PreLoad({0}) Bad ExeName({1})", fpath, exename)
+            Return Nothing
         End Using
+
+    End Function
+
+    '現EXE用ファイル読み取り、エラーはLastError・エラー時は元データ不変
+    Public Function Load(ByVal fpath As String) As Boolean
+
+        'dstDataTablesに読み取る
+        Dim errmsg As String = ""
+        Dim ename As enumExeName = enumExeName.Nodef
+        Dim tmpDataTable As dstDataTables = PreLoad(fpath, ename, errmsg)
+        If tmpDataTable Is Nothing Then
+            _LastError = errmsg
+            Return False
+        End If
+
+        '現EXEと一致
+        If ename <> g_enumExeName Then
+            '指定されたファイル'{0}'は{1}用です。{2}では使えません。
+            _LastError = String.Format(My.Resources.ErrOnotherFormat, fpath, ename.ToString, g_enumExeName.ToString)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Exe in File'{1}' <> '{2}", fpath, ename.ToString, g_enumExeName.ToString)
+            tmpDataTable.Dispose()
+            Return False
+        End If
+
+        '単位不一致チェック
+        Dim rowTmp As clsDataRow = New clsDataRow(tmpDataTable.Tables("tbl目標寸法").Rows(0))
+        If 0 <> String.Compare(rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str, True) Then
+            'ログのみ
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "clsDataTables.Load({0}) Unit in File'{1}' <> '{2}", fpath, rowTmp.Value("f_s単位"), g_clsSelectBasics.p_unit設定時の寸法単位.Str)
+        End If
+
+        '入れ替える
+        _dstDataTables.Clear()
+        _dstDataTables.Dispose()
+        _dstDataTables = tmpDataTable.Copy
 
         p_row目標寸法 = New clsDataRow(_dstDataTables.Tables("tbl目標寸法").Rows(0))
         p_row底_縦横 = New clsDataRow(_dstDataTables.Tables("tbl底_縦横").Rows(0))

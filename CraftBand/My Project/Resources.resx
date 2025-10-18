@@ -247,10 +247,6 @@
     <value>レコードを追加できませんでした。</value>
     <comment>frmPattern,frmOptions</comment>
   </data>
-  <data name="ErrBadFormat" xml:space="preserve">
-    <value>指定された'{0}'は{1}用のファイルではありません。</value>
-    <comment>clsDataTables</comment>
-  </data>
   <data name="ErrBadValue" xml:space="preserve">
     <value>{0}の値をセットしてください。</value>
     <comment>frmBandTypeWeight</comment>
@@ -601,12 +597,15 @@
   </data>
   <data name="WarningBadWorkData" xml:space="preserve">
     <value>指定されたファイル'{0}'は読み取れませんでした。</value>
+    <comment>clsDataTables</comment>
   </data>
   <data name="WarningFileSaveError" xml:space="preserve">
     <value>指定されたファイル'{0}'への保存ができませんでした。</value>
+    <comment>clsDataTables</comment>
   </data>
   <data name="WarningFileStartError" xml:space="preserve">
     <value>ファイル'{0}'を起動できませんでした。</value>
+    <comment>clsImageData, ctrDataGridView</comment>
   </data>
   <data name="MsgObjOutputSelect" xml:space="preserve">
     <value>出力先フォルダを選択してください。複数ファイルがセットで出力されます。</value>
@@ -678,5 +677,25 @@
   <data name="ErrMsgColorFileTooLarge" xml:space="preserve">
     <value>画像のサイズ({0})が大きすぎます。小さくしてください</value>
     <comment>frmColor</comment>
+  </data>
+  <data name="DataFileFilterOpen" xml:space="preserve">
+    <value>データファイル (*.cbmesh; *.xml)|*.cbmesh;*.xml|全て (*.*)|*.*</value>
+  </data>
+  <data name="DataFileOpenTitle" xml:space="preserve">
+    <value>データを読み取るファイルを指定してください。</value>
+  </data>
+  <data name="DataFileSaveTitle" xml:space="preserve">
+    <value>データを保存するファイルを指定してください。</value>
+  </data>
+  <data name="WarningFileNoExist" xml:space="preserve">
+    <value>指定されたファイル'{0}'が存在しません。</value>
+    <comment>clsDataTables</comment>
+  </data>
+  <data name="WarningNoDataFile" xml:space="preserve">
+    <value>指定された'{0}'はデータファイルではありません。</value>
+    <comment>clsDataTables</comment>
+  </data>
+  <data name="DataFileFilterSave" xml:space="preserve">
+    <value>データファイル (*.cbmesh)|*.cbmesh|旧ファイル (*.xml)|*.xml|全て (*.*)|*.*</value>
   </data>
 </root>

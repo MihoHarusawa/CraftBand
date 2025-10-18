@@ -33,6 +33,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2F5795BB15394328B7172021DC4B9155"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_554ABFCD39A64C029F76C5E747557C91"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_78A87C30B2AE4895AF0A89109E0238A0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -57,13 +69,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CB643A1B11BF4C958DC8AFB8A80505CF"
+        "MsmKey" = "8:_D57943060661491BA0A72F1DB3F51124"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D57943060661491BA0A72F1DB3F51124"
+        "MsmKey" = "8:_DFDD6398D0B74AD09F27BBD37AAECB74"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -231,6 +243,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2F5795BB15394328B7172021DC4B9155"
+            {
+            "SourcePath" = "8:..\\CbMesh\\IconCbMesh.ico"
+            "TargetName" = "8:IconCbMesh.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_554ABFCD39A64C029F76C5E747557C91"
+            {
+            "SourcePath" = "8:CraftBandMesh.CBMESH"
+            "TargetName" = "8:CraftBandMesh.CBMESH"
+            "Tag" = "8:"
+            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AAF414DFB3E402D8A7761317F8A4346"
             {
             "SourcePath" = "8:..\\CraftBandSquare45\\IconSquare45.ico"
@@ -271,26 +323,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB643A1B11BF4C958DC8AFB8A80505CF"
-            {
-            "SourcePath" = "8:CraftBandMesh.XML"
-            "TargetName" = "8:CraftBandMesh.XML"
-            "Tag" = "8:"
-            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FB207A8E5FB0487EB5FE42984F9499C5"
             {
             "SourcePath" = "8:..\\CraftBandMesh\\IconMesh.ico"
@@ -314,6 +346,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_A33D48B7EC7B40A48E41891DF226991A"
+            {
+            "Name" = "8:CbMesh"
+            "Description" = "8:CraftBandMesh シリーズ"
+            "Extensions" = "8:cbmesh"
+            "MIME" = "8:"
+            "Icon" = "8:_2F5795BB15394328B7172021DC4B9155"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_DFDD6398D0B74AD09F27BBD37AAECB74"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_E0E56F7EB5844217A2211920C18C137E"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -378,15 +433,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CraftBandInstaller"
-        "ProductCode" = "8:{12943164-0005-42A0-86F0-193994700A18}"
-        "PackageCode" = "8:{21195CBD-92F5-4C6A-A8E5-56F89178623F}"
+        "ProductCode" = "8:{07AF6792-874F-4770-B979-9D2EA2FD6BFC}"
+        "PackageCode" = "8:{B5D9DE08-E05D-4B36-9246-716EB12B50AD}"
         "UpgradeCode" = "8:{D3635BD8-65C1-4B9B-8056-CE5BCBA2A48B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.8.15"
+        "ProductVersion" = "8:1.8.16"
         "Manufacturer" = "8:LaboHarusawa"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://labo.com/CraftBand/"
@@ -499,9 +554,23 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_31CA3B9477AD4DC1942A86A7033DB14D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_111F38A907B34C4D9C3EFE74E4F205D8"
             {
-            "Name" = "8:CraftBandMesh"
+            "Name" = "8:CbMesh"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_DFDD6398D0B74AD09F27BBD37AAECB74"
+            "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
+            "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Icon" = "8:_2F5795BB15394328B7172021DC4B9155"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_265BA759EE694A059E9E21D70F5E3AF5"
+            {
+            "Name" = "8:Mesh"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -513,23 +582,9 @@
             "Icon" = "8:_FB207A8E5FB0487EB5FE42984F9499C5"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4FB259CD9D5B43598E571CAAEC945190"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_85A3DB0A010C4B54ACCC71D0391536A1"
             {
-            "Name" = "8:CraftBandHexagon"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_A49A5D82D8CF47F185267115508B42E9"
-            "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
-            "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:_1053A513FB4846728412F100A9CDED4C"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_71EF364794FE43918AE3184969BBAFEF"
-            {
-            "Name" = "8:CraftBandKnot"
+            "Name" = "8:Knot"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -541,9 +596,23 @@
             "Icon" = "8:_09D55A26D05A40A2A91FD46E2A42F22E"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9610F4CD6D01430684DD81DBFD1A9D20"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_96A6AC9D9C324BE287FD9782173FBAF3"
             {
-            "Name" = "8:CraftBandSquare45"
+            "Name" = "8:Square"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_78A87C30B2AE4895AF0A89109E0238A0"
+            "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
+            "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Icon" = "8:_BD1C8C93EF87428A899F1D055EAE26E4"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E23C9578C62740538FC581A46E4CEC67"
+            {
+            "Name" = "8:Square45"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -555,18 +624,18 @@
             "Icon" = "8:_7AAF414DFB3E402D8A7761317F8A4346"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C88CFAC6AA8C477B863BB97C7A78558F"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EC7A9E5556CA472B9127F31AC1764698"
             {
-            "Name" = "8:CraftBandSquare"
+            "Name" = "8:Hexagon"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_78A87C30B2AE4895AF0A89109E0238A0"
+            "Target" = "8:_A49A5D82D8CF47F185267115508B42E9"
             "Folder" = "8:_6ACDE12849D147EDA42C7896CA6456DF"
             "WorkingFolder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
-            "Icon" = "8:_BD1C8C93EF87428A899F1D055EAE26E4"
+            "Icon" = "8:_1053A513FB4846728412F100A9CDED4C"
             "Feature" = "8:"
             }
         }
@@ -1075,6 +1144,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{D5A60DC2-70F9-408E-947E-437DCCFD9B3C}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DFDD6398D0B74AD09F27BBD37AAECB74"
+            {
+            "SourcePath" = "8:..\\CbMesh\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F22CA1235FA14B66A92FD04748AB9509"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{A178DE65-EEF2-0F1C-14E4-A61A8BB5AA9F}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

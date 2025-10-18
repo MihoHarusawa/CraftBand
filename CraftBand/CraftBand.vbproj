@@ -6,10 +6,10 @@
     <OutputType>Library</OutputType>
     <UseWindowsForms>True</UseWindowsForms>
     <Product>CraftBand</Product>
-    <Company>LaboHarusawa</Company>
+    <Company>CraftBandLabo</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>CraftBandMesh共通ライブラリ</Title>
-    <Copyright>Copyright © LaboHarusawa 2022-2025</Copyright>
+    <Copyright>Copyright © CraftBandLabo 2022-2025</Copyright>
     <FileVersion>1.8.15.0</FileVersion>
     <AssemblyVersion>1.8.15.0</AssemblyVersion>
     <Description>CraftBandMeshシリーズ共通ライブラリ</Description>

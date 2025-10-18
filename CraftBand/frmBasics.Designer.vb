@@ -146,7 +146,7 @@ Partial Class frmBasics
         ' 
         ' SaveFileDialogMasterTable
         ' 
-        SaveFileDialogMasterTable.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        SaveFileDialogMasterTable.Filter = "設定ファイル (*.CBMESH;*.XML)|*.CBMESH;*.XML|全て (*.*)|*.*"
         SaveFileDialogMasterTable.OverwritePrompt = False
         SaveFileDialogMasterTable.Title = "設定データを保存するファイルを指定してください"
         ' 
@@ -174,19 +174,21 @@ Partial Class frmBasics
         ' 
         ' OpenFileDialogImport
         ' 
-        OpenFileDialogImport.DefaultExt = "XML"
-        OpenFileDialogImport.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        OpenFileDialogImport.DefaultExt = "CBMESH"
+        OpenFileDialogImport.Filter = "設定ファイル (*.CBMESH;*.XML)|*.CBMESH;*.XML|全て (*.*)|*.*"
         OpenFileDialogImport.Title = "インポートしたい設定データファイルを指定してください"
         ' 
         ' SaveFileDialog1
         ' 
-        SaveFileDialog1.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        SaveFileDialog1.DefaultExt = "CBMESH"
+        SaveFileDialog1.Filter = "設定ファイル (*.CBMESH)|*.CBMESH|旧ファイル (*.XML)|*.XML|全て (*.*)|*.*"
         SaveFileDialog1.OverwritePrompt = False
         SaveFileDialog1.Title = "設定データを保存するファイルを指定してください"
         ' 
         ' SaveFileDialogExport
         ' 
-        SaveFileDialogExport.Filter = "設定ファイル (*.XML)|*.XML|全て (*.*)|*.*"
+        SaveFileDialogExport.DefaultExt = "CBMESH"
+        SaveFileDialogExport.Filter = "設定ファイル (*.CBMESH)|*.CBMESH|旧ファイル (*.XML)|*.XML|全て (*.*)|*.*"
         SaveFileDialogExport.Title = "参照している設定データを書き出すファイルを指定してください"
         ' 
         ' frmBasics

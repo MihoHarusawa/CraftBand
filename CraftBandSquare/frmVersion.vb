@@ -1,7 +1,7 @@
 ﻿Imports CraftBand
 
-Public Class frmVirsion
-    Private Sub frmVirsion_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+Public Class frmVersion
+    Private Sub frmVersion_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim viExe As System.Diagnostics.FileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(g_clsLog.ExePath)
         Dim viDll As System.Diagnostics.FileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(g_clsLog.DllPath)
@@ -15,7 +15,7 @@ Public Class frmVirsion
         Try
             System.Diagnostics.Process.Start("cmd", "/C start " & lnkLabo.Text)
         Catch ex As Exception
-            g_clsLog.LogException(ex, "frmVirsion.lnkLabo_LinkClicked", lnkLabo.Text)
+            g_clsLog.LogException(ex, "frmVersion.lnkLabo_LinkClicked", lnkLabo.Text)
         End Try
     End Sub
 

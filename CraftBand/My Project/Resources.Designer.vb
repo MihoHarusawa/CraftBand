@@ -382,20 +382,47 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  データファイル (*.cbmesh; *.xml)|*.cbmesh;*.xml|全て (*.*)|*.* に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property DataFileFilterOpen() As String
+            Get
+                Return ResourceManager.GetString("DataFileFilterOpen", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  データファイル (*.cbmesh)|*.cbmesh|旧ファイル (*.xml)|*.xml|全て (*.*)|*.* に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property DataFileFilterSave() As String
+            Get
+                Return ResourceManager.GetString("DataFileFilterSave", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  データを読み取るファイルを指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property DataFileOpenTitle() As String
+            Get
+                Return ResourceManager.GetString("DataFileOpenTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  データを保存するファイルを指定してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property DataFileSaveTitle() As String
+            Get
+                Return ResourceManager.GetString("DataFileSaveTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  レコードを追加できませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property ErrAddRecord() As String
             Get
                 Return ResourceManager.GetString("ErrAddRecord", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  指定された&apos;{0}&apos;は{1}用のファイルではありません。 に類似しているローカライズされた文字列を検索します。
-        '''</summary>
-        Friend ReadOnly Property ErrBadFormat() As String
-            Get
-                Return ResourceManager.GetString("ErrBadFormat", resourceCulture)
             End Get
         End Property
         
@@ -1340,6 +1367,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  指定されたファイル&apos;{0}&apos;が存在しません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property WarningFileNoExist() As String
+            Get
+                Return ResourceManager.GetString("WarningFileNoExist", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  指定されたファイル&apos;{0}&apos;への保存ができませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property WarningFileSaveError() As String
@@ -1354,6 +1390,15 @@ Namespace My.Resources
         Friend ReadOnly Property WarningFileStartError() As String
             Get
                 Return ResourceManager.GetString("WarningFileStartError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  指定された&apos;{0}&apos;はデータファイルではありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property WarningNoDataFile() As String
+            Get
+                Return ResourceManager.GetString("WarningNoDataFile", resourceCulture)
             End Get
         End Property
     End Module

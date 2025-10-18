@@ -7,10 +7,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <Product>CraftBand</Product>
-    <Company>LaboHarusawa</Company>
+    <Company>CraftBandLabo</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>四角・楕円底かごのデザイン</Title>
-    <Copyright>Copyright © LaboHarusawa 2022-2025</Copyright>
+    <Copyright>Copyright © CraftBandLabo 2022-2025</Copyright>
     <PackageIcon>IconMesh.ico</PackageIcon>
     <ApplicationIcon>IconMesh.ico</ApplicationIcon>
     <FileVersion>1.8.15.0</FileVersion>

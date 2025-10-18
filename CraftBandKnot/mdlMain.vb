@@ -66,8 +66,7 @@ Module mdlMain
 
         'フォーム表示
         _MainForm = New frmMain
-        If 0 < CmdArgs.Count AndAlso IO.File.Exists(CmdArgs(0)) Then
-            'issue#8
+        If 0 < CmdArgs.Count Then '#102
             _MainForm._sFilePath = CmdArgs(0)
         End If
         Dim result As DialogResult = _MainForm.ShowDialog

@@ -26,6 +26,23 @@ Public Module mdlDllMain
         Return _ShortNames(exename)
     End Function
 
+    '処理プログラムか？
+    Public Function IsCraftBandExe(ByVal exename As enumExeName) As Boolean
+        Return [Enum].IsDefined(GetType(enumExeName), exename) AndAlso
+        exename <> enumExeName.Nodef
+    End Function
+    Public Function IsCraftBandExe() As Boolean
+        Return IsCraftBandExe(g_enumExeName)
+    End Function
+
+    '処理プログラムのEXE名
+    Public Function GetCraftBandExeName(ByVal exename As enumExeName) As String
+        If Not IsCraftBandExe(exename) Then
+            Return Nothing
+        End If
+        Return exename.ToString & ".exe"
+    End Function
+
     'DLL共通パラメータ
     Public Class DllParameters
         Public Log As clsLog = Nothing
@@ -159,59 +176,65 @@ Public Module mdlDllMain
 
         '保存した名前を得る
         Dim masterTablesFilePath As String = __paras.MasterTablesFilePath
-        If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
-            '名前がない時(初回)
-            Dim dlg As New frmBasics
-            Dim fname As String = IO.Path.ChangeExtension(clsMasterTables.DefaultFileName, clsMasterTables.MyExtention)
-            dlg.SaveFileDialogMasterTable.FileName = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), fname)
-            If dlg.SaveFileDialogMasterTable.ShowDialog() <> DialogResult.OK Then
-                '設定データを保存するファイルが指定されませんでした。
-                paras.Message = My.Resources.ErrMasterTableFileCancel
-                Return False
-            End If
-            masterTablesFilePath = dlg.SaveFileDialogMasterTable.FileName
-
-            If IO.File.Exists(masterTablesFilePath) Then
-                '既存ファイルがあれば読み取る
-                If Not g_clsMasterTables.LoadFile(masterTablesFilePath, True) Then
-                    '指定ファイル'{0}'から設定データを読み取ることができませんでした。
-                    paras.Message = My.Resources.ErrReadMasterTableFile
+        '各EXEによる起動であれば
+        If IsCraftBandExe() Then
+            If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
+                '名前がない時(初回)
+                Dim dlg As New frmBasics
+                Dim fname As String = IO.Path.ChangeExtension(clsMasterTables.DefaultFileName, clsMasterTables.MyExtention)
+                dlg.SaveFileDialogMasterTable.FileName = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), fname)
+                If dlg.SaveFileDialogMasterTable.ShowDialog() <> DialogResult.OK Then
+                    '設定データを保存するファイルが指定されませんでした。
+                    paras.Message = My.Resources.ErrMasterTableFileCancel
                     Return False
+                End If
+                masterTablesFilePath = dlg.SaveFileDialogMasterTable.FileName
+
+                If IO.File.Exists(masterTablesFilePath) Then
+                    '既存ファイルがあれば読み取る
+                    If Not g_clsMasterTables.LoadFile(masterTablesFilePath, True) Then
+                        '指定ファイル'{0}'から設定データを読み取ることができませんでした。
+                        paras.Message = My.Resources.ErrReadMasterTableFile
+                        Return False
+                    End If
+
+                Else
+                    '既存ファイルがない時の初期値
+                    Dim default_exe As String = IO.Path.ChangeExtension(g_clsLog.ExePath, clsMasterTables.MyExtention)
+                    Dim default_master As String = IO.Path.ChangeExtension(IO.Path.Combine(IO.Path.GetDirectoryName(g_clsLog.ExePath), clsMasterTables.DefaultFileName), clsMasterTables.MyExtention)
+                    If g_clsMasterTables.LoadFile(default_exe, False) Then
+                        '読めた
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_exe)
+                    ElseIf g_clsMasterTables.LoadFile(default_master, False) Then
+                        '読めた
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_master)
+                    Else
+                        '読めないので初期値から
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.New={0}", masterTablesFilePath)
+                        g_clsMasterTables.SetAvairable() '使える状態にする
+                    End If
+                    '名前のみセット
+                    g_clsMasterTables.MasterTablesFilePath = masterTablesFilePath
                 End If
 
             Else
-                '既存ファイルがない時の初期値
-                Dim default_exe As String = IO.Path.ChangeExtension(g_clsLog.ExePath, clsMasterTables.MyExtention)
-                Dim default_master As String = IO.Path.ChangeExtension(IO.Path.Combine(IO.Path.GetDirectoryName(g_clsLog.ExePath), clsMasterTables.DefaultFileName), clsMasterTables.MyExtention)
-                If g_clsMasterTables.LoadFile(default_exe, False) Then
-                    '読めた
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_exe)
-                ElseIf g_clsMasterTables.LoadFile(default_master, False) Then
-                    '読めた
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.LoadFile={0}", default_master)
-                Else
-                    '読めないので初期値から
-                    g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "MasterTables.New={0}", masterTablesFilePath)
-                    g_clsMasterTables.SetAvairable() '使える状態にする
+                '名前がある(再処理)
+                If Not IO.File.Exists(masterTablesFilePath) Then
+                    '新拡張子への移行可
+                    masterTablesFilePath = IO.Path.ChangeExtension(masterTablesFilePath, clsMasterTables.MyExtention)
                 End If
-                '名前のみセット
-                g_clsMasterTables.MasterTablesFilePath = masterTablesFilePath
+                '既存ファイルがあれば読み取る
+                If Not g_clsMasterTables.LoadFile(masterTablesFilePath, True) Then
+                    '指定ファイル'{0}'から設定データを読み取ることができませんでした。
+                    paras.Message = String.Format(My.Resources.ErrReadMasterTableFile, masterTablesFilePath)
+                    Return False
+                End If
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "MasterTables.LoadFile={0}", masterTablesFilePath)
             End If
 
-        Else
-            '名前がある(再処理)
-            '既存ファイルがあれば読み取る
-            If Not g_clsMasterTables.LoadFile(masterTablesFilePath, True) Then
-                '指定ファイル'{0}'から設定データを読み取ることができませんでした。
-                paras.Message = String.Format(My.Resources.ErrReadMasterTableFile, masterTablesFilePath)
-                Return False
-            End If
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "MasterTables.LoadFile={0}", masterTablesFilePath)
+            '*基本設定 ※g_clsMasterTablesが有効になってから
+            g_clsSelectBasics = New clsSelectBasics(__paras.ListOutMark)
         End If
-
-
-        '*基本設定 ※g_clsMasterTablesが有効になってから
-        g_clsSelectBasics = New clsSelectBasics(__paras.ListOutMark)
 
         Return True
     End Function
@@ -224,15 +247,17 @@ Public Module mdlDllMain
         Dim ret As Boolean = True
         If isOK Then
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "LastDataString={0}", __paras.LastDataString)
-            If Not g_clsMasterTables.Save() Then
-                '設定データのファイル'{0}への保存に失敗しました。
-                __paras.Message = String.Format(My.Resources.ErrSaveMasterTableFile, g_clsMasterTables.MasterTablesFilePath)
-                ret = False
-            End If
-            __paras.MasterTablesFilePath = g_clsMasterTables.MasterTablesFilePath
 
-            __paras.ListOutMark = g_clsSelectBasics.p_sリスト出力記号
-            g_clsSelectBasics.save()
+            If IsCraftBandExe() Then
+                If Not g_clsMasterTables.Save() Then
+                    '設定データのファイル'{0}への保存に失敗しました。
+                    __paras.Message = String.Format(My.Resources.ErrSaveMasterTableFile, g_clsMasterTables.MasterTablesFilePath)
+                    ret = False
+                End If
+                __paras.MasterTablesFilePath = g_clsMasterTables.MasterTablesFilePath
+                __paras.ListOutMark = g_clsSelectBasics.p_sリスト出力記号
+                g_clsSelectBasics.save()
+            End If
         Else
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Skip Saving Master(IsDirty={0}) And SelectBasics", g_clsMasterTables.IsDirty)
         End If

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CbMesh", "CbMesh.vbproj", "{2518FB02-8AE0-C1FC-F5CE-9290AB085F1A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CraftBand", "..\CraftBand\CraftBand.vbproj", "{88DF13EC-7645-57B9-16AE-E1BAAE9BBCAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2518FB02-8AE0-C1FC-F5CE-9290AB085F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2518FB02-8AE0-C1FC-F5CE-9290AB085F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2518FB02-8AE0-C1FC-F5CE-9290AB085F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2518FB02-8AE0-C1FC-F5CE-9290AB085F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DF13EC-7645-57B9-16AE-E1BAAE9BBCAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DF13EC-7645-57B9-16AE-E1BAAE9BBCAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DF13EC-7645-57B9-16AE-E1BAAE9BBCAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DF13EC-7645-57B9-16AE-E1BAAE9BBCAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7031ED7C-F3A5-4D17-A805-93706B1D5099}
+	EndGlobalSection
+EndGlobal

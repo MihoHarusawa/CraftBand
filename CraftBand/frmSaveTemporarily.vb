@@ -66,7 +66,7 @@ Public Class frmSaveTemporarily
 
     Private Shared Function getFilePath(ByVal timestr As String) As String
         setPath()
-        Return IO.Path.ChangeExtension(IO.Path.Combine(_TempSaveFolder, timestr.Trim), clsDataTables.DataExtention)
+        Return IO.Path.ChangeExtension(IO.Path.Combine(_TempSaveFolder, timestr.Trim), clsDataTables.DataExtention) '#102
     End Function
 
     Private Shared Function getNextIndex(ByVal table As dstWork.tblSaveTemporarilyDataTable) As Integer

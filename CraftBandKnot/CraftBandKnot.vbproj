@@ -8,10 +8,10 @@
     <MyType>WindowsForms</MyType>
     <Title>四つ畳み編みかごのデザイン</Title>
     <Authors>MihoHarusawa</Authors>
-    <Company>LaboHarusawa</Company>
+    <Company>CraftBandLabo</Company>
     <Product>CraftBand</Product>
     <Description>四つ畳み編みかごのデザインとサイズ計算</Description>
-    <Copyright>Copyright © LaboHarusawa 2023-2025</Copyright>
+    <Copyright>Copyright © CraftBandLabo 2023-2025</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
     <ApplicationIcon>IconKnot.ico</ApplicationIcon>
     <AssemblyVersion>1.4.15.0</AssemblyVersion>

@@ -270,8 +270,6 @@ Partial Class frmMain
         lbl計算寸法横 = New Label()
         lbl計算寸法周 = New Label()
         btn終了 = New Button()
-        OpenFileDialog1 = New OpenFileDialog()
-        SaveFileDialog1 = New SaveFileDialog()
         cmb基本色 = New ComboBox()
         lbl基本色 = New Label()
         lbl横寸法の差 = New Label()
@@ -2187,6 +2185,7 @@ Partial Class frmMain
         editUpDown.I上右側面本数 = 0
         editUpDown.I垂直領域四角数 = 0
         editUpDown.I水平領域四角数 = 0
+        editUpDown.I縦ひもの本数 = 0
         editUpDown.Location = New Point(-3, -3)
         editUpDown.Name = "editUpDown"
         editUpDown.PanelSize = New Size(800, 418)
@@ -2648,17 +2647,6 @@ Partial Class frmMain
         btn終了.Text = "終了(&X)"
         btn終了.UseVisualStyleBackColor = True
         ' 
-        ' OpenFileDialog1
-        ' 
-        OpenFileDialog1.FileName = "OpenFileDialog1"
-        OpenFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        OpenFileDialog1.Title = "データを読み取るファイルを指定してください"
-        ' 
-        ' SaveFileDialog1
-        ' 
-        SaveFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        SaveFileDialog1.Title = "データを保存するファイルを指定してください"
-        ' 
         ' cmb基本色
         ' 
         cmb基本色.FormattingEnabled = True
@@ -2771,7 +2759,7 @@ Partial Class frmMain
         ' frmMain
         ' 
         AllowDrop = True
-        AutoScaleDimensions = New SizeF(8.0F, 19.0F)
+        AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(888, 751)
         Controls.Add(btn一時保存)
@@ -2963,8 +2951,6 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents txt四角ベース_周 As TextBox
     Friend WithEvents txt縁厚さプラス_周 As TextBox
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
-    Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents cmb基本色 As ComboBox
     Friend WithEvents lbl基本色 As Label
     Friend WithEvents lbl横寸法の差 As Label

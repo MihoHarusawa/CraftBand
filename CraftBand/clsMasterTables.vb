@@ -10,11 +10,12 @@ Imports CraftBand.Tables.dstMasterTables
 ''' </summary>
 Public Class clsMasterTables
 
-    Public Const DefaultFileName As String = "CraftBandMesh" 'インストーラ同梱
-    Public Const MyExtention As String = ".XML"
-    Public Const MyBakExtention As String = ".BAK"
-    Public Const MaxRgbValue As Integer = 255
-    Public Const CommonColorBandType As String = "-" '描画色のバンドの種類名のDefaultValue
+    Friend Const DefaultFileName As String = "CraftBandMesh" 'インストーラ同梱
+    Public Const MyExtention As String = ".CBMESH"
+    Const MyExtention0 As String = ".XML"  '旧バージョン互換
+    Const MyBakExtention As String = ".BAK"
+    Friend Const MaxRgbValue As Integer = 255
+    Friend Const CommonColorBandType As String = "-" '描画色のバンドの種類名のDefaultValue
 
 
     Dim _dstMasterTables As dstMasterTables
@@ -121,7 +122,7 @@ Public Class clsMasterTables
             Dim readmode As System.Data.XmlReadMode = _dstMasterTables.ReadXml(path, System.Data.XmlReadMode.IgnoreSchema)
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "dstMasterTables.ReadXml={0} {1}", path, readmode)
 
-            '正しいXML形式であることをチェック
+            '正しい設定ファイル形式であることをチェック
             If _dstMasterTables.Tables("tbl基本値").Rows.Count = 0 Then
                 Throw New Exception("Bad XML (No Basic Record)")
             End If
@@ -149,6 +150,37 @@ Public Class clsMasterTables
         End If
 
         Return True
+    End Function
+
+    Public Shared Function IsValidMasterFile(ByVal path As String, ByRef description As String) As Boolean
+        If String.IsNullOrWhiteSpace(path) OrElse Not IO.File.Exists(path) Then
+            Return False
+        End If
+
+        Dim dst As New dstMasterTables
+        Try
+            Dim readmode As System.Data.XmlReadMode = dst.ReadXml(path, System.Data.XmlReadMode.IgnoreSchema)
+            '正しい設定ファイル形式であることをチェック
+            If dst.Tables("tbl基本値").Rows.Count = 0 Then
+                Return False
+            End If
+            Dim row As tbl基本値Row = dst.Tables("tbl基本値").Rows(0)
+            If String.IsNullOrWhiteSpace(row.f_sバージョン) Then
+                Return False
+            End If
+            Dim sb As New System.Text.StringBuilder
+            sb.AppendFormat("Version: {0} ", row.f_sバージョン)
+            sb.Append(row.f_s識別情報)
+            description = sb.ToString
+            Return True
+
+        Catch ex As Exception
+            Return False
+
+        Finally
+            dst.Dispose()
+        End Try
+
     End Function
 
     '現DataSetのバージョン

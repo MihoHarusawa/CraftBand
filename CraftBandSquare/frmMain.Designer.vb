@@ -228,8 +228,6 @@ Partial Class frmMain
         lbl計算寸法_単位 = New Label()
         lbl計算寸法横 = New Label()
         lbl計算寸法の周 = New Label()
-        OpenFileDialog1 = New OpenFileDialog()
-        SaveFileDialog1 = New SaveFileDialog()
         cmb基本色 = New ComboBox()
         lbl基本色 = New Label()
         lbl横寸法の差 = New Label()
@@ -1199,7 +1197,7 @@ Partial Class frmMain
         radビューア.Checked = True
         radビューア.Location = New Point(29, 18)
         radビューア.Name = "radビューア"
-        radビューア.Size = New Size(66, 23)
+        radビューア.Size = New Size(65, 23)
         radビューア.TabIndex = 0
         radビューア.TabStop = True
         radビューア.Text = "ビューア"
@@ -1952,6 +1950,7 @@ Partial Class frmMain
         editUpDown.I上右側面本数 = 0
         editUpDown.I垂直領域四角数 = 0
         editUpDown.I水平領域四角数 = 0
+        editUpDown.I縦ひもの本数 = 0
         editUpDown.Location = New Point(-3, -3)
         editUpDown.Name = "editUpDown"
         editUpDown.PanelSize = New Size(800, 418)
@@ -2113,7 +2112,7 @@ Partial Class frmMain
         radおもて.Checked = True
         radおもて.Location = New Point(23, 353)
         radおもて.Name = "radおもて"
-        radおもて.Size = New Size(59, 23)
+        radおもて.Size = New Size(58, 23)
         radおもて.TabIndex = 0
         radおもて.TabStop = True
         radおもて.Text = "おもて"
@@ -2288,17 +2287,6 @@ Partial Class frmMain
         lbl計算寸法の周.Size = New Size(23, 19)
         lbl計算寸法の周.TabIndex = 54
         lbl計算寸法の周.Text = "周"
-        ' 
-        ' OpenFileDialog1
-        ' 
-        OpenFileDialog1.FileName = "OpenFileDialog1"
-        OpenFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        OpenFileDialog1.Title = "データを読み取るファイルを指定してください"
-        ' 
-        ' SaveFileDialog1
-        ' 
-        SaveFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        SaveFileDialog1.Title = "データを保存するファイルを指定してください"
         ' 
         ' cmb基本色
         ' 
@@ -2882,8 +2870,6 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents txt四角ベース_周 As TextBox
     Friend WithEvents txt縁厚さプラス_周 As TextBox
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
-    Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents cmb基本色 As ComboBox
     Friend WithEvents lbl基本色 As Label
     Friend WithEvents lbl横寸法の差 As Label

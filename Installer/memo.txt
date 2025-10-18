@@ -11,12 +11,13 @@ CraftBandMesh‚ÌPublish€–Ú
 
 CraftBandSquare45‚ÌPublish€–Ú
 
-
 CraftBandKnot‚ÌPublish€–Ú
-
 
 CraftBandSquare‚ÌPublish€–Ú
 
+CraftBandHexagon‚ÌPublish€–Ú
+
+CbMesh‚ÌPublish€–Ú
 	
 CraftBand‚Ì‚İ‚Ì€–Ú	
  CraftBand.deps.json	
@@ -27,4 +28,6 @@ CraftBand‚Ì‚İ‚Ì€–Ú
  IconSquare45.ico
  IconKnot.ico
  IconSquare.ico
- CraftBandMesh.XML
+ IconHexagon.ico
+ IconCbMesh.ico
+ CraftBandMesh.CBMESH

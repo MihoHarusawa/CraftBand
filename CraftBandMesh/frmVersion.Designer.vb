@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmVirsion
+Partial Class frmVersion
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
@@ -22,7 +22,7 @@ Partial Class frmVirsion
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmVirsion))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmVersion))
         btn終了 = New Button()
         lblExeName = New Label()
         lblDescription = New Label()
@@ -57,7 +57,7 @@ Partial Class frmVirsion
         lblDescription.AutoSize = True
         lblDescription.Location = New Point(116, 47)
         lblDescription.Name = "lblDescription"
-        lblDescription.Size = New Size(161, 19)
+        lblDescription.Size = New Size(158, 19)
         lblDescription.TabIndex = 28
         lblDescription.Text = "四角・楕円底かごのデザイン"
         ' 
@@ -94,12 +94,12 @@ Partial Class frmVirsion
         lnkLabo.AutoSize = True
         lnkLabo.Location = New Point(116, 194)
         lnkLabo.Name = "lnkLabo"
-        lnkLabo.Size = New Size(276, 19)
+        lnkLabo.Size = New Size(280, 19)
         lnkLabo.TabIndex = 33
         lnkLabo.TabStop = True
-        lnkLabo.Text = "https://labo.com/CraftBand/craftbandmesh/"
+        lnkLabo.Text = "https://labo.com/CraftBand/CraftBandMesh/"
         ' 
-        ' frmVirsion
+        ' frmVersion
         ' 
         AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
@@ -115,7 +115,7 @@ Partial Class frmVirsion
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
         MinimizeBox = False
-        Name = "frmVirsion"
+        Name = "frmVersion"
         StartPosition = FormStartPosition.CenterParent
         Text = "バージョン情報"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()

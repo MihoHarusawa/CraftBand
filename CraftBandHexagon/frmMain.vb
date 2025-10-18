@@ -57,6 +57,7 @@ Public Class frmMain
 
         frmSaveTemporarily.ClearSaved()
 
+        '引数/前回ファイルはそのまま開く(#102 /N はNot Exists)
         Dim lastFilePath As String
         If Not String.IsNullOrWhiteSpace(_sFilePath) Then
             lastFilePath = _sFilePath
@@ -918,7 +919,7 @@ Public Class frmMain
 
     'ヘルプ
     Private Sub ToolStripMenuItemHelp_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemHelp.Click
-        Dim dlg = New frmVirsion
+        Dim dlg = New frmVersion
         dlg.ShowDialog()
     End Sub
 
@@ -982,14 +983,15 @@ Public Class frmMain
             Exit Sub
         End If
 
-        If OpenFileDialog1.ShowDialog() <> DialogResult.OK Then
+        Dim filename As String = mdlProcess.OpenDataFileDialog()
+        If String.IsNullOrWhiteSpace(filename) Then
             Exit Sub
         End If
-        If _clsDataTables.Load(OpenFileDialog1.FileName) Then
+        If _clsDataTables.Load(filename) Then
             frmSaveTemporarily.ClearSaved()
 
             DispTables(_clsDataTables)
-            _sFilePath = OpenFileDialog1.FileName
+            _sFilePath = filename
             setStartEditing(True)
         Else
             MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
@@ -998,8 +1000,8 @@ Public Class frmMain
 
     '名前をつけて保存
     Private Sub ToolStripMenuItemFileSaveAs_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSaveAs.Click
-        SaveFileDialog1.FileName = _sFilePath
-        If String.IsNullOrWhiteSpace(SaveFileDialog1.FileName) Then
+        Dim filename As String = _sFilePath
+        If String.IsNullOrWhiteSpace(filename) Then
             '目標寸法が空ならセット(#19)
             If nud横寸法.Value = 0 AndAlso nud縦寸法.Value = 0 AndAlso nud高さ寸法.Value = 0 AndAlso
                 0 < _clsCalcHexagon.p_d六つ目ベース_横 AndAlso 0 < _clsCalcHexagon.p_d六つ目ベース_縦 Then
@@ -1009,27 +1011,26 @@ Public Class frmMain
                 nud高さ寸法.Value = _clsCalcHexagon.p_d六つ目ベース_高さ
             End If
             'Mesh(本幅)横-縦-高さ
-            Dim defname As String
             Save目標寸法(_clsDataTables.p_row目標寸法)
             With _clsDataTables.p_row目標寸法
-                defname = String.Format("{0}({1}){2}-{3}-{4}",
+                filename = String.Format("{0}({1}){2}-{3}-{4}",
                 GetShortExeName(g_enumExeName), .Value("f_i基本のひも幅"),
                 Int(.Value("f_d横寸法")), Int(.Value("f_d縦寸法")), Int(.Value("f_d高さ寸法")))
             End With
-            SaveFileDialog1.FileName = defname
         End If
-        If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
+        filename = mdlProcess.SaveDataFileDialog(filename)
+        If String.IsNullOrWhiteSpace(filename) Then
             Exit Sub
         End If
 
         '保存名確定
         If String.IsNullOrEmpty(txtタイトル.Text) AndAlso String.IsNullOrEmpty(txt作成者.Text) Then
-            txtタイトル.Text = IO.Path.GetFileNameWithoutExtension(SaveFileDialog1.FileName)
+            txtタイトル.Text = IO.Path.GetFileNameWithoutExtension(filename)
             txt作成者.Text = Environment.UserName
         End If
         SaveTables(_clsDataTables)
-        If _clsDataTables.Save(SaveFileDialog1.FileName) Then
-            _sFilePath = SaveFileDialog1.FileName
+        If _clsDataTables.Save(filename) Then
+            _sFilePath = filename
             setStartEditing()
 
         Else
@@ -1039,12 +1040,13 @@ Public Class frmMain
 
     '保存
     Private Sub ToolStripMenuItemFileSave_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileSave.Click
-        If String.IsNullOrEmpty(_sFilePath) Then
-            SaveFileDialog1.FileName = Nothing
-            If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
+        Dim filename As String = _sFilePath
+        If String.IsNullOrEmpty(filename) Then
+            filename = mdlProcess.SaveDataFileDialog()
+            If String.IsNullOrWhiteSpace(filename) Then
                 Exit Sub
             End If
-            _sFilePath = SaveFileDialog1.FileName
+            _sFilePath = filename
         End If
 
         SaveTables(_clsDataTables)
@@ -1072,13 +1074,13 @@ Public Class frmMain
             If r = DialogResult.Cancel Then
                 Exit Sub
             ElseIf r = DialogResult.Yes Then
-
-                If String.IsNullOrEmpty(_sFilePath) Then
-                    SaveFileDialog1.FileName = Nothing
-                    If SaveFileDialog1.ShowDialog <> DialogResult.OK Then
+                Dim filename As String = _sFilePath
+                If String.IsNullOrEmpty(filename) Then
+                    filename = mdlProcess.SaveDataFileDialog()
+                    If String.IsNullOrWhiteSpace(filename) Then
                         Exit Sub
                     End If
-                    _sFilePath = SaveFileDialog1.FileName
+                    _sFilePath = filename
                 End If
 
                 SaveTables(_clsDataTables)
@@ -1108,22 +1110,49 @@ Public Class frmMain
     Private Sub frmMain_DragDrop(sender As Object, e As DragEventArgs) Handles MyBase.DragDrop
         Dim fileNames As String() = CType(e.Data.GetData(DataFormats.FileDrop, False), String())
         For Each fname In fileNames
-            If IsContinueEditing() Then
+            If changeFile(fname) Then
                 Exit Sub
-            End If
-            ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview) '#27
-            If _clsDataTables.Load(fname) Then
-                frmSaveTemporarily.ClearSaved()
-
-                DispTables(_clsDataTables)
-                _sFilePath = fname
-                setStartEditing(True)
-                Exit Sub
-            Else
-                MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Next
     End Sub
+
+    Private Function changeFile(ByVal fpath As String) As Boolean
+        If IsContinueEditing() Then
+            Return True '入れ替えない
+        End If
+        ShowDefaultTabControlPage(enumReason._GridDropdown Or enumReason._Preview)
+        If _clsDataTables.Load(fpath) Then
+            frmSaveTemporarily.ClearSaved()
+
+            DispTables(_clsDataTables)
+            _sFilePath = fpath
+            setStartEditing(True)
+            Return True
+        Else
+            '対象外のファイル(他EXEデータも)
+            MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Return False
+        End If
+    End Function
+
+    'ファイル通知(#102)
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        If m.Msg = WM_COPYDATA Then
+            Dim files() As String = mdlProcess.ReceiveFilePath(m)
+            If files IsNot Nothing Then
+                For Each fpath As String In files
+                    If changeFile(fpath) Then
+                        Exit For
+                    End If
+                Next
+            End If
+
+            Return
+        End If
+
+        MyBase.WndProc(m)
+    End Sub
+
 #End Region
 
 #Region "目標・配置数のコントロール"

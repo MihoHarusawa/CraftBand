@@ -139,6 +139,7 @@ Partial Class frmMain
         txt六つ目ベース_周円の径 = New TextBox()
         txt縁厚さプラス_周円の径 = New TextBox()
         btn一時保存 = New Button()
+        chk差しひも = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -265,8 +266,6 @@ Partial Class frmMain
         lbl計算寸法_単位 = New Label()
         lbl計算寸法横 = New Label()
         lbl計算寸法の周 = New Label()
-        OpenFileDialog1 = New OpenFileDialog()
-        SaveFileDialog1 = New SaveFileDialog()
         cmb基本色 = New ComboBox()
         lbl基本色 = New Label()
         lbl横寸法の差 = New Label()
@@ -286,7 +285,6 @@ Partial Class frmMain
         lblひも本幅変更 = New Label()
         lbl60度本幅変更 = New Label()
         lbl周円の径 = New Label()
-        chk差しひも = New CheckBox()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -1453,6 +1451,20 @@ Partial Class frmMain
         ToolTip1.SetToolTip(btn一時保存, "現在の状態を保存/復元します")
         btn一時保存.UseVisualStyleBackColor = True
         ' 
+        ' chk差しひも
+        ' 
+        chk差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk差しひも.AutoSize = True
+        chk差しひも.Checked = True
+        chk差しひも.CheckState = CheckState.Checked
+        chk差しひも.Location = New Point(335, 391)
+        chk差しひも.Name = "chk差しひも"
+        chk差しひも.Size = New Size(74, 23)
+        chk差しひも.TabIndex = 4
+        chk差しひも.Text = "差しひも"
+        ToolTip1.SetToolTip(chk差しひも, "チェックオフにすると非表示になります")
+        chk差しひも.UseVisualStyleBackColor = True
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1761,7 +1773,7 @@ Partial Class frmMain
         tpage配置数.Controls.Add(lbl目_ひも間のすき間_単位)
         tpage配置数.Location = New Point(4, 28)
         tpage配置数.Name = "tpage配置数"
-        tpage配置数.Padding = New Padding(3, 3, 3, 3)
+        tpage配置数.Padding = New Padding(3)
         tpage配置数.Size = New Size(920, 428)
         tpage配置数.TabIndex = 0
         tpage配置数.Text = "配置数"
@@ -2093,7 +2105,7 @@ Partial Class frmMain
         tpage側面と縁.Controls.Add(dgv側面)
         tpage側面と縁.Location = New Point(4, 28)
         tpage側面と縁.Name = "tpage側面と縁"
-        tpage側面と縁.Padding = New Padding(3, 3, 3, 3)
+        tpage側面と縁.Padding = New Padding(3)
         tpage側面と縁.Size = New Size(920, 428)
         tpage側面と縁.TabIndex = 2
         tpage側面と縁.Text = "側面と縁"
@@ -2398,7 +2410,7 @@ Partial Class frmMain
         tpage差しひも.Controls.Add(editInsertBand)
         tpage差しひも.Location = New Point(4, 28)
         tpage差しひも.Name = "tpage差しひも"
-        tpage差しひも.Padding = New Padding(3, 3, 3, 3)
+        tpage差しひも.Padding = New Padding(3)
         tpage差しひも.Size = New Size(920, 428)
         tpage差しひも.TabIndex = 8
         tpage差しひも.Text = "差しひも"
@@ -2421,7 +2433,7 @@ Partial Class frmMain
         tpageひも上下.Controls.Add(lblMessagePattern)
         tpageひも上下.Location = New Point(4, 28)
         tpageひも上下.Name = "tpageひも上下"
-        tpageひも上下.Padding = New Padding(3, 3, 3, 3)
+        tpageひも上下.Padding = New Padding(3)
         tpageひも上下.Size = New Size(920, 428)
         tpageひも上下.TabIndex = 9
         tpageひも上下.Text = "ひも上下"
@@ -2466,7 +2478,7 @@ Partial Class frmMain
         tpage追加品.Controls.Add(editAddParts)
         tpage追加品.Location = New Point(4, 28)
         tpage追加品.Name = "tpage追加品"
-        tpage追加品.Padding = New Padding(3, 3, 3, 3)
+        tpage追加品.Padding = New Padding(3)
         tpage追加品.Size = New Size(920, 428)
         tpage追加品.TabIndex = 3
         tpage追加品.Text = "追加品"
@@ -2492,7 +2504,7 @@ Partial Class frmMain
         tpageメモ他.Controls.Add(txtメモ)
         tpageメモ他.Location = New Point(4, 28)
         tpageメモ他.Name = "tpageメモ他"
-        tpageメモ他.Padding = New Padding(3, 3, 3, 3)
+        tpageメモ他.Padding = New Padding(3)
         tpageメモ他.Size = New Size(920, 428)
         tpageメモ他.TabIndex = 4
         tpageメモ他.Text = "メモ他"
@@ -2539,7 +2551,7 @@ Partial Class frmMain
         tpageプレビュー.Controls.Add(picプレビュー)
         tpageプレビュー.Location = New Point(4, 28)
         tpageプレビュー.Name = "tpageプレビュー"
-        tpageプレビュー.Padding = New Padding(3, 3, 3, 3)
+        tpageプレビュー.Padding = New Padding(3)
         tpageプレビュー.Size = New Size(920, 428)
         tpageプレビュー.TabIndex = 7
         tpageプレビュー.Text = "プレビュー"
@@ -2563,7 +2575,7 @@ Partial Class frmMain
         radおもて.Checked = True
         radおもて.Location = New Point(419, 390)
         radおもて.Name = "radおもて"
-        radおもて.Size = New Size(59, 23)
+        radおもて.Size = New Size(58, 23)
         radおもて.TabIndex = 5
         radおもて.TabStop = True
         radおもて.Text = "おもて"
@@ -2584,7 +2596,7 @@ Partial Class frmMain
         tpage斜め120度.Controls.Add(expand斜め120度)
         tpage斜め120度.Location = New Point(4, 28)
         tpage斜め120度.Name = "tpage斜め120度"
-        tpage斜め120度.Padding = New Padding(3, 3, 3, 3)
+        tpage斜め120度.Padding = New Padding(3)
         tpage斜め120度.Size = New Size(920, 428)
         tpage斜め120度.TabIndex = 6
         tpage斜め120度.Text = "斜め120度"
@@ -2605,7 +2617,7 @@ Partial Class frmMain
         tpage横ひも.Controls.Add(expand横ひも)
         tpage横ひも.Location = New Point(4, 28)
         tpage横ひも.Name = "tpage横ひも"
-        tpage横ひも.Padding = New Padding(3, 3, 3, 3)
+        tpage横ひも.Padding = New Padding(3)
         tpage横ひも.Size = New Size(920, 428)
         tpage横ひも.TabIndex = 5
         tpage横ひも.Text = "横ひも"
@@ -2626,7 +2638,7 @@ Partial Class frmMain
         tpage斜め60度.Controls.Add(expand斜め60度)
         tpage斜め60度.Location = New Point(4, 28)
         tpage斜め60度.Name = "tpage斜め60度"
-        tpage斜め60度.Padding = New Padding(3, 3, 3, 3)
+        tpage斜め60度.Padding = New Padding(3)
         tpage斜め60度.Size = New Size(920, 428)
         tpage斜め60度.TabIndex = 10
         tpage斜め60度.Text = "斜め60度"
@@ -2725,17 +2737,6 @@ Partial Class frmMain
         lbl計算寸法の周.Size = New Size(73, 19)
         lbl計算寸法の周.TabIndex = 50
         lbl計算寸法の周.Text = "周(六角形)"
-        ' 
-        ' OpenFileDialog1
-        ' 
-        OpenFileDialog1.FileName = "OpenFileDialog1"
-        OpenFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        OpenFileDialog1.Title = "データを読み取るファイルを指定してください"
-        ' 
-        ' SaveFileDialog1
-        ' 
-        SaveFileDialog1.Filter = "データファイル (*.xml)|*.xml|全て (*.*)|*.*"
-        SaveFileDialog1.Title = "データを保存するファイルを指定してください"
         ' 
         ' cmb基本色
         ' 
@@ -2912,20 +2913,6 @@ Partial Class frmMain
         lbl周円の径.Size = New Size(62, 19)
         lbl周円の径.TabIndex = 53
         lbl周円の径.Text = "周円の径"
-        ' 
-        ' chk差しひも
-        ' 
-        chk差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk差しひも.AutoSize = True
-        chk差しひも.Checked = True
-        chk差しひも.CheckState = CheckState.Checked
-        chk差しひも.Location = New Point(335, 391)
-        chk差しひも.Name = "chk差しひも"
-        chk差しひも.Size = New Size(74, 23)
-        chk差しひも.TabIndex = 4
-        chk差しひも.Text = "差しひも"
-        ToolTip1.SetToolTip(chk差しひも, "チェックオフにすると非表示になります")
-        chk差しひも.UseVisualStyleBackColor = True
         ' 
         ' frmMain
         ' 
@@ -3141,8 +3128,6 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents txt六つ目ベース_周 As TextBox
     Friend WithEvents txt縁厚さプラス_周 As TextBox
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
-    Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents cmb基本色 As ComboBox
     Friend WithEvents lbl基本色 As Label
     Friend WithEvents lbl横寸法の差 As Label
