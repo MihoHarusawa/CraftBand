@@ -698,4 +698,7 @@
   <data name="DataFileFilterSave" xml:space="preserve">
     <value>データファイル (*.cbmesh)|*.cbmesh|旧ファイル (*.xml)|*.xml|全て (*.*)|*.*</value>
   </data>
+  <data name="LOG_MasterConfigFile" xml:space="preserve">
+    <value>【設定ファイル】</value>
+  </data>
 </root>

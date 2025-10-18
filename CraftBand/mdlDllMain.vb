@@ -1,6 +1,8 @@
 ﻿Imports System.Drawing
+Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
+Imports CraftBand.clsLog
 
 Public Module mdlDllMain
 
@@ -257,6 +259,8 @@ Public Module mdlDllMain
                 __paras.MasterTablesFilePath = g_clsMasterTables.MasterTablesFilePath
                 __paras.ListOutMark = g_clsSelectBasics.p_sリスト出力記号
                 g_clsSelectBasics.save()
+                '【設定ファイル】パスをログ出力
+                g_clsLog.LogFormatMessage(LogLevel.Basic, "{0}{1}", My.Resources.LOG_MasterConfigFile, g_clsMasterTables.MasterTablesFilePath)
             End If
         Else
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Skip Saving Master(IsDirty={0}) And SelectBasics", g_clsMasterTables.IsDirty)
@@ -270,6 +274,51 @@ Public Module mdlDllMain
         'g_clsLogはexe側
         Return ret
     End Function
+
+
+    'ログから設定データパスを取得
+    Public Function GetMasterPathFromLog(ByVal logPath As String, ByVal enumExe As enumExeName) As String
+
+        '同じ位置にある別EXEのログを読む
+        Dim dir As String = Path.GetDirectoryName(logPath)
+        Dim ext As String = Path.GetExtension(logPath)
+        Dim readPath As String = IO.Path.ChangeExtension(Path.Combine(dir, enumExe.ToString), ext)
+        If Not File.Exists(readPath) Then
+            Return Nothing
+        End If
+
+        'ファイル全体を指定されたエンコーディングで読み込む
+        Dim lines As String()
+        Try
+            lines = File.ReadAllLines(readPath, g_clsLog.FileEncode)
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+        '末尾から指定行だけを検索対象とする
+        Dim searchLimit As Integer = 10
+        Dim startIndex As Integer = If(lines.Length > searchLimit, lines.Length - searchLimit, 0)
+
+        '【設定ファイル】の文字列を探す
+        Dim search As String = My.Resources.LOG_MasterConfigFile
+        ' ファイル末尾から逆順に検索
+        For i As Integer = lines.Length - 1 To startIndex Step -1
+            Dim line As String = lines(i).Trim()
+            If line.Contains(search) Then
+                ' 文字列の後に続く部分
+                Dim index As Integer = line.IndexOf(search)
+                '文字列の直後から行末まで
+                Dim extractedString As String = line.Substring(index + search.Length).Trim()
+                If Not String.IsNullOrEmpty(extractedString) Then
+                    Return extractedString
+                End If
+            End If
+        Next
+
+        ' 見つからなかった場合
+        Return Nothing
+    End Function
+
 
 
 

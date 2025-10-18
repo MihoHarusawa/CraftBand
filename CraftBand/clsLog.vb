@@ -37,6 +37,12 @@ Public Class clsLog
         End Get
     End Property
     Dim _LogLevel As LogLevel
+
+    Public ReadOnly Property FilePath As String
+        Get
+            Return _FilePath
+        End Get
+    End Property
     Dim _FilePath As String
     Dim _IsWorking As Boolean = False
     Dim _StreamWriter As IO.StreamWriter
@@ -219,7 +225,7 @@ Public Class clsLog
 
 
     'リソース文字列を得る
-    Protected Function GetResourceString(ByVal resname As String) As String
+    Public Function GetResourceString(ByVal resname As String) As String
         Dim res As String
         Try
             res = My.Resources.ResourceManager.GetString(resname)
