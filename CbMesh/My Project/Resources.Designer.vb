@@ -61,6 +61,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  変更は保存されませんがよろしいですか？
+        '''(設定を保存するには[メニュー]から[終了]してください) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgAskExit() As String
+            Get
+                Return ResourceManager.GetString("MsgAskExit", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  ファイル&apos;{0}&apos;があるため、拡張子を変更できません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgCantChange() As String

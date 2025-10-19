@@ -24,10 +24,6 @@ CraftBand‚Ì‚İ‚Ì€–Ú
 
 
 ’Ç‰Áƒtƒ@ƒCƒ‹	
- IconMesh.ico	
- IconSquare45.ico
- IconKnot.ico
- IconSquare.ico
- IconHexagon.ico
  IconCbMesh.ico
  CraftBandMesh.CBMESH
+ CraftBand.config

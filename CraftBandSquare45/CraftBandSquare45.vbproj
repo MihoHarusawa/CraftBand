@@ -14,8 +14,8 @@
     <Description>斜め45度に立ち上げる四角ベースかごのデザインとサイズ計算</Description>
     <Copyright>Copyright © CraftBandLabo 2023-2025</Copyright>
     <PackageIcon>IconSquare45.ico</PackageIcon>
-    <AssemblyVersion>1.5.15.0</AssemblyVersion>
-    <FileVersion>1.5.15.0</FileVersion>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

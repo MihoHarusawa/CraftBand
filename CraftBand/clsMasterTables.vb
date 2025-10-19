@@ -168,9 +168,16 @@ Public Class clsMasterTables
             If String.IsNullOrWhiteSpace(row.f_sバージョン) Then
                 Return False
             End If
+            '
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("Version: {0} ", row.f_sバージョン)
             sb.Append(row.f_s識別情報)
+            '
+            For Each r As tblバンドの種類Row In dst.Tables("tblバンドの種類").Rows
+                sb.AppendLine()
+                sb.AppendFormat("- '{0}'{1}({2})  ", r.f_sバンドの種類名, r.f_i本幅, r.f_dバンド幅)
+                sb.Append(r.f_s色リスト)
+            Next
             description = sb.ToString
             Return True
 

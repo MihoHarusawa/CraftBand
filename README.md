@@ -119,14 +119,14 @@ This allows all `.cbmesh` / `.xml` / `.CBMESH` / `.XML` files to be handled iden
 
 # Current Binary Version
 
-- Installer         1.8.15
-- CraftBand.dll     1.8.15.0
-- CraftBandMesh     1.8.15.0
-- CraftBandSqare45  1.5.15.0  
-- CraftBandKnot     1.4.15.0
-- CraftBandSquare   1.3.15.0
-- CraftBandHexagon  1.0.15.0
-- CbMesh            1.	
+- Installer         1.9.0
+- CraftBand.dll     1.9.0.0
+- CraftBandMesh     1.9.0.0
+- CraftBandSqare45  1.6.0.0  
+- CraftBandKnot     1.5.0.0
+- CraftBandSquare   1.4.0.0
+- CraftBandHexagon  1.1.0.0
+- CbMesh            1.0.0.0	
 
 # Usage
 

@@ -9,7 +9,7 @@ Public Class frmMain
 
     '表示色
     Dim _colorDefault As Color = Color.Black
-    Dim _colorMasterInfo As Color = Color.Orange
+    Dim _colorMasterInfo As Color = Color.DarkOrange
     Dim _colorDataInfo As Color = Color.Brown
     Dim _colorWarning As Color = Color.Red
 
@@ -89,14 +89,28 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If rad旧拡張子変更.Checked Then
-            My.Settings.TypeProcess = 2
-        ElseIf rad情報を表示する.Checked Then
-            My.Settings.TypeProcess = 1
+        If Me.DialogResult = DialogResult.OK Then
+            '正常終了
+            If rad旧拡張子変更.Checked Then
+                My.Settings.TypeProcess = 2
+            ElseIf rad情報を表示する.Checked Then
+                My.Settings.TypeProcess = 1
+            Else
+                My.Settings.TypeProcess = 0
+            End If
+            My.Settings.frmMainSize = Me.Size
+
         Else
-            My.Settings.TypeProcess = 0
+            '×ボタンやAlt+F4で閉じた場合
+            '変更は保存されませんがよろしいですか？(設定を保存するには[メニュー]から[終了]してください)
+            Dim result As DialogResult = MessageBox.Show(My.Resources.MsgAskExit, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.No Then
+                ' 閉じる処理をキャンセル
+                e.Cancel = True
+                'DialogResult を初期状態に戻す
+                Me.DialogResult = DialogResult.None
+            End If
         End If
-        My.Settings.frmMainSize = Me.Size
     End Sub
 
     Private Sub ToolStripMenuItemFileOpen_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemFileOpen.Click
