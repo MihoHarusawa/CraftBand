@@ -35,9 +35,9 @@ Partial Class frmMain
         lblSquare45 = New Label()
         lblSquare = New Label()
         lblHexagon = New Label()
-        rad起動 = New RadioButton()
-        rad情報表示 = New RadioButton()
-        rad拡張子変更 = New RadioButton()
+        radすぐに開く = New RadioButton()
+        rad情報を表示する = New RadioButton()
+        rad旧拡張子変更 = New RadioButton()
         FolderBrowserDialog1 = New FolderBrowserDialog()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
@@ -160,40 +160,40 @@ Partial Class frmMain
         lblHexagon.Text = "Hexagon"
         ToolTip1.SetToolTip(lblHexagon, "六つ目、つまり60度ごと3方向にひもを組み、ひもに沿って立ち上げるタイプ")
         ' 
-        ' rad起動
+        ' radすぐに開く
         ' 
-        rad起動.AutoSize = True
-        rad起動.Checked = True
-        rad起動.Location = New Point(23, 30)
-        rad起動.Name = "rad起動"
-        rad起動.Size = New Size(70, 23)
-        rad起動.TabIndex = 1
-        rad起動.TabStop = True
-        rad起動.Text = "起動(&S)"
-        ToolTip1.SetToolTip(rad起動, "対応するアプリを起動します")
-        rad起動.UseVisualStyleBackColor = True
+        radすぐに開く.AutoSize = True
+        radすぐに開く.Checked = True
+        radすぐに開く.Location = New Point(23, 30)
+        radすぐに開く.Name = "radすぐに開く"
+        radすぐに開く.Size = New Size(95, 23)
+        radすぐに開く.TabIndex = 1
+        radすぐに開く.TabStop = True
+        radすぐに開く.Text = "すぐに開く(&S)"
+        ToolTip1.SetToolTip(radすぐに開く, "ファイルを指定したら、すぐに対応するアプリを起動して開きます")
+        radすぐに開く.UseVisualStyleBackColor = True
         ' 
-        ' rad情報表示
+        ' rad情報を表示する
         ' 
-        rad情報表示.AutoSize = True
-        rad情報表示.Location = New Point(107, 30)
-        rad情報表示.Name = "rad情報表示"
-        rad情報表示.Size = New Size(95, 23)
-        rad情報表示.TabIndex = 2
-        rad情報表示.Text = "情報表示(&I)"
-        ToolTip1.SetToolTip(rad情報表示, "ファイルの情報を表示します")
-        rad情報表示.UseVisualStyleBackColor = True
+        rad情報を表示する.AutoSize = True
+        rad情報を表示する.Location = New Point(133, 30)
+        rad情報を表示する.Name = "rad情報を表示する"
+        rad情報を表示する.Size = New Size(128, 23)
+        rad情報を表示する.TabIndex = 2
+        rad情報を表示する.Text = "情報を表示する(&I)"
+        ToolTip1.SetToolTip(rad情報を表示する, "シリーズのファイルについて、それが何かを表示します")
+        rad情報を表示する.UseVisualStyleBackColor = True
         ' 
-        ' rad拡張子変更
+        ' rad旧拡張子変更
         ' 
-        rad拡張子変更.AutoSize = True
-        rad拡張子変更.Location = New Point(207, 30)
-        rad拡張子変更.Name = "rad拡張子変更"
-        rad拡張子変更.Size = New Size(112, 23)
-        rad拡張子変更.TabIndex = 3
-        rad拡張子変更.Text = "拡張子変更(&E)"
-        ToolTip1.SetToolTip(rad拡張子変更, "旧拡張子(.xml)を新拡張子(.cbmesh)に変更します")
-        rad拡張子変更.UseVisualStyleBackColor = True
+        rad旧拡張子変更.AutoSize = True
+        rad旧拡張子変更.Location = New Point(277, 30)
+        rad旧拡張子変更.Name = "rad旧拡張子変更"
+        rad旧拡張子変更.Size = New Size(126, 23)
+        rad旧拡張子変更.TabIndex = 3
+        rad旧拡張子変更.Text = "旧拡張子変更(&E)"
+        ToolTip1.SetToolTip(rad旧拡張子変更, "旧拡張子(.xml)を新拡張子(.cbmesh)に変更します")
+        rad旧拡張子変更.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -265,9 +265,9 @@ Partial Class frmMain
         Controls.Add(lblSquare45)
         Controls.Add(lblKnot)
         Controls.Add(lblMesh)
-        Controls.Add(rad拡張子変更)
-        Controls.Add(rad情報表示)
-        Controls.Add(rad起動)
+        Controls.Add(rad旧拡張子変更)
+        Controls.Add(rad情報を表示する)
+        Controls.Add(radすぐに開く)
         Controls.Add(btnHexagon)
         Controls.Add(btnSquare)
         Controls.Add(btnSquare45)
@@ -291,9 +291,9 @@ Partial Class frmMain
     Friend WithEvents btnSquare As Button
     Friend WithEvents btnHexagon As Button
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents rad起動 As RadioButton
-    Friend WithEvents rad情報表示 As RadioButton
-    Friend WithEvents rad拡張子変更 As RadioButton
+    Friend WithEvents radすぐに開く As RadioButton
+    Friend WithEvents rad情報を表示する As RadioButton
+    Friend WithEvents rad旧拡張子変更 As RadioButton
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents ToolStripMenuItemFile As ToolStripMenuItem

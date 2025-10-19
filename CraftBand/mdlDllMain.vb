@@ -178,7 +178,12 @@ Public Module mdlDllMain
 
         '保存した名前を得る
         Dim masterTablesFilePath As String = __paras.MasterTablesFilePath
-        '各EXEによる起動であれば
+        If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
+            '名前がない時は共通ファイルから取得
+            masterTablesFilePath = GetCommonMasterPath(g_enumExeName)
+        End If
+
+        '各EXEによる起動は設定ファイル必須
         If IsCraftBandExe() Then
             If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
                 '名前がない時(初回)
@@ -259,8 +264,11 @@ Public Module mdlDllMain
                 __paras.MasterTablesFilePath = g_clsMasterTables.MasterTablesFilePath
                 __paras.ListOutMark = g_clsSelectBasics.p_sリスト出力記号
                 g_clsSelectBasics.save()
-                '【設定ファイル】パスをログ出力
-                g_clsLog.LogFormatMessage(LogLevel.Basic, "{0}{1}", My.Resources.LOG_MasterConfigFile, g_clsMasterTables.MasterTablesFilePath)
+
+                '"設定ファイル" パスをログ出力
+                g_clsLog.LogFormatMessage(LogLevel.Basic, "{0} {1}", My.Resources.LOG_MasterConfigFile, g_clsMasterTables.MasterTablesFilePath)
+                '共通ファイルに記録
+                saveCommonMasterPath(g_clsMasterTables.MasterTablesFilePath)
             End If
         Else
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Skip Saving Master(IsDirty={0}) And SelectBasics", g_clsMasterTables.IsDirty)
@@ -276,53 +284,29 @@ Public Module mdlDllMain
     End Function
 
 
-    'ログから設定データパスを取得
-    Public Function GetMasterPathFromLog(ByVal logPath As String, ByVal enumExe As enumExeName) As String
+    Private Const MASTER_SECTION As String = "MasterFilePath"
 
-        '同じ位置にある別EXEのログを読む
-        Dim dir As String = Path.GetDirectoryName(logPath)
-        Dim ext As String = Path.GetExtension(logPath)
-        Dim readPath As String = IO.Path.ChangeExtension(Path.Combine(dir, enumExe.ToString), ext)
-        If Not File.Exists(readPath) Then
-            Return Nothing
-        End If
-
-        'ファイル全体を指定されたエンコーディングで読み込む
-        Dim lines As String()
-        Try
-            lines = File.ReadAllLines(readPath, g_clsLog.FileEncode)
-        Catch ex As Exception
-            Return Nothing
-        End Try
-
-        '末尾から指定行だけを検索対象とする
-        Dim searchLimit As Integer = 10
-        Dim startIndex As Integer = If(lines.Length > searchLimit, lines.Length - searchLimit, 0)
-
-        '【設定ファイル】の文字列を探す
-        Dim search As String = My.Resources.LOG_MasterConfigFile
-        ' ファイル末尾から逆順に検索
-        For i As Integer = lines.Length - 1 To startIndex Step -1
-            Dim line As String = lines(i).Trim()
-            If line.Contains(search) Then
-                ' 文字列の後に続く部分
-                Dim index As Integer = line.IndexOf(search)
-                '文字列の直後から行末まで
-                Dim extractedString As String = line.Substring(index + search.Length).Trim()
-                If Not String.IsNullOrEmpty(extractedString) Then
-                    Return extractedString
+    '共通ファイルに記録
+    Private Sub saveCommonMasterPath(ByVal masterFilePath As String)
+        For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
+            If Not IsCraftBandExe(enumExe) Then
+                Continue For
+            End If
+            If enumExe = g_enumExeName Then
+                '自分は上書き
+                SetCommonData(MASTER_SECTION, enumExe.ToString, masterFilePath)
+            Else
+                '以外の空にもセット
+                If String.IsNullOrEmpty(GetCommonData(MASTER_SECTION, enumExe.ToString)) Then
+                    SetCommonData(MASTER_SECTION, enumExe.ToString, masterFilePath)
                 End If
             End If
         Next
+    End Sub
 
-        ' 見つからなかった場合
-        Return Nothing
+    '共通ファイルから取得
+    Public Function GetCommonMasterPath(ByVal enumExe As enumExeName) As String
+        Return GetCommonData(MASTER_SECTION, enumExe.ToString)
     End Function
-
-
-
-
-
-
 
 End Module

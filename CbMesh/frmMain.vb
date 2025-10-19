@@ -66,11 +66,11 @@ Public Class frmMain
         '処理方法選択復元
         Select Case My.Settings.TypeProcess
             Case 2
-                rad拡張子変更.Checked = True
+                rad旧拡張子変更.Checked = True
             Case 1
-                rad情報表示.Checked = True
+                rad情報を表示する.Checked = True
             Case Else
-                rad起動.Checked = True
+                radすぐに開く.Checked = True
         End Select
 
         '起動引数があれば処理
@@ -89,9 +89,9 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If rad拡張子変更.Checked Then
+        If rad旧拡張子変更.Checked Then
             My.Settings.TypeProcess = 2
-        ElseIf rad情報表示.Checked Then
+        ElseIf rad情報を表示する.Checked Then
             My.Settings.TypeProcess = 1
         Else
             My.Settings.TypeProcess = 0
@@ -167,7 +167,7 @@ Public Class frmMain
         End If
 
         '起動指定以外は対象表示
-        If Not rad起動.Checked Then
+        If Not radすぐに開く.Checked Then
             '起動可能なデータファイル:
             addFormatText(My.Resources.MsgStartable)
             For Each enumExe As enumExeName In _mapExeFpath.Keys
@@ -223,7 +223,7 @@ Public Class frmMain
                 'シリーズの設定ファイルです。
                 addText(My.Resources.MsgSettingFile)
                 addText(_colorMasterInfo, description)
-                If rad拡張子変更.Checked Then
+                If rad旧拡張子変更.Checked Then
                     renameExtention(fpath, clsMasterTables.MyExtention)
                 End If
             Else
@@ -248,7 +248,7 @@ Public Class frmMain
         End If
 
         Dim procname As String = fpath
-        If rad拡張子変更.Checked Then
+        If rad旧拡張子変更.Checked Then
             procname = renameExtention(fpath, clsDataTables.DataExtention)
         End If
 

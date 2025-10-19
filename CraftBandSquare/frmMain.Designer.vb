@@ -108,15 +108,12 @@ Partial Class frmMain
         btn削除_側面 = New Button()
         btn追加_側面 = New Button()
         cmb編みかた名_側面 = New ComboBox()
-        txtメモ = New TextBox()
         btn終了 = New Button()
         GroupBox1 = New GroupBox()
         btn先と同じ = New Button()
         rad側面_下左 = New RadioButton()
         rad側面_上右 = New RadioButton()
         rad底 = New RadioButton()
-        txtタイトル = New TextBox()
-        txt作成者 = New TextBox()
         radファイル = New RadioButton()
         radビューア = New RadioButton()
         btn3Dモデル = New Button()
@@ -201,9 +198,7 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
-        lbl作成者 = New Label()
-        lblタイトル = New Label()
-        lblメモ = New Label()
+        editMemo = New CraftBand.ctrMemo()
         tpageプレビュー = New TabPage()
         grp差しひも = New GroupBox()
         rad回り込み = New RadioButton()
@@ -1079,16 +1074,6 @@ Partial Class frmMain
         cmb編みかた名_側面.TabIndex = 6
         ToolTip1.SetToolTip(cmb編みかた名_側面, "縁の始末の編みかた名")
         ' 
-        ' txtメモ
-        ' 
-        txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(22, 137)
-        txtメモ.Multiline = True
-        txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 237)
-        txtメモ.TabIndex = 5
-        ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
-        ' 
         ' btn終了
         ' 
         btn終了.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
@@ -1159,26 +1144,6 @@ Partial Class frmMain
         rad底.Text = "底"
         ToolTip1.SetToolTip(rad底, "底に適用されるパターンを編集します")
         rad底.UseVisualStyleBackColor = True
-        ' 
-        ' txtタイトル
-        ' 
-        txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(126, 13)
-        txtタイトル.Multiline = True
-        txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 47)
-        txtタイトル.TabIndex = 1
-        ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
-        ' 
-        ' txt作成者
-        ' 
-        txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(126, 73)
-        txt作成者.Multiline = True
-        txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 47)
-        txt作成者.TabIndex = 3
-        ToolTip1.SetToolTip(txt作成者, "作成者情報")
         ' 
         ' radファイル
         ' 
@@ -1980,12 +1945,7 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
-        tpageメモ他.Controls.Add(txt作成者)
-        tpageメモ他.Controls.Add(txtタイトル)
-        tpageメモ他.Controls.Add(lbl作成者)
-        tpageメモ他.Controls.Add(lblタイトル)
-        tpageメモ他.Controls.Add(lblメモ)
-        tpageメモ他.Controls.Add(txtメモ)
+        tpageメモ他.Controls.Add(editMemo)
         tpageメモ他.Location = New Point(4, 28)
         tpageメモ他.Name = "tpageメモ他"
         tpageメモ他.Padding = New Padding(3)
@@ -1994,32 +1954,14 @@ Partial Class frmMain
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
         ' 
-        ' lbl作成者
+        ' editMemo
         ' 
-        lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(24, 73)
-        lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(51, 19)
-        lbl作成者.TabIndex = 2
-        lbl作成者.Text = "作成者"
-        ' 
-        ' lblタイトル
-        ' 
-        lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(24, 13)
-        lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(52, 19)
-        lblタイトル.TabIndex = 0
-        lblタイトル.Text = "タイトル"
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 110)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(29, 19)
-        lblメモ.TabIndex = 4
-        lblメモ.Text = "メモ"
+        editMemo.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editMemo.Location = New Point(-3, -3)
+        editMemo.Name = "editMemo"
+        editMemo.PanelSize = New Size(713, 339)
+        editMemo.Size = New Size(892, 438)
+        editMemo.TabIndex = 0
         ' 
         ' tpageプレビュー
         ' 
@@ -2776,7 +2718,6 @@ Partial Class frmMain
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
-        tpageメモ他.PerformLayout()
         tpageプレビュー.ResumeLayout(False)
         tpageプレビュー.PerformLayout()
         grp差しひも.ResumeLayout(False)
@@ -2898,8 +2839,6 @@ Partial Class frmMain
     Friend WithEvents lblひも長加算_縦横端_単位 As Label
     Friend WithEvents lblひも長加算_縦横端 As Label
     Friend WithEvents tpageメモ他 As TabPage
-    Friend WithEvents txtメモ As TextBox
-    Friend WithEvents lblメモ As Label
     Friend WithEvents lbl厚さ As Label
     Friend WithEvents txt厚さ As TextBox
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
@@ -2981,10 +2920,6 @@ Partial Class frmMain
     Friend WithEvents rad底 As RadioButton
     Friend WithEvents editUpDown As CraftBand.ctrEditUpDown
     Friend WithEvents editAddParts As CraftBand.ctrAddParts
-    Friend WithEvents txt作成者 As TextBox
-    Friend WithEvents txtタイトル As TextBox
-    Friend WithEvents lbl作成者 As Label
-    Friend WithEvents lblタイトル As Label
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents radうら As RadioButton
@@ -3010,6 +2945,7 @@ Partial Class frmMain
     Friend WithEvents rad非表示 As RadioButton
     Friend WithEvents rad回り込み As RadioButton
     Friend WithEvents rad底置き As RadioButton
+    Friend WithEvents editMemo As CraftBand.ctrMemo
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

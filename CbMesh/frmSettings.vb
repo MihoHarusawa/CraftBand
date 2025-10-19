@@ -1,4 +1,6 @@
-﻿Imports CraftBand
+﻿Imports System.Runtime.InteropServices
+Imports IWshRuntimeLibrary
+Imports CraftBand
 
 Public Class frmSettings
     Private Sub frmSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -42,7 +44,7 @@ Public Class frmSettings
             If Not IsCraftBandExe(enumExe) Then
                 Continue For
             End If
-            Dim masterpath As String = GetMasterPathFromLog(g_clsLog.FilePath, enumExe)
+            Dim masterpath As String = GetCommonMasterPath(enumExe)
             If Not [String].IsNullOrWhiteSpace(masterpath) Then
                 sb.AppendFormat("{0} :{1}", enumExe.ToString, masterpath).AppendLine()
             End If
@@ -52,4 +54,50 @@ Public Class frmSettings
         End If
 
     End Sub
+
+    Private Sub btnShortCut_Click(sender As Object, e As EventArgs) Handles btnShortCut.Click
+
+        For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
+            If Not IsCraftBandExe(enumExe) Then
+                Continue For
+            End If
+            Dim targetExe As String
+            If String.IsNullOrWhiteSpace(txt実行ファイルフォルダ.Text) Then
+                targetExe = IO.Path.Combine(IO.Path.GetDirectoryName(g_clsLog.ExePath), GetCraftBandExeName(enumExe))
+            Else
+                targetExe = IO.Path.Combine(txt実行ファイルフォルダ.Text, GetCraftBandExeName(enumExe))
+            End If
+            CreateShortcut(targetExe, GetShortExeName(enumExe), GetCraftBandExeName(enumExe))
+        Next
+
+
+    End Sub
+
+    Public Function CreateShortcut(ByVal targetPath As String, ByVal shortcutName As String, ByVal shortcutDescription As String) As Boolean
+        If Not IO.File.Exists(targetPath) Then
+            Return False
+        End If
+
+        Try
+            Dim desktopPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            Dim shortcutPath As String = IO.Path.Combine(desktopPath, shortcutName & ".lnk")
+
+            Dim WshShell As New WshShell()
+            Dim shortcut As IWshShortcut = CType(WshShell.CreateShortcut(shortcutPath), IWshShortcut)
+            shortcut.TargetPath = targetPath
+            shortcut.WorkingDirectory = IO.Path.GetDirectoryName(targetPath)
+            shortcut.Description = shortcutDescription
+            shortcut.Save()
+            Return True
+
+        Catch ex As COMException
+            g_clsLog.LogException(ex, "CreateShortcut.COMException")
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "CreateShortcut")
+        End Try
+        Return False
+    End Function
+
+
+
 End Class

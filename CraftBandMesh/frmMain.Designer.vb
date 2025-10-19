@@ -115,9 +115,6 @@ Partial Class frmMain
         btn横寸法に合わせる = New Button()
         btn画像ファイル = New Button()
         btnブラウザ = New Button()
-        txtメモ = New TextBox()
-        txt作成者 = New TextBox()
-        txtタイトル = New TextBox()
         txt外側_最大周の径 = New TextBox()
         txt内側_最大周の径 = New TextBox()
         btn展開本幅の同期 = New Button()
@@ -280,9 +277,7 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
-        lbl作成者 = New Label()
-        lblタイトル = New Label()
-        lblメモ = New Label()
+        editMemo = New CraftBand.ctrMemo()
         tpage横ひも = New TabPage()
         expand横ひも = New CraftBand.ctrExpanding()
         tpage縦ひも = New TabPage()
@@ -1073,36 +1068,6 @@ Partial Class frmMain
         btnブラウザ.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
         btnブラウザ.UseVisualStyleBackColor = True
-        ' 
-        ' txtメモ
-        ' 
-        txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(24, 141)
-        txtメモ.Multiline = True
-        txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(861, 244)
-        txtメモ.TabIndex = 5
-        ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
-        ' 
-        ' txt作成者
-        ' 
-        txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(128, 79)
-        txt作成者.Multiline = True
-        txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(757, 47)
-        txt作成者.TabIndex = 3
-        ToolTip1.SetToolTip(txt作成者, "作成者情報")
-        ' 
-        ' txtタイトル
-        ' 
-        txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(128, 18)
-        txtタイトル.Multiline = True
-        txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(757, 47)
-        txtタイトル.TabIndex = 1
-        ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
         ' txt外側_最大周の径
         ' 
@@ -2733,12 +2698,7 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
-        tpageメモ他.Controls.Add(txt作成者)
-        tpageメモ他.Controls.Add(txtタイトル)
-        tpageメモ他.Controls.Add(lbl作成者)
-        tpageメモ他.Controls.Add(lblタイトル)
-        tpageメモ他.Controls.Add(lblメモ)
-        tpageメモ他.Controls.Add(txtメモ)
+        tpageメモ他.Controls.Add(editMemo)
         tpageメモ他.Location = New Point(4, 28)
         tpageメモ他.Name = "tpageメモ他"
         tpageメモ他.Padding = New Padding(3)
@@ -2747,32 +2707,14 @@ Partial Class frmMain
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
         ' 
-        ' lbl作成者
+        ' editMemo
         ' 
-        lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(26, 79)
-        lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(51, 19)
-        lbl作成者.TabIndex = 2
-        lbl作成者.Text = "作成者"
-        ' 
-        ' lblタイトル
-        ' 
-        lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(26, 18)
-        lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(52, 19)
-        lblタイトル.TabIndex = 0
-        lblタイトル.Text = "タイトル"
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 114)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(29, 19)
-        lblメモ.TabIndex = 4
-        lblメモ.Text = "メモ"
+        editMemo.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editMemo.Location = New Point(-3, -3)
+        editMemo.Name = "editMemo"
+        editMemo.PanelSize = New Size(713, 339)
+        editMemo.Size = New Size(892, 438)
+        editMemo.TabIndex = 0
         ' 
         ' tpage横ひも
         ' 
@@ -3777,7 +3719,6 @@ Partial Class frmMain
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
-        tpageメモ他.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage横ひも.PerformLayout()
         tpage縦ひも.ResumeLayout(False)
@@ -3941,10 +3882,8 @@ Partial Class frmMain
     Friend WithEvents lbl横ひも間のすき間_単位 As Label
     Friend WithEvents lbl横ひも間のすき間 As Label
     Friend WithEvents tpageメモ他 As TabPage
-    Friend WithEvents txtメモ As TextBox
     Friend WithEvents lbl縦置きの計 As Label
     Friend WithEvents lbl横置きの計 As Label
-    Friend WithEvents lblメモ As Label
     Friend WithEvents lbl厚さ As Label
     Friend WithEvents txt厚さ As TextBox
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
@@ -3983,10 +3922,6 @@ Partial Class frmMain
     Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents editAddParts As CraftBand.ctrAddParts
-    Friend WithEvents txt作成者 As TextBox
-    Friend WithEvents txtタイトル As TextBox
-    Friend WithEvents lbl作成者 As Label
-    Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
     Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
@@ -4089,6 +4024,7 @@ Partial Class frmMain
     Friend WithEvents txtFig底に対する角度 As TextBox
     Friend WithEvents lblFig底の周に対するひも幅の割合 As Label
     Friend WithEvents txtFig底の周に対するひも幅の割合 As TextBox
+    Friend WithEvents editMemo As CraftBand.ctrMemo
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

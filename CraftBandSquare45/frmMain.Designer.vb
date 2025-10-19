@@ -104,9 +104,6 @@ Partial Class frmMain
         chk横の辺 = New CheckBox()
         nud垂直に = New NumericUpDown()
         btn合わせる = New Button()
-        txtメモ = New TextBox()
-        txt作成者 = New TextBox()
-        txtタイトル = New TextBox()
         lbl本幅の差 = New Label()
         txt先の三角形の本幅の差 = New TextBox()
         txt四辺形の本幅の差 = New TextBox()
@@ -204,9 +201,7 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New ctrAddParts()
         tpageメモ他 = New TabPage()
-        lbl作成者 = New Label()
-        lblタイトル = New Label()
-        lblメモ = New Label()
+        editMemo = New ctrMemo()
         tpage横ひも = New TabPage()
         expand横ひも = New ctrExpanding()
         tpage縦ひも = New TabPage()
@@ -973,36 +968,6 @@ Partial Class frmMain
         btn合わせる.Text = "合わせる(&I)"
         ToolTip1.SetToolTip(btn合わせる, "編集サイズを現在の四角数(ひも数)に合わせます")
         btn合わせる.UseVisualStyleBackColor = True
-        ' 
-        ' txtメモ
-        ' 
-        txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(22, 139)
-        txtメモ.Multiline = True
-        txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 235)
-        txtメモ.TabIndex = 5
-        ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
-        ' 
-        ' txt作成者
-        ' 
-        txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(126, 77)
-        txt作成者.Multiline = True
-        txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 47)
-        txt作成者.TabIndex = 3
-        ToolTip1.SetToolTip(txt作成者, "作成者情報")
-        ' 
-        ' txtタイトル
-        ' 
-        txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(126, 16)
-        txtタイトル.Multiline = True
-        txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 47)
-        txtタイトル.TabIndex = 1
-        ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
         ' 
         ' lbl本幅の差
         ' 
@@ -1941,12 +1906,7 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
-        tpageメモ他.Controls.Add(txt作成者)
-        tpageメモ他.Controls.Add(txtタイトル)
-        tpageメモ他.Controls.Add(lbl作成者)
-        tpageメモ他.Controls.Add(lblタイトル)
-        tpageメモ他.Controls.Add(lblメモ)
-        tpageメモ他.Controls.Add(txtメモ)
+        tpageメモ他.Controls.Add(editMemo)
         tpageメモ他.Location = New Point(4, 28)
         tpageメモ他.Name = "tpageメモ他"
         tpageメモ他.Padding = New Padding(3)
@@ -1955,32 +1915,14 @@ Partial Class frmMain
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
         ' 
-        ' lbl作成者
+        ' editMemo
         ' 
-        lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(24, 77)
-        lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(51, 19)
-        lbl作成者.TabIndex = 2
-        lbl作成者.Text = "作成者"
-        ' 
-        ' lblタイトル
-        ' 
-        lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(24, 16)
-        lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(52, 19)
-        lblタイトル.TabIndex = 0
-        lblタイトル.Text = "タイトル"
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 113)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(29, 19)
-        lblメモ.TabIndex = 4
-        lblメモ.Text = "メモ"
+        editMemo.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editMemo.Location = New Point(-3, -3)
+        editMemo.Name = "editMemo"
+        editMemo.PanelSize = New Size(840, 391)
+        editMemo.Size = New Size(892, 438)
+        editMemo.TabIndex = 0
         ' 
         ' tpage横ひも
         ' 
@@ -2859,7 +2801,6 @@ Partial Class frmMain
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
-        tpageメモ他.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage横ひも.PerformLayout()
         tpage縦ひも.ResumeLayout(False)
@@ -2981,8 +2922,6 @@ Partial Class frmMain
     Friend WithEvents lblひも間のすき間_単位 As Label
     Friend WithEvents lblひも間のすき間 As Label
     Friend WithEvents tpageメモ他 As TabPage
-    Friend WithEvents txtメモ As TextBox
-    Friend WithEvents lblメモ As Label
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents btn規定値 As Button
     Friend WithEvents btnリセット As Button
@@ -3042,10 +2981,6 @@ Partial Class frmMain
     Friend WithEvents btn合わせる As Button
     Friend WithEvents editAddParts As ctrAddParts
     Friend WithEvents ToolStripMenuItemSettingUpDown As ToolStripMenuItem
-    Friend WithEvents txt作成者 As TextBox
-    Friend WithEvents txtタイトル As TextBox
-    Friend WithEvents lbl作成者 As Label
-    Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As ctrExpanding
     Friend WithEvents expand縦ひも As ctrExpanding
     Friend WithEvents lbl本幅の差 As Label
@@ -3136,4 +3071,5 @@ Partial Class frmMain
     Friend WithEvents btn外側反転 As Button
     Friend WithEvents txt折り返し数_内側 As TextBox
     Friend WithEvents lbl折り返し数_内側 As Label
+    Friend WithEvents editMemo As ctrMemo
 End Class

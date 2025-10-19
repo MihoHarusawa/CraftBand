@@ -62,6 +62,8 @@ Public Class frmMain
             If _clsDataTables.Load(lastFilePath) Then
                 _sFilePath = lastFilePath
             Else
+                '対象外のファイル(他EXEデータも)
+                MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 _clsDataTables.SetInitialValue()
             End If
         Else
@@ -251,7 +253,7 @@ Public Class frmMain
             Case tpage追加品.Name
                 Show追加品(works)
             Case tpageメモ他.Name
-                '
+                Showメモ他()
             Case tpage横ひも.Name
                 Show横ひも(works)
             Case tpage縦ひも.Name
@@ -364,9 +366,10 @@ Public Class frmMain
             dispAdjustLane(nud基本のひも幅, .Value("f_i基本のひも幅"))
             cmb基本色.Text = .Value("f_s基本色")
 
-            txtメモ.Text = .Value("f_sメモ")
-            txtタイトル.Text = .Value("f_sタイトル")
-            txt作成者.Text = .Value("f_s作成者")
+            'txtメモ.Text = .Value("f_sメモ")
+            'txtタイトル.Text = .Value("f_sタイトル")
+            'txt作成者.Text = .Value("f_s作成者")
+            editMemo.DispMemo(row目標寸法)
         End With
     End Sub
 
@@ -515,9 +518,11 @@ Public Class frmMain
             .Value("f_d高さ寸法") = nud高さ寸法.Value
             .Value("f_i基本のひも幅") = nud基本のひも幅.Value
             .Value("f_s基本色") = cmb基本色.Text
-            .Value("f_sメモ") = txtメモ.Text
-            .Value("f_sタイトル") = txtタイトル.Text
-            .Value("f_s作成者") = txt作成者.Text
+
+            '.Value("f_sメモ") = txtメモ.Text
+            '.Value("f_sタイトル") = txtタイトル.Text
+            '.Value("f_s作成者") = txt作成者.Text
+            editMemo.SaveMemo(row目標寸法)
         End With
         Return True
     End Function
@@ -928,10 +933,12 @@ Public Class frmMain
         End If
 
         '保存名確定
-        If String.IsNullOrEmpty(txtタイトル.Text) AndAlso String.IsNullOrEmpty(txt作成者.Text) Then
-            txtタイトル.Text = IO.Path.GetFileNameWithoutExtension(filename)
-            txt作成者.Text = Environment.UserName
-        End If
+        'If String.IsNullOrEmpty(txtタイトル.Text) AndAlso String.IsNullOrEmpty(txt作成者.Text) Then
+        '    txtタイトル.Text = IO.Path.GetFileNameWithoutExtension(filename)
+        '    txt作成者.Text = Environment.UserName
+        'End If
+        editMemo.FileSaveAs(filename)
+
         SaveTables(_clsDataTables)
         If _clsDataTables.Save(filename) Then
             _sFilePath = filename
@@ -1552,6 +1559,16 @@ Public Class frmMain
     End Sub
 #End Region
 
+#Region "メモ他"
+    Sub Showメモ他()
+        editMemo.PanelSize = tpageメモ他.Size
+    End Sub
+
+    Private Sub tpageメモ他_Resize(sender As Object, e As EventArgs) Handles tpageメモ他.Resize
+        editMemo.PanelSize = tpageメモ他.Size
+    End Sub
+
+#End Region
 
 #Region "DEBUG"
     Dim bVisible As Boolean = False

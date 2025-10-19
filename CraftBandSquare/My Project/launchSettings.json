@@ -1,8 +1,7 @@
 {
   "profiles": {
     "CraftBandSquare": {
-      "commandName": "Project",
-      "commandLineArgs": "/N"
+      "commandName": "Project"
     }
   }
 }

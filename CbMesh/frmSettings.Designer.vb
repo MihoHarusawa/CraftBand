@@ -34,6 +34,7 @@ Partial Class frmSettings
         chk編集対象なしで起動する = New CheckBox()
         FolderBrowserDialog1 = New FolderBrowserDialog()
         picGear = New PictureBox()
+        btnShortCut = New Button()
         CType(picGear, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -129,11 +130,22 @@ Partial Class frmSettings
         picGear.TabIndex = 7
         picGear.TabStop = False
         ' 
+        ' btnShortCut
+        ' 
+        btnShortCut.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        btnShortCut.Location = New Point(10, 133)
+        btnShortCut.Name = "btnShortCut"
+        btnShortCut.Size = New Size(111, 44)
+        btnShortCut.TabIndex = 7
+        btnShortCut.Text = "ｼｮｰﾄｶｯﾄ作成"
+        btnShortCut.UseVisualStyleBackColor = True
+        ' 
         ' frmSettings
         ' 
         AutoScaleDimensions = New SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(413, 182)
+        Controls.Add(btnShortCut)
         Controls.Add(picGear)
         Controls.Add(chk編集対象なしで起動する)
         Controls.Add(chk画面の表示を残す)
@@ -165,4 +177,5 @@ Partial Class frmSettings
     Friend WithEvents chk画面の表示を残す As CheckBox
     Friend WithEvents chk編集対象なしで起動する As CheckBox
     Friend WithEvents picGear As PictureBox
+    Friend WithEvents btnShortCut As Button
 End Class

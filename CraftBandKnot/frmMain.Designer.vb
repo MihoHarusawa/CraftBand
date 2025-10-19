@@ -107,9 +107,6 @@ Partial Class frmMain
         lbl左から = New Label()
         lbl上から = New Label()
         btn削除_側面 = New Button()
-        txtメモ = New TextBox()
-        txt作成者 = New TextBox()
-        txtタイトル = New TextBox()
         btn追加_側面 = New Button()
         txt編みひも = New TextBox()
         lbl編みひも = New Label()
@@ -180,9 +177,7 @@ Partial Class frmMain
         tpage追加品 = New TabPage()
         editAddParts = New CraftBand.ctrAddParts()
         tpageメモ他 = New TabPage()
-        lbl作成者 = New Label()
-        lblタイトル = New Label()
-        lblメモ = New Label()
+        editMemo = New CraftBand.ctrMemo()
         tpage横ひも = New TabPage()
         expand横ひも = New CraftBand.ctrExpanding()
         tpage縦ひも = New TabPage()
@@ -995,36 +990,6 @@ Partial Class frmMain
         ToolTip1.SetToolTip(btn削除_側面, "選択位置の編みかたを削除します")
         btn削除_側面.UseVisualStyleBackColor = True
         ' 
-        ' txtメモ
-        ' 
-        txtメモ.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txtメモ.Location = New Point(22, 134)
-        txtメモ.Multiline = True
-        txtメモ.Name = "txtメモ"
-        txtメモ.Size = New Size(794, 238)
-        txtメモ.TabIndex = 5
-        ToolTip1.SetToolTip(txtメモ, "自由に記述できます")
-        ' 
-        ' txt作成者
-        ' 
-        txt作成者.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txt作成者.Location = New Point(126, 73)
-        txt作成者.Multiline = True
-        txt作成者.Name = "txt作成者"
-        txt作成者.Size = New Size(690, 47)
-        txt作成者.TabIndex = 3
-        ToolTip1.SetToolTip(txt作成者, "作成者情報")
-        ' 
-        ' txtタイトル
-        ' 
-        txtタイトル.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtタイトル.Location = New Point(126, 13)
-        txtタイトル.Multiline = True
-        txtタイトル.Name = "txtタイトル"
-        txtタイトル.Size = New Size(690, 47)
-        txtタイトル.TabIndex = 1
-        ToolTip1.SetToolTip(txtタイトル, "タイトル情報")
-        ' 
         ' btn追加_側面
         ' 
         btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
@@ -1384,7 +1349,7 @@ Partial Class frmMain
         tpageコマ数.Controls.Add(grp横置き)
         tpageコマ数.Location = New Point(4, 28)
         tpageコマ数.Name = "tpageコマ数"
-        tpageコマ数.Padding = New Padding(3, 3, 3, 3)
+        tpageコマ数.Padding = New Padding(3)
         tpageコマ数.Size = New Size(840, 391)
         tpageコマ数.TabIndex = 0
         tpageコマ数.Text = "コマ数"
@@ -1581,7 +1546,7 @@ Partial Class frmMain
         tpage側面と縁.Controls.Add(dgv側面と縁)
         tpage側面と縁.Location = New Point(4, 28)
         tpage側面と縁.Name = "tpage側面と縁"
-        tpage側面と縁.Padding = New Padding(3, 3, 3, 3)
+        tpage側面と縁.Padding = New Padding(3)
         tpage側面と縁.Size = New Size(840, 391)
         tpage側面と縁.TabIndex = 2
         tpage側面と縁.Text = "側面と縁"
@@ -1632,7 +1597,7 @@ Partial Class frmMain
         tpage追加品.Controls.Add(editAddParts)
         tpage追加品.Location = New Point(4, 28)
         tpage追加品.Name = "tpage追加品"
-        tpage追加品.Padding = New Padding(3, 3, 3, 3)
+        tpage追加品.Padding = New Padding(3)
         tpage追加品.Size = New Size(840, 391)
         tpage追加品.TabIndex = 3
         tpage追加品.Text = "追加品"
@@ -1650,53 +1615,30 @@ Partial Class frmMain
         ' 
         ' tpageメモ他
         ' 
-        tpageメモ他.Controls.Add(txt作成者)
-        tpageメモ他.Controls.Add(txtタイトル)
-        tpageメモ他.Controls.Add(lbl作成者)
-        tpageメモ他.Controls.Add(lblタイトル)
-        tpageメモ他.Controls.Add(lblメモ)
-        tpageメモ他.Controls.Add(txtメモ)
+        tpageメモ他.Controls.Add(editMemo)
         tpageメモ他.Location = New Point(4, 28)
         tpageメモ他.Name = "tpageメモ他"
-        tpageメモ他.Padding = New Padding(3, 3, 3, 3)
+        tpageメモ他.Padding = New Padding(3)
         tpageメモ他.Size = New Size(840, 391)
         tpageメモ他.TabIndex = 4
         tpageメモ他.Text = "メモ他"
         tpageメモ他.UseVisualStyleBackColor = True
         ' 
-        ' lbl作成者
+        ' editMemo
         ' 
-        lbl作成者.AutoSize = True
-        lbl作成者.Location = New Point(24, 73)
-        lbl作成者.Name = "lbl作成者"
-        lbl作成者.Size = New Size(51, 19)
-        lbl作成者.TabIndex = 2
-        lbl作成者.Text = "作成者"
-        ' 
-        ' lblタイトル
-        ' 
-        lblタイトル.AutoSize = True
-        lblタイトル.Location = New Point(24, 13)
-        lblタイトル.Name = "lblタイトル"
-        lblタイトル.Size = New Size(52, 19)
-        lblタイトル.TabIndex = 0
-        lblタイトル.Text = "タイトル"
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New Point(24, 108)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New Size(29, 19)
-        lblメモ.TabIndex = 4
-        lblメモ.Text = "メモ"
+        editMemo.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        editMemo.Location = New Point(-3, -3)
+        editMemo.Name = "editMemo"
+        editMemo.PanelSize = New Size(713, 339)
+        editMemo.Size = New Size(892, 438)
+        editMemo.TabIndex = 0
         ' 
         ' tpage横ひも
         ' 
         tpage横ひも.Controls.Add(expand横ひも)
         tpage横ひも.Location = New Point(4, 28)
         tpage横ひも.Name = "tpage横ひも"
-        tpage横ひも.Padding = New Padding(3, 3, 3, 3)
+        tpage横ひも.Padding = New Padding(3)
         tpage横ひも.Size = New Size(840, 391)
         tpage横ひも.TabIndex = 5
         tpage横ひも.Text = "横ひも"
@@ -1717,7 +1659,7 @@ Partial Class frmMain
         tpage縦ひも.Controls.Add(expand縦ひも)
         tpage縦ひも.Location = New Point(4, 28)
         tpage縦ひも.Name = "tpage縦ひも"
-        tpage縦ひも.Padding = New Padding(3, 3, 3, 3)
+        tpage縦ひも.Padding = New Padding(3)
         tpage縦ひも.Size = New Size(840, 391)
         tpage縦ひも.TabIndex = 6
         tpage縦ひも.Text = "縦ひも"
@@ -1740,7 +1682,7 @@ Partial Class frmMain
         tpageプレビュー.Controls.Add(picプレビュー)
         tpageプレビュー.Location = New Point(4, 28)
         tpageプレビュー.Name = "tpageプレビュー"
-        tpageプレビュー.Padding = New Padding(3, 3, 3, 3)
+        tpageプレビュー.Padding = New Padding(3)
         tpageプレビュー.Size = New Size(840, 391)
         tpageプレビュー.TabIndex = 7
         tpageプレビュー.Text = "プレビュー"
@@ -1765,7 +1707,7 @@ Partial Class frmMain
         tpageプレビュー2.Controls.Add(picプレビュー2)
         tpageプレビュー2.Location = New Point(4, 28)
         tpageプレビュー2.Name = "tpageプレビュー2"
-        tpageプレビュー2.Padding = New Padding(3, 3, 3, 3)
+        tpageプレビュー2.Padding = New Padding(3)
         tpageプレビュー2.Size = New Size(840, 391)
         tpageプレビュー2.TabIndex = 8
         tpageプレビュー2.Text = "プレビュー2"
@@ -2376,7 +2318,6 @@ Partial Class frmMain
         tpage追加品.ResumeLayout(False)
         tpage追加品.PerformLayout()
         tpageメモ他.ResumeLayout(False)
-        tpageメモ他.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage横ひも.PerformLayout()
         tpage縦ひも.ResumeLayout(False)
@@ -2486,8 +2427,6 @@ Partial Class frmMain
     Friend WithEvents lblコマ間のすき間_単位 As Label
     Friend WithEvents lblひも間のすき間 As Label
     Friend WithEvents tpageメモ他 As TabPage
-    Friend WithEvents txtメモ As TextBox
-    Friend WithEvents lblメモ As Label
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents btn規定値 As Button
     Friend WithEvents btnリセット As Button
@@ -2554,10 +2493,6 @@ Partial Class frmMain
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ToolStripMenuItemEditColorChange As ToolStripMenuItem
     Friend WithEvents editAddParts As CraftBand.ctrAddParts
-    Friend WithEvents txt作成者 As TextBox
-    Friend WithEvents txtタイトル As TextBox
-    Friend WithEvents lbl作成者 As Label
-    Friend WithEvents lblタイトル As Label
     Friend WithEvents expand横ひも As CraftBand.ctrExpanding
     Friend WithEvents expand縦ひも As CraftBand.ctrExpanding
     Friend WithEvents txt編みひも As TextBox
@@ -2573,6 +2508,7 @@ Partial Class frmMain
     Friend WithEvents picプレビュー2 As PictureBox
     Friend WithEvents ToolStripMenuItemEditSaveTemporarily As ToolStripMenuItem
     Friend WithEvents btn一時保存 As Button
+    Friend WithEvents editMemo As CraftBand.ctrMemo
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

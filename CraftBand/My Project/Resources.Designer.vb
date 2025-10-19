@@ -870,7 +870,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  【設定ファイル】 に類似しているローカライズされた文字列を検索します。
+        '''  設定ファイル に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property LOG_MasterConfigFile() As String
             Get

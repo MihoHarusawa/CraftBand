@@ -699,6 +699,6 @@
     <value>データファイル (*.cbmesh)|*.cbmesh|旧ファイル (*.xml)|*.xml|全て (*.*)|*.*</value>
   </data>
   <data name="LOG_MasterConfigFile" xml:space="preserve">
-    <value>【設定ファイル】</value>
+    <value>設定ファイル</value>
   </data>
 </root>
