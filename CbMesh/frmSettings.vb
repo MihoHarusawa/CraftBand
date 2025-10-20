@@ -3,6 +3,11 @@ Imports IWshRuntimeLibrary
 Imports CraftBand
 
 Public Class frmSettings
+    Public Property IsSettingsChanged As Boolean = False
+
+    Dim _isFormLoaded As Boolean = False
+    Dim _isControlChanged As Boolean = False
+
     Private Sub frmSettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 #If DEBUG Then
@@ -15,6 +20,8 @@ Public Class frmSettings
         chk編集対象なしで起動する.Checked = My.Settings.IsStartEmpty
         chk画面の表示を残す.Checked = My.Settings.IsMessageNoClear
         txt実行ファイルフォルダ.Text = My.Settings.ExeDirectory
+
+        _isFormLoaded = True
     End Sub
 
 
@@ -35,6 +42,7 @@ Public Class frmSettings
         Else
             My.Settings.ExeDirectory = ""
         End If
+        IsSettingsChanged = _isControlChanged
     End Sub
 
     Private Sub picGear_Click(sender As Object, e As EventArgs) Handles picGear.Click
@@ -98,6 +106,15 @@ Public Class frmSettings
         Return False
     End Function
 
+    Private Sub txt実行ファイルフォルダ_TextChanged(sender As Object, e As EventArgs) Handles txt実行ファイルフォルダ.TextChanged
+        If _isFormLoaded Then
+            _isControlChanged = True
+        End If
+    End Sub
 
-
+    Private Sub chk_CheckedChanged(sender As Object, e As EventArgs) Handles chkアプリを起動したら閉じる.CheckedChanged, chk編集対象なしで起動する.CheckedChanged, chk画面の表示を残す.CheckedChanged
+        If _isFormLoaded Then
+            _isControlChanged = True
+        End If
+    End Sub
 End Class

@@ -189,6 +189,12 @@ Public Class ctrEditUpDown
         dgvひも上下.Columns(1).Width = 45 'dgvひも上下.RowTemplate.Height
         '唯一のインスタンス
         _DataGridSelection = New CDataGridSelection(dgvひも上下)
+
+        'ちらつき・遅延対策
+        Dim dgvType = GetType(DataGridView)
+        Dim pi = dgvType.GetProperty("DoubleBuffered", Reflection.BindingFlags.Instance Or Reflection.BindingFlags.NonPublic)
+        pi.SetValue(Me.dgvひも上下, True, Nothing)
+
     End Sub
 
 #If DEBUG Then

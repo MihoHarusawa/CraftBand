@@ -13,8 +13,10 @@ Public Class frmMain
     Dim _colorDataInfo As Color = Color.Brown
     Dim _colorWarning As Color = Color.Red
 
+    Dim _isFormLoaded As Boolean = False
+    Dim _isControlChanged As Boolean = False
 
-#Region "メニューとボタン(ファイル以外)"
+#Region "メニューとボタン(ファイル処理以外)"
     Private Sub ToolStripMenuItemクリア_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemクリア.Click
         clearText()
     End Sub
@@ -27,6 +29,9 @@ Public Class frmMain
     Private Sub ToolStripMenuItemSetting_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemSetting.Click
         Dim dlg As New frmSettings
         dlg.ShowDialog(Me)
+        If dlg.IsSettingsChanged Then
+            _isControlChanged = True
+        End If
     End Sub
 
     Private Sub ToolStripMenuItemHelp_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemHelp.Click
@@ -52,6 +57,12 @@ Public Class frmMain
     Private Sub btnHexagon_Click(sender As Object, e As EventArgs) Handles btnHexagon.Click
         startButton(enumExeName.CraftBandHexagon)
     End Sub
+
+    Private Sub rad_CheckedChanged(sender As Object, e As EventArgs) Handles radすぐに開く.CheckedChanged, rad情報を表示する.CheckedChanged, rad旧拡張子変更.CheckedChanged
+        If _isFormLoaded Then
+            _isControlChanged = True
+        End If
+    End Sub
 #End Region
 
 #Region "ファイル指定"
@@ -72,6 +83,8 @@ Public Class frmMain
             Case Else
                 radすぐに開く.Checked = True
         End Select
+        _isFormLoaded = True
+
 
         '起動引数があれば処理
         If _cmdArgs IsNot Nothing Then
@@ -100,7 +113,7 @@ Public Class frmMain
             End If
             My.Settings.frmMainSize = Me.Size
 
-        Else
+        ElseIf _isControlChanged Then
             '×ボタンやAlt+F4で閉じた場合
             '変更は保存されませんがよろしいですか？(設定を保存するには[メニュー]から[終了]してください)
             Dim result As DialogResult = MessageBox.Show(My.Resources.MsgAskExit, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -354,6 +367,8 @@ Public Class frmMain
         Dim msg As String = String.Format(format, args)
         addText(msg)
     End Sub
+
+
 #End Region
 
 End Class
