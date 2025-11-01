@@ -630,9 +630,10 @@ Public Class clsModelSquare45
     '各面に対応した画像用dataの初期化と四角数
     Private Function setDataEachPlate(ByVal oriProc As enumOriProc) As Boolean
         '画像用データ
-        _data各面(enumBasketPlateIdx._bottom) = New clsDataTables(_calc._Data)
-        _data各面(enumBasketPlateIdx._bottom).p_tbl追加品.Clear()
-        _data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_b折りカラー区分") = False
+        '_data各面(enumBasketPlateIdx._bottom) = New clsDataTables(_calc._Data)
+        '_data各面(enumBasketPlateIdx._bottom).p_tbl追加品.Clear()
+        '_data各面(enumBasketPlateIdx._bottom).p_row底_縦横.Value("f_b折りカラー区分") = False
+        _data各面(enumBasketPlateIdx._bottom) = setDataAsImageBase()
 
         For pidx As Integer = 1 To cBasketPlateCount - 1
             _data各面(pidx) = New clsDataTables(_data各面(enumBasketPlateIdx._bottom))
@@ -685,6 +686,25 @@ Public Class clsModelSquare45
         setPlateUpDown(n高さの四角数)
 
         Return True
+    End Function
+
+    '各面の画像作成の元データ
+    Private Function setDataAsImageBase() As clsDataTables
+        Dim data As clsDataTables = New clsDataTables(_calc._Data)
+
+        '画像に不要な部分を除外
+        data.p_tbl追加品.Clear()
+
+        '折り返しなし
+        data.p_row底_縦横.Value("f_b折りカラー区分") = False
+
+        '#103 加算ゼロ(展開によらず)
+        For Each r As tbl縦横展開Row In data.p_tbl縦横展開.Rows
+            r.f_dひも長加算 = 0
+            r.f_dひも長加算2 = 0
+        Next
+
+        Return data
     End Function
 
     '斜め各方向に下からバンドを積む
