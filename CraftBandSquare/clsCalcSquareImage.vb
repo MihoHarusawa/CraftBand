@@ -285,7 +285,8 @@ Partial Public Class clsCalcSquare
                 band.p終点T = item.m_rひも位置.p右上
                 If _IsDrawMarkCurrent Then
                     '横バンドの左
-                    band.SetMarkPosition(enumMarkPosition._始点Fの前, dひも幅 * 1.4)
+                    'band.SetMarkPosition(enumMarkPosition._始点Fの前, dひも幅 * 1.4)
+                    band.SetMarkPosition(enumMarkPosition._始点Fの前, _d基本のひも幅 * 1.4) '#104
                 End If
 
                 item.AddBand(band, IdxDrawBandYoko, item.m_row縦横展開.f_i位置番号)
@@ -436,7 +437,8 @@ Partial Public Class clsCalcSquare
                 band.is終点FT線 = False
                 If _IsDrawMarkCurrent Then
                     '横バンドの左
-                    band.SetMarkPosition(enumMarkPosition._始点Fの前, item.m_row縦横展開.f_dVal1) 'ひも幅
+                    'band.SetMarkPosition(enumMarkPosition._始点Fの前, item.m_row縦横展開.f_dVal1) 'ひも幅
+                    band.SetMarkPosition(enumMarkPosition._始点Fの前, _d基本のひも幅) '#104
                 End If
                 '差しひも描画用
                 item.m_rひも位置 = New S領域(band.aバンド位置.p右上, band.aバンド位置.p左下)
