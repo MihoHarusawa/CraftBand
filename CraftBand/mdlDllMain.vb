@@ -117,6 +117,18 @@ Public Module mdlDllMain
             End If
         End Function
 
+        Friend Function GetLastData(ByVal key As String, ByRef val As Boolean) As Boolean
+            Dim str As String = Nothing
+            If Not GetLastData(key, str) OrElse String.IsNullOrWhiteSpace(str) Then
+                Return False
+            End If
+            If Boolean.TryParse(str, val) Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
         Friend Function SetLastData(ByVal key As String, ByVal str As String) As Boolean
             If _KeyValue.ContainsKey(key) Then
                 _KeyValue(key) = str
@@ -134,6 +146,9 @@ Public Module mdlDllMain
 
         Friend Function SetLastData(ByVal key As String, ByVal int As Integer) As Boolean
             Return SetLastData(key, int.ToString)
+        End Function
+        Friend Function SetLastData(ByVal key As String, ByVal val As Boolean) As Boolean
+            Return SetLastData(key, val.ToString)
         End Function
 
 

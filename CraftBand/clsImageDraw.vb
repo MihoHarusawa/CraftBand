@@ -62,7 +62,7 @@ Public Class CImageDraw
     Private Shared dpi_h As Double = -1.0F
     Private Shared dpi_v As Double = -1.0F
 
-    Private Sub getPixcel()
+    Private Shared Sub getPixcel()
         '画面の解像度取得(1回だけ)
         If dpi_h < 0 OrElse dpi_v < 0 Then
             Dim measure As New Bitmap(100, 100) 'Width,Heightはダミー
@@ -73,14 +73,14 @@ Public Class CImageDraw
         End If
     End Sub
 
-    Public ReadOnly Property VerticalDpi As Double
+    Public Shared ReadOnly Property VerticalDpi As Double
         Get
             getPixcel()
             Return dpi_v
         End Get
     End Property
 
-    Public ReadOnly Property HorizontalDpi As Double
+    Public Shared ReadOnly Property HorizontalDpi As Double
         Get
             getPixcel()
             Return dpi_h
@@ -1435,13 +1435,19 @@ Public Class CImageDraw
     '指定点に画像ファイル貼付
     Function load画像(ByVal item As clsImageItem) As Boolean
         If Canvas Is Nothing OrElse item Is Nothing OrElse
-             Not IO.File.Exists(item.m_fpath) Then
+             Not (IO.File.Exists(item.m_fpath) OrElse item.m_image IsNot Nothing) Then
             Return False
         End If
 
         Try
-            '画像を読み込む
-            Dim img As Image = Image.FromFile(item.m_fpath)
+            Dim img As Image
+            If item.m_image IsNot Nothing Then
+                img = item.m_image
+            Else
+                '画像を読み込む
+                img = Image.FromFile(item.m_fpath)
+            End If
+
             Dim p As PointF = pixcel_point(item.m_a四隅.p左上)
             ' 画像を描画する
             _Graphic.DrawImage(img, p.X, p.Y)

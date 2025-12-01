@@ -15,6 +15,8 @@ Public Class clsSelectBasics
     Public Property p_sリスト出力記号 As String    'My.Settings
     Public Property p_unit出力時の寸法単位 As LUnit 'LastData
     Public Property p_i小数点以下桁数 As Integer = 0 'LastData
+    '#105
+    Public Property p_is実寸目盛 As Boolean = True 'My.Settings
 
     'リスト出力単位・桁数による文字列
     Public ReadOnly Property p_sリスト出力長(ByVal d As Double) As String
@@ -147,12 +149,20 @@ Public Class clsSelectBasics
         Else
             SetTargetBandTypeName(Nothing, False)
         End If
+        '実寸目盛 #105
+        Dim isRuler As Boolean
+        If __paras.GetLastData("RulerImage", isRuler) Then
+            p_is実寸目盛 = isRuler
+        Else
+            p_is実寸目盛 = True '有りがデフォルト
+        End If
     End Sub
 
     Friend Sub save()
         __paras.SetLastData("LengthUnitOutput", Me.p_unit出力時の寸法単位.Str)
         __paras.SetLastData("TargetBandTypeName", Me.p_s対象バンドの種類名)
         __paras.SetLastData("DecimalPlaceOutput", Me.p_i小数点以下桁数)
+        __paras.SetLastData("RulerImage", Me.p_is実寸目盛)
     End Sub
 
     'g_clsMasterTablesがセットされた後、マスターを参照して対象バンドをセットする
@@ -305,7 +315,9 @@ Public Class clsSelectBasics
     End Sub
 
     Public Overloads Function ToString() As String
-        Return String.Format("{0} {1} /Output {2} {3} .{4}", p_s対象バンドの種類名, p_unit設定時の寸法単位, p_sリスト出力記号, p_unit出力時の寸法単位, p_i小数点以下桁数)
+        Return String.Format("{0} {1} /Output {2} {3} .{4} {5}",
+                             p_s対象バンドの種類名, p_unit設定時の寸法単位, p_sリスト出力記号, p_unit出力時の寸法単位, p_i小数点以下桁数,
+                            IIf(p_is実寸目盛, " Ruler", ""))
     End Function
 
     Public Function dump() As String
@@ -313,6 +325,9 @@ Public Class clsSelectBasics
         sb.AppendFormat("Current lane={0} width={1}", p_i本幅, p_lenバンド幅).AppendLine()
         sb.AppendFormat("Selected Band {0}", p_row選択中バンドの種類.dump())
         sb.AppendFormat("Unit Setting={0} Output={1} {2} .{3}", p_unit設定時の寸法単位, p_unit出力時の寸法単位, p_sリスト出力記号, p_i小数点以下桁数)
+        If p_is実寸目盛 Then
+            sb.Append(" Ruler")
+        End If
         Return sb.ToString
     End Function
 

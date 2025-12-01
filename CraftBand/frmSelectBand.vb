@@ -47,6 +47,7 @@ Public Class frmSelectBand
         End If
         txtリスト出力記号.Text = g_clsSelectBasics.p_sリスト出力記号
         nud小数点以下桁数.Value = g_clsSelectBasics.p_i小数点以下桁数
+        chk実寸目盛.Checked = g_clsSelectBasics.p_is実寸目盛
 
         'サイズ復元
         Dim siz As Size
@@ -86,6 +87,7 @@ Public Class frmSelectBand
 
         g_clsSelectBasics.p_sリスト出力記号 = txtリスト出力記号.Text
         g_clsSelectBasics.p_i小数点以下桁数 = nud小数点以下桁数.Value
+        g_clsSelectBasics.p_is実寸目盛 = chk実寸目盛.Checked
 
         Dim sel As String = cmb対象バンドの種類名.Text
         If sel <> g_clsSelectBasics.p_s対象バンドの種類名 Then

@@ -2,6 +2,7 @@
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstOutput
 Imports CraftBand.Tables.dstDataTables
+Imports System.Drawing
 
 Public Class clsOutput
 
@@ -19,6 +20,9 @@ Public Class clsOutput
     Friend DataTitle As String 'タイトル
     Friend DataCreater As String '作成者
     Friend DataMemo As String 'メモ欄
+    '#105
+    Friend DataLogoString As String 'ロゴ文字列
+    Friend DataLogoImage As Image = Nothing 'ロゴ画像
 
     'ひもの集計
     Dim _clsBandSum As clsBandSum
@@ -244,6 +248,11 @@ Public Class clsOutput
         DataTitle = row目標寸法.Value("f_sタイトル")
         DataCreater = row目標寸法.Value("f_s作成者")
         DataMemo = row目標寸法.Value("f_sメモ")
+        DataLogoString = row目標寸法.Value("f_sロゴ文字列")
+        Dim picstr As String = row目標寸法.Value("f_sロゴ画像")
+        If Not String.IsNullOrWhiteSpace(picstr) Then
+            DataLogoImage = frmColor.CompressedBase64ToImage(picstr)
+        End If
 
         NextNewRow()
 
@@ -462,6 +471,8 @@ Public Class clsOutput
         End If
         '
         NextNewRow()
+        _CurrentRow.f_sカテゴリー = DataLogoString
+
         Dim viExe As FileVersionInfo = FileVersionInfo.GetVersionInfo(g_clsLog.ExePath)
         Dim viDll As FileVersionInfo = FileVersionInfo.GetVersionInfo(g_clsLog.DllPath)
         _CurrentRow.f_s色 = String.Format("{0} ({1})", IO.Path.GetFileName(viExe.FileName), viExe.FileVersion)

@@ -90,37 +90,61 @@ Public Class clsImageData
     Function MakeImage(ByVal outp As clsOutput) As Boolean
         _clsOutput = outp
 
-        ''ひもに記号を振る(縦横展開テーブルを作り直した時用)
-        'For Each item As clsImageItem In _ImageList
-        '    If item.m_row縦横展開 IsNot Nothing Then
-        '        Dim row As tbl縦横展開Row = item.m_row縦横展開
-        '        If String.IsNullOrEmpty(row.f_s記号) AndAlso
-        '            0 < row.f_i何本幅 AndAlso 0 < row.f_d出力ひも長 Then
-        '            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "MakeImage: No f_s記号 {0} {1} {2} ", row.f_sひも名, row.f_iひも種, row.f_iひも番号)
-        '            row.f_s記号 = outp.GetBandMark(row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
-        '        End If
-        '    End If
-        'Next
-
         '最大の描画範囲を_rDrawingRectにセット
         CurrentItemDrawingRect()
+
+        'ロゴ(#105)
+        If _clsOutput.DataLogoImage IsNot Nothing OrElse
+        Not String.IsNullOrWhiteSpace(_clsOutput.DataLogoString) Then
+            Dim p左下 As S実座標 = _rDrawingRect.p左下 + Unit270 * New Length(2, "cm").Value
+            Dim rLogo As New S領域(p左下, p左下)
+            '画像
+            If _clsOutput.DataLogoImage IsNot Nothing Then
+                Dim itemLogo As New clsImageItem(ImageTypeEnum._画像貼付, 99) '後ろ
+                itemLogo.m_image = _clsOutput.DataLogoImage
+
+                'ピクセルサイズを取得する
+                Dim widthPx As Integer = _clsOutput.DataLogoImage.Width
+                Dim heightPx As Integer = _clsOutput.DataLogoImage.Height
+                '長さ(Dot by Dot)
+                Dim width As New Length(widthPx / HorizontalDpi, "in")
+                Dim height As New Length(heightPx / VerticalDpi, "in")
+                '画像の領域
+                rLogo.p右下 = rLogo.p右下 + Unit0 * width.Value + Unit270 * height.Value
+                itemLogo.m_a四隅 = New S四隅(rLogo)
+                _ImageList.AddItem(itemLogo)
+
+                _rDrawingRect = _rDrawingRect.get拡大領域(itemLogo.Get描画領域())
+            End If
+            '文字列
+            If Not String.IsNullOrWhiteSpace(_clsOutput.DataLogoString) Then
+                Dim aryStr() As String = _clsOutput.DataLogoString.Split(vbCrLf)
+                Dim itemStr As New clsImageItem(rLogo.p右上, aryStr, BasicBandWidth / 2, aryStr.Length)
+                _ImageList.AddItem(itemStr)
+
+                _rDrawingRect = _rDrawingRect.get拡大領域(itemStr.Get描画領域())
+            End If
+        End If
 
         '少し広げる(少なくともバンド幅の2倍分)
         _rDrawingRect.enLarge(mdlUnit.Max(New Length(1, "cm").Value, BasicBandWidth * 2))
 
-        '縦軸追加
-        Dim axvert As clsImageItem = setAxis(False)
-        If axvert Is Nothing Then
-            Return False
-        End If
-        _ImageList.AddItem(axvert)
+        '実寸目盛の有無(#105)
+        If g_clsSelectBasics.p_is実寸目盛 Then
+            '縦軸追加
+            Dim axvert As clsImageItem = setAxis(False)
+            If axvert Is Nothing Then
+                Return False
+            End If
+            _ImageList.AddItem(axvert)
 
-        '横軸追加
-        Dim axhorz As clsImageItem = setAxis(True)
-        If axhorz Is Nothing Then
-            Return False
+            '横軸追加
+            Dim axhorz As clsImageItem = setAxis(True)
+            If axhorz Is Nothing Then
+                Return False
+            End If
+            _ImageList.AddItem(axhorz)
         End If
-        _ImageList.AddItem(axhorz)
 
         '描画
         Dim ret As Boolean = False

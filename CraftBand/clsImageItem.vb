@@ -1879,6 +1879,7 @@ Public Class clsImageItem
     Public m_fpath As String 'jpg
     Public m_angle As Double
     Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明
+    Public m_image As Image = Nothing '読み込み済み画像
 
 
     '描画タイプ(描画順)
