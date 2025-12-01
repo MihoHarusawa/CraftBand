@@ -560,7 +560,7 @@
     <comment>clsMasterTables</comment>
   </data>
   <data name="StringDrawType" xml:space="preserve">
-    <value>横バンド,横四角,正方形(辺),長方形(横),円(径),楕円(横径),上半円(径),正方形(周),長方形(周),円(周),楕円(周),上半円(周),横線,縦線,線分,点</value>
+    <value>横バンド,横四角,正方形(辺),長方形(横),円(径),楕円(横径),上半円(径),正方形(周),長方形(周),円(周),楕円(周),上半円(周),横線,縦線,線分,点,バンド</value>
     <comment>clsMasterTables</comment>
   </data>
   <data name="TitleBackFace" xml:space="preserve">

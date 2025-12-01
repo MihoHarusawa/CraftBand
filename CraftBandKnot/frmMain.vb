@@ -36,6 +36,7 @@ Public Class frmMain
         dgv側面と縁.SetProfile(_Profile_dgv側面と縁)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        editAddParts.SetDraw2(True)
         setAddPartsRefNames()
 
         expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
@@ -1513,7 +1514,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelKnot(_clsCalcKnot, _sFilePath)
-        ret = _clsModelImageData.CalcModel()
+        ret = _clsModelImageData.CalcModel(Me)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then

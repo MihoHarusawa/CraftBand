@@ -41,7 +41,7 @@ Public Class clsModelKnot
     End Sub
 
     'プレビュー処理
-    Public Function CalcModel() As Boolean
+    Public Function CalcModel(ByVal form As frmMain) As Boolean
 
         '各面の領域をセットする
         If Not setRegions() Then
@@ -70,6 +70,9 @@ Public Class clsModelKnot
 
         '描画
         MoveList(imageList側面展開図())
+
+        '付属品
+        AddPartsImage(Me, form.editAddParts, True) '描画2
 
         'ファイル作成
         If Not MakeImage(outp) Then

@@ -157,6 +157,14 @@ Public Class ctrAddParts
         f_i長さ参照3.ValueMember = "Value"
     End Sub
 
+    Sub SetDraw2(ByVal isVisible As Boolean)
+        f_b描画区分2.Visible = isVisible
+    End Sub
+
+    Sub SetDrawOrder(ByVal isVisible As Boolean)
+        f_i表示順.Visible = isVisible
+        f_i非表示順.Visible = isVisible
+    End Sub
 
     '編集表示する refvalues():長さの参照値,(0)は有効フラグ,(1)以上が値
     Function ShowGrid(ByVal works As clsDataTables, ByVal refvalues() As Double) As Boolean
@@ -606,6 +614,10 @@ Public Class ctrAddParts
                             End If
                             If drow.IsNull("f_b描画区分") Then
                                 drow.Value("f_b描画区分") = (g_enumExeName = enumExeName.CraftBandMesh)
+                            End If
+                            'Ver1.9.1以前のデータ対応
+                            If drow.IsNull("f_b描画区分2") Then
+                                drow.Value("f_b描画区分2") = False
                             End If
                             ok = True
                         End If

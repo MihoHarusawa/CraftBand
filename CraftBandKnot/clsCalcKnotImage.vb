@@ -838,7 +838,7 @@ Partial Public Class clsCalcKnot
         _ImageList開始位置 = Nothing
 
         '付属品
-        AddPartsImage(imgData, _frmMain.editAddParts)
+        AddPartsImage(imgData, _frmMain.editAddParts, False) '描画
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then

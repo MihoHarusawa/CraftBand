@@ -10,7 +10,7 @@
     <Shape ID="DesignTable:tbl底_縦横" ZOrder="7" X="515" Y="52" Height="1161" Width="192" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="1157" />
     <Shape ID="DesignTable:tbl底_楕円" ZOrder="6" X="17" Y="635" Height="495" Width="172" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="491" />
     <Shape ID="DesignTable:tbl側面" ZOrder="5" X="242" Y="637" Height="473" Width="174" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="469" />
-    <Shape ID="DesignTable:tbl追加品" ZOrder="4" X="864" Y="58" Height="627" Width="163" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="623" />
+    <Shape ID="DesignTable:tbl追加品" ZOrder="4" X="864" Y="58" Height="605" Width="163" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="601" />
     <Shape ID="DesignTable:tbl縦横展開" ZOrder="3" X="13" Y="54" Height="495" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="491" />
     <Shape ID="DesignTable:tblひも上下" ZOrder="2" X="1042" Y="705" Height="148" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="144" />
     <Shape ID="DesignTable:tbl差しひも" ZOrder="1" X="869" Y="702" Height="517" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="513" />

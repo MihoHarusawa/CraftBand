@@ -1248,7 +1248,7 @@ Partial Public Class clsCalcMesh
         End If
 
         '付属品
-        AddPartsImage(imgData, _frmMain.editAddParts)
+        AddPartsImage(imgData, _frmMain.editAddParts, False)
 
         '描画ファイル作成
         If Not imgData.MakeImage(outp) Then

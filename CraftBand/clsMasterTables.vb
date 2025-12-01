@@ -1050,6 +1050,7 @@ Public Class clsMasterTables
         i_縦線
         i_線分
         i_点
+        i_バンド
     End Enum
 
     Shared _描画位置table As dstWork.tblEnumDataTable = Nothing

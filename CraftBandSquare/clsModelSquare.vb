@@ -39,8 +39,10 @@ Public Class clsModelSquare
         Next
     End Sub
 
-    'プレビュー処理 引数:差しひも非表示かどうか
-    Public Function CalcModel(ByVal isNoInsert As Boolean) As Boolean
+    'プレビュー処理 
+    Public Function CalcModel(ByVal form As frmMain) As Boolean
+        '差しひも非表示かどうか
+        Dim isNoInsert As Boolean = form.rad非表示.Checked
 
         '各面の領域をセットする
         If Not setRegions() Then
@@ -69,6 +71,9 @@ Public Class clsModelSquare
 
         '描画
         MoveList(imageList側面展開図())
+
+        '付属品
+        AddPartsImage(Me, form.editAddParts, True) '描画2
 
         'ファイル作成
         If Not MakeImage(outp) Then

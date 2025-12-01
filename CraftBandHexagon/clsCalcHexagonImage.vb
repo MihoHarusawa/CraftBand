@@ -2988,7 +2988,7 @@ Partial Public Class clsCalcHexagon
 
         '付属品
         If Not isBackFace AndAlso checked.IsSetAll Then
-            AddPartsImage(imgData, _frmMain.editAddParts)
+            AddPartsImage(imgData, _frmMain.editAddParts, False)
         End If
 
         '描画ファイル作成

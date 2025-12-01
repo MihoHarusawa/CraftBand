@@ -39,6 +39,7 @@ Public Class frmMain
         editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter, My.Resources.EnumStringPosition)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        editAddParts.SetDraw2(True)
         setAddPartsRefNames()
         editUpDown.FormCaption = Me.Text
 
@@ -1837,7 +1838,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelSquare(_clsCalcSquare, _sFilePath)
-        ret = _clsModelImageData.CalcModel(rad非表示.Checked)
+        ret = _clsModelImageData.CalcModel(Me) 'rad非表示.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then

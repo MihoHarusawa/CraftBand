@@ -43,6 +43,7 @@ Public Class frmMain
         dgv折りカラー.SetProfile(_Profile_dgv折りカラー)
 
         editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        editAddParts.SetDraw2(True)
         setAddPartsRefNames()
         editUpDown.FormCaption = Me.Text
         editUpDown.IsSquare45 = True
@@ -1955,7 +1956,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelSquare45(_clsCalcSquare45, _sFilePath)
-        ret = _clsModelImageData.CalcModel(radAfter.Checked)
+        ret = _clsModelImageData.CalcModel(Me) 'radAfter.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
@@ -2012,7 +2013,7 @@ Public Class frmMain
         End If
         '
         Cursor.Current = Cursors.WaitCursor
-        Dim ret As Boolean = _clsModelImageData.CalcModel(radAfter.Checked)
+        Dim ret As Boolean = _clsModelImageData.CalcModel(Me) 'radAfter.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then

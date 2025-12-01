@@ -90,7 +90,8 @@ Public Class clsModelSquare45
 
 
     'プレビュー処理
-    Public Function CalcModel(ByVal isOriAfter As Boolean) As Boolean
+    Public Function CalcModel(ByVal form As frmMain) As Boolean
+        Dim isOriAfter As Boolean = form.radAfter.Checked
         Clear()
         If Not _calc.p_b長方形である Then
             '{0}が長方形でないため描画できません。
@@ -134,6 +135,9 @@ Public Class clsModelSquare45
 
         '絵の貼付と面枠描画
         MoveList(imageList側面展開図(oriProc))
+
+        '付属品
+        AddPartsImage(Me, form.editAddParts, True) '描画2
 
         'ファイル作成
         If Not MakeImage(outp) Then

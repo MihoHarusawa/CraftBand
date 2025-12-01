@@ -5,7 +5,7 @@ Imports CraftBand.Tables.dstDataTables
 Public Module mdlAddPartsImage
 
     '追加品のレコードをイメージ情報化
-    Function AddPartsImage(ByVal imgData As clsImageData, ByVal editAddParts As ctrAddParts) As Integer
+    Function AddPartsImage(ByVal imgData As clsImageData, ByVal editAddParts As ctrAddParts, ByVal is2nd As Boolean) As Integer
         If imgData Is Nothing OrElse editAddParts Is Nothing Then
             Return -1
         End If
@@ -45,7 +45,8 @@ Public Module mdlAddPartsImage
             Next
 
             '描画指定されている場合(f_b描画区分はi番号ごと)
-            If 0 < i点数 AndAlso (first描画位置 <> enum描画位置.i_なし) AndAlso rows(iFrom).f_b描画区分 Then
+            If 0 < i点数 AndAlso (first描画位置 <> enum描画位置.i_なし) AndAlso
+                (Not is2nd AndAlso (rows(iFrom).f_b描画区分) OrElse (is2nd AndAlso rows(iFrom).f_b描画区分2)) Then
                 Dim isCenter As Boolean = (first描画位置 <> enum描画位置.i_左下)
                 If isCenter Then
                     i点数 = 1 '同位置なので描画は1回だけ

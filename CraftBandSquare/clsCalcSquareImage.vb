@@ -184,7 +184,7 @@ Partial Public Class clsCalcSquare
 
         If Not isBackFace AndAlso Not is底のみ Then
             '付属品
-            AddPartsImage(imgData, _frmMain.editAddParts)
+            AddPartsImage(imgData, _frmMain.editAddParts, False) '描画
         End If
 
         '描画ファイル作成
