@@ -1,8 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
-Imports System.Reflection.Metadata
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -1215,10 +1213,10 @@ Public Class CImageDraw
 
         Dim ret As Boolean = True
         Select Case item.m_row追加品.f_i描画形状
-            Case enum描画形状.i_横バンド
-                Dim band As New CBand(item.m_row追加品)
-                band.SetBandF(New S線分(item.m_rひも位置.p左下, item.m_rひも位置.p右下), item.m_dひも幅, Unit90)
-                ret = drawバンド(band)
+            'Case enum描画形状.i_横バンド
+            '    Dim band As New CBand(item.m_row追加品)
+            '    band.SetBandF(New S線分(item.m_rひも位置.p左下, item.m_rひも位置.p右下), item.m_dひも幅, Unit90)
+            '    ret = drawバンド(band)
 
             Case enum描画形状.i_横四角
 
@@ -1339,6 +1337,13 @@ Public Class CImageDraw
                     Dim penTmp As New Pen(colset.PenBand.Color)
                     penTmp.Width = Math.Max(1, CInt(Math.Round(item.m_dひも幅)))
                     _Graphic.DrawLine(penTmp, New Point(rect.Left, rect.Bottom), New Point(rect.Right, rect.Top))
+                End If
+
+            Case enum描画形状.i_バンド, enum描画形状.i_横バンド
+                If item.m_bandList IsNot Nothing AndAlso 0 < item.m_bandList.Count Then
+                    For Each band As CBand In item.m_bandList
+                        ret = ret And drawバンド(band)
+                    Next
                 End If
 
         End Select

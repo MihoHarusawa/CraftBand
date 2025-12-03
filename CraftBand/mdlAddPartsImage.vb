@@ -1,4 +1,5 @@
-﻿Imports CraftBand.clsImageItem
+﻿Imports System.Text.RegularExpressions
+Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 
@@ -9,6 +10,8 @@ Public Module mdlAddPartsImage
         If imgData Is Nothing OrElse editAddParts Is Nothing Then
             Return -1
         End If
+        _基本のひも幅 = imgData.BasicBandWidth
+
         'i番号,iひも番号順
         Dim rows() As tbl追加品Row = editAddParts.GetAddPartsRecords()
         If rows.Count = 0 Then
@@ -70,10 +73,12 @@ Public Module mdlAddPartsImage
                         Dim isMark As Boolean = (iset = 1 AndAlso Not String.IsNullOrWhiteSpace(row.f_s記号))
                         '描画点(固定の場合)
                         Dim p中心 As S実座標 = __p中心
+                        Dim d角度 As Double = 0
                         If row.f_i描画位置 = enum描画位置.i_中心 Then
                             p中心 = __p中心
                         ElseIf row.f_i描画位置 = enum描画位置.i_座標 Then
-                            If p中心.FromString(row.f_s座標) Then
+                            '#106 座標と角度を指定
+                            If Parse座標と角度(row.f_s座標, p中心, d角度) Then
                                 Dim dif As New S差分(pOrigin, p中心)
                                 p中心 = __p中心 + dif
                             Else
@@ -126,11 +131,13 @@ Public Module mdlAddPartsImage
                                 count += add_縦線(itemlist, isCenter, p中心, isMark, row)
 
                             Case enum描画形状.i_線分
-                                count += add_線分(itemlist, isCenter, p中心, isMark, row)
+                                count += add_線分(itemlist, isCenter, p中心, isMark, row, d角度)
 
                             Case enum描画形状.i_点
                                 count += add_点(itemlist, isCenter, p中心, isMark, row)
 
+                            Case enum描画形状.i_バンド
+                                count += add_バンド(itemlist, isCenter, p中心, isMark, row, d角度)
 
                             Case Else
                                 Continue For
@@ -152,39 +159,114 @@ Public Module mdlAddPartsImage
         Return count
     End Function
 
+    Private Function Parse座標と角度(ByVal obj As Object, ByRef p As S実座標, ByRef angle As Double) As Boolean
+        '初期値(原点、0度)
+        p.Zero()
+        angle = 0
+
+        '空やNullは初期値とします
+        If obj Is Nothing OrElse IsDBNull(obj) Then
+            Return True
+        End If
+        Dim str As String = CStr(obj)
+        If String.IsNullOrWhiteSpace(str) Then
+            Return True
+        End If
+
+        ' ----------------- 正規表現パターン -----------------
+        ' 形式 1: (x,y)α または (x,y)  -> グループ 1, 2, 5
+        ' 形式 2: x,y,α または x,y      -> グループ 3, 4, 6
+        ' 形式 3: (x,y),α               -> グループ 3, 4, 6 (カンマ区切りとして処理)
+        Dim pattern As String = "^\s*(?:" &
+                            "\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)\s*([\d\.-]+)?" &
+                            "|" &
+                            "([\d\.-]+)\s*,\s*([\d\.-]+)\s*(?:,\s*([\d\.-]+)\s*)?" &
+                            ")\s*$"
+        Dim match As Match = Regex.Match(str, pattern)
+
+        If Not match.Success Then
+            Return False ' パターンに一致しない (NG)
+        End If
+
+        Dim xStr As String
+        Dim yStr As String
+        Dim alphaStr As String = ""
+
+        'x, y の値を取得
+        If match.Groups(1).Success Then
+            ' --- 形式 (x,y)α にマッチした場合 (グループ 1, 2, 3) 
+            xStr = match.Groups(1).Value
+            yStr = match.Groups(2).Value
+            alphaStr = match.Groups(3).Value ' αはグループ3
+
+        ElseIf match.Groups(4).Success Then
+            ' --- 形式 x,y,α または (x,y),α にマッチした場合 (グループ 4, 5, 6) 
+            xStr = match.Groups(4).Value
+            yStr = match.Groups(5).Value
+            alphaStr = match.Groups(6).Value ' αはグループ6
+
+        Else
+            Return False ' マッチングロジックの失敗
+        End If
+
+        '数値変換
+        ' x, y が正しくなければ NG
+        If Not Double.TryParse(xStr, p.X) Then Return False
+        If Not Double.TryParse(yStr, p.Y) Then Return False
+
+        'α の値を取得 (省略時は初期値ゼロ)
+        If 0 < alphaStr.Length Then
+            If Not Double.TryParse(alphaStr, angle) Then Return False
+        End If
+
+        Return True '変換に成功
+    End Function
+
+
 
     Dim __p中心 As S実座標
     Dim __p左下 As S実座標
     Dim _list点 As List(Of S実座標)
+    Dim _基本のひも幅 As Double
 
     Private Function add_横バンド(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
         Dim count As Integer = 0
-        Dim item As clsImageItem
+        Dim item As New clsImageItem(ImageTypeEnum._付属品, row)
+        item.m_bandList = New CBandList
 
-        '左下:マスター本数,長さ 
-        '中心:1本,長さ
+        '左下:マスターの1セット分を描く 
+        '中心:マスターが複数本であっても1本分だけ描く
         Dim i本数 As Integer = IIf(isCenter, 1, row.f_iひも本数 / row.f_i点数) 'マスターのひも数
         Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+
         For i As Integer = 1 To i本数
-            item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
+                '指定位置をバンドの中心として描画
                 item.m_rひも位置.p左下 = New S実座標(p中心.X - row.f_d長さ / 2, p中心.Y - dひも幅 / 2)
                 item.m_rひも位置.p右上 = New S実座標(p中心.X + row.f_d長さ / 2, p中心.Y + dひも幅 / 2)
             Else
+                If i = 1 AndAlso row.f_iひも番号 = 1 Then
+                    __p左下.Y -= dひも幅
+                End If
                 item.m_rひも位置.p左下 = New S実座標(__p左下.X, __p左下.Y - dひも幅)
                 item.m_rひも位置.p右上 = New S実座標(__p左下.X + row.f_d長さ, __p左下.Y)
-
                 __p左下.Y -= dひも幅 * 2
             End If
-            item.m_dひも幅 = dひも幅
+
+            Dim band As New CBand(row)
+            band.SetBandF(New S線分(item.m_rひも位置.p左下, item.m_rひも位置.p右下), dひも幅, Unit90)
+            item.m_bandList.Add(band)
 
             If isMark AndAlso i = 1 Then
                 item.p_p文字位置 = item.m_rひも位置.p右上
             End If
-            itemlist.AddItem(item)
             count += 1
         Next
+        If 0 < count Then
+            itemlist.AddItem(item)
+        End If
+
         Return count
     End Function
 
@@ -659,12 +741,14 @@ Public Module mdlAddPartsImage
         Return count
     End Function
 
-    Function add_線分(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+    '角度は座標とセットで指定した時のみ,以外はゼロ
+    Function add_線分(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row, ByVal d角度 As Double) As Integer
         Dim count As Integer = 0
         Dim item As clsImageItem
 
         Dim d長さ As Double = row.f_d長さ
-        Dim d角度 As Double = row.f_dひも長加算
+        'Dim d角度 As Double = row.f_dひも長加算
+
 
         Dim delta As New S差分(New S実座標(0, 0), New S実座標(d長さ, 0))
         Dim line As S線分
@@ -735,6 +819,53 @@ Public Module mdlAddPartsImage
         '    __p左下.Y -= item.m_rひも位置.y高さ + row.f_d描画厚
         'End If
         Return count
+    End Function
+
+    '角度は座標とセットで指定した時のみ,以外はゼロ
+    Function add_バンド(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row, ByVal d角度 As Double) As Integer
+        '●→───────┐T 　┌─┐┌─┐
+        '│０度　　　　　　│^ 　│　││　│     反・deltaAx(F→T)方向に並べる
+        '└────────┘F 　│90││　│     間隔は描画厚
+        '┌────────┐　　│度││　│
+        '│　　　　　　　　│　　↑　││　│
+        '└────────┘　　●─┘└─┘
+        '　　　　　　　　　　　　T <- F
+        Dim item As clsImageItem = New clsImageItem(ImageTypeEnum._付属品, row)
+        item.m_bandList = New CBandList
+        Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅)
+
+        '左下:マスターの1セット分を描く (点数分呼び出されるので)
+        '中心:全点数分を描く(呼び出しは1回だけなので)
+        Dim i本数 As Integer = IIf(isCenter, row.f_iひも本数, row.f_iひも本数 / row.f_i点数) 'マスターのひも数
+        If i本数 < 1 Then
+            Return 0
+        End If
+
+        Dim deltaBand As New S差分(d角度) '始点→終点
+        Dim deltaAx As New S差分(d角度 + 90) 'F→T(軸方向)
+        Dim deltaOrder As New S差分(d角度 - 90) 'T→F方向
+
+        Dim p As S実座標
+        If isCenter Then
+            p = p中心 + deltaOrder * (dひも幅 / 2)
+        Else
+            p = __p左下 + deltaOrder * dひも幅
+            __p左下.Y -= (dひも幅 + row.f_d描画厚) * i本数
+        End If
+        Dim line As New S線分(p, p + deltaBand * row.f_d長さ)
+
+        For i As Integer = 1 To i本数
+            Dim band As New CBand(row)
+            band.SetBand(line, dひも幅, deltaAx)
+            If isMark AndAlso i = 1 Then
+                band.SetMarkPosition(CBand.enumMarkPosition._始点の前, _基本のひも幅)
+            End If
+
+            item.m_bandList.Add(band)
+            line += deltaOrder * (dひも幅 + row.f_d描画厚)
+        Next
+        itemlist.AddItem(item)
+        Return i本数
     End Function
 
 End Module

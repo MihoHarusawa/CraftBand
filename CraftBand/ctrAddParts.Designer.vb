@@ -480,7 +480,7 @@ Partial Class ctrAddParts
         f_s座標.HeaderText = "座標"
         f_s座標.Name = "f_s座標"
         f_s座標.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        f_s座標.ToolTipText = "x , y の形式で指定してください"
+        f_s座標.ToolTipText = "x , y もしくは (x,y) 形式、線分とバンドは角度も追記できます"
         f_s座標.Visible = False
         ' 
         ' f_i描画形状3

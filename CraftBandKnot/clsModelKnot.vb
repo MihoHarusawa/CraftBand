@@ -71,6 +71,8 @@ Public Class clsModelKnot
         '描画
         MoveList(imageList側面展開図())
 
+        '原点
+        CenterCoordinates = _region各面(enumBasketPlateIdx._bottom).p中央
         '付属品
         AddPartsImage(Me, form.editAddParts, True) '描画2
 

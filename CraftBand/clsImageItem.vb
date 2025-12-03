@@ -1,10 +1,6 @@
 ﻿Imports System.Drawing
-Imports System.Runtime.ConstrainedExecution
 Imports System.Text
-Imports System.Windows.Forms
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsDataTables
-Imports CraftBand.clsImageItem
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
 
@@ -1871,7 +1867,7 @@ Public Class clsImageItem
     Public m_knot As CKnot = Nothing
 
     'バンドセット
-    Friend m_bandList As CBandList = Nothing
+    Friend m_bandList As CBandList = Nothing    '付属品
     Friend m_clipList As CBandList = Nothing
     Friend m_aDraw As S四隅 '指定があればこの範囲にだけ
 
@@ -1911,7 +1907,7 @@ Public Class clsImageItem
         _折り返し線 'm_listLine
 
         _底の中央線  'm_listLine
-        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域
+        _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域,m_bandList
 
         _文字列 'm_p位置,_r文字領域
 
@@ -2192,10 +2188,12 @@ Public Class clsImageItem
                 r描画領域 = r描画領域.get拡大領域(m_lineList.Get描画領域())
 
             Case ImageTypeEnum._付属品, ImageTypeEnum._付属品0
-                Debug.Print("m_dひも幅({0}) m_rひも位置 {1}", m_dひも幅, m_rひも位置.ToString)
+                'Debug.Print("m_dひも幅({0}) m_rひも位置 {1}", m_dひも幅, m_rひも位置.ToString)
                 r描画領域 = m_rひも位置.get拡大領域(m_dひも幅)
                 r描画領域 = r描画領域.get拡大領域(_r文字領域) 'm_p文字位置を含む
-                Debug.Print("r描画領域({0}) ", r描画領域.ToString)
+                If m_bandList IsNot Nothing Then
+                    r描画領域 = r描画領域.get拡大領域(m_bandList.Get描画領域())
+                End If
 
             Case ImageTypeEnum._底枠, ImageTypeEnum._四隅領域, ImageTypeEnum._四隅領域線
                 r描画領域 = m_a四隅.r外接領域
