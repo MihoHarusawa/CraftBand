@@ -185,6 +185,11 @@ Public Class ctrExpanding
         Return ret
     End Function
 
+    Sub SetDrawOrder(ByVal isVisible As Boolean)
+        f_i表示順.Visible = isVisible
+        f_i非表示順.Visible = isVisible
+    End Sub
+
     'カラム幅を文字列に保存
     Public ReadOnly Property GetColumnWidthString() As String
         Get

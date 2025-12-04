@@ -6,17 +6,46 @@ Imports CraftBand.Tables.dstDataTables
 Public Module mdlAddPartsImage
 
     '追加品のレコードをイメージ情報化
-    Function AddPartsImage(ByVal imgData As clsImageData, ByVal editAddParts As ctrAddParts, ByVal is2nd As Boolean) As Integer
+    Function AddPartsImage(ByVal imgData As clsImageData, ByVal data As clsDataTables, ByVal is2nd As Boolean) As Integer
+        If imgData Is Nothing OrElse data Is Nothing Then
+            Return -1
+        End If
+
+        'i番号,iひも番号順
+        Dim order As String = "f_i番号 , f_iひも番号"
+        Dim rows() As tbl追加品Row = data.p_tbl追加品.Select(Nothing, order)
+        If rows.Count = 0 Then
+            Return 0
+        End If
+
+        Return AddPartsImage(imgData, rows, is2nd)
+    End Function
+
+    Private Function AddPartsImage(ByVal imgData As clsImageData, ByVal editAddParts As ctrAddParts, ByVal is2nd As Boolean) As Integer
         If imgData Is Nothing OrElse editAddParts Is Nothing Then
             Return -1
         End If
-        _基本のひも幅 = imgData.BasicBandWidth
 
         'i番号,iひも番号順
         Dim rows() As tbl追加品Row = editAddParts.GetAddPartsRecords()
         If rows.Count = 0 Then
             Return 0
         End If
+
+        Return AddPartsImage(imgData, rows, is2nd)
+    End Function
+
+    Private Function AddPartsImage(ByVal imgData As clsImageData, ByVal rows As tbl追加品Row(), ByVal is2nd As Boolean) As Integer
+        If imgData Is Nothing OrElse rows Is Nothing Then
+            Return -1
+        End If
+        _基本のひも幅 = imgData.BasicBandWidth
+
+        ''i番号,iひも番号順
+        'Dim rows() As tbl追加品Row = editAddParts.GetAddPartsRecords()
+        'If rows.Count = 0 Then
+        '    Return 0
+        'End If
 
         '現在の描画位置
         __p左下 = imgData.CurrentItemDrawingRect.p左下 '最下

@@ -3091,6 +3091,7 @@ Namespace Tables
                 Me.columnf_d連続ひも長.DefaultValue = CType(0R,Double)
                 Me.columnf_s記号.DefaultValue = CType("",String)
                 Me.columnf_i表示順.DefaultValue = CType(0,Integer)
+                Me.columnf_i非表示順.DefaultValue = CType("0",String)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
             End Sub
             
@@ -3758,6 +3759,7 @@ Namespace Tables
                 Me.columnf_i描画形状.DefaultValue = CType(0,Short)
                 Me.columnf_bシステム区分.DefaultValue = CType(false,Boolean)
                 Me.columnf_i表示順.DefaultValue = CType(0,Integer)
+                Me.columnf_i非表示順.DefaultValue = CType("0",String)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
             End Sub
             
@@ -5226,8 +5228,8 @@ Namespace Tables
                         ByVal f_iひも本数 As Integer,  _
                         ByVal f_s記号 As String,  _
                         ByVal f_s無効理由 As String,  _
-                        ByVal f_i表示順 As String,  _
-                        ByVal f_i非表示順 As String,  _
+                        ByVal f_i表示順 As Integer,  _
+                        ByVal f_i非表示順 As Integer,  _
                         ByVal f_sメモ As String) As tbl差しひもRow
                 Dim rowtbl差しひもRow As tbl差しひもRow = CType(Me.NewRow,tbl差しひもRow)
                 Dim columnValuesArray() As Object = New Object() {f_i番号, f_b有効区分, f_i配置面, f_i角度, f_i中心点, f_i何本幅, f_s色, f_i開始位置, f_i何本ごと, f_i同位置数, f_i同位置順, f_i差し位置, f_dひも長, f_dひも長加算, f_d出力ひも長, f_iひも本数, f_s記号, f_s無効理由, f_i表示順, f_i非表示順, f_sメモ}
@@ -5321,9 +5323,9 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s記号)
                 Me.columnf_s無効理由 = New Global.System.Data.DataColumn("f_s無効理由", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s無効理由)
-                Me.columnf_i表示順 = New Global.System.Data.DataColumn("f_i表示順", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                Me.columnf_i表示順 = New Global.System.Data.DataColumn("f_i表示順", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i表示順)
-                Me.columnf_i非表示順 = New Global.System.Data.DataColumn("f_i非表示順", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                Me.columnf_i非表示順 = New Global.System.Data.DataColumn("f_i非表示順", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_i非表示順)
                 Me.columnf_sメモ = New Global.System.Data.DataColumn("f_sメモ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_sメモ)
@@ -5348,7 +5350,8 @@ Namespace Tables
                 Me.columnf_iひも本数.DefaultValue = CType(0,Integer)
                 Me.columnf_s記号.DefaultValue = CType("",String)
                 Me.columnf_s無効理由.DefaultValue = CType("",String)
-                Me.columnf_i非表示順.DefaultValue = CType("0",String)
+                Me.columnf_i表示順.DefaultValue = CType(0,Integer)
+                Me.columnf_i非表示順.DefaultValue = CType(0,Integer)
                 Me.columnf_sメモ.DefaultValue = CType("",String)
             End Sub
             
@@ -8323,11 +8326,11 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_i非表示順() As String
                 Get
-                    Try 
+                    If Me.Isf_i非表示順Null Then
+                        Return "0"
+                    Else
                         Return CType(Me(Me.tabletbl側面.f_i非表示順Column),String)
-                    Catch e As Global.System.InvalidCastException
-                        Throw New Global.System.Data.StrongTypingException("テーブル 'tbl側面' にある列 'f_i非表示順' の値は DBNull です。", e)
-                    End Try
+                    End If
                 End Get
                 Set
                     Me(Me.tabletbl側面.f_i非表示順Column) = value
@@ -9039,11 +9042,11 @@ Namespace Tables
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
             Public Property f_i非表示順() As String
                 Get
-                    Try 
+                    If Me.Isf_i非表示順Null Then
+                        Return "0"
+                    Else
                         Return CType(Me(Me.tabletbl追加品.f_i非表示順Column),String)
-                    Catch e As Global.System.InvalidCastException
-                        Throw New Global.System.Data.StrongTypingException("テーブル 'tbl追加品' にある列 'f_i非表示順' の値は DBNull です。", e)
-                    End Try
+                    End If
                 End Get
                 Set
                     Me(Me.tabletbl追加品.f_i非表示順Column) = value
@@ -10692,13 +10695,13 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_i表示順() As String
+            Public Property f_i表示順() As Integer
                 Get
-                    Try 
-                        Return CType(Me(Me.tabletbl差しひも.f_i表示順Column),String)
-                    Catch e As Global.System.InvalidCastException
-                        Throw New Global.System.Data.StrongTypingException("テーブル 'tbl差しひも' にある列 'f_i表示順' の値は DBNull です。", e)
-                    End Try
+                    If Me.Isf_i表示順Null Then
+                        Return 0
+                    Else
+                        Return CType(Me(Me.tabletbl差しひも.f_i表示順Column),Integer)
+                    End If
                 End Get
                 Set
                     Me(Me.tabletbl差しひも.f_i表示順Column) = value
@@ -10707,12 +10710,12 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_i非表示順() As String
+            Public Property f_i非表示順() As Integer
                 Get
                     If Me.Isf_i非表示順Null Then
-                        Return "0"
+                        Return 0
                     Else
-                        Return CType(Me(Me.tabletbl差しひも.f_i非表示順Column),String)
+                        Return CType(Me(Me.tabletbl差しひも.f_i非表示順Column),Integer)
                     End If
                 End Get
                 Set

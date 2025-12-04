@@ -31,6 +31,8 @@ Partial Class ctrExpanding
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Panel = New Windows.Forms.Panel()
         lblDirection = New Windows.Forms.Label()
         btn削除 = New Windows.Forms.Button()
@@ -52,6 +54,8 @@ Partial Class ctrExpanding
         f_s記号4 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_d出力ひも長4 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_s色4 = New Windows.Forms.DataGridViewComboBoxColumn()
+        f_i表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_i非表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_sメモ4 = New Windows.Forms.DataGridViewTextBoxColumn()
         Panel.SuspendLayout()
         CType(dgv展開, ComponentModel.ISupportInitialize).BeginInit()
@@ -68,7 +72,7 @@ Partial Class ctrExpanding
         Panel.Enabled = False
         Panel.Location = New System.Drawing.Point(3, 3)
         Panel.Name = "Panel"
-        Panel.Size = New System.Drawing.Size(840, 413)
+        Panel.Size = New System.Drawing.Size(840, 392)
         Panel.TabIndex = 0
         ' 
         ' lblDirection
@@ -76,16 +80,16 @@ Partial Class ctrExpanding
         lblDirection.AutoSize = True
         lblDirection.Location = New System.Drawing.Point(6, 8)
         lblDirection.Name = "lblDirection"
-        lblDirection.Size = New System.Drawing.Size(115, 20)
+        lblDirection.Size = New System.Drawing.Size(106, 19)
         lblDirection.TabIndex = 0
         lblDirection.Text = "{0} から順に {1}へ"
         ' 
         ' btn削除
         ' 
         btn削除.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn削除.Location = New System.Drawing.Point(123, 362)
+        btn削除.Location = New System.Drawing.Point(123, 344)
         btn削除.Name = "btn削除"
-        btn削除.Size = New System.Drawing.Size(111, 46)
+        btn削除.Size = New System.Drawing.Size(111, 44)
         btn削除.TabIndex = 3
         btn削除.Text = "削除(&R)"
         ToolTip1.SetToolTip(btn削除, "選択した行を削除します")
@@ -94,9 +98,9 @@ Partial Class ctrExpanding
         ' btn追加
         ' 
         btn追加.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn追加.Location = New System.Drawing.Point(723, 362)
+        btn追加.Location = New System.Drawing.Point(723, 344)
         btn追加.Name = "btn追加"
-        btn追加.Size = New System.Drawing.Size(111, 46)
+        btn追加.Size = New System.Drawing.Size(111, 44)
         btn追加.TabIndex = 4
         btn追加.Text = "追加(&A)"
         ToolTip1.SetToolTip(btn追加, "行を追加します")
@@ -105,9 +109,9 @@ Partial Class ctrExpanding
         ' btnリセット
         ' 
         btnリセット.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btnリセット.Location = New System.Drawing.Point(6, 362)
+        btnリセット.Location = New System.Drawing.Point(6, 344)
         btnリセット.Name = "btnリセット"
-        btnリセット.Size = New System.Drawing.Size(111, 46)
+        btnリセット.Size = New System.Drawing.Size(111, 44)
         btnリセット.TabIndex = 2
         btnリセット.Text = "リセット(&C)"
         ToolTip1.SetToolTip(btnリセット, "変更をリセットし初期状態に戻します")
@@ -121,13 +125,13 @@ Partial Class ctrExpanding
         dgv展開.AutoGenerateColumns = False
         dgv展開.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv展開.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv展開.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_iひも種4, f_i位置番号4, f_sひも名4, f_iひも番号4, f_i何本幅4, f_d長さ4, f_d幅4, f_dひも長4, f_dひも長加算4, f_dひも長加算24, f_s記号4, f_d出力ひも長4, f_s色4, f_sメモ4})
+        dgv展開.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_iひも種4, f_i位置番号4, f_sひも名4, f_iひも番号4, f_i何本幅4, f_d長さ4, f_d幅4, f_dひも長4, f_dひも長加算4, f_dひも長加算24, f_s記号4, f_d出力ひも長4, f_s色4, f_i表示順, f_i非表示順, f_sメモ4})
         dgv展開.DataSource = BindingSource展開
-        dgv展開.Location = New System.Drawing.Point(6, 38)
+        dgv展開.Location = New System.Drawing.Point(6, 36)
         dgv展開.Name = "dgv展開"
         dgv展開.RowHeadersWidth = 51
         dgv展開.RowTemplate.Height = 29
-        dgv展開.Size = New System.Drawing.Size(828, 315)
+        dgv展開.Size = New System.Drawing.Size(828, 299)
         dgv展開.TabIndex = 1
         ' 
         ' BindingSource展開
@@ -293,6 +297,24 @@ Partial Class ctrExpanding
         f_s色4.Resizable = Windows.Forms.DataGridViewTriState.True
         f_s色4.Width = 125
         ' 
+        ' f_i表示順
+        ' 
+        f_i表示順.DataPropertyName = "f_i表示順"
+        DataGridViewCellStyle9.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i表示順.DefaultCellStyle = DataGridViewCellStyle9
+        f_i表示順.HeaderText = "表示順"
+        f_i表示順.Name = "f_i表示順"
+        f_i表示順.Visible = False
+        ' 
+        ' f_i非表示順
+        ' 
+        f_i非表示順.DataPropertyName = "f_i非表示順"
+        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i非表示順.DefaultCellStyle = DataGridViewCellStyle10
+        f_i非表示順.HeaderText = "非表示順"
+        f_i非表示順.Name = "f_i非表示順"
+        f_i非表示順.Visible = False
+        ' 
         ' f_sメモ4
         ' 
         f_sメモ4.DataPropertyName = "f_sメモ"
@@ -304,12 +326,12 @@ Partial Class ctrExpanding
         ' 
         ' ctrExpanding
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
         AutoSizeMode = Windows.Forms.AutoSizeMode.GrowAndShrink
         Controls.Add(Panel)
         Name = "ctrExpanding"
-        Size = New System.Drawing.Size(872, 449)
+        Size = New System.Drawing.Size(872, 427)
         Panel.ResumeLayout(False)
         Panel.PerformLayout()
         CType(dgv展開, ComponentModel.ISupportInitialize).EndInit()
@@ -338,6 +360,8 @@ Partial Class ctrExpanding
     Friend WithEvents f_s記号4 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_d出力ひも長4 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s色4 As Windows.Forms.DataGridViewComboBoxColumn
+    Friend WithEvents f_i表示順 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i非表示順 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ4 As Windows.Forms.DataGridViewTextBoxColumn
 
 End Class

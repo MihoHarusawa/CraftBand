@@ -711,7 +711,7 @@ Public Class clsDataTables
 
 #Region "ワークテーブルとtbl縦横展開の転送"
     '※キーはf_iひも種,f_iひも番号 [対象は、f_iひも種のbitを持つレコード]
-    '保持するのは入力値:  f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ   f_i何本幅は対応Exeのみ
+    '保持するのは入力値:  f_dひも長加算,f_dひも長加算2, f_s色, f_sメモ, f_i表示順, f_i非表示順   f_i何本幅は対応Exeのみ
 
     'f_i何本幅の保持対象の時True
     Private Function isLoad何本幅() As Boolean
@@ -740,6 +740,8 @@ Public Class clsDataTables
                 If isget何本幅 Then
                     this.f_i何本幅 = 1
                 End If
+                this.f_i表示順 = 0
+                this.f_i非表示順 = 0
 
             Else
                 this.f_dひも長加算 = other.f_dひも長加算
@@ -761,6 +763,8 @@ Public Class clsDataTables
                 this.f_b内側区分2 = other.f_b内側区分2
                 this.f_s色2 = other.f_s色2
                 this.f_i描画種 = other.f_i描画種
+                this.f_i表示順 = other.f_i表示順
+                this.f_i非表示順 = other.f_i非表示順
 
                 'f_i何本幅
                 If isget何本幅 Then

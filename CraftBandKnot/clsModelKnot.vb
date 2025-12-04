@@ -74,7 +74,8 @@ Public Class clsModelKnot
         '原点
         CenterCoordinates = _region各面(enumBasketPlateIdx._bottom).p中央
         '付属品
-        AddPartsImage(Me, form.editAddParts, True) '描画2
+        'AddPartsImage(Me, form.editAddParts, True) '描画2
+        AddPartsImage(Me, _calc._Data, True) '描画2
 
         'ファイル作成
         If Not MakeImage(outp) Then

@@ -205,6 +205,11 @@ Public Class ctrInsertBand
         Return ret
     End Function
 
+    Sub SetDrawOrder(ByVal isVisible As Boolean)
+        f_i表示順.Visible = isVisible
+        f_i非表示順.Visible = isVisible
+    End Sub
+
     'enum文字列
     Public ReadOnly Property PlateString(ByVal plate As enum配置面) As String
         Get

@@ -32,6 +32,8 @@ Partial Class ctrInsertBand
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
         BindingSource差しひも = New System.Windows.Forms.BindingSource(components)
         ToolTip1 = New System.Windows.Forms.ToolTip(components)
         btn削除 = New Windows.Forms.Button()
@@ -58,6 +60,8 @@ Partial Class ctrInsertBand
         f_dひも長加算1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_d出力ひも長1 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_s無効理由1 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_i表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_i非表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_sメモ1 = New Windows.Forms.DataGridViewTextBoxColumn()
         CType(BindingSource差しひも, ComponentModel.ISupportInitialize).BeginInit()
         Panel.SuspendLayout()
@@ -72,9 +76,9 @@ Partial Class ctrInsertBand
         ' btn削除
         ' 
         btn削除.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn削除.Location = New System.Drawing.Point(357, 361)
+        btn削除.Location = New System.Drawing.Point(357, 343)
         btn削除.Name = "btn削除"
-        btn削除.Size = New System.Drawing.Size(111, 46)
+        btn削除.Size = New System.Drawing.Size(111, 44)
         btn削除.TabIndex = 4
         btn削除.Text = "削除(&R)"
         ToolTip1.SetToolTip(btn削除, "選択した行を削除します")
@@ -83,9 +87,9 @@ Partial Class ctrInsertBand
         ' btn追加
         ' 
         btn追加.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
-        btn追加.Location = New System.Drawing.Point(723, 361)
+        btn追加.Location = New System.Drawing.Point(723, 343)
         btn追加.Name = "btn追加"
-        btn追加.Size = New System.Drawing.Size(111, 46)
+        btn追加.Size = New System.Drawing.Size(111, 44)
         btn追加.TabIndex = 5
         btn追加.Text = "追加(&A)"
         ToolTip1.SetToolTip(btn追加, "行を追加します")
@@ -94,9 +98,9 @@ Partial Class ctrInsertBand
         ' btn下へ
         ' 
         btn下へ.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn下へ.Location = New System.Drawing.Point(123, 361)
+        btn下へ.Location = New System.Drawing.Point(123, 343)
         btn下へ.Name = "btn下へ"
-        btn下へ.Size = New System.Drawing.Size(111, 46)
+        btn下へ.Size = New System.Drawing.Size(111, 44)
         btn下へ.TabIndex = 2
         btn下へ.Text = "下へ(&D)"
         ToolTip1.SetToolTip(btn下へ, "選択した行を下に移動します")
@@ -105,9 +109,9 @@ Partial Class ctrInsertBand
         ' btn上へ
         ' 
         btn上へ.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn上へ.Location = New System.Drawing.Point(6, 361)
+        btn上へ.Location = New System.Drawing.Point(6, 343)
         btn上へ.Name = "btn上へ"
-        btn上へ.Size = New System.Drawing.Size(111, 46)
+        btn上へ.Size = New System.Drawing.Size(111, 44)
         btn上へ.TabIndex = 1
         btn上へ.Text = "上へ(&U)"
         ToolTip1.SetToolTip(btn上へ, "選択した行を上に移動します")
@@ -116,9 +120,9 @@ Partial Class ctrInsertBand
         ' btn同位置
         ' 
         btn同位置.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
-        btn同位置.Location = New System.Drawing.Point(240, 361)
+        btn同位置.Location = New System.Drawing.Point(240, 343)
         btn同位置.Name = "btn同位置"
-        btn同位置.Size = New System.Drawing.Size(111, 46)
+        btn同位置.Size = New System.Drawing.Size(111, 44)
         btn同位置.TabIndex = 3
         btn同位置.Text = "同位置(&S)"
         ToolTip1.SetToolTip(btn同位置, "同位置数・同位置順を再設定します")
@@ -134,7 +138,7 @@ Partial Class ctrInsertBand
         Panel.Controls.Add(dgv差しひも)
         Panel.Location = New System.Drawing.Point(3, 3)
         Panel.Name = "Panel"
-        Panel.Size = New System.Drawing.Size(840, 413)
+        Panel.Size = New System.Drawing.Size(840, 392)
         Panel.TabIndex = 0
         ' 
         ' dgv差しひも
@@ -146,13 +150,13 @@ Partial Class ctrInsertBand
         dgv差しひも.AutoGenerateColumns = False
         dgv差しひも.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv差しひも.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv差しひも.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号1, f_b有効区分1, f_i配置面1, f_i角度1, f_i中心点1, f_i何本幅1, f_s色1, f_i開始位置1, f_i何本ごと1, f_i同位置数1, f_i同位置順1, f_i差し位置1, f_dひも長1, f_iひも本数1, f_dひも長加算1, f_d出力ひも長1, f_s無効理由1, f_sメモ1})
+        dgv差しひも.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号1, f_b有効区分1, f_i配置面1, f_i角度1, f_i中心点1, f_i何本幅1, f_s色1, f_i開始位置1, f_i何本ごと1, f_i同位置数1, f_i同位置順1, f_i差し位置1, f_dひも長1, f_iひも本数1, f_dひも長加算1, f_d出力ひも長1, f_s無効理由1, f_i表示順, f_i非表示順, f_sメモ1})
         dgv差しひも.DataSource = BindingSource差しひも
         dgv差しひも.Location = New System.Drawing.Point(6, 6)
         dgv差しひも.Name = "dgv差しひも"
         dgv差しひも.RowHeadersWidth = 51
         dgv差しひも.RowTemplate.Height = 29
-        dgv差しひも.Size = New System.Drawing.Size(828, 349)
+        dgv差しひも.Size = New System.Drawing.Size(828, 332)
         dgv差しひも.TabIndex = 0
         ' 
         ' f_i番号1
@@ -342,6 +346,24 @@ Partial Class ctrInsertBand
         f_s無効理由1.ToolTipText = "有効にならない理由"
         f_s無効理由1.Width = 125
         ' 
+        ' f_i表示順
+        ' 
+        f_i表示順.DataPropertyName = "f_i表示順"
+        DataGridViewCellStyle10.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i表示順.DefaultCellStyle = DataGridViewCellStyle10
+        f_i表示順.HeaderText = "表示順"
+        f_i表示順.Name = "f_i表示順"
+        f_i表示順.Visible = False
+        ' 
+        ' f_i非表示順
+        ' 
+        f_i非表示順.DataPropertyName = "f_i非表示順"
+        DataGridViewCellStyle11.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        f_i非表示順.DefaultCellStyle = DataGridViewCellStyle11
+        f_i非表示順.HeaderText = "非表示順"
+        f_i非表示順.Name = "f_i非表示順"
+        f_i非表示順.Visible = False
+        ' 
         ' f_sメモ1
         ' 
         f_sメモ1.DataPropertyName = "f_sメモ"
@@ -353,12 +375,12 @@ Partial Class ctrInsertBand
         ' 
         ' ctrInsertBand
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
         AutoSizeMode = Windows.Forms.AutoSizeMode.GrowAndShrink
         Controls.Add(Panel)
         Name = "ctrInsertBand"
-        Size = New System.Drawing.Size(867, 448)
+        Size = New System.Drawing.Size(867, 426)
         CType(BindingSource差しひも, ComponentModel.ISupportInitialize).EndInit()
         Panel.ResumeLayout(False)
         CType(dgv差しひも, ComponentModel.ISupportInitialize).EndInit()
@@ -391,6 +413,8 @@ Partial Class ctrInsertBand
     Friend WithEvents f_dひも長加算1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_d出力ひも長1 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s無効理由1 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i表示順 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_i非表示順 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As Windows.Forms.DataGridViewTextBoxColumn
 
 End Class

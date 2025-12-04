@@ -74,9 +74,9 @@ Partial Class ctrAddParts
         f_d描画厚3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_s座標 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i描画形状3 = New Windows.Forms.DataGridViewComboBoxColumn()
-        f_sメモ3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_i非表示順 = New Windows.Forms.DataGridViewTextBoxColumn()
+        f_sメモ3 = New Windows.Forms.DataGridViewTextBoxColumn()
         f_bError3 = New Windows.Forms.DataGridViewCheckBoxColumn()
         Panel.SuspendLayout()
         CType(nud長さ, ComponentModel.ISupportInitialize).BeginInit()
@@ -228,7 +228,7 @@ Partial Class ctrAddParts
         dgv追加品.AutoGenerateColumns = False
         dgv追加品.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv追加品.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_d縦対横比率, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_b描画区分3, f_b描画区分2, f_i描画位置3, f_d描画厚3, f_s座標, f_i描画形状3, f_sメモ3, f_i表示順, f_i非表示順, f_bError3})
+        dgv追加品.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {f_i番号3, f_s付属品名3, f_s付属品ひも名3, f_iひも番号3, f_b巻きひも区分3, f_i何本幅3, f_d長さ3, f_i長さ参照3, f_b集計対象外区分3, f_i点数3, f_s色3, f_dひも長3, f_d縦対横比率, f_dひも長加算3, f_iひも本数3, f_d出力ひも長3, f_s記号3, f_b描画区分3, f_b描画区分2, f_i描画位置3, f_d描画厚3, f_s座標, f_i描画形状3, f_i表示順, f_i非表示順, f_sメモ3, f_bError3})
         dgv追加品.DataSource = BindingSource追加品
         dgv追加品.Location = New System.Drawing.Point(6, 8)
         dgv追加品.Name = "dgv追加品"
@@ -495,15 +495,6 @@ Partial Class ctrAddParts
         f_i描画形状3.Visible = False
         f_i描画形状3.Width = 125
         ' 
-        ' f_sメモ3
-        ' 
-        f_sメモ3.DataPropertyName = "f_sメモ"
-        f_sメモ3.HeaderText = "メモ"
-        f_sメモ3.MinimumWidth = 6
-        f_sメモ3.Name = "f_sメモ3"
-        f_sメモ3.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        f_sメモ3.Width = 125
-        ' 
         ' f_i表示順
         ' 
         f_i表示順.DataPropertyName = "f_i表示順"
@@ -521,6 +512,15 @@ Partial Class ctrAddParts
         f_i非表示順.HeaderText = "非表示順"
         f_i非表示順.Name = "f_i非表示順"
         f_i非表示順.Visible = False
+        ' 
+        ' f_sメモ3
+        ' 
+        f_sメモ3.DataPropertyName = "f_sメモ"
+        f_sメモ3.HeaderText = "メモ"
+        f_sメモ3.MinimumWidth = 6
+        f_sメモ3.Name = "f_sメモ3"
+        f_sメモ3.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        f_sメモ3.Width = 125
         ' 
         ' f_bError3
         ' 
@@ -587,8 +587,8 @@ Partial Class ctrAddParts
     Friend WithEvents f_d描画厚3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_s座標 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i描画形状3 As Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents f_sメモ3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i表示順 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i非表示順 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents f_sメモ3 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_bError3 As Windows.Forms.DataGridViewCheckBoxColumn
 End Class

@@ -35,6 +35,8 @@ Partial Class frmMain
         Dim DataGridViewCellStyle10 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         ToolTip1 = New ToolTip(components)
         nud基本のひも幅 = New NumericUpDown()
@@ -146,6 +148,8 @@ Partial Class frmMain
         ToolStripSeparator1 = New ToolStripSeparator()
         ToolStripMenuItemEditList = New ToolStripMenuItem()
         ToolStripMenuItemEditDefaultFile = New ToolStripMenuItem()
+        ToolStripSeparator6 = New ToolStripSeparator()
+        ToolStripMenuItemEditStepImage = New ToolStripMenuItem()
         ToolStripMenuItemSetting = New ToolStripMenuItem()
         ToolStripMenuItemSettingBandType = New ToolStripMenuItem()
         ToolStripMenuItemSettingPattern = New ToolStripMenuItem()
@@ -257,6 +261,8 @@ Partial Class frmMain
         f_d連続ひも長2 = New DataGridViewTextBoxColumn()
         f_d厚さ2 = New DataGridViewTextBoxColumn()
         f_s記号2 = New DataGridViewTextBoxColumn()
+        f_i表示順2 = New DataGridViewTextBoxColumn()
+        f_i非表示順2 = New DataGridViewTextBoxColumn()
         f_sメモ2 = New DataGridViewTextBoxColumn()
         f_bError2 = New DataGridViewCheckBoxColumn()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
@@ -1320,7 +1326,7 @@ Partial Class frmMain
         ' 
         ' ToolStripMenuItemEdit
         ' 
-        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditSaveTemporarily, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile})
+        ToolStripMenuItemEdit.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemEditSelectBand, ToolStripSeparator4, ToolStripMenuItemEditSaveTemporarily, ToolStripMenuItemEditReset, ToolStripMenuItemEditDefault, ToolStripMenuItemEditCalc, ToolStripSeparator5, ToolStripMenuItemEditColorChange, ToolStripMenuItemEditColorRepeat, ToolStripSeparator1, ToolStripMenuItemEditList, ToolStripMenuItemEditDefaultFile, ToolStripSeparator6, ToolStripMenuItemEditStepImage})
         ToolStripMenuItemEdit.Name = "ToolStripMenuItemEdit"
         ToolStripMenuItemEdit.Size = New Size(64, 23)
         ToolStripMenuItemEdit.Text = "編集(&E)"
@@ -1401,6 +1407,17 @@ Partial Class frmMain
         ToolStripMenuItemEditDefaultFile.Size = New Size(206, 24)
         ToolStripMenuItemEditDefaultFile.Text = "規定値保存フォルダ(&F)"
         ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値保存フォルダを指定します"
+        ' 
+        ' ToolStripSeparator6
+        ' 
+        ToolStripSeparator6.Name = "ToolStripSeparator6"
+        ToolStripSeparator6.Size = New Size(203, 6)
+        ' 
+        ' ToolStripMenuItemEditStepImage
+        ' 
+        ToolStripMenuItemEditStepImage.Name = "ToolStripMenuItemEditStepImage"
+        ToolStripMenuItemEditStepImage.Size = New Size(206, 24)
+        ToolStripMenuItemEditStepImage.Text = "表示順画像生成(&I)"
         ' 
         ' ToolStripMenuItemSetting
         ' 
@@ -1859,7 +1876,7 @@ Partial Class frmMain
         dgv側面.AutoGenerateColumns = False
         dgv側面.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv側面.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_b集計対象外区分2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_sメモ2, f_bError2})
+        dgv側面.Columns.AddRange(New DataGridViewColumn() {f_i番号2, f_s編みかた名2, f_s編みひも名2, f_iひも番号2, f_i何本幅2, f_i周数2, f_b集計対象外区分2, f_iひも本数2, f_s色2, f_d高さ2, f_d垂直ひも長2, f_d周長2, f_dひも長2, f_dひも長加算2, f_d連続ひも長2, f_d厚さ2, f_s記号2, f_i表示順2, f_i非表示順2, f_sメモ2, f_bError2})
         dgv側面.DataSource = BindingSource側面
         dgv側面.Location = New Point(6, 34)
         dgv側面.Name = "dgv側面"
@@ -2586,6 +2603,22 @@ Partial Class frmMain
         f_s記号2.Visible = False
         f_s記号2.Width = 125
         ' 
+        ' f_i表示順2
+        ' 
+        f_i表示順2.DataPropertyName = "f_i表示順"
+        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i表示順2.DefaultCellStyle = DataGridViewCellStyle13
+        f_i表示順2.HeaderText = "表示順"
+        f_i表示順2.Name = "f_i表示順2"
+        ' 
+        ' f_i非表示順2
+        ' 
+        f_i非表示順2.DataPropertyName = "f_i非表示順"
+        DataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle14
+        f_i非表示順2.HeaderText = "非表示順"
+        f_i非表示順2.Name = "f_i非表示順2"
+        ' 
         ' f_sメモ2
         ' 
         f_sメモ2.DataPropertyName = "f_sメモ"
@@ -2946,6 +2979,8 @@ Partial Class frmMain
     Friend WithEvents rad回り込み As RadioButton
     Friend WithEvents rad底置き As RadioButton
     Friend WithEvents editMemo As CraftBand.ctrMemo
+    Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItemEditStepImage As ToolStripMenuItem
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
@@ -2963,6 +2998,8 @@ Partial Class frmMain
     Friend WithEvents f_d連続ひも長2 As DataGridViewTextBoxColumn
     Friend WithEvents f_d厚さ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s記号2 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i表示順2 As DataGridViewTextBoxColumn
+    Friend WithEvents f_i非表示順2 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError2 As DataGridViewCheckBoxColumn
 End Class

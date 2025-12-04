@@ -2871,6 +2871,7 @@ Partial Public Class clsCalcHexagon
 
     'プレビュータブのCheckBox値
     Public Class CDispImageChecked
+        '横,60度,120度,側面,差しひも
         Private _checked(cAngleCount + 1) As Boolean
 
         Public Sub New()
@@ -2904,9 +2905,9 @@ Partial Public Class clsCalcHexagon
             End Set
         End Property
 
-        Public ReadOnly Property IsSetAll As Boolean
+        Public ReadOnly Property IsSetFrame As Boolean
             Get
-                For i As Integer = 0 To _checked.Length - 1
+                For i As Integer = 0 To _checked.Length - 2 '底と側面
                     If Not _checked(i) Then
                         Return False
                     End If
@@ -2987,8 +2988,9 @@ Partial Public Class clsCalcHexagon
         imageList描画要素 = Nothing
 
         '付属品
-        If Not isBackFace AndAlso checked.IsSetAll Then
-            AddPartsImage(imgData, _frmMain.editAddParts, False)
+        If Not isBackFace AndAlso checked.IsSetFrame Then
+            'AddPartsImage(imgData, _frmMain.editAddParts, False)
+            AddPartsImage(imgData, _Data, False)
         End If
 
         '描画ファイル作成
