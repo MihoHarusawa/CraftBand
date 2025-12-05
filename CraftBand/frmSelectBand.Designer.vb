@@ -308,6 +308,7 @@ Partial Class frmSelectBand
         ' 
         ' frmSelectBand
         ' 
+        AcceptButton = btnキャンセル
         AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
         ClientSize = New System.Drawing.Size(646, 229)

@@ -39,16 +39,6 @@ Partial Class frmPattern
         Dim DataGridViewCellStyle12 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle13 As DataGridViewCellStyle = New DataGridViewCellStyle()
         dgvData = New ctrDataGridView()
-        BindingSource編みかた = New BindingSource(components)
-        lbl設定時の寸法単位 = New Label()
-        lbl単位 = New Label()
-        btnキャンセル = New Button()
-        btnOK = New Button()
-        btnひも追加 = New Button()
-        txt編みかた名 = New TextBox()
-        lbl編みかた名 = New Label()
-        btn削除 = New Button()
-        ToolTip1 = New ToolTip(components)
         f_s編みかた名 = New DataGridViewTextBoxColumn()
         f_iひも番号 = New DataGridViewTextBoxColumn()
         f_s編みひも名 = New DataGridViewTextBoxColumn()
@@ -74,6 +64,16 @@ Partial Class frmPattern
         f_bCraftBandSquare = New DataGridViewCheckBoxColumn()
         f_bCraftBandHexagon = New DataGridViewCheckBoxColumn()
         f_s備考 = New DataGridViewTextBoxColumn()
+        BindingSource編みかた = New BindingSource(components)
+        lbl設定時の寸法単位 = New Label()
+        lbl単位 = New Label()
+        btnキャンセル = New Button()
+        btnOK = New Button()
+        btnひも追加 = New Button()
+        txt編みかた名 = New TextBox()
+        lbl編みかた名 = New Label()
+        btn削除 = New Button()
+        ToolTip1 = New ToolTip(components)
         CType(dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSource編みかた, System.ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -88,98 +88,12 @@ Partial Class frmPattern
         dgvData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgvData.Columns.AddRange(New DataGridViewColumn() {f_s編みかた名, f_iひも番号, f_s編みひも名, f_b縁専用区分, f_b底使用区分, f_i周あたり段数, f_iひも数, f_i本幅初期値, f_b周連続区分, f_d高さ比率対ひも幅, f_d垂直ひも長比率対ひも幅, f_dひも長比率対周長, f_dひも長加算1目あたり, f_dひも長加算1周あたり, f_dひも1幅係数1目あたり, f_dひも長加算ひもあたり, f_dひも長加算初期値, f_d厚さ, f_b集計対象外区分初期値, f_bCraftBandMesh, f_bCraftBandSquare45, f_bCraftBandKnot, f_bCraftBandSquare, f_bCraftBandHexagon, f_s備考})
         dgvData.DataSource = BindingSource編みかた
-        dgvData.Location = New System.Drawing.Point(12, 32)
+        dgvData.Location = New System.Drawing.Point(12, 30)
         dgvData.Name = "dgvData"
         dgvData.RowHeadersWidth = 51
         dgvData.RowTemplate.Height = 29
-        dgvData.Size = New System.Drawing.Size(746, 156)
+        dgvData.Size = New System.Drawing.Size(746, 148)
         dgvData.TabIndex = 2
-        ' 
-        ' BindingSource編みかた
-        ' 
-        BindingSource編みかた.DataMember = "tbl編みかた"
-        BindingSource編みかた.DataSource = GetType(Tables.dstMasterTables)
-        ' 
-        ' lbl設定時の寸法単位
-        ' 
-        lbl設定時の寸法単位.AutoSize = True
-        lbl設定時の寸法単位.Location = New System.Drawing.Point(60, -1)
-        lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
-        lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 20)
-        lbl設定時の寸法単位.TabIndex = 1
-        ' 
-        ' lbl単位
-        ' 
-        lbl単位.AutoSize = True
-        lbl単位.Location = New System.Drawing.Point(12, -1)
-        lbl単位.Name = "lbl単位"
-        lbl単位.Size = New System.Drawing.Size(42, 20)
-        lbl単位.TabIndex = 0
-        lbl単位.Text = "単位:"
-        ' 
-        ' btnキャンセル
-        ' 
-        btnキャンセル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnキャンセル.DialogResult = DialogResult.Cancel
-        btnキャンセル.Location = New System.Drawing.Point(647, 202)
-        btnキャンセル.Name = "btnキャンセル"
-        btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        btnキャンセル.TabIndex = 8
-        btnキャンセル.Text = "キャンセル(&C)"
-        ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
-        btnキャンセル.UseVisualStyleBackColor = True
-        ' 
-        ' btnOK
-        ' 
-        btnOK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnOK.Location = New System.Drawing.Point(528, 202)
-        btnOK.Name = "btnOK"
-        btnOK.Size = New System.Drawing.Size(111, 46)
-        btnOK.TabIndex = 7
-        btnOK.Text = "OK(&O)"
-        ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
-        btnOK.UseVisualStyleBackColor = True
-        ' 
-        ' btnひも追加
-        ' 
-        btnひも追加.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnひも追加.Location = New System.Drawing.Point(329, 202)
-        btnひも追加.Name = "btnひも追加"
-        btnひも追加.Size = New System.Drawing.Size(111, 46)
-        btnひも追加.TabIndex = 6
-        btnひも追加.Text = "ひも追加(&B)"
-        ToolTip1.SetToolTip(btnひも追加, "新たな編みかた名を追加、" & vbCrLf & "もしくは既存の編みかた名に編みひもを追加")
-        btnひも追加.UseVisualStyleBackColor = True
-        ' 
-        ' txt編みかた名
-        ' 
-        txt編みかた名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        txt編みかた名.Location = New System.Drawing.Point(212, 212)
-        txt編みかた名.Name = "txt編みかた名"
-        txt編みかた名.Size = New System.Drawing.Size(101, 27)
-        txt編みかた名.TabIndex = 5
-        ToolTip1.SetToolTip(txt編みかた名, "編みかたの名前")
-        ' 
-        ' lbl編みかた名
-        ' 
-        lbl編みかた名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lbl編みかた名.AutoSize = True
-        lbl編みかた名.Location = New System.Drawing.Point(130, 215)
-        lbl編みかた名.Name = "lbl編みかた名"
-        lbl編みかた名.Size = New System.Drawing.Size(76, 20)
-        lbl編みかた名.TabIndex = 4
-        lbl編みかた名.Text = "編みかた名"
-        ' 
-        ' btn削除
-        ' 
-        btn削除.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btn削除.Location = New System.Drawing.Point(12, 202)
-        btn削除.Name = "btn削除"
-        btn削除.Size = New System.Drawing.Size(111, 46)
-        btn削除.TabIndex = 3
-        btn削除.Text = "削除(&D)"
-        ToolTip1.SetToolTip(btn削除, "選択している編みかたを削除します")
-        btn削除.UseVisualStyleBackColor = True
         ' 
         ' f_s編みかた名
         ' 
@@ -441,11 +355,98 @@ Partial Class frmPattern
         f_s備考.SortMode = DataGridViewColumnSortMode.NotSortable
         f_s備考.Width = 125
         ' 
+        ' BindingSource編みかた
+        ' 
+        BindingSource編みかた.DataMember = "tbl編みかた"
+        BindingSource編みかた.DataSource = GetType(Tables.dstMasterTables)
+        ' 
+        ' lbl設定時の寸法単位
+        ' 
+        lbl設定時の寸法単位.AutoSize = True
+        lbl設定時の寸法単位.Location = New System.Drawing.Point(60, -1)
+        lbl設定時の寸法単位.Name = "lbl設定時の寸法単位"
+        lbl設定時の寸法単位.Size = New System.Drawing.Size(0, 19)
+        lbl設定時の寸法単位.TabIndex = 1
+        ' 
+        ' lbl単位
+        ' 
+        lbl単位.AutoSize = True
+        lbl単位.Location = New System.Drawing.Point(12, -1)
+        lbl単位.Name = "lbl単位"
+        lbl単位.Size = New System.Drawing.Size(40, 19)
+        lbl単位.TabIndex = 0
+        lbl単位.Text = "単位:"
+        ' 
+        ' btnキャンセル
+        ' 
+        btnキャンセル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnキャンセル.DialogResult = DialogResult.Cancel
+        btnキャンセル.Location = New System.Drawing.Point(647, 192)
+        btnキャンセル.Name = "btnキャンセル"
+        btnキャンセル.Size = New System.Drawing.Size(111, 44)
+        btnキャンセル.TabIndex = 8
+        btnキャンセル.Text = "キャンセル(&C)"
+        ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
+        btnキャンセル.UseVisualStyleBackColor = True
+        ' 
+        ' btnOK
+        ' 
+        btnOK.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnOK.Location = New System.Drawing.Point(528, 192)
+        btnOK.Name = "btnOK"
+        btnOK.Size = New System.Drawing.Size(111, 44)
+        btnOK.TabIndex = 7
+        btnOK.Text = "OK(&O)"
+        ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
+        btnOK.UseVisualStyleBackColor = True
+        ' 
+        ' btnひも追加
+        ' 
+        btnひも追加.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnひも追加.Location = New System.Drawing.Point(329, 192)
+        btnひも追加.Name = "btnひも追加"
+        btnひも追加.Size = New System.Drawing.Size(111, 44)
+        btnひも追加.TabIndex = 6
+        btnひも追加.Text = "ひも追加(&B)"
+        ToolTip1.SetToolTip(btnひも追加, "新たな編みかた名を追加、" & vbCrLf & "もしくは既存の編みかた名に編みひもを追加")
+        btnひも追加.UseVisualStyleBackColor = True
+        ' 
+        ' txt編みかた名
+        ' 
+        txt編みかた名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        txt編みかた名.Location = New System.Drawing.Point(212, 201)
+        txt編みかた名.Name = "txt編みかた名"
+        txt編みかた名.Size = New System.Drawing.Size(101, 26)
+        txt編みかた名.TabIndex = 5
+        ToolTip1.SetToolTip(txt編みかた名, "編みかたの名前")
+        ' 
+        ' lbl編みかた名
+        ' 
+        lbl編みかた名.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        lbl編みかた名.AutoSize = True
+        lbl編みかた名.Location = New System.Drawing.Point(130, 204)
+        lbl編みかた名.Name = "lbl編みかた名"
+        lbl編みかた名.Size = New System.Drawing.Size(71, 19)
+        lbl編みかた名.TabIndex = 4
+        lbl編みかた名.Text = "編みかた名"
+        ' 
+        ' btn削除
+        ' 
+        btn削除.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        btn削除.Location = New System.Drawing.Point(12, 192)
+        btn削除.Name = "btn削除"
+        btn削除.Size = New System.Drawing.Size(111, 44)
+        btn削除.TabIndex = 3
+        btn削除.Text = "削除(&D)"
+        ToolTip1.SetToolTip(btn削除, "選択している編みかたを削除します")
+        btn削除.UseVisualStyleBackColor = True
+        ' 
         ' frmPattern
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(8F, 20F)
+        AcceptButton = btnキャンセル
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New System.Drawing.Size(770, 256)
+        ClientSize = New System.Drawing.Size(772, 251)
         Controls.Add(btn削除)
         Controls.Add(lbl編みかた名)
         Controls.Add(txt編みかた名)
@@ -455,7 +456,7 @@ Partial Class frmPattern
         Controls.Add(lbl設定時の寸法単位)
         Controls.Add(lbl単位)
         Controls.Add(dgvData)
-        MinimumSize = New System.Drawing.Size(788, 303)
+        MinimumSize = New System.Drawing.Size(788, 290)
         Name = "frmPattern"
         StartPosition = FormStartPosition.CenterParent
         Text = "編みかた"

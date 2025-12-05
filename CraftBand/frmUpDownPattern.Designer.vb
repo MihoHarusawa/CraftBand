@@ -22,144 +22,143 @@ Partial Class frmUpDownPattern
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.btn削除 = New System.Windows.Forms.Button()
-        Me.btnキャンセル = New System.Windows.Forms.Button()
-        Me.btnOK = New System.Windows.Forms.Button()
-        Me.dgvData = New CraftBand.ctrDataGridView()
-        Me.Fs上下図名DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fi水平本数DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fi垂直本数DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fs上下DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Fs備考DataGridViewTextBoxColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.BindingSource上下図 = New System.Windows.Forms.BindingSource(Me.components)
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        CType(Me.dgvData, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.BindingSource上下図, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'btn削除
-        '
-        Me.btn削除.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btn削除.Location = New System.Drawing.Point(12, 202)
-        Me.btn削除.Name = "btn削除"
-        Me.btn削除.Size = New System.Drawing.Size(111, 46)
-        Me.btn削除.TabIndex = 9
-        Me.btn削除.Text = "削除(&D)"
-        Me.ToolTip1.SetToolTip(Me.btn削除, "選択されている上下図を削除します")
-        Me.btn削除.UseVisualStyleBackColor = True
-        '
-        'btnキャンセル
-        '
-        Me.btnキャンセル.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnキャンセル.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btnキャンセル.Location = New System.Drawing.Point(326, 202)
-        Me.btnキャンセル.Name = "btnキャンセル"
-        Me.btnキャンセル.Size = New System.Drawing.Size(111, 46)
-        Me.btnキャンセル.TabIndex = 14
-        Me.btnキャンセル.Text = "キャンセル(&C)"
-        Me.ToolTip1.SetToolTip(Me.btnキャンセル, "変更を保存せずに終了します")
-        Me.btnキャンセル.UseVisualStyleBackColor = True
-        '
-        'btnOK
-        '
-        Me.btnOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnOK.Location = New System.Drawing.Point(207, 202)
-        Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(111, 46)
-        Me.btnOK.TabIndex = 13
-        Me.btnOK.Text = "OK(&O)"
-        Me.ToolTip1.SetToolTip(Me.btnOK, "変更を保存して終了します")
-        Me.btnOK.UseVisualStyleBackColor = True
-        '
-        'dgvData
-        '
-        Me.dgvData.AllowUserToAddRows = False
-        Me.dgvData.AllowUserToDeleteRows = False
-        Me.dgvData.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dgvData.AutoGenerateColumns = False
-        Me.dgvData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Fs上下図名DataGridViewTextBoxColumn, Me.Fi水平本数DataGridViewTextBoxColumn, Me.Fi垂直本数DataGridViewTextBoxColumn, Me.Fs上下DataGridViewTextBoxColumn, Me.Fs備考DataGridViewTextBoxColumn})
-        Me.dgvData.DataSource = Me.BindingSource上下図
-        Me.dgvData.Location = New System.Drawing.Point(12, 12)
-        Me.dgvData.Name = "dgvData"
-        Me.dgvData.RowHeadersWidth = 51
-        Me.dgvData.RowTemplate.Height = 29
-        Me.dgvData.Size = New System.Drawing.Size(425, 176)
-        Me.dgvData.TabIndex = 15
-        '
-        'Fs上下図名DataGridViewTextBoxColumn
-        '
-        Me.Fs上下図名DataGridViewTextBoxColumn.DataPropertyName = "f_s上下図名"
-        Me.Fs上下図名DataGridViewTextBoxColumn.HeaderText = "上下図名"
-        Me.Fs上下図名DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fs上下図名DataGridViewTextBoxColumn.Name = "Fs上下図名DataGridViewTextBoxColumn"
-        Me.Fs上下図名DataGridViewTextBoxColumn.ToolTipText = "重複しない名前"
-        Me.Fs上下図名DataGridViewTextBoxColumn.Width = 150
-        '
-        'Fi水平本数DataGridViewTextBoxColumn
-        '
-        Me.Fi水平本数DataGridViewTextBoxColumn.DataPropertyName = "f_i水平本数"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Fi水平本数DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle5
-        Me.Fi水平本数DataGridViewTextBoxColumn.HeaderText = "水平本数"
-        Me.Fi水平本数DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fi水平本数DataGridViewTextBoxColumn.Name = "Fi水平本数DataGridViewTextBoxColumn"
-        Me.Fi水平本数DataGridViewTextBoxColumn.Width = 80
-        '
-        'Fi垂直本数DataGridViewTextBoxColumn
-        '
-        Me.Fi垂直本数DataGridViewTextBoxColumn.DataPropertyName = "f_i垂直本数"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Fi垂直本数DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle6
-        Me.Fi垂直本数DataGridViewTextBoxColumn.HeaderText = "垂直本数"
-        Me.Fi垂直本数DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fi垂直本数DataGridViewTextBoxColumn.Name = "Fi垂直本数DataGridViewTextBoxColumn"
-        Me.Fi垂直本数DataGridViewTextBoxColumn.Width = 80
-        '
-        'Fs上下DataGridViewTextBoxColumn
-        '
-        Me.Fs上下DataGridViewTextBoxColumn.DataPropertyName = "f_s上下"
-        Me.Fs上下DataGridViewTextBoxColumn.HeaderText = "上下"
-        Me.Fs上下DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fs上下DataGridViewTextBoxColumn.Name = "Fs上下DataGridViewTextBoxColumn"
-        Me.Fs上下DataGridViewTextBoxColumn.ToolTipText = "1はON, 0はOFF, 行は';'で区切ります"
-        Me.Fs上下DataGridViewTextBoxColumn.Width = 300
-        '
-        'Fs備考DataGridViewTextBoxColumn
-        '
-        Me.Fs備考DataGridViewTextBoxColumn.DataPropertyName = "f_s備考"
-        Me.Fs備考DataGridViewTextBoxColumn.HeaderText = "備考"
-        Me.Fs備考DataGridViewTextBoxColumn.MinimumWidth = 6
-        Me.Fs備考DataGridViewTextBoxColumn.Name = "Fs備考DataGridViewTextBoxColumn"
-        Me.Fs備考DataGridViewTextBoxColumn.Width = 125
-        '
-        'BindingSource上下図
-        '
-        Me.BindingSource上下図.DataMember = "tbl上下図"
-        Me.BindingSource上下図.DataSource = GetType(CraftBand.Tables.dstMasterTables)
-        '
-        'frmUpDownPattern
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(449, 260)
-        Me.Controls.Add(Me.dgvData)
-        Me.Controls.Add(Me.btn削除)
-        Me.Controls.Add(Me.btnキャンセル)
-        Me.Controls.Add(Me.btnOK)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.Name = "frmUpDownPattern"
-        Me.Text = "上下図"
-        CType(Me.dgvData, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.BindingSource上下図, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        components = New ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New Windows.Forms.DataGridViewCellStyle()
+        btn削除 = New Windows.Forms.Button()
+        btnキャンセル = New Windows.Forms.Button()
+        btnOK = New Windows.Forms.Button()
+        dgvData = New ctrDataGridView()
+        Fs上下図名DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fi水平本数DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fi垂直本数DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fs上下DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        Fs備考DataGridViewTextBoxColumn = New Windows.Forms.DataGridViewTextBoxColumn()
+        BindingSource上下図 = New System.Windows.Forms.BindingSource(components)
+        ToolTip1 = New System.Windows.Forms.ToolTip(components)
+        CType(dgvData, ComponentModel.ISupportInitialize).BeginInit()
+        CType(BindingSource上下図, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' btn削除
+        ' 
+        btn削除.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left
+        btn削除.Location = New System.Drawing.Point(12, 192)
+        btn削除.Name = "btn削除"
+        btn削除.Size = New System.Drawing.Size(111, 44)
+        btn削除.TabIndex = 9
+        btn削除.Text = "削除(&D)"
+        ToolTip1.SetToolTip(btn削除, "選択されている上下図を削除します")
+        btn削除.UseVisualStyleBackColor = True
+        ' 
+        ' btnキャンセル
+        ' 
+        btnキャンセル.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btnキャンセル.DialogResult = Windows.Forms.DialogResult.Cancel
+        btnキャンセル.Location = New System.Drawing.Point(326, 192)
+        btnキャンセル.Name = "btnキャンセル"
+        btnキャンセル.Size = New System.Drawing.Size(111, 44)
+        btnキャンセル.TabIndex = 14
+        btnキャンセル.Text = "キャンセル(&C)"
+        ToolTip1.SetToolTip(btnキャンセル, "変更を保存せずに終了します")
+        btnキャンセル.UseVisualStyleBackColor = True
+        ' 
+        ' btnOK
+        ' 
+        btnOK.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btnOK.Location = New System.Drawing.Point(207, 192)
+        btnOK.Name = "btnOK"
+        btnOK.Size = New System.Drawing.Size(111, 44)
+        btnOK.TabIndex = 13
+        btnOK.Text = "OK(&O)"
+        ToolTip1.SetToolTip(btnOK, "変更を保存して終了します")
+        btnOK.UseVisualStyleBackColor = True
+        ' 
+        ' dgvData
+        ' 
+        dgvData.AllowUserToAddRows = False
+        dgvData.AllowUserToDeleteRows = False
+        dgvData.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
+        dgvData.AutoGenerateColumns = False
+        dgvData.ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        dgvData.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgvData.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {Fs上下図名DataGridViewTextBoxColumn, Fi水平本数DataGridViewTextBoxColumn, Fi垂直本数DataGridViewTextBoxColumn, Fs上下DataGridViewTextBoxColumn, Fs備考DataGridViewTextBoxColumn})
+        dgvData.DataSource = BindingSource上下図
+        dgvData.Location = New System.Drawing.Point(12, 11)
+        dgvData.Name = "dgvData"
+        dgvData.RowHeadersWidth = 51
+        dgvData.RowTemplate.Height = 29
+        dgvData.Size = New System.Drawing.Size(425, 167)
+        dgvData.TabIndex = 15
+        ' 
+        ' Fs上下図名DataGridViewTextBoxColumn
+        ' 
+        Fs上下図名DataGridViewTextBoxColumn.DataPropertyName = "f_s上下図名"
+        Fs上下図名DataGridViewTextBoxColumn.HeaderText = "上下図名"
+        Fs上下図名DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fs上下図名DataGridViewTextBoxColumn.Name = "Fs上下図名DataGridViewTextBoxColumn"
+        Fs上下図名DataGridViewTextBoxColumn.ToolTipText = "重複しない名前"
+        Fs上下図名DataGridViewTextBoxColumn.Width = 150
+        ' 
+        ' Fi水平本数DataGridViewTextBoxColumn
+        ' 
+        Fi水平本数DataGridViewTextBoxColumn.DataPropertyName = "f_i水平本数"
+        DataGridViewCellStyle1.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Fi水平本数DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle1
+        Fi水平本数DataGridViewTextBoxColumn.HeaderText = "水平本数"
+        Fi水平本数DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fi水平本数DataGridViewTextBoxColumn.Name = "Fi水平本数DataGridViewTextBoxColumn"
+        Fi水平本数DataGridViewTextBoxColumn.Width = 80
+        ' 
+        ' Fi垂直本数DataGridViewTextBoxColumn
+        ' 
+        Fi垂直本数DataGridViewTextBoxColumn.DataPropertyName = "f_i垂直本数"
+        DataGridViewCellStyle2.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Fi垂直本数DataGridViewTextBoxColumn.DefaultCellStyle = DataGridViewCellStyle2
+        Fi垂直本数DataGridViewTextBoxColumn.HeaderText = "垂直本数"
+        Fi垂直本数DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fi垂直本数DataGridViewTextBoxColumn.Name = "Fi垂直本数DataGridViewTextBoxColumn"
+        Fi垂直本数DataGridViewTextBoxColumn.Width = 80
+        ' 
+        ' Fs上下DataGridViewTextBoxColumn
+        ' 
+        Fs上下DataGridViewTextBoxColumn.DataPropertyName = "f_s上下"
+        Fs上下DataGridViewTextBoxColumn.HeaderText = "上下"
+        Fs上下DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fs上下DataGridViewTextBoxColumn.Name = "Fs上下DataGridViewTextBoxColumn"
+        Fs上下DataGridViewTextBoxColumn.ToolTipText = "1はON, 0はOFF, 行は';'で区切ります"
+        Fs上下DataGridViewTextBoxColumn.Width = 300
+        ' 
+        ' Fs備考DataGridViewTextBoxColumn
+        ' 
+        Fs備考DataGridViewTextBoxColumn.DataPropertyName = "f_s備考"
+        Fs備考DataGridViewTextBoxColumn.HeaderText = "備考"
+        Fs備考DataGridViewTextBoxColumn.MinimumWidth = 6
+        Fs備考DataGridViewTextBoxColumn.Name = "Fs備考DataGridViewTextBoxColumn"
+        Fs備考DataGridViewTextBoxColumn.Width = 125
+        ' 
+        ' BindingSource上下図
+        ' 
+        BindingSource上下図.DataMember = "tbl上下図"
+        BindingSource上下図.DataSource = GetType(Tables.dstMasterTables)
+        ' 
+        ' frmUpDownPattern
+        ' 
+        AcceptButton = btnキャンセル
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
+        AutoScaleMode = Windows.Forms.AutoScaleMode.Font
+        ClientSize = New System.Drawing.Size(449, 247)
+        Controls.Add(dgvData)
+        Controls.Add(btn削除)
+        Controls.Add(btnキャンセル)
+        Controls.Add(btnOK)
+        MaximizeBox = False
+        MinimizeBox = False
+        Name = "frmUpDownPattern"
+        Text = "上下図"
+        CType(dgvData, ComponentModel.ISupportInitialize).EndInit()
+        CType(BindingSource上下図, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
 
     End Sub
 

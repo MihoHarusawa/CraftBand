@@ -780,7 +780,7 @@ Public Class frmMain
 #Region "ステップ画像"
 
     Private Sub ToolStripMenuItemEditStepImage_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditStepImage.Click
-        Dim dlg As New frmStepImages
+        Dim dlg As New frmStepImages(True)
         If Not dlg.SetMainForm(Me, _clsDataTables, _sFilePath) Then
             Exit Sub
         End If

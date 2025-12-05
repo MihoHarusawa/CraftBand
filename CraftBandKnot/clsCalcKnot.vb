@@ -9,7 +9,8 @@ Imports CraftBand.Tables.dstOutput
 
 Class clsCalcKnot
 
-    Dim _clsBandTypeGauge As clsBandTypeGauge
+    'ステップ画像生成時には同じゲージを使用する
+    Shared _clsBandTypeGauge As clsBandTypeGauge = Nothing
     Private Property p_dマイひも長係数 As Double '設定値
 
 

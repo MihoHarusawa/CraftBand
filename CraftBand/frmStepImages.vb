@@ -17,7 +17,11 @@ Public Class frmStepImages
 
     Const TARGET_EXT As String = ".gif"
 
-
+    Sub New(ByVal is2nd As Boolean)
+        InitializeComponent()
+        '
+        radプレビュー2.Enabled = is2nd
+    End Sub
 
     Public Function SetMainForm(ByVal frm As Windows.Forms.Form, ByVal data As clsDataTables, ByVal fpath As String)
         _frmMain = frm
@@ -50,7 +54,7 @@ Public Class frmStepImages
             cmb非表示色.Text = text
         End If
 
-        If _ImgSel = 2 Then
+        If radプレビュー2.Enabled AndAlso _ImgSel = 2 Then
             radプレビュー2.Checked = True
         End If
 
@@ -86,7 +90,7 @@ Public Class frmStepImages
     End Sub
 
     Private Sub frmStepImages_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If radプレビュー2.Checked Then
+        If radプレビュー2.Enabled AndAlso radプレビュー2.Checked Then
             _ImgSel = 2
         Else
             _ImgSel = 1
@@ -206,6 +210,16 @@ Public Class frmStepImages
             Exit Sub
         End Try
     End Sub
+
+    Private Sub nud表示番号_ValueChanged(sender As Object, e As EventArgs) Handles nud表示番号.ValueChanged
+        Dim n As Integer = CInt(nud表示番号.Value)
+        Dim memo As String = Nothing
+        Dim count As Integer = CountDispStepRecord(_dataCurrent, n, memo)
+        '表示番号<{0}>のレコード数は {1}
+        addFormatMessage(My.Resources.MsgStepImageDispNumber, n, count)
+        addMessage(memo)
+    End Sub
+
 
     '作成先がセットされており、フォルダが存在する状態だとTrueを返す(isCreate=Trueなら作成)
     Private Function isExistDestFolder(ByVal isCreate As Boolean) As Boolean

@@ -1418,6 +1418,7 @@ Partial Class frmMain
         ToolStripMenuItemEditStepImage.Name = "ToolStripMenuItemEditStepImage"
         ToolStripMenuItemEditStepImage.Size = New Size(206, 24)
         ToolStripMenuItemEditStepImage.Text = "表示順画像生成(&I)"
+        ToolStripMenuItemEditStepImage.ToolTipText = "表示順画像生成画面を開きます"
         ' 
         ' ToolStripMenuItemSetting
         ' 
@@ -2610,6 +2611,7 @@ Partial Class frmMain
         f_i表示順2.DefaultCellStyle = DataGridViewCellStyle13
         f_i表示順2.HeaderText = "表示順"
         f_i表示順2.Name = "f_i表示順2"
+        f_i表示順2.Visible = False
         ' 
         ' f_i非表示順2
         ' 
@@ -2618,6 +2620,7 @@ Partial Class frmMain
         f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle14
         f_i非表示順2.HeaderText = "非表示順"
         f_i非表示順2.Name = "f_i非表示順2"
+        f_i非表示順2.Visible = False
         ' 
         ' f_sメモ2
         ' 

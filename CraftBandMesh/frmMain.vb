@@ -8,6 +8,7 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBandMesh.clsCalcMesh
 
 Public Class frmMain
+    Implements ICommonActions
 
     '画面編集用のワーク
     Dim _clsDataTables As New clsDataTables
@@ -911,6 +912,94 @@ Public Class frmMain
     Private Sub btn終了_Click(sender As Object, e As EventArgs) Handles btn終了.Click
         ToolStripMenuItemFileExit.PerformClick()
     End Sub
+#End Region
+
+#Region "ステップ画像"
+
+    Private Sub ToolStripMenuItemEditStepImage_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditStepImage.Click
+        Dim dlg As New frmStepImages(False)
+        If Not dlg.SetMainForm(Me, _clsDataTables, _sFilePath) Then
+            Exit Sub
+        End If
+
+        SaveTables(_clsDataTables)
+        ShowDefaultTabControlPage(enumReason._GridDropdown) 'グリッド系
+        dlg.ShowDialog()
+    End Sub
+
+    Public Sub SetDrawOrder(ByVal show As Boolean) Implements ICommonActions.SetDrawOrder
+        'dgv側面
+        f_i表示順1.Visible = show
+        f_i非表示順1.Visible = show
+        f_i表示順2.Visible = show
+        f_i非表示順2.Visible = show
+        editAddParts.SetDrawOrder(show)
+        expand横ひも.SetDrawOrder(show)
+        expand縦ひも.SetDrawOrder(show)
+        'If show AndAlso Not chk縦横側面を展開する.Checked Then
+        '    chk縦横側面を展開する.Checked = True
+        'End If
+    End Sub
+
+    'SaveTables(_clsDataTables)状態で呼出し
+    Public Function MakeImageFile(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+                                  ) As Boolean Implements ICommonActions.MakeImageFile
+
+        Dim isUpRightOnly As Boolean = rad右上.Checked
+        Dim isShowSide As Boolean = chk側面.Checked
+        Dim updownnone As enumUpDownNone = enumUpDownNone._None
+        If rad底_下上.Checked Then
+            updownnone = enumUpDownNone._DownUp
+        ElseIf rad底_上下.Checked Then
+            updownnone = enumUpDownNone._UpDown
+        End If
+
+        Dim data As New clsDataTables(_clsDataTables)
+
+        '表示/非表示
+        SetStepDispData(data, n, col)
+
+        Dim calc As New clsCalcMesh(data, Me)
+        If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Dim stepImageData As New clsImageData(Nothing)
+        Dim ret As Boolean = calc.CalcImage(stepImageData, isUpRightOnly, isShowSide, updownnone)
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Try
+            '存在チェック
+            If Not IO.File.Exists(stepImageData.GifFilePath) Then
+                Return False
+            End If
+
+            '移動先ファイルがあれば削除
+            If IO.File.Exists(fpath) Then
+                IO.File.Delete(fpath)
+            End If
+
+            IO.File.Move(stepImageData.GifFilePath, fpath)
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "MakeImageFile")
+            msg = ex.Message
+            Return False
+        End Try
+    End Function
+
+    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeImageFile2
+
+        msg = "not implemented"
+        Return False
+    End Function
 #End Region
 
 #Region "設定メニュー・ヘルプ"

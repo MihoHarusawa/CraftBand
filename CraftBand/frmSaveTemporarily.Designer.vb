@@ -27,18 +27,18 @@ Partial Class frmSaveTemporarily
         btn一時保存 = New Windows.Forms.Button()
         btnClose = New Windows.Forms.Button()
         dgvData = New ctrDataGridView()
-        BindingSourceSaveTemporarily = New System.Windows.Forms.BindingSource(components)
-        txtメモ = New Windows.Forms.TextBox()
-        lblメモ = New Windows.Forms.Label()
-        txt時刻 = New Windows.Forms.Label()
-        lbl時刻 = New Windows.Forms.Label()
-        lbl一時保存リスト = New Windows.Forms.Label()
         col削除 = New Windows.Forms.DataGridViewButtonColumn()
         colIndex = New Windows.Forms.DataGridViewTextBoxColumn()
         colTimeString = New Windows.Forms.DataGridViewTextBoxColumn()
         ColIsFileExist = New Windows.Forms.DataGridViewCheckBoxColumn()
         colDescription = New Windows.Forms.DataGridViewTextBoxColumn()
         col復元 = New Windows.Forms.DataGridViewButtonColumn()
+        BindingSourceSaveTemporarily = New System.Windows.Forms.BindingSource(components)
+        txtメモ = New Windows.Forms.TextBox()
+        lblメモ = New Windows.Forms.Label()
+        txt時刻 = New Windows.Forms.Label()
+        lbl時刻 = New Windows.Forms.Label()
+        lbl一時保存リスト = New Windows.Forms.Label()
         CType(dgvData, ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSourceSaveTemporarily, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -46,10 +46,9 @@ Partial Class frmSaveTemporarily
         ' btn一時保存
         ' 
         btn一時保存.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Right
-        btn一時保存.Location = New System.Drawing.Point(357, 14)
-        btn一時保存.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        btn一時保存.Location = New System.Drawing.Point(408, 18)
         btn一時保存.Name = "btn一時保存"
-        btn一時保存.Size = New System.Drawing.Size(97, 34)
+        btn一時保存.Size = New System.Drawing.Size(111, 43)
         btn一時保存.TabIndex = 4
         btn一時保存.Text = "一時保存(&S)"
         ToolTip1.SetToolTip(btn一時保存, "現在のデータを保存します")
@@ -58,10 +57,9 @@ Partial Class frmSaveTemporarily
         ' btnClose
         ' 
         btnClose.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Right
-        btnClose.Location = New System.Drawing.Point(357, 52)
-        btnClose.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        btnClose.Location = New System.Drawing.Point(408, 66)
         btnClose.Name = "btnClose"
-        btnClose.Size = New System.Drawing.Size(97, 34)
+        btnClose.Size = New System.Drawing.Size(111, 43)
         btnClose.TabIndex = 5
         btnClose.Text = "閉じる(&C)"
         ToolTip1.SetToolTip(btnClose, "この画面を閉じます")
@@ -77,62 +75,13 @@ Partial Class frmSaveTemporarily
         dgvData.ColumnHeadersHeightSizeMode = Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgvData.Columns.AddRange(New Windows.Forms.DataGridViewColumn() {col削除, colIndex, colTimeString, ColIsFileExist, colDescription, col復元})
         dgvData.DataSource = BindingSourceSaveTemporarily
-        dgvData.Location = New System.Drawing.Point(5, 125)
+        dgvData.Location = New System.Drawing.Point(6, 158)
+        dgvData.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
         dgvData.Name = "dgvData"
         dgvData.RowHeadersWidth = 20
         dgvData.RowTemplate.Height = 25
-        dgvData.Size = New System.Drawing.Size(450, 105)
+        dgvData.Size = New System.Drawing.Size(514, 133)
         dgvData.TabIndex = 7
-        ' 
-        ' BindingSourceSaveTemporarily
-        ' 
-        BindingSourceSaveTemporarily.DataMember = "tblSaveTemporarily"
-        BindingSourceSaveTemporarily.DataSource = GetType(Tables.dstWork)
-        ' 
-        ' txtメモ
-        ' 
-        txtメモ.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
-        txtメモ.Location = New System.Drawing.Point(46, 30)
-        txtメモ.Multiline = True
-        txtメモ.Name = "txtメモ"
-        txtメモ.Size = New System.Drawing.Size(305, 56)
-        txtメモ.TabIndex = 3
-        ' 
-        ' lblメモ
-        ' 
-        lblメモ.AutoSize = True
-        lblメモ.Location = New System.Drawing.Point(5, 30)
-        lblメモ.Name = "lblメモ"
-        lblメモ.Size = New System.Drawing.Size(24, 15)
-        lblメモ.TabIndex = 2
-        lblメモ.Text = "メモ"
-        ' 
-        ' txt時刻
-        ' 
-        txt時刻.AutoSize = True
-        txt時刻.Location = New System.Drawing.Point(46, 9)
-        txt時刻.Name = "txt時刻"
-        txt時刻.Size = New System.Drawing.Size(31, 15)
-        txt時刻.TabIndex = 1
-        txt時刻.Text = "時刻"
-        ' 
-        ' lbl時刻
-        ' 
-        lbl時刻.AutoSize = True
-        lbl時刻.Location = New System.Drawing.Point(5, 9)
-        lbl時刻.Name = "lbl時刻"
-        lbl時刻.Size = New System.Drawing.Size(31, 15)
-        lbl時刻.TabIndex = 0
-        lbl時刻.Text = "時刻"
-        ' 
-        ' lbl一時保存リスト
-        ' 
-        lbl一時保存リスト.AutoSize = True
-        lbl一時保存リスト.Location = New System.Drawing.Point(5, 102)
-        lbl一時保存リスト.Name = "lbl一時保存リスト"
-        lbl一時保存リスト.Size = New System.Drawing.Size(80, 15)
-        lbl一時保存リスト.TabIndex = 6
-        lbl一時保存リスト.Text = "一時保存リスト"
         ' 
         ' col削除
         ' 
@@ -184,11 +133,63 @@ Partial Class frmSaveTemporarily
         col復元.ToolTipText = "このデータの状態に戻します"
         col復元.UseColumnTextForButtonValue = True
         ' 
+        ' BindingSourceSaveTemporarily
+        ' 
+        BindingSourceSaveTemporarily.DataMember = "tblSaveTemporarily"
+        BindingSourceSaveTemporarily.DataSource = GetType(Tables.dstWork)
+        ' 
+        ' txtメモ
+        ' 
+        txtメモ.Anchor = Windows.Forms.AnchorStyles.Top Or Windows.Forms.AnchorStyles.Left Or Windows.Forms.AnchorStyles.Right
+        txtメモ.Location = New System.Drawing.Point(53, 38)
+        txtメモ.Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
+        txtメモ.Multiline = True
+        txtメモ.Name = "txtメモ"
+        txtメモ.Size = New System.Drawing.Size(348, 70)
+        txtメモ.TabIndex = 3
+        ' 
+        ' lblメモ
+        ' 
+        lblメモ.AutoSize = True
+        lblメモ.Location = New System.Drawing.Point(6, 38)
+        lblメモ.Name = "lblメモ"
+        lblメモ.Size = New System.Drawing.Size(29, 19)
+        lblメモ.TabIndex = 2
+        lblメモ.Text = "メモ"
+        ' 
+        ' txt時刻
+        ' 
+        txt時刻.AutoSize = True
+        txt時刻.Location = New System.Drawing.Point(53, 11)
+        txt時刻.Name = "txt時刻"
+        txt時刻.Size = New System.Drawing.Size(37, 19)
+        txt時刻.TabIndex = 1
+        txt時刻.Text = "時刻"
+        ' 
+        ' lbl時刻
+        ' 
+        lbl時刻.AutoSize = True
+        lbl時刻.Location = New System.Drawing.Point(6, 11)
+        lbl時刻.Name = "lbl時刻"
+        lbl時刻.Size = New System.Drawing.Size(37, 19)
+        lbl時刻.TabIndex = 0
+        lbl時刻.Text = "時刻"
+        ' 
+        ' lbl一時保存リスト
+        ' 
+        lbl一時保存リスト.AutoSize = True
+        lbl一時保存リスト.Location = New System.Drawing.Point(6, 129)
+        lbl一時保存リスト.Name = "lbl一時保存リスト"
+        lbl一時保存リスト.Size = New System.Drawing.Size(96, 19)
+        lbl一時保存リスト.TabIndex = 6
+        lbl一時保存リスト.Text = "一時保存リスト"
+        ' 
         ' frmSaveTemporarily
         ' 
-        AutoScaleDimensions = New System.Drawing.SizeF(7F, 15F)
+        AcceptButton = btn一時保存
+        AutoScaleDimensions = New System.Drawing.SizeF(8F, 19F)
         AutoScaleMode = Windows.Forms.AutoScaleMode.Font
-        ClientSize = New System.Drawing.Size(467, 239)
+        ClientSize = New System.Drawing.Size(534, 303)
         Controls.Add(btnClose)
         Controls.Add(lbl一時保存リスト)
         Controls.Add(lbl時刻)
@@ -197,6 +198,7 @@ Partial Class frmSaveTemporarily
         Controls.Add(txtメモ)
         Controls.Add(txt時刻)
         Controls.Add(lblメモ)
+        Margin = New System.Windows.Forms.Padding(3, 4, 3, 4)
         MaximizeBox = False
         MinimizeBox = False
         Name = "frmSaveTemporarily"

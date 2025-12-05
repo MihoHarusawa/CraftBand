@@ -9,6 +9,7 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBandHexagon.clsCalcHexagon
 
 Public Class frmMain
+    Implements ICommonActions
 
     '画面編集用のワーク
     Dim _clsDataTables As New clsDataTables
@@ -855,6 +856,89 @@ Public Class frmMain
     Private Sub btn終了_Click(sender As Object, e As EventArgs) Handles btn終了.Click
         ToolStripMenuItemFileExit.PerformClick()
     End Sub
+#End Region
+
+#Region "ステップ画像"
+    Private Sub ToolStripMenuItemEditStepImage_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditStepImage.Click
+        Dim dlg As New frmStepImages(False)
+        If Not dlg.SetMainForm(Me, _clsDataTables, _sFilePath) Then
+            Exit Sub
+        End If
+
+        SaveTables(_clsDataTables)
+        ShowDefaultTabControlPage(enumReason._GridDropdown) 'グリッド系
+        dlg.ShowDialog()
+    End Sub
+
+    Public Sub SetDrawOrder(ByVal show As Boolean) Implements ICommonActions.SetDrawOrder
+        'dgv側面
+        f_i表示順2.Visible = show
+        f_i非表示順2.Visible = show
+        editInsertBand.SetDrawOrder(show)
+        editAddParts.SetDrawOrder(show)
+        expand横ひも.SetDrawOrder(show)
+        expand斜め120度.SetDrawOrder(show)
+        expand斜め60度.SetDrawOrder(show)
+        'If show AndAlso Not chk縦横側面を展開する.Checked Then
+        '    chk縦横側面を展開する.Checked = True
+        'End If
+    End Sub
+
+    'SaveTables(_clsDataTables)状態で呼出し
+    Public Function MakeImageFile(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+                                  ) As Boolean Implements ICommonActions.MakeImageFile
+
+        Dim isBackFace As Boolean
+        Dim checked As New CDispImageChecked
+        Dim data As clsDataTables = dataForImageNew(_clsDataTables, isBackFace, checked)
+        If data Is Nothing Then
+            data = New clsDataTables(_clsDataTables)
+        End If
+
+        '表示/非表示
+        SetStepDispData(data, n, col)
+
+        Dim calc As New clsCalcHexagon(data, Me)
+        If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Dim stepImageData As New clsImageData(Nothing)
+        Dim ret As Boolean = calc.CalcImage(stepImageData, checked, isBackFace)
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Try
+            '存在チェック
+            If Not IO.File.Exists(stepImageData.GifFilePath) Then
+                Return False
+            End If
+
+            '移動先ファイルがあれば削除
+            If IO.File.Exists(fpath) Then
+                IO.File.Delete(fpath)
+            End If
+
+            IO.File.Move(stepImageData.GifFilePath, fpath)
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "MakeImageFile")
+            msg = ex.Message
+            Return False
+        End Try
+    End Function
+
+    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeImageFile2
+        msg = "Not implemented"
+        Return False
+
+    End Function
 #End Region
 
 #Region "設定メニュー・ヘルプ"
@@ -1900,32 +1984,42 @@ Public Class frmMain
     Private Sub CalcImageData()
         If ToolStripStatusLabel1.Text = "OK" Then
 
-            Dim isBackFace As Boolean = radうら.Checked
+            Dim isBackFace As Boolean ' = radうら.Checked
 
             Dim checked As New CDispImageChecked
-            checked(cIdxAngle0) = chk横ひも.Checked
-            checked.Side = chk側面.Checked
+            'checked(cIdxAngle0) = chk横ひも.Checked
+            'checked.Side = chk側面.Checked
 
-            Dim data As clsDataTables
+            Dim data As clsDataTables = dataForImageNew(_clsDataTables, isBackFace, checked)
             Dim calc As clsCalcHexagon
-            If radうら.Checked Then
-                data = _clsDataTables.LeftSideRightData()
+            'If radうら.Checked Then
+            '    data = _clsDataTables.LeftSideRightData()
+            '    calc = New clsCalcHexagon(data, Me)
+            '    If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            '        Return  '先にOKならOKのはずだが
+            '    End If
+            '    '入れ替え
+            '    checked(cIdxAngle60) = chk斜め120度.Checked
+            '    checked(cIdxAngle120) = chk斜め60度.Checked
+            '    checked.Insert = False
+            'Else
+            '    'おもて
+            '    data = _clsDataTables
+            '    calc = _clsCalcHexagon
+            '    'そのまま
+            '    checked(cIdxAngle60) = chk斜め60度.Checked
+            '    checked(cIdxAngle120) = chk斜め120度.Checked
+            '    checked.Insert = chk差しひも.Enabled AndAlso chk差しひも.Checked
+            'End If
+            If data Is Nothing Then
+                '元データ
+                data = _clsDataTables
+                calc = _clsCalcHexagon
+            Else
                 calc = New clsCalcHexagon(data, Me)
                 If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
                     Return  '先にOKならOKのはずだが
                 End If
-                '入れ替え
-                checked(cIdxAngle60) = chk斜め120度.Checked
-                checked(cIdxAngle120) = chk斜め60度.Checked
-                checked.Insert = False
-            Else
-                'おもて
-                data = _clsDataTables
-                calc = _clsCalcHexagon
-                'そのまま
-                checked(cIdxAngle60) = chk斜め60度.Checked
-                checked(cIdxAngle120) = chk斜め120度.Checked
-                checked.Insert = chk差しひも.Enabled AndAlso chk差しひも.Checked
             End If
 
             Cursor.Current = Cursors.WaitCursor
@@ -1942,6 +2036,33 @@ Public Class frmMain
             picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
         End If
     End Sub
+
+    'dataをそのまま使う場合はNothing, 変更した場合は新規作成して返す
+    Private Function dataForImageNew(ByVal data As clsDataTables, ByRef isBackFace As Boolean, ByVal checked As CDispImageChecked) As clsDataTables
+
+        isBackFace = radうら.Checked
+
+        checked(cIdxAngle0) = chk横ひも.Checked
+        checked.Side = chk側面.Checked
+
+        If radうら.Checked Then
+            data = _clsDataTables.LeftSideRightData()
+            '入れ替え
+            checked(cIdxAngle60) = chk斜め120度.Checked
+            checked(cIdxAngle120) = chk斜め60度.Checked
+            checked.Insert = False
+            'うらなので入れ替え
+            Return data.LeftSideRightData()
+        Else
+            'そのまま
+            checked(cIdxAngle60) = chk斜め60度.Checked
+            checked(cIdxAngle120) = chk斜め120度.Checked
+            checked.Insert = chk差しひも.Enabled AndAlso chk差しひも.Checked
+            'おもてなのでそのまま
+            Return Nothing
+        End If
+
+    End Function
 
     Private Sub chkひも_CheckedChanged(sender As Object, e As EventArgs) Handles chk横ひも.CheckedChanged, chk斜め60度.CheckedChanged, chk斜め120度.CheckedChanged, chk側面.CheckedChanged, chk差しひも.CheckedChanged
         If _clsImageData Is Nothing Then
