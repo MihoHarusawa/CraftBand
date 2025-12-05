@@ -353,6 +353,7 @@ Partial Class ctrInsertBand
         f_i表示順.DefaultCellStyle = DataGridViewCellStyle10
         f_i表示順.HeaderText = "表示順"
         f_i表示順.Name = "f_i表示順"
+        f_i表示順.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_i表示順.Visible = False
         ' 
         ' f_i非表示順
@@ -362,6 +363,7 @@ Partial Class ctrInsertBand
         f_i非表示順.DefaultCellStyle = DataGridViewCellStyle11
         f_i非表示順.HeaderText = "非表示順"
         f_i非表示順.Name = "f_i非表示順"
+        f_i非表示順.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_i非表示順.Visible = False
         ' 
         ' f_sメモ1

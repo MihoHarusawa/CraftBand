@@ -140,6 +140,8 @@ Partial Class frmMain
         ToolStripSeparator5 = New ToolStripSeparator()
         ToolStripMenuItemEditList = New ToolStripMenuItem()
         ToolStripMenuItemEditDefaultFile = New ToolStripMenuItem()
+        ToolStripSeparator6 = New ToolStripSeparator()
+        ToolStripMenuItemEditStepImage = New ToolStripMenuItem()
         ToolStripMenuItemSetting = New ToolStripMenuItem()
         ToolStripMenuItemSettingBandType = New ToolStripMenuItem()
         ToolStripMenuItemSettingGauge = New ToolStripMenuItem()
@@ -211,8 +213,6 @@ Partial Class frmMain
         ToolStripStatusLabel2 = New ToolStripStatusLabel()
         lbl単位 = New Label()
         btnDEBUG = New Button()
-        ToolStripSeparator6 = New ToolStripSeparator()
-        ToolStripMenuItemEditStepImage = New ToolStripMenuItem()
         f_i番号2 = New DataGridViewTextBoxColumn()
         f_s編みかた名2 = New DataGridViewTextBoxColumn()
         f_s編みひも名2 = New DataGridViewTextBoxColumn()
@@ -1237,6 +1237,18 @@ Partial Class frmMain
         ToolStripMenuItemEditDefaultFile.Text = "規定値保存フォルダ(&F)"
         ToolStripMenuItemEditDefaultFile.ToolTipText = "規定値保存フォルダを指定します"
         ' 
+        ' ToolStripSeparator6
+        ' 
+        ToolStripSeparator6.Name = "ToolStripSeparator6"
+        ToolStripSeparator6.Size = New Size(203, 6)
+        ' 
+        ' ToolStripMenuItemEditStepImage
+        ' 
+        ToolStripMenuItemEditStepImage.Name = "ToolStripMenuItemEditStepImage"
+        ToolStripMenuItemEditStepImage.Size = New Size(206, 24)
+        ToolStripMenuItemEditStepImage.Text = "表示順画像生成(&I)"
+        ToolStripMenuItemEditStepImage.ToolTipText = "表示順画像生成画面を開きます"
+        ' 
         ' ToolStripMenuItemSetting
         ' 
         ToolStripMenuItemSetting.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItemSettingBandType, ToolStripMenuItemSettingGauge, ToolStripMenuItemSettingPattern, ToolStripMenuItemSettingOptions, ToolStripMenuItemSettingColor, ToolStripSeparator3, ToolStripMenuItemSettingBasics})
@@ -1947,18 +1959,6 @@ Partial Class frmMain
         btnDEBUG.UseVisualStyleBackColor = True
         btnDEBUG.Visible = False
         ' 
-        ' ToolStripSeparator6
-        ' 
-        ToolStripSeparator6.Name = "ToolStripSeparator6"
-        ToolStripSeparator6.Size = New Size(203, 6)
-        ' 
-        ' ToolStripMenuItemEditStepImage
-        ' 
-        ToolStripMenuItemEditStepImage.Name = "ToolStripMenuItemEditStepImage"
-        ToolStripMenuItemEditStepImage.Size = New Size(206, 24)
-        ToolStripMenuItemEditStepImage.Text = "表示順画像生成(&I)"
-        ToolStripMenuItemEditStepImage.ToolTipText = "表示順画像生成画面を開きます"
-        ' 
         ' f_i番号2
         ' 
         f_i番号2.DataPropertyName = "f_i番号"
@@ -2226,6 +2226,7 @@ Partial Class frmMain
         f_i表示順2.DefaultCellStyle = DataGridViewCellStyle16
         f_i表示順2.HeaderText = "表示順"
         f_i表示順2.Name = "f_i表示順2"
+        f_i表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i表示順2.Visible = False
         ' 
         ' f_i非表示順2
@@ -2235,6 +2236,7 @@ Partial Class frmMain
         f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle17
         f_i非表示順2.HeaderText = "非表示順"
         f_i非表示順2.Name = "f_i非表示順2"
+        f_i非表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i非表示順2.Visible = False
         ' 
         ' f_sメモ2

@@ -502,6 +502,7 @@ Partial Class ctrAddParts
         f_i表示順.DefaultCellStyle = DataGridViewCellStyle12
         f_i表示順.HeaderText = "表示順"
         f_i表示順.Name = "f_i表示順"
+        f_i表示順.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_i表示順.Visible = False
         ' 
         ' f_i非表示順
@@ -511,6 +512,7 @@ Partial Class ctrAddParts
         f_i非表示順.DefaultCellStyle = DataGridViewCellStyle13
         f_i非表示順.HeaderText = "非表示順"
         f_i非表示順.Name = "f_i非表示順"
+        f_i非表示順.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_i非表示順.Visible = False
         ' 
         ' f_sメモ3

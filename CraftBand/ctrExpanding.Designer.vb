@@ -178,7 +178,6 @@ Partial Class ctrExpanding
         f_iひも番号4.MinimumWidth = 6
         f_iひも番号4.Name = "f_iひも番号4"
         f_iひも番号4.ReadOnly = True
-        f_iひも番号4.SortMode = Windows.Forms.DataGridViewColumnSortMode.NotSortable
         f_iひも番号4.Width = 125
         ' 
         ' f_i何本幅4

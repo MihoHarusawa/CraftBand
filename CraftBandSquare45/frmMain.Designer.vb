@@ -278,9 +278,9 @@ Partial Class frmMain
         f_dひも長加算 = New DataGridViewTextBoxColumn()
         f_iひも本数 = New DataGridViewTextBoxColumn()
         f_d厚さ = New DataGridViewTextBoxColumn()
-        f_sメモ = New DataGridViewTextBoxColumn()
         f_i表示順 = New DataGridViewTextBoxColumn()
         f_i非表示順 = New DataGridViewTextBoxColumn()
+        f_sメモ = New DataGridViewTextBoxColumn()
         f_d連続ひも長 = New DataGridViewTextBoxColumn()
         f_s記号 = New DataGridViewTextBoxColumn()
         f_bError = New DataGridViewCheckBoxColumn()
@@ -1639,7 +1639,7 @@ Partial Class frmMain
         dgv縁の始末.AutoGenerateColumns = False
         dgv縁の始末.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgv縁の始末.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgv縁の始末.Columns.AddRange(New DataGridViewColumn() {f_i番号, f_s編みかた名, f_s編みひも名, f_iひも番号, f_i何本幅, f_b集計対象外区分, f_s色, f_d高さ, f_d垂直ひも長, f_d周長比率対底の周, f_d周長, f_dひも長, f_dひも長加算, f_iひも本数, f_d厚さ, f_sメモ, f_i表示順, f_i非表示順, f_d連続ひも長, f_s記号, f_bError})
+        dgv縁の始末.Columns.AddRange(New DataGridViewColumn() {f_i番号, f_s編みかた名, f_s編みひも名, f_iひも番号, f_i何本幅, f_b集計対象外区分, f_s色, f_d高さ, f_d垂直ひも長, f_d周長比率対底の周, f_d周長, f_dひも長, f_dひも長加算, f_iひも本数, f_d厚さ, f_i表示順, f_i非表示順, f_sメモ, f_d連続ひも長, f_s記号, f_bError})
         dgv縁の始末.DataSource = BindingSource縁の始末
         dgv縁の始末.Location = New Point(6, 5)
         dgv縁の始末.Name = "dgv縁の始末"
@@ -2676,15 +2676,6 @@ Partial Class frmMain
         f_d厚さ.SortMode = DataGridViewColumnSortMode.NotSortable
         f_d厚さ.Width = 125
         ' 
-        ' f_sメモ
-        ' 
-        f_sメモ.DataPropertyName = "f_sメモ"
-        f_sメモ.HeaderText = "メモ"
-        f_sメモ.MinimumWidth = 6
-        f_sメモ.Name = "f_sメモ"
-        f_sメモ.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_sメモ.Width = 125
-        ' 
         ' f_i表示順
         ' 
         f_i表示順.DataPropertyName = "f_i表示順"
@@ -2692,6 +2683,7 @@ Partial Class frmMain
         f_i表示順.DefaultCellStyle = DataGridViewCellStyle11
         f_i表示順.HeaderText = "表示順"
         f_i表示順.Name = "f_i表示順"
+        f_i表示順.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i表示順.Visible = False
         ' 
         ' f_i非表示順
@@ -2701,7 +2693,17 @@ Partial Class frmMain
         f_i非表示順.DefaultCellStyle = DataGridViewCellStyle12
         f_i非表示順.HeaderText = "非表示順"
         f_i非表示順.Name = "f_i非表示順"
+        f_i非表示順.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i非表示順.Visible = False
+        ' 
+        ' f_sメモ
+        ' 
+        f_sメモ.DataPropertyName = "f_sメモ"
+        f_sメモ.HeaderText = "メモ"
+        f_sメモ.MinimumWidth = 6
+        f_sメモ.Name = "f_sメモ"
+        f_sメモ.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sメモ.Width = 125
         ' 
         ' f_d連続ひも長
         ' 
@@ -3106,9 +3108,9 @@ Partial Class frmMain
     Friend WithEvents f_dひも長加算 As DataGridViewTextBoxColumn
     Friend WithEvents f_iひも本数 As DataGridViewTextBoxColumn
     Friend WithEvents f_d厚さ As DataGridViewTextBoxColumn
-    Friend WithEvents f_sメモ As DataGridViewTextBoxColumn
     Friend WithEvents f_i表示順 As DataGridViewTextBoxColumn
     Friend WithEvents f_i非表示順 As DataGridViewTextBoxColumn
+    Friend WithEvents f_sメモ As DataGridViewTextBoxColumn
     Friend WithEvents f_d連続ひも長 As DataGridViewTextBoxColumn
     Friend WithEvents f_s記号 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError As DataGridViewCheckBoxColumn

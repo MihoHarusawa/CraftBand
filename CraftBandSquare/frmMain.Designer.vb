@@ -2611,6 +2611,7 @@ Partial Class frmMain
         f_i表示順2.DefaultCellStyle = DataGridViewCellStyle13
         f_i表示順2.HeaderText = "表示順"
         f_i表示順2.Name = "f_i表示順2"
+        f_i表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i表示順2.Visible = False
         ' 
         ' f_i非表示順2
@@ -2620,6 +2621,7 @@ Partial Class frmMain
         f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle14
         f_i非表示順2.HeaderText = "非表示順"
         f_i非表示順2.Name = "f_i非表示順2"
+        f_i非表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
         f_i非表示順2.Visible = False
         ' 
         ' f_sメモ2
