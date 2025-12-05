@@ -701,4 +701,84 @@
   <data name="LOG_MasterConfigFile" xml:space="preserve">
     <value>設定ファイル</value>
   </data>
+  <data name="MsgStepImageAskDeleteFile" xml:space="preserve">
+    <value>{0}ファイル{1}点を削除します。よろしいですか？</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageAskDeleteFolder" xml:space="preserve">
+    <value>フォルダ'{0}'を削除しますか？</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageDispNumber" xml:space="preserve">
+    <value>表示番号&lt;{0}&gt;のレコード数は {1}</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageDispNumberError" xml:space="preserve">
+    <value>表示番号&lt;{0}&gt; ファイル'{1}'の生成に失敗しました</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageDispNumberSuccess" xml:space="preserve">
+    <value>表示番号&lt;{0}&gt; ファイル'{1}'の生成に成功しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFileDelete" xml:space="preserve">
+    <value>{0}ファイル{1}点を削除しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFileDeleteError" xml:space="preserve">
+    <value>{0}点のファイル削除に失敗しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFileLeft" xml:space="preserve">
+    <value>フォルダ'{0}'にはファイル{1}点 フォルダ{2}点が残っています。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFinish" xml:space="preserve">
+    <value>画像一括生成完了 {0}枚</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFoderDeleteError" xml:space="preserve">
+    <value>フォルダ'{0}'の削除に失敗しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFolderCreateError" xml:space="preserve">
+    <value>フォルダ'{0}'の作成に失敗しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFolderDelete" xml:space="preserve">
+    <value>フォルダ'{0}'を削除しました。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFolderOpenError" xml:space="preserve">
+    <value>フォルダ'{0}'を開くことができませんでした。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageGenerating" xml:space="preserve">
+    <value>ステップ画像生成中... {0}/({1}～{2}) {3}</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageNoDispColor" xml:space="preserve">
+    <value>非表示色を選択してください。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageNoFile" xml:space="preserve">
+    <value>生成先フォルダ'{0}'内に{1}ファイルはありません。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageNoFolder" xml:space="preserve">
+    <value>生成先フォルダ'{0}'が存在しません。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageNoFolderName" xml:space="preserve">
+    <value>生成先フォルダが指定されていません。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageNotExpand" xml:space="preserve">
+    <value>縦横が展開されていません。列を表示し、展開して表示順をセットしてください。</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageRangeError" xml:space="preserve">
+    <value>開始番号は終了番号以下にしてください。({0} &gt; {1})</value>
+    <comment>frmStepImages</comment>
+  </data>
 </root>

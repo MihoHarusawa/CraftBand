@@ -18,10 +18,11 @@ End Interface
 
 Public Module mdlStepImages
 
-
-
     '表示番号がnの時の色を変えるか
     Private Function no_disp(ByVal n As Integer, ByVal o表示順 As Object, ByVal o非表示順 As Object) As Boolean
+        If n < 0 Then
+            Return False 'nはゼロ以上の前提
+        End If
         Dim i表示順 As Integer = 0
         If Not IsDBNull(o表示順) Then
             i表示順 = CInt(o表示順)
@@ -140,62 +141,51 @@ Public Module mdlStepImages
 
     '指定の表示順のレコード数を返す
     Public Function CountDispStepRecord(ByVal data As clsDataTables, ByVal n As Integer, ByRef memo As String) As Integer
-        Dim count As Boolean = 0
+        Dim count As Integer = 0
         Dim sb As New System.Text.StringBuilder
         With data
             '側面と縁
             For Each row As tbl側面Row In .p_tbl側面.Rows
-                If n = row.f_i表示順 Then
-                    count += 1
-                    If Not String.IsNullOrEmpty(row.f_sメモ) Then
-                        sb.AppendLine(row.f_sメモ)
-                    End If
-                End If
+                count += disp_count(n, row, sb)
             Next
 
             '底_楕円
             For Each row As tbl底_楕円Row In .p_tbl底_楕円.Rows
-                If n = row.f_i表示順 Then
-                    count += 1
-                    If Not String.IsNullOrEmpty(row.f_sメモ) Then
-                        sb.AppendLine(row.f_sメモ)
-                    End If
-                End If
+                count += disp_count(n, row, sb)
             Next
 
             '差しひも
             For Each row As tbl差しひもRow In .p_tbl差しひも.Rows
-                If n = row.f_i表示順 Then
-                    count += 1
-                    If Not String.IsNullOrEmpty(row.f_sメモ) Then
-                        sb.AppendLine(row.f_sメモ)
-                    End If
-                End If
+                count += disp_count(n, row, sb)
             Next
 
             '追加品
             For Each row As tbl追加品Row In .p_tbl追加品.Rows
-                If n = row.f_i表示順 Then
-                    count += 1
-                    If Not String.IsNullOrEmpty(row.f_sメモ) Then
-                        sb.AppendLine(row.f_sメモ)
-                    End If
-                End If
+                count += disp_count(n, row, sb)
             Next
 
             '縦ひもと横ひも
             For Each row As tbl縦横展開Row In .p_tbl縦横展開.Rows
-                If n = row.f_i表示順 Then
-                    count += 1
-                    If Not String.IsNullOrEmpty(row.f_sメモ) Then
-                        sb.AppendLine(row.f_sメモ)
-                    End If
-                End If
+                count += disp_count(n, row, sb)
             Next
         End With
 
         memo = sb.ToString()
         Return count
+    End Function
+
+    Private Function disp_count(ByVal n As Integer, ByVal row As DataRow, ByVal sb As Text.StringBuilder) As Integer
+        If IsDBNull(row("f_i表示順")) Then
+            If n = 0 Then
+                Return 1
+            End If
+        ElseIf n = row("f_i表示順") Then
+            If Not String.IsNullOrWhiteSpace(row("f_sメモ")) Then
+                sb.AppendLine(row("f_sメモ"))
+            End If
+            Return 1
+        End If
+        Return 0
     End Function
 
 

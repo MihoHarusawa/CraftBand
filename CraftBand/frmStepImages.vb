@@ -56,7 +56,8 @@ Public Class frmStepImages
 
         'データが展開されていること
         If Not _dataCurrent.p_row底_縦横.Value("f_b展開区分") Then
-            addMessage("縦横が展開されていません。列を表示し、展開して表示順をセットしてください。")
+            '縦横が展開されていません。列を表示し、展開して表示順をセットしてください。
+            addMessage(My.Resources.MsgStepImageNotExpand)
             Exit Sub
         End If
 
@@ -122,34 +123,63 @@ Public Class frmStepImages
         'SearchOption.TopDirectoryOnly は現在のフォルダ直下のみを検索
         Dim gifFiles As String() = Directory.GetFiles(folderPath, "*" & TARGET_EXT, SearchOption.TopDirectoryOnly)
         If gifFiles.Length = 0 Then
-            addFormatMessage("生成先フォルダ'{0}'内に {1} ファイルはありません。", folderPath, TARGET_EXT)
-            Exit Sub
-        End If
+            '生成先フォルダ'{0}'内に{1}ファイルはありません。
+            addFormatMessage(My.Resources.MsgStepImageNoFile, folderPath, TARGET_EXT)
 
-        '削除の可否を質問
-        Dim message As String = String.Format("{0}ファイル{1}点を削除します。よろしいですか？", TARGET_EXT, gifFiles.Length)
-        Dim result As DialogResult = MessageBox.Show(message, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-        If result = DialogResult.Yes Then
-            Dim deletedCount As Integer = 0
-            Dim failedFiles As New List(Of String)()
+        Else
+            '{0}ファイル{1}点を削除します。よろしいですか？
+            Dim message As String = String.Format(My.Resources.MsgStepImageAskDeleteFile, TARGET_EXT, gifFiles.Length)
+            Dim result As DialogResult = MessageBox.Show(message, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.Yes Then
+                Dim deletedCount As Integer = 0
+                Dim failedFiles As New List(Of String)()
 
-            For Each filePath In gifFiles
-                Try
-                    File.Delete(filePath)
-                    deletedCount += 1
-                Catch ex As Exception
-                    ' 削除に失敗した場合（ファイルが使用中など）
-                    failedFiles.Add(Path.GetFileName(filePath))
-                End Try
-            Next
-            addFormatMessage("{0}ファイル{1}点を削除しました。", TARGET_EXT, deletedCount)
-            If 0 < failedFiles.Count Then
-                addFormatMessage("{0}点のファイル削除に失敗しました。", failedFiles.Count)
-                For i As Integer = 0 To failedFiles.Count - 1
-                    addFormatMessage("  {0}. {1}", i + 1, failedFiles(i))
+                For Each filePath In gifFiles
+                    Try
+                        File.Delete(filePath)
+                        deletedCount += 1
+                    Catch ex As Exception
+                        ' 削除に失敗した場合（ファイルが使用中など）
+                        failedFiles.Add(Path.GetFileName(filePath))
+                    End Try
                 Next
+                '{0}ファイル{1}点を削除しました。
+                addFormatMessage(My.Resources.MsgStepImageFileDelete, TARGET_EXT, deletedCount)
+                If 0 < failedFiles.Count Then
+                    '{0}点のファイル削除に失敗しました。
+                    addFormatMessage(My.Resources.MsgStepImageFileDeleteError, failedFiles.Count)
+                    For i As Integer = 0 To failedFiles.Count - 1
+                        addFormatMessage("  {0}. {1}", i + 1, failedFiles(i))
+                    Next
+                    Exit Sub
+                End If
             End If
         End If
+
+        'gifファイルがなくなった状態
+        Try
+            Dim filesCount As Integer = Directory.GetFiles(folderPath, "*", SearchOption.TopDirectoryOnly).Length
+            Dim dirsCount As Integer = Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Length
+            If 0 < filesCount OrElse 0 < dirsCount Then
+                'フォルダ'{0}'にはファイル{1}点 フォルダ{2}点が残っています。
+                addFormatMessage(My.Resources.MsgStepImageFileLeft, folderPath, filesCount, dirsCount)
+                Exit Sub
+            End If
+
+            'フォルダ'{0}'を削除しますか？
+            Dim message As String = String.Format(My.Resources.MsgStepImageAskDeleteFolder, folderPath)
+            Dim result As DialogResult = MessageBox.Show(message, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If result = DialogResult.Yes Then
+                Directory.Delete(folderPath)
+                'フォルダ'{0}'を削除しました。
+                addFormatMessage(My.Resources.MsgStepImageFolderDelete, folderPath)
+            End If
+
+        Catch ex As Exception
+            'フォルダ'{0}'の削除に失敗しました。
+            addFormatMessage(My.Resources.MsgStepImageFoderDeleteError, folderPath)
+            addMessage(ex.Message)
+        End Try
     End Sub
 
     Private Sub btn生成先フォルダ_Click(sender As Object, e As EventArgs) Handles btn生成先フォルダ.Click
@@ -170,9 +200,10 @@ Public Class frmStepImages
             Process.Start("explorer.exe", folderPath)
 
         Catch ex As Exception
-            addFormatMessage("フォルダ'{0}'のオープンに失敗しました。", folderPath)
+            'フォルダ'{0}'を開くことができませんでした。
+            addFormatMessage(My.Resources.MsgStepImageFolderOpenError, folderPath)
             addMessage(ex.Message)
-            Return
+            Exit Sub
         End Try
     End Sub
 
@@ -182,7 +213,8 @@ Public Class frmStepImages
         Dim folderPath As String = txt生成先フォルダ.Text.Trim()
 
         If String.IsNullOrWhiteSpace(folderPath) Then
-            addMessage("生成先フォルダが指定されていません。")
+            '生成先フォルダが指定されていません。
+            addMessage(My.Resources.MsgStepImageNoFolderName)
             Return False
         End If
 
@@ -191,11 +223,14 @@ Public Class frmStepImages
                 Try
                     Directory.CreateDirectory(folderPath)
                 Catch ex As Exception
-                    addFormatMessage("フォルダ'{0}'の作成に失敗しました。{1}{2}", folderPath, vbCrLf, ex.Message)
+                    'フォルダ'{0}'の作成に失敗しました。
+                    addFormatMessage(My.Resources.MsgStepImageFolderCreateError, folderPath)
+                    addMessage(ex.Message)
                     Return False
                 End Try
             Else
-                addFormatMessage("生成先フォルダ'{0}'が存在しません。", folderPath)
+                '生成先フォルダ'{0}'が存在しません。
+                addFormatMessage(My.Resources.MsgStepImageNoFolder, folderPath)
                 Return False
             End If
         End If
@@ -218,14 +253,16 @@ Public Class frmStepImages
 
         Dim color As String = cmb非表示色.Text.Trim()
         If String.IsNullOrEmpty(color) Then
-            addMessage("非表示色を選択してください。")
+            '非表示色を選択してください。
+            addMessage(My.Resources.MsgStepImageNoDispColor)
             Exit Sub
         End If
 
         Dim n As Integer = CInt(nud表示番号.Value)
         Dim memo As String = Nothing
         Dim count As Integer = CountDispStepRecord(_dataCurrent, n, memo)
-        addFormatMessage("表示番号<{0}>のレコード数は {1}", n, count)
+        '表示番号<{0}>のレコード数は {1}
+        addFormatMessage(My.Resources.MsgStepImageDispNumber, n, count)
         addMessage(memo)
 
         Dim filePath As String = getFilePath(n)
@@ -247,7 +284,8 @@ Public Class frmStepImages
         Me.Enabled = True
 
         If ret Then
-            addFormatMessage("表示番号<{0}> ファイル'{1}'の生成に成功しました。", n, filePath)
+            '表示番号<{0}> ファイル'{1}'の生成に成功しました。
+            addFormatMessage(My.Resources.MsgStepImageDispNumberSuccess, n, filePath)
 
             Dim psi As New ProcessStartInfo()
             psi.FileName = filePath
@@ -255,7 +293,8 @@ Public Class frmStepImages
             Process.Start(psi)
 
         Else
-            addFormatMessage("表示番号<{0}> ファイル'{1}'の生成に失敗しました。", n, filePath)
+            '表示番号<{0}> ファイル'{1}'の生成に失敗しました
+            addFormatMessage(My.Resources.MsgStepImageDispNumberError, n, filePath)
             addMessage(errMsg)
         End If
     End Sub
@@ -270,14 +309,16 @@ Public Class frmStepImages
 
         Dim color As String = cmb非表示色.Text.Trim()
         If String.IsNullOrEmpty(color) Then
-            addMessage("非表示色を選択してください。")
+            '非表示色を選択してください。
+            addMessage(My.Resources.MsgStepImageNoDispColor)
             Exit Sub
         End If
 
         Dim nFrom As Integer = CInt(nudFrom.Value)
         Dim nTo As Integer = CInt(nudTo.Value)
         If nFrom > nTo Then
-            addMessage("開始番号は終了番号以下にしてください。")
+            '開始番号は終了番号以下にしてください。({0} > {1})
+            addFormatMessage(My.Resources.MsgStepImageRangeError, nFrom, nTo)
             Exit Sub
         End If
 
@@ -293,7 +334,8 @@ Public Class frmStepImages
             If count = 0 AndAlso Not (n = nFrom OrElse n = nTo) Then
                 skip = "skip"
             End If
-            addFormatMessage("ステップ画像生成中 {0}/({1},{2}) {3}", n, nFrom, nTo, skip)
+            'ステップ画像生成中... {0}/({1}～{2}) {3}
+            addFormatMessage(My.Resources.MsgStepImageGenerating, n, nFrom, nTo, skip)
             addMessage(memo)
             Application.DoEvents()
             If Not String.IsNullOrEmpty(skip) Then
@@ -310,13 +352,15 @@ Public Class frmStepImages
             End If
 
             If Not ret Then
-                addFormatMessage("表示番号<{0}> ファイル'{1}'の生成に失敗しました。", n, filePath)
+                '表示番号<{0}> ファイル'{1}'の生成に失敗しました
+                addFormatMessage(My.Resources.MsgStepImageDispNumberError, n, filePath)
                 addMessage(errMsg)
                 Exit For
             End If
             generate += 1
         Next
-        addFormatMessage("画像一括生成完了 {0}枚", generate)
+        '画像一括生成完了 {0}枚
+        addFormatMessage(My.Resources.MsgStepImageFinish, generate)
 
         Cursor = Cursors.Default
         Enabled = True

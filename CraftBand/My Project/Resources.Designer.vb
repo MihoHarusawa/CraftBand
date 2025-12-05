@@ -1187,6 +1187,186 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  {0}ファイル{1}点を削除します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageAskDeleteFile() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageAskDeleteFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;を削除しますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageAskDeleteFolder() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageAskDeleteFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  表示番号&lt;{0}&gt;のレコード数は {1} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageDispNumber() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageDispNumber", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  表示番号&lt;{0}&gt; ファイル&apos;{1}&apos;の生成に失敗しました に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageDispNumberError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageDispNumberError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  表示番号&lt;{0}&gt; ファイル&apos;{1}&apos;の生成に成功しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageDispNumberSuccess() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageDispNumberSuccess", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}ファイル{1}点を削除しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFileDelete() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFileDelete", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  {0}点のファイル削除に失敗しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFileDeleteError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFileDeleteError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;にはファイル{1}点 フォルダ{2}点が残っています。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFileLeft() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFileLeft", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  画像一括生成完了 {0}枚 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFinish() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFinish", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;の削除に失敗しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFoderDeleteError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFoderDeleteError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;の作成に失敗しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFolderCreateError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFolderCreateError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;を削除しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFolderDelete() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFolderDelete", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  フォルダ&apos;{0}&apos;を開くことができませんでした。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFolderOpenError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFolderOpenError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ステップ画像生成中... {0}/({1}～{2}) {3} に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageGenerating() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageGenerating", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  非表示色を選択してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageNoDispColor() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageNoDispColor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  生成先フォルダ&apos;{0}&apos;内に{1}ファイルはありません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageNoFile() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageNoFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  生成先フォルダ&apos;{0}&apos;が存在しません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageNoFolder() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageNoFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  生成先フォルダが指定されていません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageNoFolderName() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageNoFolderName", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  縦横が展開されていません。列を表示し、展開して表示順をセットしてください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageNotExpand() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageNotExpand", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  開始番号は終了番号以下にしてください。({0} &gt; {1}) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageRangeError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageRangeError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  [{0}] の {1}点を更新しました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgUpdate() As String
