@@ -403,11 +403,19 @@ Public Class ctrInsertBand
         row.f_s色 = rcur.f_s色
         row.f_i開始位置 = rcur.f_i開始位置
         row.f_i何本ごと = rcur.f_i何本ごと
-        row.f_i同位置数 = rcur.f_i同位置数
-        row.f_i同位置順 = rcur.f_i同位置順
         row.f_i差し位置 = rcur.f_i差し位置
         row.f_dひも長加算 = rcur.f_dひも長加算
         row.f_sメモ = rcur.f_sメモ
+        If rcur.Isf_i同位置順Null() Then
+            row.Setf_i同位置順Null()
+        Else
+            row.f_i同位置順 = rcur.f_i同位置順
+        End If
+        If rcur.Isf_i同位置数Null() Then
+            row.Setf_i同位置数Null()
+        Else
+            row.f_i同位置数 = rcur.f_i同位置数
+        End If
 
         table.Rows.Add(row)
         dgv差しひも.NumberPositionsSelect(number)
