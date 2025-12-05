@@ -371,6 +371,49 @@ Public Class ctrInsertBand
         dgv差しひも.NumberPositionsSelect(row.f_i番号)
     End Sub
 
+    Private Sub btn複製_Click(sender As Object, e As EventArgs) Handles btn複製.Click
+        Dim table As tbl差しひもDataTable = Nothing
+        Dim r As DataRow = Nothing
+        If Not dgv差しひも.GetTableAndRow(table, r) Then
+            Exit Sub
+        End If
+        Dim rcur As tbl差しひもRow = DirectCast(r, tbl差しひもRow)
+        Dim number As Integer = rcur.f_i番号
+        If number < 0 Then
+            Exit Sub
+        End If
+        _EditChanged = True
+
+        'number の次の位置を空ける
+        number += 1 'Next
+        If Not clsDataTables.ShiftNumberAfter(table, number) Then
+            '{0}追加用の番号がとれません。
+            Dim msg As String = String.Format(My.Resources.CalcNoAddNumber, _TabPageName)
+            MessageBox.Show(msg, _FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        'レコード
+        Dim row As tbl差しひもRow = table.Newtbl差しひもRow '配置面なし
+        row.f_i番号 = number
+        row.f_i配置面 = rcur.f_i配置面
+        row.f_i角度 = rcur.f_i角度
+        row.f_i中心点 = rcur.f_i中心点
+        row.f_i何本幅 = rcur.f_i何本幅
+        row.f_s色 = rcur.f_s色
+        row.f_i開始位置 = rcur.f_i開始位置
+        row.f_i何本ごと = rcur.f_i何本ごと
+        row.f_i同位置数 = rcur.f_i同位置数
+        row.f_i同位置順 = rcur.f_i同位置順
+        row.f_i差し位置 = rcur.f_i差し位置
+        row.f_dひも長加算 = rcur.f_dひも長加算
+        row.f_sメモ = rcur.f_sメモ
+
+        table.Rows.Add(row)
+        dgv差しひも.NumberPositionsSelect(number)
+        RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, "f_i番号"))
+    End Sub
+
     Private Sub btn上へ_Click(sender As Object, e As EventArgs) Handles btn上へ.Click
         Dim table As tbl差しひもDataTable = Nothing
         Dim number As Integer = -1

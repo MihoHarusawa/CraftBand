@@ -1273,6 +1273,29 @@ Public Class clsDataTables
 
     End Function
 
+    'numberを空ける(以降の番号を1つ後ろにシフト)#108
+    Shared Function ShiftNumberAfter(ByVal table As DataTable, ByVal number As Integer) As Boolean
+
+        '"f_i番号" の値が number 以上の行をすべて選択
+        Dim rowsToUpdate = table.AsEnumerable() _
+            .Where(Function(row) row.Field(Of Integer)("f_i番号") >= number) _
+            .OrderByDescending(Function(row) row.Field(Of Integer)("f_i番号")) ' 降順で処理
+
+        '各行の値を更新する
+        For Each row As DataRow In rowsToUpdate
+            Try
+                Dim currentKey As Integer = row.Field(Of Integer)("f_i番号")
+                row("f_i番号") = currentKey + 1
+
+            Catch ex As Exception
+                g_clsLog.LogException(ex, "clsDataTables.ShiftNumberAfter")
+                Return False
+            End Try
+        Next
+        Return True
+
+    End Function
+
 #End Region
 
 

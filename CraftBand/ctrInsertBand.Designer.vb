@@ -41,6 +41,7 @@ Partial Class ctrInsertBand
         btn下へ = New Windows.Forms.Button()
         btn上へ = New Windows.Forms.Button()
         btn同位置 = New Windows.Forms.Button()
+        btn複製 = New Windows.Forms.Button()
         Panel = New Windows.Forms.Panel()
         dgv差しひも = New ctrDataGridView()
         f_i番号1 = New Windows.Forms.DataGridViewTextBoxColumn()
@@ -128,8 +129,20 @@ Partial Class ctrInsertBand
         ToolTip1.SetToolTip(btn同位置, "同位置数・同位置順を再設定します")
         btn同位置.UseVisualStyleBackColor = True
         ' 
+        ' btn複製
+        ' 
+        btn複製.Anchor = Windows.Forms.AnchorStyles.Bottom Or Windows.Forms.AnchorStyles.Right
+        btn複製.Location = New System.Drawing.Point(606, 344)
+        btn複製.Name = "btn複製"
+        btn複製.Size = New System.Drawing.Size(111, 44)
+        btn複製.TabIndex = 6
+        btn複製.Text = "複製(&P)"
+        ToolTip1.SetToolTip(btn複製, "行を追加します")
+        btn複製.UseVisualStyleBackColor = True
+        ' 
         ' Panel
         ' 
+        Panel.Controls.Add(btn複製)
         Panel.Controls.Add(btn同位置)
         Panel.Controls.Add(btn削除)
         Panel.Controls.Add(btn追加)
@@ -418,5 +431,6 @@ Partial Class ctrInsertBand
     Friend WithEvents f_i表示順 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_i非表示順 As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ1 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents btn複製 As Windows.Forms.Button
 
 End Class
