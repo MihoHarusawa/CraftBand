@@ -916,6 +916,10 @@ Public Class frmMain
             End If
 
             IO.File.Move(stepModelImageData.GifFilePath, fpath)
+            'No Check
+            If radビューア.Checked Then
+                stepModelImageData.ModelFileOpen()
+            End If
             Return True
 
         Catch ex As Exception
