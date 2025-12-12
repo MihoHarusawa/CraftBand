@@ -11,7 +11,7 @@ Public Interface ICommonActions
     Function MakeImageFile(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String) As Boolean
 
     'プレビュー2画像
-    Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String) As Boolean
+    Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByVal isShow3D As Boolean, ByRef msg As String) As Boolean
 
 End Interface
 

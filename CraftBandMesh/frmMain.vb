@@ -994,7 +994,7 @@ Public Class frmMain
         End Try
     End Function
 
-    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByVal isShow3D As Boolean, ByRef msg As String
                                    ) As Boolean Implements ICommonActions.MakeImageFile2
 
         msg = "not implemented"

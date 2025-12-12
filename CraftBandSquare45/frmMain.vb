@@ -883,7 +883,7 @@ Public Class frmMain
         End Try
     End Function
 
-    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByRef msg As String
+    Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByVal isShow3D As Boolean, ByRef msg As String
                                    ) As Boolean Implements ICommonActions.MakeImageFile2
 
         Dim data As New clsDataTables(_clsDataTables)
@@ -917,7 +917,7 @@ Public Class frmMain
 
             IO.File.Move(stepModelImageData.GifFilePath, fpath)
             'No Check
-            If radビューア.Checked Then
+            If isShow3D AndAlso radビューア.Checked Then
                 stepModelImageData.ModelFileOpen()
             End If
             Return True

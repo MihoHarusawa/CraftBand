@@ -290,7 +290,7 @@ Public Class frmStepImages
         Dim errMsg As String = Nothing
         Dim ret As Boolean
         If radプレビュー2.Checked Then
-            ret = _commonActions.MakeImageFile2(n, color, filePath, errMsg)
+            ret = _commonActions.MakeImageFile2(n, color, filePath, True, errMsg) 'with 3D
         Else
             ret = _commonActions.MakeImageFile(n, color, filePath, errMsg)
         End If
@@ -360,7 +360,7 @@ Public Class frmStepImages
             Dim ret As Boolean
             Dim errMsg As String = Nothing
             If radプレビュー2.Checked Then
-                ret = _commonActions.MakeImageFile2(n, color, filePath, errMsg)
+                ret = _commonActions.MakeImageFile2(n, color, filePath, False, errMsg) 'without 3D
             Else
                 ret = _commonActions.MakeImageFile(n, color, filePath, errMsg)
             End If
