@@ -1,6 +1,8 @@
 ﻿Imports System.Drawing
 Imports System.IO
+Imports System.Text
 Imports System.Windows.Forms
+Imports System.Xml
 Imports CraftBand.Tables
 
 Public Class frmStepImages
@@ -16,6 +18,7 @@ Public Class frmStepImages
     Shared _filename As String
 
     Const TARGET_EXT As String = ".gif"
+    Const MEMO_EXT As String = ".txt"
 
     Sub New(ByVal is2nd As Boolean)
         InitializeComponent()
@@ -124,21 +127,34 @@ Public Class frmStepImages
 
         Dim folderPath As String = txt生成先フォルダ.Text.Trim()
 
-        'SearchOption.TopDirectoryOnly は現在のフォルダ直下のみを検索
-        Dim gifFiles As String() = Directory.GetFiles(folderPath, "*" & TARGET_EXT, SearchOption.TopDirectoryOnly)
-        If gifFiles.Length = 0 Then
-            '生成先フォルダ'{0}'内に{1}ファイルはありません。
-            addFormatMessage(My.Resources.MsgStepImageNoFile, folderPath, TARGET_EXT)
+        '現在のフォルダ直下から、.gifと.txtを検索
+        Dim giftxtFiles As String() = Nothing
+        Try
+            Dim gifFiles As IEnumerable(Of String) = Directory.EnumerateFiles(folderPath, "*" & TARGET_EXT, SearchOption.TopDirectoryOnly)
+            Dim memoFiles As IEnumerable(Of String) = Directory.EnumerateFiles(folderPath, "*" & MEMO_EXT, SearchOption.TopDirectoryOnly)
+            giftxtFiles = gifFiles.Concat(memoFiles).ToArray()
+
+        Catch ex As Exception
+            'フォルダ'{0}'のファイルリストアップに失敗しました。
+            addFormatMessage(My.Resources.MsgStepImageFolderListupError, folderPath)
+            addMessage(ex.Message)
+            Exit Sub
+        End Try
+
+        '対象ファイルを削除
+        If giftxtFiles Is Nothing OrElse giftxtFiles.Length = 0 Then
+            '生成先フォルダ'{0}'内に{1}/{2}ファイルはありません。
+            addFormatMessage(My.Resources.MsgStepImageNoFile, folderPath, TARGET_EXT, MEMO_EXT)
 
         Else
-            '{0}ファイル{1}点を削除します。よろしいですか？
-            Dim message As String = String.Format(My.Resources.MsgStepImageAskDeleteFile, TARGET_EXT, gifFiles.Length)
+            '{0}/{1}ファイル{2}点を削除します。よろしいですか？
+            Dim message As String = String.Format(My.Resources.MsgStepImageAskDeleteFile, TARGET_EXT, MEMO_EXT, giftxtFiles.Length)
             Dim result As DialogResult = MessageBox.Show(message, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
             If result = DialogResult.Yes Then
                 Dim deletedCount As Integer = 0
                 Dim failedFiles As New List(Of String)()
 
-                For Each filePath In gifFiles
+                For Each filePath In giftxtFiles
                     Try
                         File.Delete(filePath)
                         deletedCount += 1
@@ -147,8 +163,8 @@ Public Class frmStepImages
                         failedFiles.Add(Path.GetFileName(filePath))
                     End Try
                 Next
-                '{0}ファイル{1}点を削除しました。
-                addFormatMessage(My.Resources.MsgStepImageFileDelete, TARGET_EXT, deletedCount)
+                '{0}/{1}ファイル{2}点を削除しました。
+                addFormatMessage(My.Resources.MsgStepImageFileDelete, TARGET_EXT, MEMO_EXT, deletedCount)
                 If 0 < failedFiles.Count Then
                     '{0}点のファイル削除に失敗しました。
                     addFormatMessage(My.Resources.MsgStepImageFileDeleteError, failedFiles.Count)
@@ -160,7 +176,7 @@ Public Class frmStepImages
             End If
         End If
 
-        'gifファイルがなくなった状態
+        '対象ファイルがなくなった状態で
         Try
             Dim filesCount As Integer = Directory.GetFiles(folderPath, "*", SearchOption.TopDirectoryOnly).Length
             Dim dirsCount As Integer = Directory.GetDirectories(folderPath, "*", SearchOption.TopDirectoryOnly).Length
@@ -339,7 +355,11 @@ Public Class frmStepImages
 
         Cursor = Cursors.WaitCursor
         Enabled = False
+        Dim sb As New System.Text.StringBuilder
+        sb.AppendLine(_dataCurrent.p_row目標寸法.Value("f_sタイトル"))
+        sb.AppendLine(_dataCurrent.p_row目標寸法.Value("f_s作成者"))
 
+        Dim filePath As String = getFilePath(0)
         Dim generate As Integer = 0
         For n As Integer = nFrom To nTo
             Dim memo As String = Nothing
@@ -347,16 +367,17 @@ Public Class frmStepImages
             Dim count As Integer = CountDispStepRecord(_dataCurrent, n, memo)
             If count = 0 AndAlso Not (n = nFrom OrElse n = nTo) Then
                 skip = "skip"
+            Else
+                skip = memo
             End If
             'ステップ画像生成中... {0}/({1}～{2}) {3}
             addFormatMessage(My.Resources.MsgStepImageGenerating, n, nFrom, nTo, skip)
-            addMessage(memo)
             Application.DoEvents()
-            If Not String.IsNullOrEmpty(skip) Then
+            If skip = "skip" Then
                 Continue For
             End If
 
-            Dim filePath As String = getFilePath(n)
+            filePath = getFilePath(n)
             Dim ret As Boolean
             Dim errMsg As String = Nothing
             If radプレビュー2.Checked Then
@@ -371,14 +392,25 @@ Public Class frmStepImages
                 addMessage(errMsg)
                 Exit For
             End If
+            sb.AppendFormat("{0} {1}", IO.Path.GetFileNameWithoutExtension(filePath), memo).AppendLine()
             generate += 1
         Next
         '画像一括生成完了 {0}枚
         addFormatMessage(My.Resources.MsgStepImageFinish, generate)
 
+        'memoファイル
+        sb.AppendLine(_dataCurrent.p_row目標寸法.Value("f_sメモ"))
+        sb.AppendLine(_dataCurrent.p_row目標寸法.Value("f_sロゴ文字列"))
+        Try
+            'ファイルが存在すれば内容を上書き
+            File.WriteAllText(IO.Path.ChangeExtension(filePath, MEMO_EXT), sb.ToString(), Encoding.UTF8)
+        Catch ex As Exception
+            'No Check
+            addMessage(ex.Message)
+        End Try
+
         Cursor = Cursors.Default
         Enabled = True
-
     End Sub
 
     Private Function clearMessage() As Boolean

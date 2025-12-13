@@ -897,7 +897,7 @@ Public Class frmMain
         End If
 
         Dim stepModelImageData As New clsModelSquare45(calc, Nothing)
-        Dim ret As Boolean = stepModelImageData.CalcModel(Me) 'rad非表示.Checked)
+        Dim ret As Boolean = stepModelImageData.CalcModel(Me, False) 'NOT radAfter.Checked
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(stepModelImageData.LastError) Then
             msg = _clsModelImageData.LastError
@@ -2080,7 +2080,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         _clsModelImageData = New clsModelSquare45(_clsCalcSquare45, _sFilePath)
-        ret = _clsModelImageData.CalcModel(Me) 'radAfter.Checked)
+        ret = _clsModelImageData.CalcModel(Me, radAfter.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then
@@ -2137,7 +2137,7 @@ Public Class frmMain
         End If
         '
         Cursor.Current = Cursors.WaitCursor
-        Dim ret As Boolean = _clsModelImageData.CalcModel(Me) 'radAfter.Checked)
+        Dim ret As Boolean = _clsModelImageData.CalcModel(Me, radAfter.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsModelImageData.LastError) Then

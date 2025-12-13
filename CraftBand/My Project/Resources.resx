@@ -702,7 +702,7 @@
     <value>設定ファイル</value>
   </data>
   <data name="MsgStepImageAskDeleteFile" xml:space="preserve">
-    <value>{0}ファイル{1}点を削除します。よろしいですか？</value>
+    <value>{0}/{1}ファイル{2}点を削除します。よろしいですか？</value>
     <comment>frmStepImages</comment>
   </data>
   <data name="MsgStepImageAskDeleteFolder" xml:space="preserve">
@@ -722,7 +722,7 @@
     <comment>frmStepImages</comment>
   </data>
   <data name="MsgStepImageFileDelete" xml:space="preserve">
-    <value>{0}ファイル{1}点を削除しました。</value>
+    <value>{0}/{1}ファイル{2}点を削除しました。</value>
     <comment>frmStepImages</comment>
   </data>
   <data name="MsgStepImageFileDeleteError" xml:space="preserve">
@@ -762,7 +762,7 @@
     <comment>frmStepImages</comment>
   </data>
   <data name="MsgStepImageNoFile" xml:space="preserve">
-    <value>生成先フォルダ'{0}'内に{1}ファイルはありません。</value>
+    <value>生成先フォルダ'{0}'内に{1}/{2}ファイルはありません。</value>
     <comment>frmStepImages</comment>
   </data>
   <data name="MsgStepImageNoFolder" xml:space="preserve">
@@ -779,6 +779,10 @@
   </data>
   <data name="MsgStepImageRangeError" xml:space="preserve">
     <value>開始番号は終了番号以下にしてください。({0} &gt; {1})</value>
+    <comment>frmStepImages</comment>
+  </data>
+  <data name="MsgStepImageFolderListupError" xml:space="preserve">
+    <value>フォルダ'{0}'のファイルリストアップに失敗しました。</value>
     <comment>frmStepImages</comment>
   </data>
 </root>

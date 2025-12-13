@@ -1187,7 +1187,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}ファイル{1}点を削除します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
+        '''  {0}/{1}ファイル{2}点を削除します。よろしいですか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgStepImageAskDeleteFile() As String
             Get
@@ -1232,7 +1232,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  {0}ファイル{1}点を削除しました。 に類似しているローカライズされた文字列を検索します。
+        '''  {0}/{1}ファイル{2}点を削除しました。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgStepImageFileDelete() As String
             Get
@@ -1295,6 +1295,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  フォルダ&apos;{0}&apos;のファイルリストアップに失敗しました。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepImageFolderListupError() As String
+            Get
+                Return ResourceManager.GetString("MsgStepImageFolderListupError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  フォルダ&apos;{0}&apos;を開くことができませんでした。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgStepImageFolderOpenError() As String
@@ -1322,7 +1331,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  生成先フォルダ&apos;{0}&apos;内に{1}ファイルはありません。 に類似しているローカライズされた文字列を検索します。
+        '''  生成先フォルダ&apos;{0}&apos;内に{1}/{2}ファイルはありません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property MsgStepImageNoFile() As String
             Get

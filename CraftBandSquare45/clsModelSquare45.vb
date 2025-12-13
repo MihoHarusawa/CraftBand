@@ -90,8 +90,7 @@ Public Class clsModelSquare45
 
 
     'プレビュー処理
-    Public Function CalcModel(ByVal form As frmMain) As Boolean
-        Dim isOriAfter As Boolean = form.radAfter.Checked
+    Public Function CalcModel(ByVal form As frmMain, ByVal isOriAfter As Boolean) As Boolean
         Clear()
         If Not _calc.p_b長方形である Then
             '{0}が長方形でないため描画できません。

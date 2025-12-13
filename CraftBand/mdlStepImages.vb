@@ -170,7 +170,7 @@ Public Module mdlStepImages
             Next
         End With
 
-        memo = sb.ToString()
+        memo = sb.ToString().Trim
         Return count
     End Function
 
