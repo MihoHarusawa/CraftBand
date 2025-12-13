@@ -148,10 +148,10 @@ Public Module mdlAddPartsImage
                                 count += add_楕円_周(itemlist, isCenter, p中心, isMark, row)
 
                             Case enum描画形状.i_上半円_径
-                                count += add_上半円_径(itemlist, isCenter, p中心, isMark, row)
+                                count += add_上半円_径(itemlist, isCenter, p中心, isMark, row, d角度)
 
                             Case enum描画形状.i_上半円_周
-                                count += add_上半円_周(itemlist, isCenter, p中心, isMark, row)
+                                count += add_上半円_周(itemlist, isCenter, p中心, isMark, row, d角度)
 
                             Case enum描画形状.i_横線
                                 count += add_横線(itemlist, isCenter, p中心, isMark, row)
@@ -621,7 +621,7 @@ Public Module mdlAddPartsImage
     End Function
 
 
-    Private Function add_上半円_径(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+    Private Function add_上半円_径(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row, ByVal d角度 As Double) As Integer
         Dim count As Integer = 0
         Dim item As clsImageItem
 
@@ -634,8 +634,15 @@ Public Module mdlAddPartsImage
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-                item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y)
                 item.m_rひも位置.p右上 = New S実座標(p中心.X + d径 / 2, p中心.Y + d径 / 2)
+                If d角度 = 0 Then
+                    '上半分
+                    item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y)
+                Else
+                    '全体
+                    item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y - d径 / 2)
+                    item.m_angle = d角度
+                End If
             Else
                 item.m_rひも位置.p左下 = New S実座標(__p左下.X, __p左下.Y - d径 / 2)
                 item.m_rひも位置.p右上 = New S実座標(__p左下.X + d径, __p左下.Y)
@@ -654,7 +661,7 @@ Public Module mdlAddPartsImage
     End Function
 
 
-    Private Function add_上半円_周(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row) As Integer
+    Private Function add_上半円_周(ByVal itemlist As clsImageItemList, ByVal isCenter As Boolean, ByVal p中心 As S実座標, ByVal isMark As Boolean, ByVal row As tbl追加品Row, ByVal d角度 As Double) As Integer
         Dim count As Integer = 0
         Dim item As clsImageItem
 
@@ -667,8 +674,15 @@ Public Module mdlAddPartsImage
             item = New clsImageItem(ImageTypeEnum._付属品, row)
 
             If isCenter Then
-                item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y)
                 item.m_rひも位置.p右上 = New S実座標(p中心.X + d径 / 2, p中心.Y + d径 / 2)
+                If d角度 = 0 Then
+                    '上半分
+                    item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y)
+                Else
+                    '全体
+                    item.m_rひも位置.p左下 = New S実座標(p中心.X - d径 / 2, p中心.Y - d径 / 2)
+                    item.m_angle = d角度
+                End If
             Else
                 item.m_rひも位置.p左下 = New S実座標(__p左下.X, __p左下.Y - d径 / 2)
                 item.m_rひも位置.p右上 = New S実座標(__p左下.X + d径, __p左下.Y)

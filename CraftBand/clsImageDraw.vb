@@ -1286,8 +1286,11 @@ Public Class CImageDraw
 
             Case enum描画形状.i_上半円_径, enum描画形状.i_上半円_周
 
-                Dim r円 As S領域 = item.m_rひも位置 '上半分
-                r円.y最下 -= r円.y高さ
+                Dim d角度 As Double = item.m_angle
+                Dim r円 As S領域 = item.m_rひも位置 '上半分/全体
+                If d角度 = 0 Then
+                    r円.y最下 -= r円.y高さ '上半分→全体
+                End If
 
                 If 0 < item.m_dひも幅 AndAlso item.m_dひも幅 < r円.x幅 AndAlso item.m_dひも幅 < r円.y高さ Then
                     Dim r外 As S領域 = r円.get拡大領域(item.m_dひも幅 / 2)
@@ -1297,18 +1300,18 @@ Public Class CImageDraw
 
                     If colset.BrushAlfa IsNot Nothing Then
                         Dim path As New GraphicsPath()
-                        path.AddArc(rect外, 180, 180)
-                        path.AddArc(rect内, 180, 180)
+                        path.AddArc(rect外, 180 - d角度, 180)
+                        path.AddArc(rect内, 180 - d角度, 180)
                         path.FillMode = FillMode.Alternate
                         _Graphic.FillPath(colset.BrushAlfa, path)
                     End If
                     If colset.PenBand IsNot Nothing Then
                         Dim path外 As New GraphicsPath()
-                        path外.AddArc(rect外, 180, 180)
+                        path外.AddArc(rect外, 180 - d角度, 180)
                         path外.FillMode = FillMode.Alternate
                         _Graphic.DrawPath(colset.PenBand, path外)
                         Dim path内 As New GraphicsPath()
-                        path内.AddArc(rect内, 180, 180)
+                        path内.AddArc(rect内, 180 - d角度, 180)
                         path内.FillMode = FillMode.Alternate
                         _Graphic.DrawPath(colset.PenBand, path内)
                     End If

@@ -1873,7 +1873,7 @@ Public Class clsImageItem
 
     'クリップ
     Public m_fpath As String 'jpg
-    Public m_angle As Double
+    Public m_angle As Double = 0                   '付属品
     Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明
     Public m_image As Image = Nothing '読み込み済み画像
 
