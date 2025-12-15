@@ -22,65 +22,82 @@ Partial Class ctrDataGridView
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        'Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ContextMenuStripDgv = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.MenuItemCut = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuItemCopy = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuItemPaste = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuItemDelete = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuItemCancel = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ContextMenuStripDgv.SuspendLayout()
-        CType(Me, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SuspendLayout()
-        '
-        'ContextMenuStripDgv
-        '
-        Me.ContextMenuStripDgv.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStripDgv.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuItemCopy, Me.MenuItemCut, Me.MenuItemPaste, Me.MenuItemDelete, Me.MenuItemCancel})
-        Me.ContextMenuStripDgv.Name = "ContextMenuStrip"
-        Me.ContextMenuStripDgv.Size = New System.Drawing.Size(211, 152)
-        '
-        'MenuItemCut
-        '
-        Me.MenuItemCut.Name = "MenuItemCut"
-        Me.MenuItemCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
-        Me.MenuItemCut.Size = New System.Drawing.Size(210, 24)
-        Me.MenuItemCut.Text = "切り取り(&T)"
-        '
-        'MenuItemCopy
-        '
-        Me.MenuItemCopy.Name = "MenuItemCopy"
-        Me.MenuItemCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.MenuItemCopy.Size = New System.Drawing.Size(210, 24)
-        Me.MenuItemCopy.Text = "コピー(&C)"
-        '
-        'MenuItemPaste
-        '
-        Me.MenuItemPaste.Name = "MenuItemPaste"
-        Me.MenuItemPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.MenuItemPaste.Size = New System.Drawing.Size(210, 24)
-        Me.MenuItemPaste.Text = "貼り付け(&P)"
-        '
-        'MenuItemDelete
-        '
-        Me.MenuItemDelete.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar
-        Me.MenuItemDelete.Name = "MenuItemDelete"
-        Me.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete
-        Me.MenuItemDelete.Size = New System.Drawing.Size(210, 24)
-        Me.MenuItemDelete.Text = "削除(&D)"
-        '
-        'MenuItemCancel
-        '
-        Me.MenuItemCancel.Name = "MenuItemCancel"
-        Me.MenuItemCancel.Size = New System.Drawing.Size(210, 24)
-        Me.MenuItemCancel.Text = "キャンセル(Esc)"
-
-        Me.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        Me.ContextMenuStrip = Me.ContextMenuStripDgv
-        Me.ContextMenuStripDgv.ResumeLayout(False)
-        CType(Me, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ResumeLayout(False)
+        components = New ComponentModel.Container()
+        ContextMenuStripDgv = New System.Windows.Forms.ContextMenuStrip(components)
+        MenuItemCopy = New Windows.Forms.ToolStripMenuItem()
+        MenuItemCut = New Windows.Forms.ToolStripMenuItem()
+        MenuItemPaste = New Windows.Forms.ToolStripMenuItem()
+        MenuItemDelete = New Windows.Forms.ToolStripMenuItem()
+        MenuItemCancel = New Windows.Forms.ToolStripMenuItem()
+        ToolStripFillSeparator = New Windows.Forms.ToolStripSeparator()
+        MenuItemFill = New Windows.Forms.ToolStripMenuItem()
+        ContextMenuStripDgv.SuspendLayout()
+        CType(Me, ComponentModel.ISupportInitialize).BeginInit()
+        SuspendLayout()
+        ' 
+        ' ContextMenuStripDgv
+        ' 
+        ContextMenuStripDgv.ImageScalingSize = New System.Drawing.Size(20, 20)
+        ContextMenuStripDgv.Items.AddRange(New Windows.Forms.ToolStripItem() {MenuItemCopy, MenuItemCut, MenuItemPaste, MenuItemDelete, MenuItemCancel, ToolStripFillSeparator, MenuItemFill})
+        ContextMenuStripDgv.Name = "ContextMenuStrip"
+        ContextMenuStripDgv.Size = New System.Drawing.Size(194, 154)
+        ' 
+        ' MenuItemCopy
+        ' 
+        MenuItemCopy.Name = "MenuItemCopy"
+        MenuItemCopy.ShortcutKeys = Windows.Forms.Keys.Control Or Windows.Forms.Keys.C
+        MenuItemCopy.Size = New System.Drawing.Size(193, 24)
+        MenuItemCopy.Text = "コピー(&C)"
+        ' 
+        ' MenuItemCut
+        ' 
+        MenuItemCut.Name = "MenuItemCut"
+        MenuItemCut.ShortcutKeys = Windows.Forms.Keys.Control Or Windows.Forms.Keys.X
+        MenuItemCut.Size = New System.Drawing.Size(193, 24)
+        MenuItemCut.Text = "切り取り(&T)"
+        ' 
+        ' MenuItemPaste
+        ' 
+        MenuItemPaste.Name = "MenuItemPaste"
+        MenuItemPaste.ShortcutKeys = Windows.Forms.Keys.Control Or Windows.Forms.Keys.V
+        MenuItemPaste.Size = New System.Drawing.Size(193, 24)
+        MenuItemPaste.Text = "貼り付け(&P)"
+        ' 
+        ' MenuItemDelete
+        ' 
+        MenuItemDelete.Name = "MenuItemDelete"
+        MenuItemDelete.ShortcutKeys = Windows.Forms.Keys.Delete
+        MenuItemDelete.Size = New System.Drawing.Size(193, 24)
+        MenuItemDelete.Text = "削除(&D)"
+        ' 
+        ' MenuItemCancel
+        ' 
+        MenuItemCancel.Name = "MenuItemCancel"
+        MenuItemCancel.Size = New System.Drawing.Size(193, 24)
+        MenuItemCancel.Text = "キャンセル(Esc)"
+        ' 
+        ' ToolStripFillSeparator
+        ' 
+        ToolStripFillSeparator.Name = "ToolStripFillSeparator"
+        ToolStripFillSeparator.Size = New System.Drawing.Size(190, 6)
+        ' 
+        ' MenuItemFill
+        ' 
+        MenuItemFill.Name = "MenuItemFill"
+        MenuItemFill.ShowShortcutKeys = False
+        MenuItemFill.Size = New System.Drawing.Size(193, 24)
+        MenuItemFill.Text = "等差補完"
+        MenuItemFill.ToolTipText = "最初の2点から等差数列をセット"
+        MenuItemFill.Visible = False
+        ' 
+        ' ctrDataGridView
+        ' 
+        ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
+        ContextMenuStrip = ContextMenuStripDgv
+        RowTemplate.Height = 28
+        ContextMenuStripDgv.ResumeLayout(False)
+        CType(Me, ComponentModel.ISupportInitialize).EndInit()
+        ResumeLayout(False)
 
     End Sub
 
@@ -90,5 +107,7 @@ Partial Class ctrDataGridView
     Friend WithEvents MenuItemPaste As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItemDelete As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItemCancel As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuItemFill As Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripFillSeparator As Windows.Forms.ToolStripSeparator
 
 End Class

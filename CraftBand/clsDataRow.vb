@@ -293,6 +293,23 @@ Public Class clsDataRow
         Return True
     End Function
 
+    Public Function IsNumericField(ByVal name As String) As Boolean
+        If Not IsValid Then
+            Return False 'Never
+        End If
+        If Not String.IsNullOrWhiteSpace(name) AndAlso _DataRow.Table.Columns.Contains(name) Then
+            Dim col As DataColumn = _DataRow.Table.Columns(name)
+            Select Case col.DataType.ToString
+                Case "System.Int16", "System.Int32", "System.UInt32", "System.Double"
+                    Return True
+                Case Else
+                    Return False
+            End Select
+        End If
+        Return False
+    End Function
+
+
     Public Function dump() As String
         If Not IsValid Then
             Return Nothing

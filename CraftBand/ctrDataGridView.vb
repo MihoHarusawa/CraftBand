@@ -336,6 +336,8 @@ Public Class ctrDataGridView
         Me.MenuItemPaste.Enabled = IsPastable(Me)
         Me.MenuItemDelete.Enabled = HasWritableCell(Me)
         Me.MenuItemCancel.Enabled = True
+        '#107
+        Me.MenuItemFill.Visible = IsFillable(Me, MyGridDataRow)
     End Sub
 
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
@@ -375,6 +377,10 @@ Public Class ctrDataGridView
 
     Private Sub MenuItemCancel_Click(sender As Object, e As EventArgs) Handles MenuItemCancel.Click
         SendKeys.Send("{Esc}")
+    End Sub
+
+    Private Sub MenuItemFill_Click(sender As Object, e As EventArgs) Handles MenuItemFill.Click
+        DoFill(Me, MyGridDataRow)
     End Sub
 
 #Region "DataGridViewとレコードスキーマに対応したShared関数"
@@ -632,6 +638,97 @@ Public Class ctrDataGridView
     End Function
 #End Region
 
+    '#107
+    '数値フィールドで、入力可能で、最初の2点に値がある
+    Public Shared Function IsFillable(ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow) As Boolean
+        If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
+            Return False
+        End If
+        If dgv.SelectedCells.Count < 3 Then
+            Return False
+        End If
+        '選択されたセル順
+        Dim columnIndex As Integer = -1
+        Dim dstcels As New List(Of Integer())
+        For Each c As DataGridViewCell In dgv.SelectedCells
+            If c.ReadOnly OrElse Not c.Visible Then
+                Return False
+            End If
+            If columnIndex < 0 Then
+                columnIndex = c.ColumnIndex
+                '数値フィールド
+                Dim col As DataGridViewColumn = dgv.Columns(columnIndex)
+                If Not gridDataRow.IsNumericField(col.DataPropertyName) Then
+                    Return False
+                End If
+            ElseIf columnIndex <> c.ColumnIndex Then
+                Return False
+            End If
+            dstcels.Add(New Integer() {c.RowIndex, c.ColumnIndex})
+        Next
+        dstcels.Sort(AddressOf cmp)
+
+        Dim line1st As Integer = -1
+        Dim linePrev As Integer = 0
+        For Each dst() As Integer In dstcels
+            Dim val As Object = dgv.Rows(dst(0)).Cells(columnIndex).Value
+            'Debug.Print("行{0} 列{1} 値<{2}>", dst(0), columnIndex, If(val IsNot Nothing, val.ToString(), "NULL"))
+            If line1st < 0 Then '1番目のセル
+                line1st = dst(0)
+                '値があること
+                If IsDBNull(val) OrElse String.IsNullOrWhiteSpace(val.ToString) Then
+                    Return False
+                End If
+
+            ElseIf dst(0) = line1st + 1 Then '2番目のセル
+                '値があること
+                If IsDBNull(val) OrElse String.IsNullOrWhiteSpace(val.ToString) Then
+                    Return False
+                End If
+
+            Else '以降のセル
+                If dst(0) <> linePrev + 1 Then
+                    Return False '連続していない
+                End If
+                '値はノーチェック
+
+            End If
+            linePrev = dst(0)
+        Next
+
+        Return True
+    End Function
+
+    Private Sub DoFill(ByVal dgv As ctrDataGridView, ByVal gridDataRow As clsDataRow)
+        If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
+            Exit Sub
+        End If
+        'セルチェック済
+        Dim dstcels As New List(Of Integer())
+        For Each c As DataGridViewCell In dgv.SelectedCells
+            dstcels.Add(New Integer() {c.RowIndex, c.ColumnIndex})
+        Next
+        dstcels.Sort(AddressOf cmp)
+
+        Dim line1st As Integer = -1
+        Dim val1 As Double = 0
+        Dim val2 As Double = 0
+        Dim lastVal As Double = 0
+        For Each dst() As Integer In dstcels
+            Dim val As Object = dgv.Rows(dst(0)).Cells(dst(1)).Value
+            Debug.Print("行{0} 列{1} 値<{2}>", dst(0), dst(1), If(val IsNot Nothing, val.ToString(), "NULL"))
+            If line1st < 0 Then '1番目のセル
+                line1st = dst(0)
+                val1 = CDbl(dgv.Rows(dst(0)).Cells(dst(1)).Value)
+            ElseIf dst(0) = line1st + 1 Then '2番目のセル
+                val2 = CDbl(dgv.Rows(dst(0)).Cells(dst(1)).Value)
+                lastVal = val2
+            Else '以降のセル
+                lastVal = lastVal + (val2 - val1)
+                dgv.Rows(dst(0)).Cells(dst(1)).Value = lastVal
+            End If
+        Next
+    End Sub
 #End Region
 
 #Region "操作"
