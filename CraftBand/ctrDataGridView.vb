@@ -337,7 +337,16 @@ Public Class ctrDataGridView
         Me.MenuItemDelete.Enabled = HasWritableCell(Me)
         Me.MenuItemCancel.Enabled = True
         '#107
-        Me.MenuItemFill.Visible = IsFillable(Me, MyGridDataRow)
+        If IsFillable(Me, MyGridDataRow) Then
+            Me.ToolStripFillSeparator.Visible = True
+            Me.MenuItemFill.Visible = True
+            Me.MenuItemFill.Enabled = True
+        Else
+            Me.ToolStripFillSeparator.Visible = False
+            Me.MenuItemFill.Visible = False
+            Me.MenuItemFill.Enabled = False
+        End If
+
     End Sub
 
     Private Sub MenuItemCopy_Click(sender As Object, e As EventArgs) Handles MenuItemCopy.Click
@@ -699,11 +708,13 @@ Public Class ctrDataGridView
         Return True
     End Function
 
+    '最初の2点からの等差補完処理
     Private Sub DoFill(ByVal dgv As ctrDataGridView, ByVal gridDataRow As clsDataRow)
         If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
             Exit Sub
         End If
-        'セルチェック済
+
+        'チェック済の前提
         Dim dstcels As New List(Of Integer())
         For Each c As DataGridViewCell In dgv.SelectedCells
             dstcels.Add(New Integer() {c.RowIndex, c.ColumnIndex})
