@@ -36,6 +36,11 @@ Partial Class frmOutput
         Dim DataGridViewCellStyle9 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmOutput))
         dgvOutput = New ctrDataGridView()
+        BindingSourceOutput = New BindingSource(components)
+        btn閉じる = New Button()
+        btnCSV出力 = New Button()
+        btnTXT出力 = New Button()
+        ToolTip1 = New ToolTip(components)
         f_iNo = New DataGridViewTextBoxColumn()
         f_b空行区分 = New DataGridViewCheckBoxColumn()
         f_sカテゴリー = New DataGridViewTextBoxColumn()
@@ -53,28 +58,6 @@ Partial Class frmOutput
         f_s高さ = New DataGridViewTextBoxColumn()
         f_s長さ = New DataGridViewTextBoxColumn()
         f_sメモ = New DataGridViewTextBoxColumn()
-        BindingSourceOutput = New BindingSource(components)
-        btn閉じる = New Button()
-        btnCSV出力 = New Button()
-        btnTXT出力 = New Button()
-        ToolTip1 = New ToolTip(components)
-        FiNoDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fb空行区分DataGridViewCheckBoxColumn = New DataGridViewCheckBoxColumn()
-        FsカテゴリーDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs記号DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs番号DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        FsタイプDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs編みかた名DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs編みひも名DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fi周数DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fi段数DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs高さDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs長さDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs本幅DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fsひも本数DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fsひも長DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        Fs色DataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
-        FsメモDataGridViewTextBoxColumn = New DataGridViewTextBoxColumn()
         CType(dgvOutput, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(BindingSourceOutput, System.ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -87,7 +70,7 @@ Partial Class frmOutput
         dgvOutput.AutoGenerateColumns = False
         dgvOutput.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgvOutput.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvOutput.Columns.AddRange(New DataGridViewColumn() {f_iNo, f_b空行区分, f_sカテゴリー, f_s番号, f_s記号, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_sメモ, FiNoDataGridViewTextBoxColumn, Fb空行区分DataGridViewCheckBoxColumn, FsカテゴリーDataGridViewTextBoxColumn, Fs記号DataGridViewTextBoxColumn, Fs番号DataGridViewTextBoxColumn, FsタイプDataGridViewTextBoxColumn, Fs編みかた名DataGridViewTextBoxColumn, Fs編みひも名DataGridViewTextBoxColumn, Fi周数DataGridViewTextBoxColumn, Fi段数DataGridViewTextBoxColumn, Fs高さDataGridViewTextBoxColumn, Fs長さDataGridViewTextBoxColumn, Fs本幅DataGridViewTextBoxColumn, Fsひも本数DataGridViewTextBoxColumn, Fsひも長DataGridViewTextBoxColumn, Fs色DataGridViewTextBoxColumn, FsメモDataGridViewTextBoxColumn})
+        dgvOutput.Columns.AddRange(New DataGridViewColumn() {f_iNo, f_b空行区分, f_sカテゴリー, f_s番号, f_s記号, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_sメモ})
         dgvOutput.DataSource = BindingSourceOutput
         dgvOutput.Location = New System.Drawing.Point(12, 11)
         dgvOutput.Name = "dgvOutput"
@@ -96,6 +79,45 @@ Partial Class frmOutput
         dgvOutput.RowTemplate.Height = 29
         dgvOutput.Size = New System.Drawing.Size(552, 166)
         dgvOutput.TabIndex = 0
+        ' 
+        ' BindingSourceOutput
+        ' 
+        BindingSourceOutput.DataMember = "tblOutput"
+        BindingSourceOutput.DataSource = GetType(Tables.dstOutput)
+        ' 
+        ' btn閉じる
+        ' 
+        btn閉じる.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btn閉じる.DialogResult = DialogResult.Cancel
+        btn閉じる.Location = New System.Drawing.Point(453, 183)
+        btn閉じる.Name = "btn閉じる"
+        btn閉じる.Size = New System.Drawing.Size(111, 44)
+        btn閉じる.TabIndex = 28
+        btn閉じる.Text = "閉じる(&C)"
+        ToolTip1.SetToolTip(btn閉じる, "この画面を閉じます")
+        btn閉じる.UseVisualStyleBackColor = True
+        ' 
+        ' btnCSV出力
+        ' 
+        btnCSV出力.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnCSV出力.Location = New System.Drawing.Point(335, 183)
+        btnCSV出力.Name = "btnCSV出力"
+        btnCSV出力.Size = New System.Drawing.Size(111, 44)
+        btnCSV出力.TabIndex = 27
+        btnCSV出力.Text = "CSV出力(&O)"
+        ToolTip1.SetToolTip(btnCSV出力, "CSVファイルとして開きます")
+        btnCSV出力.UseVisualStyleBackColor = True
+        ' 
+        ' btnTXT出力
+        ' 
+        btnTXT出力.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
+        btnTXT出力.Location = New System.Drawing.Point(217, 183)
+        btnTXT出力.Name = "btnTXT出力"
+        btnTXT出力.Size = New System.Drawing.Size(111, 44)
+        btnTXT出力.TabIndex = 29
+        btnTXT出力.Text = "TXT出力(&T)"
+        ToolTip1.SetToolTip(btnTXT出力, "テキストファイルとして開きます")
+        btnTXT出力.UseVisualStyleBackColor = True
         ' 
         ' f_iNo
         ' 
@@ -284,164 +306,6 @@ Partial Class frmOutput
         f_sメモ.SortMode = DataGridViewColumnSortMode.NotSortable
         f_sメモ.Width = 125
         ' 
-        ' BindingSourceOutput
-        ' 
-        BindingSourceOutput.DataMember = "tblOutput"
-        BindingSourceOutput.DataSource = GetType(Tables.dstOutput)
-        ' 
-        ' btn閉じる
-        ' 
-        btn閉じる.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn閉じる.DialogResult = DialogResult.Cancel
-        btn閉じる.Location = New System.Drawing.Point(453, 183)
-        btn閉じる.Name = "btn閉じる"
-        btn閉じる.Size = New System.Drawing.Size(111, 44)
-        btn閉じる.TabIndex = 28
-        btn閉じる.Text = "閉じる(&C)"
-        ToolTip1.SetToolTip(btn閉じる, "この画面を閉じます")
-        btn閉じる.UseVisualStyleBackColor = True
-        ' 
-        ' btnCSV出力
-        ' 
-        btnCSV出力.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnCSV出力.Location = New System.Drawing.Point(335, 183)
-        btnCSV出力.Name = "btnCSV出力"
-        btnCSV出力.Size = New System.Drawing.Size(111, 44)
-        btnCSV出力.TabIndex = 27
-        btnCSV出力.Text = "CSV出力(&O)"
-        ToolTip1.SetToolTip(btnCSV出力, "CSVファイルとして開きます")
-        btnCSV出力.UseVisualStyleBackColor = True
-        ' 
-        ' btnTXT出力
-        ' 
-        btnTXT出力.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnTXT出力.Location = New System.Drawing.Point(217, 183)
-        btnTXT出力.Name = "btnTXT出力"
-        btnTXT出力.Size = New System.Drawing.Size(111, 44)
-        btnTXT出力.TabIndex = 29
-        btnTXT出力.Text = "TXT出力(&T)"
-        ToolTip1.SetToolTip(btnTXT出力, "テキストファイルとして開きます")
-        btnTXT出力.UseVisualStyleBackColor = True
-        ' 
-        ' FiNoDataGridViewTextBoxColumn
-        ' 
-        FiNoDataGridViewTextBoxColumn.DataPropertyName = "f_iNo"
-        FiNoDataGridViewTextBoxColumn.HeaderText = "f_iNo"
-        FiNoDataGridViewTextBoxColumn.Name = "FiNoDataGridViewTextBoxColumn"
-        FiNoDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fb空行区分DataGridViewCheckBoxColumn
-        ' 
-        Fb空行区分DataGridViewCheckBoxColumn.DataPropertyName = "f_b空行区分"
-        Fb空行区分DataGridViewCheckBoxColumn.HeaderText = "f_b空行区分"
-        Fb空行区分DataGridViewCheckBoxColumn.Name = "Fb空行区分DataGridViewCheckBoxColumn"
-        Fb空行区分DataGridViewCheckBoxColumn.ReadOnly = True
-        ' 
-        ' FsカテゴリーDataGridViewTextBoxColumn
-        ' 
-        FsカテゴリーDataGridViewTextBoxColumn.DataPropertyName = "f_sカテゴリー"
-        FsカテゴリーDataGridViewTextBoxColumn.HeaderText = "f_sカテゴリー"
-        FsカテゴリーDataGridViewTextBoxColumn.Name = "FsカテゴリーDataGridViewTextBoxColumn"
-        FsカテゴリーDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs記号DataGridViewTextBoxColumn
-        ' 
-        Fs記号DataGridViewTextBoxColumn.DataPropertyName = "f_s記号"
-        Fs記号DataGridViewTextBoxColumn.HeaderText = "f_s記号"
-        Fs記号DataGridViewTextBoxColumn.Name = "Fs記号DataGridViewTextBoxColumn"
-        Fs記号DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs番号DataGridViewTextBoxColumn
-        ' 
-        Fs番号DataGridViewTextBoxColumn.DataPropertyName = "f_s番号"
-        Fs番号DataGridViewTextBoxColumn.HeaderText = "f_s番号"
-        Fs番号DataGridViewTextBoxColumn.Name = "Fs番号DataGridViewTextBoxColumn"
-        Fs番号DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' FsタイプDataGridViewTextBoxColumn
-        ' 
-        FsタイプDataGridViewTextBoxColumn.DataPropertyName = "f_sタイプ"
-        FsタイプDataGridViewTextBoxColumn.HeaderText = "f_sタイプ"
-        FsタイプDataGridViewTextBoxColumn.Name = "FsタイプDataGridViewTextBoxColumn"
-        FsタイプDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs編みかた名DataGridViewTextBoxColumn
-        ' 
-        Fs編みかた名DataGridViewTextBoxColumn.DataPropertyName = "f_s編みかた名"
-        Fs編みかた名DataGridViewTextBoxColumn.HeaderText = "f_s編みかた名"
-        Fs編みかた名DataGridViewTextBoxColumn.Name = "Fs編みかた名DataGridViewTextBoxColumn"
-        Fs編みかた名DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs編みひも名DataGridViewTextBoxColumn
-        ' 
-        Fs編みひも名DataGridViewTextBoxColumn.DataPropertyName = "f_s編みひも名"
-        Fs編みひも名DataGridViewTextBoxColumn.HeaderText = "f_s編みひも名"
-        Fs編みひも名DataGridViewTextBoxColumn.Name = "Fs編みひも名DataGridViewTextBoxColumn"
-        Fs編みひも名DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fi周数DataGridViewTextBoxColumn
-        ' 
-        Fi周数DataGridViewTextBoxColumn.DataPropertyName = "f_i周数"
-        Fi周数DataGridViewTextBoxColumn.HeaderText = "f_i周数"
-        Fi周数DataGridViewTextBoxColumn.Name = "Fi周数DataGridViewTextBoxColumn"
-        Fi周数DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fi段数DataGridViewTextBoxColumn
-        ' 
-        Fi段数DataGridViewTextBoxColumn.DataPropertyName = "f_i段数"
-        Fi段数DataGridViewTextBoxColumn.HeaderText = "f_i段数"
-        Fi段数DataGridViewTextBoxColumn.Name = "Fi段数DataGridViewTextBoxColumn"
-        Fi段数DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs高さDataGridViewTextBoxColumn
-        ' 
-        Fs高さDataGridViewTextBoxColumn.DataPropertyName = "f_s高さ"
-        Fs高さDataGridViewTextBoxColumn.HeaderText = "f_s高さ"
-        Fs高さDataGridViewTextBoxColumn.Name = "Fs高さDataGridViewTextBoxColumn"
-        Fs高さDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs長さDataGridViewTextBoxColumn
-        ' 
-        Fs長さDataGridViewTextBoxColumn.DataPropertyName = "f_s長さ"
-        Fs長さDataGridViewTextBoxColumn.HeaderText = "f_s長さ"
-        Fs長さDataGridViewTextBoxColumn.Name = "Fs長さDataGridViewTextBoxColumn"
-        Fs長さDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs本幅DataGridViewTextBoxColumn
-        ' 
-        Fs本幅DataGridViewTextBoxColumn.DataPropertyName = "f_s本幅"
-        Fs本幅DataGridViewTextBoxColumn.HeaderText = "f_s本幅"
-        Fs本幅DataGridViewTextBoxColumn.Name = "Fs本幅DataGridViewTextBoxColumn"
-        Fs本幅DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fsひも本数DataGridViewTextBoxColumn
-        ' 
-        Fsひも本数DataGridViewTextBoxColumn.DataPropertyName = "f_sひも本数"
-        Fsひも本数DataGridViewTextBoxColumn.HeaderText = "f_sひも本数"
-        Fsひも本数DataGridViewTextBoxColumn.Name = "Fsひも本数DataGridViewTextBoxColumn"
-        Fsひも本数DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fsひも長DataGridViewTextBoxColumn
-        ' 
-        Fsひも長DataGridViewTextBoxColumn.DataPropertyName = "f_sひも長"
-        Fsひも長DataGridViewTextBoxColumn.HeaderText = "f_sひも長"
-        Fsひも長DataGridViewTextBoxColumn.Name = "Fsひも長DataGridViewTextBoxColumn"
-        Fsひも長DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' Fs色DataGridViewTextBoxColumn
-        ' 
-        Fs色DataGridViewTextBoxColumn.DataPropertyName = "f_s色"
-        Fs色DataGridViewTextBoxColumn.HeaderText = "f_s色"
-        Fs色DataGridViewTextBoxColumn.Name = "Fs色DataGridViewTextBoxColumn"
-        Fs色DataGridViewTextBoxColumn.ReadOnly = True
-        ' 
-        ' FsメモDataGridViewTextBoxColumn
-        ' 
-        FsメモDataGridViewTextBoxColumn.DataPropertyName = "f_sメモ"
-        FsメモDataGridViewTextBoxColumn.HeaderText = "f_sメモ"
-        FsメモDataGridViewTextBoxColumn.Name = "FsメモDataGridViewTextBoxColumn"
-        FsメモDataGridViewTextBoxColumn.ReadOnly = True
-        ' 
         ' frmOutput
         ' 
         AcceptButton = btn閉じる
@@ -467,6 +331,7 @@ Partial Class frmOutput
     Friend WithEvents btnCSV出力 As Button
     Friend WithEvents BindingSourceOutput As BindingSource
     Friend WithEvents btnTXT出力 As Button
+    Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents f_iNo As DataGridViewTextBoxColumn
     Friend WithEvents f_b空行区分 As DataGridViewCheckBoxColumn
     Friend WithEvents f_sカテゴリー As DataGridViewTextBoxColumn
@@ -484,22 +349,4 @@ Partial Class frmOutput
     Friend WithEvents f_s高さ As DataGridViewTextBoxColumn
     Friend WithEvents f_s長さ As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ As DataGridViewTextBoxColumn
-    Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents FiNoDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fb空行区分DataGridViewCheckBoxColumn As DataGridViewCheckBoxColumn
-    Friend WithEvents FsカテゴリーDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs記号DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs番号DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents FsタイプDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs編みかた名DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs編みひも名DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fi周数DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fi段数DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs高さDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs長さDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs本幅DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fsひも本数DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fsひも長DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents Fs色DataGridViewTextBoxColumn As DataGridViewTextBoxColumn
-    Friend WithEvents FsメモDataGridViewTextBoxColumn As DataGridViewTextBoxColumn
 End Class
