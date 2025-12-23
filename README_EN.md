@@ -97,7 +97,35 @@ allowing all extensions and cases to be handled identically.
 
 
 # Installation
-Place the binary files in any directory and run each `.exe` directly.
+You can place the extracted binary files in any directory.
+Each `.exe` can be launched directly.
+
+
+# Quick Start
+
+### 1. Download
+Download the latest version from the GitHub Releases page.
+
+[Download latest release](releases/latest)
+
+### 2. Installation
+This software is a Windows desktop application.  
+Run the downloaded installer (`setup.exe`) to install the software.
+
+.NET 6.0 or later is required.
+If it is not installed, you will be guided to install it
+from the official Microsoft page on first launch.
+
+### 3. Open Your First Project
+1. Launch **CbMesh.exe** (the launcher for the series)
+2. Download any free sample data published on the official website
+3. Open the downloaded data and check the preview
+4. Try changing values such as dimensions or number of bands
+   and observe how the result changes
+
+The sample data represents real, buildable basket designs
+and can be used as practical references for learning and experimentation.
+
 
 
 # Current Binary Version
