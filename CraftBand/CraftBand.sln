@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 	ProjectSection(SolutionItems) = preProject
 		..\LICENSE.txt = ..\LICENSE.txt
 		..\README.md = ..\README.md
+		..\README_EN.md = ..\README_EN.md
 	EndProjectSection
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CraftBandSquare45", "..\CraftBandSquare45\CraftBandSquare45.vbproj", "{0C67BCFD-EA11-4850-B989-6B3339A306EA}"

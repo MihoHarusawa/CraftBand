@@ -7,8 +7,7 @@ the **design, calculation, verification, and documentation**
 of baskets made from band-shaped materials such as paper bands and craft tapes.
 
 The official website hosts a large number of **free project data**
-created with this software, published together with photos taken during
-and after the manufacturing process.
+created with this software, published together with photos of the finished works.
 These datasets are positioned not merely as samples,
 but as a **reference database of real-world designs and verified constructions**.
 
@@ -64,7 +63,7 @@ A shared library providing configuration databases and common editing forms.
 * Output color-based cut lists
 * Simulate combinations of band color, width, and crossing patterns
 * Some applications support 3D preview of the finished shape
-* Recent versions allow storing not only the final design
+* Recent versions allow storing not only the final design  
   but also the **manufacturing process** as part of the project data
 * A large collection of free project data with production photos is available on the official website,
   serving as a reference database based on real manufacturing results
@@ -113,12 +112,26 @@ Place the binary files in any directory and run each `.exe` directly.
 
 
 # Usage
-* https://labo.com/CraftBand/
-* https://labo.com/CraftBand/craftbandmesh-series/
+* Series overview and documentation  
+  https://labo.com/CraftBand/craftbandmesh-series/
+* CraftBandMesh  
+  https://labo.com/CraftBand/CraftbandMesh/
+* CraftBandSqare45  
+  https://labo.com/CraftBand/CraftBandSquare45/
+* CraftBandKnot  
+  https://labo.com/CraftBand/CraftBandKnot/
+* CraftBandSquare  
+  https://labo.com/CraftBand/CraftBandSquare/
+* CraftBandHexagon  
+  https://labo.com/CraftBand/CraftBandHexagon/
+* CbMesh  
+  https://labo.com/CraftBand/CbMesh/
+* Samples and free data  
+  https://labo.com/CraftBand/sitemap/
 
 
 # Author
-* Miho Harusawa (CraftbandLabo)
+* Miho Harusawa (CraftBandLabo)
 * E-mail: haru@labo.com
 
 

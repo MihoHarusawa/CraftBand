@@ -5,10 +5,11 @@
 CraftBandMesh シリーズは、クラフトバンド／紙バンドなどの帯状素材を用いた
 かご製作のための **設計・計算・検証・記録** を支援するアプリケーション群です。
 
-公式サイトには、本シリーズで実際に作成された多数の **フリーデータ** が、
+公式サイトには、本シリーズで作成された多数の **フリーデータ** が、
 製作途中および完成後の写真とともに登録・公開されています。  
 これらのデータは単なるサンプルではなく、  
-**実制作に基づく設計例・検証例・参照用データベース**として位置づけられています。
+**実制作に基づく設計例・寸法検討・構造確認のための参照用データベース**
+として位置づけられています。
 
 
 ## CraftBandMesh / CraftBandMesh.exe
@@ -62,10 +63,10 @@ CraftBandMesh シリーズは、クラフトバンド／紙バンドなどの帯
 * ひもに色を設定し、色ごとのカットリストを出力できます
 * バンド色・幅・上下交差パターンの組み合わせをシミュレーションできます
 * 一部のアプリでは、完成形を 3D プレビューで確認できます
-* 最近のバージョンアップにより、完成形だけでなく
+* 最近のバージョンアップにより、完成形だけでなく  
   **製作途中のプロセス情報もデータとして保存可能**になりました
-* 本ソフトで作成された多数のフリーデータが、製作写真とともに公式サイトに公開されており、
-  実制作に基づく設計・検証の参照資料として活用できます
+* 本ソフトで作成された多数のフリーデータが、製作写真とともに公式サイトに公開されており、  
+  実制作に基づく設計や寸法検討の参考資料として活用できます
 
 
 # CraftBandMesh XML Format (.cbmesh)
@@ -111,11 +112,26 @@ XML DataSet 構造で、XSD スキーマにより定義されています。
 
 
 # Usage
-* https://labo.com/CraftBand/
-* https://labo.com/CraftBand/craftbandmesh-series/
+* シリーズ概要・ソフト説明  
+  https://labo.com/CraftBand/craftbandmesh-series/
+* CraftBandMesh  
+  https://labo.com/CraftBand/CraftbandMesh/
+* CraftBandSqare45  
+  https://labo.com/CraftBand/CraftBandSquare45/
+* CraftBandKnot  
+  https://labo.com/CraftBand/CraftBandKnot/
+* CraftBandSquare  
+  https://labo.com/CraftBand/CraftBandSquare/
+* CraftBandHexagon  
+  https://labo.com/CraftBand/CraftBandHexagon/
+* CbMesh  
+  https://labo.com/CraftBand/CbMesh/
+* サンプル・フリーデータ  
+  https://labo.com/CraftBand/sitemap/
+
 
 # Author
-* Miho Harusawa (CraftbandLabo)
+* Miho Harusawa (CraftBandLabo)
 * E-mail: haru@labo.com
 
 
