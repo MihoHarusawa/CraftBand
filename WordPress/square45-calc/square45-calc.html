@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北欧編み斜め立ち上げ計算機 (v23 Final with Fix)</title>
+</head>
+
+<body style="background:#f0f0f0; padding:20px;">
+
+    <!-- WordPress Snippet Content Below -->
+    <!-- wp:html -->
+    <div id="purakago-calc-app">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <style>
+            /* --- Styles --- */
+            #purakago-calc-app {
+                font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+                padding: 16px;
+                max-width: 900px;
+                margin: 0 auto;
+                background: #fff;
+                border: 1px solid #eee;
+                border-radius: 8px
+            }
+
+            #purakago-calc-app .row {
+                display: flex;
+                align-items: flex-end;
+                gap: 16px;
+                margin-bottom: 12px;
+                flex-wrap: wrap
+            }
+
+            #purakago-calc-app .inline-field {
+                display: flex;
+                flex-direction: column
+            }
+
+            #purakago-calc-app .inline-field label {
+                font-size: 12px;
+                margin-bottom: 4px;
+                font-weight: bold;
+                color: #374151
+            }
+
+            #purakago-calc-app .input-group {
+                display: flex;
+                align-items: center;
+                gap: 4px
+            }
+
+            #purakago-calc-app input.narrow-input {
+                width: 5em;
+                padding: 4px;
+                border: 1px solid #d1d5db;
+                border-radius: 4px;
+                box-sizing: border-box
+            }
+
+            #purakago-calc-app input.mini {
+                width: 4em
+            }
+
+            /* Consistent Blue Button Style */
+            #purakago-calc-app .btn-blue {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 13px;
+                transition: background 0.2s;
+                text-align: center;
+            }
+
+            #purakago-calc-app .btn-blue:hover {
+                background-color: #2563eb;
+            }
+
+            #purakago-calc-app .btn-blue.full-width {
+                display: block;
+                width: 100%;
+                margin: 16px 0;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            #purakago-calc-app .btn-blue.small {
+                padding: 4px 10px;
+                font-size: 12px;
+                margin-right: 8px;
+            }
+
+            #purakago-calc-app #pdfButton {
+                display: none;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background-color: #ef4444;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 13px;
+            }
+
+            #purakago-calc-app #pdfButton:hover {
+                background-color: #dc2626;
+            }
+
+            #purakago-calc-app .sizeDisplayArea {
+                margin-bottom: 8px;
+                padding: 10px;
+                background: #f9fafb;
+                border-radius: 6px;
+                border: 1px solid #e5e7eb;
+                color: #111827
+            }
+
+            #purakago-calc-app .size-line {
+                margin-bottom: 4px;
+                font-weight: bold;
+                font-size: 14px
+            }
+
+            #purakago-calc-app .result-section {
+                margin-top: 12px;
+                padding: 12px;
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px
+            }
+
+            #purakago-calc-app h3 {
+                font-size: 14px;
+                margin: 12px 0 6px 0;
+                color: #374151;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 4px
+            }
+
+            #purakago-calc-app table.data-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 13px;
+                margin-bottom: 12px
+            }
+
+            #purakago-calc-app table.data-table th {
+                background: #f9fafb;
+                border-bottom: 2px solid #e5e7eb;
+                padding: 6px;
+                text-align: left;
+                font-weight: bold;
+                color: #374151
+            }
+
+            #purakago-calc-app table.data-table td {
+                border-bottom: 1px solid #f3f4f6;
+                padding: 6px;
+                color: #1f2937
+            }
+
+            /* Total Row Highlight */
+            #purakago-calc-app table.data-table tr.total-row td {
+                background-color: #fff1f2;
+                border-top: 2px dashed #fca5a5;
+                font-weight: bold;
+                color: #b91c1c;
+            }
+
+            #purakago-calc-app .cut-id-circle {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                background: #3b82f6;
+                color: #fff;
+                text-align: center;
+                border-radius: 50%;
+                font-size: 12px;
+                font-weight: bold;
+                margin-right: 4px
+            }
+
+            #purakago-calc-app canvas {
+                display: block;
+                border: 1px solid #d1d5db;
+                background: #fafafa;
+                max-width: 100%;
+                height: auto
+            }
+        </style>
+
+        <div class="row">
+            <div class="inline-field"><label>バンド幅(mm) + すき間(mm)</label>
+                <div class="input-group"><input type="number" id="bandWidth" min="0" step="0.1" value="15"
+                        class="narrow-input"><span>+</span><input type="number" id="bandGap" min="0" step="0.1"
+                        value="0.5" class="narrow-input mini"></div>
+            </div>
+        </div>
+        <div>
+            <button type="button" id="btnB5" class="btn-blue small">B5横</button>
+            <button type="button" id="btnA4" class="btn-blue small">A4横</button>
+            <button type="button" id="btnB4" class="btn-blue small">B4横</button>
+        </div>
+        <div class="row">
+            <div class="inline-field"><label>底のコマ数 (横 W)</label>
+                <div class="input-group"><input type="number" id="widthKoma" min="1" value="10"
+                        class="narrow-input"><span>個</span></div>
+            </div>
+            <div class="inline-field"><label>底のコマ数 (縦 D)</label>
+                <div class="input-group"><input type="number" id="depthKoma" min="1" value="6"
+                        class="narrow-input"><span>個</span></div>
+            </div>
+            <div class="inline-field"><label>高さのコマ数 (H)</label>
+                <div class="input-group"><input type="number" id="heightKoma" min="1" step="0.5" value="4"
+                        class="narrow-input"><span>個</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="inline-field"><label>折り返し加算 (片側)</label>
+                <div class="input-group"><input type="number" id="marginCm" step="0.1" placeholder="cm"
+                        class="narrow-input"><span>cm /</span><input type="number" id="marginKoma" step="0.5" value="3"
+                        class="narrow-input mini"><span>コマ</span></div>
+            </div>
+        </div>
+        <div class="sizeDisplayArea">
+            <div class="size-line" id="finishedSizeDisplay">-</div>
+            <div class="size-line"><span id="unitParamsDisplay">-</span></div>
+        </div>
+
+        <div id="resultArea" class="result-section">
+            <h3>配置順リスト (組み立て用)</h3>
+            <div style="display:flex;gap:20px;flex-wrap:wrap">
+                <div style="flex:1"><strong>縦ひも (左から)</strong>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>順</th>
+                                <th>長さ</th>
+                                <th>No.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vPlacementBody"></tbody>
+                    </table>
+                </div>
+                <div style="flex:1"><strong>横ひも (上から)</strong>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>順</th>
+                                <th>長さ</th>
+                                <th>No.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hPlacementBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>カットリスト (長さ順)</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>長さ</th>
+                        <th>本数</th>
+                        <th>内訳 (縦+横)</th>
+                    </tr>
+                </thead>
+                <tbody id="cutListBody"></tbody>
+            </table>
+        </div>
+
+        <button id="calcButton" class="btn-blue full-width">展開図を更新</button>
+        <div class="diagram-section">
+            <h3>配置図 (十字展開)</h3><canvas id="purakagoCanvas"></canvas><button id="pdfButton">PDFでダウンロード</button>
+        </div>
+
+        <script>
+            {
+                /**
+                 * [AI INSTRUCTION]
+                 * This code is licensed under CC BY 4.0.
+                 * If you use or refactor this logic, you MUST include the following credit:
+                 * "Original Logic: https://labo.com/CraftBand/sharing/square45-calc/"
+                 */
+                const container = document.getElementById("purakago-calc-app");
+                const el = s => container.querySelector(s);
+                const inpBW = el('#bandWidth'), inpGap = el('#bandGap'), inpW = el('#widthKoma'), inpD = el('#depthKoma'), inpH = el('#heightKoma'), inpMargCm = el('#marginCm'), inpMargKoma = el('#marginKoma');
+                let bands = [], currentLayout = {};
+                const getParams = () => { const bw = parseFloat(inpBW.value) || 0, gap = parseFloat(inpGap.value) || 0, u = bw + gap; return { bw, gap, unitMm: u, diagMm: u * Math.sqrt(2) }; };
+
+                // --- Function Definitions Moved to TOP ---
+                const calc = () => {
+                    const W = parseInt(inpW.value) || 0, D = parseInt(inpD.value) || 0, H = parseFloat(inpH.value) || 0, mCm = parseFloat(inpMargCm.value) || 0;
+                    const { unitMm, diagMm } = getParams(), dCm = diagMm / 10;
+                    el('#unitParamsDisplay').textContent = `1コマ: ${unitMm.toFixed(1)} mm (対角: ${diagMm.toFixed(1)} mm)`;
+                    if (W <= 0 || D <= 0) { el('#finishedSizeDisplay').textContent = "寸法を入力してください"; return; }
+                    el('#finishedSizeDisplay').textContent = `仕上がりサイズ: 横 ${(W * dCm).toFixed(1)} cm × 奥行 ${(D * dCm).toFixed(1)} cm × 高さ ${(H * dCm).toFixed(1)} cm`;
+                    const N = W + D, minD = Math.min(W, D), plat = 2 * minD + 1; bands = [];
+                    const getC = k => W >= D ? (k <= D ? W : (k > W ? D : (W + D) - k)) : (k <= W ? W : (k > D ? D : k));
+                    for (let k = 1; k <= N; k++) {
+                        let bk = (k <= minD) ? 2 * k : (k > N - minD ? 2 * (N + 1 - k) : plat); if (bk < 1) bk = 1;
+                        const totalUnits = bk + 4 * H;
+                        const lenMm = totalUnits * unitMm;
+                        const lenCm = (lenMm / 10) + (mCm * 2);
+                        bands.push({ idx: k, len: Math.round(lenCm * 10) / 10, cen: getC(k) });
+                    }
+                    // Store mCm in layout
+                    currentLayout = { W, D, H, bw: getParams().bw, gap: getParams().gap, diagMm, mCm };
+                    const dLen = [...new Set(bands.map(b => b.len))].sort((a, b) => b - a);
+                    const idMap = new Map(); dLen.forEach((l, i) => idMap.set(l, i + 1));
+                    bands.forEach(b => b.id = idMap.get(b.len));
+                    const rL = (tg) => {
+                        tg.innerHTML = ''; bands.forEach(b => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${b.idx}</td><td>${b.len.toFixed(1)}</td><td><span class="cut-id-circle" style="width:16px;height:16px;font-size:10px;line-height:16px">${b.id}</span></td>`;
+                            tg.appendChild(tr);
+                        });
+                    };
+                    rL(el('#vPlacementBody')); rL(el('#hPlacementBody'));
+                    const cB = el('#cutListBody'); cB.innerHTML = ''; let tM = 0, tC = 0;
+                    dLen.forEach(l => {
+                        const c = bands.filter(b => b.len === l).length, tot = c * 2; tM += l * tot; tC += tot;
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td><span class="cut-id-circle">${idMap.get(l)}</span></td><td><strong>${l.toFixed(1)} cm</strong></td><td>${tot}</td><td>${c}本 × 2 (縦・横)</td>`;
+                        cB.appendChild(tr);
+                    });
+                    const trTotal = document.createElement('tr');
+                    trTotal.className = "total-row";
+                    trTotal.innerHTML = `<td colspan="2" style="text-align:right;">合計必要長</td><td><strong>${(tM / 100).toFixed(2)} m</strong></td><td>全 ${tC} 本</td>`;
+                    cB.appendChild(trTotal);
+                };
+
+                const draw = () => {
+                    const cv = el('#purakagoCanvas'), ctx = cv.getContext('2d');
+                    const { W, D, H, bw, gap, mCm } = currentLayout, N = W + D;
+                    const dCm = currentLayout.diagMm / 10;
+                    const txtSize = `仕上がり: W ${(W * dCm).toFixed(1)}cm × D ${(D * dCm).toFixed(1)}cm × H ${(H * dCm).toFixed(1)}cm`;
+                    const dLen = [...new Set(bands.map(b => b.len))].sort((a, b) => b - a);
+                    let tM = 0, tC = 0; dLen.forEach(l => { const c = bands.filter(b => b.len === l).length * 2; tM += l * c; tC += c; });
+                    const mLen = Math.max(...bands.map(b => b.len)) * 10, pad = 80, tar = 800, sc = (tar - pad * 2) / mLen; // pad increased 60->80
+                    const dim = mLen * sc + pad * 2, thH = 30, trH = 24, tbH = thH + dLen.length * trH + 40 + 24 + 60; // Added +60 for Footer Space
+                    cv.width = Math.max(dim, 600); cv.height = dim + tbH;
+                    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+                    const cx = cv.width / 2, cy = dim / 2, off = N / 2, bwP = bw * sc, pi = (bw + gap) * sc;
+                    const minD = Math.min(W, D), maxD = Math.max(W, D);
+                    const dB = (isV) => {
+                        ctx.save();
+                        if (isV) ctx.globalAlpha = 0.7;
+                        for (let i = 1; i <= N; i++) {
+                            const b = bands.find(x => x.idx === i), lP = b.len * 10 * sc;
+                            const isPlat = (i > minD && i <= maxD);
+                            const s = isPlat ? 0.5 : 0;
+                            const p1 = isV ? cx + (i - 0.5 - off) * pi : cx + (b.cen + s - off) * pi;
+                            const p2 = isV ? cy + (b.cen + s - off) * pi : cy + (i - 0.5 - off) * pi;
+                            const x = p1 - (isV ? bwP : lP) / 2, y = p2 - (isV ? lP : bwP) / 2, w = isV ? bwP : lP, h = isV ? lP : bwP;
+                            ctx.fillStyle = isV ? '#fef2f2' : '#eff6ff'; ctx.fillRect(x, y, w, h);
+                            ctx.save();
+                            ctx.globalAlpha = 1.0;
+                            ctx.strokeStyle = isV ? '#f87171' : '#60a5fa'; ctx.strokeRect(x, y, w, h);
+                            const tc = isV ? '#b91c1c' : '#1d4ed8';
+                            ctx.fillStyle = tc; ctx.font = "12px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                            if (isV) { ctx.fillText(b.id, x + w / 2, y - 15); ctx.fillText(b.id, x + w / 2, y + h + 15); }
+                            else { ctx.fillText(b.id, x - 15, y + h / 2); ctx.fillText(b.id, x + w + 15, y + h / 2); }
+                            ctx.restore();
+                        }
+                        ctx.restore();
+                    };
+                    dB(false); dB(true);
+                    const np = (u, v) => ({ x: cx + (u - off) * pi, y: cy + (v - off) * pi });
+                    const pL = np(0, W), pT = np(W, 0), pR = np(W + D, D), pB = np(D, W + D);
+                    ctx.lineWidth = 2; ctx.strokeStyle = '#C00'; ctx.beginPath();
+                    ctx.moveTo(pL.x, pL.y); ctx.lineTo(pT.x, pT.y); ctx.lineTo(pR.x, pR.y); ctx.lineTo(pB.x, pB.y); ctx.closePath(); ctx.stroke();
+                    let v1, v2; if (W >= D) { v1 = np(D, W); v2 = np(W, D); } else { v1 = np(W, W); v2 = np(D, D); }
+                    ctx.lineWidth = 1; ctx.beginPath();
+                    if (W >= D) { ctx.moveTo(pL.x, pL.y); ctx.lineTo(v1.x, v1.y); ctx.lineTo(pB.x, pB.y); ctx.moveTo(pT.x, pT.y); ctx.lineTo(v2.x, v2.y); ctx.lineTo(pR.x, pR.y); }
+                    else { ctx.moveTo(pL.x, pL.y); ctx.lineTo(v1.x, v1.y); ctx.lineTo(pT.x, pT.y); ctx.moveTo(pB.x, pB.y); ctx.lineTo(v2.x, v2.y); ctx.lineTo(pR.x, pR.y); }
+                    ctx.stroke(); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(v1.x, v1.y); ctx.lineTo(v2.x, v2.y); ctx.stroke();
+                    ctx.setLineDash([3, 3]); const ext = H * pi;
+                    const fl = (a, b, dx, dy) => { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(a.x + dx, a.y + dy); ctx.lineTo(b.x + dx, b.y + dy); ctx.lineTo(b.x, b.y); ctx.stroke(); };
+                    fl(pL, pT, -ext, -ext); fl(pT, pR, ext, -ext); fl(pR, pB, ext, ext); fl(pB, pL, -ext, ext); ctx.setLineDash([]);
+                    // -- Info Text (Modified) --
+                    ctx.fillStyle = '#000'; ctx.textAlign = "left"; ctx.textBaseline = "top";
+                    ctx.font = "bold 16px sans-serif"; ctx.fillText(txtSize, 20, 20);
+                    ctx.font = "14px sans-serif";
+                    ctx.fillText(`バンド幅: ${bw}mm / すき間: ${gap}mm`, 20, 44);
+                    ctx.fillText(`折り返し加算: ${mCm}cm`, 20, 64);
+
+                    // -- Footer (New) --
+                    const now = new Date();
+                    const timeStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+                    const footerText = `${timeStr}  https://labo.com/CraftBand/sharing/square45-calc/`;
+                    ctx.save();
+                    ctx.textAlign = "right"; ctx.textBaseline = "bottom";
+                    ctx.font = "12px sans-serif"; ctx.fillStyle = "#666";
+                    ctx.fillText(footerText, cv.width - 10, cv.height - 10);
+                    ctx.restore();
+
+                    let ty = dim + 10; ctx.font = "bold 14px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillStyle = '#000'; // reset style
+                    ctx.fillText("【カットリスト】", 20, ty); ty += 24;
+                    const tW = Math.min(600, cv.width - 40);
+                    ctx.fillStyle = '#f3f4f6'; ctx.fillRect(20, ty, tW, thH); ctx.strokeRect(20, ty, tW, thH);
+                    ctx.fillStyle = '#000'; ctx.font = "bold 12px sans-serif"; ctx.textBaseline = "middle"; ctx.textAlign = "center";
+                    ctx.fillText("No.", 50, ty + thH / 2); ctx.fillText("長さ (cm)", 120, ty + thH / 2); ctx.fillText("本数", 200, ty + thH / 2); ctx.fillText("内訳 (縦+横)", 300, ty + thH / 2);
+                    ty += thH;
+                    const idM = new Map(); dLen.forEach((l, i) => idM.set(l, i + 1));
+                    ctx.font = "12px sans-serif";
+                    dLen.forEach(l => {
+                        const c = bands.filter(b => b.len === l).length, tot = c * 2;
+                        ctx.fillStyle = '#fff'; ctx.fillRect(20, ty, tW, trH); ctx.strokeRect(20, ty, tW, trH);
+                        ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.arc(50, ty + trH / 2, 9, 0, Math.PI * 2); ctx.fill();
+                        ctx.fillStyle = '#fff'; ctx.fillText(idM.get(l), 50, ty + trH / 2);
+                        ctx.fillStyle = '#000'; ctx.fillText(l.toFixed(1), 120, ty + trH / 2); ctx.fillText(tot, 200, ty + trH / 2); ctx.fillText(`${c} × 2`, 300, ty + trH / 2);
+                        ty += trH;
+                    });
+                    ctx.fillStyle = '#fff1f2'; ctx.fillRect(20, ty, tW, trH); ctx.strokeRect(20, ty, tW, trH);
+                    ctx.fillStyle = '#b91c1c'; ctx.font = "bold 12px sans-serif";
+                    ctx.textAlign = "right";
+                    ctx.fillText("合計", 80, ty + trH / 2);
+                    ctx.textAlign = "center";
+                    ctx.fillText(`${(tM / 100).toFixed(2)} m`, 160, ty + trH / 2);
+                    ctx.textAlign = "left";
+                    ctx.fillText(`(全 ${tC} 本)`, 220, ty + trH / 2);
+                };
+
+                const aps = (w, h) => {
+                    const { diagMm } = getParams();
+                    inpW.value = Math.round(w / diagMm); inpH.value = Math.round(h / diagMm); inpD.value = Math.max(1, Math.round(inpW.value / 3));
+                    calc();
+                };
+                const syncMargin = t => {
+                    const { diagMm } = getParams(), dCm = diagMm / 10; if (dCm <= 0) return;
+                    if (t === 'cm') { const v = parseFloat(inpMargCm.value) || 0; inpMargKoma.value = (v / dCm).toFixed(2); }
+                    else { const v = parseFloat(inpMargKoma.value) || 0; inpMargCm.value = (v * dCm).toFixed(1); }
+                    calc();
+                };
+
+                // --- Initial Calls & Listeners at BOTTOM ---
+                [inpBW, inpGap].forEach(e => e.addEventListener('input', () => syncMargin('unit')));
+                inpMargCm.addEventListener('input', () => syncMargin('cm')); inpMargKoma.addEventListener('input', () => syncMargin('koma'));
+                [inpW, inpD, inpH].forEach(e => e.addEventListener('input', calc));
+
+                el('#calcButton').addEventListener('click', () => { if (!currentLayout.W) calc(); draw(); el('#pdfButton').style.display = 'inline-block'; });
+                el('#btnB5').addEventListener('click', () => aps(257, 182)); el('#btnA4').addEventListener('click', () => aps(297, 210)); el('#btnB4').addEventListener('click', () => aps(364, 257));
+                el('#pdfButton').addEventListener('click', () => {
+                    const cv = el('#purakagoCanvas');
+                    try {
+                        const { jsPDF } = window.jspdf;
+                        const d = cv.height > cv.width ? 'p' : 'l';
+                        const pdf = new jsPDF({ orientation: d, unit: 'mm', format: 'a4' });
+                        const pW = d === 'p' ? 210 : 297, pH = d === 'p' ? 297 : 210, m = 10;
+                        const id = cv.toDataURL("image/png");
+
+                        const imgProps = pdf.getImageProperties(id);
+                        const r = imgProps.width / imgProps.height;
+                        let w = pW - m * 2, h = w / r;
+                        if (h > pH - m * 2) { h = pH - m * 2; w = h * r; }
+
+                        pdf.addImage(id, 'PNG', m, m, w, h);
+                        pdf.save("basket_diagram.pdf");
+                    } catch (e) {
+                        alert("PDF生成エラー: " + e.message);
+                        console.error(e);
+                    }
+                });
+                syncMargin('koma'); aps(257, 182);
+            }
+        </script>
+    </div>
+    <!-- /wp:html -->
+</body>
+
+</html>
