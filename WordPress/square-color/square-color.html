@@ -18,8 +18,8 @@
         /* --- Styles derived from square45-calc --- */
         #square-color-app {
             font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-            padding: 16px;
-            max-width: 900px;
+            padding: 10px;
+            max-width: 100%;
             margin: 0 auto;
             background: #fff;
             border: 1px solid #eee;
@@ -30,7 +30,7 @@
         #square-color-app .row {
             display: flex;
             align-items: flex-end;
-            gap: 16px;
+            gap: 10px;
             margin-bottom: 12px;
             flex-wrap: wrap;
         }
@@ -58,7 +58,7 @@
         }
 
         #square-color-app input.narrow-input {
-            width: 5em;
+            width: 3.5em;
             padding: 4px;
             border: 1px solid #d1d5db;
             border-radius: 4px;
@@ -66,7 +66,7 @@
         }
 
         #square-color-app input.mini {
-            width: 4em;
+            width: 3.2em;
         }
 
         #square-color-app select {
@@ -121,8 +121,8 @@
         }
 
         #square-color-app .section {
-            margin-bottom: 16px;
-            padding: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
             background: #f9fafb;
             border-radius: 6px;
             border: 1px solid #e5e7eb;
@@ -147,7 +147,7 @@
 
         #square-color-app .layout-columns {
             display: flex;
-            gap: 16px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -205,7 +205,7 @@
         #square-color-app .bulk-control-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
@@ -357,9 +357,9 @@
                     <div class="bulk-control-row">
                         <div class="bulk-radios">
                             <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="vertical"
-                                    checked> 垂直ひも(下から上)</label>
+                                    checked> 垂直ひも(左から)</label>
                             <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="horizontal">
-                                編みひも(右から左)</label>
+                                編みひも(下から)</label>
                         </div>
 
                         <div class="inline-field" style="margin-left:8px;">
@@ -790,7 +790,8 @@
                 const patternNameStr = "上下図名: " + (selectedOpt.getAttribute('data-name') || selectedOpt.text);
 
                 const now = new Date();
-                const timeStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+                const pad = (n) => n.toString().padStart(2, '0');
+                const timeStr = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
                 const footerText = `${timeStr}  https://labo.com/CraftBand/sharing/square-color/`;
 
                 ctx.save();

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022-2025 LaboHarusawa
+Copyright (c) 2022-2026 Miho Harusawa
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+
+
+Additional Notice (Non-binding Request)
+
+This software suite reads and writes files in the standard format (.cbmesh).
+If you modify any part of this suite or develop other software based on it, 
+you are kindly requested to maintain compatibility with this file format 
+as much as possible, in order to ensure user convenience and 
+to prevent existing data assets from becoming unusable.
