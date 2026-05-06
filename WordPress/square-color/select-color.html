@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D Color Selector - フォルトゥーナパール</title>
+    <style>
+        body { 
+            margin: 0; 
+            background-color: #0f1115; 
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; 
+            color: white; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        #ui-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 5px 0 0 0;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        #instructions {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e6edf3;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e67e22;
+        }
+
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        #preview-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: rgba(15, 17, 21, 0.9);
+            border-radius: 8px;
+            border: 2px solid #30363d;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        #selection-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .selection-box { 
+            flex: 1;
+            padding: 10px 15px; 
+            background: rgba(15, 17, 21, 0.9); 
+            border-radius: 8px; 
+            border: 2px solid #30363d; 
+            border-left: 15px solid #444;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            min-width: 0;
+        }
+        
+        .selection-box.active {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+        }
+
+        .active-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            background: #e67e22;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: none;
+            width: fit-content;
+            margin-bottom: 5px;
+        }
+
+        .selection-box.active .active-label {
+            display: block;
+        }
+        
+        h3 { margin: 0; font-size: 11px; text-transform: uppercase; color: #8b949e; }
+        .val { font-size: 15px; font-weight: bold; line-height: 1.3; margin-top: 5px; min-height: 40px; }
+        .rgb-val { font-size: 11px; opacity: 0.7; font-weight: normal; font-family: monospace; display: block; margin-top: 2px; }
+        
+        #canvas-container {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 400px;
+            position: relative;
+            background-color: #0f1115;
+            border-top: 2px solid #30363d;
+        }
+
+        footer { 
+            text-align: center;
+            padding: 15px;
+            font-size: 14px; 
+            color: #444; 
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        #btn-pdf {
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: opacity 0.2s ease;
+        }
+        
+        #btn-pdf:hover {
+            opacity: 0.8;
+        }
+        
+        /* PDF出力時専用のスタイル（ライトテーマ＆切り取り防止） */
+        body.pdf-export-mode {
+            background-color: #ffffff !important;
+            color: #333333 !important;
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+        }
+        body.pdf-export-mode #ui-container {
+            background-color: #ffffff !important;
+        }
+        body.pdf-export-mode h1 {
+            color: #111111 !important;
+        }
+        body.pdf-export-mode #instructions {
+            color: #333333 !important;
+            background-color: #f5f5f5 !important;
+            border-left: 4px solid #e67e22 !important;
+        }
+        body.pdf-export-mode .selection-box {
+            box-shadow: none !important;
+            border-top: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+            border-bottom: 1px solid #cccccc;
+        }
+        body.pdf-export-mode .selection-box.active {
+            border-top: 2px solid #e67e22;
+            border-right: 2px solid #e67e22;
+            border-bottom: 2px solid #e67e22;
+        }
+        body.pdf-export-mode h3 {
+            color: #555555 !important;
+        }
+        body.pdf-export-mode .rgb-val {
+            color: #666666 !important;
+            opacity: 1 !important;
+        }
+        body.pdf-export-mode #preview-box {
+            border-color: #cccccc !important;
+            box-shadow: none !important;
+        }
+        body.pdf-export-mode #canvas-container, 
+        body.pdf-export-mode footer {
+            display: none !important;
+        }
+
+        #pdf-footer {
+            display: none;
+        }
+
+        body.pdf-export-mode #pdf-footer {
+            display: flex !important;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #888888;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui-container">
+        <h1>フォルトゥーナパールの色合わせ</h1>
+        
+        <div id="instructions">
+            <span class="highlight">【使い方】</span><br>
+            1. 下の「選択色A」または「選択色B」の枠をタップして、ターゲットを選択します。<br>
+            2. 画面下部の3D空間にある色の球をタップすると、その色が斜め格子に反映されます。<br>
+            <span style="font-size: 11px; color: #8b949e; display: block; margin-top: 5px;">※3D空間はスワイプ（ドラッグ）で回転、ピンチ操作で拡大・縮小できます。</span>
+        </div>
+
+        <!-- 斜め格子プレビュー -->
+        <div id="preview-box">
+            <svg id="preview-svg" width="100%" height="100%">
+                <defs>
+                    <pattern id="diagonal-checker" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                        <rect id="pattern-rect-a1" x="0" y="0" width="30" height="30" fill="#444" />
+                        <rect id="pattern-rect-b1" x="30" y="0" width="30" height="30" fill="#222" />
+                        <rect id="pattern-rect-b2" x="0" y="30" width="30" height="30" fill="#222" />
+                        <rect id="pattern-rect-a2" x="30" y="30" width="30" height="30" fill="#444" />
+                    </pattern>
+                </defs>
+                <rect x="0" y="0" width="100%" height="100%" fill="url(#diagonal-checker)" />
+            </svg>
+        </div>
+
+        <div id="selection-container">
+            <div class="selection-box active" id="color-a" onclick="setActiveSlot('a')">
+                <div class="active-label">選択ターゲット</div>
+                <h3>選択色 A</h3>
+                <div id="text-a" class="val">下の球体をタップ</div>
+            </div>
+            <div class="selection-box" id="color-b" onclick="setActiveSlot('b')">
+                <div class="active-label">選択ターゲット</div>
+                <h3>選択色 B</h3>
+                <div id="text-b" class="val">下の球体をタップ</div>
+            </div>
+        </div>
+
+        <!-- PDF出力時のみ表示されるフッター -->
+        <div id="pdf-footer">
+            <span id="pdf-timestamp"></span>
+            <span>orisai.jp</span>
+        </div>
+    </div>
+    
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+    
+    <footer>
+        <button id="btn-pdf">PDFでダウンロード</button>
+    </footer>
+
+    <!-- html2pdf ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const colorPalette = [
+            {"name":"あいすみちゃ 藍墨茶","r":127,"g":122,"b":124},{"name":"あお 青","r":56,"g":163,"b":209},{"name":"あおみどり 青緑","r":31,"g":137,"b":115},{"name":"あかべに 赤紅","r":211,"g":20,"b":45},{"name":"あさぎいろ 浅葱色","r":44,"g":183,"b":184},{"name":"あさはなだ 朝縹","r":152,"g":186,"b":183},{"name":"あまいろ 亜麻色","r":200,"g":179,"b":125},{"name":"あらぞめ 退紅","r":205,"g":148,"b":115},{"name":"うすあお 薄青","r":150,"g":156,"b":67},{"name":"うすき 浅黄","r":251,"g":238,"b":138},{"name":"うすべに 薄紅色","r":238,"g":120,"b":78},{"name":"うすみどり 薄緑","r":91,"g":162,"b":20},{"name":"うめねず 梅鼠","r":167,"g":129,"b":119},{"name":"えびいろ 葡萄色","r":151,"g":46,"b":61},{"name":"かいはくしょく 灰白色","r":235,"g":224,"b":180},{"name":"かきいろ 柿色","r":243,"g":148,"b":23},{"name":"からしいろ 芥子色","r":228,"g":193,"b":48},{"name":"きいろ 黄色","r":246,"g":221,"b":94},{"name":"きみどり 黄緑","r":169,"g":184,"b":63},{"name":"ぎんねず 銀鼠","r":152,"g":152,"b":127},{"name":"くるみぞめ 胡桃染","r":162,"g":132,"b":90},{"name":"くろ 黒","r":28,"g":25,"b":13},{"name":"くろみどり 黒緑","r":65,"g":85,"b":35},{"name":"けしむらさき 滅紫","r":169,"g":140,"b":152},{"name":"けんぼういろ 憲法色","r":142,"g":114,"b":80},{"name":"こいくれない 濃紅","r":153,"g":4,"b":0},{"name":"こんじき 金色","r":171,"g":133,"b":61},{"name":"しおんいろ 紫苑色","r":148,"g":109,"b":153},{"name":"しゃくどういろ 赤銅色","r":156,"g":60,"b":6},{"name":"しろ 白","r":227,"g":227,"b":214},{"name":"すみれいろ 菫色","r":117,"g":101,"b":173},{"name":"せきちくいろ 石竹色","r":230,"g":179,"b":169},{"name":"ぞうげいろ 象牙色","r":230,"g":223,"b":182},{"name":"そらいろ 空色","r":169,"g":210,"b":223},{"name":"だいだいいろ 橙色","r":250,"g":137,"b":7},{"name":"たんこう 淡黄","r":251,"g":238,"b":113},{"name":"ちゃいろ 茶色","r":184,"g":118,"b":65},{"name":"てつぐろ 鉄黒","r":113,"g":92,"b":71},{"name":"てつこん 鉄紺","r":57,"g":92,"b":112},{"name":"なでしこいろ 撫子色","r":230,"g":192,"b":177},{"name":"にせむらさき 似せ紫","r":125,"g":47,"b":51},{"name":"びんろうじぞめ 檳榔子染","r":141,"g":127,"b":100},{"name":"ふかみどり 深緑","r":41,"g":131,"b":98},{"name":"ふじいろ 藤色","r":180,"g":166,"b":180},{"name":"ふじむらさき 藤紫","r":116,"g":88,"b":152},{"name":"べにけしねずみ 紅消鼠","r":160,"g":134,"b":139},{"name":"ぼたんいろ 牡丹色","r":207,"g":99,"b":177},{"name":"みずいろ 水色","r":66,"g":197,"b":201},{"name":"みどり 緑","r":108,"g":152,"b":69},{"name":"ももはないろ 桃花色","r":238,"g":153,"b":171},{"name":"りきゅうねずみ 利休鼠","r":146,"g":147,"b":87},{"name":"るりいろ 瑠璃色","r":59,"g":125,"b":182},{"name":"わかなえいろ 若苗色","r":215,"g":217,"b":55}
+        ];
+
+        let activeSlot = 'a';
+        let selectedColors = { a: null, b: null }; // 選択された状態を保持
+
+        window.setActiveSlot = (slot) => {
+            activeSlot = slot;
+            document.getElementById('color-a').classList.toggle('active', slot === 'a');
+            document.getElementById('color-b').classList.toggle('active', slot === 'b');
+        };
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        let width = container.clientWidth;
+        let height = container.clientHeight;
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        camera.position.set(380, 380, 380);
+        controls.target.set(127.5, 127.5, 127.5);
+        controls.enableDamping = true;
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+        const pointLight = new THREE.PointLight(0xffffff, 0.6);
+        pointLight.position.set(400, 500, 400);
+        scene.add(pointLight);
+
+        const grid = new THREE.LineSegments(
+            new THREE.EdgesGeometry(new THREE.BoxGeometry(255, 255, 255)),
+            new THREE.LineBasicMaterial({ color: 0x444d56 })
+        );
+        grid.position.set(127.5, 127.5, 127.5);
+        scene.add(grid);
+
+        const sphereGroup = new THREE.Group();
+        const sphereGeo = new THREE.SphereGeometry(14, 32, 32); 
+
+        colorPalette.forEach(color => {
+            const material = new THREE.MeshPhongMaterial({ 
+                color: new THREE.Color(`rgb(${color.r},${color.g},${color.b})`),
+                shininess: 90
+            });
+            const sphere = new THREE.Mesh(sphereGeo, material);
+            sphere.position.set(color.r, color.g, color.b);
+            sphere.userData = color;
+            sphereGroup.add(sphere);
+        });
+        scene.add(sphereGroup);
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let pointerDownTime = 0;
+        let pointerDownPos = { x: 0, y: 0 };
+
+        renderer.domElement.addEventListener('pointerdown', (e) => {
+            pointerDownTime = Date.now();
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+        });
+
+        renderer.domElement.addEventListener('pointerup', (e) => {
+            const duration = Date.now() - pointerDownTime;
+            const dist = Math.sqrt(Math.pow(e.clientX - pointerDownPos.x, 2) + Math.pow(e.clientY - pointerDownPos.y, 2));
+            
+            // ドラッグではなく「タップ（短い時間、移動距離が少ない）」の場合のみ選択
+            if (duration < 300 && dist < 10) {
+                const rect = e.target.getBoundingClientRect();
+                mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera);
+                // 距離順でソートされるので、最初の要素が最前面
+                const intersects = raycaster.intersectObjects(sphereGroup.children, true);
+                
+                if (intersects.length > 0) {
+                    updateSelection(activeSlot, intersects[0].object.userData);
+                }
+            }
+        });
+
+        function updateSelection(target, color) {
+            const box = document.getElementById(`color-${target}`);
+            const textEl = document.getElementById(`text-${target}`);
+            const rgbStr = `rgb(${color.r}, ${color.g}, ${color.b})`;
+            
+            textEl.innerHTML = `${color.name}<br><span class="rgb-val">RGB: ${color.r}, ${color.g}, ${color.b}</span>`;
+            textEl.style.color = rgbStr;
+            box.style.borderLeftColor = rgbStr;
+            box.style.backgroundColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.15)`;
+            
+            // プレビューの更新情報を保持
+            selectedColors[target] = color;
+            updatePreview();
+        }
+
+        // プレビュー欄を更新する関数
+        function updatePreview() {
+            // 未選択の場合はデフォルトのダークグレー
+            const colAStr = selectedColors.a ? `rgb(${selectedColors.a.r}, ${selectedColors.a.g}, ${selectedColors.a.b})` : '#444';
+            const colBStr = selectedColors.b ? `rgb(${selectedColors.b.r}, ${selectedColors.b.g}, ${selectedColors.b.b})` : '#222';
+            
+            // SVG内のパターン定義色を上書き
+            document.getElementById('pattern-rect-a1').setAttribute('fill', colAStr);
+            document.getElementById('pattern-rect-a2').setAttribute('fill', colAStr);
+            document.getElementById('pattern-rect-b1').setAttribute('fill', colBStr);
+            document.getElementById('pattern-rect-b2').setAttribute('fill', colBStr);
+        }
+
+        // PDFダウンロード機能
+        document.getElementById('btn-pdf').addEventListener('click', () => {
+            const body = document.body;
+            const element = document.getElementById('ui-container');
+            
+            // タイムスタンプの設定
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = now.getMonth() + 1;
+            const d = now.getDate();
+            const h = now.getHours().toString().padStart(2, '0');
+            const min = now.getMinutes().toString().padStart(2, '0');
+            const sec = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('pdf-timestamp').textContent = `${y}/${m}/${d} ${h}:${min}:${sec}`;
+            
+            // 背景色を白（ライトテーマ）にし、見切れを防ぐためにスクロールなどの制約を解除
+            body.classList.add('pdf-export-mode');
+            
+            // 確実に見切れを防ぐため、一番上へスクロールさせる
+            const originalScrollY = window.scrollY;
+            window.scrollTo(0, 0);
+            
+            const opt = {
+                margin:       10,
+                filename:     'fortuna-pearl-colors.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 3, // 高画質化
+                    useCORS: true, 
+                    backgroundColor: '#ffffff', // 白背景
+                    scrollY: 0,
+                    windowWidth: document.documentElement.scrollWidth,
+                    windowHeight: document.documentElement.scrollHeight
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            // CSSの適用を待ってからレンダリングを開始する
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save().then(() => {
+                    body.classList.remove('pdf-export-mode');
+                    window.scrollTo(0, originalScrollY); // 元のスクロール位置に戻す
+                });
+            }, 150);
+        });
+
+        window.addEventListener('resize', () => {
+            width = container.clientWidth;
+            height = container.clientHeight;
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

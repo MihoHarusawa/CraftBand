@@ -131,6 +131,97 @@
             display: inline-block;
         }
 
+        /* --- Collapsible and UI enhancements --- */
+        #square-color-app .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            padding: 6px 10px;
+            margin: -10px -10px 0 -10px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 6px 6px 0 0;
+            transition: background 0.2s;
+        }
+
+        #square-color-app .collapsible-header:hover {
+            background: #e5e7eb;
+        }
+
+        #square-color-app .collapsible-header h3 {
+            margin: 0 !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        #square-color-app .collapsible-content {
+            padding-top: 12px;
+        }
+
+        #square-color-app .collapsible-content.hidden {
+            display: none;
+        }
+
+        #square-color-app .toggle-icon::after {
+            content: "\25BC";
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        #square-color-app .toggle-icon::after {
+            content: "\25BC";
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        #square-color-app .collapsed .toggle-icon::after {
+            content: "\25B6";
+        }
+
+        #square-color-app .collapsed .collapsible-header {
+            border-bottom: none;
+            border-radius: 6px;
+        }
+
+        #square-color-app .integrated-picker {
+            width: 60px;
+            height: 36px;
+            padding: 2px;
+            border: 1px solid #9ca3af;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        #square-color-app #undoButton {
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #d1d5db;
+            transition: all 0.2s;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        #square-color-app #undoButton.active {
+            color: #3b82f6;
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        #square-color-app #undoButton.active:hover {
+            background-color: #dbeafe;
+        }
+
         #square-color-app .layout-columns {
             display: flex;
             gap: 10px;
@@ -230,54 +321,64 @@
 
     <div class="row row-start">
         <!-- サイズ指定 -->
-        <div class="section" style="flex: 1; min-width: 250px;">
-            <h3>サイズ指定</h3>
-            <div class="row">
-                <div class="inline-field">
-                    <label>垂直ひも (右へ)</label>
-                    <div class="input-group">
-                        <button type="button" class="btn-blue small btn-adjust-v" data-delta="-10">-10</button>
-                        <button type="button" class="btn-blue small btn-adjust-v" data-delta="-1">-1</button>
-                        <input type="number" id="numVertical" value="19" min="1" class="narrow-input">
-                        <button type="button" class="btn-blue small btn-adjust-v" data-delta="1">+1</button>
-                        <button type="button" class="btn-blue small btn-adjust-v" data-delta="10">+10</button>
+        <div id="sectionSize" class="section collapsed" style="flex: 1; min-width: 250px;">
+            <div class="collapsible-header" id="headerSize">
+                <h3>サイズ指定</h3>
+                <span class="toggle-icon"></span>
+            </div>
+            <div class="collapsible-content hidden">
+                <div class="row">
+                    <div class="inline-field">
+                        <label>垂直ひも (右へ)</label>
+                        <div class="input-group">
+                            <button type="button" class="btn-blue small btn-adjust-v" data-delta="-10">-10</button>
+                            <button type="button" class="btn-blue small btn-adjust-v" data-delta="-1">-1</button>
+                            <input type="number" id="numVertical" value="19" min="1" class="narrow-input">
+                            <button type="button" class="btn-blue small btn-adjust-v" data-delta="1">+1</button>
+                            <button type="button" class="btn-blue small btn-adjust-v" data-delta="10">+10</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="inline-field">
-                    <label>編みひも (上へ)</label>
-                    <div class="input-group">
-                        <button type="button" class="btn-blue small btn-adjust-h" data-delta="-10">-10</button>
-                        <button type="button" class="btn-blue small btn-adjust-h" data-delta="-1">-1</button>
-                        <input type="number" id="numHorizontal" value="12" min="1" class="narrow-input">
-                        <button type="button" class="btn-blue small btn-adjust-h" data-delta="1">+1</button>
-                        <button type="button" class="btn-blue small btn-adjust-h" data-delta="10">+10</button>
+                <div class="row">
+                    <div class="inline-field">
+                        <label>編みひも (下から)</label>
+                        <div class="input-group">
+                            <button type="button" class="btn-blue small btn-adjust-h" data-delta="-10">-10</button>
+                            <button type="button" class="btn-blue small btn-adjust-h" data-delta="-1">-1</button>
+                            <input type="number" id="numHorizontal" value="12" min="1" class="narrow-input">
+                            <button type="button" class="btn-blue small btn-adjust-h" data-delta="1">+1</button>
+                            <button type="button" class="btn-blue small btn-adjust-h" data-delta="10">+10</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ひも上下 -->
-        <div class="section" style="flex: 1; min-width: 200px;">
-            <h3>ひも上下</h3>
-            <div class="inline-field">
-                <label>上下図名</label>
-                <select id="patternDropdown">
-                    <option value="10;01" data-name="平編み">平編み</option>
-                    <option value="1100;0110;0011;1001;" data-name="網代編み2つ飛び">網代編み2つ飛び</option>
-                    <option value="111000;011100;001110;000111;100011;110001;" data-name="網代編み3つ飛び">網代編み3つ飛び
-                    </option>
-                    <option value="110;011;101;" data-name="3x3 2-1">3x3 2-1</option>
-                    <option value="011;110;101;" data-name="3x3 1-2">3x3 1-2</option>
-                    <option
-                        value="1110000011;0111000111;0011101110;0001111100;1000111000;0001111100;0011101110;0111000111;1110000011;1100010001;"
-                        data-name="花桝網代">花桝網代</option>
-                </select>
+        <div id="sectionPattern" class="section collapsed" style="flex: 1; min-width: 200px;">
+            <div class="collapsible-header" id="headerPattern">
+                <h3>ひも上下</h3>
+                <span class="toggle-icon"></span>
             </div>
-            <div
-                style="margin-top: 8px; font-size: 12px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
-                内部ロジック: <span id="patternCodeDisplay">10;01</span>
+            <div class="collapsible-content hidden">
+                <div class="inline-field">
+                    <label>上下図名</label>
+                    <select id="patternDropdown">
+                        <option value="10;01" data-name="平編み">平編み</option>
+                        <option value="1100;0110;0011;1001;" data-name="網代編み2つ飛び">網代編み2つ飛び</option>
+                        <option value="111000;011100;001110;000111;100011;110001;" data-name="網代編み3つ飛び">網代編み3つ飛び
+                        </option>
+                        <option value="110;011;101;" data-name="3x3 2-1">3x3 2-1</option>
+                        <option value="011;110;101;" data-name="3x3 1-2">3x3 1-2</option>
+                        <option
+                            value="1110000011;0111000111;0011101110;0001111100;1000111000;0001111100;0011101110;0111000111;1110000011;1100010001;"
+                            data-name="花桝網代">花桝網代</option>
+                    </select>
+                </div>
+                <div
+                    style="margin-top: 8px; font-size: 12px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+                    内部ロジック: <span id="patternCodeDisplay">10;01</span>
+                </div>
             </div>
         </div>
     </div>
@@ -286,17 +387,12 @@
     <div class="layout-columns">
         <div class="col-main">
             <div class="section">
-                <h3>色指定</h3>
+                <h3>現在の色の指定</h3>
                 <div class="row">
                     <div class="inline-field">
                         <label>現在の色</label>
-                        <div class="input-group">
-                            <div id="currentColorPreview" class="color-preview" style="background-color: #ff1493;">
-                            </div>
-                            <input type="color" id="currentColorInput" value="#ff1493"
-                                style="padding:0; width:30px; height:30px; border:none; cursor:pointer;"
-                                title="カラーピッカーを開く">
-                        </div>
+                        <input type="color" id="currentColorInput" value="#0000ff" class="integrated-picker"
+                            title="カラーピッカーを開く">
                     </div>
                     <div class="inline-field">
                         <label>代表色から選ぶ</label>
@@ -372,8 +468,11 @@
         </div>
     </div>
 
-    <div class="canvas-hint">💡
-        バンドの端をクリックすると「現在の色」に変わります。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;左上セルで垂直ひも全て・左下セルで編みひも全てが現在の色になります。</div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <button id="undoButton" title="1手戻す" type="button">&#x21B6;</button>
+        <div class="canvas-hint" style="margin-bottom: 0;">&#x1F4A1;
+            図やバンドの端をクリックすると「現在の色」に変わります。<br><span style="display:inline-block; width:2em;"></span>左上セルで垂直ひも全て・左下セルで編みひも全てが現在の色になります。</div>
+    </div>
     <canvas id="weaveCanvas"></canvas>
 
     <!-- Pattern Name moved to canvas -->
@@ -401,7 +500,8 @@
             // In WordPress Page Preview, block IDs might be duplicated. We find the container reliably using currentScript.
             let container = null;
             if (document.currentScript) {
-                container = document.currentScript.closest('#' + containerId) || document.currentScript.parentElement;
+                const closest = document.currentScript.closest('#' + containerId);
+                container = closest ? closest : document.currentScript.parentElement;
             } else {
                 container = document.getElementById(containerId);
             }
@@ -413,11 +513,14 @@
 
             let vBands = 19;
             let hBands = 12;
-            let currentColor = '#ff1493'; // Deep Pink Default
+            let currentColor = '#0000ff'; // Blue Default
             let currentPatternStr = '10;01';
 
             let verticalColors = [];
             let horizontalColors = [];
+
+            // Undo Cache (1-level)
+            let undoCache = null;
 
             // Display modifier flags
             let modMirrorX = false;
@@ -449,7 +552,8 @@
             // --- Size Logic ---
             const performAdjustSize = (type, delta) => {
                 let elem = type === 'vertical' ? el('#numVertical') : el('#numHorizontal');
-                let val = parseInt(elem.value) || 0;
+                let rawVal = parseInt(elem.value);
+                let val = !isNaN(rawVal) ? rawVal : 0;
                 let newVal = Math.max(1, val + delta);
                 elem.value = newVal;
 
@@ -462,13 +566,13 @@
                     if (horizontalColors.length > newVal) horizontalColors.length = newVal;
                     hBands = newVal;
                 }
+                clearUndoCache();
                 drawCanvas();
             };
 
             // --- Color Logic ---
             const setCurrentColor = (hex, skipRgbUpdate = false) => {
                 currentColor = hex.toLowerCase();
-                el('#currentColorPreview').style.backgroundColor = hex;
                 el('#currentColorInput').value = hex;
 
                 // Update dropdown if matches
@@ -490,6 +594,37 @@
                 }
             };
 
+            const saveUndoState = () => {
+                undoCache = {
+                    v: [...verticalColors],
+                    h: [...horizontalColors]
+                };
+                updateUndoButton();
+            };
+
+            const performUndo = () => {
+                if (!undoCache) return;
+                verticalColors = [...undoCache.v];
+                horizontalColors = [...undoCache.h];
+                undoCache = null;
+                updateUndoButton();
+                drawCanvas();
+            };
+
+            const clearUndoCache = () => {
+                undoCache = null;
+                updateUndoButton();
+            };
+
+            const updateUndoButton = () => {
+                const btn = el('#undoButton');
+                if (undoCache) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            };
+
             const setupColorListeners = () => {
                 const cInp = el('#currentColorInput');
                 cInp.addEventListener('input', e => setCurrentColor(e.target.value));
@@ -499,9 +634,13 @@
                 });
 
                 const updateFromRgb = () => {
-                    let r = Math.max(0, Math.min(255, parseInt(el('#rgb_r').value) || 0));
-                    let g = Math.max(0, Math.min(255, parseInt(el('#rgb_g').value) || 0));
-                    let b = Math.max(0, Math.min(255, parseInt(el('#rgb_b').value) || 0));
+                const getVal = (id) => {
+                    let v = parseInt(el(id).value);
+                    return !isNaN(v) ? v : 0;
+                };
+                let r = Math.max(0, Math.min(255, getVal('#rgb_r')));
+                let g = Math.max(0, Math.min(255, getVal('#rgb_g')));
+                let b = Math.max(0, Math.min(255, getVal('#rgb_b')));
                     el('#rgb_r').value = r; el('#rgb_g').value = g; el('#rgb_b').value = b;
                     setCurrentColor(rgbToHex(r, g, b), true);
                 };
@@ -549,8 +688,10 @@
             // --- Bulk Logic ---
             const performApplyBulkColor = () => {
                 let target = container.querySelector('input[name="bulkTarget"]:checked').value;
-                let start = parseInt(el('#bulkStart').value) || 1;
-                let step = parseInt(el('#bulkStep').value) || 0;
+                let startRaw = parseInt(el('#bulkStart').value);
+                let start = !isNaN(startRaw) ? startRaw : 1;
+                let stepRaw = parseInt(el('#bulkStep').value);
+                let step = !isNaN(stepRaw) ? stepRaw : 0;
 
                 let startIndex = start - 1;
                 if (startIndex < 0) { alert('開始位置は1以上を指定してください。'); return; }
@@ -559,6 +700,7 @@
 
                 if (startIndex >= t_arr.length) return;
 
+                saveUndoState();
                 if (step === 0) {
                     t_arr[startIndex] = currentColor;
                 } else {
@@ -596,6 +738,20 @@
 
                 el('#btnApplyBulk').addEventListener('click', performApplyBulkColor);
 
+                el('#undoButton').addEventListener('click', performUndo);
+
+                // Collapsible Listeners
+                const setupCollapsible = (headerId, sectionId) => {
+                    el('#' + headerId).addEventListener('click', () => {
+                        const sec = el('#' + sectionId);
+                        const content = sec.querySelector('.collapsible-content');
+                        sec.classList.toggle('collapsed');
+                        content.classList.toggle('hidden');
+                    });
+                };
+                setupCollapsible('headerSize', 'sectionSize');
+                setupCollapsible('headerPattern', 'sectionPattern');
+
                 const bindMod = (id, type) => {
                     const block = el(id);
                     if (block) {
@@ -612,7 +768,7 @@
                     el('#patternCodeDisplay').textContent = currentPatternStr;
 
                     // Pattern name updates in canvas automatically
-
+                    clearUndoCache();
                     drawCanvas();
                 });
 
@@ -769,7 +925,8 @@
 
                 // --- Canvas Footer (Time & URL & Pattern Name) ---
                 const selectedOpt = el('#patternDropdown').options[el('#patternDropdown').selectedIndex];
-                const patternNameStr = "上下図名: " + (selectedOpt.getAttribute('data-name') || selectedOpt.text);
+                const attrName = selectedOpt.getAttribute('data-name');
+                const patternNameStr = "上下図名: " + (attrName ? attrName : selectedOpt.text);
 
                 const now = new Date();
                 const pad = (n) => n.toString().padStart(2, '0');
@@ -791,7 +948,7 @@
                 ctx.fillText(footerText, cv.width - 10, cv.height - 10);
 
                 // --- Modifiers Active Text (Optional, helps users know it's a preview mode)
-                if (modMirrorX || modInvertY) {
+                if (modMirrorX ? true : modInvertY) {
                     ctx.textAlign = "left";
                     ctx.fillStyle = "#dc2626";
                     ctx.font = "bold 12px sans-serif";
@@ -821,31 +978,43 @@
 
                 let hitType = null;
                 let hitIdx = -1;
+                let hitCol = -1;
+                let hitRow = -1;
 
-                if (cellX === 0 && cellY === 0) {
+                if (cellX === 0) if (cellY === 0) {
                     hitType = 'top-left-corner';
                     return { hitType, hitIdx };
                 }
-                if (cellX === 0 && cellY === totRows - 1) {
+                if (cellX === 0) if (cellY === totRows - 1) {
                     hitType = 'bot-left-corner';
                     return { hitType, hitIdx };
                 }
 
-                if (cellY >= 1 && cellY <= logicRows) {
-                    if (cellX === 0 || cellX === totCols - 1) {
+                if (cellY >= 1) if (cellY <= logicRows) {
+                    if (cellX === 0 ? true : (cellX === totCols - 1)) {
                         hitType = 'h';
                         hitIdx = logicRows - cellY; // Data index
+                        return { hitType, hitIdx };
                     }
                 }
 
-                if (cellX >= 1 && cellX <= logicCols) {
-                    if (cellY === 0 || cellY === totRows - 1) {
+                if (cellX >= 1) if (cellX <= logicCols) {
+                    if (cellY === 0 ? true : (cellY === totRows - 1)) {
                         hitType = 'v';
                         hitIdx = cellX - 1;
                         if (modMirrorX) {
                             hitIdx = logicCols - 1 - hitIdx; // Click maps correctly when mirrored
                         }
+                        return { hitType, hitIdx };
                     }
+                }
+
+                // Grid Cells
+                if (cellX >= 1) if (cellX <= logicCols) if (cellY >= 1) if (cellY <= logicRows) {
+                    hitType = 'grid-cell';
+                    hitCol = cellX - 1;
+                    hitRow = logicRows - cellY;
+                    return { hitType, hitCol, hitRow };
                 }
 
                 return { hitType, hitIdx };
@@ -864,37 +1033,69 @@
                 });
 
                 el('#weaveCanvas').addEventListener('click', e => {
-                    const { hitType, hitIdx } = getCanvasHit(e);
+                    const { hitType, hitIdx, hitCol, hitRow } = getCanvasHit(e);
 
                     if (hitType === 'h') {
-                        if (hitIdx >= 0) {
-                            if (hitIdx < hBands) {
+                        if (hitIdx >= 0) if (hitIdx < hBands) {
+                            if (horizontalColors[hitIdx] !== currentColor) {
+                                saveUndoState();
                                 horizontalColors[hitIdx] = currentColor;
                                 drawCanvas();
                             }
                         }
                     } else if (hitType === 'v') {
-                        if (hitIdx >= 0) {
-                            if (hitIdx < vBands) {
+                        if (hitIdx >= 0) if (hitIdx < vBands) {
+                            if (verticalColors[hitIdx] !== currentColor) {
+                                saveUndoState();
                                 verticalColors[hitIdx] = currentColor;
                                 drawCanvas();
                             }
                         }
+                    } else if (hitType === 'grid-cell') {
+                        // Determine which band is on top
+                        const matrix = currentPatternStr.split(';').filter(s => s.trim() !== '').map(row => row.split('').map(Number));
+                        const pHeight = matrix.length;
+                        const pWidth = pHeight > 0 ? matrix[0].length : 1;
+
+                        const r = hitRow % pHeight;
+                        const c = hitCol % pWidth;
+                        let logic = matrix[r][c];
+                        if (modInvertY) logic = 1 - logic;
+
+                        if (logic === 1) {
+                            // Vertical is on top
+                            let actualIdx = modMirrorX ? (vBands - 1 - hitCol) : hitCol;
+                            if (verticalColors[actualIdx] !== currentColor) {
+                                saveUndoState();
+                                verticalColors[actualIdx] = currentColor;
+                                drawCanvas();
+                            }
+                        } else {
+                            // Horizontal is on top
+                            if (horizontalColors[hitRow] !== currentColor) {
+                                saveUndoState();
+                                horizontalColors[hitRow] = currentColor;
+                                drawCanvas();
+                            }
+                        }
                     } else if (hitType === 'top-left-corner') {
+                        saveUndoState();
                         for (let i = 0; i < vBands; i++) verticalColors[i] = currentColor;
                         drawCanvas();
                     } else if (hitType === 'bot-left-corner') {
+                        saveUndoState();
                         for (let i = 0; i < hBands; i++) horizontalColors[i] = currentColor;
                         drawCanvas();
                     }
                 });
 
                 // Initialize band arrays with their direction's default color.
-                verticalColors = Array(vBands).fill(presets[0].hex);
-                horizontalColors = Array(hBands).fill(presets[1].hex);
+                verticalColors = Array(vBands).fill('#ff1493');
+                horizontalColors = Array(hBands).fill('#00bfff');
 
-                // Keep initial currentColor to preset 1
-                setCurrentColor(presets[0].hex, true);
+                // Keep initial currentColor to Blue
+                setCurrentColor('#0000ff', true);
+                updateUndoButton();
                 drawCanvas();
             };
 

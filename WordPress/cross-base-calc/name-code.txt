@@ -1,0 +1,51 @@
+			
+クロス	Crisscross	AAAA-BB-BB	AAAA-**-AA	AAAA-**-BB	BBBB-**-AA	BBBB-**-BB	
+							
+独楽(コマ)	Spinning Top	BAAA-BA-BBAA	BAAA-BA-AABB				
+線虫	C.elegans	BBAA-AA-BBAA	BBAA-AA-AABB				
+アヒル	Duck	BAAB-AA-BBAA	BAAB-AA-AABB				
+							
+クロスチェック	Crisscross Check	AAAA-AA-AB					
+鍔(つば)	Tsuba 	AAAA-BB-AB					
+柄(つか)	Tsuka 	AAAA-AB-AB					
+手裏剣	Shuriken 	AAAA-BA-AB					
+							
+花	Flower	BBAA-BB-AB					
+四つ葉	Clover	BBAA-BB-AA					
+水玉	Polka Dot	BBAA-BB-BB					
+星	Star	BBAA-AA-AA					
+連花	Linked Flowers	BBAA-AB-AB					
+糸巻	Spool	BBAA-BA-AB					
+							
+キャンディー	candy	ABAB-AB-BB					
+インベーダー	Invader 	ABAB-BB-AB					
+E.T.	ET	ABAB-BA-AB					
+スズラン	Lily-of-the-Valley 	ABAB-AA-AB					
+連提灯	Lantern Row 	ABAB-AA-BB					
+							
+リボン	Ribbon	BAAB-BB-AB					
+水晶	Cristal	BAAB-BB-BB					
+ろうそく	Candle	BAAB-AA-AB					
+鉄アレイ	Dumbbell	BAAB-AB-AB					
+猫目	Cat's Eye	BAAB-BB-AA					
+							
+ダマスク	Damask	BAAA-BA-ABBA					
+丸花	Rosette	BAAA-BA-AB					
+大花	Big Flower	BAAA-BB-AB					
+松皮菱	Overlapping diamond	ABAA-BB-AB					
+X	X 	ABAA-AA-AB					
+バックル	Buckle	ABAA-BA-AB					
+鎖	Chain	ABAA-BA-BB					
+							
+丸窓	Round Window	AABA-AA-AA					
+ランタン	Lantern 	AABA-AA-BB					
+牛	Buffalo	AABA-BB-AB					
+蝶	Butterfly	AABA-AA-AB					
+駐車場	Parking Lot 	AAAB-BA-AB					
+Tシャツ	T-shirt	AAAB-AA-AB					
+バンドエイド	Band-Aid	AAAB-BB-AB	
+
+<名前募集中>	Unnamed
+							
+							
+							
