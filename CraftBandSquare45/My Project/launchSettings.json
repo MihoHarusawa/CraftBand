@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CraftBandSquare45": {
+      "commandName": "Project"
+    },
+    "プロファイル 1": {
+      "commandName": "Project",
+      "commandLineArgs": "--image \"c:\\tmp\\sq45\" --image2 \"c:\\tmp\\sq452\" --list \"c:\\tmp\\list45\""
+    }
+  }
+}

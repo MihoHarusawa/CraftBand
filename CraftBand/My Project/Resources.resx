@@ -767,7 +767,7 @@
   </data>
   <data name="MsgStepImageNoFolder" xml:space="preserve">
     <value>生成先フォルダ'{0}'が存在しません。</value>
-    <comment>frmStepImages</comment>
+    <comment>frmStepImages,clsImageData</comment>
   </data>
   <data name="MsgStepImageNoFolderName" xml:space="preserve">
     <value>生成先フォルダが指定されていません。</value>
@@ -784,5 +784,8 @@
   <data name="MsgStepImageFolderListupError" xml:space="preserve">
     <value>フォルダ'{0}'のファイルリストアップに失敗しました。</value>
     <comment>frmStepImages</comment>
+  </data>
+  <data name="LOG_HeadlessEnd" xml:space="preserve">
+    <value>ヘッドレスモード終了</value>
   </data>
 </root>

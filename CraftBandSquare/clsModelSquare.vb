@@ -86,7 +86,8 @@ Public Class clsModelSquare
     End Function
 
     '3Dモデルを開く
-    Function ModelFileOpen() As Boolean
+    'saveDir: 空はGUI問い合わせ、指定されたらGUIなしで保存のみ
+    Function ModelFileOpen(ByVal saveDir As String) As Boolean
 
         Dim height As Double = _delta画像サイズ(1).dY '左側面
         If Not NearlyEqual(height, _delta画像サイズ(2).dY) OrElse
@@ -98,13 +99,18 @@ Public Class clsModelSquare
         End If
 
         Dim outpath As String = Nothing
-        If _calc._frmMain.radビューア.Checked Then
-            outpath = IO.Path.Combine(IO.Path.GetTempPath, "Square_model")
+        If String.IsNullOrEmpty(saveDir) Then
+            '画面操作
+            If _calc._frmMain.radビューア.Checked Then
+                outpath = IO.Path.Combine(IO.Path.GetTempPath, "Square_model")
+            End If
+        Else
+            outpath = saveDir
         End If
 
         ' OBJとMTLファイルの出力
         Return CreateOBJWithTextures(_calc.get周の横, height, _calc.get周の縦,
-        _path各面画像, outpath)
+        _path各面画像, outpath, (String.IsNullOrEmpty(saveDir)))
     End Function
 
 

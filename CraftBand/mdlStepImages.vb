@@ -13,6 +13,14 @@ Public Interface ICommonActions
     'プレビュー2画像
     Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByVal isShow3D As Boolean, ByRef msg As String) As Boolean
 
+
+    'ヘッドレス実行用
+    Function frmMain_SubLoad() As Boolean
+    Function SetInitialFilePath(ByVal cmdArg As clsCommandLine) As Boolean
+    Function MakeImageFile(ByVal fpath As String, ByRef msg As String) As Boolean
+    Function MakeImageFile2(ByVal fpath As String, ByVal saveDir As String, ByRef msg As String) As Boolean
+    Function MakeListFile(ByVal fpath As String, ByRef msg As String) As Boolean
+
 End Interface
 
 

@@ -86,7 +86,7 @@ Public Class frmMain
         _isFormLoaded = True
 
 
-        '起動引数があれば処理
+        '起動時のファイル
         If _cmdArgs IsNot Nothing Then
             fileStart()
             For Each fname In _cmdArgs
@@ -94,7 +94,7 @@ Public Class frmMain
                     fileAdd(fname)
                 End If
             Next
-            fileEnd()
+            fileEnd(True) '表示のみ(可能なら既に実行している)
         Else
             '[ファイル]メニューから[開く]もしくはドラッグ＆ドロップでファイルを指定してください。
             addText(My.Resources.MsgNeedFile)
@@ -133,7 +133,7 @@ Public Class frmMain
         End If
         fileStart()
         fileAdd(filename)
-        fileEnd()
+        fileEnd(False)
     End Sub
 
     Private Sub frmMain_DragEnter(sender As Object, e As DragEventArgs) Handles MyBase.DragEnter
@@ -153,7 +153,7 @@ Public Class frmMain
         For Each fname In fileNames
             fileAdd(fname)
         Next
-        fileEnd()
+        fileEnd(False)
     End Sub
 
 #End Region
@@ -188,13 +188,13 @@ Public Class frmMain
     End Sub
 
     'ファイル処理終了
-    Private Sub fileEnd()
+    Private Sub fileEnd(ByVal no_start As Boolean)
         If _mapExeFpath.Count = 0 Then
             Return
         End If
 
         '起動指定以外は対象表示
-        If Not radすぐに開く.Checked Then
+        If no_start OrElse Not radすぐに開く.Checked Then
             '起動可能なデータファイル:
             addFormatText(My.Resources.MsgStartable)
             For Each enumExe As enumExeName In _mapExeFpath.Keys

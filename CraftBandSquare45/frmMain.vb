@@ -23,6 +23,46 @@ Public Class frmMain
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
 
 
+    '起動時のファイル、引数/前回値
+    Friend Function SetInitialFilePath(ByVal cmdArg As clsCommandLine
+                                       ) As Boolean Implements ICommonActions.SetInitialFilePath
+
+        Dim lastFilePath As String
+        If Not String.IsNullOrWhiteSpace(cmdArg.DataPath) Then
+            lastFilePath = cmdArg.DataPath
+        Else
+            lastFilePath = My.Settings.LastFilePath
+        End If
+        If Not cmdArg.IsNewData AndAlso
+            (Not String.IsNullOrWhiteSpace(lastFilePath) AndAlso IO.File.Exists(lastFilePath)) Then
+            If _clsDataTables.Load(lastFilePath) Then
+                _sFilePath = lastFilePath 'OK
+            Else
+                '対象外のファイル(他EXEデータなども)
+                If cmdArg.IsHeadlessMode Then
+                    cmdArg.AddWarning(String.Format("Failed to load file: {0} Error: {1}", lastFilePath, _clsDataTables.LastError))
+                    Return False
+                Else
+                    MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    _clsDataTables.SetInitialValue()
+                End If
+            End If
+        Else
+            _clsDataTables.SetInitialValue()
+        End If
+
+        Return True
+    End Function
+
+    Friend Function frmMain_SubLoad(
+                                   ) As Boolean Implements ICommonActions.frmMain_SubLoad
+
+        '
+
+        Return True
+    End Function
+
+
 #Region "基本的な画面処理"
 
     Dim _Profile_dgv縁の始末 As New CDataGridViewProfile(
@@ -58,27 +98,6 @@ Public Class frmMain
         btnDEBUG.Visible = (clsLog.LogLevel.Debug <= g_clsLog.Level)
 #End If
         frmSaveTemporarily.ClearSaved()
-
-        '引数/前回ファイルはそのまま開く(#102 /N はNot Exists)
-        Dim lastFilePath As String
-        If Not String.IsNullOrWhiteSpace(_sFilePath) Then
-            lastFilePath = _sFilePath
-            _sFilePath = Nothing
-        Else
-            lastFilePath = My.Settings.LastFilePath
-        End If
-        If Not String.IsNullOrWhiteSpace(lastFilePath) AndAlso IO.File.Exists(lastFilePath) Then
-            If _clsDataTables.Load(lastFilePath) Then
-                _sFilePath = lastFilePath
-            Else
-                '対象外のファイル(他EXEデータも)
-                MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                _clsDataTables.SetInitialValue()
-            End If
-        Else
-            _clsDataTables.SetInitialValue()
-
-        End If
 
         'プレビューを先にするため一旦削除
         TabControl.TabPages.Remove(tpage横ひも)
@@ -918,7 +937,7 @@ Public Class frmMain
             IO.File.Move(stepModelImageData.GifFilePath, fpath)
             'No Check
             If isShow3D AndAlso radビューア.Checked Then
-                stepModelImageData.ModelFileOpen()
+                stepModelImageData.ModelFileOpen(Nothing)
             End If
             Return True
 
@@ -927,6 +946,102 @@ Public Class frmMain
             msg = ex.Message
             Return False
         End Try
+
+    End Function
+    
+    'ヘッドレス実行
+    Public Function MakeImageFile(ByVal fpath As String, ByRef msg As String
+                                  ) As Boolean Implements ICommonActions.MakeImageFile
+
+        If Not _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = _clsCalcSquare45.p_sメッセージ
+            Return False
+        End If
+
+        Dim imgData As New clsImageData(Nothing)
+        Dim ret As Boolean = _clsCalcSquare45.CalcImage(imgData, False)
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcSquare45.p_sメッセージ) Then
+            msg = _clsCalcSquare45.p_sメッセージ
+            Return False
+        End If
+
+        Try
+            '存在チェック
+            If Not IO.File.Exists(imgData.GifFilePath) Then
+                Return False
+            End If
+
+            '移動先ファイルがあれば削除
+            If IO.File.Exists(fpath) Then
+                IO.File.Delete(fpath)
+            End If
+
+            IO.File.Move(imgData.GifFilePath, fpath)
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "MakeImageFile")
+            msg = ex.Message
+            Return False
+        End Try
+    End Function
+
+    'ヘッドレス実行
+    Public Function MakeImageFile2(ByVal fpath As String, ByVal saveDir As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeImageFile2
+
+        If Not _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = _clsCalcSquare45.p_sメッセージ
+            Return False
+        End If
+
+        Dim modelImageData As New clsModelSquare45(_clsCalcSquare45, Nothing)
+        Dim ret As Boolean = modelImageData.CalcModel(Me, False) 'NOT radAfter.Checked
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(modelImageData.LastError) Then
+            msg = _clsModelImageData.LastError
+            Return False
+        End If
+
+        Try
+            '存在チェック
+            If Not IO.File.Exists(modelImageData.GifFilePath) Then
+                Return False
+            End If
+
+            '上書きコピー
+            IO.File.Move(modelImageData.GifFilePath, fpath, True)
+            '3D
+            If Not String.IsNullOrWhiteSpace(saveDir) Then
+                Return modelImageData.ModelFileOpen(saveDir)
+            End If
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "MakeImageFile2")
+            msg = ex.Message
+            Return False
+        End Try
+
+    End Function
+
+    Function MakeListFile(ByVal fpath As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeListFile
+
+        If Not _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = _clsCalcSquare45.p_sメッセージ
+            Return False
+        End If
+
+        Dim output As New clsOutput(_sFilePath)
+        If Not _clsCalcSquare45.CalcOutput(output) Then
+            msg = _clsCalcSquare45.p_sメッセージ
+            Return False
+        End If
+
+        Dim dlg As New frmOutput(output)
+        Return dlg.GetTableOutput(fpath, msg)
 
     End Function
 #End Region
@@ -2102,7 +2217,7 @@ Public Class frmMain
         If _clsModelImageData Is Nothing Then
             Return
         End If
-        If Not _clsModelImageData.ModelFileOpen Then
+        If Not _clsModelImageData.ModelFileOpen(Nothing) Then
             MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub

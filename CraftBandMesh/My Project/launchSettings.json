@@ -1,7 +1,8 @@
 {
   "profiles": {
     "CraftBandMesh": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--image \"c:\\tmp\\mesh\" --list \"c:\\tmp\\mesh\" --image2 \"c:\\tmp\\mesh\""
     },
     "プロファイル 1": {
       "commandName": "Project",

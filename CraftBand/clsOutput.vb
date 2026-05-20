@@ -69,9 +69,6 @@ Public Class clsOutput
 
 
 #Region "出力リストテーブル"
-
-#End Region
-
     '空行
     Sub AddBlankLine()
         _CurrentRow = Table.NewtblOutputRow
@@ -130,6 +127,7 @@ Public Class clsOutput
             _CurrentRow.f_s色 = color
         End If
     End Sub
+#End Region
 
 
     'カットリスト記号を得る※既存がなければ呼び出し順

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "CraftBandHexagon": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--list \"c:\\tmp\\hexagon\" --image \"c:\\tmp\\hexagon\""
     }
   }
 }

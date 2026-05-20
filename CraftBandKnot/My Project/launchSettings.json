@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "CraftBandKnot": {
+      "commandName": "Project",
+      "commandLineArgs": "--image \"c:\\tmp\\knot\" --list \"c:\\tmp\\knot\" --image2 \"c:\\tmp\\image2\""
+    },
+    "プロファイル 1": {
+      "commandName": "Project"
+    }
+  }
+}

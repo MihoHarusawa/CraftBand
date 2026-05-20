@@ -22,6 +22,44 @@ Public Class frmMain
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
 
+    '起動時のファイル、引数/前回値
+    Friend Function SetInitialFilePath(ByVal cmdArg As clsCommandLine
+                                       ) As Boolean Implements ICommonActions.SetInitialFilePath
+
+        Dim lastFilePath As String
+        If Not String.IsNullOrWhiteSpace(cmdArg.DataPath) Then
+            lastFilePath = cmdArg.DataPath
+        Else
+            lastFilePath = My.Settings.LastFilePath
+        End If
+        If Not cmdArg.IsNewData AndAlso
+            (Not String.IsNullOrWhiteSpace(lastFilePath) AndAlso IO.File.Exists(lastFilePath)) Then
+            If _clsDataTables.Load(lastFilePath) Then
+                _sFilePath = lastFilePath 'OK
+            Else
+                '対象外のファイル(他EXEデータなども)
+                If cmdArg.IsHeadlessMode Then
+                    cmdArg.AddWarning(String.Format("Failed to load file: {0} Error: {1}", lastFilePath, _clsDataTables.LastError))
+                    Return False
+                Else
+                    MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    _clsDataTables.SetInitialValue()
+                End If
+            End If
+        Else
+            _clsDataTables.SetInitialValue()
+        End If
+
+        Return True
+    End Function
+
+    Friend Function frmMain_SubLoad(
+                                   ) As Boolean Implements ICommonActions.frmMain_SubLoad
+
+        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
+
+        Return True
+    End Function
 
 #Region "基本的な画面処理"
 
@@ -57,28 +95,6 @@ Public Class frmMain
 #End If
 
         frmSaveTemporarily.ClearSaved()
-
-        '引数/前回ファイルはそのまま開く(#102 /N はNot Exists)
-        Dim lastFilePath As String
-        If Not String.IsNullOrWhiteSpace(_sFilePath) Then
-            lastFilePath = _sFilePath
-            _sFilePath = Nothing
-        Else
-            lastFilePath = My.Settings.LastFilePath
-        End If
-        If Not String.IsNullOrWhiteSpace(lastFilePath) AndAlso IO.File.Exists(lastFilePath) Then
-            If _clsDataTables.Load(lastFilePath) Then
-                _sFilePath = lastFilePath
-            Else
-                '対象外のファイル(他EXEデータも)
-                MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                _clsDataTables.SetInitialValue()
-            End If
-        Else
-            _clsDataTables.SetInitialValue()
-
-        End If
-
 
         '一旦削除
         TabControl.TabPages.Remove(tpage斜め60度)
@@ -784,7 +800,7 @@ Public Class frmMain
     'ひもリスト
     Private Sub ToolStripMenuItemEditList_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditList.Click
         SaveTables(_clsDataTables)
-        '_clsCalcSquare.CalcSize(CalcCategory.NewData, Nothing, Nothing)
+        '_clsCalcHexagon.CalcSize(CalcCategory.NewData, Nothing, Nothing)
         _clsCalcHexagon.CalcSize(CalcCategory.FixLength, Nothing, Nothing)
 
         Dim msg As String = Nothing
@@ -935,10 +951,83 @@ Public Class frmMain
 
     Public Function MakeImageFile2(ByVal n As Integer, ByVal col As String, ByVal fpath As String, ByVal isShow3D As Boolean, ByRef msg As String
                                    ) As Boolean Implements ICommonActions.MakeImageFile2
-        msg = "Not implemented"
+        msg = "MakeImageFile2 is Not implemented"
         Return False
 
     End Function
+
+    'ヘッドレス実行
+    Public Function MakeImageFile(ByVal fpath As String, ByRef msg As String
+                                  ) As Boolean Implements ICommonActions.MakeImageFile
+
+        Dim checked As New CDispImageChecked
+        Dim data As clsDataTables = dataForImageNew(_clsDataTables, False, checked)
+        If data Is Nothing Then
+            data = New clsDataTables(_clsDataTables)
+        End If
+
+        Dim calc As New clsCalcHexagon(data, Me)
+        If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Dim imgData As New clsImageData(Nothing)
+        Dim ret As Boolean = calc.CalcImage(imgData, checked, False)
+
+        If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
+            msg = calc.p_sメッセージ
+            Return False
+        End If
+
+        Try
+            '存在チェック
+            If Not IO.File.Exists(imgData.GifFilePath) Then
+                Return False
+            End If
+
+            '移動先ファイルがあれば削除
+            If IO.File.Exists(fpath) Then
+                IO.File.Delete(fpath)
+            End If
+
+            IO.File.Move(imgData.GifFilePath, fpath)
+            Return True
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "MakeImageFile")
+            msg = ex.Message
+            Return False
+        End Try
+    End Function
+
+    'ヘッドレス実行
+    Public Function MakeImageFile2(ByVal fpath As String, ByVal saveDir As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeImageFile2
+
+        msg = "MakeImageFile2 is Not implemented"
+        Return True 'No Error
+    End Function
+
+    Function MakeListFile(ByVal fpath As String, ByRef msg As String
+                                   ) As Boolean Implements ICommonActions.MakeListFile
+
+        If Not _clsCalcHexagon.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
+            msg = _clsCalcHexagon.p_sメッセージ
+            Return False
+        End If
+
+        Dim output As New clsOutput(_sFilePath)
+        If Not _clsCalcHexagon.CalcOutput(output) Then
+            msg = _clsCalcHexagon.p_sメッセージ
+            Return False
+        End If
+
+        Dim dlg As New frmOutput(output)
+        Return dlg.GetTableOutput(fpath, msg)
+
+    End Function
+
 #End Region
 
 #Region "設定メニュー・ヘルプ"

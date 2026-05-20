@@ -411,11 +411,21 @@ Public Class clsImageData
 
     '3D
     Public Function CreateOBJWithTextures(ByVal width As Single, ByVal height As Single, ByVal depth As Single,
-                                          ByVal textureFiles() As String, ByVal outPath As String) As Boolean
+                                          ByVal textureFiles() As String, ByVal outPath As String, ByVal isShow As Boolean) As Boolean
         Try
-            Dim outputFolder As String = getOutputFolder(outPath)
-            If String.IsNullOrEmpty(outputFolder) Then
-                Return True 'Manual Stop
+            Dim outputFolder As String
+            If isShow Then
+                outputFolder = getOutputFolder(outPath)
+                If String.IsNullOrEmpty(outputFolder) Then
+                    Return True 'Manual Stop
+                End If
+            Else
+                If String.IsNullOrEmpty(outPath) OrElse Not IO.Directory.Exists(outPath) Then
+                    '生成先フォルダ'{0}'が存在しません。
+                    _LastError = String.Format(My.Resources.MsgStepImageNoFolder, IO.Path.GetFileNameWithoutExtension(outPath))
+                    Return False
+                End If
+                outputFolder = outPath
             End If
 
             ' OBJファイルのパス
@@ -510,14 +520,17 @@ Public Class clsImageData
                 IO.File.Copy(textureFile, IO.Path.Combine(outputFolder, IO.Path.GetFileName(textureFile)), True)
             Next
 
-            ' 作成したOBJファイルを開く
-            If Not String.IsNullOrWhiteSpace(outPath) Then
-                Process.Start("explorer.exe", objFilePath)
-            Else
-                'フォルダ'{0}' に OBJファイル'{1}' および関連ファイル一式を出力しました。
-                Dim msg As String = String.Format(My.Resources.MsgObjOutput, outputFolder, IO.Path.GetFileName(objFilePath))
-                MessageBox.Show(msg, IO.Path.GetFileNameWithoutExtension(FilePath), MessageBoxButtons.OK, MessageBoxIcon.Information)
+            If isShow Then
+                ' 作成したOBJファイルを開く
+                If Not String.IsNullOrWhiteSpace(outPath) Then
+                    Process.Start("explorer.exe", objFilePath)
+                Else
+                    'フォルダ'{0}' に OBJファイル'{1}' および関連ファイル一式を出力しました。
+                    Dim msg As String = String.Format(My.Resources.MsgObjOutput, outputFolder, IO.Path.GetFileName(objFilePath))
+                    MessageBox.Show(msg, IO.Path.GetFileNameWithoutExtension(FilePath), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
             End If
+
             Return True
 
         Catch ex As Exception

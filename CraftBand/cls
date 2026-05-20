@@ -1,0 +1,155 @@
+CommandLine.vb
+Imports System.IO
+Imports System.Text.RegularExpressions
+Imports System.Text.Json
+
+' ----- ヘルパ -----
+Private Function LoadArgsFromConfigFile(path As String) As String()
+    Dim txt As String = File.ReadAllText(path).Trim()
+    If String.IsNullOrWhiteSpace(txt) Then
+        Return New String() {}
+    End If
+
+    ' Try JSON parse first (array or object)
+    Try
+        Using doc = JsonDocument.Parse(txt)
+            Dim root = doc.RootElement
+            Dim list As New List(Of String)
+
+            If root.ValueKind = JsonValueKind.Array Then
+                For Each el In root.EnumerateArray()
+                    If el.ValueKind = JsonValueKind.String Then
+                        list.Add(el.GetString())
+                    End If
+                Next
+                If list.Count > 0 Then Return list.ToArray()
+            ElseIf root.ValueKind = JsonValueKind.Object Then
+                ' top-level keys mapping
+                Dim tmp As JsonElement
+
+                If root.TryGetProperty("master", tmp) AndAlso tmp.ValueKind = JsonValueKind.String Then
+                    list.Add("--master") : list.Add(tmp.GetString())
+                End If
+                If root.TryGetProperty("data", tmp) AndAlso tmp.ValueKind = JsonValueKind.String Then
+                    list.Add("--data") : list.Add(tmp.GetString())
+                End If
+                ' boolean flags
+                If root.TryGetProperty("new", tmp) AndAlso tmp.ValueKind = JsonValueKind.True Then
+                    list.Add("--new")
+                End If
+
+                ' output オブジェクト内のキー
+                If root.TryGetProperty("output", tmp) AndAlso tmp.ValueKind = JsonValueKind.Object Then
+                    Dim outEl As JsonElement = tmp
+                    Dim oe As JsonElement
+                    If outEl.TryGetProperty("list", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--list") : list.Add(oe.GetString())
+                    End If
+                    If outEl.TryGetProperty("image", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--image") : list.Add(oe.GetString())
+                    End If
+                    If outEl.TryGetProperty("image2", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--image2") : list.Add(oe.GetString())
+                    End If
+                End If
+
+                If list.Count > 0 Then Return list.ToArray()
+            End If
+        End Using
+    Catch ex As JsonException
+        ' JSON 解析失敗ならフォールバックして下へ（既存の SplitArgs を使用）
+        If g_clsLog IsNot Nothing Then
+            g_clsLog.LogException(ex, "clsCommandLine.LoadConfig(JsonParse)")
+        End If
+    End Try
+
+    ' 既存の挙動：配列でないならコマンドライン形式のテキストを分割して返す
+    If txt.StartsWith("[") Then
+        ' ここには到達しない想定だが保険として既存の簡易配列パースを使う
+        Dim m As MatchCollection = Regex.Matches(txt, """([^""]*)""")
+        Dim list2 As New List(Of String)
+        For Each mm As Match In m
+            list2.Add(mm.Groups(1).Value)
+        Next
+        Return list2.ToArray()
+    End If
+
+    Return SplitArgs(txt)
+End FunctionCommandLine.vb
+Imports System.IO
+Imports System.Text.RegularExpressions
+Imports System.Text.Json
+
+' ----- ヘルパ -----
+Private Function LoadArgsFromConfigFile(path As String) As String()
+    Dim txt As String = File.ReadAllText(path).Trim()
+    If String.IsNullOrWhiteSpace(txt) Then
+        Return New String() {}
+    End If
+
+    ' Try JSON parse first (array or object)
+    Try
+        Using doc = JsonDocument.Parse(txt)
+            Dim root = doc.RootElement
+            Dim list As New List(Of String)
+
+            If root.ValueKind = JsonValueKind.Array Then
+                For Each el In root.EnumerateArray()
+                    If el.ValueKind = JsonValueKind.String Then
+                        list.Add(el.GetString())
+                    End If
+                Next
+                If list.Count > 0 Then Return list.ToArray()
+            ElseIf root.ValueKind = JsonValueKind.Object Then
+                ' top-level keys mapping
+                Dim tmp As JsonElement
+
+                If root.TryGetProperty("master", tmp) AndAlso tmp.ValueKind = JsonValueKind.String Then
+                    list.Add("--master") : list.Add(tmp.GetString())
+                End If
+                If root.TryGetProperty("data", tmp) AndAlso tmp.ValueKind = JsonValueKind.String Then
+                    list.Add("--data") : list.Add(tmp.GetString())
+                End If
+                ' boolean flags
+                If root.TryGetProperty("new", tmp) AndAlso tmp.ValueKind = JsonValueKind.True Then
+                    list.Add("--new")
+                End If
+
+                ' output オブジェクト内のキー
+                If root.TryGetProperty("output", tmp) AndAlso tmp.ValueKind = JsonValueKind.Object Then
+                    Dim outEl As JsonElement = tmp
+                    Dim oe As JsonElement
+                    If outEl.TryGetProperty("list", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--list") : list.Add(oe.GetString())
+                    End If
+                    If outEl.TryGetProperty("image", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--image") : list.Add(oe.GetString())
+                    End If
+                    If outEl.TryGetProperty("image2", oe) AndAlso oe.ValueKind = JsonValueKind.String Then
+                        list.Add("--image2") : list.Add(oe.GetString())
+                    End If
+                End If
+
+                If list.Count > 0 Then Return list.ToArray()
+            End If
+        End Using
+    Catch ex As JsonException
+        ' JSON 解析失敗ならフォールバックして下へ（既存の SplitArgs を使用）
+        If g_clsLog IsNot Nothing Then
+            g_clsLog.LogException(ex, "clsCommandLine.LoadConfig(JsonParse)")
+        End If
+    End Try
+
+    ' 既存の挙動：配列でないならコマンドライン形式のテキストを分割して返す
+    If txt.StartsWith("[") Then
+        ' ここには到達しない想定だが保険として既存の簡易配列パースを使う
+        Dim m As MatchCollection = Regex.Matches(txt, """([^""]*)""")
+        Dim list2 As New List(Of String)
+        For Each mm As Match In m
+            list2.Add(mm.Groups(1).Value)
+        Next
+        Return list2.ToArray()
+    End If
+
+    Return SplitArgs(txt)
+End Function

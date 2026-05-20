@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports CraftBand.clsLog
+Imports CraftBand.DllParameters
 
 Public Module mdlDllMain
 
@@ -10,6 +11,7 @@ Public Module mdlDllMain
     Public g_clsMasterTables As clsMasterTables
     Public g_clsSelectBasics As clsSelectBasics
     Public g_clsLog As clsLog
+    Public g_isHeadlessMode As Boolean = False '#110
 
     '実行中のプログラム
     Enum enumExeName
@@ -53,6 +55,22 @@ Public Module mdlDllMain
         Public Property ListOutMark As String
 
         Public Property Message As String
+        Public Property IsSettingSave As Boolean
+
+        Enum ProcessCode
+            NormalEnd = 0   '正常終了
+            DialogResultNG = 1  'ダイアログの結果がOK以外(×など)
+
+            HeadlessExecuteError = 5 'ヘッドレスモードの実行に失敗
+            DllFinalizeError = 8 'DLLの終了処理に失敗(マスター保存失敗など)
+            Exception = 9   '例外発生
+            '
+            InvalidData = 97 'データの識別に失敗など、実行不可
+            InvalidArgument = 98 '引数エラーなど、実行不可
+            DllInitializeError = 99 'DLLの開始処理に失敗(マスターがないなど)、実行不可
+        End Enum
+
+        Public Property EndCode As ProcessCode
 
 #Region "前回値の保持"
 
@@ -165,8 +183,13 @@ Public Module mdlDllMain
 
     Friend __paras As DllParameters
     Friend __encShiftJis As System.Text.Encoding
+    Friend __cmdArg As clsCommandLine
 
-    Public Function Initialize(ByVal paras As DllParameters) As Boolean
+    Public Function Initialize(ByVal paras As DllParameters, ByVal cmdArg As clsCommandLine) As Boolean
+        __cmdArg = cmdArg
+        g_clsLog = paras.Log
+        g_isHeadlessMode = cmdArg.IsHeadlessMode
+
         If paras.Log Is Nothing Then
             '起動に必要なパラメータがありません。
             paras.Message = My.Resources.ErrNoInitializeParameters
@@ -179,7 +202,6 @@ Public Module mdlDllMain
         __encShiftJis = System.Text.Encoding.GetEncoding("shift_jis")
 
         '*ログとEXE名
-        g_clsLog = paras.Log
         Dim exename As String = IO.Path.GetFileNameWithoutExtension(g_clsLog.ExePath)
         For Each enumExe As enumExeName In GetType(enumExeName).GetEnumValues
             If [String].Compare(exename, enumExe.ToString, True) = 0 Then
@@ -202,15 +224,17 @@ Public Module mdlDllMain
         If IsCraftBandExe() Then
             If String.IsNullOrWhiteSpace(masterTablesFilePath) Then
                 '名前がない時(初回)
-                Dim dlg As New frmBasics
-                Dim fname As String = IO.Path.ChangeExtension(clsMasterTables.DefaultFileName, clsMasterTables.MyExtention)
-                dlg.SaveFileDialogMasterTable.FileName = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), fname)
-                If dlg.SaveFileDialogMasterTable.ShowDialog() <> DialogResult.OK Then
-                    '設定データを保存するファイルが指定されませんでした。
-                    paras.Message = My.Resources.ErrMasterTableFileCancel
-                    Return False
+                If Not g_isHeadlessMode Then
+                    Dim dlg As New frmBasics
+                    Dim fname As String = IO.Path.ChangeExtension(clsMasterTables.DefaultFileName, clsMasterTables.MyExtention)
+                    dlg.SaveFileDialogMasterTable.FileName = IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), fname)
+                    If dlg.SaveFileDialogMasterTable.ShowDialog() <> DialogResult.OK Then
+                        '設定データを保存するファイルが指定されませんでした。
+                        paras.Message = My.Resources.ErrMasterTableFileCancel
+                        Return False
+                    End If
+                    masterTablesFilePath = dlg.SaveFileDialogMasterTable.FileName
                 End If
-                masterTablesFilePath = dlg.SaveFileDialogMasterTable.FileName
 
                 If IO.File.Exists(masterTablesFilePath) Then
                     '既存ファイルがあれば読み取る
@@ -261,15 +285,18 @@ Public Module mdlDllMain
         Return True
     End Function
 
-    Public Function Finalize(ByVal isOK As Boolean) As Boolean
+    '*DLL終了処理
+    'isSave:保存処理をする時True
+    '戻り値:保存エラーはfalse
+    Public Function Finalize(ByVal isSave As Boolean) As Boolean
         If __paras Is Nothing Then
             Return False
         End If
 
         Dim ret As Boolean = True
-        If isOK Then
+        If isSave Then
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "LastDataString={0}", __paras.LastDataString)
-
+            '保存対象のみ
             If IsCraftBandExe() Then
                 If Not g_clsMasterTables.Save() Then
                     '設定データのファイル'{0}への保存に失敗しました。
@@ -297,6 +324,57 @@ Public Module mdlDllMain
         'g_clsLogはexe側
         Return ret
     End Function
+
+
+
+    '*メイン処理 フォーム/ヘッドレス実行
+    '__parasに結果を入れて返す, Messageは警告もあり
+    Public Function MainProcess(ByVal mainForm As Windows.Forms.Form) As Boolean
+
+        'データファイルの読み込み
+        Dim _commonActions As ICommonActions = TryCast(mainForm, ICommonActions)
+        If Not _commonActions.SetInitialFilePath(__cmdArg) Then
+            __paras.EndCode = ProcessCode.InvalidData
+            __paras.Message = __cmdArg.Warning
+            Return False
+        End If
+
+        '実行
+        Dim ret As Boolean
+        __paras.EndCode = ProcessCode.NormalEnd ' = 0
+        __paras.IsSettingSave = False
+
+        If __cmdArg.IsHeadlessMode Then
+            'ヘッドレスモードで実行
+            If Not _commonActions.frmMain_SubLoad() OrElse
+                Not __cmdArg.ExecuteHeadlessMode(mainForm) Then
+                __paras.EndCode = ProcessCode.HeadlessExecuteError
+                ret = False
+            End If
+            __paras.Message = __cmdArg.Warning
+            g_clsLog.LogResourceMessage(clsLog.LogLevel.Steps, "LOG_HeadlessEnd", ret)
+        Else
+            'フォーム表示
+            If mainForm.ShowDialog = DialogResult.OK Then
+                __paras.IsSettingSave = True
+            Else
+                'abort,cancelなど
+                __paras.EndCode = ProcessCode.DialogResultNG '1
+            End If
+            'ダイアログ表示終了
+            g_clsLog.LogResourceMessage(clsLog.LogLevel.Steps, "LOG_FormEnd", ret)
+        End If
+
+        'DLLの終了処理
+        If Not mdlDllMain.Finalize(__paras.IsSettingSave) Then
+            __paras.IsSettingSave = False
+            __paras.EndCode = ProcessCode.DllFinalizeError
+            Return False
+        End If
+
+        Return ret
+    End Function
+
 
 
     Private Const MASTER_SECTION As String = "MasterFilePath"
