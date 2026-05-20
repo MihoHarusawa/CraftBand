@@ -240,6 +240,7 @@ Module mdlMain
                 startinfo.FileName = exepath
             End If
         End If
+        startinfo.Arguments = arguments
 
         Try
             Dim p As Process = Process.Start(startinfo)
