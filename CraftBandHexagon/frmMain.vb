@@ -71,6 +71,7 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
         editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
+        g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
 
         Return True
     End Function

@@ -70,6 +70,7 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
         'コマ寸法と要尺
+        g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
         _clsCalcKnot.SetBandName(g_clsSelectBasics.p_s対象バンドの種類名)
 
         Return True

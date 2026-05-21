@@ -1,8 +1,11 @@
 {
   "profiles": {
     "CraftBandSquare": {
+      "commandName": "Project"
+    },
+    "プロファイル 1": {
       "commandName": "Project",
-      "commandLineArgs": " --config \"c:\\tmp\\test.txt\""
+      "commandLineArgs": "--config \"C:\\Users\\miho\\Documents\\検証データ\\ダブルハート2.json\""
     }
   }
 }

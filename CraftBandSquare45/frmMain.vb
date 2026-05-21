@@ -70,7 +70,7 @@ Public Class frmMain
     Friend Function frmMain_SubLoad(
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
-        '
+        g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
 
         Return True
     End Function

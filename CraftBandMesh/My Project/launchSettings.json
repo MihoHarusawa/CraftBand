@@ -1,12 +1,11 @@
 {
   "profiles": {
     "CraftBandMesh": {
-      "commandName": "Project",
-      "commandLineArgs": "--image \"c:\\tmp\\mesh\" --list \"c:\\tmp\\mesh\" --image2 \"c:\\tmp\\mesh\""
+      "commandName": "Project"
     },
     "プロファイル 1": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\miho\\Desktop\\test.xml"
+      "commandLineArgs": "--config \"C:\\Users\\miho\\Documents\\検証データ\\mesh-楕円底.json\""
     }
   }
 }
