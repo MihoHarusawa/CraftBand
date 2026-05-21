@@ -65,6 +65,7 @@ A shared library providing configuration databases and common editing forms.
 * Some applications support 3D preview of the finished shape
 * Recent versions allow storing not only the final design  
   but also the **manufacturing process** as part of the project data
+* **From Ver.1.9.2**, **headless execution** via the command line and JSON config files (automatic GIF/CSV export, batch and external tool integration)
 * A large collection of free project data with production photos is available on the official website,
   serving as a reference database based on real manufacturing results
 
@@ -126,6 +127,45 @@ from the official Microsoft page on first launch.
 The sample data represents real, buildable basket designs
 and can be used as practical references for learning and experimentation.
 
+### 4. Headless Execution (Ver.1.9.2 and later)
+
+Run without showing the UI: load a `.cbmesh` file from the command line and automatically export GIF, CSV, and other outputs.  
+Launch the EXE that matches the app that created the data.
+
+**Launch with a JSON config file (recommended)**
+
+```batch
+CraftBandHexagon.exe --config "C:\path\project.json"
+```
+
+Example `project.json`:
+
+```json
+{
+  "data": "C:/path/Sample.cbmesh",
+  "output": {
+    "list": "C:/path/out/result.csv",
+    "image": "C:/path/out/preview.gif"
+  }
+}
+```
+
+**Direct switches**
+
+```batch
+CraftBandHexagon.exe --data "C:\path\Sample.cbmesh" --list "C:\path\out\result.csv" --image "C:\path\out\preview.gif"
+```
+
+Get the exit code from a batch file:
+
+```batch
+start "" /wait "C:\path\CraftBandHexagon.exe" --config "C:\path\project.json"
+echo Exit code: %ERRORLEVEL%
+```
+
+* Results and warnings are **printed to the console** that started the process
+* Detailed logs are written to `%TMP%\<EXE name>.log` (e.g. `CraftBandHexagon.log`)
+* For switches, JSON format, exit codes, and more, see **[doc/cli-spec_EN.md](doc/cli-spec_EN.md)**
 
 
 # Current Binary Version
@@ -137,6 +177,11 @@ and can be used as practical references for learning and experimentation.
 - CraftBandSquare   1.4.1.0
 - CraftBandHexagon  1.1.1.0
 - CbMesh            1.0.1.0
+
+
+# Documentation
+* Command-line / headless specification (English) … [doc/cli-spec_EN.md](doc/cli-spec_EN.md)
+* コマンドライン・ヘッドレス実行仕様（日本語） … [doc/cli-spec.md](doc/cli-spec.md)
 
 
 # Usage

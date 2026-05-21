@@ -71,6 +71,8 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
         g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
+        editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        setAddPartsRefNames()
 
         Return True
     End Function
@@ -1009,7 +1011,7 @@ Public Class frmMain
         Dim ret As Boolean = modelImageData.CalcModel(Me, False) 'NOT radAfter.Checked
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(modelImageData.LastError) Then
-            msg = _clsModelImageData.LastError
+            msg = modelImageData.LastError
             Return False
         End If
 
@@ -1047,7 +1049,7 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.MakeListFile
 
         If Not _clsCalcSquare45.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
-            msg = _clsCalcSquare45.p_sメッセージ
+            msg = _clsCalcSquare45.p_sメッセージ & " " & _clsCalcSquare45.p_s警告
             Return False
         End If
 

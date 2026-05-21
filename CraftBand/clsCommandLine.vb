@@ -342,6 +342,21 @@ Public Class clsCommandLine
             Dim ret As Boolean = True
             Dim msg As String = Nothing
 
+            'リスト出力 (/list)
+            If Not String.IsNullOrWhiteSpace(ListOutputPath) Then
+                Dim outList As String = ListOutputPath
+                If String.IsNullOrWhiteSpace(Path.GetExtension(outList)) Then
+                    outList = outList & ".csv"
+                End If
+                If IO.File.Exists(outList) Then IO.File.Delete(outList)
+                msg = Nothing
+                If Not commonActions.MakeListFile(outList, msg) Then
+                    ret = False
+                End If
+                AddMessage(msg)
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeListFile({0}):<{1}>", outList, msg)
+            End If
+
             '画像出力 (/image)
             If Not String.IsNullOrWhiteSpace(ImageOutputPath) Then
                 Dim imgfpath As String = ImageOutputPath
@@ -379,21 +394,6 @@ Public Class clsCommandLine
                 End If
                 AddMessage(msg)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeImageFile2({0}):<{1}>", img2fpath, msg)
-            End If
-
-            'リスト出力 (/list)
-            If Not String.IsNullOrWhiteSpace(ListOutputPath) Then
-                Dim outList As String = ListOutputPath
-                If String.IsNullOrWhiteSpace(Path.GetExtension(outList)) Then
-                    outList = outList & ".csv"
-                End If
-                If IO.File.Exists(outList) Then IO.File.Delete(outList)
-                msg = Nothing
-                If Not commonActions.MakeListFile(outList, msg) Then
-                    ret = False
-                End If
-                AddMessage(msg)
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeListFile({0}):<{1}>", outList, msg)
             End If
 
             Return ret

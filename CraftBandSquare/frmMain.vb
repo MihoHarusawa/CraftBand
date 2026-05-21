@@ -70,8 +70,10 @@ Public Class frmMain
     Friend Function frmMain_SubLoad(
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
-        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter, My.Resources.EnumStringPosition)
         g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
+        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, My.Resources.EnumStringCenter, My.Resources.EnumStringPosition)
+        editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        setAddPartsRefNames()
 
         Return True
     End Function
@@ -980,7 +982,7 @@ Public Class frmMain
         Dim ret As Boolean = modelImageData.CalcModel(Me) 'rad非表示.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(modelImageData.LastError) Then
-            msg = _clsModelImageData.LastError
+            msg = modelImageData.LastError
             Return False
         End If
 

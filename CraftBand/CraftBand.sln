@@ -16,6 +16,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer_x64", "..\Install
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{DC610EA1-F1A9-4498-8ED5-FA428594A320}"
 	ProjectSection(SolutionItems) = preProject
+		..\doc\cli-spec.md = ..\doc\cli-spec.md
+		..\doc\cli-spec_EN.md = ..\doc\cli-spec_EN.md
 		..\LICENSE.txt = ..\LICENSE.txt
 		..\README.md = ..\README.md
 		..\README_EN.md = ..\README_EN.md

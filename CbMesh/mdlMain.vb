@@ -114,7 +114,7 @@ Module mdlMain
                     If StartCraftbandExeWithArguments(ename, originalArgs, errmsg) Then
                         '起動できた
                         isStarted = True
-                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "StartCraftbandExeWithArguments({0}){1}", ename, originalArgs)
+                        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "Start Exe({0}) : {1}", ename, originalArgs)
                         errcode = ProcessCode.NormalEnd
                     Else
                         errcode = ProcessCode.HeadlessExecuteError
@@ -157,7 +157,7 @@ Module mdlMain
                 AttachConsole(ATTACH_PARENT_PROCESS)
                 Console.WriteLine(errmsg)
             End If
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Headless errcode({0}) {1}", errcode, errmsg)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Headless errcode({0}) {1}", errcode, errmsg)
 
         Else
             '結果で前回値保存

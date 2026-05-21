@@ -65,6 +65,7 @@ CraftBandMesh シリーズは、クラフトバンド／紙バンドなどの帯
 * 一部のアプリでは、完成形を 3D プレビューで確認できます
 * 最近のバージョンアップにより、完成形だけでなく  
   **製作途中のプロセス情報もデータとして保存可能**になりました
+* **Ver.1.9.2 以降**、コマンドラインおよび JSON 設定ファイルによる**ヘッドレス実行**に対応（プレビュー GIF・一覧 CSV 等の自動出力、バッチ・外部ツール連携）
 * 本ソフトで作成された多数のフリーデータが、製作写真とともに公式サイトに公開されており、  
   実制作に基づく設計や寸法検討の参考資料として活用できます
 
@@ -123,6 +124,45 @@ GitHub の Releases ページから最新版をダウンロードしてくださ
 完成例のデータは、実制作に基づく設計例として公開されており、
 操作方法や寸法調整の参考として利用できます。
 
+### 4. ヘッドレス実行（Ver.1.9.2 以降）
+
+画面を表示せず、コマンドラインから `.cbmesh` を読み込み、GIF・CSV 等を自動出力できます。  
+データの作成アプリに対応する EXE を直接指定して起動してください。
+
+**JSON 設定ファイルで起動（推奨）**
+
+```batch
+CraftBandHexagon.exe --config "C:\path\project.json"
+```
+
+`project.json` の例:
+
+```json
+{
+  "data": "C:/path/Sample.cbmesh",
+  "output": {
+    "list": "C:/path/out/result.csv",
+    "image": "C:/path/out/preview.gif"
+  }
+}
+```
+
+**スイッチを直接指定する例**
+
+```batch
+CraftBandHexagon.exe --data "C:\path\Sample.cbmesh" --list "C:\path\out\result.csv" --image "C:\path\out\preview.gif"
+```
+
+バッチから終了コードを取得する例:
+
+```batch
+start "" /wait "C:\path\CraftBandHexagon.exe" --config "C:\path\project.json"
+echo Exit code: %ERRORLEVEL%
+```
+
+* 実行結果・警告は**起動したコマンドライン（コンソール）**に表示されます
+* 詳細ログは `%TMP%\<EXE名>.log`（例: `CraftBandHexagon.log`）に出力されます
+* スイッチ一覧・JSON 仕様・終了コードなどの詳細は **[doc/cli-spec.md](doc/cli-spec.md)** を参照してください
 
 
 # Current Binary Version
@@ -134,6 +174,11 @@ GitHub の Releases ページから最新版をダウンロードしてくださ
 - CraftBandSquare   1.4.1.0
 - CraftBandHexagon  1.1.1.0
 - CbMesh            1.0.1.0
+
+
+# Documentation
+* コマンドライン・ヘッドレス実行仕様（日本語） … [doc/cli-spec.md](doc/cli-spec.md)
+* Command-line / headless specification (English) … [doc/cli-spec_EN.md](doc/cli-spec_EN.md)
 
 
 # Usage

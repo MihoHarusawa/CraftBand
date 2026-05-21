@@ -70,8 +70,16 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
         g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
+        editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        setAddPartsRefNames()
+        '
+        If _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum配置タイプ.i_放射状 OrElse _clsDataTables.p_row底_縦横.Value("f_i織りタイプ") = enum配置タイプ.i_輪弧 Then
+            cmb配置タイプ.SelectedIndex = _clsDataTables.p_row底_縦横.Value("f_i織りタイプ")
+        Else
+            cmb配置タイプ.SelectedIndex = enum配置タイプ.i_縦横
+            End If
 
-        Return True
+            Return True
     End Function
 
 
@@ -1042,8 +1050,11 @@ Public Class frmMain
             Return False
         End If
 
+        'rad底_下上/rad底_上下
+        Dim updownnone As enumUpDownNone = _clsDataTables.p_row底_縦横.Value("f_iひも上下の高さ数")
+
         Dim imgData As New clsImageData(Nothing)
-        Dim ret As Boolean = _clsCalcMesh.CalcImage(imgData, True, True, enumUpDownNone._None)
+        Dim ret As Boolean = _clsCalcMesh.CalcImage(imgData, True, True, updownnone)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcMesh.p_sメッセージ) Then
             msg = _clsCalcMesh.p_sメッセージ

@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Windows
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.ctrAddParts
@@ -70,8 +71,12 @@ Public Class frmMain
     Friend Function frmMain_SubLoad(
                                    ) As Boolean Implements ICommonActions.frmMain_SubLoad
 
-        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
         g_clsSelectBasics.SetTargetBandTypeName(_clsDataTables.p_row目標寸法.Value("f_sバンドの種類名"), False)
+        editInsertBand.SetNames(Me.Text, tpage差しひも.Text, My.Resources.EnumStringPlate, My.Resources.EnumStringAngle, Nothing, My.Resources.EnumStringPosition)
+        editAddParts.SetNames(Me.Text, tpage追加品.Text)
+        setAddPartsRefNames()
+
+        Dispひも上下(_clsDataTables.p_row底_縦横)
 
         Return True
     End Function
@@ -476,6 +481,14 @@ Public Class frmMain
             chkクロスひも.Checked = .Value("f_bクロスひも区分")
             chk高さの六つ目に反映.Checked = .Value("f_b高さ調整区分")
             chkひも中心合わせ.Checked = .Value("f_bひも中心区分")
+        End With
+
+        Dispひも上下(row底_縦横)
+
+    End Sub
+
+    Sub Dispひも上下(ByVal row底_縦横 As clsDataRow)
+        With row底_縦横
 
             Select Case .Value("f_iコマ上側の縦ひも")
                 Case enumコマ上側の縦ひも.i_左側
@@ -1028,7 +1041,7 @@ Public Class frmMain
                                    ) As Boolean Implements ICommonActions.MakeListFile
 
         If Not _clsCalcHexagon.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
-            msg = _clsCalcHexagon.p_sメッセージ
+            msg = _clsCalcHexagon.p_sメッセージ & " " & _clsCalcHexagon.p_s警告
             Return False
         End If
 
