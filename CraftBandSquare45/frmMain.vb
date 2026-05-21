@@ -40,14 +40,27 @@ Public Class frmMain
             Else
                 '対象外のファイル(他EXEデータなども)
                 If cmdArg.IsHeadlessMode Then
-                    cmdArg.AddWarning(String.Format("Failed to load file: {0} Error: {1}", lastFilePath, _clsDataTables.LastError))
+                    cmdArg.AddMessage(String.Format("Failed to load file: {0} Error: {1}", lastFilePath, _clsDataTables.LastError))
                     Return False
                 Else
                     MessageBox.Show(_clsDataTables.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     _clsDataTables.SetInitialValue()
                 End If
             End If
+            'ヘッドレス時はマスターにあるバンドの種類を使っていること
+            If cmdArg.IsHeadlessMode Then
+                Dim bandtype As String = _clsDataTables.p_row目標寸法.Value("f_sバンドの種類名")
+                If g_clsMasterTables.GetBandTypeRecord(bandtype, False) Is Nothing Then
+                    cmdArg.AddMessage(String.Format("BandType'{0}' is not in Master.", bandtype))
+                    Return False
+                End If
+            End If
         Else
+            If cmdArg.IsHeadlessMode Then
+                'ヘッドレス時はデータ必須
+                cmdArg.AddMessage(String.Format("No data file."))
+                Return False
+            End If
             _clsDataTables.SetInitialValue()
         End If
 
@@ -827,8 +840,7 @@ Public Class frmMain
     End Sub
 #End Region
 
-#Region "ステップ画像"
-
+#Region "ステップ画像・ヘッドレス実行"
     Private Sub ToolStripMenuItemEditStepImage_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemEditStepImage.Click
         Dim dlg As New frmStepImages(True)
         If Not dlg.SetMainForm(Me, _clsDataTables, _sFilePath) Then
@@ -969,15 +981,12 @@ Public Class frmMain
         Try
             '存在チェック
             If Not IO.File.Exists(imgData.GifFilePath) Then
+                msg = "Image file was not created."
                 Return False
             End If
 
-            '移動先ファイルがあれば削除
-            If IO.File.Exists(fpath) Then
-                IO.File.Delete(fpath)
-            End If
-
             IO.File.Move(imgData.GifFilePath, fpath)
+            msg = "Image file :" & fpath
             Return True
 
         Catch ex As Exception
@@ -1007,6 +1016,7 @@ Public Class frmMain
         Try
             '存在チェック
             If Not IO.File.Exists(modelImageData.GifFilePath) Then
+                msg = "Image2 file was not created."
                 Return False
             End If
 
@@ -1014,7 +1024,14 @@ Public Class frmMain
             IO.File.Move(modelImageData.GifFilePath, fpath, True)
             '3D
             If Not String.IsNullOrWhiteSpace(saveDir) Then
-                Return modelImageData.ModelFileOpen(saveDir)
+                If Not modelImageData.ModelFileOpen(saveDir) Then
+                    msg = modelImageData.LastError
+                    Return False
+                End If
+            End If
+            msg = "Image2 file :" & fpath
+            If Not String.IsNullOrWhiteSpace(saveDir) Then
+                msg &= vbCrLf & "3D data in " & saveDir
             End If
             Return True
 
@@ -1041,8 +1058,11 @@ Public Class frmMain
         End If
 
         Dim dlg As New frmOutput(output)
-        Return dlg.GetTableOutput(fpath, msg)
-
+        If Not dlg.GetTableOutput(fpath, msg) Then
+            Return False
+        End If
+        msg = "List file :" & fpath
+        Return True
     End Function
 #End Region
 

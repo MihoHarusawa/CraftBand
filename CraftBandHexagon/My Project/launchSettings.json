@@ -1,8 +1,11 @@
 {
   "profiles": {
     "CraftBandHexagon": {
+      "commandName": "Project"
+    },
+    "プロファイル 1": {
       "commandName": "Project",
-      "commandLineArgs": "--list \"c:\\tmp\\hexagon\" --image \"c:\\tmp\\hexagon\""
+      "commandLineArgs": "--config \"C:\\Users\\miho\\Documents\\検証データ\\_testing.json\""
     }
   }
 }

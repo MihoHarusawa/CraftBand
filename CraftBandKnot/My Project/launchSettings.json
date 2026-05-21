@@ -1,11 +1,11 @@
 {
   "profiles": {
     "CraftBandKnot": {
-      "commandName": "Project",
-      "commandLineArgs": "--image \"c:\\tmp\\knot\" --list \"c:\\tmp\\knot\" --image2 \"c:\\tmp\\image2\""
+      "commandName": "Project"
     },
     "プロファイル 1": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--config \"C:\\Users\\miho\\Documents\\検証データ\\Knot(12)170-273-170.json\""
     }
   }
 }

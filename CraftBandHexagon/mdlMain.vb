@@ -18,7 +18,7 @@ Module mdlMain
         If cmdArg.IsHeadlessMode AndAlso Not cmdArg.IsValid Then
             '親コンソールがあれば接続して出力。
             AttachConsole(ATTACH_PARENT_PROCESS)
-            Console.WriteLine(cmdArg.Warning)
+            Console.WriteLine(cmdArg.Message)
             Return DllParameters.ProcessCode.InvalidArgument '引数エラー
         End If
 

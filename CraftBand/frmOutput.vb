@@ -125,6 +125,8 @@ Public Class frmOutput
                 sw.Write(sb.ToString)
                 sw.Close()
             End Using
+            Return True
+
         Catch ex As Exception
             g_clsLog.LogException(ex, "frmOutput.GetGridOutput (FileWrite)", errmsg)
             '指定されたファイル'{0}'への保存ができませんでした。
@@ -132,6 +134,5 @@ Public Class frmOutput
             Return False
         End Try
 
-        Return True
     End Function
 End Class

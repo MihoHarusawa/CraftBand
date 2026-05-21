@@ -335,7 +335,7 @@ Public Module mdlDllMain
         Dim _commonActions As ICommonActions = TryCast(mainForm, ICommonActions)
         If Not _commonActions.SetInitialFilePath(__cmdArg) Then
             __paras.EndCode = ProcessCode.InvalidData
-            __paras.Message = __cmdArg.Warning
+            __paras.Message = __cmdArg.Message
             Return False
         End If
 
@@ -351,7 +351,7 @@ Public Module mdlDllMain
                 __paras.EndCode = ProcessCode.HeadlessExecuteError
                 ret = False
             End If
-            __paras.Message = __cmdArg.Warning
+            __paras.Message = __cmdArg.Message
             g_clsLog.LogResourceMessage(clsLog.LogLevel.Steps, "LOG_HeadlessEnd", ret)
         Else
             'フォーム表示
