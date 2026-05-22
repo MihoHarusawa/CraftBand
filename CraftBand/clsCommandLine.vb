@@ -46,17 +46,35 @@ Public Class clsCommandLine
             Return _message.ToString()
         End Get
     End Property
-    Sub AddMessage(ByVal message As String)
+    Sub AddMessage(ByVal message As String, Optional is_no_lf As Boolean = False)
         If String.IsNullOrEmpty(message) Then
             Return
         End If
-        _message.AppendLine(message)
+        If is_no_lf Then
+            _message.Append(message)
+        Else
+            _message.AppendLine(message)
+        End If
     End Sub
+
+    Dim _args() As String = Nothing
 
     '元のコマンドラインのうち、EXE名以降の引数部分
     Public ReadOnly Property OriginalCommandLine() As String
         Get
-            Return Environment.CommandLine.Substring(Environment.ProcessPath.Length).TrimStart()
+            'Return Environment.CommandLine.Substring(Environment.ProcessPath.Length).TrimStart()
+            If _args Is Nothing OrElse _args.Length = 0 Then Return ""
+            ' 各引数を検査し、スペースが含まれている場合だけ「"」で囲む
+            Dim cleanArgs = _args.Select(Function(a)
+                                             If a.Contains(" ") Then
+                                                 Return $"""{a}"""
+                                             Else
+                                                 Return a
+                                             End If
+                                         End Function)
+
+            ' 半角スペースで結合して1つの文字列にする
+            Return String.Join(" ", cleanArgs)
         End Get
     End Property
 
@@ -92,6 +110,7 @@ Public Class clsCommandLine
         If args Is Nothing Then
             args = New String() {}
         End If
+        _args = args
 
         ' --config を探してファイルから引数を読み替える
         Dim configPath As String = Nothing
@@ -333,7 +352,7 @@ Public Class clsCommandLine
             Not String.IsNullOrWhiteSpace(Image2OutputPath) AndAlso
             String.Equals(ImageOutputPath, Image2OutputPath, StringComparison.OrdinalIgnoreCase) Then
 
-            AddMessage("image,image2 cannot be the same path.")
+            AddMessage("NG:image,image2 cannot be the same path.")
             Return False
         End If
 
@@ -352,6 +371,7 @@ Public Class clsCommandLine
                 msg = Nothing
                 If Not commonActions.MakeListFile(outList, msg) Then
                     ret = False
+                    AddMessage("NG:", True)
                 End If
                 AddMessage(msg)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeListFile({0}):<{1}>", outList, msg)
@@ -367,6 +387,7 @@ Public Class clsCommandLine
                 msg = Nothing
                 If Not commonActions.MakeImageFile(imgfpath, msg) Then
                     ret = False
+                    AddMessage("NG:", True)
                 End If
                 AddMessage(msg)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeImageFile({0}):<{1}>", imgfpath, msg)
@@ -391,6 +412,7 @@ Public Class clsCommandLine
                 msg = Nothing
                 If Not commonActions.MakeImageFile2(img2fpath, img2Dir, msg) Then
                     ret = False
+                    AddMessage("NG:", True)
                     If Directory.Exists(img2Dir) AndAlso
                         Directory.GetFiles(img2Dir).Length = 0 AndAlso
                         Directory.GetDirectories(img2Dir).Length = 0 Then
