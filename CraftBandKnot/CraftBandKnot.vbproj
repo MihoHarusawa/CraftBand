@@ -11,11 +11,11 @@
     <Company>CraftBandLabo</Company>
     <Product>CraftBand</Product>
     <Description>四つ畳み編みかごのデザインとサイズ計算</Description>
-    <Copyright>Copyright © CraftBandLabo 2023-2025</Copyright>
+    <Copyright>Copyright © CraftBandLabo 2023-2026</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
     <ApplicationIcon>IconKnot.ico</ApplicationIcon>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
-    <FileVersion>1.5.1.0</FileVersion>
+    <AssemblyVersion>1.5.2.0</AssemblyVersion>
+    <FileVersion>1.5.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

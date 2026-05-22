@@ -9,9 +9,9 @@
     <Company>CraftBandLabo</Company>
     <Authors>MihoHarusawa</Authors>
     <Title>CraftBandMesh共通ライブラリ</Title>
-    <Copyright>Copyright © CraftBandLabo 2022-2025</Copyright>
-    <FileVersion>1.9.1.0</FileVersion>
-    <AssemblyVersion>1.9.1.0</AssemblyVersion>
+    <Copyright>Copyright © CraftBandLabo 2022-2026</Copyright>
+    <FileVersion>1.9.2.0</FileVersion>
+    <AssemblyVersion>1.9.2.0</AssemblyVersion>
     <Description>CraftBandMeshシリーズ共通ライブラリ</Description>
   </PropertyGroup>
 

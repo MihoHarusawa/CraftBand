@@ -391,6 +391,11 @@ Public Class clsCommandLine
                 msg = Nothing
                 If Not commonActions.MakeImageFile2(img2fpath, img2Dir, msg) Then
                     ret = False
+                    If Directory.Exists(img2Dir) AndAlso
+                        Directory.GetFiles(img2Dir).Length = 0 AndAlso
+                        Directory.GetDirectories(img2Dir).Length = 0 Then
+                        Directory.Delete(img2Dir, True)
+                    End If
                 End If
                 AddMessage(msg)
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "◆ MakeImageFile2({0}):<{1}>", img2fpath, msg)

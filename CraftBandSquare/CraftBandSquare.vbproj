@@ -11,11 +11,11 @@
     <Company>CraftBandLabo</Company>
     <Product>CraftBand</Product>
     <Description>四つ目かごのデザインとサイズ計算</Description>
-    <Copyright>Copyright © CraftBandLabo 2023-2025</Copyright>
+    <Copyright>Copyright © CraftBandLabo 2023-2026</Copyright>
     <PackageIcon>IconSquare.ico</PackageIcon>
     <Authors>MihoHarusawa</Authors>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
