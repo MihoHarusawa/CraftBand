@@ -111,15 +111,28 @@ Module mdlMain
 
                 '対象EXEが確定
                 If cmdArg.GetDataPathArray.Count = 1 Then
-                    '1ファイルのみ指定なら即起動
-                    If StartCraftbandExeWithArguments(ename, originalArgs, message) Then
-                        '起動できた
-                        isStarted = True
+                    '1ファイルのみ指定なら即起動可
+                    If cmdArg.IsHeadlessMode Then
+                        'ヘッドレス(出力指定あり)
+                        isStarted = StartCraftbandExeWithArguments(ename, originalArgs, message)
+                    Else
+                        'ヘッドレスでない(出力指定なし)
+                        If String.IsNullOrWhiteSpace(cmdArg.MasterPath) Then
+                            'マスターなし(起動していれば同画面)
+                            isStarted = StartCraftbandExe(ename, cmdArg.DataPath)
+                        Else
+                            'マスターあり(別起動) ※マスター照合はしない
+                            isStarted = StartCraftbandExeWithArguments(ename, originalArgs, message)
+                        End If
+                    End If
+                    '起動できた
+                    If isStarted Then
                         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "Start Exe({0}) : {1}", ename, originalArgs)
-                        message = "Start Exe :" & ename.ToString
+                        message = "Start Exe(" & ename.ToString & "):" & cmdArg.DataPath
                         errcode = ProcessCode.NormalEnd
                     Else
                         errcode = ProcessCode.HeadlessExecuteError
+                        'ヘッドレスでなければ、フォームでユーザー操作
                     End If
                 Else
                     '複数ファイル指定なら即起動できない
@@ -130,7 +143,7 @@ Module mdlMain
                 message = "InvalidData:" & cmdArg.DataPath
             End If
         Else
-            'データがないので対象が判別できない
+            'データがないので対象が判別できない(ヘッドレスはNG)
             message = "NoData to Execute"
         End If
 
@@ -194,7 +207,7 @@ Module mdlMain
         '同名のプロセスが起動中か？
         Dim procname As String = enumExe.ToString
         Dim procs() As Process = Process.GetProcessesByName(procname)
-        If procs.Length > 0 Then
+        If 0 < procs.Length Then
             '起動中のプロセスをアクティブにする
             For Each p As Process In procs
                 If p.MainWindowHandle <> IntPtr.Zero Then
@@ -203,10 +216,9 @@ Module mdlMain
                     If Not String.IsNullOrWhiteSpace(fpath) AndAlso IO.File.Exists(fpath) Then
                         mdlProcess.SendFilePath(p.MainWindowHandle, fpath)
                     End If
-                    Exit For
+                    Return True ' 既に起動している
                 End If
             Next
-            Return True ' 既に起動している
         End If
 
         'コマンドライン

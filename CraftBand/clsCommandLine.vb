@@ -24,15 +24,6 @@ Public Class clsCommandLine
         End Get
     End Property
 
-    Public ReadOnly Property IsDataOnly As Boolean
-        Get
-            Return IsValid AndAlso
-                Not IsHeadlessMode AndAlso
-                Not IsNewData AndAlso
-                Not String.IsNullOrWhiteSpace(MasterPath)
-        End Get
-    End Property
-
     Public Function GetDataPathArray() As String()
         Return _dataList.ToArray()
     End Function

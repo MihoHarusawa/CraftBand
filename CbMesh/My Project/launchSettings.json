@@ -5,7 +5,7 @@
     },
     "プロファイル 1": {
       "commandName": "Project",
-      "commandLineArgs": "--data \"c:\\tmp\\Square-Snow.cbmesh\" --master \"C:\\Users\\miho\\Documents\\検討保留中データ\\Square-3本△.cbmesh\"  --list \"c:\\tmp\\out\"\r\n"
+      "commandLineArgs": "c:\\tmp\\aa-ab.cbmesh --image {DIR}\\{NAME}\r\n"
     }
   }
 }
