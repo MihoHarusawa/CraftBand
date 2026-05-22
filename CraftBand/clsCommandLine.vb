@@ -329,8 +329,8 @@ Public Class clsCommandLine
         _message.Clear()
 
         '簡易チェック
-        If String.IsNullOrWhiteSpace(ImageOutputPath) AndAlso
-            String.IsNullOrWhiteSpace(Image2OutputPath) AndAlso
+        If Not String.IsNullOrWhiteSpace(ImageOutputPath) AndAlso
+            Not String.IsNullOrWhiteSpace(Image2OutputPath) AndAlso
             String.Equals(ImageOutputPath, Image2OutputPath, StringComparison.OrdinalIgnoreCase) Then
 
             AddMessage("image,image2 cannot be the same path.")

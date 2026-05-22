@@ -19,6 +19,8 @@ The corresponding EXE is recorded in the data field `f_sEXE名` in table `tbl目
 **CbMesh (launcher)**  
 Identifies the XML data type and starts the matching application. The `.dbmesh` extension is associated with CbMesh. When you know which EXE owns the data, **start that EXE directly** (the wrong EXE causes a data error). Launching via CbMesh is a two-step process; direct launch is recommended.
 
+When started via CbMesh.exe, the exit code available to the caller is **CbMesh.exe’s own**, and CbMesh.exe exits successfully (0) once the individual EXE has been launched. **The individual EXE’s processing result and exit code are not available through CbMesh.exe** (see §9).
+
 ---
 
 ## 2. Input and Output Overview
@@ -173,6 +175,8 @@ If the path still has no extension after substitution, apply the common rule in 
 
 ## 9. Exit Codes
 
+### 9.1. Direct launch of an individual EXE
+
 `DllParameters.ProcessCode` / `clsCommandLine.EndCode` (obtain with `start /wait`, etc.):
 
 | Code | Name | Meaning |
@@ -190,5 +194,13 @@ If the path still has no extension after substitution, apply the common rule in 
 
 * **Success**: output files were generated successfully
 * **Failure**: unknown switch, missing `--config`, file generation (`ICommonActions`) returned `False`, etc.
+
+### 9.2. Launch via CbMesh.exe
+
+CbMesh.exe is a launcher that starts the matching individual EXE. The exit code obtained with `start /wait`, etc. is **CbMesh.exe’s**; the table and success/failure notes in §9.1 **do not apply to the individual EXE**.
+
+* **Success (0)**: CbMesh.exe exits after it has identified the data and successfully started the matching individual EXE. Whether the individual EXE later completed headless processing or produced output files cannot be determined from this exit code.
+* **Failure (non-zero)**: Data identification or launch failed on the CbMesh.exe side (events comparable to 97, 98, etc. in §9.1).
+* **Individual EXE processing result**: Headless output success/failure, §9.1 exit codes, and log contents are **not returned to the caller via CbMesh.exe**. If automation must judge the individual EXE’s outcome, **start the matching EXE directly** when its owner is known (see §1).
 
 ---

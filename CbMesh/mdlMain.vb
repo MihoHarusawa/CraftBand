@@ -83,6 +83,7 @@ Module mdlMain
         If Not mdlDllMain.Initialize(paras, cmdArg) Then
             'DLLエラー
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "DllInitialize Error: {0}", paras.Message)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "cmdArg: {0}", cmdArg.dump)
 
             If cmdArg.IsHeadlessMode Then
                 AttachConsole(ATTACH_PARENT_PROCESS)
@@ -99,37 +100,38 @@ Module mdlMain
         Dim isStarted As Boolean = False
         Dim errcode As Integer = ProcessCode.InvalidData 'ヘッドレス用
 
-        'データ指定がある
+        'データ指定があるかどうか
         Dim ename As enumExeName = enumExeName.Nodef
-        Dim errmsg As String = String.Empty
+        Dim message As String = String.Empty
         If Not String.IsNullOrWhiteSpace(cmdArg.DataPath) AndAlso IO.File.Exists(cmdArg.DataPath) Then
-            '形式とEXE名フィールドをチェック→ename
-            Dim dst As dstDataTables = clsDataTables.PreLoad(cmdArg.DataPath, ename, errmsg)
+            'あれば、形式とEXE名フィールドをチェック→ename
+            Dim dst As dstDataTables = clsDataTables.PreLoad(cmdArg.DataPath, ename, message)
             If dst IsNot Nothing Then
                 dst.Dispose()
 
                 '対象EXEが確定
                 If cmdArg.GetDataPathArray.Count = 1 Then
                     '1ファイルのみ指定なら即起動
-                    If StartCraftbandExeWithArguments(ename, originalArgs, errmsg) Then
+                    If StartCraftbandExeWithArguments(ename, originalArgs, message) Then
                         '起動できた
                         isStarted = True
                         g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "Start Exe({0}) : {1}", ename, originalArgs)
+                        message = "Start Exe :" & ename.ToString
                         errcode = ProcessCode.NormalEnd
                     Else
                         errcode = ProcessCode.HeadlessExecuteError
                     End If
                 Else
                     '複数ファイル指定なら即起動できない
-                    errmsg = "MultipleData:" & String.Join(",", cmdArg.GetDataPathArray)
+                    message = "MultipleData:" & String.Join(",", cmdArg.GetDataPathArray)
                 End If
             Else
                 '非対象データ
-                errmsg = "InvalidData:" & cmdArg.DataPath
+                message = "InvalidData:" & cmdArg.DataPath
             End If
         Else
             'データがないので対象が判別できない
-            errmsg = "NoData to Execute"
+            message = "NoData to Execute"
         End If
 
         '個別EXEの起動なし
@@ -153,11 +155,11 @@ Module mdlMain
         If cmdArg.IsHeadlessMode Then
             'ノーチェック
             mdlDllMain.Finalize(False)
-            If errcode <> ProcessCode.NormalEnd Then
+            If Not String.IsNullOrWhiteSpace(message) Then
                 AttachConsole(ATTACH_PARENT_PROCESS)
-                Console.WriteLine(errmsg)
+                Console.WriteLine(message)
             End If
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Headless errcode({0}) {1}", errcode, errmsg)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Steps, "Headless errcode({0}) {1}", errcode, message)
 
         Else
             '結果で前回値保存
@@ -169,7 +171,7 @@ Module mdlMain
                 End If
             Else
                 errcode = DllParameters.ProcessCode.DllFinalizeError
-                errmsg = paras.Message
+                message = paras.Message
             End If
         End If
 

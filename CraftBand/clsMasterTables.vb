@@ -178,10 +178,17 @@ Public Class clsMasterTables
                 sb.AppendFormat("- '{0}'{1}({2})  ", r.f_sバンドの種類名, r.f_i本幅, r.f_dバンド幅)
                 sb.Append(r.f_s色リスト)
             Next
+            'レコード数
+            sb.AppendLine().Append(" [")
+            For Each tbl As DataTable In dst.Tables
+                sb.AppendFormat(" {0}({1})", tbl.TableName, tbl.Rows.Count)
+            Next
+            sb.Append(" ]")
             description = sb.ToString
             Return True
 
         Catch ex As Exception
+            '正しい設定ファイル形式ではないと判定
             Return False
 
         Finally

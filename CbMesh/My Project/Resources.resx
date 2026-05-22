@@ -157,6 +157,9 @@
   <data name="MsgStartExe" xml:space="preserve">
     <value>{0}({1})を起動しました。</value>
   </data>
+  <data name="MsgStepDispSet" xml:space="preserve">
+    <value>※ 表示順がセットされています。最大値は {0} です。</value>
+  </data>
   <data name="TitleDllError" xml:space="preserve">
     <value>DLLエラー</value>
     <comment>mdlMain</comment>

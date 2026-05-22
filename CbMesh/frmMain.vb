@@ -269,7 +269,10 @@ Public Class frmMain
                 'タイトル【{0}】{1}
                 addFormatText(_colorDataInfo, My.Resources.MsgInfo2, .Value("f_sタイトル"), .Value("f_s作成者"))
                 addText(_colorDataInfo, .Value("f_sメモ"))
+                addText(_colorDataInfo, .Value("f_sロゴ文字列"))
             End With
+            '付加情報
+            addText(_colorDataInfo, GetDataInfo(dst))
 
             dst.Dispose()
         End If
@@ -286,6 +289,42 @@ Public Class frmMain
         End If
 
     End Sub
+
+    '付加情報
+    Private Function GetDataInfo(ByVal dst As dstDataTables) As String
+        Try
+            '各レコード数と表示順の最大値
+            Dim sb As New System.Text.StringBuilder
+            Dim maxDispValue As Integer = 0
+            sb.Append(" [")
+            For Each tbl As DataTable In dst.Tables
+                sb.AppendFormat(" {0}({1})", tbl.TableName, tbl.Rows.Count)
+                '
+                If 0 < tbl.Rows.Count AndAlso tbl.Columns.Contains("f_i表示順") Then
+                    Dim obj = tbl.Compute("MAX([f_i表示順])", "")
+                    If obj Is Nothing OrElse obj Is DBNull.Value Then
+                        Continue For
+                    End If
+                    Dim maxValue As Integer = CInt(obj)
+                    If maxDispValue < maxValue Then
+                        maxDispValue = maxValue
+                    End If
+                End If
+            Next
+            sb.Append(" ]")
+            '
+            If 0 < maxDispValue Then
+                sb.AppendLine()
+                '"※ 表示順がセットされています。最大値は {0} です。"
+                sb.AppendFormat(My.Resources.MsgStepDispSet, maxDispValue)
+            End If
+            Return sb.ToString
+
+        Catch ex As Exception
+            g_clsLog.LogException(ex, "frmMain.GetDataInfo")
+            Return Nothing
+        End Try
+    End Function
 
 
     '拡張子のリネーム、fpath存在確認済み、ファイルパスを返す

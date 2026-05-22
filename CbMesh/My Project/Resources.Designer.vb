@@ -179,6 +179,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ※ 表示順がセットされています。最大値は {0} です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgStepDispSet() As String
+            Get
+                Return ResourceManager.GetString("MsgStepDispSet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  DLLエラー に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property TitleDllError() As String
