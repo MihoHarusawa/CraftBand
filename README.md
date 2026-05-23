@@ -84,9 +84,9 @@ XML ベースのデータ形式です。
 - `.CBMESH` … 表記上、設定データ識別用（実体は同一）
 
 ## データ構造
-XML DataSet 構造で、XSD スキーマにより定義されています。
-- 設定データ: `<dstMasterTables>`
-- 作品データ: `<dstDataTables>`
+`.cbmesh` 標準フォーマットは XML DataSet 構造で、次の XSD スキーマにより定義されています。
+- 設定データ: `<dstMasterTables>` — [dstMasterTables.xsd](CraftBand/dstMasterTables.xsd)
+- 作品データ: `<dstDataTables>` — [dstDataTables.xsd](CraftBand/dstDataTables.xsd)
 
 内部ではそれぞれ `ReadXml()` により処理され、  
 拡張子や大文字小文字を区別せずに扱えます。
@@ -106,7 +106,7 @@ XML DataSet 構造で、XSD スキーマにより定義されています。
 ### 1. ダウンロード
 GitHub の Releases ページから最新版をダウンロードしてください。
 
-[最新版をダウンロード](releases/latest)
+[最新版をダウンロード](https://github.com/MihoHarusawa/CraftBand/releases/latest)
 
 ### 2. インストール
 本ソフトは Windows 用アプリケーションです。  

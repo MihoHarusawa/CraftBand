@@ -84,9 +84,9 @@ Older `.xml` files remain fully compatible.
 - `.CBMESH` – Conventionally used to distinguish master data in documentation (functionally identical)
 
 ## Data Structure
-The format uses an XML DataSet structure defined by an XSD schema.
-- Master Configuration Data: `<dstMasterTables>`
-- Project Data: `<dstDataTables>`
+The `.cbmesh` standard format is an XML DataSet structure defined by the following XSD schemas:
+- Master Configuration Data: `<dstMasterTables>` — [dstMasterTables.xsd](CraftBand/dstMasterTables.xsd)
+- Project Data: `<dstDataTables>` — [dstDataTables.xsd](CraftBand/dstDataTables.xsd)
 
 Internally, all formats are processed via `ReadXml()`,
 allowing all extensions and cases to be handled identically.
@@ -107,7 +107,7 @@ Each `.exe` can be launched directly.
 ### 1. Download
 Download the latest version from the GitHub Releases page.
 
-[Download latest release](releases/latest)
+[Download latest release](https://github.com/MihoHarusawa/CraftBand/releases/latest)
 
 ### 2. Installation
 This software is a Windows desktop application.  
