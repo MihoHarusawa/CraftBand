@@ -171,17 +171,23 @@
 
     <div class="control-section">
         <!-- Palette Select -->
-        <div class="palette-row">
-            <div style="position: relative; width: 50px; height: 50px;">
-                <div id="swatchA" class="color-swatch" style="background-color: #87CEEB; position: absolute; top: 0; left: 0; margin: 0; width: 100%; height: 100%; box-sizing: border-box;">A</div>
-                <input type="color" id="pickerA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+        <div class="palette-row" style="align-items: flex-start;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                <div style="position: relative; width: 50px; height: 50px;">
+                    <div id="swatchA" class="color-swatch" style="background-color: #87CEEB; position: absolute; top: 0; left: 0; margin: 0; width: 100%; height: 100%; box-sizing: border-box;">A</div>
+                    <input type="color" id="pickerA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                </div>
+                <div id="valueA" style="font-size: 0.65rem; color: #555; font-family: monospace; line-height: 1;">#87CEEB</div>
             </div>
-            <div style="position: relative; width: 50px; height: 50px;">
-                <div id="swatchB" class="color-swatch" style="background-color: #FFC0CB; position: absolute; top: 0; left: 0; margin: 0; width: 100%; height: 100%; box-sizing: border-box;">B</div>
-                <input type="color" id="pickerB" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                <div style="position: relative; width: 50px; height: 50px;">
+                    <div id="swatchB" class="color-swatch" style="background-color: #FFC0CB; position: absolute; top: 0; left: 0; margin: 0; width: 100%; height: 100%; box-sizing: border-box;">B</div>
+                    <input type="color" id="pickerB" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                </div>
+                <div id="valueB" style="font-size: 0.65rem; color: #555; font-family: monospace; line-height: 1;">#FFC0CB</div>
             </div>
-            <span style="font-size:0.8rem; color:#666">← クリックで色変更</span>
-            <div style="margin-left: 10px; display: flex; gap: 5px;">
+            <span style="font-size:0.8rem; color:#666; margin-top: 15px;">← クリックで色変更</span>
+            <div style="margin-left: 10px; display: flex; gap: 5px; margin-top: 10px;">
                 <button id="btnSwapColors" class="util-btn">色交換</button>
                 <button id="btnSwapABCode" class="util-btn">AB交換</button>
             </div>
@@ -271,8 +277,9 @@
     <div id="craftBandSquarePanel" class="info-panel" style="display:none; border: 1px solid #90caf9; margin-top: 10px; overflow-x: auto;"></div>
 </div>
 
-<div style="text-align:center; margin-top:20px; margin-bottom: 20px;">
+<div style="text-align:center; margin-top:20px; margin-bottom: 20px; display: flex; justify-content: center; gap: 10px;">
     <button id="btnPdfDownload" style="padding: 10px 20px; font-weight:bold; font-size: 0.9rem; background: #eee; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; color: #333;">PDFでダウンロード</button>
+    <button id="btnDuplicateTab" style="padding: 10px 20px; font-weight:bold; font-size: 0.9rem; background: #10b981; border: 1px solid #059669; border-radius: 4px; cursor: pointer; color: #fff;">タブを複製</button>
 </div>
 </div>
 
@@ -306,6 +313,74 @@
         },
         isPreviewL0: false
     };
+
+    // --- URL parameter parsing & initialization ---
+    const urlParams = new window.URLSearchParams(window.location.search);
+    let paramA = urlParams.get('colorA');
+    if (!paramA) paramA = urlParams.get('a');
+    if (!paramA) paramA = urlParams.get('A');
+    if (paramA) {
+        if (paramA.indexOf('#') !== 0) {
+            if (/^[0-9a-fA-F]{3,8}$/.test(paramA)) {
+                paramA = '#' + paramA;
+            }
+        }
+        if (/^#[0-9a-fA-F]{3,8}$/.test(paramA)) {
+            state.colorA = paramA;
+        }
+    }
+
+    let paramB = urlParams.get('colorB');
+    if (!paramB) paramB = urlParams.get('b');
+    if (!paramB) paramB = urlParams.get('B');
+    if (paramB) {
+        if (paramB.indexOf('#') !== 0) {
+            if (/^[0-9a-fA-F]{3,8}$/.test(paramB)) {
+                paramB = '#' + paramB;
+            }
+        }
+        if (/^#[0-9a-fA-F]{3,8}$/.test(paramB)) {
+            state.colorB = paramB;
+        }
+    }
+
+    let paramCode = urlParams.get('code');
+    if (!paramCode) paramCode = urlParams.get('Code');
+    if (paramCode) {
+        const parts = paramCode.toUpperCase().split('-');
+        if (parts.length === 3) {
+            const base = parts[0].split('');
+            const l1 = parts[1].split('');
+            let l2 = parts[2].split('');
+            if (l2.length === 2) l2 = [...l2, ...l2];
+            
+            const isValid = (arr) => {
+                let ok = true;
+                arr.forEach(v => {
+                    if (v !== 'A') {
+                        if (v !== 'B') {
+                            ok = false;
+                        }
+                    }
+                });
+                return ok;
+            };
+            
+            let valid = true;
+            if (base.length !== 4) valid = false;
+            if (l1.length !== 2) valid = false;
+            if (l2.length !== 4) valid = false;
+            if (!isValid(base)) valid = false;
+            if (!isValid(l1)) valid = false;
+            if (!isValid(l2)) valid = false;
+            
+            if (valid) {
+                state.code.base = base;
+                state.code.l1 = l1;
+                state.code.l2 = l2;
+            }
+        }
+    }
 
     const PATTERNS_DB = [
         { jp: "クロス", en: "Crisscross", codes: ["AAAA-BB-BB"] },
@@ -571,6 +646,8 @@
         };
         el('#baseNameLabel').textContent = getBaseName(state.code.base);
         el('#swatchA').style.backgroundColor = state.colorA; el('#swatchB').style.backgroundColor = state.colorB;
+        if (el('#valueA')) el('#valueA').textContent = state.colorA.toUpperCase();
+        if (el('#valueB')) el('#valueB').textContent = state.colorB.toUpperCase();
         if (el('#craftBandSquarePanel')) el('#craftBandSquarePanel').style.display = 'none';
         els('.toggle-btn').forEach(btn => {
             const type = btn.getAttribute('data-type'), idx = parseInt(btn.getAttribute('data-idx')), valSpan = btn.querySelector('.toggle-val');
@@ -872,6 +949,20 @@
             alert("PDFの生成中にエラーが発生しました。");
         }
     };
+
+    // --- Duplicate Tab ---
+    if (el('#btnDuplicateTab')) {
+        el('#btnDuplicateTab').onclick = () => {
+            const curCodeStr = getFullCodeString(state.code);
+            const encodedCode = window.encodeURIComponent(curCodeStr);
+            const encodedColorA = window.encodeURIComponent(state.colorA);
+            const encodedColorB = window.encodeURIComponent(state.colorB);
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const newUrl = `${baseUrl}?code=${encodedCode}&colorA=${encodedColorA}&colorB=${encodedColorB}`;
+            window.open(newUrl, '_blank');
+        };
+    }
 
     updateToggles(); draw();
 })();
