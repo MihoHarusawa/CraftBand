@@ -1,0 +1,6 @@
+			
+						
+井桁	Grid	AAAA-BBBB				
+梁(はり)	Beams	BBAA-AABB				
+窓(まど)	Windowpane	ABAB-AAAA							
+連窓(れんまど)	Linked Window	BBAB-AAAA					

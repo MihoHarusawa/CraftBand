@@ -316,9 +316,7 @@
 
     // --- URL parameter parsing & initialization ---
     const urlParams = new window.URLSearchParams(window.location.search);
-    let paramA = urlParams.get('colorA');
-    if (!paramA) paramA = urlParams.get('a');
-    if (!paramA) paramA = urlParams.get('A');
+    let paramA = urlParams.get('cb_colorA');
     if (paramA) {
         if (paramA.indexOf('#') !== 0) {
             if (/^[0-9a-fA-F]{3,8}$/.test(paramA)) {
@@ -330,9 +328,7 @@
         }
     }
 
-    let paramB = urlParams.get('colorB');
-    if (!paramB) paramB = urlParams.get('b');
-    if (!paramB) paramB = urlParams.get('B');
+    let paramB = urlParams.get('cb_colorB');
     if (paramB) {
         if (paramB.indexOf('#') !== 0) {
             if (/^[0-9a-fA-F]{3,8}$/.test(paramB)) {
@@ -344,8 +340,7 @@
         }
     }
 
-    let paramCode = urlParams.get('code');
-    if (!paramCode) paramCode = urlParams.get('Code');
+    let paramCode = urlParams.get('cb_code');
     if (paramCode) {
         const parts = paramCode.toUpperCase().split('-');
         if (parts.length === 3) {
@@ -959,7 +954,7 @@
             const encodedColorB = window.encodeURIComponent(state.colorB);
             
             const baseUrl = window.location.origin + window.location.pathname;
-            const newUrl = `${baseUrl}?code=${encodedCode}&colorA=${encodedColorA}&colorB=${encodedColorB}`;
+            const newUrl = `${baseUrl}?cb_code=${encodedCode}&cb_colorA=${encodedColorA}&cb_colorB=${encodedColorB}`;
             window.open(newUrl, '_blank');
         };
     }

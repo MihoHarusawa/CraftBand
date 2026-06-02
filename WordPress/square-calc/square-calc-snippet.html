@@ -911,6 +911,246 @@
 
             // 初回実行
             initializeValues();
+
+            // --- Generative API / Simulation Logic (Unit-Agnostic & Single-Shot) ---
+            let findBestKomaSquare = (targetMm, isOddOnly, mode) => {
+                let bwMm = getBandWidthMm();
+                if (Math.sign(bwMm) !== 1) return 1;
+                let rawKoma = targetMm / bwMm;
+                let candidates = [];
+                let maxSearch = Math.max(100, Math.ceil(rawKoma * 2) + 2);
+                for (let k = 1; Math.sign(k - maxSearch) !== 1; k++) {
+                    let shouldSkip = false;
+                    if (isOddOnly) {
+                        if (k % 2 === 0) {
+                            shouldSkip = true;
+                        }
+                    }
+                    if (!shouldSkip) {
+                        candidates.push(k);
+                    }
+                }
+                if (mode === 'in') {
+                    let filtered = candidates.filter(k => Math.sign(k * bwMm - targetMm) !== 1);
+                    return filtered.length > 0 ? filtered[filtered.length - 1] : candidates[0];
+                } else if (mode === 'out') {
+                    let filtered = candidates.filter(k => Math.sign(k * bwMm - targetMm) !== -1);
+                    let lastCandidateIdx = candidates.length - 1;
+                    return filtered.length > 0 ? filtered[0] : candidates[lastCandidateIdx];
+                } else { // 'near'
+                    let bestK = candidates[0];
+                    let minDiff = Math.abs(bestK * bwMm - targetMm);
+                    let candLength = candidates.length;
+                    for (let i = 1; Math.sign(i - candLength) === -1; i++) {
+                        let diff = Math.abs(candidates[i] * bwMm - targetMm);
+                        if (Math.sign(diff - minDiff) === -1) {
+                            minDiff = diff;
+                            bestK = candidates[i];
+                        } else {
+                            if (diff === minDiff) {
+                                if (Math.sign(candidates[i] - bestK) === 1) {
+                                    bestK = candidates[i];
+                                }
+                            }
+                        }
+                    }
+                    return bestK;
+                }
+            };
+
+            let loadSimulationParams = () => {
+                console.log("Generative API: loadSimulationParams started.");
+                let urlParams = new URLSearchParams(window.location.search);
+                let hasParams = false;
+                if (urlParams.has('cb_w')) { hasParams = true; }
+                if (urlParams.has('cb_d')) { hasParams = true; }
+                if (urlParams.has('cb_h')) { hasParams = true; }
+                if (urlParams.has('cb_model')) { hasParams = true; }
+                console.log("Generative API: hasParams =", hasParams);
+                if (!hasParams) return;
+
+                let modelParam = urlParams.get('cb_model');
+                console.log("Generative API: cb_model =", modelParam);
+                if (modelParam) {
+                    if (modelParam !== 'square') {
+                        console.log("Generative API: model mismatch, skipping.");
+                        return;
+                    }
+                }
+
+                let mode = urlParams.get('cb_mode') || 'near';
+                console.log("Generative API: cb_mode =", mode);
+
+                if (urlParams.has('cb_band')) {
+                    let bandVal = parseFloat(urlParams.get('cb_band'));
+                    console.log("Generative API: cb_band =", bandVal);
+                    if (!isNaN(bandVal)) {
+                        bandWidthBase.value = bandVal;
+                        bandWidthBase.dispatchEvent(new Event('input'));
+                    }
+                }
+                if (urlParams.has('cb_gap')) {
+                    let gapVal = parseFloat(urlParams.get('cb_gap'));
+                    console.log("Generative API: cb_gap =", gapVal);
+                    if (!isNaN(gapVal)) {
+                        bandGap.value = gapVal;
+                        bandGap.dispatchEvent(new Event('input'));
+                    }
+                }
+                if (urlParams.has('cb_add')) {
+                    let addVal = parseFloat(urlParams.get('cb_add'));
+                    console.log("Generative API: cb_add =", addVal);
+                    if (!isNaN(addVal)) {
+                        foldKomaEl.value = addVal;
+                        foldKomaEl.dispatchEvent(new Event('input'));
+                    }
+                }
+                if (urlParams.has('cb_rim')) {
+                    if (edgeCountEl) {
+                        let rimVal = parseInt(urlParams.get('cb_rim'));
+                        console.log("Generative API: cb_rim =", rimVal);
+                        if (!isNaN(rimVal)) {
+                            edgeCountEl.value = rimVal;
+                            edgeCountEl.dispatchEvent(new Event('input'));
+                        }
+                    }
+                }
+                if (urlParams.has('cb_lap')) {
+                    if (cordKomaEl) {
+                        let lapVal = parseFloat(urlParams.get('cb_lap'));
+                        console.log("Generative API: cb_lap =", lapVal);
+                        if (!isNaN(lapVal)) {
+                            cordKomaEl.value = lapVal;
+                            cordKomaEl.dispatchEvent(new Event('input'));
+                        }
+                    }
+                }
+
+                updateKomaFromBandWidth();
+
+                let wTarget = parseFloat(urlParams.get('cb_w'));
+                let dTarget = parseFloat(urlParams.get('cb_d'));
+                let hTarget = parseFloat(urlParams.get('cb_h'));
+                let hasW = !isNaN(wTarget);
+                let hasD = !isNaN(dTarget);
+                let hasH = !isNaN(hTarget);
+                console.log("Generative API: targets =", { wTarget, dTarget, hTarget, hasW, hasD, hasH });
+
+                let shouldInterpolate = false;
+                if (hasW) { shouldInterpolate = true; }
+                if (hasD) { shouldInterpolate = true; }
+                if (hasH) { shouldInterpolate = true; }
+
+                if (shouldInterpolate) {
+                    let cond1 = false;
+                    if (hasW) {
+                        if (!hasD) {
+                            if (!hasH) {
+                                cond1 = true;
+                            }
+                        }
+                    }
+
+                    let cond2 = false;
+                    if (!hasW) {
+                        if (!hasD) {
+                            if (hasH) {
+                                cond2 = true;
+                            }
+                        }
+                    }
+
+                    let cond3 = false;
+                    if (!hasW) {
+                        if (hasD) {
+                            if (!hasH) {
+                                cond3 = true;
+                            }
+                        }
+                    }
+
+                    if (cond1) {
+                        dTarget = wTarget / 3;
+                        hTarget = wTarget / Math.sqrt(2);
+                    } else {
+                        if (cond2) {
+                            wTarget = hTarget * Math.sqrt(2);
+                            dTarget = wTarget / 3;
+                        } else {
+                            if (cond3) {
+                                wTarget = dTarget * 3;
+                                hTarget = wTarget / Math.sqrt(2);
+                            } else {
+                                if (!hasW) { wTarget = dTarget * 3; }
+                                if (!hasD) { dTarget = wTarget / 3; }
+                                if (!hasH) { hTarget = wTarget / Math.sqrt(2); }
+                            }
+                        }
+                    }
+
+                    let bestW = findBestKomaSquare(wTarget, true, mode);
+                    let bestD = findBestKomaSquare(dTarget, true, mode);
+                    let bestH = findBestKomaSquare(hTarget, false, mode);
+                    console.log("Generative API: fitted koma =", { bestW, bestD, bestH });
+
+                    horizontal.value = String(bestW);
+                    horizontal.dispatchEvent(new Event('input'));
+                    vertical.value = String(bestD);
+                    vertical.dispatchEvent(new Event('input'));
+                    height.value = String(bestH);
+                    height.dispatchEvent(new Event('input'));
+                }
+
+                calculateAll();
+                console.log("Generative API: calculateAll called.");
+                let canvas = container.querySelector("#purakagoCanvas");
+                if (canvas) {
+                    if (canvas.getContext) {
+                        console.log("Generative API: triggering calcButton click.");
+                        calcButton.click();
+                    }
+                }
+
+                // Output JSON DOM element
+                let vVal = Number(vertical.value || 0);
+                let hVal = Number(horizontal.value || 0);
+                let heVal = Number(height.value || 0);
+                let bwMm = getBandWidthMm();
+                let foldAdd = Number(foldAdditionEl.value || 0);
+                let cordAdd = Number(cordAdditionEl.value || 0);
+                let edgeCount = 2;
+                if (edgeCountEl) {
+                    edgeCount = Number(edgeCountEl.value);
+                }
+
+                const bwCm = bwMm / 10;
+                let tateLength = foldAdd * 2 + (heVal + vVal + heVal) * bwCm;
+                let yokoLength = foldAdd * 2 + (heVal + hVal + heVal) * bwCm;
+                let loopLen = (hVal + vVal) * 2 * bwCm;
+                let amiLength = loopLen + cordAdd;
+                let totalCm = (tateLength * hVal) + (yokoLength * vVal) + (amiLength * (heVal + edgeCount));
+
+                let cbData = {
+                    "model": "square",
+                    "koma": { "w": hVal, "d": vVal, "h": heVal },
+                    "size": { "w": hVal * bwMm, "d": vVal * bwMm, "h": heVal * bwMm },
+                    "total_length": Math.round(totalCm * 10 * 10) / 10,
+                    "cut_list": [
+                        { "len": Math.round(yokoLength * 10 * 10) / 10, "num": vVal, "name": "横ひも" },
+                        { "len": Math.round(tateLength * 10 * 10) / 10, "num": hVal, "name": "縦ひも" },
+                        { "len": Math.round(amiLength * 10 * 10) / 10, "num": heVal + edgeCount, "name": "編みひも" }
+                    ]
+                };
+
+                let scriptEl = document.createElement('script');
+                scriptEl.type = 'application/json';
+                scriptEl.id = 'craftband-simulation-data';
+                scriptEl.textContent = JSON.stringify(cbData);
+                document.body.appendChild(scriptEl);
+                console.log("Generative API: loadSimulationParams finished.");
+            };
+
+            loadSimulationParams();
         } // ブロックスコープ終了
     </script>
 </div>

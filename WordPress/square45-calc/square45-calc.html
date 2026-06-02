@@ -471,8 +471,205 @@
                     }
                 });
                 syncMargin('koma'); aps(257, 182);
-            }
-        </script>
+
+            // --- Generative API / Simulation Logic (Unit-Agnostic & Single-Shot) ---
+            let findBestKomaSquare45 = (targetMm, isHeight, mode) => {
+                const { diagMm } = getParams();
+                if (Math.sign(diagMm) !== 1) return 1;
+                let rawKoma = targetMm / diagMm;
+                let candidates = [];
+                if (isHeight) {
+                    let maxSearch = Math.max(100, Math.ceil(rawKoma * 2) + 2);
+                    for (let k = 1.0; Math.sign(k - maxSearch) !== 1; k += 0.5) {
+                        candidates.push(k);
+                    }
+                } else {
+                    let maxSearch = Math.max(100, Math.ceil(rawKoma) + 2);
+                    for (let k = 1; Math.sign(k - maxSearch) !== 1; k++) {
+                        candidates.push(k);
+                    }
+                }
+                if (mode === 'in') {
+                    let filtered = candidates.filter(k => Math.sign(k * diagMm - targetMm) !== 1);
+                    return filtered.length > 0 ? filtered[filtered.length - 1] : candidates[0];
+                } else if (mode === 'out') {
+                    let filtered = candidates.filter(k => Math.sign(k * diagMm - targetMm) !== -1);
+                    let lastCandidateIdx = candidates.length - 1;
+                    return filtered.length > 0 ? filtered[0] : candidates[lastCandidateIdx];
+                } else { // 'near'
+                    let bestK = candidates[0];
+                    let minDiff = Math.abs(bestK * diagMm - targetMm);
+                    let candLength = candidates.length;
+                    for (let i = 1; Math.sign(i - candLength) === -1; i++) {
+                        let diff = Math.abs(candidates[i] * diagMm - targetMm);
+                        if (Math.sign(diff - minDiff) === -1) {
+                            minDiff = diff;
+                            bestK = candidates[i];
+                        } else {
+                            if (diff === minDiff) {
+                                if (Math.sign(candidates[i] - bestK) === 1) {
+                                    bestK = candidates[i];
+                                }
+                            }
+                        }
+                    }
+                    return bestK;
+                }
+            };
+
+            let loadSimulationParams = () => {
+                let urlParams = new URLSearchParams(window.location.search);
+                let hasParams = false;
+                if (urlParams.has('cb_w')) { hasParams = true; }
+                if (urlParams.has('cb_d')) { hasParams = true; }
+                if (urlParams.has('cb_h')) { hasParams = true; }
+                if (urlParams.has('cb_model')) { hasParams = true; }
+                if (!hasParams) return;
+
+                let modelParam = urlParams.get('cb_model');
+                if (modelParam) {
+                    if (modelParam !== 'square45') {
+                        return;
+                    }
+                }
+
+                let mode = urlParams.get('cb_mode') || 'near';
+
+                if (urlParams.has('cb_band')) {
+                    let bandVal = parseFloat(urlParams.get('cb_band'));
+                    if (!isNaN(bandVal)) {
+                        inpBW.value = bandVal;
+                        inpBW.dispatchEvent(new Event('input'));
+                    }
+                }
+                if (urlParams.has('cb_gap')) {
+                    let gapVal = parseFloat(urlParams.get('cb_gap'));
+                    if (!isNaN(gapVal)) {
+                        inpGap.value = gapVal;
+                        inpGap.dispatchEvent(new Event('input'));
+                    }
+                }
+                if (urlParams.has('cb_add')) {
+                    let addVal = parseFloat(urlParams.get('cb_add'));
+                    if (!isNaN(addVal)) {
+                        inpMargKoma.value = addVal;
+                        inpMargKoma.dispatchEvent(new Event('input'));
+                    }
+                }
+
+                syncMargin('koma');
+
+                let wTarget = parseFloat(urlParams.get('cb_w'));
+                let dTarget = parseFloat(urlParams.get('cb_d'));
+                let hTarget = parseFloat(urlParams.get('cb_h'));
+                let hasW = !isNaN(wTarget);
+                let hasD = !isNaN(dTarget);
+                let hasH = !isNaN(hTarget);
+
+                let shouldInterpolate = false;
+                if (hasW) { shouldInterpolate = true; }
+                if (hasD) { shouldInterpolate = true; }
+                if (hasH) { shouldInterpolate = true; }
+
+                if (shouldInterpolate) {
+                    let cond1 = false;
+                    if (hasW) {
+                        if (!hasD) {
+                            if (!hasH) {
+                                cond1 = true;
+                            }
+                        }
+                    }
+
+                    let cond2 = false;
+                    if (!hasW) {
+                        if (!hasD) {
+                            if (hasH) {
+                                cond2 = true;
+                            }
+                        }
+                    }
+
+                    let cond3 = false;
+                    if (!hasW) {
+                        if (hasD) {
+                            if (!hasH) {
+                                cond3 = true;
+                            }
+                        }
+                    }
+
+                    if (cond1) {
+                        dTarget = wTarget / 3;
+                        hTarget = wTarget / Math.sqrt(2);
+                    } else {
+                        if (cond2) {
+                            wTarget = hTarget * Math.sqrt(2);
+                            dTarget = wTarget / 3;
+                        } else {
+                            if (cond3) {
+                                wTarget = dTarget * 3;
+                                hTarget = wTarget / Math.sqrt(2);
+                            } else {
+                                if (!hasW) { wTarget = dTarget * 3; }
+                                if (!hasD) { dTarget = wTarget / 3; }
+                                if (!hasH) { hTarget = wTarget / Math.sqrt(2); }
+                            }
+                        }
+                    }
+
+                    inpW.value = String(findBestKomaSquare45(wTarget, false, mode));
+                    inpW.dispatchEvent(new Event('input'));
+                    inpD.value = String(findBestKomaSquare45(dTarget, false, mode));
+                    inpD.dispatchEvent(new Event('input'));
+                    inpH.value = String(findBestKomaSquare45(hTarget, true, mode));
+                    inpH.dispatchEvent(new Event('input'));
+                }
+
+                calc();
+                el('#calcButton').click();
+
+                // Generate Single-Shot JSON
+                const W = parseInt(inpW.value) || 0;
+                const D = parseInt(inpD.value) || 0;
+                const H = parseFloat(inpH.value) || 0;
+                const { diagMm } = getParams();
+
+                let cutList = [];
+                let dLen = [...new Set(bands.map(b => b.len))].sort((a, b) => b - a);
+                let idMap = new Map();
+                dLen.forEach((l, i) => idMap.set(l, i + 1));
+
+                let totalCm = 0;
+                dLen.forEach(l => {
+                    let count = bands.filter(b => b.len === l).length;
+                    let tot = count * 2;
+                    totalCm += l * tot;
+                    cutList.push({
+                        "len": Math.round(l * 10 * 10) / 10,
+                        "num": tot,
+                        "name": `ひも No.${idMap.get(l)}`
+                    });
+                });
+
+                let cbData = {
+                    "model": "square45",
+                    "koma": { "w": W, "d": D, "h": H },
+                    "size": { "w": Math.round(W * diagMm * 10) / 10, "d": Math.round(D * diagMm * 10) / 10, "h": Math.round(H * diagMm * 10) / 10 },
+                    "total_length": Math.round(totalCm * 10 * 10) / 10,
+                    "cut_list": cutList
+                };
+
+                let scriptEl = document.createElement('script');
+                scriptEl.type = 'application/json';
+                scriptEl.id = 'craftband-simulation-data';
+                scriptEl.textContent = JSON.stringify(cbData);
+                document.body.appendChild(scriptEl);
+            };
+
+            loadSimulationParams();
+        }
+    </script>
     </div>
     <!-- /wp:html -->
 </body>
