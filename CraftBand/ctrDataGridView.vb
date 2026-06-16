@@ -378,16 +378,14 @@ Public Class ctrDataGridView
         Me.MenuItemPaste.Enabled = IsPastable(Me)
         Me.MenuItemDelete.Enabled = HasWritableCell(Me)
         Me.MenuItemCancel.Enabled = True
-        '#107
-        If IsFillable(Me, MyGridDataRow) Then
-            Me.ToolStripFillSeparator.Visible = True
-            Me.MenuItemFill.Visible = True
-            Me.MenuItemFill.Enabled = True
-        Else
-            Me.ToolStripFillSeparator.Visible = False
-            Me.MenuItemFill.Visible = False
-            Me.MenuItemFill.Enabled = False
-        End If
+        '#107,#110
+        Dim fillable As Boolean = IsFillable(Me, MyGridDataRow)
+        Dim reversable As Boolean = IsReversable(Me)
+        Me.ToolStripFillSeparator.Visible = fillable Or reversable
+        Me.MenuItemFill.Visible = fillable
+        Me.MenuItemFill.Enabled = fillable
+        Me.MenuItemReverse.Visible = reversable
+        Me.MenuItemReverse.Enabled = reversable
 
     End Sub
 
@@ -425,6 +423,15 @@ Public Class ctrDataGridView
         DoFill(Me, MyGridDataRow)
         Me.EndEdit()
     End Sub
+
+    Private Sub MenuItemReverse_Click(sender As Object, e As EventArgs) Handles MenuItemReverse.Click
+        If Me.DataSource.Current Is Nothing OrElse Me.DataSource.Current.IsNew Then
+            Exit Sub
+        End If
+        DoReverse(Me, MyGridDataRow)
+        Me.EndEdit()
+    End Sub
+
 
 #Region "DataGridViewとレコードスキーマに対応したShared関数"
 
@@ -774,6 +781,60 @@ Public Class ctrDataGridView
             End If
         Next
     End Sub
+
+
+    '2点以上で、入力可能で、行ではなく、1列選択
+    Public Shared Function IsReversable(ByVal dgv As DataGridView) As Boolean
+        If Not IsPastable(dgv) Then
+            Return False
+        End If
+        If dgv.SelectedCells.Count < 2 OrElse 0 < dgv.SelectedRows.Count Then
+            Return False
+        End If
+        '同じ列であること
+        Dim columnIndex As Integer = -1
+        For Each c As DataGridViewCell In dgv.SelectedCells
+            If c.ReadOnly OrElse Not c.Visible Then
+                Return False
+            End If
+            If columnIndex < 0 Then
+                columnIndex = c.ColumnIndex
+            ElseIf columnIndex <> c.ColumnIndex Then
+                Return False
+            End If
+        Next
+
+        Return True
+    End Function
+
+    Public Shared Sub DoReverse(ByVal dgv As DataGridView, ByVal gridDataRow As clsDataRow)
+        If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
+            Exit Sub
+        End If
+        If dgv.SelectedCells.Count < 2 OrElse 0 < dgv.SelectedRows.Count Then
+            Exit Sub
+        End If
+
+        '1行チェック済
+        Dim dstcels As New List(Of Integer())
+        For Each c As DataGridViewCell In dgv.SelectedCells
+            dstcels.Add(New Integer() {c.RowIndex, c.ColumnIndex})
+        Next
+        dstcels.Sort(AddressOf cmp)
+
+        Dim val_list As New List(Of Object)
+        For Each dst() As Integer In dstcels
+            Dim val As Object = dgv.Rows(dst(0)).Cells(dst(1)).Value
+            val_list.Add(val)
+        Next
+        val_list.Reverse()
+        Dim i As Integer = 0
+        For Each dst() As Integer In dstcels
+            dgv.Rows(dst(0)).Cells(dst(1)).Value = val_list(i)
+            i += 1
+        Next
+    End Sub
+
 #End Region
 
 #Region "操作"

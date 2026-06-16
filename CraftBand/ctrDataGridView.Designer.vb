@@ -31,6 +31,7 @@ Partial Class ctrDataGridView
         MenuItemCancel = New Windows.Forms.ToolStripMenuItem()
         ToolStripFillSeparator = New Windows.Forms.ToolStripSeparator()
         MenuItemFill = New Windows.Forms.ToolStripMenuItem()
+        MenuItemReverse = New Windows.Forms.ToolStripMenuItem()
         ContextMenuStripDgv.SuspendLayout()
         CType(Me, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -38,9 +39,9 @@ Partial Class ctrDataGridView
         ' ContextMenuStripDgv
         ' 
         ContextMenuStripDgv.ImageScalingSize = New System.Drawing.Size(20, 20)
-        ContextMenuStripDgv.Items.AddRange(New Windows.Forms.ToolStripItem() {MenuItemCopy, MenuItemCut, MenuItemPaste, MenuItemDelete, MenuItemCancel, ToolStripFillSeparator, MenuItemFill})
+        ContextMenuStripDgv.Items.AddRange(New Windows.Forms.ToolStripItem() {MenuItemCopy, MenuItemCut, MenuItemPaste, MenuItemDelete, MenuItemCancel, ToolStripFillSeparator, MenuItemFill, MenuItemReverse})
         ContextMenuStripDgv.Name = "ContextMenuStrip"
-        ContextMenuStripDgv.Size = New System.Drawing.Size(194, 154)
+        ContextMenuStripDgv.Size = New System.Drawing.Size(194, 178)
         ' 
         ' MenuItemCopy
         ' 
@@ -90,6 +91,13 @@ Partial Class ctrDataGridView
         MenuItemFill.ToolTipText = "最初の2点から等差数列をセット"
         MenuItemFill.Visible = False
         ' 
+        ' MenuItemReverse
+        ' 
+        MenuItemReverse.Name = "MenuItemReverse"
+        MenuItemReverse.Size = New System.Drawing.Size(193, 24)
+        MenuItemReverse.Text = "上下に逆転"
+        MenuItemReverse.ToolTipText = "列の値を逆方向に入れ替える"
+        ' 
         ' ctrDataGridView
         ' 
         ClipboardCopyMode = Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
@@ -109,5 +117,6 @@ Partial Class ctrDataGridView
     Friend WithEvents MenuItemCancel As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuItemFill As Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripFillSeparator As Windows.Forms.ToolStripSeparator
+    Friend WithEvents MenuItemReverse As Windows.Forms.ToolStripMenuItem
 
 End Class
