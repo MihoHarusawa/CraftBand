@@ -86,6 +86,48 @@ Public Class ctrDataGridView
 #End Region
 
 #Region "イベント処理"
+    Public Class CellRowValueChangedEventArgs
+        Inherits EventArgs
+
+        Public Property Row As DataRow = Nothing
+        Public Property DataPropertyName As String
+
+        Public Sub New(ByVal r As DataRow, Optional pname As String = Nothing)
+            Me.Row = r
+            DataPropertyName = pname
+        End Sub
+    End Class
+
+    Public Event CellRowValueChanged As EventHandler(Of CellRowValueChangedEventArgs)
+
+    '#111 セル値変更、ペースト時はカレントとは異なる可能性あり
+    Protected Overrides Sub OnCellValueChanged(e As DataGridViewCellEventArgs)
+        MyBase.OnCellValueChanged(e)
+
+        '新しい行は除外
+        If e.ColumnIndex < 0 OrElse e.RowIndex < 0 OrElse e.RowIndex = Me.NewRowIndex Then
+            Exit Sub
+        End If
+        'フィールドに対応
+        Dim dataPropertyName As String = Me.Columns(e.ColumnIndex).DataPropertyName
+        If String.IsNullOrEmpty(dataPropertyName) Then
+            Exit Sub
+        End If
+
+        '行のレコード
+        Dim bs As BindingSource = Me.DataSource
+        If bs Is Nothing Then
+            Exit Sub
+        End If
+        Dim rowView As DataRowView = TryCast(bs(e.RowIndex), DataRowView)
+        If rowView Is Nothing Then
+            Exit Sub
+        End If
+        Dim currentRow As DataRow = rowView.Row
+        'レコード＆フィールド名
+        RaiseEvent CellRowValueChanged(Me, New CellRowValueChangedEventArgs(currentRow, dataPropertyName))
+    End Sub
+
     'セルのチェック
     Private Sub DataGridView_CellValidating(sender As System.Object, e As System.Windows.Forms.DataGridViewCellValidatingEventArgs) Handles MyBase.CellValidating
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
@@ -357,10 +399,7 @@ Public Class ctrDataGridView
     Private Sub MenuItemCut_Click(sender As Object, e As EventArgs) Handles MenuItemCut.Click
         SetToClipBoard(Me)
         SetDefaultWritableCell(Me, MyGridDataRow)
-        '
-        If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
-            Me.DataSource.Current.row.acceptchanges()
-        End If
+        Me.EndEdit()
     End Sub
 
     Private Sub MenuItemPaste_Click(sender As Object, e As EventArgs) Handles MenuItemPaste.Click
@@ -368,19 +407,13 @@ Public Class ctrDataGridView
             Exit Sub
         End If
         DoPaste(Me, MyGridDataRow)
-        '
-        If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
-            Me.DataSource.Current.row.acceptchanges()
-        End If
+        Me.EndEdit()
     End Sub
 
     Private Sub MenuItemDelete_Click(sender As Object, e As EventArgs) Handles MenuItemDelete.Click
         If Not DeleteLines(Me) Then
             SetDefaultWritableCell(Me, MyGridDataRow)
-            'DataSourceはBindingSource
-            If Me.DataSource IsNot Nothing AndAlso Me.DataSource.Current IsNot Nothing AndAlso Me.DataSource.Current.row IsNot Nothing Then
-                Me.DataSource.Current.row.acceptchanges()
-            End If
+            Me.EndEdit()
         End If
     End Sub
 
@@ -390,6 +423,7 @@ Public Class ctrDataGridView
 
     Private Sub MenuItemFill_Click(sender As Object, e As EventArgs) Handles MenuItemFill.Click
         DoFill(Me, MyGridDataRow)
+        Me.EndEdit()
     End Sub
 
 #Region "DataGridViewとレコードスキーマに対応したShared関数"
@@ -709,7 +743,7 @@ Public Class ctrDataGridView
     End Function
 
     '最初の2点からの等差補完処理
-    Private Sub DoFill(ByVal dgv As ctrDataGridView, ByVal gridDataRow As clsDataRow)
+    Private Shared Sub DoFill(ByVal dgv As ctrDataGridView, ByVal gridDataRow As clsDataRow)
         If gridDataRow Is Nothing OrElse Not gridDataRow.IsValid Then
             Exit Sub
         End If

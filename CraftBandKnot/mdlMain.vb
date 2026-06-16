@@ -93,7 +93,7 @@ Module mdlMain
             Else
                 MessageBox.Show(paras.Message, My.Resources.TitleDllError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 '次にやり直せるよう名前を消去
-                If Not String.IsNullOrEmpty(cmdArg.MasterPath) Then
+                If String.IsNullOrEmpty(cmdArg.MasterPath) Then
                     My.Settings.MasterTablesFilePath = String.Empty
                     My.Settings.Save()
                 End If

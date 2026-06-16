@@ -862,7 +862,7 @@ Public Class ctrEditUpDown
 #Region "DataGridViewイベント処理"
 
     Private Sub dgvひも上下_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvひも上下.CellValueChanged
-        _UpdownChanged = True
+        _UpdownChanged = (0 <= e.RowIndex AndAlso 0 <= e.ColumnIndex)
     End Sub
 
     Private Sub txt上下のメモ_TextChanged(sender As Object, e As EventArgs) Handles txt上下のメモ.TextChanged

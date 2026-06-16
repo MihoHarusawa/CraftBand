@@ -196,7 +196,8 @@ Public Class frmColor
         Dim dgv As DataGridView = CType(sender, DataGridView)
 
         '新しい行のセルは除外
-        If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty OrElse e.ColumnIndex < 0 Then
+        'If e.RowIndex = dgv.NewRowIndex OrElse Not dgv.IsCurrentCellDirty OrElse e.ColumnIndex < 0 Then
+        If e.RowIndex = dgv.NewRowIndex OrElse e.ColumnIndex < 0 Then
             Exit Sub
         End If
 

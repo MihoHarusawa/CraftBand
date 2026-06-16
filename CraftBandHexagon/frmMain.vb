@@ -1744,18 +1744,14 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv側面.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource側面.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv側面.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
-
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName側面と縁(DataPropertyName) Then
-            recalc(CalcCategory.SideEdge, current.Row, DataPropertyName)
+        Dim row As tbl側面Row = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellRowValueChanged({1},{2}){3}", row.f_i番号, row.f_iひも番号, e.DataPropertyName, row(e.DataPropertyName))
+        If IsDataPropertyName側面と縁(e.DataPropertyName) Then
+            recalc(CalcCategory.SideEdge, row, e.DataPropertyName)
         End If
     End Sub
 
@@ -1878,14 +1874,14 @@ Public Class frmMain
 
 
 
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+    Private Sub expand横ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.CellRowValueChanged
         recalc(CalcCategory.Expand_0, e.Row, e.DataPropertyName)
     End Sub
-    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+    Private Sub expand横ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.ResetButton
         _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex._0deg))
         expand横ひも.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex._0deg, True)
     End Sub
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcHexagon.add_ひも(AngleIndex._0deg, currow) Then
             nud横ひもの本数.Value = nud横ひもの本数.Value + 1 'with recalc
@@ -1894,7 +1890,7 @@ Public Class frmMain
             End If
         End If
     End Sub
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._0deg, currow.f_iひも種) Then
@@ -1918,14 +1914,14 @@ Public Class frmMain
     End Sub
 
 
-    Private Sub expand斜め60度_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.CellValueChanged
+    Private Sub expand斜め60度_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め60度.CellRowValueChanged
         recalc(CalcCategory.Expand_60, e.Row, e.DataPropertyName)
     End Sub
-    Private Sub expand斜め60度_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.ResetButton
+    Private Sub expand斜め60度_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め60度.ResetButton
         _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex._60deg))
         expand斜め60度.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex._60deg, True)
     End Sub
-    Private Sub expand斜め60度_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.AddButton
+    Private Sub expand斜め60度_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め60度.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcHexagon.add_ひも(AngleIndex._60deg, currow) Then
             nud斜めひも本数60度.Value = nud斜めひも本数60度.Value + 1 'with recalc
@@ -1934,7 +1930,7 @@ Public Class frmMain
             End If
         End If
     End Sub
-    Private Sub expand斜め60度_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め60度.DeleteButton
+    Private Sub expand斜め60度_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め60度.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._60deg, currow.f_iひも種) Then
@@ -1957,15 +1953,15 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand斜め120度_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.CellValueChanged
+    Private Sub expand斜め120度_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め120度.CellRowValueChanged
         recalc(CalcCategory.Expand_120, e.Row, e.DataPropertyName)
     End Sub
-    Private Sub expand斜め120度_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.ResetButton
+    Private Sub expand斜め120度_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め120度.ResetButton
         _clsDataTables.Removeひも種Rows(idxひも種(AngleIndex._120deg))
         expand斜め120度.DataSource = _clsCalcHexagon.get展開DataTable(AngleIndex._120deg, True)
     End Sub
     '追加・削除ボタンは、同数でない場合のみ表示される
-    Private Sub expand斜め120度_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.AddButton
+    Private Sub expand斜め120度_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め120度.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcHexagon.add_ひも(AngleIndex._120deg, currow) Then
             nud斜めひも本数120度.Value = nud斜めひも本数120度.Value + 1 'with recalc
@@ -1974,7 +1970,7 @@ Public Class frmMain
             End If
         End If
     End Sub
-    Private Sub expand斜め120度_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand斜め120度.DeleteButton
+    Private Sub expand斜め120度_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand斜め120度.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow IsNot Nothing Then
             If is_idx補強(AngleIndex._120deg, currow.f_iひも種) Then
@@ -2013,14 +2009,13 @@ Public Class frmMain
         Return editInsertBand.HideGrid(works)
     End Function
 
-    Private Sub editInsertBand_CellValueChanged(sender As Object, e As InsertBandEventArgs) Handles editInsertBand.CellValueChanged
-        Dim DataPropertyName As String = e.DataPropertyName
-        Dim row As tbl差しひもRow = e.Row
-        If row Is Nothing Then
+    Private Sub editInsertBand_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles editInsertBand.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellValueChanged({1}){2}", Now, DataPropertyName, New clsDataRow(row).ToString)
-        recalc(CalcCategory.Inserted, row, DataPropertyName)
+        Dim row As tbl差しひもRow = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellRowValueChanged({1}){2}", row.f_i番号, e.DataPropertyName, row(e.DataPropertyName))
+        recalc(CalcCategory.Inserted, row, e.DataPropertyName)
     End Sub
 #End Region
 

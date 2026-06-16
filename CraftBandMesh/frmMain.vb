@@ -1839,18 +1839,15 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv底楕円_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv底楕円.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource底_楕円.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv底楕円_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv底楕円.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv底楕円_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName底楕円(DataPropertyName) Then
-            recalc(CalcCategory.Oval, current.Row, DataPropertyName)
+        Dim row As tbl底_楕円Row = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv底楕円_CellRowValueChanged({1},{2}){3}", row.f_i番号, e.DataPropertyName, row.f_iひも番号, row(e.DataPropertyName))
+        If IsDataPropertyName底楕円(e.DataPropertyName) Then
+            recalc(CalcCategory.Oval, row, e.DataPropertyName)
         End If
     End Sub
 
@@ -1987,18 +1984,15 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv側面.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource側面.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv側面.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName側面(DataPropertyName) Then
-            recalc(CalcCategory.Side, current.Row, DataPropertyName)
+        Dim row As tbl側面Row = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellRowValueChanged({1},{2}){3}", row.f_i番号, e.DataPropertyName, row.f_iひも番号, row(e.DataPropertyName))
+        If IsDataPropertyName側面(e.DataPropertyName) Then
+            recalc(CalcCategory.Side, row, e.DataPropertyName)
         End If
     End Sub
 
@@ -2087,7 +2081,7 @@ Public Class frmMain
     End Function
 
 
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -2113,7 +2107,7 @@ Public Class frmMain
         expand横ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -2143,11 +2137,11 @@ Public Class frmMain
         expand横ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+    Private Sub expand横ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.ResetButton
         expand横ひも.DataSource = _clsCalcMesh.get横展開DataTable(True)
     End Sub
 
-    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+    Private Sub expand縦ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -2169,7 +2163,7 @@ Public Class frmMain
         expand縦ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+    Private Sub expand縦ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -2198,11 +2192,11 @@ Public Class frmMain
         expand縦ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
+    Private Sub expand縦ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcMesh.get縦展開DataTable(True)
     End Sub
 
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+    Private Sub expand横ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -2210,7 +2204,7 @@ Public Class frmMain
         recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
     End Sub
 
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+    Private Sub expand縦ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub

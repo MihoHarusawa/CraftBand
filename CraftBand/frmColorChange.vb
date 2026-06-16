@@ -349,19 +349,16 @@ Friend Class frmColorChange
         setGridCurrentColor()
     End Sub
 
-    Private Sub dgvColorChange_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvColorChange.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSourceColorChange.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgvColorChange_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgvColorChange.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        If {"After"}.Contains(DataPropertyName) Then
-            current.Row("IsTarget") = True
+        If {"After"}.Contains(e.DataPropertyName) Then
+            e.Row("IsTarget") = True
         End If
     End Sub
+
 
     Private Sub btn閉じる_Click(sender As Object, e As EventArgs) Handles btn閉じる.Click
         Me.Close() '#70 Me.Hide()

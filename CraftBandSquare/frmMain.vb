@@ -1609,18 +1609,15 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv側面.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource側面.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv側面.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName側面と縁(DataPropertyName) Then
-            recalc(CalcCategory.SideEdge, current.Row, DataPropertyName)
+        Dim row As tbl側面Row = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellRowValueChanged({1},{2}){3}", row.f_i番号, row.f_iひも番号, e.DataPropertyName, row(e.DataPropertyName))
+        If IsDataPropertyName側面と縁(e.DataPropertyName) Then
+            recalc(CalcCategory.SideEdge, row, e.DataPropertyName)
         End If
     End Sub
 
@@ -1746,7 +1743,7 @@ Public Class frmMain
     End Function
 
 
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcSquare.add_横ひも(currow) Then
             nud縦の目の数.Value = nud縦の目の数.Value + 1 'with recalc
@@ -1754,7 +1751,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
 
         '補強ひも/上端・下端
@@ -1780,7 +1777,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+    Private Sub expand横ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -1788,11 +1785,11 @@ Public Class frmMain
         recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
     End Sub
 
-    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+    Private Sub expand横ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.ResetButton
         expand横ひも.DataSource = _clsCalcSquare.get横展開DataTable(True)
     End Sub
 
-    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+    Private Sub expand縦ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If _clsCalcSquare.add_縦ひも(currow) Then
             nud横の目の数.Value = nud横の目の数.Value + 1 'with recalc
@@ -1800,7 +1797,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+    Private Sub expand縦ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -1808,7 +1805,7 @@ Public Class frmMain
         recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
     End Sub
 
-    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+    Private Sub expand縦ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
 
         '補強ひも/左端・右端
@@ -1834,7 +1831,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
+    Private Sub expand縦ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcSquare.get縦展開DataTable(True)
     End Sub
 
@@ -1855,17 +1852,16 @@ Public Class frmMain
         Return editInsertBand.HideGrid(works)
     End Function
 
-    Private Sub editInsertBand_CellValueChanged(sender As Object, e As InsertBandEventArgs) Handles editInsertBand.CellValueChanged
-        Dim DataPropertyName As String = e.DataPropertyName
-        Dim row As tbl差しひもRow = e.Row
-        If row Is Nothing Then
+    Private Sub editInsertBand_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles editInsertBand.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellValueChanged({1}){2}", Now, DataPropertyName, New clsDataRow(row).ToString)
-        recalc(CalcCategory.Inserted, row, DataPropertyName)
+        Dim row As tbl差しひもRow = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} editInsertBand_CellRowValueChanged({1}){2}", row.f_i番号, e.DataPropertyName, row(e.DataPropertyName))
+        recalc(CalcCategory.Inserted, row, e.DataPropertyName)
     End Sub
 
-    Private Sub editInsertBand_InnerPositionsSet(sender As Object, e As InsertBandEventArgs) Handles editInsertBand.InnerPositionsSet
+    Private Sub editInsertBand_InnerPositionsSet(sender As Object, e As CellRowValueChangedEventArgs) Handles editInsertBand.InnerPositionsSet
         recalc(CalcCategory.Inserted, Nothing, Nothing)
     End Sub
 #End Region

@@ -22,22 +22,10 @@ Public Class ctrInsertBand
         End Get
     End Property
 
-    'イベント
-    Public Class InsertBandEventArgs
-        Inherits EventArgs
-
-        Public Property Row As tbl差しひもRow = Nothing
-        Public Property DataPropertyName As String
-
-        Public Sub New(ByVal r As tbl差しひもRow, Optional pname As String = Nothing)
-            Me.Row = r
-            DataPropertyName = pname
-        End Sub
-    End Class
 
     'セルの変更通知
-    Public Event CellValueChanged As EventHandler(Of InsertBandEventArgs)
-    Public Event InnerPositionsSet As EventHandler(Of InsertBandEventArgs)
+    Public Event CellRowValueChanged As EventHandler(Of CellRowValueChangedEventArgs)
+    Public Event InnerPositionsSet As EventHandler(Of CellRowValueChangedEventArgs)
     '追加(配置面なしで追加)・削除・移動はコントロール内で完結
 
 
@@ -419,7 +407,7 @@ Public Class ctrInsertBand
 
         table.Rows.Add(row)
         dgv差しひも.NumberPositionsSelect(number)
-        RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, "f_i番号"))
+        RaiseEvent CellRowValueChanged(Me, New CellRowValueChangedEventArgs(row, "f_i番号"))
     End Sub
 
     Private Sub btn上へ_Click(sender As Object, e As EventArgs) Handles btn上へ.Click
@@ -477,16 +465,13 @@ Public Class ctrInsertBand
         clsDataTables.FillNumber(table) '#16
     End Sub
 
-    Private Sub dgv差しひも_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv差しひも.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource差しひも.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv差しひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv差しひも.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
         _EditChanged = True
 
-        Dim row As tbl差しひもRow = current.Row
+        Dim row As tbl差しひもRow = e.Row
         If IsInvalidRow(row) Then
             '無効
             row.f_b有効区分 = False
@@ -496,11 +481,10 @@ Public Class ctrInsertBand
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv差しひも_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv差しひも_CellRowValueChanged({1},{2}){3}", Now, e.DataPropertyName, row.f_i番号, row(e.DataPropertyName))
         '再計算対象のカラム　非対象 "f_i差し位置""f_s色""f_sメモ"
-        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順"}.Contains(DataPropertyName) Then
-            RaiseEvent CellValueChanged(Me, New InsertBandEventArgs(row, DataPropertyName))
+        If {"f_i配置面", "f_i角度", "f_i中心点", "f_i何本幅", "f_i開始位置", "f_i何本ごと", "f_dひも長加算", "f_i同位置数", "f_i同位置順"}.Contains(e.DataPropertyName) Then
+            RaiseEvent CellRowValueChanged(Me, New CellRowValueChangedEventArgs(row, e.DataPropertyName))
         End If
     End Sub
 
@@ -577,7 +561,7 @@ Public Class ctrInsertBand
                 Next
             End If
         Next
-        RaiseEvent InnerPositionsSet(Me, New InsertBandEventArgs(Nothing, Nothing))
+        RaiseEvent InnerPositionsSet(Me, New CellRowValueChangedEventArgs(Nothing, Nothing))
     End Sub
 
     Private Function match_key(ByVal row As tbl差しひもRow) As String

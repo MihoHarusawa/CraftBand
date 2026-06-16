@@ -391,26 +391,20 @@ Public Class ctrAddParts
         End If
     End Sub
 
-    Private Sub dgv追加品_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv追加品.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource追加品.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv追加品_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv追加品.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv追加品_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
         '他のセル値に反映
-        If _Calc.IsDataPropertyName追加品(DataPropertyName) Then
+        If _Calc.IsDataPropertyName追加品(e.DataPropertyName) Then
             Dim isNeedCood As Boolean = False
-            If Not _Calc.calc_追加品(current.Row, DataPropertyName, isNeedCood) Then
+            If Not _Calc.calc_追加品(e.Row, e.DataPropertyName, isNeedCood) Then
                 RaiseEvent AddPartsError(Me, New AddPartsEventArgs(_Calc.p_sメッセージ))
             End If
             showCood(isNeedCood)
         End If
     End Sub
-
 
 
     'データ保持とクラス関数呼び出し

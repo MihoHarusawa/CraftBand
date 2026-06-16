@@ -484,7 +484,7 @@ Public Class frmMain
 
 
     Private Sub Disp計算結果(ByVal calc As clsCalcSquare45)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "Disp計算結果 {0}", calc.ToString)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Disp計算結果 {0}", calc.dump())
         With calc
             '
@@ -962,7 +962,7 @@ Public Class frmMain
         End Try
 
     End Function
-    
+
     'ヘッドレス実行
     Public Function MakeImageFile(ByVal fpath As String, ByRef msg As String
                                   ) As Boolean Implements ICommonActions.MakeImageFile
@@ -1486,18 +1486,14 @@ Public Class frmMain
     End Sub
 
 
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv縁の始末.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource縁の始末.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv縁の始末.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName側面(DataPropertyName) Then
-            recalc(CalcCategory.Edge, current.Row, DataPropertyName)
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellRowValueChanged({1})", Now, e.DataPropertyName)
+        If IsDataPropertyName側面(e.DataPropertyName) Then
+            recalc(CalcCategory.Edge, e.Row, e.DataPropertyName)
         End If
     End Sub
 
@@ -1620,7 +1616,7 @@ Public Class frmMain
     End Function
 
 
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -1642,7 +1638,7 @@ Public Class frmMain
         expand横ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -1669,7 +1665,7 @@ Public Class frmMain
         expand横ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand横ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.CellValueChanged
+    Private Sub expand横ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -1677,11 +1673,11 @@ Public Class frmMain
         recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
     End Sub
 
-    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+    Private Sub expand横ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.ResetButton
         expand横ひも.DataSource = _clsCalcSquare45.get横展開DataTable(True)
     End Sub
 
-    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+    Private Sub expand縦ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.AddButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -1703,7 +1699,7 @@ Public Class frmMain
         expand縦ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand縦ひも_CellValueChanged(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.CellValueChanged
+    Private Sub expand縦ひも_CellRpwValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.CellRowValueChanged
         '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -1711,7 +1707,7 @@ Public Class frmMain
         recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
     End Sub
 
-    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+    Private Sub expand縦ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.DeleteButton
         Dim currow As tbl縦横展開Row = e.Row
         If currow Is Nothing Then
             Exit Sub
@@ -1738,7 +1734,7 @@ Public Class frmMain
         expand縦ひも.PositionSelect(currow)
     End Sub
 
-    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
+    Private Sub expand縦ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcSquare45.get縦展開DataTable(True)
     End Sub
 
@@ -1843,10 +1839,13 @@ Public Class frmMain
     'チェックオン/オフ、色表示変更を伴う
     Private Sub dgv折りカラー_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv折りカラー.CellValueChanged
         If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Return
-        ' チェックボックスの列のみ処理
-        If ColIndexDetail < e.ColumnIndex OrElse (dgv折りカラー.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
-            Return
-        End If
+        '' チェックボックスの列のみ処理
+        'If ColIndexDetail < e.ColumnIndex OrElse (dgv折りカラー.Columns(e.ColumnIndex).ValueType <> GetType(Boolean)) Then
+        '    Return
+        'End If
+        '#111 チェックボックスの列
+        Dim isCheckBoxColumn As Boolean = TypeOf dgv折りカラー.Columns(e.ColumnIndex) Is DataGridViewCheckBoxColumn
+
         ' 編集結果をレコードに反映
         dgv折りカラー.EndEdit()
 
@@ -1857,10 +1856,12 @@ Public Class frmMain
         Dim fieldName As String = dgv折りカラー.Columns(e.ColumnIndex).DataPropertyName
 
         If _clsCalcSquare45.OriColor_RecordChanged(fieldName, dataRow) Then
-            'dgv折りカラー.Refresh()
-            ' 変更があったのでタイマーをリセット
-            timer折りカラー.Stop()
-            timer折りカラー.Start()
+            If isCheckBoxColumn Then
+                'dgv折りカラー.Refresh()
+                ' 変更があったのでタイマーをリセット
+                timer折りカラー.Stop()
+                timer折りカラー.Start()
+            End If
         End If
     End Sub
 

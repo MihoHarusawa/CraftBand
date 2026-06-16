@@ -1536,18 +1536,15 @@ Public Class frmMain
     End Sub
 
     'セル変更の再計算は縁に対してのみ
-    Private Sub dgv側面_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv側面と縁.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource側面と縁.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv側面と縁.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
 
-        Dim DataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellValueChanged({1},{2}){3}", Now, DataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If IsDataPropertyName側面(DataPropertyName) Then
-            recalc(CalcCategory.Edge, current.Row, DataPropertyName)
+        Dim row As tbl側面Row = e.Row
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv側面_CellRowValueChanged({1},{2}){3}", row.f_i番号, e.DataPropertyName, row.f_iひも番号, row(e.DataPropertyName))
+        If IsDataPropertyName側面(e.DataPropertyName) Then
+            recalc(CalcCategory.Edge, row, e.DataPropertyName)
         End If
     End Sub
 
@@ -1653,7 +1650,7 @@ Public Class frmMain
         Return expand縦ひも.HideGrid(enumひも種.i_縦, works)
     End Function
 
-    Private Sub expand横ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.AddButton
+    Private Sub expand横ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.AddButton
         Dim currow As DataRow = e.Row
         If _clsCalcKnot.add_縦横展開(expand横ひも.DataSource, currow) Then
             nud縦のコマ数.Value = nud縦のコマ数.Value + 1 'with recalc
@@ -1663,7 +1660,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand横ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.DeleteButton
+    Private Sub expand横ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.DeleteButton
         Dim currow As DataRow = e.Row
         If _clsCalcKnot.del_縦横展開(expand横ひも.DataSource, currow) Then
             nud縦のコマ数.Value = nud縦のコマ数.Value - 1 'with recalc
@@ -1673,11 +1670,11 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand横ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand横ひも.ResetButton
+    Private Sub expand横ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.ResetButton
         expand横ひも.DataSource = _clsCalcKnot.set横展開DataTable(False)
     End Sub
 
-    Private Sub expand縦ひも_AddButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.AddButton
+    Private Sub expand縦ひも_AddButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.AddButton
         Dim currow As DataRow = e.Row
         If _clsCalcKnot.add_縦横展開(expand縦ひも.DataSource, currow) Then
             nud横のコマ数.Value = nud横のコマ数.Value + 1 'with recalc
@@ -1687,7 +1684,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand縦ひも_DeleteButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.DeleteButton
+    Private Sub expand縦ひも_DeleteButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.DeleteButton
         Dim currow As DataRow = e.Row
         If _clsCalcKnot.del_縦横展開(expand縦ひも.DataSource, currow) Then
             nud横のコマ数.Value = nud横のコマ数.Value - 1 'with recalc
@@ -1697,7 +1694,7 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub expand縦ひも_ResetButton(sender As Object, e As ctrExpanding.ExpandingEventArgs) Handles expand縦ひも.ResetButton
+    Private Sub expand縦ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(False)
     End Sub
 

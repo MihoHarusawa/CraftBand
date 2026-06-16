@@ -1,6 +1,4 @@
 ﻿Imports CraftBand.clsDataTables
-Imports CraftBand.clsMasterTables
-Imports CraftBand.clsUpDown
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables.dstDataTables
 Imports System.Drawing
@@ -22,23 +20,11 @@ Public Class ctrExpanding
         End Get
     End Property
 
-    'イベント
-    Public Class ExpandingEventArgs
-        Inherits EventArgs
 
-        Public Property Row As tbl縦横展開Row = Nothing
-        Public Property DataPropertyName As String
-
-        Public Sub New(ByVal r As tbl縦横展開Row, Optional pname As String = Nothing)
-            Me.Row = r
-            DataPropertyName = pname
-        End Sub
-    End Class
-
-    Public Event ResetButton As EventHandler(Of ExpandingEventArgs)
-    Public Event AddButton As EventHandler(Of ExpandingEventArgs)
-    Public Event DeleteButton As EventHandler(Of ExpandingEventArgs)
-    Public Event CellValueChanged As EventHandler(Of ExpandingEventArgs)
+    Public Event ResetButton As EventHandler(Of CellRowValueChangedEventArgs)
+    Public Event AddButton As EventHandler(Of CellRowValueChangedEventArgs)
+    Public Event DeleteButton As EventHandler(Of CellRowValueChangedEventArgs)
+    Public Event CellRowValueChanged As EventHandler(Of CellRowValueChangedEventArgs)
 
 
 
@@ -262,7 +248,7 @@ Public Class ctrExpanding
         End If
         _EditChanged = True
 
-        RaiseEvent ResetButton(Me, New ExpandingEventArgs(Nothing))
+        RaiseEvent ResetButton(Me, New CellRowValueChangedEventArgs(Nothing))
     End Sub
 
     Private Sub btn削除_Click(sender As Object, e As EventArgs) Handles btn削除.Click
@@ -272,7 +258,7 @@ Public Class ctrExpanding
         End If
         _EditChanged = True
 
-        RaiseEvent DeleteButton(Me, New ExpandingEventArgs(current.Row))
+        RaiseEvent DeleteButton(Me, New CellRowValueChangedEventArgs(current.Row))
     End Sub
 
     Private Sub btn追加_Click(sender As Object, e As EventArgs) Handles btn追加.Click
@@ -282,23 +268,23 @@ Public Class ctrExpanding
         End If
         _EditChanged = True
 
-        RaiseEvent AddButton(Me, New ExpandingEventArgs(current.Row))
+        RaiseEvent AddButton(Me, New CellRowValueChangedEventArgs(current.Row))
     End Sub
 
-    Private Sub dgv展開_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgv展開.CellValueChanged
-        Dim dgv As DataGridView = CType(sender, DataGridView)
-        Dim current As System.Data.DataRowView = BindingSource展開.Current
-        If dgv Is Nothing OrElse current Is Nothing OrElse current.Row Is Nothing _
-            OrElse e.ColumnIndex < 0 OrElse e.RowIndex < 0 Then
+    Private Sub dgv展開_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv展開.CellRowValueChanged
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
         End If
+
+        '対象レコード
+        Dim currentRow As DataRow = e.Row
         _EditChanged = True
 
         '編集対象のカラム
-        Dim dataPropertyName As String = dgv.Columns(e.ColumnIndex).DataPropertyName
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv展開_CellValueChanged({1},{2}){3}", Now, dataPropertyName, e.RowIndex, dgv.Rows(e.RowIndex).Cells(e.ColumnIndex).Value)
-        If {"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"}.Contains(dataPropertyName) Then
-            RaiseEvent CellValueChanged(Me, New ExpandingEventArgs(current.Row, dataPropertyName))
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0} dgv展開_CellRowValueChanged({1}:{2})", Now, e.DataPropertyName, currentRow(e.DataPropertyName))
+        If {"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"}.Contains(e.DataPropertyName) Then
+            RaiseEvent CellRowValueChanged(Me, e)
         End If
     End Sub
+
 End Class
