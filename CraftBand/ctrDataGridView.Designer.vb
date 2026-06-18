@@ -95,8 +95,8 @@ Partial Class ctrDataGridView
         ' 
         MenuItemReverse.Name = "MenuItemReverse"
         MenuItemReverse.Size = New System.Drawing.Size(193, 24)
-        MenuItemReverse.Text = "上下に逆転"
-        MenuItemReverse.ToolTipText = "列の値を逆方向に入れ替える"
+        MenuItemReverse.Text = "上下に反転"
+        MenuItemReverse.ToolTipText = "選択セルの値を上下逆方向に入れ替える"
         ' 
         ' ctrDataGridView
         ' 

@@ -785,7 +785,7 @@ Public Class ctrDataGridView
 
     '2点以上で、入力可能で、行ではなく、1列選択
     Public Shared Function IsReversable(ByVal dgv As DataGridView) As Boolean
-        If Not IsPastable(dgv) Then
+        If dgv Is Nothing Then
             Return False
         End If
         If dgv.SelectedCells.Count < 2 OrElse 0 < dgv.SelectedRows.Count Then
