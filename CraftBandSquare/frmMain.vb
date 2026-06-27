@@ -1420,6 +1420,9 @@ Public Class frmMain
         Else
             nud縦の目の数.Value = 0
         End If
+        If nud横ひもの本数.Value < nudフラップの縦ひも.Value Then
+            nudフラップの縦ひも.Value = nud横ひもの本数.Value
+        End If
         recalc(CalcCategory.Square_Tate, sender)
     End Sub
 
@@ -1499,6 +1502,28 @@ Public Class frmMain
     Private Sub nud高さの目_ValueChanged(sender As Object, e As EventArgs) Handles nud高さの目.ValueChanged
         recalc(CalcCategory.Square_Gap, sender)
     End Sub
+
+    Private Sub radフラップ_CheckedChanged(sender As Object, e As EventArgs) Handles radフラップ_無し.CheckedChanged, radフラップ_有り.CheckedChanged, radフラップ_内側.CheckedChanged, radフラップ_外側.CheckedChanged
+        If radフラップ_無し.Checked Then
+            lblフラップの縦ひも.Visible = False
+            nudフラップの縦ひも.Visible = False
+            lblフラップの縦ひも_単位.Visible = False
+        Else
+            lblフラップの縦ひも.Visible = True
+            nudフラップの縦ひも.Visible = True
+            lblフラップの縦ひも_単位.Visible = True
+        End If
+        recalc(CalcCategory.Square_Tate, sender)
+    End Sub
+
+    Private Sub nudフラップの縦ひも_ValueChanged(sender As Object, e As EventArgs) Handles nudフラップの縦ひも.ValueChanged
+        If nudフラップの縦ひも.Value < 0 Then
+            nudフラップの縦ひも.Value = 0
+        ElseIf nud横ひもの本数.Value < nudフラップの縦ひも.value Then
+            nudフラップの縦ひも.Value = nud横ひもの本数.Value
+        End If
+    End Sub
+
 #End Region
 
 #Region "側面"
