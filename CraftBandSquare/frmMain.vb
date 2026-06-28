@@ -1,7 +1,6 @@
 ﻿Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsUpDown
-Imports CraftBand.ctrInsertBand
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
@@ -461,7 +460,17 @@ Public Class frmMain
                 chk底とは別.Checked = False
                 dispValidValueNud(nud高さの目, .Value("f_dひも間のすき間"))
             End If
-
+            Select Case .Value("f_i織りタイプ")
+                Case enumフラップタイプ.i_同位置
+                    radフラップ_有り.Checked = True
+                Case enumフラップタイプ.i_内側
+                    radフラップ_内側.Checked = True
+                Case enumフラップタイプ.i_外側
+                    radフラップ_外側.Checked = True
+                Case Else
+                    radフラップ_無し.Checked = True 'i_なし
+            End Select
+            nudフラップの縦ひも.Value = .Value("f_i縦ひも")
         End With
     End Sub
 
@@ -595,6 +604,17 @@ Public Class frmMain
             Else
                 .Value("f_dひとつのすき間の寸法") = nud目_ひも間のすき間.Value
             End If
+
+            If radフラップ_有り.Checked Then
+                .Value("f_i織りタイプ") = enumフラップタイプ.i_同位置
+            ElseIf radフラップ_内側.Checked Then
+                .Value("f_i織りタイプ") = enumフラップタイプ.i_内側
+            ElseIf radフラップ_外側.Checked Then
+                .Value("f_i織りタイプ") = enumフラップタイプ.i_外側
+            Else
+                .Value("f_i織りタイプ") = enumフラップタイプ.i_なし
+            End If
+            .Value("f_i縦ひも") = nudフラップの縦ひも.Value
 
         End With
         Return True

@@ -109,7 +109,7 @@ Public Class clsModelSquare
         End If
 
         ' OBJとMTLファイルの出力
-        Return CreateOBJWithTextures(_calc.get周の横, height, _calc.get周の縦,
+        Return CreateOBJWithTextures(_calc.get周の横(1, True), height, _calc.get周の縦(1),
         _path各面画像, outpath, (String.IsNullOrEmpty(saveDir)))
     End Function
 
@@ -133,9 +133,9 @@ Public Class clsModelSquare
     '各面の領域をセットする
     Private Function setRegions() As Boolean
         '底の横
-        Dim yoko As Double = _calc.get周の横
+        Dim yoko As Double = _calc.get周の横(1, False) '側面サイズ
         '底の縦
-        Dim tate As Double = _calc.get周の縦
+        Dim tate As Double = _calc.get周の縦(1)
         '高さ
         Dim takasa As Double = _calc.get縁厚さプラス_高さ()
 
@@ -212,13 +212,13 @@ Public Class clsModelSquare
                     End If
                     If i = 0 Then
                         '底
-                        _delta画像サイズ(i) = New S差分(calcTmp.get周の横, calcTmp.get周の縦)
+                        _delta画像サイズ(i) = New S差分(calcTmp.get周の横(1, True), calcTmp.get周の縦(1))
                     ElseIf {1, 3}.Contains(i) Then
                         '右側面と左側面
-                        _delta画像サイズ(i) = New S差分(calcTmp.get周の縦, calcTmp.get縁厚さプラス_高さ())
+                        _delta画像サイズ(i) = New S差分(calcTmp.get周の縦(1), calcTmp.get縁厚さプラス_高さ())
                     Else
                         '前面と背面
-                        _delta画像サイズ(i) = New S差分(calcTmp.get周の横, calcTmp.get縁厚さプラス_高さ())
+                        _delta画像サイズ(i) = New S差分(calcTmp.get周の横(1, True), calcTmp.get縁厚さプラス_高さ())
                     End If
 
                     If Not ret Then

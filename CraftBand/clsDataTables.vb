@@ -141,6 +141,13 @@ Public Class clsDataTables
         i_放射状 = 1 '放射状に置く(縦ひも)
         i_輪弧 = 2  '輪弧に置く(縦ひも)
     End Enum
+    'Square
+    Public Enum enumフラップタイプ
+        i_なし = 0
+        i_同位置 = 1
+        i_内側 = 2
+        i_外側 = 3
+    End Enum
 
     'tbl縦横展開
     'カテゴリー出力順

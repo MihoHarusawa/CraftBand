@@ -71,6 +71,10 @@ Class clsCalcSquare
 
     Private Property _b縦横側面を展開する As Boolean
 
+    Private Property _iフラップタイプ As enumフラップタイプ
+    Private Property _iフラップの縦ひも As Integer
+
+
 
     '計算結果の保持
     Private Property _d四角ベース_横計 As Double '横の目数,左右の目,縦ひも幅計,すき間
@@ -137,6 +141,9 @@ Class clsCalcSquare
         _b横ひも本幅変更 = False
         _b縦ひも本幅変更 = False
         _b側面ひも本幅変更 = False
+
+        _iフラップタイプ = enumフラップタイプ.i_なし
+        _iフラップの縦ひも = 0
 
         _d四角ベース_横計 = -1
         _d四角ベース_縦計 = -1
@@ -243,7 +250,8 @@ Class clsCalcSquare
     Public ReadOnly Property p_d縁厚さプラス_周 As Double
         Get
             If 0 <= p_d四角ベース_周 Then
-                Return p_d四角ベース_周 + 8 * p_d厚さ
+                Return p_d四角ベース_周 + 8 * p_d厚さ +
+                    IIf(enumフラップタイプ.i_同位置 < _iフラップタイプ, 4 * g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ"), 0)
             End If
             Return 0
         End Get
@@ -319,7 +327,8 @@ Class clsCalcSquare
     Public ReadOnly Property p_d縁厚さプラス_横 As Double
         Get
             If 0 <= p_d四角ベース_横 Then
-                Return p_d四角ベース_横 + p_d厚さ * 2
+                Return p_d四角ベース_横 + p_d厚さ * 2 +
+                    IIf(enumフラップタイプ.i_同位置 < _iフラップタイプ, 2 * g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ"), 0)
             End If
             Return 0
         End Get
@@ -680,6 +689,10 @@ Class clsCalcSquare
             _d上端下端の目 = .Value("f_d上端下端の目")
             _d最下段の目 = .Value("f_d最下段の目")
 
+            _iフラップタイプ = .Value("f_i織りタイプ")
+            _iフラップの縦ひも = .Value("f_i縦ひも")
+
+
             '調整してセット
             If 0 < _i横の目の数 Then
                 _i縦ひもの本数 = _i横の目の数 + 1
@@ -700,6 +713,9 @@ Class clsCalcSquare
                 Else
                     _i横ひもの本数 = 1
                 End If
+            End If
+            If _i横ひもの本数 < _iフラップの縦ひも Then
+                _iフラップの縦ひも = _i横ひもの本数
             End If
         End With
 
@@ -1587,8 +1603,8 @@ Class clsCalcSquare
             Else
                 row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_底
             End If
-            row.f_d長さ = get周の横() + get側面高(2)
-            row.f_dひも長 = (get周の横() + get側面高(2)) * _dひも長係数
+            row.f_d長さ = get周の横(1, True) + get側面高(2)
+            row.f_dひも長 = (get周の横(1, True) + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
                 row.f_dひも長加算 + row.f_dひも長加算2 '#92
@@ -1787,8 +1803,8 @@ Class clsCalcSquare
             Else
                 row.f_d幅 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) + _d目_ひも間のすき間_底
             End If
-            row.f_d長さ = get周の縦() + get側面高(2)
-            row.f_dひも長 = (get周の縦() + get側面高(2)) * _dひも長係数
+            row.f_d長さ = get周の縦(1) + get側面高(2)
+            row.f_dひも長 = (get周の縦(1) + get側面高(2)) * _dひも長係数
             row.f_d出力ひも長 = row.f_dひも長 +
                 2 * (_dひも長加算_縦横端 + _d縁の垂直ひも長) +
                 row.f_dひも長加算 + row.f_dひも長加算2 '#92

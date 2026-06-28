@@ -30,7 +30,25 @@ Partial Public Class clsCalcSquare
     '　　　　　　　　　　　　 + [_d縁の高さ と _d縁の垂直ひも長 の小さい方]
     '
     '
-
+    '
+    '                                                        
+    '内側フラップ　　┌──────┐                   　　　┌────────┐    外側フラップ
+    '　　　　　　　　├──────┤                   　　　├────────┤           
+    '　　　　　　　　│　　　　　　│     get周の横(n,False)　│←　　　　　　→│           
+    '　　　　　　　　├‥‥‥‥‥‥┤                   　　　├‥‥‥‥‥‥‥‥┤           
+    '　　　┌┬─┬┬┴──────┴┬┬─┬┐         ┌┬─┬┬──────┬┬─┬┐         
+    '　　　││　：│　┏━━━━┓　│：　││get周の横││　：│┏━━━━┓│：　││         
+    '　　　││　：│←┃　　　　┃→│：　││ (n,True)││　：│┃　　　　┃│：　││  
+    '　　　││　：│　┃　　　　┃　│：　││   　　　││　：│┃　　　　┃│：　││  　　　　
+    '　　　││　：│　┗━━━━┛　│：　││  　     ││　：│┗━━━━┛│：　││  　
+    '　　　└┴─┴┴┬──────┬┴┴─┴┘         └┴─┴┴──────┴┴─┴┘    
+    '　　　　　　　　├‥‥‥‥‥‥┤ 　　　　　        　　　├‥‥‥‥‥‥‥‥┤ 　　　　　
+    '　　　　　　　　│　　　　　　│  f_d底の厚さ分幅をシフト│←　　　　　　→│
+    '　　　　　　　　├──────┤　　　　　　 　　　　　　├────────┤　　　　　　　　　　　　　　　　　
+    '　　　　　　　　└──────┘                   　　　└────────┘
+    '※プレビュー2描画時は、底面は側面の幅に合わせる
+    '
+    '
 
     'プレビュー時に生成,描画後はNothing
     Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
@@ -207,13 +225,20 @@ Partial Public Class clsCalcSquare
     End Function
 
     '横ひも長計算・描画に使用
-    Friend Function get周の横(Optional ByVal multi As Double = 1) As Double
-        Return multi *
-            (_d四角ベース_横計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
+    'multi:1=辺長, 1/2=中心からの長さ
+    'isBottom:true=底, false=上下の側面
+    Friend Function get周の横(ByVal multi As Double, ByVal isBottom As Boolean) As Double
+        Dim wid As Double = (_d四角ベース_横計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
+        If (isBottom AndAlso enumフラップタイプ.i_内側 = _iフラップタイプ) OrElse
+           (Not isBottom AndAlso enumフラップタイプ.i_外側 = _iフラップタイプ) Then
+            wid += 2 * g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        End If
+        Return multi * wid
     End Function
 
     '縦ひも長計算・描画に使用
-    Friend Function get周の縦(Optional ByVal multi As Double = 1) As Double
+    'multi:1=辺長, 1/2=中心からの長さ
+    Friend Function get周の縦(ByVal multi As Double) As Double
         Return multi *
             (_d四角ベース_縦計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
     End Function
@@ -230,12 +255,12 @@ Partial Public Class clsCalcSquare
 
     '描画の横高ゼロ描画位置
     Private Function getZeroX(Optional ByVal multi As Double = 1) As Double
-        Return multi * (get周の横() + getZeroSide(2))
+        Return multi * (get周の横(1, True) + getZeroSide(2))
     End Function
 
     '描画の縦高ゼロ描画位置
     Private Function getZeroY(Optional ByVal multi As Double = 1) As Double
-        Return multi * (get周の縦() + getZeroSide(2))
+        Return multi * (get周の縦(1) + getZeroSide(2))
     End Function
 
     '側面描画長、底の周から縁を加えた高さ
@@ -415,9 +440,9 @@ Partial Public Class clsCalcSquare
 
         Dim item As clsImageItem
 
-        Dim p上ひも始点F As New S実座標(-get周の横(1 / 2), d最下の高さ + getZeroY(1 / 2))
+        Dim p上ひも始点F As New S実座標(-get周の横(1 / 2, False), d最下の高さ + getZeroY(1 / 2))
         Dim p右ひも始点F As New S実座標(d最下の高さ + getZeroX(1 / 2), get周の縦(1 / 2))
-        Dim p下ひも始点F As New S実座標(get周の横(1 / 2), -d最下の高さ - getZeroY(1 / 2))
+        Dim p下ひも始点F As New S実座標(get周の横(1 / 2, False), -d最下の高さ - getZeroY(1 / 2))
         Dim p左ひも始点F As New S実座標(-d最下の高さ - getZeroX(1 / 2), -get周の縦(1 / 2))
 
         '1～_i高さの目の数
@@ -432,7 +457,7 @@ Partial Public Class clsCalcSquare
                 '始点F(*) 　　　　　終点F
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p上ひも始点F, p上ひも始点F + Unit0 * get周の横()),
+                band.SetBandF(New S線分(p上ひも始点F, p上ひも始点F + Unit0 * get周の横(1, False)),
                     item.m_row縦横展開.f_dVal1, Unit90)
                 band.is始点FT線 = False
                 band.is終点FT線 = False
@@ -460,7 +485,7 @@ Partial Public Class clsCalcSquare
                 '終点F 　□　終点T
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * get周の縦()),
+                band.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * get周の縦(1)),
                     item.m_row縦横展開.f_dVal1, Unit0)
                 band.is始点FT線 = False
                 band.is終点FT線 = False
@@ -481,7 +506,7 @@ Partial Public Class clsCalcSquare
                 '終点T　　　　　始点T　　
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p下ひも始点F, p下ひも始点F + Unit180 * get周の横()),
+                band.SetBandF(New S線分(p下ひも始点F, p下ひも始点F + Unit180 * get周の横(1, False)),
                     item.m_row縦横展開.f_dVal1, Unit270)
                 band.is始点FT線 = False
                 band.is終点FT線 = False
@@ -502,7 +527,7 @@ Partial Public Class clsCalcSquare
                 '始点T　□　始点F(*)
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * get周の縦()),
+                band.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * get周の縦(1)),
                     item.m_row縦横展開.f_dVal1, Unit180)
                 band.is始点FT線 = False
                 band.is終点FT線 = False
@@ -526,14 +551,14 @@ Partial Public Class clsCalcSquare
             '*上
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, IdxDrawBandSide0)
             item.m_a四隅.p左下 = p上ひも始点F
-            item.m_a四隅.p右下 = p上ひも始点F + Unit0 * get周の横()
+            item.m_a四隅.p右下 = p上ひも始点F + Unit0 * get周の横(1, False)
             item.m_a四隅.p左上 = p上ひも始点F + Unit90 * d高さ
-            item.m_a四隅.p右上 = p上ひも始点F + Unit90 * d高さ + Unit0 * get周の横()
+            item.m_a四隅.p右上 = p上ひも始点F + Unit90 * d高さ + Unit0 * get周の横(1, False)
 
             '文字位置
             '#60
             If _IsDrawMarkCurrent Then
-                item.p_p文字位置 = p上ひも始点F + Unit0 * get周の横() + Unit90 * d高さ
+                item.p_p文字位置 = p上ひも始点F + Unit0 * get周の横(1, False) + Unit90 * d高さ
             End If
             _imageList側面上.AddItem(item)
 
@@ -541,17 +566,17 @@ Partial Public Class clsCalcSquare
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, IdxDrawBandSide1)
             item.m_a四隅.p左上 = p右ひも始点F
             item.m_a四隅.p右上 = p右ひも始点F + Unit0 * d高さ
-            item.m_a四隅.p左下 = p右ひも始点F + Unit270 * get周の縦()
-            item.m_a四隅.p右下 = p右ひも始点F + Unit0 * d高さ + Unit270 * get周の縦()
+            item.m_a四隅.p左下 = p右ひも始点F + Unit270 * get周の縦(1)
+            item.m_a四隅.p右下 = p右ひも始点F + Unit0 * d高さ + Unit270 * get周の縦(1)
             '文字なし
             _imageList側面右.AddItem(item)
 
             '*下
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, IdxDrawBandSide2)
             item.m_a四隅.p右上 = p下ひも始点F
-            item.m_a四隅.p左上 = p下ひも始点F + Unit180 * get周の横()
+            item.m_a四隅.p左上 = p下ひも始点F + Unit180 * get周の横(1, False)
             item.m_a四隅.p右下 = p下ひも始点F + Unit270 * d高さ
-            item.m_a四隅.p左下 = p下ひも始点F + Unit270 * d高さ + Unit180 * get周の横()
+            item.m_a四隅.p左下 = p下ひも始点F + Unit270 * d高さ + Unit180 * get周の横(1, False)
             '文字なし
             _imageList側面下.AddItem(item)
 
@@ -559,8 +584,8 @@ Partial Public Class clsCalcSquare
             item = New clsImageItem(ImageTypeEnum._編みかた, groupRow, IdxDrawBandSide3)
             item.m_a四隅.p右下 = p左ひも始点F
             item.m_a四隅.p左下 = p左ひも始点F + Unit180 * d高さ
-            item.m_a四隅.p右上 = p左ひも始点F + Unit90 * get周の縦()
-            item.m_a四隅.p左上 = p左ひも始点F + Unit180 * d高さ + Unit90 * get周の縦()
+            item.m_a四隅.p右上 = p左ひも始点F + Unit90 * get周の縦(1)
+            item.m_a四隅.p左上 = p左ひも始点F + Unit180 * d高さ + Unit90 * get周の縦(1)
             '文字なし
             _imageList側面左.AddItem(item)
 
@@ -586,8 +611,8 @@ Partial Public Class clsCalcSquare
         a底.p右下 = -a底.p左上
 
         Dim a底の周 As S四隅
-        a底の周.p左上 = New S実座標(-get周の横(1 / 2), get周の縦(1 / 2))
-        a底の周.p右上 = New S実座標(get周の横(1 / 2), get周の縦(1 / 2))
+        a底の周.p左上 = New S実座標(-get周の横(1 / 2, True), get周の縦(1 / 2))
+        a底の周.p右上 = New S実座標(get周の横(1 / 2, True), get周の縦(1 / 2))
         a底の周.p左下 = -a底の周.p右上
         a底の周.p右下 = -a底の周.p左上
 
@@ -614,7 +639,11 @@ Partial Public Class clsCalcSquare
         '底の画像
         If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._bottom, False)) Then
             Dim item2 As New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 1)
-            item2.m_a四隅 = a底の周
+            '横は側面サイズ
+            item2.m_a四隅.p左上 = New S実座標(-get周の横(1 / 2, False), get周の縦(1 / 2))
+            item2.m_a四隅.p右上 = New S実座標(get周の横(1 / 2, False), get周の縦(1 / 2))
+            item2.m_a四隅.p左下 = -item2.m_a四隅.p右上
+            item2.m_a四隅.p右下 = -item2.m_a四隅.p左上
             item2.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._bottom, False)
             item2.m_angle = _PlateAngle(enumBasketPlateIdx._bottom)
             itemlist.AddItem(item2)
@@ -626,8 +655,8 @@ Partial Public Class clsCalcSquare
 
         '上の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
-        item.m_a四隅.p左下 = a底の周.p左上
-        item.m_a四隅.p右下 = a底の周.p右上
+        item.m_a四隅.p左下 = New S実座標(-get周の横(1 / 2, False), get周の縦(1 / 2)) ' a底の周.p左上
+        item.m_a四隅.p右下 = New S実座標(get周の横(1 / 2, False), get周の縦(1 / 2)) 'a底の周.p右上
         item.m_a四隅.p左上 = item.m_a四隅.p左下 + Unit90 * _d縁厚さプラス_高さ
         item.m_a四隅.p右上 = item.m_a四隅.p右下 + Unit90 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p左下, item.m_a四隅.p右下) + Unit90 * d底の厚さ
@@ -664,8 +693,8 @@ Partial Public Class clsCalcSquare
 
         '下の側面
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
-        item.m_a四隅.p左上 = a底の周.p左下
-        item.m_a四隅.p右上 = a底の周.p右下
+        item.m_a四隅.p左上 = New S実座標(-get周の横(1 / 2, False), -get周の縦(1 / 2)) 'a底の周.p左下
+        item.m_a四隅.p右上 = New S実座標(get周の横(1 / 2, False), -get周の縦(1 / 2)) 'a底の周.p右下
         item.m_a四隅.p左下 = item.m_a四隅.p左上 + Unit270 * _d縁厚さプラス_高さ
         item.m_a四隅.p右下 = item.m_a四隅.p右上 + Unit270 * _d縁厚さプラス_高さ
         line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p右上) + Unit270 * d底の厚さ

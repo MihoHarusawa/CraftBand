@@ -465,7 +465,7 @@ Partial Public Class clsCalcSquare
                             'set
                             tmp.m_iひも数 = count 'ひも数
                             tmp.m_i開始位置 = n開始位置
-                            tmp.m_dひも長 = get周の縦() + get側面高(2) '縁は加えない
+                            tmp.m_dひも長 = get周の縦(1) + get側面高(2) '縁は加えない
                             tmptable.Add(tmp)
                         End If
                         n開始位置 = get次の開始位置(n開始位置, i縦ひもの本数, row.f_i何本ごと)
@@ -480,7 +480,7 @@ Partial Public Class clsCalcSquare
                             'set
                             tmp.m_iひも数 = count 'ひも数
                             tmp.m_i開始位置 = n開始位置
-                            tmp.m_dひも長 = get周の横() + get側面高(2) '縁は加えない
+                            tmp.m_dひも長 = get周の横(1, True) + get側面高(2) '縁は加えない
                             tmptable.Add(tmp)
                         End If
                         If 0 < tmptable.Count Then
@@ -1033,7 +1033,7 @@ Partial Public Class clsCalcSquare
         Dim d幅 As Double = g_clsSelectBasics.p_d指定本幅(i本幅)
 
         'バンド長
-        Dim band_x As Double = get周の横(1 / 2)
+        Dim band_x As Double = get周の横(1 / 2, False)
         Dim band_y As Double = get周の縦(1 / 2)
 
         Dim band As CBand
@@ -1180,21 +1180,21 @@ Partial Public Class clsCalcSquare
     Private Sub imageSetup()
         '4側面:全て上向き　右上,左下
         _ary_r側面(ISIDE0) = New S領域(
-                                      New S実座標(get周の横(1 / 2), get周の縦(1 / 2) + get側面高(1)),
-                                      New S実座標(-get周の横(1 / 2), get周の縦(1 / 2)))
+                                      New S実座標(get周の横(1 / 2, False), get周の縦(1 / 2) + get側面高(1)),
+                                      New S実座標(-get周の横(1 / 2, False), get周の縦(1 / 2)))
 
         _ary_r側面(ISIDE1) = New S領域(
-                                      New S実座標(get周の横(1 / 2) + get側面高(1), get周の縦(1 / 2)),
-                                      New S実座標(get周の横(1 / 2), -get周の縦(1 / 2)))
+                                      New S実座標(get周の横(1 / 2, True) + get側面高(1), get周の縦(1 / 2)),
+                                      New S実座標(get周の横(1 / 2, True), -get周の縦(1 / 2)))
         _ary_r側面(ISIDE2) = New S領域(
-                                      New S実座標(get周の横(1 / 2), -get周の縦(1 / 2)),
-                                      New S実座標(-get周の横(1 / 2), -get周の縦(1 / 2) - get側面高(1)))
+                                      New S実座標(get周の横(1 / 2, False), -get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2, False), -get周の縦(1 / 2) - get側面高(1)))
         _ary_r側面(ISIDE3) = New S領域(
-                                      New S実座標(-get周の横(1 / 2), get周の縦(1 / 2)),
-                                      New S実座標(-get周の横(1 / 2) - get側面高(1), -get周の縦(1 / 2)))
+                                      New S実座標(-get周の横(1 / 2, True), get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2, True) - get側面高(1), -get周の縦(1 / 2)))
         _r底面 = New S領域(
-                                      New S実座標(get周の横(1 / 2), get周の縦(1 / 2)),
-                                      New S実座標(-get周の横(1 / 2), -get周の縦(1 / 2)))
+                                      New S実座標(get周の横(1 / 2, False), get周の縦(1 / 2)),
+                                      New S実座標(-get周の横(1 / 2, False), -get周の縦(1 / 2)))
 
         '右回りのオーバーライン
         _ary_line面右(ISIDE0) = New S線分(_ary_r側面(ISIDE0).p右下, _ary_r側面(ISIDE0).p右上)
@@ -1599,14 +1599,14 @@ Partial Public Class clsCalcSquare
         Dim y_line As Double '絶対値
         Dim dShortCorner As Double = 0 '角を短くする分、長さ(回転前)ベース
         If row.f_i配置面 = enum配置面.i_全面 Then
-            x_line = get周の横(1 / 2) + get側面高(1)
+            x_line = get周の横(1 / 2, True) + get側面高(1)
             y_line = get周の縦(1 / 2) + get側面高(1)
             If is縦の上下に目あり() AndAlso is横の左右に目あり() Then
                 '側面高の対角線ではなく、側面高にする
                 dShortCorner = get側面高(1) * (1 - ROOT2 / 2)
             Else
                 '角まで短くする
-                dShortCorner = get側面高(1) + (get周の横() - p_d四角ベース_横) / 2
+                dShortCorner = get側面高(1) + (get周の横(1, True) - p_d四角ベース_横) / 2
             End If
         ElseIf row.f_i配置面 = enum配置面.i_底面 Then
             x_line = p_d四角ベース_横 / 2
