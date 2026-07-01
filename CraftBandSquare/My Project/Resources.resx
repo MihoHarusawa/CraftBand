@@ -231,4 +231,22 @@
   <data name="ModelNoImage" xml:space="preserve">
     <value>{0}が描画できませんでした。</value>
   </data>
+  <data name="CalcListOutLeftSide" xml:space="preserve">
+    <value>左側面(フラップなし)</value>
+  </data>
+  <data name="CalcListOutLowerSideBothEnd" xml:space="preserve">
+    <value>下側面の両端</value>
+  </data>
+  <data name="CalcListOutUpperSideBothEnd" xml:space="preserve">
+    <value>上側面の両端</value>
+  </data>
+  <data name="CalcListOutUpperSide" xml:space="preserve">
+    <value>上側面(両端にフラップ)</value>
+  </data>
+  <data name="CalcListOutLowerSide" xml:space="preserve">
+    <value>下側面(両端にフラップ)</value>
+  </data>
+  <data name="CalcListOutRightSide" xml:space="preserve">
+    <value>右側面(フラップなし)</value>
+  </data>
 </root>

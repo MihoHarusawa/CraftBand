@@ -135,6 +135,60 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  左側面(フラップなし) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutLeftSide() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutLeftSide", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  下側面(両端にフラップ) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutLowerSide() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutLowerSide", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  下側面の両端 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutLowerSideBothEnd() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutLowerSideBothEnd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  右側面(フラップなし) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutRightSide() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutRightSide", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  上側面(両端にフラップ) に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutUpperSide() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutUpperSide", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  上側面の両端 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcListOutUpperSideBothEnd() As String
+            Get
+                Return ResourceManager.GetString("CalcListOutUpperSideBothEnd", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}追加用の番号がとれません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoAddNumber() As String

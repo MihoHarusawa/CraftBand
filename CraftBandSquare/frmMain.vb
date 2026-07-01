@@ -1533,7 +1533,7 @@ Public Class frmMain
             nudフラップの縦ひも.Visible = True
             lblフラップの縦ひも_単位.Visible = True
         End If
-        recalc(CalcCategory.Square_Tate, sender)
+        recalc(CalcCategory.Square_Gap, sender)
     End Sub
 
     Private Sub nudフラップの縦ひも_ValueChanged(sender As Object, e As EventArgs) Handles nudフラップの縦ひも.ValueChanged
@@ -1542,6 +1542,7 @@ Public Class frmMain
         ElseIf nud横ひもの本数.Value < nudフラップの縦ひも.value Then
             nudフラップの縦ひも.Value = nud横ひもの本数.Value
         End If
+        recalc(CalcCategory.Square_Gap, sender)
     End Sub
 
 #End Region

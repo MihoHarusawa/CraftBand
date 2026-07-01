@@ -29,8 +29,6 @@ Partial Public Class clsCalcSquare
     '　　　　　　　　　       + get側面高()
     '　　　　　　　　　　　　 + [_d縁の高さ と _d縁の垂直ひも長 の小さい方]
     '
-    '
-    '
     '                                                        
     '内側フラップ　　┌──────┐                   　　　┌────────┐    外側フラップ
     '　　　　　　　　├──────┤                   　　　├────────┤           
@@ -58,6 +56,7 @@ Partial Public Class clsCalcSquare
     Dim _imageList側面下 As clsImageItemList    '側面の展開レコードを含む
     Dim _imageList側面左 As clsImageItemList    '側面の展開レコードを含む
     Dim _ImageList描画要素 As clsImageItemList '底と側面
+    Dim _ImageListフラップ As clsImageItemList 'フラップの縦ひも
 
 
     '現画像生成時に記号を表示する #60
@@ -70,6 +69,7 @@ Partial Public Class clsCalcSquare
     Const IdxDrawBandSide1 As Integer = 11
     Const IdxDrawBandSide2 As Integer = 12
     Const IdxDrawBandSide3 As Integer = 13
+    Const IdxDrawBandFlap As Integer = 15
     Const IdxDrawInsertBand As Integer = 20 'うら・おもて
     Const IdxDrawInsertOnBand As Integer = 20 '同位
 
@@ -129,6 +129,7 @@ Partial Public Class clsCalcSquare
         _imageList側面下 = Nothing
         _imageList側面右 = Nothing
         _ImageList描画要素 = Nothing
+        _ImageListフラップ = Nothing
 
         '_BandListForClip.Clear()
         imageSetup()
@@ -151,6 +152,7 @@ Partial Public Class clsCalcSquare
         imgData.setBasics(_d基本のひも幅, _Data.p_row目標寸法.Value("f_s基本色"))
 
         If Not is底のみ Then
+            '_imageList側面上・_imageList側面左・_imageList側面下・_imageList側面右・_ImageListフラップ
             If Not imageList四側面() Then
                 '処理に必要な情報がありません。
                 p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -186,10 +188,12 @@ Partial Public Class clsCalcSquare
             imgData.MoveList(_imageList側面右)
             imgData.MoveList(_imageList側面下)
             imgData.MoveList(_imageList側面左)
+            imgData.MoveList(_ImageListフラップ)
             _imageList側面上 = Nothing
             _imageList側面右 = Nothing
             _imageList側面下 = Nothing
             _imageList側面左 = Nothing
+            _ImageListフラップ = Nothing
         End If
 
         imgData.MoveList(_ImageList描画要素)
@@ -218,6 +222,10 @@ Partial Public Class clsCalcSquare
 
 #Region "描画のベースとなる値"
 
+    Friend Function get立ち上げ時の一辺の増分() As Double
+        Return g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4
+    End Function
+
     '底の配置領域に立ち上げ増分をプラス, = p_d四角ベース_周
     Private Function get側面の周長() As Double
         Return 2 * (_d四角ベース_横計 + _d四角ベース_縦計) _
@@ -228,7 +236,7 @@ Partial Public Class clsCalcSquare
     'multi:1=辺長, 1/2=中心からの長さ
     'isBottom:true=底, false=上下の側面
     Friend Function get周の横(ByVal multi As Double, ByVal isBottom As Boolean) As Double
-        Dim wid As Double = (_d四角ベース_横計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
+        Dim wid As Double = (_d四角ベース_横計 + get立ち上げ時の一辺の増分())
         If (isBottom AndAlso enumフラップタイプ.i_内側 = _iフラップタイプ) OrElse
            (Not isBottom AndAlso enumフラップタイプ.i_外側 = _iフラップタイプ) Then
             wid += 2 * g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
@@ -240,7 +248,7 @@ Partial Public Class clsCalcSquare
     'multi:1=辺長, 1/2=中心からの長さ
     Friend Function get周の縦(ByVal multi As Double) As Double
         Return multi *
-            (_d四角ベース_縦計 + g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d立ち上げ時の四角底周の増分") / 4)
+            (_d四角ベース_縦計 + get立ち上げ時の一辺の増分())
     End Function
 
     '縦ひも長計算・描画に使用   '縁は含まない
@@ -383,18 +391,16 @@ Partial Public Class clsCalcSquare
         Return True
     End Function
 
-    '_imageList側面上・_imageList側面左・_imageList側面下・_imageList側面右生成
-    '※側面のレコードはリスト出力時にadjust_側面() 済み
-    Function imageList四側面() As Boolean
-
-        '側面のレコードを縦横レコード化
+    '側面のレコード配列を縦横展開テーブル化　非展開を展開
+    Private Function tbl側面to縦横展開DataTable(ByVal rows() As tbl側面Row) As tbl縦横展開DataTable
         Dim tmptable As New tbl縦横展開DataTable
         Dim row As tbl縦横展開Row
 
         Dim d最下の高さ As Double = 0
+        '側面のレコードを縦横レコード化
 
         Dim idx As Integer = 1
-        For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC")
+        For Each r As tbl側面Row In rows
             If r.f_i番号 = cHemNumber Then
                 '縁は編みかたとして処理
                 Continue For
@@ -431,12 +437,48 @@ Partial Public Class clsCalcSquare
         Next
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "tmptable:{0}", New clsGroupDataRow(tmptable).ToString)
 
+        Return tmptable
+    End Function
+
+    '_imageList側面上・_imageList側面左・_imageList側面下・_imageList側面右生成
+    '※側面のレコードはリスト出力時にadjust_側面() 済み
+    Function imageList四側面() As Boolean
+
+        '縦横レコード化されない
+        Dim d最下の高さ As Double = 0
+        For Each r As tbl側面Row In _Data.p_tbl側面.Select("f_i番号 = " & cIdxSpace)
+            d最下の高さ = r.f_d高さ
+        Next
+
+        '側面のレコードを縦横レコード化
+        Dim tmptableU As tbl縦横展開DataTable
+        Dim tmptableR As tbl縦横展開DataTable
+        Dim tmptableD As tbl縦横展開DataTable
+        Dim tmptableL As tbl縦横展開DataTable
+        Dim isフラップ As Boolean = (_iフラップタイプ <> enumフラップタイプ.i_なし)
+
+        If Not isフラップ Then
+            tmptableU = tbl側面to縦横展開DataTable(_Data.p_tbl側面.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC"))
+            tmptableR = tmptableU
+            tmptableD = tmptableU
+            tmptableL = tmptableU
+        Else
+            If _tbl側面フラップ_上横ひも Is Nothing OrElse _tbl側面フラップ_下横ひも Is Nothing OrElse
+                _tbl側面フラップ_左縦ひも Is Nothing OrElse _tbl側面フラップ_右縦ひも Is Nothing Then
+                Return False
+            End If
+            tmptableU = tbl側面to縦横展開DataTable(_tbl側面フラップ_上横ひも.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC"))
+            tmptableR = tbl側面to縦横展開DataTable(_tbl側面フラップ_右縦ひも.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC"))
+            tmptableD = tbl側面to縦横展開DataTable(_tbl側面フラップ_下横ひも.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC"))
+            tmptableL = tbl側面to縦横展開DataTable(_tbl側面フラップ_左縦ひも.Select(Nothing, "f_i番号 ASC , f_iひも番号 ASC"))
+        End If
 
         '以降参照するのでここでセットする
-        _imageList側面上 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
-        _imageList側面右 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
-        _imageList側面下 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
-        _imageList側面左 = New clsImageItemList(tmptable, Not _IsDrawMarkCurrent)
+        _imageList側面上 = New clsImageItemList(tmptableU, Not _IsDrawMarkCurrent)
+        _imageList側面右 = New clsImageItemList(tmptableR, Not _IsDrawMarkCurrent)
+        _imageList側面下 = New clsImageItemList(tmptableD, Not _IsDrawMarkCurrent)
+        _imageList側面左 = New clsImageItemList(tmptableL, Not _IsDrawMarkCurrent)
+
 
         Dim item As clsImageItem
 
@@ -457,10 +499,16 @@ Partial Public Class clsCalcSquare
                 '始点F(*) 　　　　　終点F
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p上ひも始点F, p上ひも始点F + Unit0 * get周の横(1, False)),
+                If Not isフラップ Then
+                    band.SetBandF(New S線分(p上ひも始点F, p上ひも始点F + Unit0 * get周の横(1, False)),
                     item.m_row縦横展開.f_dVal1, Unit90)
-                band.is始点FT線 = False
-                band.is終点FT線 = False
+                    band.is始点FT線 = False
+                    band.is終点FT線 = False
+                Else
+                    Dim pF As New S実座標(-item.m_row縦横展開.f_d出力ひも長 / 2, p上ひも始点F.Y)
+                    band.SetBandF(New S線分(pF, pF + Unit0 * item.m_row縦横展開.f_d出力ひも長),
+                    item.m_row縦横展開.f_dVal1, Unit90)
+                End If
                 If _IsDrawMarkCurrent Then
                     '横バンドの左
                     'band.SetMarkPosition(enumMarkPosition._始点Fの前, item.m_row縦横展開.f_dVal1) 'ひも幅
@@ -485,10 +533,19 @@ Partial Public Class clsCalcSquare
                 '終点F 　□　終点T
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * get周の縦(1)),
+                If Not isフラップ Then
+                    band.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * get周の縦(1)),
                     item.m_row縦横展開.f_dVal1, Unit0)
-                band.is始点FT線 = False
-                band.is終点FT線 = False
+                    band.is始点FT線 = False
+                    band.is終点FT線 = False
+                Else
+                    Dim pF As New S実座標(p右ひも始点F.X, item.m_row縦横展開.f_d出力ひも長 / 2)
+                    band.SetBandF(New S線分(pF, pF + Unit270 * item.m_row縦横展開.f_d出力ひも長),
+                    item.m_row縦横展開.f_dVal1, Unit0)
+                    If _IsDrawMarkCurrent Then
+                        band.SetMarkPosition(enumMarkPosition._始点Fの前)
+                    End If
+                End If
 
                 item.AddBand(band, IdxDrawBandSide1, i)
                 AddClipItem(band)
@@ -506,10 +563,16 @@ Partial Public Class clsCalcSquare
                 '終点T　　　　　始点T　　
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p下ひも始点F, p下ひも始点F + Unit180 * get周の横(1, False)),
+                If Not isフラップ Then
+                    band.SetBandF(New S線分(p下ひも始点F, p下ひも始点F + Unit180 * get周の横(1, False)),
                     item.m_row縦横展開.f_dVal1, Unit270)
-                band.is始点FT線 = False
-                band.is終点FT線 = False
+                    band.is始点FT線 = False
+                    band.is終点FT線 = False
+                Else
+                    Dim pF As New S実座標(item.m_row縦横展開.f_d出力ひも長 / 2, p下ひも始点F.Y)
+                    band.SetBandF(New S線分(pF, pF + Unit180 * item.m_row縦横展開.f_d出力ひも長),
+                    item.m_row縦横展開.f_dVal1, Unit270)
+                End If
 
                 item.AddBand(band, IdxDrawBandSide2, i)
                 AddClipItem(band)
@@ -527,10 +590,16 @@ Partial Public Class clsCalcSquare
                 '始点T　□　始点F(*)
 
                 Dim band As New CBand(item.m_row縦横展開)
-                band.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * get周の縦(1)),
+                If Not isフラップ Then
+                    band.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * get周の縦(1)),
                     item.m_row縦横展開.f_dVal1, Unit180)
-                band.is始点FT線 = False
-                band.is終点FT線 = False
+                    band.is始点FT線 = False
+                    band.is終点FT線 = False
+                Else
+                    Dim pF As New S実座標(p左ひも始点F.X, -item.m_row縦横展開.f_d出力ひも長 / 2)
+                    band.SetBandF(New S線分(pF, pF + Unit90 * item.m_row縦横展開.f_d出力ひも長),
+                    item.m_row縦横展開.f_dVal1, Unit180)
+                End If
 
                 item.AddBand(band, IdxDrawBandSide3, i)
                 AddClipItem(band)
@@ -596,6 +665,136 @@ Partial Public Class clsCalcSquare
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面左:{0}", _imageList側面左.ToString)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面下:{0}", _imageList側面下.ToString)
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_imageList側面右:{0}", _imageList側面右.ToString)
+        Return imageListフラップの縦ひも(isフラップ)
+    End Function
+
+    '_ImageListフラップ生成
+    Function imageListフラップの縦ひも(ByVal isフラップ As Boolean) As Boolean
+        If Not isフラップ Then
+            Return True
+        End If
+        If _tbl縦ひもフラップ_上 Is Nothing OrElse _tbl縦ひもフラップ_下 Is Nothing Then
+            Return False
+        End If
+        _ImageListフラップ = New clsImageItemList
+
+        Dim dひも長 As Double = _d四角ベース_高さ計 + _dひも長加算_縦横端 '長さに設定した値
+        Dim item As clsImageItem
+
+        '上側面の両端に描画
+        Dim a左上四隅 As S四隅
+        a左上四隅.p右下 = New S実座標(-get周の横(1 / 2, False), getZeroY(1 / 2))
+
+        Dim p左ひも始点F As S実座標 = a左上四隅.p右下 + Unit180 * (get立ち上げ時の一辺の増分() / 2)
+
+        '1 ～_iフラップの縦ひもの本数
+        For Each r As tbl縦横展開Row In _tbl縦ひもフラップ_上.Select(Nothing, "f_iひも番号 ASC")
+            If r.f_iひも番号 = 0 Then
+                p左ひも始点F.X -= r.f_d幅 '上端下端の目
+                Continue For
+            End If
+
+            '           終点T　□　終点F　←deltaAx(180)
+            '           　　 　↑(90)
+            '           始点T　□　始点F(*)
+            ' ...[3]    [2]    [1]              
+
+            Dim bandL As New CBand(r)
+            bandL.SetBandF(New S線分(p左ひも始点F, p左ひも始点F + Unit90 * r.f_d出力ひも長),
+                    r.f_dVal1, Unit180) 'f_dVal1(ひも幅)
+            If _IsDrawMarkCurrent Then
+                bandL.SetMarkPosition(enumMarkPosition._終点Tの後)
+            End If
+
+            Dim pF As New S実座標(-p左ひも始点F.X + r.f_dVal1, p左ひも始点F.Y)
+            Dim bandR As New CBand(r)
+            bandR.SetBandF(New S線分(pF, pF + Unit90 * r.f_d出力ひも長), r.f_dVal1, Unit180)
+            If _IsDrawMarkCurrent Then
+                bandR.SetMarkPosition(enumMarkPosition._終点Tの後)
+            End If
+
+            AddClipItem(bandL)
+            AddClipItem(bandR)
+
+            item = New clsImageItem(bandL, IdxDrawBandFlap, r.f_iひも番号)
+            item.AddBand(bandR, IdxDrawBandFlap, r.f_iひも番号)
+            _ImageListフラップ.AddItem(item)
+
+            If r.f_iひも番号 < _iフラップの縦ひも Then
+                p左ひも始点F.X -= r.f_d幅
+            Else
+                p左ひも始点F.X -= r.f_dVal1
+                Exit For
+            End If
+        Next
+
+        '左の枠
+        a左上四隅.p右上 = a左上四隅.p右下 + Unit90 * _d四角ベース_高さ計
+        a左上四隅.p左下 = p左ひも始点F
+        a左上四隅.p左上 = a左上四隅.p左下 + Unit90 * _d四角ベース_高さ計
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 5)
+        item.m_a四隅 = a左上四隅
+        _ImageListフラップ.AddItem(item)
+
+        '右の枠
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 6)
+        item.m_a四隅 = a左上四隅.VertLeft '左右反転
+        _ImageListフラップ.AddItem(item)
+
+
+        '下側面の両端に描画
+        Dim a右下四隅 As S四隅
+        a右下四隅.p左上 = New S実座標(get周の横(1 / 2, False), -getZeroY(1 / 2))
+
+        Dim p右ひも始点F As S実座標 = a右下四隅.p左上 + Unit0 * (get立ち上げ時の一辺の増分() / 2)
+
+        '_i横ひもの本数 ～_(_i横ひもの本数 - _iフラップの縦ひも + 1)
+        For Each r As tbl縦横展開Row In _tbl縦ひもフラップ_下.Select(Nothing, "f_iひも番号 DESC")
+            p右ひも始点F.X += r.f_d幅 - r.f_dVal1
+
+            '始点F(*)□　始点T　→deltaAx(0)
+            '　　  　↓(270)
+            '終点F 　□　終点T
+            '        [n]    [n-1]    [n-2]...
+
+            Dim bandR As New CBand(r)
+            bandR.SetBandF(New S線分(p右ひも始点F, p右ひも始点F + Unit270 * r.f_d出力ひも長),
+                    r.f_dVal1, Unit0)
+            If _IsDrawMarkCurrent Then
+                bandR.SetMarkPosition(enumMarkPosition._終点Fの後, _d基本のひも幅)
+            End If
+
+            Dim pF As New S実座標(-p右ひも始点F.X - r.f_dVal1, p右ひも始点F.Y)
+            Dim bandL As New CBand(r)
+            bandL.SetBandF(New S線分(pF, pF + Unit270 * r.f_d出力ひも長), r.f_dVal1, Unit0)
+            If _IsDrawMarkCurrent Then
+                bandL.SetMarkPosition(enumMarkPosition._終点Fの後, _d基本のひも幅)
+            End If
+
+            AddClipItem(bandR)
+            AddClipItem(bandL)
+
+            item = New clsImageItem(bandR, IdxDrawBandFlap, r.f_iひも番号)
+            item.AddBand(bandL, IdxDrawBandFlap, r.f_iひも番号)
+            _ImageListフラップ.AddItem(item)
+
+            p右ひも始点F.X += r.f_dVal1
+        Next
+
+        '右の枠
+        a右下四隅.p左下 = a右下四隅.p左上 + Unit270 * _d四角ベース_高さ計
+        a右下四隅.p右上 = p右ひも始点F
+        a右下四隅.p右下 = a右下四隅.p右上 + Unit270 * _d四角ベース_高さ計
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 7)
+        item.m_a四隅 = a右下四隅
+        _ImageListフラップ.AddItem(item)
+
+        '左の枠
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 8)
+        item.m_a四隅 = a右下四隅.VertLeft '左右反転
+        _ImageListフラップ.AddItem(item)
+
+
         Return True
     End Function
 

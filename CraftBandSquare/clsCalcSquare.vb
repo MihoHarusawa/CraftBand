@@ -9,6 +9,11 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
 Class clsCalcSquare
+    Implements IDisposable
+
+    Private _disposedValue As Boolean
+
+
     Friend Shared ROOT2 As Double = Math.Sqrt(2)
 
     '処理のカテゴリー
@@ -1069,7 +1074,13 @@ Class clsCalcSquare
             End If
             row.f_d周長 = get側面の周長()
             row.f_dひも長 = row.f_d周長 * _dひも長係数
-            row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
+            If _iフラップタイプ = enumフラップタイプ.i_なし Then
+                row.f_d連続ひも長 = row.f_dひも長 + _dひも長加算_側面 + row.f_dひも長加算
+            Else
+                '概算
+                row.f_d連続ひも長 = row.f_dひも長
+                row.f_d連続ひも長 += 4 * (_iフラップの縦ひも * (_d基本のひも幅 + _d目_ひも間のすき間_底) + _dひも長加算_側面 + row.f_dひも長加算)
+            End If
             row.f_d厚さ = g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
             row.f_b集計対象外区分 = False
         End If
@@ -2044,7 +2055,361 @@ Class clsCalcSquare
 
 #End Region
 
+
+#Region "フラップ"
+
+    'フラップ指定時のみ生成
+    Dim _tbl側面フラップ_上横ひも As tbl側面DataTable '側面上、左右にフラップを追加
+    Dim _tbl側面フラップ_下横ひも As tbl側面DataTable '側面下、左右にフラップを追加
+    Dim _tbl側面フラップ_左縦ひも As tbl側面DataTable '側面左、フラップなし
+    Dim _tbl側面フラップ_右縦ひも As tbl側面DataTable '側面右、フラップなし
+    Dim _tbl縦ひもフラップ_上 As tbl縦横展開DataTable '側面上、左右のフラップ2セット
+    Dim _tbl縦ひもフラップ_下 As tbl縦横展開DataTable '側面下、左右のフラップ2セット
+
+    Private Sub prepareフラップDataTable()
+        If _tbl側面フラップ_上横ひも Is Nothing Then
+            _tbl側面フラップ_上横ひも = New tbl側面DataTable
+        End If
+        If _tbl側面フラップ_下横ひも Is Nothing Then
+            _tbl側面フラップ_下横ひも = New tbl側面DataTable
+        End If
+        If _tbl側面フラップ_左縦ひも Is Nothing Then
+            _tbl側面フラップ_左縦ひも = New tbl側面DataTable
+        End If
+        If _tbl側面フラップ_右縦ひも Is Nothing Then
+            _tbl側面フラップ_右縦ひも = New tbl側面DataTable
+        End If
+        If _tbl縦ひもフラップ_上 Is Nothing Then
+            _tbl縦ひもフラップ_上 = New tbl縦横展開DataTable
+        End If
+        If _tbl縦ひもフラップ_下 Is Nothing Then
+            _tbl縦ひもフラップ_下 = New tbl縦横展開DataTable
+        End If
+    End Sub
+
+    'フラップの本数に応じた横ひも幅の合計を返す。reverse=Trueで最後からn本数分
+    Private Function get指定本数の縦ひも幅(ByVal n本数 As Integer, ByVal reverse As Boolean) As Double
+        If n本数 <= 0 Then
+            Return 0
+        ElseIf _i横ひもの本数 < n本数 Then
+            Return get周の縦(1)
+        End If
+
+        'ひも番号 
+        '  0   1      2      3      _i横ひもの本数   ※折って横ひもに重なる縦ひも←横ひも
+        '     |□|<->|□|<->|□|....   |□|    ' _d目_ひも間のすき間_底
+        '<--->|□|   |□|   |□|....   |□|<-->' 上端下端の目
+        '<--->|<---->|<---->|□|....   |<----->' f_d幅 
+        '               |   |                  '
+        '<------------->|   |                  '    reverse=False: 最初からn本数分、ひも位置まで
+        '                   |<---------------->'    reverse=True:  最後からn本数分、ひも位置まで
+        '
+        If Not reverse Then
+
+            Dim dSum最初から As Double = 0
+            Dim filt As String = "f_iひも番号 <= " & n本数
+            Dim obj As Object = _tbl縦横展開_横ひも.Compute("SUM(f_d幅)", filt)
+            If Not IsDBNull(obj) Then
+                dSum最初から = obj
+            End If
+            dSum最初から -= _d目_ひも間のすき間_底
+            If dSum最初から < 0 Then
+                Return 0
+            Else
+                Return dSum最初から
+            End If
+
+        Else
+            Dim dSum最後から As Double = 0
+            Dim filt As String = "f_iひも番号 > " & (_i横ひもの本数 - n本数)
+            Dim obj As Object = _tbl縦横展開_横ひも.Compute("SUM(f_d幅)", filt)
+            If Not IsDBNull(obj) Then
+                dSum最後から = obj
+            End If
+            If dSum最後から < 0 Then
+                Return 0
+            Else
+                Return dSum最後から
+            End If
+        End If
+    End Function
+
+    Private Function set_側面フラップ(ByVal output As clsOutput) As Boolean
+        _tbl側面フラップ_上横ひも.Clear()
+        _tbl側面フラップ_下横ひも.Clear()
+        _tbl側面フラップ_左縦ひも.Clear()
+        _tbl側面フラップ_右縦ひも.Clear()
+
+        '片側のフラップの幅
+        Dim dSum最初から As Double = get指定本数の縦ひも幅(_iフラップの縦ひも, False)
+        Dim dSum最後から As Double = get指定本数の縦ひも幅(_iフラップの縦ひも, True)
+        dSum最初から += get立ち上げ時の一辺の増分() / 2 '+ g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+        dSum最後から += get立ち上げ時の一辺の増分() / 2 '+ g_clsSelectBasics.p_row選択中バンドの種類.Value("f_d底の厚さ")
+
+        For Each r As tbl側面Row In _Data.p_tbl側面.Select()
+            If r.f_i番号 = cHemNumber Then
+                Continue For
+            End If
+            Dim row As tbl側面Row
+
+            '*上側面の横ひも
+            row = _tbl側面フラップ_上横ひも.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+            '上側面(両端にフラップ)
+            row.f_s編みひも名 = My.Resources.CalcListOutUpperSide
+            row.f_d周長 = get周の横(1, False)
+            row.f_dひも長 = row.f_d周長 * _dひも長係数
+            row.f_d連続ひも長 = row.f_dひも長 + dSum最初から * 2
+            row.f_d連続ひも長 += 2 * (_dひも長加算_側面 + row.f_dひも長加算)
+
+            If 0 < row.f_d連続ひも長 AndAlso Not row.f_b集計対象外区分 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d連続ひも長, row.f_s色)
+            End If
+            _tbl側面フラップ_上横ひも.Rows.Add(row)
+
+
+            '*下側面の横ひも
+            row = _tbl側面フラップ_下横ひも.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+            '下側面(両端にフラップ)
+            row.f_s編みひも名 = My.Resources.CalcListOutLowerSide
+            row.f_d周長 = get周の横(1, False)
+            row.f_dひも長 = row.f_d周長 * _dひも長係数
+            row.f_d連続ひも長 = row.f_dひも長 + dSum最後から * 2
+            row.f_d連続ひも長 += 2 * (_dひも長加算_側面 + row.f_dひも長加算)
+
+            If 0 < row.f_d連続ひも長 AndAlso Not row.f_b集計対象外区分 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d連続ひも長, row.f_s色)
+            End If
+            _tbl側面フラップ_下横ひも.Rows.Add(row)
+
+
+            '*左側面の縦ひも
+            row = _tbl側面フラップ_左縦ひも.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+            '左側面(フラップなし)
+            row.f_s編みひも名 = My.Resources.CalcListOutLeftSide
+            row.f_d周長 = get周の縦(1)
+            row.f_dひも長 = row.f_d周長 * _dひも長係数
+            row.f_d連続ひも長 = row.f_dひも長
+
+            If 0 < row.f_d連続ひも長 AndAlso Not row.f_b集計対象外区分 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d連続ひも長, row.f_s色)
+            End If
+            _tbl側面フラップ_左縦ひも.Rows.Add(row)
+
+            '*右側面の縦ひも
+            row = _tbl側面フラップ_右縦ひも.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+            '右側面(フラップなし)
+            row.f_s編みひも名 = My.Resources.CalcListOutRightSide
+            row.f_d周長 = get周の縦(1)
+            row.f_dひも長 = row.f_d周長 * _dひも長係数
+            row.f_d連続ひも長 = row.f_dひも長
+
+            If 0 < row.f_d連続ひも長 AndAlso Not row.f_b集計対象外区分 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d連続ひも長, row.f_s色)
+            End If
+            _tbl側面フラップ_右縦ひも.Rows.Add(row)
+
+        Next
+        Return True
+    End Function
+
+    Private Function set_縦ひもフラップ(ByVal output As clsOutput) As Boolean
+        _tbl縦ひもフラップ_上.Clear()
+        _tbl縦ひもフラップ_下.Clear()
+        Dim filt As String
+
+        '0 ～_iフラップの縦ひもの本数
+        filt = "f_i位置番号 < " & cBackPosition & " AND f_iひも番号 <= " & _iフラップの縦ひも
+        For Each r As tbl縦横展開Row In _tbl縦横展開_横ひも.Select(filt, "f_iひも番号 ASC")
+            Dim row As tbl縦横展開Row
+
+            '小さい順に_iフラップの縦ひも本
+            row = _tbl縦ひもフラップ_上.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+
+            'フラップの縦ひも - 上側面の両端
+            row.f_sひも名 = String.Format("{0} - {1}", textフラップの縦ひも(), My.Resources.CalcListOutUpperSideBothEnd)
+            row.f_d長さ = _d四角ベース_高さ計 + _dひも長加算_縦横端
+            row.f_dひも長 = row.f_d長さ * _dひも長係数
+            row.f_d出力ひも長 = row.f_dひも長
+            row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) 'ひも幅
+
+            If 0 < row.f_iひも番号 AndAlso 0 < row.f_d出力ひも長 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
+            Else
+                row.f_s記号 = ""
+            End If
+
+            _tbl縦ひもフラップ_上.Rows.Add(row)
+        Next
+
+        '_i横ひもの本数 ～_(_i横ひもの本数 - _iフラップの縦ひも + 1)
+        filt = "(f_i位置番号 < " & cBackPosition & ") AND (f_iひも番号 > " & (_i横ひもの本数 - _iフラップの縦ひも) & ")"
+        For Each r As tbl縦横展開Row In _tbl縦横展開_横ひも.Select(filt, "f_iひも番号 DESC")
+            Dim row As tbl縦横展開Row
+
+            '大きい順に_iフラップの縦ひも本
+            row = _tbl縦ひもフラップ_下.NewRow()
+            row.ItemArray = r.ItemArray '値をコピー
+
+            'フラップの縦ひも - 下側面の両端
+            row.f_sひも名 = String.Format("{0} - {1}", textフラップの縦ひも(), My.Resources.CalcListOutLowerSideBothEnd)
+            row.f_d長さ = _d四角ベース_高さ計 + _dひも長加算_縦横端
+            row.f_dひも長 = row.f_d長さ * _dひも長係数
+            row.f_d出力ひも長 = row.f_dひも長
+            row.f_dVal1 = g_clsSelectBasics.p_d指定本幅(row.f_i何本幅) 'ひも幅
+
+            If 0 < row.f_d出力ひも長 Then
+                row.f_s記号 = output.SetBandRow(0, row.f_i何本幅, row.f_d出力ひも長, row.f_s色)
+            Else
+                row.f_s記号 = ""
+            End If
+
+            _tbl縦ひもフラップ_下.Rows.Add(row)
+        Next
+
+        Return True
+    End Function
+
+    Private Sub out_フラップの縦ひもRows(ByVal output As clsOutput, ByVal rows() As tbl縦横展開Row)
+        Dim row As tblOutputRow
+
+        Dim r_prv As tbl縦横展開Row = Nothing
+        Dim contcount As Integer = 0
+        Dim addstr As String = String.Empty
+        For Each r As tbl縦横展開Row In rows
+            If r.f_iひも番号 < 1 Then
+                Continue For
+            End If
+
+            If r_prv IsNot Nothing AndAlso r_prv.f_s記号 = r.f_s記号 Then
+                contcount += 2 '1レコードにつき2点
+                addstr += String.Format(" {0}", r.f_iひも番号)
+            Else
+                If r_prv IsNot Nothing Then
+                    row = output.NextNewRow
+                    output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d出力ひも長, r_prv.f_s色)
+                    row.f_s長さ = output.outLengthText(r_prv.f_d長さ)
+                    row.f_s編みひも名 = addstr
+                    row.f_s編みかた名 = r_prv.f_sひも名
+                End If
+                contcount = 2
+                addstr = String.Format("{0}", r.f_iひも番号)
+                r_prv = r
+            End If
+        Next
+        If r_prv IsNot Nothing Then
+            row = output.NextNewRow
+            output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d出力ひも長, r_prv.f_s色)
+            row.f_s長さ = output.outLengthText(r_prv.f_d長さ)
+            row.f_s編みひも名 = addstr
+            row.f_s編みかた名 = r_prv.f_sひも名
+        End If
+
+    End Sub
+#End Region
+
 #Region "リスト出力"
+
+    <Flags()>
+    Public Enum out側面種 As Integer
+        _none = 0
+        _縁 = 1
+        _編みひも = 2
+        _最下段 = 4
+    End Enum
+    Const out全て As out側面種 = out側面種._縁 Or out側面種._編みひも Or out側面種._最下段
+    Const out縁のみ As out側面種 = out側面種._縁
+    Const out編みひも As out側面種 = out側面種._編みひも
+
+    '側面レコードのリスト出力
+    Private Sub out側面Rows(ByVal output As clsOutput, ByVal out As out側面種, ByVal rows() As tbl側面Row)
+        Dim row As tblOutputRow
+
+        Dim r_prv As tbl側面Row = Nothing
+        Dim contcount As Integer = 0
+        For Each r As tbl側面Row In rows
+            If r.f_i番号 = cHemNumber Then
+                If Not out.HasFlag(out側面種._縁) Then
+                    Continue For
+                End If
+            ElseIf r.f_i番号 = cIdxHeight Then
+                If Not out.HasFlag(out側面種._編みひも) Then
+                    Continue For
+                End If
+            Else '最下段スペース
+                If Not out.HasFlag(out側面種._最下段) Then
+                    Continue For
+                End If
+            End If
+
+            If r_prv IsNot Nothing AndAlso r_prv.f_s記号 = r.f_s記号 _
+                AndAlso r_prv.f_s編みひも名 = r.f_s編みひも名 AndAlso r_prv.f_sメモ = r.f_sメモ _
+                AndAlso r_prv.f_b集計対象外区分 = r.f_b集計対象外区分 Then
+                contcount += r.f_iひも本数
+            Else
+                If r_prv IsNot Nothing Then
+                    row = output.NextNewRow
+                    If r_prv.f_i番号 = cHemNumber Then
+                        row.f_sタイプ = text縁の始末()
+                        row.f_s編みかた名 = r_prv.f_s編みかた名
+                        row.f_s編みひも名 = r_prv.f_s編みひも名
+                    ElseIf r_prv.f_i番号 = cIdxHeight Then
+                        row.f_s番号 = r_prv.f_iひも番号.ToString
+                        row.f_s編みかた名 = r_prv.f_s編みひも名
+                    Else '最下段スペース
+                        row.f_s編みかた名 = r_prv.f_s編みかた名
+                        row.f_s編みひも名 = r_prv.f_s編みひも名
+                    End If
+
+                    row.f_i周数 = contcount
+                    row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+                    row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
+                    If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
+                        If r_prv.f_b集計対象外区分 Then
+                            output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                        Else
+                            output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                        End If
+                    End If
+                    row.f_sメモ = r_prv.f_sメモ
+                End If
+                contcount = r.f_iひも本数
+            End If
+            r_prv = r
+        Next
+        If r_prv IsNot Nothing Then
+            row = output.NextNewRow
+            If r_prv.f_i番号 = cHemNumber Then
+                row.f_sタイプ = text縁の始末()
+                row.f_s編みかた名 = r_prv.f_s編みかた名
+                row.f_s編みひも名 = r_prv.f_s編みひも名
+            ElseIf r_prv.f_i番号 = cIdxHeight Then
+                row.f_s番号 = r_prv.f_iひも番号.ToString
+                row.f_s編みかた名 = r_prv.f_s編みひも名
+            Else '最下段スペース
+                row.f_s編みかた名 = r_prv.f_s編みかた名
+                row.f_s編みひも名 = r_prv.f_s編みひも名
+            End If
+            row.f_i周数 = contcount
+            row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+            row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
+            If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
+                If r_prv.f_b集計対象外区分 Then
+                    output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                Else
+                    output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
+                End If
+            End If
+            row.f_sメモ = r_prv.f_sメモ
+        End If
+
+    End Sub
+
+
     'リスト生成
     Public Function CalcOutput(ByVal output As clsOutput) As Boolean
         _InsertExpand.Clear()
@@ -2193,15 +2558,19 @@ Class clsCalcSquare
             row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
             row.f_s高さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
 
+            Dim isフラップ As Boolean = (_iフラップタイプ <> enumフラップタイプ.i_なし)
+
+            '#112 フラップの場合は縁のみ
             order = "f_i番号 ASC , f_iひも番号 ASC"
             If is側面下から上へ() Then
-                '記号をとる
+                '記号は番号順にとる
                 For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
                     If r.f_i番号 = cIdxSpace Then
                         Continue For
                     End If
                     If 0 < r.f_iひも本数 Then
-                        If 0 < r.f_d連続ひも長 AndAlso Not r.f_b集計対象外区分 Then
+                        If 0 < r.f_d連続ひも長 AndAlso Not r.f_b集計対象外区分 AndAlso
+                            (r.f_i番号 = cHemNumber OrElse Not isフラップ) Then
                             r.f_s記号 = output.SetBandRow(0, r.f_i何本幅, r.f_d連続ひも長, r.f_s色)
                         Else
                             r.f_s記号 = ""
@@ -2211,71 +2580,32 @@ Class clsCalcSquare
                 order = "f_i番号 DESC , f_iひも番号 DESC"
             End If
             'リスト出力
-            Dim r_prv As tbl側面Row = Nothing
-            Dim contcount As Integer = 0
-            For Each r As tbl側面Row In _Data.p_tbl側面.Select(Nothing, order)
-                If r_prv IsNot Nothing AndAlso r_prv.f_s記号 = r.f_s記号 _
-                    AndAlso r_prv.f_s編みひも名 = r.f_s編みひも名 AndAlso r_prv.f_sメモ = r.f_sメモ _
-                    AndAlso r_prv.f_b集計対象外区分 = r.f_b集計対象外区分 Then
-                    contcount += r.f_iひも本数
-                Else
-                    If r_prv IsNot Nothing Then
-                        row = output.NextNewRow
-                        If r_prv.f_i番号 = cHemNumber Then
-                            row.f_sタイプ = text縁の始末()
-                            row.f_s編みかた名 = r_prv.f_s編みかた名
-                            row.f_s編みひも名 = r_prv.f_s編みひも名
-                        ElseIf r_prv.f_i番号 = cIdxHeight Then
-                            row.f_s番号 = r_prv.f_iひも番号.ToString
-                            row.f_s編みかた名 = r_prv.f_s編みひも名
-                        Else '最下段スペース
-                            row.f_s編みかた名 = r_prv.f_s編みかた名
-                            row.f_s編みひも名 = r_prv.f_s編みひも名
-                        End If
-                        row.f_i周数 = contcount
-                        row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
-                        row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
-                        If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
-                            If r_prv.f_b集計対象外区分 Then
-                                output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
-                            Else
-                                output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
-                            End If
-                        End If
-                        row.f_sメモ = r_prv.f_sメモ
-                    End If
-                    contcount = r.f_iひも本数
-                End If
-                r_prv = r
-            Next
-            If r_prv IsNot Nothing Then
+            out側面Rows(output, IIf(isフラップ, out縁のみ, out全て), _Data.p_tbl側面.Select(Nothing, order))
+
+
+            '#112 
+            If isフラップ Then
                 row = output.NextNewRow
-                If r_prv.f_i番号 = cHemNumber Then
-                    row.f_sタイプ = text縁の始末()
-                    row.f_s編みかた名 = r_prv.f_s編みかた名
-                    row.f_s編みひも名 = r_prv.f_s編みひも名
-                ElseIf r_prv.f_i番号 = cIdxHeight Then
-                    row.f_s番号 = r_prv.f_iひも番号.ToString
-                    row.f_s編みかた名 = r_prv.f_s編みひも名
-                Else '最下段スペース
-                    row.f_s編みかた名 = r_prv.f_s編みかた名
-                    row.f_s編みひも名 = r_prv.f_s編みひも名
-                End If
-                row.f_i周数 = contcount
-                row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
-                row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
-                If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
-                    If r_prv.f_b集計対象外区分 Then
-                        output.SetBandRowNoMark(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
-                    Else
-                        output.SetBandRow(contcount, r_prv.f_i何本幅, r_prv.f_d連続ひも長, r_prv.f_s色)
-                    End If
-                End If
-                row.f_sメモ = r_prv.f_sメモ
+                row.f_sタイプ = textフラップ()
+                row.f_s編みかた名 = textフラップ選択中()
+
+                prepareフラップDataTable() 'DISPOSEまで保持
+                set_側面フラップ(output)
+                set_縦ひもフラップ(output)
+
+                out側面Rows(output, out編みひも, _tbl側面フラップ_上横ひも.Select(Nothing, order))
+                out_フラップの縦ひもRows(output, _tbl縦ひもフラップ_上.Select(Nothing, "f_iひも番号 ASC"))
+                out側面Rows(output, out編みひも, _tbl側面フラップ_下横ひも.Select(Nothing, order))
+                out_フラップの縦ひもRows(output, _tbl縦ひもフラップ_下.Select(Nothing, "f_iひも番号 DESC"))
+
+                out側面Rows(output, out編みひも, _tbl側面フラップ_左縦ひも.Select(Nothing, order))
+                out側面Rows(output, out編みひも, _tbl側面フラップ_右縦ひも.Select(Nothing, order))
+
             End If
 
             output.AddBlankLine()
         End If
+
 
         '***差しひも
         If 0 < _Data.p_tbl差しひも.Rows.Count Then
@@ -2376,6 +2706,9 @@ Class clsCalcSquare
 
         Return True
     End Function
+
+
+
 #End Region
 
 #Region "画面から文字列取得"
@@ -2564,6 +2897,92 @@ Class clsCalcSquare
     Private Function PositionString(ByVal i As Integer) As String
         Return _frmMain.editInsertBand.PositionString(i)
     End Function
+
+    Private Function textフラップ() As String
+        Return _frmMain.lblフラップ.Text
+    End Function
+
+    Private Function textフラップの縦ひも() As String
+        Return _frmMain.lblフラップの縦ひも.Text
+    End Function
+
+    Private Function textフラップ選択中() As String
+        With _frmMain
+            If .radフラップ_有り.Checked Then
+                Return .radフラップ_有り.Text
+            ElseIf .radフラップ_内側.Checked Then
+                Return .radフラップ_内側.Text
+            ElseIf .radフラップ_外側.Checked Then
+                Return .radフラップ_外側.Text
+            Else
+                Return .radフラップ_無し.Text
+            End If
+        End With
+    End Function
+
+
 #End Region
 
+
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not _disposedValue Then
+            If disposing Then
+                'マネージド リソースを破棄
+                If _tbl縦横展開_横ひも IsNot Nothing Then
+                    _tbl縦横展開_横ひも.Clear()
+                    _tbl縦横展開_横ひも.Dispose()
+                    _tbl縦横展開_横ひも = Nothing
+                End If
+                If _tbl縦横展開_縦ひも IsNot Nothing Then
+                    _tbl縦横展開_縦ひも.Clear()
+                    _tbl縦横展開_縦ひも.Dispose()
+                    _tbl縦横展開_縦ひも = Nothing
+                End If
+
+                If _tbl側面フラップ_上横ひも IsNot Nothing Then
+                    _tbl側面フラップ_上横ひも.Clear()
+                    _tbl側面フラップ_上横ひも.Dispose()
+                    _tbl側面フラップ_上横ひも = Nothing
+                End If
+                If _tbl側面フラップ_下横ひも IsNot Nothing Then
+                    _tbl側面フラップ_下横ひも.Clear()
+                    _tbl側面フラップ_下横ひも.Dispose()
+                    _tbl側面フラップ_下横ひも = Nothing
+                End If
+                If _tbl側面フラップ_左縦ひも IsNot Nothing Then
+                    _tbl側面フラップ_左縦ひも.Clear()
+                    _tbl側面フラップ_左縦ひも.Dispose()
+                    _tbl側面フラップ_左縦ひも = Nothing
+                End If
+                If _tbl側面フラップ_右縦ひも IsNot Nothing Then
+                    _tbl側面フラップ_右縦ひも.Clear()
+                    _tbl側面フラップ_右縦ひも.Dispose()
+                    _tbl側面フラップ_右縦ひも = Nothing
+                End If
+                If _tbl縦ひもフラップ_上 IsNot Nothing Then
+                    _tbl縦ひもフラップ_上.Clear()
+                    _tbl縦ひもフラップ_上.Dispose()
+                    _tbl縦ひもフラップ_上 = Nothing
+                End If
+                If _tbl縦ひもフラップ_下 IsNot Nothing Then
+                    _tbl縦ひもフラップ_下.Clear()
+                    _tbl縦ひもフラップ_下.Dispose()
+                    _tbl縦ひもフラップ_下 = Nothing
+                End If
+            End If
+
+            _disposedValue = True
+        End If
+    End Sub
+
+    'マネージドオブジェクトのみなので基本的には不要だが
+    Protected Overrides Sub Finalize()
+        ' disposing を False にして呼び出す
+        Dispose(disposing:=False)
+        MyBase.Finalize()
+    End Sub
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Dispose(disposing:=True)
+        GC.SuppressFinalize(Me)
+    End Sub
 End Class
