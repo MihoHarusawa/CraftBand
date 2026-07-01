@@ -176,7 +176,12 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の横={0}", My.Settings.frmMainGridYoko)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の縦={0}", My.Settings.frmMainGridTate)
     End Sub
-
+    Private Sub FrmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        If _clsCalcSquare IsNot Nothing Then
+            _clsCalcSquare.Dispose()
+            _clsCalcSquare = Nothing
+        End If
+    End Sub
 
     '対象バンド・基本値の更新
     Sub setBasics(ByVal isCheckUndef As Boolean)
@@ -2051,21 +2056,12 @@ Public Class frmMain
         Dim isBackFace As Boolean = False
         If radうら.Checked Then
             data = _clsDataTables.LeftSideRightData()
-            calc = New clsCalcSquare(data, Me)
+            calc = New clsCalcSquare(data, Me) '※calc.Dispose()が必要です
             isBackFace = True
             If Not calc.CalcSize(CalcCategory.NewData, Nothing, Nothing) Then
                 Return  '先にOKならOKのはずだが
             End If
         End If
-        ''#95
-        'Dim sasihimo As enum差しひも表示 = enum差しひも表示._非表示
-        'If grp差しひも.Visible Then
-        '    If rad回り込み.Checked Then
-        '        sasihimo = enum差しひも表示._回り込み
-        '    ElseIf rad底置き.Checked Then
-        '        sasihimo = enum差しひも表示._底置き
-        '    End If
-        'End If
 
         Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)

@@ -6,6 +6,14 @@
     "プロファイル 1": {
       "commandName": "Project",
       "commandLineArgs": "--data \"C:\\Users\\miho\\Documents\\テストデータ\\square-testing.cbmesh\" --list \"c:\\tmp\\vs\\{NAME}_\" --image \"c:\\tmp\\vs\\{NAME}\" --image2 \"c:\\tmp\\vs\\{NAME}2\""
+    },
+    "プロファイル 2": {
+      "commandName": "Project",
+      "commandLineArgs": "--data \"C:\\Users\\miho\\Documents\\検証データ\\インベーダーゲーム1.cbmesh\" --list \"c:\\tmp\\vs\\{NAME}_\" --image \"c:\\tmp\\vs\\{NAME}\" --image2 \"c:\\tmp\\vs\\{NAME}2\""
+    },
+    "プロファイル 3": {
+      "commandName": "Project",
+      "commandLineArgs": "--data \"C:\\Users\\miho\\Documents\\検証データ\\ダブルハート2.cbmesh\" --list \"c:\\tmp\\vs\\{NAME}_\" --image \"c:\\tmp\\vs\\{NAME}\" --image2 \"c:\\tmp\\vs\\{NAME}2\""
     }
   }
 }

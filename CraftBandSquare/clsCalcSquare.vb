@@ -2969,18 +2969,27 @@ Class clsCalcSquare
                     _tbl縦ひもフラップ_下.Dispose()
                     _tbl縦ひもフラップ_下 = Nothing
                 End If
+
+                ' イベント登録があればここで RemoveHandler を呼ぶ
+
+                ' 所有していないが参照を切っておく（循環参照防止）
+                _Data = Nothing
+                _frmMain = Nothing
             End If
 
             _disposedValue = True
         End If
     End Sub
 
-    'マネージドオブジェクトのみなので基本的には不要だが
     Protected Overrides Sub Finalize()
-        ' disposing を False にして呼び出す
-        Dispose(disposing:=False)
-        MyBase.Finalize()
+        Try
+            ' disposing を False にして呼び出す
+            Dispose(disposing:=False)
+        Finally
+            MyBase.Finalize()
+        End Try
     End Sub
+
     Public Sub Dispose() Implements IDisposable.Dispose
         Dispose(disposing:=True)
         GC.SuppressFinalize(Me)
