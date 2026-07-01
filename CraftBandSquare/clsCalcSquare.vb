@@ -2286,7 +2286,7 @@ Class clsCalcSquare
             End If
 
             If r_prv IsNot Nothing AndAlso r_prv.f_s記号 = r.f_s記号 Then
-                contcount += 2 '1レコードにつき2点
+                contcount += 2 '1レコードにつき左と右の2点
                 addstr += String.Format(" {0}", r.f_iひも番号)
             Else
                 If r_prv IsNot Nothing Then
@@ -2331,6 +2331,7 @@ Class clsCalcSquare
 
         Dim r_prv As tbl側面Row = Nothing
         Dim contcount As Integer = 0
+        Dim isSameHeight As Boolean = True '高さが一致
         For Each r As tbl側面Row In rows
             If r.f_i番号 = cHemNumber Then
                 If Not out.HasFlag(out側面種._縁) Then
@@ -2350,6 +2351,9 @@ Class clsCalcSquare
                 AndAlso r_prv.f_s編みひも名 = r.f_s編みひも名 AndAlso r_prv.f_sメモ = r.f_sメモ _
                 AndAlso r_prv.f_b集計対象外区分 = r.f_b集計対象外区分 Then
                 contcount += r.f_iひも本数
+                If r_prv.f_d高さ <> r.f_d高さ Then
+                    isSameHeight = False
+                End If
             Else
                 If r_prv IsNot Nothing Then
                     row = output.NextNewRow
@@ -2366,7 +2370,9 @@ Class clsCalcSquare
                     End If
 
                     row.f_i周数 = contcount
-                    row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+                    If isSameHeight Then
+                        row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+                    End If
                     row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
                     If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
                         If r_prv.f_b集計対象外区分 Then
@@ -2378,6 +2384,7 @@ Class clsCalcSquare
                     row.f_sメモ = r_prv.f_sメモ
                 End If
                 contcount = r.f_iひも本数
+                isSameHeight = True
             End If
             r_prv = r
         Next
@@ -2395,7 +2402,9 @@ Class clsCalcSquare
                 row.f_s編みひも名 = r_prv.f_s編みひも名
             End If
             row.f_i周数 = contcount
-            row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+            If isSameHeight Then
+                row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
+            End If
             row.f_s長さ = output.outLengthText(r_prv.f_dひも長)
             If 0 < r_prv.f_d連続ひも長 AndAlso 0 < contcount Then
                 If r_prv.f_b集計対象外区分 Then
