@@ -9,7 +9,7 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
 Class clsCalcSquare
-    Implements IDisposable
+    'Implements IDisposable
 
     Private _disposedValue As Boolean
 
@@ -2933,7 +2933,8 @@ Class clsCalcSquare
 #End Region
 
 
-    Protected Overridable Sub Dispose(disposing As Boolean)
+    'Protected Overridable Sub Dispose(disposing As Boolean)
+    Sub Dispose(Optional ByVal disposing As Boolean = True)
         If Not _disposedValue Then
             If disposing Then
                 'マネージド リソースを破棄
@@ -2990,17 +2991,18 @@ Class clsCalcSquare
         End If
     End Sub
 
-    Protected Overrides Sub Finalize()
-        Try
-            ' disposing を False にして呼び出す
-            Dispose(disposing:=False)
-        Finally
-            MyBase.Finalize()
-        End Try
-    End Sub
+    'Protected Overrides Sub Finalize()
+    '    Try
+    '        ' disposing を False にして呼び出す
+    '        Dispose(disposing:=False)
+    '    Finally
+    '        MyBase.Finalize()
+    '    End Try
+    'End Sub
 
-    Public Sub Dispose() Implements IDisposable.Dispose
-        Dispose(disposing:=True)
-        GC.SuppressFinalize(Me)
-    End Sub
+    'Public Sub Dispose() Implements IDisposable.Dispose
+    '    Dispose(disposing:=True)
+    '    GC.SuppressFinalize(Me)
+    'End Sub
+
 End Class
