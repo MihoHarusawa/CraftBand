@@ -176,6 +176,7 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の横={0}", My.Settings.frmMainGridYoko)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv底の縦={0}", My.Settings.frmMainGridTate)
     End Sub
+
     Private Sub FrmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         If _clsCalcSquare IsNot Nothing Then
             _clsCalcSquare.Dispose()
