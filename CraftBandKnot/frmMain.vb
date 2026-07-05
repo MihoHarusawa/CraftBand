@@ -95,8 +95,8 @@ Public Class frmMain
         editAddParts.SetDraw2(True)
         setAddPartsRefNames()
 
-        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
-        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, ctrExpanding.enumVisible.i_None, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
+        expand横ひも.SetNames(Me.Text, tpage横ひも.Text, False, ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
+        expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, False, ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
 
 #If DEBUG Then

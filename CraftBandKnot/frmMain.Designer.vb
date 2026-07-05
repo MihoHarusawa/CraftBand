@@ -2190,12 +2190,11 @@ Partial Class frmMain
         DataGridViewCellStyle14.Format = "N2"
         DataGridViewCellStyle14.NullValue = Nothing
         f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle14
-        f_d連続ひも長2.HeaderText = "連続ひも長"
+        f_d連続ひも長2.HeaderText = "出力ひも長"
         f_d連続ひも長2.MinimumWidth = 6
         f_d連続ひも長2.Name = "f_d連続ひも長2"
         f_d連続ひも長2.ReadOnly = True
         f_d連続ひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d連続ひも長2.Visible = False
         f_d連続ひも長2.Width = 125
         ' 
         ' f_d厚さ2
