@@ -109,6 +109,11 @@ Class clsCalcKnot
     End Function
 
 #Region "プロパティ値"
+    ReadOnly Property p_d基本のひも幅 As Double
+        Get
+            Return g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
+        End Get
+    End Property
 
     ReadOnly Property p_d縁の高さ As Double
         Get
@@ -1281,6 +1286,7 @@ Class clsCalcKnot
 
 
     '横ひもの展開テーブル作成 ※入力値ベース
+    'isRefSaved: True=既存情報反映/False=新規作成
     'OUT:   _ImageList横ひも
     Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
 

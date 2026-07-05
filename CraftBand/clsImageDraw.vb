@@ -358,11 +358,11 @@ Public Class CImageDraw
 
     Function DrawItem(ByVal item As clsImageItem) As Boolean
         Select Case item.m_ImageType
-            Case ImageTypeEnum._横バンド
-                Return draw横バンド(item)
+            'Case ImageTypeEnum._横バンド
+            '    Return draw横バンド(item)
 
-            Case ImageTypeEnum._縦バンド
-                Return draw縦バンド(item)
+            'Case ImageTypeEnum._縦バンド
+            '    Return draw縦バンド(item)
 
             Case ImageTypeEnum._バンドセット
                 Return drawバンドセット(item)
@@ -421,17 +421,17 @@ Public Class CImageDraw
         End Select
     End Function
 
-    Function draw横バンド(ByVal item As clsImageItem) As Boolean
-        'Return subバンド(item, False)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw横バンド f_s記号:{0}", item.m_row縦横展開.f_s記号)
-        Return False
-    End Function
+    'Function draw横バンド(ByVal item As clsImageItem) As Boolean
+    '    'Return subバンド(item, False)
+    '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw横バンド f_s記号:{0}", item.m_row縦横展開.f_s記号)
+    '    Return False
+    'End Function
 
-    Function draw縦バンド(ByVal item As clsImageItem) As Boolean
-        'Return subバンド(item, True)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw縦バンド f_s記号:{01}", item.m_row縦横展開.f_s記号)
-        Return False
-    End Function
+    'Function draw縦バンド(ByVal item As clsImageItem) As Boolean
+    '    Return subバンド(item, True)
+    '    g_clsLog.LogFormatMessage(clsLog.LogLevel.Basic, "★ draw縦バンド f_s記号:{01}", item.m_row縦横展開.f_s記号)
+    '    Return False
+    'End Function
 
 #If 0 Then
 
@@ -750,15 +750,17 @@ Public Class CImageDraw
                 '本幅線
                 Dim i何本幅 As Integer = band._i何本幅
                 If colset.PenLane IsNot Nothing AndAlso 1 < i何本幅 Then
-                    Dim dx As Single = (p始点T.X - p始点F.X) / i何本幅
-                    Dim dy As Single = (p始点T.Y - p始点F.Y) / i何本幅
+                    Dim dx始点 As Single = (p始点T.X - p始点F.X) / i何本幅
+                    Dim dy始点 As Single = (p始点T.Y - p始点F.Y) / i何本幅
+                    Dim dx終点 As Single = (p終点T.X - p終点F.X) / i何本幅
+                    Dim dy終点 As Single = (p終点T.Y - p終点F.Y) / i何本幅
                     Dim pStart As PointF = p始点F
                     Dim pEnd As PointF = p終点F
                     For i As Integer = 1 To i何本幅 - 1
-                        pStart.X += dx
-                        pStart.Y += dy
-                        pEnd.X += dx
-                        pEnd.Y += dy
+                        pStart.X += dx始点
+                        pStart.Y += dy始点
+                        pEnd.X += dx終点
+                        pEnd.Y += dy終点
                         _Graphic.DrawLine(colset.PenLane, pStart, pEnd)
                     Next
                 End If
@@ -796,7 +798,7 @@ Public Class CImageDraw
         Return ret
     End Function
 
-
+#If 0 Then
     Private Sub subコマ(colset As CPenBrush, a As S四隅, l As S線分)
         Dim polygon As PointF() = pixcel_lines(a)
         '塗りつぶし
@@ -845,6 +847,22 @@ Public Class CImageDraw
         End If
         Return True
     End Function
+#Else
+
+    Function drawコマ(ByVal item As clsImageItem) As Boolean
+        drawバンド(item.m_knot.band横上)
+        drawバンド(item.m_knot.band横下)
+        drawバンド(item.m_knot.band縦上)
+        drawバンド(item.m_knot.band縦下)
+
+        If item.m_knot.IsDrawArea Then
+            Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+            _Graphic.DrawRectangle(_Pen_black_dot, rect.X, rect.Y, rect.Width, rect.Height)
+        End If
+
+        Return True
+    End Function
+#End If
 
     Function draw底枠(ByVal item As clsImageItem) As Boolean
         Dim ret As Boolean = True
@@ -968,12 +986,18 @@ Public Class CImageDraw
 
 
     Function draw文字列(ByVal item As clsImageItem) As Boolean
-        If item.m_aryString Is Nothing OrElse item.m_sizeFont <= 0 Then
+        'If item.m_aryString Is Nothing OrElse item.m_sizeFont <= 0 Then
+        If item.m_aryString Is Nothing OrElse item.m_sizeFont < 0 Then
             Return False
+        End If
+        Dim sizeFont As Single = item.m_sizeFont
+        If sizeFont = 0 Then
+            sizeFont = _FontSize 's_BasicFontSize
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "CImageDraw.draw文字列:FontSize=0 to Basic ({0})", String.Join(":", item.m_aryString))
         End If
 
         'フォントオブジェクトの作成
-        Dim fontsize As Single = pixcel_width(item.m_sizeFont)
+        Dim fontsize As Single = pixcel_width(sizeFont)
         Dim font = New Font(My.Resources.FontNameString, fontsize)
         Dim p As PointF = pixcel_point(item.p_p文字位置)
         For Each str As String In item.m_aryString

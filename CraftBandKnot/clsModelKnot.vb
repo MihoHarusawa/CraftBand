@@ -65,7 +65,7 @@ Public Class clsModelKnot
             Return False '既にチェック済のはず
         End If
 
-        '基本のひも幅と基本色
+        '文字サイズと基本色
         setBasics(_calc.p_dコマの寸法, _calc._Data.p_row目標寸法.Value("f_s基本色"))
 
         '描画
