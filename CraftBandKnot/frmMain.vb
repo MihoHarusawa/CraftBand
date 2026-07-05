@@ -1535,7 +1535,7 @@ Public Class frmMain
         End If
     End Sub
 
-    'セル変更の再計算は縁に対してのみ
+    'セル変更の再計算
     Private Sub dgv側面_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles dgv側面と縁.CellRowValueChanged
         If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
             Exit Sub
@@ -1697,6 +1697,23 @@ Public Class frmMain
     Private Sub expand縦ひも_ResetButton(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.ResetButton
         expand縦ひも.DataSource = _clsCalcKnot.set縦展開DataTable(False)
     End Sub
+
+    Private Sub expand縦ひも_CellRpwValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand縦ひも.CellRowValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Tate, e.Row, e.DataPropertyName)
+    End Sub
+
+    Private Sub expand横ひも_CellRowValueChanged(sender As Object, e As CellRowValueChangedEventArgs) Handles expand横ひも.CellRowValueChanged
+        '"f_i何本幅", "f_dひも長加算", "f_dひも長加算2", "f_s色"
+        If e.Row Is Nothing OrElse String.IsNullOrEmpty(e.DataPropertyName) Then
+            Exit Sub
+        End If
+        recalc(CalcCategory.Expand_Yoko, e.Row, e.DataPropertyName)
+    End Sub
+
 
 #End Region
 

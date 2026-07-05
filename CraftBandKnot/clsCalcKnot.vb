@@ -23,9 +23,13 @@ Class clsCalcKnot
         Target    '目標寸法(基本のひも幅以外)
         BandWidth   '基本のひも幅
         Knot 'コマ数・コマ間のすき間
-        Edge  '縁の始末 
+        Edge  '縁の始末・側面 
         Options  '追加品
         Expand '縦横展開
+
+        Expand_Yoko '横ひも展開のセル編集
+        Expand_Tate '縦ひも展開のセル編集
+
 
         '相互参照値のFix
         FixLength   '長さ確定
@@ -503,6 +507,15 @@ Class clsCalcKnot
                 End If
                 '(追加品は計算寸法変更なし)
 
+            Case CalcCategory.Expand_Yoko  '横ひも展開のセル編集
+                Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
+                ret = ret And adjust_ひも(row, key)
+
+            Case CalcCategory.Expand_Tate  '縦ひも展開のセル編集
+                Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
+                ret = ret And adjust_ひも(row, key)
+
+
             Case CalcCategory.FixLength '相互参照値のFix(1Pass値は得られている前提)
                 If ret Then
                     p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
@@ -779,7 +792,7 @@ Class clsCalcKnot
     Friend Const cIdxHeight As Integer = 1
     Friend Const cIdxFolding As Integer = 2
 
-    '高さのコマ数+折り返しのコマ数をレコード化　※マイ係数未セット
+    '高さのコマ数+折り返しのコマ数をレコード化　
     Function adjust_側面() As Boolean
 
         Dim table As tbl側面DataTable = _Data.p_tbl側面
@@ -879,7 +892,8 @@ Class clsCalcKnot
             RemoveNumberFromTable(table, cIdxFolding)
         End If
 
-        Return True
+        '中でマイ係数対応
+        Return set側面_連続ひも長()
     End Function
 
     Function Add側面HeightRow(Optional ByVal iひも番号 As Integer = 1) As tbl側面Row
@@ -954,7 +968,7 @@ Class clsCalcKnot
     End Function
 
     '更新処理が必要なフィールド名
-    Shared _fields側面() As String = {"f_i何本幅", "f_b集計対象外区分"}
+    Shared _fields側面() As String = {"f_i何本幅", "f_b集計対象外区分", "f_dひも長加算"}
     Shared Function IsDataPropertyName側面(ByVal name As String) As Boolean
         Return _fields側面.Contains(name)
     End Function
@@ -969,9 +983,9 @@ Class clsCalcKnot
 
         Else
             If row IsNot Nothing Then
-                '縁に対してのみ
+                '縁/編みひも
                 If row.f_i番号 = clsDataTables.cHemNumber Then
-                    '追加もしくは更新
+                    '縁の追加もしくは更新
                     Dim cond As String = String.Format("f_i番号 = {0}", row.f_i番号)
                     Dim groupRow = New clsGroupDataRow(_Data.p_tbl側面.Select(cond), "f_iひも番号")
                     If dataPropertyName = "f_i周数" Then
@@ -982,8 +996,9 @@ Class clsCalcKnot
                     g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "Side Change: {0}", groupRow.ToString)
                 Else
                     '編みひも
-                    row.f_b集計対象外区分 = False
+                    row.f_b集計対象外区分 = False '念のため
                 End If
+                set側面_連続ひも長(row)
             Else
                 '削除
             End If
@@ -1018,10 +1033,12 @@ Class clsCalcKnot
     End Function
 
     Private Function recalc_側面() As Boolean
-        '縁についてのみ計算
+        '縁
         Dim cond As String = String.Format("f_i番号 = {0}", clsDataTables.cHemNumber)
         Dim groupRow = New clsGroupDataRow(_Data.p_tbl側面.Select(cond, "f_iひも番号 ASC"), "f_iひも番号")
-        Return set_groupRow側面(groupRow)
+        Dim ret As Boolean = set_groupRow側面(groupRow)
+        ret = ret And set側面_連続ひも長()
+        Return ret
     End Function
 
     'IN:    p_dコマベース_周    p_i垂直ひも数
@@ -1323,6 +1340,8 @@ Class clsCalcKnot
         If isRefSaved Then
             _Data.ToTmpTable(enumひも種.i_横, tmptable) '出力ひも長も加算
         End If
+        set縦横_出力ひも長(tmptable)
+
         _ImageList横ひも = Nothing
         _ImageList横ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
@@ -1367,6 +1386,8 @@ Class clsCalcKnot
         If isRefSaved Then
             _Data.ToTmpTable(enumひも種.i_縦, tmptable) '出力ひも長も加算
         End If
+        set縦横_出力ひも長(tmptable)
+
         _ImageList縦ひも = Nothing
         _ImageList縦ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
@@ -1419,6 +1440,21 @@ Class clsCalcKnot
         End If
 
         _Data.FromTmpTable(currow.f_iひも種, table)
+        Return True
+    End Function
+
+    '指定レコードの出力ひも長を計算
+    'IN:.f_d長さ  _dひも間のすき間,_d高さの四角数,_dひも長係数,_dひも長加算,_d縁の垂直ひも長
+    'OUT:.f_dひも長,.f_d出力ひも長
+    Function adjust_ひも(ByVal row As tbl縦横展開Row, ByVal dataPropertyName As String) As Boolean
+        'セル編集操作時
+        If String.IsNullOrEmpty(dataPropertyName) OrElse
+            Not {"f_dひも長加算", "f_dひも長加算2"}.Contains(dataPropertyName) Then
+            Return True
+        End If
+
+        '出力ひも長をセット
+        set縦横_出力ひも長(row)
         Return True
     End Function
 
@@ -1691,28 +1727,34 @@ Class clsCalcKnot
 
 
 #Region "リスト出力"
-    '「連続ひも長」フィールドに入力値を加算し係数倍した値をセットする(縁は除外)
+    '「連続ひも長」フィールドに入力値を加算し係数倍した値をセットする(縁は係数倍しない)
     Private Function set側面_連続ひも長() As Boolean
         For Each row As tbl側面Row In _Data.p_tbl側面.Rows
-            row.f_d連続ひも長 = (row.f_dひも長 + row.f_dひも長加算)
-            If row.f_i番号 <> cHemNumber Then
-                row.f_d連続ひも長 = row.f_d連続ひも長 * p_dマイひも長係数
-            End If
+            set側面_連続ひも長(row)
         Next row
 
         _Data.p_tbl側面.AcceptChanges()
         Return True
     End Function
+    Private Sub set側面_連続ひも長(row As tbl側面Row)
+        row.f_d連続ひも長 = (row.f_dひも長 + row.f_dひも長加算)
+        If row.f_i番号 <> cHemNumber Then
+            row.f_d連続ひも長 = row.f_d連続ひも長 * p_dマイひも長係数
+        End If
+    End Sub
+
 
     '縦横展開DataTableの「出力ひも長」フィールドに入力値を加算し係数倍した値をセットする
-    Private Function set側面_出力ひも長(ByVal tmptable As tbl縦横展開DataTable) As Boolean
+    Private Function set縦横_出力ひも長(ByVal tmptable As tbl縦横展開DataTable) As Boolean
         For Each row As tbl縦横展開Row In tmptable
-            row.f_d出力ひも長 = (row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2) * p_dマイひも長係数
+            set縦横_出力ひも長(row)
         Next row
-
-        _Data.p_tbl側面.AcceptChanges()
+        tmptable.AcceptChanges()
         Return True
     End Function
+    Private Sub set縦横_出力ひも長(ByVal row As tbl縦横展開Row)
+        row.f_d出力ひも長 = (row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2) * p_dマイひも長係数
+    End Sub
 
 
     'リスト生成
@@ -1772,7 +1814,7 @@ Class clsCalcKnot
             'レコードあり
 
             '長い順に記号を振る
-            set側面_出力ひも長(tmpTable)
+            set縦横_出力ひも長(tmpTable)
             Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
             For Each tt As tbl縦横展開Row In tmps
                 tt.f_s記号 = output.GetBandMark(tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
