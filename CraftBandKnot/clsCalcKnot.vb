@@ -141,6 +141,12 @@ Class clsCalcKnot
         End Get
     End Property
 
+    ReadOnly Property p_i高さコマ数計 As Integer
+        Get
+            Return _i高さのコマ数 + _i折り返しコマ数
+        End Get
+    End Property
+
     ReadOnly Property p_d縁の高さ As Double
         Get
             Return _d縁の高さ
@@ -443,18 +449,6 @@ Class clsCalcKnot
                 'Debug.Print(" {0} - {1}", mem.MemberType, mem.Name)
             End If
         Next
-
-        '
-        'If _ImageList横ひも IsNot Nothing Then
-        '    For Each band As clsImageItem In _ImageList横ひも
-        '        sb.AppendLine(band.ToString)
-        '    Next
-        'End If
-        'If _ImageList縦ひも IsNot Nothing Then
-        '    For Each band As clsImageItem In _ImageList縦ひも
-        '        sb.AppendLine(band.ToString)
-        '    Next
-        'End If
 
         Return sb.ToString
     End Function
@@ -1350,7 +1344,7 @@ Class clsCalcKnot
             row.f_i位置番号 = pos
             row.f_sひも名 = text横ひも()
             row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i横のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+            Dim iコマ数 As Integer = _i横のコマ数 + 2 * p_i高さコマ数計
             row.f_d長さ = iコマ数 * _dコマベース寸法
             row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
             row.f_i何本幅 = _I基本のひも幅
@@ -1371,10 +1365,9 @@ Class clsCalcKnot
         End If
         set縦横_出力ひも長(tmptable)
 
-        '_ImageList横ひも = Nothing
-        '_ImageList横ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
+        'テーブルレコード再生成のため
+        _KnotFolderSpace.InValidate()
 
-        'image計算結果は不要
         Return tmptable
     End Function
 
@@ -1397,7 +1390,7 @@ Class clsCalcKnot
             row.f_i位置番号 = pos
             row.f_sひも名 = text縦ひも()
             row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i縦のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+            Dim iコマ数 As Integer = _i縦のコマ数 + 2 * p_i高さコマ数計
             row.f_d長さ = iコマ数 * _dコマベース寸法
             row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
             row.f_i何本幅 = _I基本のひも幅
@@ -1418,10 +1411,9 @@ Class clsCalcKnot
         End If
         set縦横_出力ひも長(tmptable)
 
-        '_ImageList縦ひも = Nothing
-        '_ImageList縦ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
+        'テーブルレコード再生成のため
+        _KnotFolderSpace.InValidate()
 
-        'image計算結果は不要
         Return tmptable
     End Function
 
@@ -1520,8 +1512,7 @@ Class clsCalcKnot
 
             i左から何番目 = i左
             i上から何番目 = i上
-            'row横展開 = _parent.getBand(enumひも種.i_横, i上から何番目)
-            'row縦展開 = _parent.getBand(enumひも種.i_縦, i左から何番目)
+
             Dim knotStart As CKnotFolder = _parent._KnotFolderSpace.GetStartKnot()
             If knotStart Is Nothing Then
                 Return
@@ -1529,14 +1520,6 @@ Class clsCalcKnot
             row横展開 = knotStart.m_row横方向
             row縦展開 = knotStart.m_row縦方向
 
-            If row横展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "getBand({0},{1})", enumひも種.i_横, i上から何番目)
-                Return
-            End If
-            If row縦展開 Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "getBand({0},{1})", enumひも種.i_縦, i左から何番目)
-                Return
-            End If
             _IsValid = True
 
 
@@ -1804,8 +1787,7 @@ Class clsCalcKnot
             Return False
         End If
 
-        'Dim b展開区分 As Boolean = _Data.p_row底_縦横.Value("f_b展開区分")
-
+        '出力ひも長(念のため)
         adjust_側面()
         set側面_連続ひも長()
 
@@ -1903,10 +1885,10 @@ Class clsCalcKnot
                     Select Case lasttmp.f_sひも名
                         Case text横ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i横ひもの本数, row.f_s編みひも名)
-                            row.f_i段数 = _i横のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+                            row.f_i段数 = _i横のコマ数 + 2 * p_i高さコマ数計
                         Case text縦ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i縦ひもの本数, row.f_s編みひも名)
-                            row.f_i段数 = _i縦のコマ数 + 2 * (_i高さのコマ数 + _i折り返しコマ数)
+                            row.f_i段数 = _i縦のコマ数 + 2 * p_i高さコマ数計
                     End Select
 
                     row = output.NextNewRow

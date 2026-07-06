@@ -4,6 +4,7 @@ Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsImageItem.CKnot
 Imports CraftBand.Tables.dstDataTables
+Imports CraftBandKnot.clsCalcKnot
 
 Partial Public Class clsCalcKnot
 
@@ -11,12 +12,7 @@ Partial Public Class clsCalcKnot
     Const c_foldingRatio As Double = 2 / 6.43   '要尺の折り位置までの比
     Const c_tiltRatio As Double = 0.216   '折りの傾き(幅に対する差の比)
 
-    ''リスト出力時に生成
-    'Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
-    'Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
-
     'プレビュー時に生成
-    'Dim _imageList側面ひも As clsImageItemList    '側面の展開レコードを含む
     Dim _ImageListコマ As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底や側面の展開図
     Dim _ImageList開始位置 As clsImageItemList
@@ -84,11 +80,6 @@ Partial Public Class clsCalcKnot
         End Get
     End Property
 
-    ReadOnly Property p_i高さコマ数計 As Integer
-        Get
-            Return _i高さのコマ数 + _i折り返しコマ数
-        End Get
-    End Property
 
     '四角数,入力値(ひも長加算,ひも幅)がFixした状態で、コマ配置をセットする
     Private Function calc_コマ配置計算() As Boolean
@@ -96,39 +87,34 @@ Partial Public Class clsCalcKnot
 
         'CalcOutput により、以下には記号がセットされています
         '_tbl縦横展開(emExp._Yoko), _tbl縦横展開(emExp._Tate)
-
         '_Data.p_tbl側面→_tbl縦横展開(emExp._Side)
         tbl側面to縦横展開DataTable()
 
-
+        '再初期化
         _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ)
+        'コマ配置
         ret = SetTables()
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.ToString)
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.dump)
+
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.ToString)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.dump)
 
         Return ret
     End Function
 
-    Private Function image_コマ配置(ByVal isKnotLeft As Boolean) As Boolean
-        Dim ret As Boolean = True
-
+    Private Function imagelistコマ配置(ByVal isKnotLeft As Boolean) As Boolean
         '_KnotFolderSpace 設定済のこと
+        If Not _KnotFolderSpace.IsValid Then
+            Return False
+        End If
 
         'コマ描画
         For Each knotfolder In _KnotFolderSpace
-            If knotfolder.Count = 2 Then
-                Dim x As Double = (knotfolder.m_index横 - 1) - (_KnotFolderSpace.HorizontalCount / 2)
-                Dim y As Double = -(knotfolder.m_index縦 - 1) + (_KnotFolderSpace.VerticalCount / 2)
-
-                Dim p As S実座標 = toPoint(x, y)
-
-                addコマ(p, knotfolder.m_row横方向, knotfolder.m_row縦方向,
-                      p_d基本のひも幅, isKnotLeft, knotfolder.m_knotSide)
-
+            If knotfolder.RowsCount = 2 Then
+                addコマ(knotfolder, isKnotLeft)
             End If
         Next
 
-        Return ret
+        Return True
     End Function
 
 
@@ -149,7 +135,7 @@ Partial Public Class clsCalcKnot
             m_index縦 = vert
         End Sub
 
-        Function Count() As Integer
+        Function RowsCount() As Integer
             Dim cnt As Integer = 0
             If m_row横方向 IsNot Nothing Then
                 cnt += 1
@@ -159,6 +145,13 @@ Partial Public Class clsCalcKnot
             End If
             Return cnt
         End Function
+
+        ReadOnly Property IsStart As Boolean
+            Get
+                Return m_isStart横 And m_isStart縦
+            End Get
+        End Property
+
 
         Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
@@ -194,6 +187,10 @@ Partial Public Class clsCalcKnot
         Public Sub New()
         End Sub
 
+        Public Sub InValidate()
+            _IsValid = False
+        End Sub
+
         'サイズ再設定と初期化
         Public Sub Reinitialize(ByVal width As Integer, ByVal height As Integer)
             If width < 1 OrElse width < 1 Then
@@ -227,9 +224,13 @@ Partial Public Class clsCalcKnot
             End Get
         End Property
 
+        '開始位置のコマ
         Public Function GetStartKnot() As CKnotFolder
+            If Not IsValid Then
+                Return Nothing
+            End If
             For Each knot In Me
-                If knot.m_isStart横 AndAlso knot.m_isStart縦 Then
+                If knot.IsStart Then
                     Return knot
                 End If
             Next
@@ -242,13 +243,13 @@ Partial Public Class clsCalcKnot
             For y As Integer = 1 To VerticalCount
                 For x As Integer = 1 To HorizontalCount
                     Dim knot As CKnotFolder = GetAt(x, y)
-                    If knot.Count = 2 Then
-                        If knot.m_isStart横 AndAlso knot.m_isStart縦 Then
+                    If knot.RowsCount = 2 Then
+                        If knot.IsStart Then
                             sb.Append("■")
                         Else
                             sb.Append("田")
                         End If
-                    ElseIf knot.Count = 1 Then
+                    ElseIf knot.RowsCount = 1 Then
                         sb.Append("×")
                     Else
                         sb.Append("　")
@@ -396,49 +397,24 @@ Partial Public Class clsCalcKnot
         Return New S実座標(_dコマベース寸法 * x, _dコマベース寸法 * y)
     End Function
 
-    'Private Function getBand(ByVal pos As enumひも種, ByVal idx As Integer) As tbl縦横展開Row
-    '    Try
-    '        Dim band As clsImageItem = Nothing
-    '        Select Case pos
-    '            Case enumひも種.i_横
-    '                '上からidx番目(1～),マイナスは下から(-1～-横のコマ数)
-    '                If idx < 0 Then
-    '                    idx = _i横のコマ数 + idx + 1
-    '                End If
-    '                band = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
-    '            Case enumひも種.i_縦
-    '                '左からidx番目(1～),マイナスは右から(-1～-縦のコマ数)
-    '                If idx < 0 Then
-    '                    idx = _i縦のコマ数 + idx + 1
-    '                End If
-    '                band = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
-    '            Case enumひも種.i_側面
-    '                '下からidx番目の色(1～),マイナスは上から(-1～-側面のコマ数)
-    '                If idx < 0 Then
-    '                    idx = _i高さのコマ数 + _i折り返しコマ数 + idx + 1
-    '                End If
-    '                band = _imageList側面ひも.GetRowItem(enumひも種.i_側面, idx)
-    '        End Select
-    '        If band Is Nothing Then
-    '            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "getBand Err:{0} {1}", pos, idx)
-    '            Return Nothing
-    '        End If
-    '        Return band.m_row縦横展開
-
-    '    Catch ex As Exception
-    '        g_clsLog.LogException(ex, "getBand", pos, idx)
-    '        Return Nothing
-    '    End Try
-    'End Function
 
     'コマベース左上→コマの中心
-    Private Function addコマ(ByVal p左上 As S実座標, ByVal y_band As tbl縦横展開Row, ByVal t_band As tbl縦横展開Row,
-                           ByVal dひも幅 As Double, ByVal isleft As Boolean, ByVal mark As enumKnotSide) As Boolean
+    Private Function addコマ(ByVal knot As CKnotFolder, ByVal isleft As Boolean) As Boolean
+        If knot Is Nothing OrElse knot.RowsCount < 2 Then
+            Return False
+        End If
 
-        Dim knotitem As New clsImageItem(p左上 + (Unit315 * (_dコマベース寸法 / 2)), y_band, t_band,
-                                            dひも幅, _dコマの寸法, _dコマ間のすき間, isleft)
-        If mark <> enumKnotSide._none Then
-            knotitem.m_knot.SetMarkDisp(mark)
+        Dim x As Double = (knot.m_index横 - 1) - (p_iコマ空間幅 / 2)
+        Dim y As Double = -(knot.m_index縦 - 1) + (p_iコマ空間高さ / 2)
+
+        Dim p左上 As S実座標 = toPoint(x, y)
+        Dim p中心 As S実座標 = p左上 + (Unit315 * (_dコマベース寸法 / 2))
+
+        Dim knotitem As New clsImageItem(p中心, knot.m_row横方向, knot.m_row縦方向,
+                                            p_d基本のひも幅, _dコマの寸法, _dコマ間のすき間, isleft)
+
+        If knot.m_knotSide <> enumKnotSide._none Then
+            knotitem.m_knot.SetMarkDisp(knot.m_knotSide)
         End If
 
         If _ImageListコマ Is Nothing Then
@@ -446,88 +422,9 @@ Partial Public Class clsCalcKnot
         End If
         _ImageListコマ.Add(knotitem)
 
-        Return y_band IsNot Nothing AndAlso t_band IsNot Nothing
+        Return True
     End Function
 
-    '横ひもリストの記号出力情報
-    'Private Function imageList横記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
-    '    If _ImageList横ひも Is Nothing Then
-    '        Return False
-    '    End If
-
-    '    '左側面の左 コマは右側面も
-    '    Dim _左上 As S実座標 = toPoint(-(_i高さのコマ数 + _i折り返しコマ数 + (_i横のコマ数 / 2)), (_i縦のコマ数 / 2))
-    '    Dim _左上_右側面 As S実座標 = toPoint((_i横のコマ数 / 2), (_i縦のコマ数 / 2))
-
-    '    '上から下へ
-    '    For idx As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-    '        Dim item As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
-    '        If item Is Nothing Then
-    '            Continue For
-    '        End If
-
-    '        Dim mark As enumKnotSide = enumKnotSide._none
-    '        ''裏表・バンド幅変更なし
-    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
-    '            mark = enumKnotSide._左
-    '        End If
-    '        '
-    '        For j = 1 To _i高さのコマ数 + _i折り返しコマ数
-    '            addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, -j),
-    '                  dひも幅, isKnotLeft, mark)
-    '            mark = enumKnotSide._none
-    '            addコマ(_左上_右側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, j),
-    '                  dひも幅, isKnotLeft, mark)
-    '        Next
-    '        _左上 = _左上 + (Unit270 * _dコマベース寸法)
-    '        _左上_右側面 = _左上_右側面 + (Unit270 * _dコマベース寸法)
-    '    Next
-
-    '    Return True
-    'End Function
-
-    ''縦ひもリストの記号出力情報
-    'Private Function imageList縦記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
-    '    If _ImageList縦ひも Is Nothing Then
-    '        Return False
-    '    End If
-
-    '    '上側面の上
-    '    'Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), _i高さのコマ数 + _i折り返しコマ数 + (_i縦のコマ数 / 2))
-    '    Dim _左上_底 As S実座標 = toPoint(-(_i横のコマ数 / 2), (_i縦のコマ数 / 2))
-
-    '    '上側面;左から右へ
-    '    For idx As Integer = 1 To p_i縦ひもの本数 '_i横のコマ数
-    '        Dim item As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
-    '        If item Is Nothing Then
-    '            Continue For
-    '        End If
-
-    '        Dim markL As enumKnotSide = enumKnotSide._none
-    '        Dim markU As enumKnotSide = enumKnotSide._none
-
-    '        ''裏表・バンド幅変更なし
-    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) AndAlso
-    '            (_i高さのコマ数 + _i折り返しコマ数) = 0 Then
-    '            If idx = 1 Then
-    '                markL = enumKnotSide._左
-    '            End If
-    '            markU = enumKnotSide._上
-    '        End If
-
-    '        '底のコマ
-    '        For j As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-    '            addコマ(_左上_底 + Unit270 * (j - 1) * _dコマベース寸法, getBand(enumひも種.i_横, j), item.m_row縦横展開,
-    '                  dひも幅, isKnotLeft, markL Or markU)
-    '            markU = enumKnotSide._none
-    '        Next
-
-    '        '_左上 = _左上 + (Unit0 * _dコマベース寸法)
-    '        _左上_底 = _左上_底 + (Unit0 * _dコマベース寸法)
-    '    Next
-
-    '    Return True
-    'End Function
 
 
     Private Function tbl側面to縦横展開DataTable() As tbl縦横展開DataTable
@@ -561,60 +458,13 @@ Partial Public Class clsCalcKnot
         Return tmptable
     End Function
 
-
-    '_imageList側面ひも生成、縦横展開DataTable化したレコードを含む
-    'Function imageList側面記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
-
-    '    '側面のレコードを縦横レコード化
-    '    Dim tmptable As tbl縦横展開DataTable = tbl側面to縦横展開DataTable()
-
-    '    '以降参照するのでここでセットする
-    '    _imageList側面ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
-
-
-    '    '下側面の左
-    '    Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), -(_i縦のコマ数 / 2))
-    '    Dim _左下_上側面 As S実座標 = toPoint(-(_i横のコマ数 / 2), 1 + (_i縦のコマ数 / 2))
-
-    '    '下側面:上から下へ
-    '    For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-    '        Dim item As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
-    '        If item Is Nothing Then
-    '            Continue For
-    '        End If
-
-    '        Dim markL As enumKnotSide = enumKnotSide._none
-    '        Dim markU As enumKnotSide = enumKnotSide._none
-    '        ''裏表・バンド幅変更なし
-    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
-    '            markL = enumKnotSide._左
-    '            If i = (_i高さのコマ数 + _i折り返しコマ数) Then
-    '                markU = enumKnotSide._上
-    '            End If
-    '        End If
-
-    '        '
-    '        For j = 1 To p_i縦ひもの本数 '_i横のコマ数
-    '            addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
-    '                  dひも幅, isKnotLeft, markL)
-    '            markL = enumKnotSide._none
-
-    '            addコマ(_左下_上側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
-    '                  dひも幅, isKnotLeft, markU)
-    '        Next
-    '        '
-    '        _左上 = _左上 + (Unit270 * _dコマベース寸法)
-    '        _左下_上側面 = _左下_上側面 + (Unit90 * _dコマベース寸法)
-    '    Next
-    '    Return True
-    'End Function
-
+    'basecross:底のグリッド   sideline:側面のコマライン
     Function imageList描画要素(ByVal basecross As Boolean, ByVal sideline As Boolean) As clsImageItemList
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
 
 
-        Dim d側面の高さ As Double = _dコマベース寸法 * (_i高さのコマ数 + _i折り返しコマ数)
+        Dim d側面の高さ As Double = _dコマベース寸法 * p_i高さコマ数計
         Dim d折り返し高さ As Double = _dコマベース寸法 * _i折り返しコマ数
         Dim deltaコマ右 As S差分 = Unit0 * _dコマベース寸法
         Dim deltaコマ下 As S差分 = Unit270 * _dコマベース寸法
@@ -686,8 +536,8 @@ Partial Public Class clsCalcKnot
             line += Unit270 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-        For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数 - 1
-            If i < _i高さのコマ数 + _i折り返しコマ数 AndAlso sideline Then
+        For i As Integer = 1 To p_i高さコマ数計 - 1
+            If i < p_i高さコマ数計 AndAlso sideline Then
                 line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p右上)
                 line += deltaコマ下 * i
                 item.m_lineList.Add(line)
@@ -722,8 +572,8 @@ Partial Public Class clsCalcKnot
             line += Unit90 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-        For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-            If i < _i高さのコマ数 + _i折り返しコマ数 AndAlso sideline Then
+        For i As Integer = 1 To p_i高さコマ数計
+            If i < p_i高さコマ数計 AndAlso sideline Then
                 line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p右上)
                 line += deltaコマ下 * i
                 item.m_lineList.Add(line)
@@ -758,8 +608,8 @@ Partial Public Class clsCalcKnot
             line += Unit0 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-        For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-            If i < _i高さのコマ数 + _i折り返しコマ数 AndAlso sideline Then
+        For i As Integer = 1 To p_i高さコマ数計
+            If i < p_i高さコマ数計 AndAlso sideline Then
                 line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p左下)
                 line += deltaコマ右 * i
                 item.m_lineList.Add(line)
@@ -794,8 +644,8 @@ Partial Public Class clsCalcKnot
             line += Unit180 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-        For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-            If i < _i高さのコマ数 + _i折り返しコマ数 AndAlso sideline Then
+        For i As Integer = 1 To p_i高さコマ数計
+            If i < p_i高さコマ数計 AndAlso sideline Then
                 line = New S線分(item.m_a四隅.p左上, item.m_a四隅.p左下)
                 line += deltaコマ右 * i
                 item.m_lineList.Add(line)
@@ -829,11 +679,11 @@ Partial Public Class clsCalcKnot
 
         '要尺
         If True Then
-            Dim p要尺位置 As S実座標 = toPoint(-(_i横のコマ数 / 2) - (_i高さのコマ数 + _i折り返しコマ数), (_i縦のコマ数 / 2) + (_i高さのコマ数 + _i折り返しコマ数))
-            If _i高さのコマ数 + _i折り返しコマ数 = 0 Then
+            Dim p要尺位置 As S実座標 = toPoint(-(_i横のコマ数 / 2) - p_i高さコマ数計, (_i縦のコマ数 / 2) + p_i高さコマ数計)
+            If p_i高さコマ数計 = 0 Then
                 p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
             End If
-            If (_i高さのコマ数 + _i折り返しコマ数 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
+            If (p_i高さコマ数計 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
                 p要尺位置.X = -(1 + _i横のコマ数 / 2) * _dコマベース寸法 - (_dコマベース要尺 / 2)
             Else
                 p要尺位置.X = p要尺位置.X + (_dコマベース要尺 / 2)
@@ -896,7 +746,7 @@ Partial Public Class clsCalcKnot
 
         '開始位置のコマの転記
         Dim dバンド長 As Double = _dコマベース要尺
-        Dim pコマ位置 As S実座標 = toPoint(0, -_i縦のコマ数 / 2 - (_i高さのコマ数 + _i折り返しコマ数) - 1) + Unit270 * dバンド長
+        Dim pコマ位置 As S実座標 = toPoint(0, -_i縦のコマ数 / 2 - p_i高さコマ数計 - 1) + Unit270 * dバンド長
         item = New clsImageItem(pコマ位置, startInfo.row横展開, startInfo.row縦展開,
             dひも幅, _dコマの寸法, _dコマ間のすき間, isKnotLeft, True)
         itemlist.AddItem(item)
@@ -1082,7 +932,6 @@ Partial Public Class clsCalcKnot
         End If
 
         '念のため
-        '_imageList側面ひも = Nothing
         _ImageListコマ = Nothing
         _ImageList描画要素 = Nothing
         _ImageList開始位置 = Nothing
@@ -1092,14 +941,6 @@ Partial Public Class clsCalcKnot
         If Not CalcOutput(outp) Then
             Return False 'p_sメッセージあり
         End If
-
-
-
-        'If _ImageList横ひも Is Nothing OrElse _ImageList縦ひも Is Nothing Then
-        '    '処理に必要な情報がありません。
-        '    p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
-        '    Return False
-        'End If
 
         '記号表示の位置をセット
         Dim isKnotLeft As Boolean = False
@@ -1111,31 +952,23 @@ Partial Public Class clsCalcKnot
             Case enumコマ上側の縦ひも.i_右側
                 isKnotLeft = False
         End Select
-        'Dim dひも幅 As Double = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
 
         '文字サイズと基本色
         imgData.setBasics(_dコマの寸法, _Data.p_row目標寸法.Value("f_s基本色"))
 
-        '通常描画
-
-        'リスト処理で残された情報
-        image_コマ配置(isKnotLeft)
-        'imageList側面記号(p_d基本のひも幅, isKnotLeft)
-        'imageList横記号(p_d基本のひも幅, isKnotLeft)
-        'imageList縦記号(p_d基本のひも幅, isKnotLeft)
+        'output処理でセットされているはず
+        If Not imagelistコマ配置(isKnotLeft) Then
+            '処理に必要な情報がありません。
+            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
+            Return False
+        End If
         _ImageList開始位置 = imageList開始位置(p_d基本のひも幅, isKnotLeft, outp)
+
+        '描画のための位置計算
         _ImageList描画要素 = imageList描画要素(False, False)
 
         '中身を移動
-        'imgData.MoveList(_ImageList横ひも)
-        '_ImageList横ひも = Nothing
-        ''imgData.MoveList(_ImageList縦ひも)
-        '_ImageList縦ひも = Nothing
-        ''imgData.MoveList(_imageList側面ひも)
-        '_imageList側面ひも = Nothing
-
         imgData.MoveList(_ImageListコマ)
-
         _ImageListコマ = Nothing
         imgData.MoveList(_ImageList描画要素)
         _ImageList描画要素 = Nothing
