@@ -445,16 +445,16 @@ Class clsCalcKnot
         Next
 
         '
-        If _ImageList横ひも IsNot Nothing Then
-            For Each band As clsImageItem In _ImageList横ひも
-                sb.AppendLine(band.ToString)
-            Next
-        End If
-        If _ImageList縦ひも IsNot Nothing Then
-            For Each band As clsImageItem In _ImageList縦ひも
-                sb.AppendLine(band.ToString)
-            Next
-        End If
+        'If _ImageList横ひも IsNot Nothing Then
+        '    For Each band As clsImageItem In _ImageList横ひも
+        '        sb.AppendLine(band.ToString)
+        '    Next
+        'End If
+        'If _ImageList縦ひも IsNot Nothing Then
+        '    For Each band As clsImageItem In _ImageList縦ひも
+        '        sb.AppendLine(band.ToString)
+        '    Next
+        'End If
 
         Return sb.ToString
     End Function
@@ -1371,8 +1371,8 @@ Class clsCalcKnot
         End If
         set縦横_出力ひも長(tmptable)
 
-        _ImageList横ひも = Nothing
-        _ImageList横ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
+        '_ImageList横ひも = Nothing
+        '_ImageList横ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
         'image計算結果は不要
         Return tmptable
@@ -1418,8 +1418,8 @@ Class clsCalcKnot
         End If
         set縦横_出力ひも長(tmptable)
 
-        _ImageList縦ひも = Nothing
-        _ImageList縦ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
+        '_ImageList縦ひも = Nothing
+        '_ImageList縦ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
         'image計算結果は不要
         Return tmptable
@@ -1520,8 +1520,14 @@ Class clsCalcKnot
 
             i左から何番目 = i左
             i上から何番目 = i上
-            row横展開 = _parent.getBand(enumひも種.i_横, i上から何番目)
-            row縦展開 = _parent.getBand(enumひも種.i_縦, i左から何番目)
+            'row横展開 = _parent.getBand(enumひも種.i_横, i上から何番目)
+            'row縦展開 = _parent.getBand(enumひも種.i_縦, i左から何番目)
+            Dim knotStart As CKnotFolder = _parent._KnotFolderSpace.GetStartKnot()
+            If knotStart Is Nothing Then
+                Return
+            End If
+            row横展開 = knotStart.m_row横方向
+            row縦展開 = knotStart.m_row縦方向
 
             If row横展開 Is Nothing Then
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "getBand({0},{1})", enumひも種.i_横, i上から何番目)
@@ -2004,6 +2010,7 @@ Class clsCalcKnot
 
 
         '開始位置の情報をセット
+        calc_コマ配置計算()
         Dim startInfo As CStartInfo = setStartInfo()
         If startInfo IsNot Nothing Then
             '設定されていれば

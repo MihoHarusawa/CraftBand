@@ -11,12 +11,12 @@ Partial Public Class clsCalcKnot
     Const c_foldingRatio As Double = 2 / 6.43   '要尺の折り位置までの比
     Const c_tiltRatio As Double = 0.216   '折りの傾き(幅に対する差の比)
 
-    'リスト出力時に生成
-    Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
-    Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
+    ''リスト出力時に生成
+    'Dim _ImageList横ひも As clsImageItemList   '横ひもの展開レコードを含む
+    'Dim _ImageList縦ひも As clsImageItemList   '縦ひもの展開レコードを含む
 
     'プレビュー時に生成
-    Dim _imageList側面ひも As clsImageItemList    '側面の展開レコードを含む
+    'Dim _imageList側面ひも As clsImageItemList    '側面の展開レコードを含む
     Dim _ImageListコマ As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底や側面の展開図
     Dim _ImageList開始位置 As clsImageItemList
@@ -91,7 +91,7 @@ Partial Public Class clsCalcKnot
     End Property
 
     '四角数,入力値(ひも長加算,ひも幅)がFixした状態で、コマ配置をセットする
-    Private Function calc_コマ配置計算(ByVal isKnotLeft As Boolean) As Boolean
+    Private Function calc_コマ配置計算() As Boolean
         Dim ret As Boolean = True
 
         'CalcOutput により、以下には記号がセットされています
@@ -103,8 +103,16 @@ Partial Public Class clsCalcKnot
 
         _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ)
         ret = SetTables()
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.ToString )
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.ToString)
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.dump)
+
+        Return ret
+    End Function
+
+    Private Function image_コマ配置(ByVal isKnotLeft As Boolean) As Boolean
+        Dim ret As Boolean = True
+
+        '_KnotFolderSpace 設定済のこと
 
         'コマ描画
         For Each knotfolder In _KnotFolderSpace
@@ -120,10 +128,8 @@ Partial Public Class clsCalcKnot
             End If
         Next
 
-
         Return ret
     End Function
-
 
 
     'コマ1点の情報
@@ -131,8 +137,10 @@ Partial Public Class clsCalcKnot
 
         Friend m_row横方向 As tbl縦横展開Row = Nothing
         Friend m_row縦方向 As tbl縦横展開Row = Nothing
-        Friend m_index横 As Integer
-        Friend m_index縦 As Integer
+        Friend m_index横 As Integer = 0
+        Friend m_index縦 As Integer = 0
+        Friend m_isStart横 As Boolean = False
+        Friend m_isStart縦 As Boolean = False
 
         Friend m_knotSide As enumKnotSide = enumKnotSide._none
 
@@ -157,13 +165,15 @@ Partial Public Class clsCalcKnot
             sb.AppendFormat("({0},{1})", m_index横, m_index縦)
             If m_row横方向 IsNot Nothing Then
                 Dim iひも種 As Integer = m_row横方向.f_iひも種
-                sb.AppendFormat(" m_row横方向:({0},{1}){2}{3} {4:F1}", DirectCast(iひも種, enumひも種), m_row横方向.f_iひも番号, m_row横方向.f_s記号, m_row横方向.f_s色, m_row横方向.f_d出力ひも長)
+                sb.AppendFormat(" m_row横方向:({0},{1}){5}{2}{3} {4:F1}", DirectCast(iひも種, enumひも種), m_row横方向.f_iひも番号, m_row横方向.f_s記号, m_row横方向.f_s色, m_row横方向.f_d出力ひも長,
+                IIf(Me.m_isStart横, "*", " "))
             Else
                 sb.Append("                        ")
             End If
             If m_row縦方向 IsNot Nothing Then
                 Dim iひも種 As Integer = m_row縦方向.f_iひも種
-                sb.AppendFormat(" m_row縦方向:({0},{1}){2}{3} {4:F1}", DirectCast(iひも種, enumひも種), m_row縦方向.f_iひも番号, m_row縦方向.f_s記号, m_row縦方向.f_s色, m_row縦方向.f_d出力ひも長)
+                sb.AppendFormat(" m_row縦方向:({0},{1}){5}{2}{3} {4:F1}", DirectCast(iひも種, enumひも種), m_row縦方向.f_iひも番号, m_row縦方向.f_s記号, m_row縦方向.f_s色, m_row縦方向.f_d出力ひも長,
+                IIf(Me.m_isStart縦, "*", " "))
             End If
             Return sb.ToString
         End Function
@@ -217,6 +227,15 @@ Partial Public Class clsCalcKnot
             End Get
         End Property
 
+        Public Function GetStartKnot() As CKnotFolder
+            For Each knot In Me
+                If knot.m_isStart横 AndAlso knot.m_isStart縦 Then
+                    Return knot
+                End If
+            Next
+            Return Nothing
+        End Function
+
         Public Overrides Function ToString() As String
             Dim sb As New System.Text.StringBuilder
             sb.AppendFormat("CKnotFolderSpace({0}) 幅={1} 高さ={2}", IsValid, HorizontalCount, VerticalCount).AppendLine()
@@ -224,7 +243,11 @@ Partial Public Class clsCalcKnot
                 For x As Integer = 1 To HorizontalCount
                     Dim knot As CKnotFolder = GetAt(x, y)
                     If knot.Count = 2 Then
-                        sb.Append("田")
+                        If knot.m_isStart横 AndAlso knot.m_isStart縦 Then
+                            sb.Append("■")
+                        Else
+                            sb.Append("田")
+                        End If
                     ElseIf knot.Count = 1 Then
                         sb.Append("×")
                     Else
@@ -275,6 +298,9 @@ Partial Public Class clsCalcKnot
     Function SetTables() As Boolean
         Dim ret As Boolean = True
 
+        Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
+        Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
+
         For i As Integer = 0 To cExpandCount - 1
             Dim bcount As Integer
             Dim setcount As Integer = 0
@@ -305,6 +331,7 @@ Partial Public Class clsCalcKnot
                                 If x = 1 Then
                                     knot.m_knotSide = enumKnotSide._左
                                 End If
+                                knot.m_isStart横 = (idx = _i上から何番目)
                             End If
                         Next
                         setcount += 1
@@ -318,6 +345,7 @@ Partial Public Class clsCalcKnot
                                 If y = 1 Then
                                     knot.m_knotSide = enumKnotSide._上
                                 End If
+                                knot.m_isStart縦 = (idx = _i左から何番目)
                             End If
                         Next
                         setcount += 1
@@ -368,40 +396,40 @@ Partial Public Class clsCalcKnot
         Return New S実座標(_dコマベース寸法 * x, _dコマベース寸法 * y)
     End Function
 
-    Private Function getBand(ByVal pos As enumひも種, ByVal idx As Integer) As tbl縦横展開Row
-        Try
-            Dim band As clsImageItem = Nothing
-            Select Case pos
-                Case enumひも種.i_横
-                    '上からidx番目(1～),マイナスは下から(-1～-横のコマ数)
-                    If idx < 0 Then
-                        idx = _i横のコマ数 + idx + 1
-                    End If
-                    band = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
-                Case enumひも種.i_縦
-                    '左からidx番目(1～),マイナスは右から(-1～-縦のコマ数)
-                    If idx < 0 Then
-                        idx = _i縦のコマ数 + idx + 1
-                    End If
-                    band = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
-                Case enumひも種.i_側面
-                    '下からidx番目の色(1～),マイナスは上から(-1～-側面のコマ数)
-                    If idx < 0 Then
-                        idx = _i高さのコマ数 + _i折り返しコマ数 + idx + 1
-                    End If
-                    band = _imageList側面ひも.GetRowItem(enumひも種.i_側面, idx)
-            End Select
-            If band Is Nothing Then
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "getBand Err:{0} {1}", pos, idx)
-                Return Nothing
-            End If
-            Return band.m_row縦横展開
+    'Private Function getBand(ByVal pos As enumひも種, ByVal idx As Integer) As tbl縦横展開Row
+    '    Try
+    '        Dim band As clsImageItem = Nothing
+    '        Select Case pos
+    '            Case enumひも種.i_横
+    '                '上からidx番目(1～),マイナスは下から(-1～-横のコマ数)
+    '                If idx < 0 Then
+    '                    idx = _i横のコマ数 + idx + 1
+    '                End If
+    '                band = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
+    '            Case enumひも種.i_縦
+    '                '左からidx番目(1～),マイナスは右から(-1～-縦のコマ数)
+    '                If idx < 0 Then
+    '                    idx = _i縦のコマ数 + idx + 1
+    '                End If
+    '                band = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
+    '            Case enumひも種.i_側面
+    '                '下からidx番目の色(1～),マイナスは上から(-1～-側面のコマ数)
+    '                If idx < 0 Then
+    '                    idx = _i高さのコマ数 + _i折り返しコマ数 + idx + 1
+    '                End If
+    '                band = _imageList側面ひも.GetRowItem(enumひも種.i_側面, idx)
+    '        End Select
+    '        If band Is Nothing Then
+    '            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "getBand Err:{0} {1}", pos, idx)
+    '            Return Nothing
+    '        End If
+    '        Return band.m_row縦横展開
 
-        Catch ex As Exception
-            g_clsLog.LogException(ex, "getBand", pos, idx)
-            Return Nothing
-        End Try
-    End Function
+    '    Catch ex As Exception
+    '        g_clsLog.LogException(ex, "getBand", pos, idx)
+    '        Return Nothing
+    '    End Try
+    'End Function
 
     'コマベース左上→コマの中心
     Private Function addコマ(ByVal p左上 As S実座標, ByVal y_band As tbl縦横展開Row, ByVal t_band As tbl縦横展開Row,
@@ -422,84 +450,84 @@ Partial Public Class clsCalcKnot
     End Function
 
     '横ひもリストの記号出力情報
-    Private Function imageList横記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
-        If _ImageList横ひも Is Nothing Then
-            Return False
-        End If
+    'Private Function imageList横記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
+    '    If _ImageList横ひも Is Nothing Then
+    '        Return False
+    '    End If
 
-        '左側面の左 コマは右側面も
-        Dim _左上 As S実座標 = toPoint(-(_i高さのコマ数 + _i折り返しコマ数 + (_i横のコマ数 / 2)), (_i縦のコマ数 / 2))
-        Dim _左上_右側面 As S実座標 = toPoint((_i横のコマ数 / 2), (_i縦のコマ数 / 2))
+    '    '左側面の左 コマは右側面も
+    '    Dim _左上 As S実座標 = toPoint(-(_i高さのコマ数 + _i折り返しコマ数 + (_i横のコマ数 / 2)), (_i縦のコマ数 / 2))
+    '    Dim _左上_右側面 As S実座標 = toPoint((_i横のコマ数 / 2), (_i縦のコマ数 / 2))
 
-        '上から下へ
-        For idx As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-            Dim item As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
-            If item Is Nothing Then
-                Continue For
-            End If
+    '    '上から下へ
+    '    For idx As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
+    '        Dim item As clsImageItem = _ImageList横ひも.GetRowItem(enumひも種.i_横, idx)
+    '        If item Is Nothing Then
+    '            Continue For
+    '        End If
 
-            Dim mark As enumKnotSide = enumKnotSide._none
-            ''裏表・バンド幅変更なし
-            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
-                mark = enumKnotSide._左
-            End If
-            '
-            For j = 1 To _i高さのコマ数 + _i折り返しコマ数
-                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, -j),
-                      dひも幅, isKnotLeft, mark)
-                mark = enumKnotSide._none
-                addコマ(_左上_右側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, j),
-                      dひも幅, isKnotLeft, mark)
-            Next
-            _左上 = _左上 + (Unit270 * _dコマベース寸法)
-            _左上_右側面 = _左上_右側面 + (Unit270 * _dコマベース寸法)
-        Next
+    '        Dim mark As enumKnotSide = enumKnotSide._none
+    '        ''裏表・バンド幅変更なし
+    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+    '            mark = enumKnotSide._左
+    '        End If
+    '        '
+    '        For j = 1 To _i高さのコマ数 + _i折り返しコマ数
+    '            addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, -j),
+    '                  dひも幅, isKnotLeft, mark)
+    '            mark = enumKnotSide._none
+    '            addコマ(_左上_右側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_側面, j),
+    '                  dひも幅, isKnotLeft, mark)
+    '        Next
+    '        _左上 = _左上 + (Unit270 * _dコマベース寸法)
+    '        _左上_右側面 = _左上_右側面 + (Unit270 * _dコマベース寸法)
+    '    Next
 
-        Return True
-    End Function
+    '    Return True
+    'End Function
 
-    '縦ひもリストの記号出力情報
-    Private Function imageList縦記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
-        If _ImageList縦ひも Is Nothing Then
-            Return False
-        End If
+    ''縦ひもリストの記号出力情報
+    'Private Function imageList縦記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
+    '    If _ImageList縦ひも Is Nothing Then
+    '        Return False
+    '    End If
 
-        '上側面の上
-        'Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), _i高さのコマ数 + _i折り返しコマ数 + (_i縦のコマ数 / 2))
-        Dim _左上_底 As S実座標 = toPoint(-(_i横のコマ数 / 2), (_i縦のコマ数 / 2))
+    '    '上側面の上
+    '    'Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), _i高さのコマ数 + _i折り返しコマ数 + (_i縦のコマ数 / 2))
+    '    Dim _左上_底 As S実座標 = toPoint(-(_i横のコマ数 / 2), (_i縦のコマ数 / 2))
 
-        '上側面;左から右へ
-        For idx As Integer = 1 To p_i縦ひもの本数 '_i横のコマ数
-            Dim item As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
-            If item Is Nothing Then
-                Continue For
-            End If
+    '    '上側面;左から右へ
+    '    For idx As Integer = 1 To p_i縦ひもの本数 '_i横のコマ数
+    '        Dim item As clsImageItem = _ImageList縦ひも.GetRowItem(enumひも種.i_縦, idx)
+    '        If item Is Nothing Then
+    '            Continue For
+    '        End If
 
-            Dim markL As enumKnotSide = enumKnotSide._none
-            Dim markU As enumKnotSide = enumKnotSide._none
+    '        Dim markL As enumKnotSide = enumKnotSide._none
+    '        Dim markU As enumKnotSide = enumKnotSide._none
 
-            ''裏表・バンド幅変更なし
-            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) AndAlso
-                (_i高さのコマ数 + _i折り返しコマ数) = 0 Then
-                If idx = 1 Then
-                    markL = enumKnotSide._左
-                End If
-                markU = enumKnotSide._上
-            End If
+    '        ''裏表・バンド幅変更なし
+    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) AndAlso
+    '            (_i高さのコマ数 + _i折り返しコマ数) = 0 Then
+    '            If idx = 1 Then
+    '                markL = enumKnotSide._左
+    '            End If
+    '            markU = enumKnotSide._上
+    '        End If
 
-            '底のコマ
-            For j As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
-                addコマ(_左上_底 + Unit270 * (j - 1) * _dコマベース寸法, getBand(enumひも種.i_横, j), item.m_row縦横展開,
-                      dひも幅, isKnotLeft, markL Or markU)
-                markU = enumKnotSide._none
-            Next
+    '        '底のコマ
+    '        For j As Integer = 1 To p_i横ひもの本数 '_i縦のコマ数
+    '            addコマ(_左上_底 + Unit270 * (j - 1) * _dコマベース寸法, getBand(enumひも種.i_横, j), item.m_row縦横展開,
+    '                  dひも幅, isKnotLeft, markL Or markU)
+    '            markU = enumKnotSide._none
+    '        Next
 
-            '_左上 = _左上 + (Unit0 * _dコマベース寸法)
-            _左上_底 = _左上_底 + (Unit0 * _dコマベース寸法)
-        Next
+    '        '_左上 = _左上 + (Unit0 * _dコマベース寸法)
+    '        _左上_底 = _左上_底 + (Unit0 * _dコマベース寸法)
+    '    Next
 
-        Return True
-    End Function
+    '    Return True
+    'End Function
 
 
     Private Function tbl側面to縦横展開DataTable() As tbl縦横展開DataTable
@@ -535,51 +563,51 @@ Partial Public Class clsCalcKnot
 
 
     '_imageList側面ひも生成、縦横展開DataTable化したレコードを含む
-    Function imageList側面記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
+    'Function imageList側面記号(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean) As Boolean
 
-        '側面のレコードを縦横レコード化
-        Dim tmptable As tbl縦横展開DataTable = tbl側面to縦横展開DataTable()
+    '    '側面のレコードを縦横レコード化
+    '    Dim tmptable As tbl縦横展開DataTable = tbl側面to縦横展開DataTable()
 
-        '以降参照するのでここでセットする
-        _imageList側面ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
+    '    '以降参照するのでここでセットする
+    '    _imageList側面ひも = New clsImageItemList(tmptable, String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号))
 
 
-        '下側面の左
-        Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), -(_i縦のコマ数 / 2))
-        Dim _左下_上側面 As S実座標 = toPoint(-(_i横のコマ数 / 2), 1 + (_i縦のコマ数 / 2))
+    '    '下側面の左
+    '    Dim _左上 As S実座標 = toPoint(-(_i横のコマ数 / 2), -(_i縦のコマ数 / 2))
+    '    Dim _左下_上側面 As S実座標 = toPoint(-(_i横のコマ数 / 2), 1 + (_i縦のコマ数 / 2))
 
-        '下側面:上から下へ
-        For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
-            Dim item As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
-            If item Is Nothing Then
-                Continue For
-            End If
+    '    '下側面:上から下へ
+    '    For i As Integer = 1 To _i高さのコマ数 + _i折り返しコマ数
+    '        Dim item As clsImageItem = _imageList側面ひも.GetRowItem(enumひも種.i_側面, i)
+    '        If item Is Nothing Then
+    '            Continue For
+    '        End If
 
-            Dim markL As enumKnotSide = enumKnotSide._none
-            Dim markU As enumKnotSide = enumKnotSide._none
-            ''裏表・バンド幅変更なし
-            If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
-                markL = enumKnotSide._左
-                If i = (_i高さのコマ数 + _i折り返しコマ数) Then
-                    markU = enumKnotSide._上
-                End If
-            End If
+    '        Dim markL As enumKnotSide = enumKnotSide._none
+    '        Dim markU As enumKnotSide = enumKnotSide._none
+    '        ''裏表・バンド幅変更なし
+    '        If Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号) Then
+    '            markL = enumKnotSide._左
+    '            If i = (_i高さのコマ数 + _i折り返しコマ数) Then
+    '                markU = enumKnotSide._上
+    '            End If
+    '        End If
 
-            '
-            For j = 1 To p_i縦ひもの本数 '_i横のコマ数
-                addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
-                      dひも幅, isKnotLeft, markL)
-                markL = enumKnotSide._none
+    '        '
+    '        For j = 1 To p_i縦ひもの本数 '_i横のコマ数
+    '            addコマ(_左上 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
+    '                  dひも幅, isKnotLeft, markL)
+    '            markL = enumKnotSide._none
 
-                addコマ(_左下_上側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
-                      dひも幅, isKnotLeft, markU)
-            Next
-            '
-            _左上 = _左上 + (Unit270 * _dコマベース寸法)
-            _左下_上側面 = _左下_上側面 + (Unit90 * _dコマベース寸法)
-        Next
-        Return True
-    End Function
+    '            addコマ(_左下_上側面 + Unit0 * (j - 1) * _dコマベース寸法, item.m_row縦横展開, getBand(enumひも種.i_縦, j),
+    '                  dひも幅, isKnotLeft, markU)
+    '        Next
+    '        '
+    '        _左上 = _左上 + (Unit270 * _dコマベース寸法)
+    '        _左下_上側面 = _左下_上側面 + (Unit90 * _dコマベース寸法)
+    '    Next
+    '    Return True
+    'End Function
 
     Function imageList描画要素(ByVal basecross As Boolean, ByVal sideline As Boolean) As clsImageItemList
         Dim item As clsImageItem
@@ -1054,7 +1082,7 @@ Partial Public Class clsCalcKnot
         End If
 
         '念のため
-        _imageList側面ひも = Nothing
+        '_imageList側面ひも = Nothing
         _ImageListコマ = Nothing
         _ImageList描画要素 = Nothing
         _ImageList開始位置 = Nothing
@@ -1090,24 +1118,21 @@ Partial Public Class clsCalcKnot
 
         '通常描画
 
-#If 1 Then
         'リスト処理で残された情報
-        calc_コマ配置計算(isKnotLeft)
-#Else
-        imageList側面記号(p_d基本のひも幅, isKnotLeft)
-        imageList横記号(p_d基本のひも幅, isKnotLeft)
-        imageList縦記号(p_d基本のひも幅, isKnotLeft)
-#End If
+        image_コマ配置(isKnotLeft)
+        'imageList側面記号(p_d基本のひも幅, isKnotLeft)
+        'imageList横記号(p_d基本のひも幅, isKnotLeft)
+        'imageList縦記号(p_d基本のひも幅, isKnotLeft)
         _ImageList開始位置 = imageList開始位置(p_d基本のひも幅, isKnotLeft, outp)
         _ImageList描画要素 = imageList描画要素(False, False)
 
         '中身を移動
         'imgData.MoveList(_ImageList横ひも)
-        _ImageList横ひも = Nothing
-        'imgData.MoveList(_ImageList縦ひも)
-        _ImageList縦ひも = Nothing
-        'imgData.MoveList(_imageList側面ひも)
-        _imageList側面ひも = Nothing
+        '_ImageList横ひも = Nothing
+        ''imgData.MoveList(_ImageList縦ひも)
+        '_ImageList縦ひも = Nothing
+        ''imgData.MoveList(_imageList側面ひも)
+        '_imageList側面ひも = Nothing
 
         imgData.MoveList(_ImageListコマ)
 
