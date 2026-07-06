@@ -169,6 +169,12 @@ Public Class frmMain
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Detail, "dgv縦ひも={0}", My.Settings.frmMainGridTate)
     End Sub
 
+    Private Sub FrmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        If _clsCalcKnot IsNot Nothing Then
+            _clsCalcKnot.Dispose()
+            _clsCalcKnot = Nothing
+        End If
+    End Sub
 
     '対象バンド・基本値の更新
     Sub setBasics(ByVal isCheckUndef As Boolean)

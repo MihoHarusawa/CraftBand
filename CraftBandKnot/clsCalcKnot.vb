@@ -8,6 +8,7 @@ Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
 
 Class clsCalcKnot
+    Private _disposedValue As Boolean
 
     'ステップ画像生成時には同じゲージを使用する
     Shared _clsBandTypeGauge As clsBandTypeGauge = Nothing
@@ -60,11 +61,26 @@ Class clsCalcKnot
     Private Property _dひも長加算_縦横端 As Double 'プラスマイナス可
     Private Property _dひも長加算_側面 As Double 'プラスマイナス可
 
+    'キャッシュ
+    Private Property _b縦横側面を展開する As Boolean
 
-    '縁部分のみ
+
+
+    '縁部分のみの集計値
     Private Property _d縁の高さ As Double '縁の合計値,ゼロ以上
     Private Property _d縁の垂直ひも長 As Double '縁の合計値,ゼロ以上
     Private Property _d縁の厚さ As Double '縁の厚さの最大値,ゼロ以上
+
+
+    '横・縦・側面の展開
+    Enum emExp
+        _Yoko = 0
+        _Tate = 1
+        _Side = 2
+    End Enum
+    Const cExpandCount As Integer = 3
+
+    Dim _tbl縦横展開(cExpandCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
 
     '初期化
     Public Sub Clear()
@@ -90,11 +106,17 @@ Class clsCalcKnot
         _dひも長加算_縦横端 = 0
         _dひも長加算_側面 = 0
 
+        _b縦横側面を展開する = False
+
         _d縁の高さ = 0
         _d縁の垂直ひも長 = 0
         _d縁の厚さ = 0
 
         p_dマイひも長係数 = My.Settings.MySafetyFactor
+
+        For i As Integer = 0 To cExpandCount - 1
+            _tbl縦横展開(i).Clear()
+        Next
     End Sub
 
     Function SetBandName(ByVal bandtypename As String) As Boolean
@@ -460,6 +482,11 @@ Class clsCalcKnot
         _Data = data
         _frmMain = frm
 
+        '最初に作っておく。以降は存在が前提
+        For i As Integer = 0 To cExpandCount - 1
+            _tbl縦横展開(i) = New tbl縦横展開DataTable
+        Next
+
         Clear()
     End Sub
 
@@ -570,6 +597,7 @@ Class clsCalcKnot
             _dコマ間のすき間 = _Data.p_row底_縦横.Value("f_dひも間のすき間")
             _dひも長加算_縦横端 = .Value("f_dひも長加算")
             _dひも長加算_側面 = .Value("f_dひも長加算_側面")
+            _b縦横側面を展開する = .Value("f_b展開区分")
         End With
 
         Return IsValidInput()
@@ -801,7 +829,7 @@ Class clsCalcKnot
         If 0 < _i高さのコマ数 Then
             For i As Integer = 1 To _i高さのコマ数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
-                If i = 1 OrElse _Data.p_row底_縦横.Value("f_b展開区分") Then
+                If i = 1 OrElse _b縦横側面を展開する Then
                     If row Is Nothing Then
                         row = table.Newtbl側面Row
                         row.f_i番号 = cIdxHeight
@@ -810,7 +838,7 @@ Class clsCalcKnot
                     End If
                     row.f_s編みかた名 = text四つ畳み編み()
                     row.f_s編みひも名 = text高さのコマ()
-                    If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                    If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                     Else
                         row.f_iひも本数 = _i高さのコマ数
@@ -848,7 +876,7 @@ Class clsCalcKnot
         If 0 < _i折り返しコマ数 Then
             For i As Integer = 1 To _i折り返しコマ数
                 row = clsDataTables.NumberSubRecord(table, cIdxFolding, i)
-                If i = 1 OrElse _Data.p_row底_縦横.Value("f_b展開区分") Then
+                If i = 1 OrElse _b縦横側面を展開する Then
                     If row Is Nothing Then
                         row = table.Newtbl側面Row
                         row.f_i番号 = cIdxFolding
@@ -857,7 +885,7 @@ Class clsCalcKnot
                     End If
                     row.f_s編みかた名 = text四つ畳み編み()
                     row.f_s編みひも名 = text折り返しのコマ()
-                    If _Data.p_row底_縦横.Value("f_b展開区分") Then
+                    If _b縦横側面を展開する Then
                         row.f_iひも本数 = 1
                     Else
                         row.f_iひも本数 = _i折り返しコマ数
@@ -1121,7 +1149,7 @@ Class clsCalcKnot
         Dim table As tbl側面DataTable = _Data.p_tbl側面
 
         '各1レコードの時
-        If Not _Data.p_row底_縦横.Value("f_b展開区分") Then
+        If Not _b縦横側面を展開する Then
             If currow.f_i番号 = cIdxFolding OrElse currow.f_i番号 = cIdxHeight Then
                 currow.f_iひも本数 = currow.f_iひも本数 + 1
             Else
@@ -1243,7 +1271,7 @@ Class clsCalcKnot
         Dim table As tbl側面DataTable = _Data.p_tbl側面
 
         '各1レコードの時
-        If Not _Data.p_row底_縦横.Value("f_b展開区分") Then
+        If Not _b縦横側面を展開する Then
             'レコードは1点
             If 1 < currow.f_iひも本数 Then
                 currow.f_iひも本数 = currow.f_iひも本数 - 1
@@ -1307,9 +1335,10 @@ Class clsCalcKnot
     'OUT:   _ImageList横ひも
     Function set横展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
 
-        Dim tmptable As New tbl縦横展開DataTable
-        Dim row As tbl縦横展開Row
+        Dim tmptable As tbl縦横展開DataTable = _tbl縦横展開(emExp._Yoko)
+        tmptable.Clear()
 
+        Dim row As tbl縦横展開Row
         Dim pos As Integer = -(p_i横ひもの本数 \ 2)
         Dim zero As Integer = p_i横ひもの本数 Mod 2
 
@@ -1353,9 +1382,10 @@ Class clsCalcKnot
     'OUT:   _ImageList縦ひも
     Function set縦展開DataTable(ByVal isRefSaved As Boolean) As tbl縦横展開DataTable
 
-        Dim tmptable As New tbl縦横展開DataTable
-        Dim row As tbl縦横展開Row
+        Dim tmptable As tbl縦横展開DataTable = _tbl縦横展開(emExp._Tate)
+        tmptable.Clear()
 
+        Dim row As tbl縦横展開Row
         Dim pos As Integer = (p_i縦ひもの本数 \ 2)
         Dim zero As Integer = p_i縦ひもの本数 Mod 2
 
@@ -1768,7 +1798,7 @@ Class clsCalcKnot
             Return False
         End If
 
-        Dim b展開区分 As Boolean = _Data.p_row底_縦横.Value("f_b展開区分")
+        'Dim b展開区分 As Boolean = _Data.p_row底_縦横.Value("f_b展開区分")
 
         adjust_側面()
         set側面_連続ひも長()
@@ -1801,11 +1831,11 @@ Class clsCalcKnot
 
             If yokotate = 1 Then
                 row.f_sタイプ = text横置き()
-                tmpTable = set横展開DataTable(b展開区分)
+                tmpTable = set横展開DataTable(_b縦横側面を展開する)
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
             Else
                 row.f_sタイプ = text縦置き()
-                tmpTable = set縦展開DataTable(b展開区分)
+                tmpTable = set縦展開DataTable(_b縦横側面を展開する)
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
@@ -1905,7 +1935,7 @@ Class clsCalcKnot
                     row.f_sタイプ = text縁の始末()
                     row.f_s高さ = output.outLengthText(r.f_d高さ)
                 Else
-                    If b展開区分 Then
+                    If _b縦横側面を展開する Then
                         row.f_s番号 = r.f_iひも番号.ToString
                     End If
                     If 0 < r.f_dひも長加算 Then
@@ -2183,5 +2213,29 @@ Class clsCalcKnot
         Return _frmMain.lbl要尺.Text
     End Function
 #End Region
+
+    'Protected Overridable Sub Dispose(disposing As Boolean)
+    Sub Dispose(Optional ByVal disposing As Boolean = True)
+        If Not _disposedValue Then
+            If disposing Then
+                'マネージド リソースを破棄
+                For i As Integer = 0 To cExpandCount - 1
+                    If _tbl縦横展開(i) IsNot Nothing Then
+                        _tbl縦横展開(i).Clear()
+                        _tbl縦横展開(i).Dispose()
+                        _tbl縦横展開(i) = Nothing
+                    End If
+                Next
+
+                ' イベント登録があればここで RemoveHandler を呼ぶ
+
+                ' 所有していないが参照を切っておく（循環参照防止）
+                _Data = Nothing
+                _frmMain = Nothing
+            End If
+
+            _disposedValue = True
+        End If
+    End Sub
 
 End Class
