@@ -101,7 +101,7 @@ Partial Public Class clsCalcKnot
         Return ret
     End Function
 
-    Private Function imagelistコマ配置(ByVal isKnotLeft As Boolean) As Boolean
+    Private Function imagelistコマ配置(ByVal isKnotLeft As Boolean, ByVal isKnotFrame As Boolean) As Boolean
         '_KnotFolderSpace 設定済のこと
         If Not _KnotFolderSpace.IsValid Then
             Return False
@@ -110,7 +110,7 @@ Partial Public Class clsCalcKnot
         'コマ描画
         For Each knotfolder In _KnotFolderSpace
             If knotfolder.RowsCount = 2 Then
-                addコマ(knotfolder, isKnotLeft)
+                addコマ(knotfolder, isKnotLeft, isKnotFrame)
             End If
         Next
 
@@ -399,7 +399,7 @@ Partial Public Class clsCalcKnot
 
 
     'コマベース左上→コマの中心
-    Private Function addコマ(ByVal knot As CKnotFolder, ByVal isleft As Boolean) As Boolean
+    Private Function addコマ(ByVal knot As CKnotFolder, ByVal isleft As Boolean, ByVal isKnotFrame As Boolean) As Boolean
         If knot Is Nothing OrElse knot.RowsCount < 2 Then
             Return False
         End If
@@ -411,7 +411,7 @@ Partial Public Class clsCalcKnot
         Dim p中心 As S実座標 = p左上 + (Unit315 * (_dコマベース寸法 / 2))
 
         Dim knotitem As New clsImageItem(p中心, knot.m_row横方向, knot.m_row縦方向,
-                                            p_d基本のひも幅, _dコマの寸法, _dコマ間のすき間, isleft)
+                                            p_d基本のひも幅, _dコマの寸法, _dコマ間のすき間, isleft, isKnotFrame)
 
         If knot.m_knotSide <> enumKnotSide._none Then
             knotitem.m_knot.SetMarkDisp(knot.m_knotSide)
@@ -668,7 +668,7 @@ Partial Public Class clsCalcKnot
 
 #Region "開始位置"
 
-    Function imageList開始位置(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean, ByVal outp As clsOutput) As clsImageItemList
+    Function imageList開始位置(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean, ByVal outp As clsOutput, ByVal isKnotFrame As Boolean) As clsImageItemList
 
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
@@ -748,7 +748,7 @@ Partial Public Class clsCalcKnot
         Dim dバンド長 As Double = _dコマベース要尺
         Dim pコマ位置 As S実座標 = toPoint(0, -_i縦のコマ数 / 2 - p_i高さコマ数計 - 1) + Unit270 * dバンド長
         item = New clsImageItem(pコマ位置, startInfo.row横展開, startInfo.row縦展開,
-            dひも幅, _dコマの寸法, _dコマ間のすき間, isKnotLeft, True)
+            dひも幅, _dコマの寸法, _dコマ間のすき間, isKnotLeft, isKnotFrame, True)
         itemlist.AddItem(item)
 
         'コマに続くバンド
@@ -924,7 +924,8 @@ Partial Public Class clsCalcKnot
 #End Region
 
     'プレビュー画像生成
-    Public Function CalcImage(ByVal imgData As clsImageData) As Boolean
+    Public Function CalcImage(ByVal imgData As clsImageData,
+                              ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean) As Boolean
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -957,12 +958,12 @@ Partial Public Class clsCalcKnot
         imgData.setBasics(_dコマの寸法, _Data.p_row目標寸法.Value("f_s基本色"))
 
         'output処理でセットされているはず
-        If Not imagelistコマ配置(isKnotLeft) Then
+        If Not imagelistコマ配置(isKnotLeft, isKnotFrame) Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
         End If
-        _ImageList開始位置 = imageList開始位置(p_d基本のひも幅, isKnotLeft, outp)
+        _ImageList開始位置 = imageList開始位置(p_d基本のひも幅, isKnotLeft, outp, isKnotFrame)
 
         '描画のための位置計算
         _ImageList描画要素 = imageList描画要素(False, False)

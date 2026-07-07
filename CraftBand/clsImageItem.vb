@@ -1960,7 +1960,7 @@ Public Class clsImageItem
     Public Shared Unit270 As New S差分(0, -1) '↓
 
     'レコード情報
-    Public m_row縦横展開 As tbl縦横展開Row = Nothing '縦バンド・横バンド・コマの横
+    Public m_row縦横展開 As tbl縦横展開Row = Nothing 'コマの横
     Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
     Public m_groupRow As clsGroupDataRow = Nothing '編みかた,底楕円("f_s記号","f_s編みかた名","f_s色"))
     Public m_row追加品 As tbl追加品Row = Nothing '付属品
@@ -2098,7 +2098,7 @@ Public Class clsImageItem
 
     '四つ畳み編みのコマ
     Sub New(ByVal p中心 As S実座標, ByVal row As tbl縦横展開Row, ByVal row2 As tbl縦横展開Row,
-            ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean,
+            ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean, ByVal isframe As Boolean,
             Optional ByVal isgauge As Boolean = False)
 
         m_row縦横展開 = row
@@ -2121,7 +2121,7 @@ Public Class clsImageItem
         m_rひも位置.p左下 = p中心 + Unit225 * ((dコマ寸法 + add) / 2)
 
         'm_knot = New CKnot(p中心, dひも幅, 0 < dすき間, isleft, isgauge)
-        m_knot = New CKnot(p中心, 2 < dすき間, isleft)
+        m_knot = New CKnot(p中心, isframe, isleft)
 
         Dim bandY As New CBand(m_row縦横展開)
         Dim bandT As New CBand(m_row縦横展開2)

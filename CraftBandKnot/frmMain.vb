@@ -445,6 +445,14 @@ Public Class frmMain
             nud高さのコマ数.Value = .Value("f_i高さのコマ数")
             nud折り返しコマ数.Value = .Value("f_i折り返しコマ数")
             nudひも長加算_側面.Value = .Value("f_dひも長加算_側面")  'マイナス可
+
+            If .Value("f_i織りタイプ") = enum立ち上げタイプ.i_斜め Then
+                chk斜め立ち上げ.Checked = True
+                nud高さのコマ数.Value = .Value("f_d高さの四角数")
+            Else
+                chk斜め立ち上げ.Checked = False
+            End If
+
         End With
     End Sub
 
@@ -561,9 +569,6 @@ Public Class frmMain
             .Value("f_i基本のひも幅") = nud基本のひも幅.Value
             .Value("f_s基本色") = cmb基本色.Text
 
-            '.Value("f_sメモ") = txtメモ.Text
-            '.Value("f_sタイトル") = txtタイトル.Text
-            '.Value("f_s作成者") = txt作成者.Text
             editMemo.SaveMemo(row目標寸法)
         End With
         Return True
@@ -595,6 +600,13 @@ Public Class frmMain
             .Value("f_i高さのコマ数") = nud高さのコマ数.Value
             .Value("f_i折り返しコマ数") = nud折り返しコマ数.Value
             .Value("f_dひも長加算_側面") = nudひも長加算_側面.Value  'マイナス可
+
+            .Value("f_d高さの四角数") = nud高さのコマ数.Value
+            If chk斜め立ち上げ.Checked Then
+                .Value("f_i織りタイプ") = enum立ち上げタイプ.i_斜め
+            Else
+                .Value("f_i織りタイプ") = enum立ち上げタイプ.i_縦横
+            End If
         End With
         Return True
     End Function
@@ -843,7 +855,8 @@ Public Class frmMain
         End If
 
         Dim stepImageData As New clsImageData(Nothing)
-        Dim ret As Boolean = calc.CalcImage(stepImageData)
+        Dim ret As Boolean = calc.CalcImage(stepImageData,
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
             msg = calc.p_sメッセージ
@@ -928,7 +941,8 @@ Public Class frmMain
         End If
 
         Dim imgData As New clsImageData(Nothing)
-        Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData)
+        Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData,
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
             msg = _clsCalcKnot.p_sメッセージ
@@ -1418,6 +1432,33 @@ Public Class frmMain
     Private Sub cmb基本色_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb基本色.SelectedIndexChanged
         ShowDefaultTabControlPage(enumReason._Preview) '色と本幅数変更の可能性
     End Sub
+
+    Private Sub chk斜め立ち上げ_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜め立ち上げ.CheckedChanged
+        Dim checked As Boolean = chk斜め立ち上げ.Checked
+        lblひも長加算_側面.Visible = Not checked
+        nudひも長加算_側面.Visible = Not checked
+        lblひも長加算_側面_単位.Visible = Not checked
+        lbl編みひも.Visible = Not checked
+        txt編みひも.Visible = Not checked
+        lbl編みひも_単位.Visible = Not checked
+
+        lbl対角サイズ.Visible = checked
+        txtコマ_対角.Visible = checked
+        txtコマベース_対角.Visible = checked
+
+        If checked Then
+            nud高さのコマ数.Increment = 0.5
+            nud高さのコマ数.DecimalPlaces = 1
+        Else
+            nud高さのコマ数.Increment = 1
+            nud高さのコマ数.DecimalPlaces = 0
+            nud高さのコマ数.Value = Int(nud高さのコマ数.Value)
+        End If
+
+        ShowDefaultTabControlPage(enumReason._Gauge) '描きなおし
+        recalc(CalcCategory.SideFolding, sender)
+    End Sub
+
 #End Region
 
 #Region "側面"
@@ -1523,7 +1564,7 @@ Public Class frmMain
                 Exit Sub
             End If
 
-        ElseIf currow.f_i番号 = clsCalcknot.cIdxHeight Then
+        ElseIf currow.f_i番号 = clsCalcKnot.cIdxHeight Then
             '高さのコマ
             If _clsCalcKnot.del_高さ(currow) Then
                 nud高さのコマ数.Value = nud高さのコマ数.Value - 1
@@ -1736,9 +1777,16 @@ Public Class frmMain
             Return
         End If
 
-        Cursor.Current = Cursors.WaitCursor
+        calcImageAndShow()
+    End Sub
+
+    Private Sub calcImageAndShow()
+        picプレビュー.Image = Nothing
         _clsImageData = New clsImageData(_sFilePath)
-        ret = _clsCalcKnot.CalcImage(_clsImageData)
+
+        Cursor.Current = Cursors.WaitCursor
+        Dim ret As Boolean = _clsCalcKnot.CalcImage(_clsImageData,
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
@@ -1747,6 +1795,19 @@ Public Class frmMain
         End If
         picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
     End Sub
+
+    Private Sub chk底のみ_CheckedChanged(sender As Object, e As EventArgs) Handles chk底のみ.CheckedChanged
+        calcImageAndShow()
+    End Sub
+
+    Private Sub chkひも全体_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged
+        calcImageAndShow()
+    End Sub
+
+    Private Sub chkコマ枠_CheckedChanged(sender As Object, e As EventArgs) Handles chkコマ枠.CheckedChanged
+        calcImageAndShow()
+    End Sub
+
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
         picプレビュー.Image = Nothing

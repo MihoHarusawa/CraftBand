@@ -28,6 +28,8 @@ Class clsCalcKnot
         Options  '追加品
         Expand '縦横展開
 
+        SideFolding '立ち上げ方法(縦横/斜め)
+
         Expand_Yoko '横ひも展開のセル編集
         Expand_Tate '縦ひも展開のセル編集
 
@@ -2061,7 +2063,7 @@ Class clsCalcKnot
 
         'メモがあれば追記
         output.OutMemo()
-        
+
         Return True
     End Function
 #End Region

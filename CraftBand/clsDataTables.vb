@@ -148,6 +148,11 @@ Public Class clsDataTables
         i_内側 = 2
         i_外側 = 3
     End Enum
+    'Knot
+    Public Enum enum立ち上げタイプ
+        i_縦横 = 0
+        i_斜め = 1
+    End Enum
 
     'tbl縦横展開
     'カテゴリー出力順
