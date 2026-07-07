@@ -1,5 +1,4 @@
-﻿Imports System.Diagnostics.Eventing.Reader
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.Text
 Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem.CBand
@@ -25,6 +24,7 @@ Public Class clsImageItem
         _下 = 4
         _右 = 8
     End Enum
+    Public Const cDirectionEnumNone As DirectionEnum = 0
     Public Const cDirectionEnumAll As DirectionEnum = DirectionEnum._上 Or DirectionEnum._左 Or DirectionEnum._右 Or DirectionEnum._下
 
 #Region "配置構造体"
@@ -1289,131 +1289,60 @@ Public Class clsImageItem
 
     '四つ畳み編み
     Class CKnot
-
-        ''4点多角形
-        'Private Shared c_a右上四角 As New S四隅(New S実座標(0.448, 1.341), New S実座標(-0.447, 0.895), New S実座標(0, 0), New S実座標(1.087, 0.543))
-        'Private Shared c_a左上四角 As New S四隅(New S実座標(-0.543, 1.087), New S実座標(-1.341, 0.448), New S実座標(-0.895, -0.447), New S実座標(0, 0.0))
-
-        'Private Shared c_l右上線 As New S線分(New S実座標(0.768, 0.942), New S実座標(-0.223, 0.447))
-        'Private Shared c_l左上線 As New S線分(New S実座標(-0.942, 0.768), New S実座標(-0.447, -0.223))
-
-        Private Const c_angle As Double = 26.34 'コマの傾き leftは左に・rightは右に
-
-
-        Public p中心 As S実座標
-        Public IsKnotLeft As Boolean    '左綾
-        Public IsDrawArea As Boolean    '領域の枠線を描く
-
-        ''4つの四角
-        'Public a右上四角 As S四隅
-        'Public a左上四角 As S四隅
-        'Public a右下四角 As S四隅
-        'Public a左下四角 As S四隅
-
-        'Public l右上線 As S線分
-        'Public l左上線 As S線分
-        'Public l右下線 As S線分
-        'Public l左下線 As S線分
-
+        '* 定数値
+        'コマの傾き leftは左に・rightは右に
+        Private Const c_angle As Double = 26.34
         '単位パーツの位置
         Private Shared c_a横上単位 As New S四隅(New S実座標(0, 0), New S実座標(1.087, 0.543), New S実座標(0.448, 1.341), New S実座標(-0.447, 0.895))
         Private Shared c_a縦左単位 As New S四隅(New S実座標(0, 0), New S実座標(-0.543, 1.087), New S実座標(-1.341, 0.448), New S実座標(-0.895, -0.447))
         Private Shared c_p横上交点 As New S実座標(0, 1.12) 'Y軸とc_a横上単位のCDの交点
 
+        '*個別値
+        Dim _p中心 As S実座標
+        Dim _dコマ寸法 As Double   'コマを囲む正方形の辺
+        Dim _dすき間 As Double     '隣のコマとの間隔(まわりに1/2ずつ)
+        Dim _isKnotLeft As Boolean '左綾
 
-        Public band横上 As CBand
-        Public band横下 As CBand
-        Public band縦上 As CBand
-        Public band縦下 As CBand
+        Dim _isDrawUnit As Boolean = False  'コマの枠線を描く
+        Dim _isDrawArea As Boolean = False  '領域の枠線を描く
 
-        Public d描画幅 As Double = 0
+        Friend band横上 As CBand
+        Friend band横下 As CBand
+        Friend band縦上 As CBand
+        Friend band縦下 As CBand
 
-        '方向指定
-        <Flags>
-        Enum enumKnotSide
-            _none = 0
-            _右 = 1
-            _上 = 2
-            _左 = 4
-            _下 = 8
-        End Enum
+        Dim _d描画幅 As Double = 0
 
 
+        Sub New(ByVal p As S実座標, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean)
+            _p中心 = p
+            _dコマ寸法 = dコマ寸法
+            _dすき間 = dすき間
+            _isKnotLeft = isleft
 
-        'Sub New(ByVal p As S実座標, ByVal dひも幅 As Double, ByVal isArea As Boolean, ByVal isleft As Boolean, ByVal isgauge As Boolean)
-        Sub New(ByVal p As S実座標, ByVal isArea As Boolean, ByVal isleft As Boolean)
-            IsDrawArea = isArea
-            IsKnotLeft = isleft
-            p中心 = p
-
-            'If Not isleft Then '描画時に上下反転するため形状は逆
-            '    If Not isgauge Then
-            '        a右上四角 = c_a右上四角 * dひも幅
-            '        a左上四角 = c_a左上四角 * dひも幅
-            '        l右上線 = c_l右上線 * dひも幅
-            '        l左上線 = c_l左上線 * dひも幅
-            '    Else
-            '        Dim rad As Double = -c_angle * System.Math.PI / 180
-            '        a右上四角 = c_a右上四角.Rotate(-c_angle) * dひも幅
-            '        a左上四角 = c_a左上四角.Rotate(-c_angle) * dひも幅
-            '        l右上線 = c_l右上線.Rotate(-c_angle) * dひも幅
-            '        l左上線 = c_l左上線.Rotate(-c_angle) * dひも幅
-            '    End If
-            'Else
-            '    If Not isgauge Then
-            '        a右上四角 = c_a右上四角.VertLeft * dひも幅
-            '        a左上四角 = c_a左上四角.VertLeft * dひも幅
-            '        l右上線 = c_l右上線.VertLeft * dひも幅
-            '        l左上線 = c_l左上線.VertLeft * dひも幅
-            '    Else
-            '        Dim rad As Double = c_angle * System.Math.PI / 180
-            '        a右上四角 = c_a右上四角.VertLeft.Rotate(c_angle) * dひも幅
-            '        a左上四角 = c_a左上四角.VertLeft.Rotate(c_angle) * dひも幅
-            '        l右上線 = c_l右上線.VertLeft.Rotate(c_angle) * dひも幅
-            '        l左上線 = c_l左上線.VertLeft.Rotate(c_angle) * dひも幅
-            '    End If
-            'End If
-
-            'a左下四角 = a右上四角 * -1 '180度
-            'a右下四角 = a左上四角 * -1 '180度
-
-            'l左下線 = l右上線 * -1 '180度
-            'l右下線 = l左上線 * -1 '180度
-
-            'Dim delta As New S差分(pOrigin, p中心)
-
-            'a右上四角 = a右上四角 + delta
-            'a左下四角 = a左下四角 + delta
-            'a左上四角 = a左上四角 + delta
-            'a右下四角 = a右下四角 + delta
-
-            'l右上線 = l右上線 + delta
-            'l左下線 = l左下線 + delta
-            'l左上線 = l左上線 + delta
-            'l右下線 = l右下線 + delta
         End Sub
 
         'isgauge:Tureの時は開始位置表示用に傾き補正する
-        Sub SetBandYH(ByVal bandY As CBand, ByVal bandT As CBand, ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal isgauge As Boolean)
+        Sub SetBandYH(ByVal bandY As CBand, ByVal bandT As CBand, ByVal dひも幅 As Double, ByVal isgauge As Boolean)
             band横上 = bandY
             band横下 = New CBand(bandY)
             band縦上 = bandT
             band縦下 = New CBand(bandT)
 
             'コマのサイズで描画する時の比率
-            d描画幅 = (dコマ寸法 / 2) / c_p横上交点.Y
+            _d描画幅 = (_dコマ寸法 / 2) / c_p横上交点.Y
 
             '単位パーツは、ひも幅=1とした時の値です(枠線分少し小さめ)
             Const c_dMaxRatio As Double = 1.5 '対ひも幅の最大比率
-            If c_dMaxRatio < (d描画幅 / dひも幅) Then
-                d描画幅 = dひも幅 * c_dMaxRatio
+            If c_dMaxRatio < (_d描画幅 / dひも幅) Then
+                _d描画幅 = dひも幅 * c_dMaxRatio
             End If
 
 
-            band横上.aバンド位置 = c_a横上単位 * d描画幅
+            band横上.aバンド位置 = c_a横上単位 * _d描画幅
             band横下.aバンド位置 = band横上.aバンド位置 * -1 '180度
 
-            band縦上.aバンド位置 = c_a縦左単位 * d描画幅
+            band縦上.aバンド位置 = c_a縦左単位 * _d描画幅
             band縦下.aバンド位置 = band縦上.aバンド位置 * -1 '180度
 
             If isgauge Then
@@ -1423,14 +1352,14 @@ Public Class clsImageItem
                 band縦下.RotateBand(-c_angle)
             End If
 
-            If IsKnotLeft Then
+            If _isKnotLeft Then
                 band横上.VertLeftBand()
                 band横下.VertLeftBand()
                 band縦上.VertLeftBand()
                 band縦下.VertLeftBand()
             End If
 
-            Dim delta As New S差分(pOrigin, p中心)
+            Dim delta As New S差分(pOrigin, _p中心)
             band横上.MoveBand(delta)
             band横下.MoveBand(delta)
             band縦上.MoveBand(delta)
@@ -1438,55 +1367,99 @@ Public Class clsImageItem
 
         End Sub
 
+        Sub SetRegionDisp(ByVal isUnit As Boolean, ByVal isArea As Boolean)
+            _isDrawUnit = isUnit
+            _isDrawArea = isArea
+        End Sub
 
-        Sub SetMarkDisp(ByVal disp As enumKnotSide)
+        Sub SetMarkDisp(ByVal disp As DirectionEnum)
             Dim markAt As CBand = Nothing
 
-            If IsKnotLeft Then
+            If _isKnotLeft Then
                 '左綾
-                If disp.HasFlag(enumKnotSide._右) Then
+                If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横下
 
                 End If
-                If disp.HasFlag(enumKnotSide._上) Then
+                If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, d描画幅, Unit180 * d描画幅 * 2.5)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅, Unit180 * _d描画幅 * 2.5)
 
                 End If
-                If disp.HasFlag(enumKnotSide._左) Then
+                If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, d描画幅 * 3, Unit270 * d描画幅 * 3.2)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit270 * _d描画幅 * 3.2)
 
                 End If
-                If disp.HasFlag(enumKnotSide._下) Then
+                If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
 
                 End If
 
             Else
                 '右綾
-                If disp.HasFlag(enumKnotSide._右) Then
+                If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横上
 
 
                 End If
-                If disp.HasFlag(enumKnotSide._上) Then
+                If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, d描画幅)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
 
                 End If
-                If disp.HasFlag(enumKnotSide._左) Then
+                If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横下
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, d描画幅 * 3, Unit90 * d描画幅)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit90 * _d描画幅)
 
                 End If
-                If disp.HasFlag(enumKnotSide._下) Then
+                If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
 
                 End If
 
             End If
         End Sub
+
+        Function Get描画幅() As Double
+            Return _d描画幅
+        End Function
+        Function GetDrawUnit(Optional isDraw As Boolean = False) As S領域
+            Dim r As S領域
+            If _isDrawUnit OrElse isDraw Then
+                r.p右上 = _p中心 + Unit45 * (_dコマ寸法 / 2)
+                r.p左下 = _p中心 + Unit225 * (_dコマ寸法 / 2)
+            End If
+            Return r
+        End Function
+        Function GetDrawArea(Optional isDraw As Boolean = False) As S領域
+            Dim r As S領域
+            If _isDrawArea OrElse isDraw Then
+                r.p右上 = _p中心 + Unit45 * ((_dコマ寸法 + _dすき間) / 2)
+                r.p左下 = _p中心 + Unit225 * ((_dコマ寸法 + _dすき間) / 2)
+            End If
+            Return r
+        End Function
+
+        Function Get描画領域() As S領域
+            Dim r描画領域 As S領域 = GetDrawArea(True)
+            r描画領域.get拡大領域(band横上.Get描画領域())
+            r描画領域.get拡大領域(band横下.Get描画領域())
+            r描画領域.get拡大領域(band縦上.Get描画領域())
+            r描画領域.get拡大領域(band縦下.Get描画領域())
+            Return r描画領域
+        End Function
+
+        Public Overrides Function ToString() As String
+            Dim sb As New StringBuilder
+            sb.AppendFormat("CKnot: _p中心({0}) _dコマ寸法({1:F2}) _dすき間({2}) _isKnotLeft({3}) _isDrawUnit({4}) _isDrawArea({5})",
+                            _p中心, _dコマ寸法, _dすき間, _isKnotLeft, _isDrawUnit, _isDrawArea).AppendLine()
+            sb.AppendLine(band横上.ToString)
+            sb.AppendLine(band横下.ToString)
+            sb.AppendLine(band縦上.ToString)
+            sb.AppendLine(band縦下.ToString)
+            Return sb.ToString
+        End Function
 
     End Class
 
@@ -1896,7 +1869,7 @@ Public Class clsImageItem
             Dim sb As New StringBuilder
             sb.AppendFormat("[A]始点F{0}{4}[D]始点T{1} : [B]終点F{2}{5}[C]終点T{3} ", p始点F, p始点T, p終点F, p終点T,
                             IIf(is始点FT線, "=", "."), IIf(is終点FT線, "=", "."))
-            sb.AppendFormat("角度={0} ", delta始点終点.Angle)
+            sb.AppendFormat("角度={0:F2} ", delta始点終点.Angle)
             sb.AppendFormat("_i何本幅={0} _s色={1} _s記号={2} p文字位置{3}", _i何本幅, _s色, _s記号, p文字位置)
             sb.AppendFormat(" _s色2={0} _i描画種={1}", _s色2, _i描画種)
             Return sb.ToString
@@ -1960,8 +1933,8 @@ Public Class clsImageItem
     Public Shared Unit270 As New S差分(0, -1) '↓
 
     'レコード情報
-    Public m_row縦横展開 As tbl縦横展開Row = Nothing 'コマの横
-    Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
+    Public m_row縦横展開 As tbl縦横展開Row = Nothing '旧互換
+    'Public m_row縦横展開2 As tbl縦横展開Row = Nothing 'コマの縦
     Public m_groupRow As clsGroupDataRow = Nothing '編みかた,底楕円("f_s記号","f_s編みかた名","f_s色"))
     Public m_row追加品 As tbl追加品Row = Nothing '付属品
 
@@ -1976,7 +1949,7 @@ Public Class clsImageItem
 
     '縦バンド・横バンド
     Public m_bNoMark As Boolean = False '記号なし
-    Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
+    'Public m_borderひも As DirectionEnum = cDirectionEnumAll '周囲の線描画
     'Public m_regionList As C領域リスト 
 
     '線分リスト
@@ -2063,9 +2036,9 @@ Public Class clsImageItem
         m_Index2 = idx2
     End Sub
 
-    '記号つきバンド ※_縦バンド/_横バンドの描画は、_バンドセットに上書き置換してください
-    '               clsImageItemList.GetRowItemでm_row縦横展開を取得するために残しています
-    Sub New(ByVal row As tbl縦横展開Row, Optional nomark As Boolean = False)
+    '※_縦バンド/_横バンドの描画は、_バンドセットに置換されました
+    '  clsImageItemList.GetRowItemでm_row縦横展開を取得するために残しています
+    Friend Sub New(ByVal row As tbl縦横展開Row, Optional nomark As Boolean = False)
         m_bNoMark = nomark
         FromRow(row)
     End Sub
@@ -2097,36 +2070,45 @@ Public Class clsImageItem
     End Function
 
     '四つ畳み編みのコマ
-    Sub New(ByVal p中心 As S実座標, ByVal row As tbl縦横展開Row, ByVal row2 As tbl縦横展開Row,
-            ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean, ByVal isframe As Boolean,
-            Optional ByVal isgauge As Boolean = False)
+    'Sub New(ByVal p中心 As S実座標, ByVal row As tbl縦横展開Row, ByVal row2 As tbl縦横展開Row,
+    '        ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean, ByVal isframe As Boolean,
+    '        Optional ByVal isgauge As Boolean = False)
 
-        m_row縦横展開 = row
-        m_row縦横展開2 = row2
+    '    m_row縦横展開 = row
+    '    m_row縦横展開2 = row2
+    '    m_ImageType = ImageTypeEnum._コマ
+
+    '    If m_row縦横展開 IsNot Nothing Then
+    '        m_Index = CType(m_row縦横展開.f_iひも種, Integer) + m_row縦横展開.f_iひも番号
+    '    End If
+    '    If m_row縦横展開2 IsNot Nothing Then
+    '        m_Index2 = CType(m_row縦横展開2.f_iひも種, Integer) + m_row縦横展開2.f_iひも番号
+    '    End If
+
+    '    m_dひも幅 = dひも幅
+
+    '    m_knot = New CKnot(p中心, dコマ寸法, dすき間, isleft)
+
+    '    Dim bandY As New CBand(m_row縦横展開)
+    '    Dim bandT As New CBand(m_row縦横展開2)
+    '    m_knot.SetBandYH(bandY, bandT, dひも幅, isgauge)
+
+    '    If isframe Then
+    '        If isgauge Then
+    '            m_knot.SetRegionDisp(False, True) 'コマ寸法+すき間
+    '        Else
+    '            m_knot.SetRegionDisp(True, False) 'コマ寸法
+    '        End If
+    '    End If
+
+    'End Sub
+
+    Sub New(ByVal knot As CKnot, ByVal idx As Integer, ByVal idx2 As Integer)
         m_ImageType = ImageTypeEnum._コマ
 
-        If m_row縦横展開 IsNot Nothing Then
-            m_Index = CType(m_row縦横展開.f_iひも種, Integer) + m_row縦横展開.f_iひも番号
-        End If
-        If m_row縦横展開2 IsNot Nothing Then
-            m_Index2 = CType(m_row縦横展開2.f_iひも種, Integer) + m_row縦横展開2.f_iひも番号
-        End If
-
-        m_dひも幅 = dひも幅
-        Dim add As Double = 0
-        If isgauge Then
-            add = dすき間 'ゲージ+すき間
-        End If
-        m_rひも位置.p右上 = p中心 + Unit45 * ((dコマ寸法 + add) / 2)
-        m_rひも位置.p左下 = p中心 + Unit225 * ((dコマ寸法 + add) / 2)
-
-        'm_knot = New CKnot(p中心, dひも幅, 0 < dすき間, isleft, isgauge)
-        m_knot = New CKnot(p中心, isframe, isleft)
-
-        Dim bandY As New CBand(m_row縦横展開)
-        Dim bandT As New CBand(m_row縦横展開2)
-        m_knot.SetBandYH(bandY, bandT, dひも幅, dコマ寸法, isgauge)
-
+        m_knot = knot
+        m_Index = idx
+        m_Index2 = idx2
     End Sub
 
     '編みかた・底楕円(差しひも含む)
@@ -2313,8 +2295,8 @@ Public Class clsImageItem
                 r描画領域 = m_bandList.Get描画領域()
 
             Case ImageTypeEnum._コマ
-                r描画領域 = m_rひも位置
-                '他は領域内
+                'r描画領域 = m_rひも位置
+                r描画領域 = m_knot.Get描画領域()
 
             Case ImageTypeEnum._編みかた
                 r描画領域 = m_a四隅.r外接領域
@@ -2408,18 +2390,18 @@ Public Class clsImageItem
         If m_row縦横展開 IsNot Nothing Then
             sb.AppendFormat("位置({0}) d長さ({1}) dひも長({2}) d出力ひも長({3})", m_row縦横展開.f_i位置番号, m_row縦横展開.f_d長さ, m_row縦横展開.f_dひも長, m_row縦横展開.f_d出力ひも長).AppendLine()
         End If
-        If m_row縦横展開2 IsNot Nothing Then
-            sb.AppendFormat("位置({0}) d長さ({1}) dひも長({2}) d出力ひも長({3})", m_row縦横展開2.f_i位置番号, m_row縦横展開2.f_d長さ, m_row縦横展開2.f_dひも長, m_row縦横展開2.f_d出力ひも長).AppendLine()
-        End If
         If Not m_a四隅.IsEmpty Then
             sb.AppendFormat("四隅:{0}", m_a四隅).AppendLine()
         End If
         sb.AppendFormat("dひも幅={0} ひも位置:{1}", m_dひも幅, m_rひも位置).AppendLine()
-        sb.AppendFormat("bNoMark={0} border:{1}", m_bNoMark, m_borderひも).AppendLine()
-        'If m_regionList IsNot Nothing AndAlso 0 < m_regionList.Count Then
-        '    sb.AppendLine(m_regionList.ToString)
-        'End If
+        'sb.AppendFormat("bNoMark={0} border:{1}", m_bNoMark, m_borderひも).AppendLine()
         sb.AppendLine(m_lineList.ToString)
+        If m_knot IsNot Nothing Then
+            sb.AppendLine(m_knot.ToString)
+        End If
+        If m_bandList IsNot Nothing Then
+            sb.AppendLine(m_bandList.ToString)
+        End If
         Return sb.ToString
     End Function
 End Class

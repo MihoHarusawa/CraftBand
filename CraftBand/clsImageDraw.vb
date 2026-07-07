@@ -855,8 +855,19 @@ Public Class CImageDraw
         drawバンド(item.m_knot.band縦上)
         drawバンド(item.m_knot.band縦下)
 
-        If item.m_knot.IsDrawArea Then
-            Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+        'If item.m_knot.IsDrawArea Then
+        '    Dim rect As RectangleF = pixcel_rectangle(item.m_rひも位置)
+        '    _Graphic.DrawRectangle(_Pen_black_dot, rect.X, rect.Y, rect.Width, rect.Height)
+        'End If
+
+        Dim ru As S領域 = item.m_knot.GetDrawUnit
+        If Not ru.IsEmpty Then
+            Dim rect As RectangleF = pixcel_rectangle(ru)
+            _Graphic.DrawRectangle(_Pen_black_dot, rect.X, rect.Y, rect.Width, rect.Height)
+        End If
+        Dim ra As S領域 = item.m_knot.GetDrawArea
+        If Not ra.IsEmpty Then
+            Dim rect As RectangleF = pixcel_rectangle(ra)
             _Graphic.DrawRectangle(_Pen_black_dot, rect.X, rect.Y, rect.Width, rect.Height)
         End If
 
