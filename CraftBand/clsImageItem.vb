@@ -2047,19 +2047,6 @@ Public Class clsImageItem
         If m_row縦横展開 IsNot Nothing Then
             m_Index = m_row縦横展開.f_iひも番号
 
-            'If m_row縦横展開.f_iひも種 = enumひも種.i_横 Then
-            '    m_ImageType = ImageTypeEnum._横バンド
-            'ElseIf m_row縦横展開.f_iひも種 = enumひも種.i_縦 Then
-            '    m_ImageType = ImageTypeEnum._縦バンド
-            'ElseIf m_row縦横展開.f_iひも種 = enumひも種.i_側面 Then
-            '    m_ImageType = ImageTypeEnum._横バンド '横向きに描く
-            'ElseIf (m_row縦横展開.f_iひも種 And enumひも種.i_横) Then
-            '    'Meshの場合
-            '    m_ImageType = ImageTypeEnum._横バンド
-            'Else
-            '    '他は別途指定
-            'End If
-
             'm_ImageType = ImageTypeEnum._描画なし
             '描画する場合はセットしてください
 
@@ -2070,38 +2057,6 @@ Public Class clsImageItem
     End Function
 
     '四つ畳み編みのコマ
-    'Sub New(ByVal p中心 As S実座標, ByVal row As tbl縦横展開Row, ByVal row2 As tbl縦横展開Row,
-    '        ByVal dひも幅 As Double, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean, ByVal isframe As Boolean,
-    '        Optional ByVal isgauge As Boolean = False)
-
-    '    m_row縦横展開 = row
-    '    m_row縦横展開2 = row2
-    '    m_ImageType = ImageTypeEnum._コマ
-
-    '    If m_row縦横展開 IsNot Nothing Then
-    '        m_Index = CType(m_row縦横展開.f_iひも種, Integer) + m_row縦横展開.f_iひも番号
-    '    End If
-    '    If m_row縦横展開2 IsNot Nothing Then
-    '        m_Index2 = CType(m_row縦横展開2.f_iひも種, Integer) + m_row縦横展開2.f_iひも番号
-    '    End If
-
-    '    m_dひも幅 = dひも幅
-
-    '    m_knot = New CKnot(p中心, dコマ寸法, dすき間, isleft)
-
-    '    Dim bandY As New CBand(m_row縦横展開)
-    '    Dim bandT As New CBand(m_row縦横展開2)
-    '    m_knot.SetBandYH(bandY, bandT, dひも幅, isgauge)
-
-    '    If isframe Then
-    '        If isgauge Then
-    '            m_knot.SetRegionDisp(False, True) 'コマ寸法+すき間
-    '        Else
-    '            m_knot.SetRegionDisp(True, False) 'コマ寸法
-    '        End If
-    '    End If
-
-    'End Sub
 
     Sub New(ByVal knot As CKnot, ByVal idx As Integer, ByVal idx2 As Integer)
         m_ImageType = ImageTypeEnum._コマ
@@ -2393,8 +2348,8 @@ Public Class clsImageItem
         If Not m_a四隅.IsEmpty Then
             sb.AppendFormat("四隅:{0}", m_a四隅).AppendLine()
         End If
-        sb.AppendFormat("dひも幅={0} ひも位置:{1}", m_dひも幅, m_rひも位置).AppendLine()
-        'sb.AppendFormat("bNoMark={0} border:{1}", m_bNoMark, m_borderひも).AppendLine()
+        sb.AppendFormat("dひも幅={0} ひも位置:{1}", m_dひも幅, m_rひも位置)
+        sb.AppendFormat(" bNoMark={0}", m_bNoMark).AppendLine()
         sb.AppendLine(m_lineList.ToString)
         If m_knot IsNot Nothing Then
             sb.AppendLine(m_knot.ToString)
