@@ -246,7 +246,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.BandWidth}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Knot, CalcCategory.BandWidth}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Knot, CalcCategory.BandWidth, CalcCategory.SideFolding}.Contains(category) Then
             Saveコマ数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -500,7 +500,7 @@ Public Class frmMain
             txt縁厚さプラス_周.Text = .p_s縁厚さプラス_周
 
             txt垂直ひも数.Text = .p_i垂直ひも数
-            txt厚さ.Text = .p_d厚さ
+            txt厚さ.Text = .p_s厚さ
 
             lbl横寸法の差.Text = .p_s横寸法の差
             lbl縦寸法の差.Text = .p_s縦寸法の差
@@ -513,6 +513,9 @@ Public Class frmMain
                 ToolStripStatusLabel1.Text = "NG"
                 ToolStripStatusLabel2.Text = .p_sメッセージ
             End If
+
+            txtコマ_対角.Text = .p_sコマの寸法_対角
+            txtコマベース_対角.Text = .p_sコマベース寸法_対角
         End With
 
     End Sub

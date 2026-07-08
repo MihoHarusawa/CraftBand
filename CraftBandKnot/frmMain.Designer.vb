@@ -760,6 +760,7 @@ Partial Class frmMain
         txt1コマ_要尺.ReadOnly = True
         txt1コマ_要尺.Size = New Size(79, 26)
         txt1コマ_要尺.TabIndex = 35
+        txt1コマ_要尺.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt1コマ_要尺, "1コマ編むのに必要な長さ")
         ' 
         ' txt1コマ_寸法
@@ -770,6 +771,7 @@ Partial Class frmMain
         txt1コマ_寸法.ReadOnly = True
         txt1コマ_寸法.Size = New Size(79, 26)
         txt1コマ_寸法.TabIndex = 34
+        txt1コマ_寸法.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt1コマ_寸法, "1コマの寸法")
         ' 
         ' lbl要尺
@@ -791,6 +793,7 @@ Partial Class frmMain
         txtコマベース_要尺.ReadOnly = True
         txtコマベース_要尺.Size = New Size(79, 26)
         txtコマベース_要尺.TabIndex = 38
+        txtコマベース_要尺.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtコマベース_要尺, "1コマ編むのに必要な長さにすき間を加えた、単位となる長さ")
         ' 
         ' txtコマベース_寸法
@@ -801,6 +804,7 @@ Partial Class frmMain
         txtコマベース_寸法.ReadOnly = True
         txtコマベース_寸法.Size = New Size(79, 26)
         txtコマベース_寸法.TabIndex = 37
+        txtコマベース_寸法.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtコマベース_寸法, "コマ寸法にすき間を加えた、単位となるサイズ")
         ' 
         ' nud折り返しコマ数
@@ -1171,6 +1175,7 @@ Partial Class frmMain
         txtコマベース_対角.ReadOnly = True
         txtコマベース_対角.Size = New Size(79, 26)
         txtコマベース_対角.TabIndex = 41
+        txtコマベース_対角.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtコマベース_対角, "斜め時、コマ寸法にすき間を加えた、単位となるサイズ")
         txtコマベース_対角.Visible = False
         ' 
@@ -1182,6 +1187,7 @@ Partial Class frmMain
         txtコマ_対角.ReadOnly = True
         txtコマ_対角.Size = New Size(79, 26)
         txtコマ_対角.TabIndex = 40
+        txtコマ_対角.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtコマ_対角, "コマ寸法の対角線のサイズ")
         txtコマ_対角.Visible = False
         ' 

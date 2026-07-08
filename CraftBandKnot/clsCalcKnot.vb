@@ -10,6 +10,8 @@ Imports CraftBand.Tables.dstOutput
 Class clsCalcKnot
     Private _disposedValue As Boolean
 
+    Friend Shared ROOT2 As Double = Math.Sqrt(2)
+
     'ステップ画像生成時には同じゲージを使用する
     Shared _clsBandTypeGauge As clsBandTypeGauge = Nothing
     Private Property p_dマイひも長係数 As Double '設定値
@@ -48,15 +50,21 @@ Class clsCalcKnot
     Private Property _d縦_目標 As Double
     Private Property _d高さ_目標 As Double
     Private Property _I基本のひも幅 As Integer
+    Private Property _d基本のひも幅 As Double
     '基本単位
     Private Property _dコマの寸法 As Double
     Private Property _dコマの要尺 As Double
     Private Property _dコマベース寸法 As Double
     Private Property _dコマベース要尺 As Double
+    Private Property _dコマの寸法_対角 As Double
+    Private Property _dコマベース寸法_対角 As Double
+
     'コマ数
     Private Property _i横のコマ数 As Integer
     Private Property _i縦のコマ数 As Integer
     Private Property _i高さのコマ数 As Integer
+    Private Property _d高さのコマ数 As Double
+
     Private Property _i折り返しコマ数 As Integer
     Private Property _dコマ間のすき間 As Double 'nudゼロ以上
     '展開時参照
@@ -65,6 +73,7 @@ Class clsCalcKnot
 
     'キャッシュ
     Private Property _b縦横側面を展開する As Boolean
+    Private Property _b斜め立ち上げ As Boolean
 
 
 
@@ -94,21 +103,27 @@ Class clsCalcKnot
         _d縦_目標 = -1
         _d高さ_目標 = -1
         _I基本のひも幅 = -1
+        _d基本のひも幅 = 0
 
         _dコマの寸法 = -1
         _dコマの要尺 = -1
         _dコマベース寸法 = -1
         _dコマベース要尺 = -1
 
+        _dコマの寸法_対角 = -1
+        _dコマベース寸法_対角 = -1
+
         _i横のコマ数 = -1
         _i縦のコマ数 = -1
         _i高さのコマ数 = -1
+        _d高さのコマ数 = -1
         _i折り返しコマ数 = -1
         _dコマ間のすき間 = 0
         _dひも長加算_縦横端 = 0
         _dひも長加算_側面 = 0
 
         _b縦横側面を展開する = False
+        _b斜め立ち上げ = False
 
         _d縁の高さ = 0
         _d縁の垂直ひも長 = 0
@@ -137,11 +152,6 @@ Class clsCalcKnot
     End Function
 
 #Region "プロパティ値"
-    ReadOnly Property p_d基本のひも幅 As Double
-        Get
-            Return g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
-        End Get
-    End Property
 
     ReadOnly Property p_i高さコマ数計 As Integer
         Get
@@ -161,10 +171,85 @@ Class clsCalcKnot
         End Get
     End Property
 
+
+    ReadOnly Property p_i横ひもの本数 As Integer
+        Get
+            If _b斜め立ち上げ Then
+                Return _i縦のコマ数 + _i横のコマ数
+            Else
+                Return _i縦のコマ数
+            End If
+        End Get
+    End Property
+
+    ReadOnly Property p_i縦ひもの本数 As Integer
+        Get
+            If _b斜め立ち上げ Then
+                Return _i縦のコマ数 + _i横のコマ数
+            Else
+                Return _i横のコマ数
+            End If
+        End Get
+    End Property
+
+    Public ReadOnly Property p_i垂直ひも数 As Integer
+        Get
+            Return 2 * (p_i横ひもの本数 + p_i縦ひもの本数)
+        End Get
+    End Property
+
+
+    ReadOnly Property p_dコマベース_横 As Double
+        Get
+            If _b斜め立ち上げ Then
+                Return _dコマベース寸法_対角 * _i横のコマ数
+            Else
+                Return _dコマベース寸法 * _i横のコマ数
+            End If
+        End Get
+    End Property
+
+    ReadOnly Property p_dコマベース_縦 As Double
+        Get
+            If _b斜め立ち上げ Then
+                Return _dコマベース寸法_対角 * _i縦のコマ数
+            Else
+                Return _dコマベース寸法 * _i縦のコマ数
+            End If
+        End Get
+    End Property
+
+    ReadOnly Property p_dコマベース_高さ As Double
+        Get
+            If _b斜め立ち上げ Then
+                Return _dコマベース寸法_対角 * _d高さのコマ数 '0.5あり
+            Else
+                Return _dコマベース寸法 * _i高さのコマ数
+            End If
+        End Get
+    End Property
+
+    ReadOnly Property p_dコマベース_周 As Double
+        Get
+            Return 2 * (p_dコマベース_横 + p_dコマベース_縦)
+        End Get
+    End Property
+
+
+#Region "結果表示・参照のみ(長さ計算やイメージ生成には使わない)"
+
     ReadOnly Property p_sコマの寸法 As String
         Get
             If 0 < _dコマの寸法 Then
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_dコマの寸法)
+            End If
+            Return ""
+        End Get
+    End Property
+    ReadOnly Property p_sコマの寸法_対角 As String
+        Get
+            If 0 < _dコマの寸法 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_dコマの寸法_対角)
             End If
             Return ""
         End Get
@@ -187,6 +272,14 @@ Class clsCalcKnot
             Return ""
         End Get
     End Property
+    ReadOnly Property p_sコマベース寸法_対角 As String
+        Get
+            If 0 < _dコマベース寸法 Then
+                Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_dコマベース寸法_対角)
+            End If
+            Return ""
+        End Get
+    End Property
 
     ReadOnly Property p_sコマベース要尺 As String
         Get
@@ -194,42 +287,6 @@ Class clsCalcKnot
                 Return g_clsSelectBasics.p_unit設定時の寸法単位.Text(_dコマベース要尺)
             End If
             Return ""
-        End Get
-    End Property
-
-    ReadOnly Property p_i横ひもの本数 As Integer
-        Get
-            Return _i縦のコマ数
-        End Get
-    End Property
-
-    ReadOnly Property p_i縦ひもの本数 As Integer
-        Get
-            Return _i横のコマ数
-        End Get
-    End Property
-
-    ReadOnly Property p_dコマベース_横 As Double
-        Get
-            Return _dコマベース寸法 * _i横のコマ数
-        End Get
-    End Property
-
-    ReadOnly Property p_dコマベース_縦 As Double
-        Get
-            Return _dコマベース寸法 * _i縦のコマ数
-        End Get
-    End Property
-
-    ReadOnly Property p_dコマベース_高さ As Double
-        Get
-            Return _dコマベース寸法 * _i高さのコマ数
-        End Get
-    End Property
-
-    ReadOnly Property p_dコマベース_周 As Double
-        Get
-            Return 2 * (p_dコマベース_横 + p_dコマベース_縦)
         End Get
     End Property
 
@@ -392,12 +449,6 @@ Class clsCalcKnot
     End Property
 
 
-    Public ReadOnly Property p_i垂直ひも数 As Integer
-        Get
-            Return 2 * (p_i横ひもの本数 + p_i縦ひもの本数)
-        End Get
-    End Property
-
     Public ReadOnly Property p_s厚さ As String
         Get
             If 0 < p_d厚さ Then
@@ -430,7 +481,7 @@ Class clsCalcKnot
 
         Return values
     End Function
-
+#End Region
 
     'データ内容
     Public Function dump() As String
@@ -530,6 +581,16 @@ Class clsCalcKnot
                 End If
                 '(追加品は計算寸法変更なし)
 
+            Case CalcCategory.SideFolding    '立ち上げ方法(縦横/斜め)
+                ret = ret And set_コマ数()
+                ret = ret And calc_側面(category, Nothing, Nothing)
+                If ret Then
+                    p_sメッセージ = _frmMain.editAddParts.SetRefValueAndCheckError(_Data, getAddPartsRefValues)
+                    If Not String.IsNullOrEmpty(p_sメッセージ) Then
+                        ret = False
+                    End If
+                End If
+
             Case CalcCategory.Expand_Yoko  '横ひも展開のセル編集
                 Dim row As tbl縦横展開Row = CType(ctr, tbl縦横展開Row)
                 ret = ret And adjust_ひも(row, key)
@@ -572,6 +633,7 @@ Class clsCalcKnot
             _d高さ_目標 = .Value("f_d高さ寸法")
 
             _I基本のひも幅 = .Value("f_i基本のひも幅")
+            _d基本のひも幅 = g_clsSelectBasics.p_d指定本幅(_I基本のひも幅)
         End With
 
         If Not isValidTarget(needTarget) Then
@@ -594,6 +656,14 @@ Class clsCalcKnot
             _dひも長加算_縦横端 = .Value("f_dひも長加算")
             _dひも長加算_側面 = .Value("f_dひも長加算_側面")
             _b縦横側面を展開する = .Value("f_b展開区分")
+
+            If .Value("f_i織りタイプ") = enum立ち上げタイプ.i_斜め Then
+                _b斜め立ち上げ = True
+                _d高さのコマ数 = .Value("f_d高さの四角数")
+            Else
+                _b斜め立ち上げ = False
+            End If
+
         End With
 
         Return IsValidInput()
@@ -614,6 +684,8 @@ Class clsCalcKnot
         _dコマの要尺 = _clsBandTypeGauge.Getコマ要尺値(_I基本のひも幅)
         _dコマベース寸法 = _dコマの寸法 + _dコマ間のすき間
         _dコマベース要尺 = _dコマの要尺 + _dコマ間のすき間
+        _dコマの寸法_対角 = _dコマの寸法 * ROOT2
+        _dコマベース寸法_対角 = _dコマベース寸法 * ROOT2
 
         Return True
     End Function
