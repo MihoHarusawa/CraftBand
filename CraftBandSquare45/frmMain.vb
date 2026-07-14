@@ -2049,17 +2049,17 @@ Public Class frmMain
         dgv折りカラー.EndEdit()
         dgv折りカラー.Refresh()
     End Sub
-
-
 #End Region
 
 #Region "ひも上下"
 
     Sub Showひも上下(ByVal works As clsDataTables)
+        '高さを切り上げているため、0.5がある時はマイナスを指定
         Dim ret As Boolean =
         editUpDown.SetSquare45Basics(_clsCalcSquare45.p_i横の四角数,
                                     _clsCalcSquare45.p_i縦の四角数,
-                                    _clsCalcSquare45.p_i高さの切上四角数) AndAlso
+                                    _clsCalcSquare45.p_i高さの切上四角数,
+                                    IIf(_clsCalcSquare45.p_b高さ半四角, -1, 0)) AndAlso
         editUpDown.ChangeSquare45EditHeight(nud開始高さ.Value, chk1回のみ.Checked)
 
         editUpDown.PanelSize = tpageひも上下.Size

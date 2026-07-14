@@ -153,7 +153,7 @@ Public Class ctrEditUpDown
         Return ret
     End Function
 
-    Function SetSquare45Basics(ByVal yoko As Integer, ByVal tate As Integer, ByVal takasa As Integer) As Boolean
+    Function SetSquare45Basics(ByVal yoko As Integer, ByVal tate As Integer, ByVal takasa As Integer, ByVal iHalf As Integer) As Boolean
         I水平領域四角数 = yoko + tate
         I垂直領域四角数 = yoko + tate
         '
@@ -161,7 +161,7 @@ Public Class ctrEditUpDown
             Return False
         End If
         _clsSquare45Bottom = Nothing
-        _clsSquare45Bottom = New clsSquare45Bottom(yoko, tate, takasa)
+        _clsSquare45Bottom = New clsSquare45Bottom(yoko, tate, takasa, iHalf)
         Return True
     End Function
 

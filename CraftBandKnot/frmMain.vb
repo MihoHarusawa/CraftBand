@@ -246,7 +246,7 @@ Public Class frmMain
         If {CalcCategory.NewData, CalcCategory.Target, CalcCategory.BandWidth}.Contains(category) Then
             Save目標寸法(_clsDataTables.p_row目標寸法)
         End If
-        If {CalcCategory.NewData, CalcCategory.Knot, CalcCategory.BandWidth, CalcCategory.SideFolding}.Contains(category) Then
+        If {CalcCategory.NewData, CalcCategory.Knot, CalcCategory.BandWidth, CalcCategory.Expand, CalcCategory.SideFolding}.Contains(category) Then
             Saveコマ数(_clsDataTables.p_row底_縦横)
         End If
         'tableについては更新中をそのまま使用
@@ -514,8 +514,10 @@ Public Class frmMain
                 ToolStripStatusLabel2.Text = .p_sメッセージ
             End If
 
+            txt編みひも.Text = .p_i編みひもの本数
             txtコマ_対角.Text = .p_sコマの寸法_対角
             txtコマベース_対角.Text = .p_sコマベース寸法_対角
+
         End With
 
     End Sub
@@ -528,11 +530,11 @@ Public Class frmMain
             Exit Sub
         End If
 
-        Saveコマ数(works.p_row底_縦横) '縦横側面展開値
-        If Not _clsCalcKnot.adjust_側面() Then
-            MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
+        'Saveコマ数(works.p_row底_縦横) '縦横側面展開値
+        'If Not _clsCalcKnot.adjust_側面() Then
+        '    MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        '    Exit Sub
+        'End If
 
         BindingSource側面と縁.DataSource = works.p_tbl側面
         BindingSource側面と縁.Sort = "f_i番号 , f_iひも番号"
@@ -1350,6 +1352,7 @@ Public Class frmMain
     '縦横の展開チェックボックス　※チェックは最初のタブにある
     Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横側面を展開する.CheckedChanged
         set底の縦横展開(chk縦横側面を展開する.Checked)
+        recalc(CalcCategory.Expand, Nothing, Nothing) '高さのコマ数の展開状態
     End Sub
 
     Private Sub nud基本のひも幅_ValueChanged(sender As Object, e As EventArgs) Handles nud基本のひも幅.ValueChanged
@@ -1375,9 +1378,9 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud横のコマ数.ValueChanged
-        If Not _isLoadingData Then
-            nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
-        End If
+        'If Not _isLoadingData Then
+        '    nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
+        'End If
         recalc(CalcCategory.Knot, sender)
     End Sub
 
@@ -1394,9 +1397,9 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦のコマ数.ValueChanged
-        If Not _isLoadingData Then
-            nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
-        End If
+        'If Not _isLoadingData Then
+        '    nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
+        'End If
         recalc(CalcCategory.Knot, sender)
     End Sub
 
@@ -1404,10 +1407,11 @@ Public Class frmMain
         If nud横のコマ数.Value <= 0 Then
             Exit Sub
         End If
-        If nud横のコマ数.Value < nud左から何番目のコマ.Value Then
-            nud左から何番目のコマ.Value = nud横のコマ数.Value
-            'ElseIf nud左から何番目のコマ.Value <= 0 Then
-            '    nud左から何番目のコマ.Value = 1
+        'If nud横のコマ数.Value < nud左から何番目のコマ.Value Then
+        '    nud左から何番目のコマ.Value = nud横のコマ数.Value
+        'End If
+        If Val(txt縦ひもの本数.Text) < nud左から何番目のコマ.Value Then
+            nud左から何番目のコマ.Value = Val(txt縦ひもの本数.Text)
         End If
     End Sub
 
@@ -1415,20 +1419,21 @@ Public Class frmMain
         If nud縦のコマ数.Value <= 0 Then
             Exit Sub
         End If
-        If nud縦のコマ数.Value < nud上から何番目のコマ.Value Then
-            nud上から何番目のコマ.Value = nud縦のコマ数.Value
-            'ElseIf nud上から何番目のコマ.Value <= 0 Then
-            '    nud上から何番目のコマ.Value = 1
+        'If nud縦のコマ数.Value < nud上から何番目のコマ.Value Then
+        '    nud上から何番目のコマ.Value = nud縦のコマ数.Value
+        'End If
+        If Val(txt横ひもの本数.Text) < nud上から何番目のコマ.Value Then
+            nud上から何番目のコマ.Value = Val(txt横ひもの本数.Text)
         End If
     End Sub
 
     Private Sub nud高さのコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さのコマ数.ValueChanged
-        txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
+        'txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
         recalc(CalcCategory.Knot, sender)
     End Sub
 
     Private Sub nud折り返しコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud折り返しコマ数.ValueChanged
-        txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
+        'txt編みひも.Text = (nud高さのコマ数.Value + nud折り返しコマ数.Value).ToString
         recalc(CalcCategory.Knot, sender)
     End Sub
 
@@ -1441,9 +1446,6 @@ Public Class frmMain
         lblひも長加算_側面.Visible = Not checked
         nudひも長加算_側面.Visible = Not checked
         lblひも長加算_側面_単位.Visible = Not checked
-        lbl編みひも.Visible = Not checked
-        txt編みひも.Visible = Not checked
-        lbl編みひも_単位.Visible = Not checked
 
         lbl対角サイズ.Visible = checked
         txtコマ_対角.Visible = checked
@@ -1462,10 +1464,24 @@ Public Class frmMain
         recalc(CalcCategory.SideFolding, sender)
     End Sub
 
+    Private Sub txt横ひもの本数_TextChanged(sender As Object, e As EventArgs) Handles txt横ひもの本数.TextChanged
+        If Not _isLoadingData Then
+            nud上から何番目のコマ.Value = KnotsCenter(Val(txt横ひもの本数.Text))
+        End If
+    End Sub
+
+    Private Sub txt縦ひもの本数_TextChanged(sender As Object, e As EventArgs) Handles txt縦ひもの本数.TextChanged
+        If Not _isLoadingData Then
+            nud左から何番目のコマ.Value = KnotsCenter(Val(txt縦ひもの本数.Text))
+        End If
+    End Sub
+
+
 #End Region
 
 #Region "側面"
 
+    '縁以外は、何本幅・集計対象外区分は変更不可
     Private Sub dgv_CellFormatting側面と縁(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgv側面と縁.CellFormatting
         Dim dgv As DataGridView = CType(sender, DataGridView)
         If dgv Is Nothing OrElse e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then
@@ -1939,6 +1955,7 @@ Public Class frmMain
             End If
         Next
     End Sub
+
 
 #End Region
 

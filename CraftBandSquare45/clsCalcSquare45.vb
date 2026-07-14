@@ -1141,7 +1141,7 @@ Class clsCalcSquare45
     '横の辺.Checked, 垂直に.Value, i底に.Value, i開始高さ.Value
     Function fitsizeひも上下(ByVal yoko As Boolean, ByVal sideup As Integer, ByVal botm As Integer, ByVal takasa As Integer) As clsUpDown
 
-        Dim square45bottom As New clsSquare45Bottom(_i横の四角数, _i縦の四角数, p_i高さの切上四角数)
+        Dim square45bottom As New clsSquare45Bottom(_i横の四角数, _i縦の四角数, p_i高さの切上四角数, p_b高さ半四角)
         '開始高さ
         If Not square45bottom.SetEditHeight(takasa, True) Then
             Return Nothing

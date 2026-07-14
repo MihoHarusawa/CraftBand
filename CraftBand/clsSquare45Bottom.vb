@@ -5,8 +5,10 @@ Public Class clsSquare45Bottom
 
     Dim _i横の四角数 As Integer '配置表示用 45度側
     Dim _i縦の四角数 As Integer '〃　　　　135度側
-    Dim _i高さ切上四角数 As Integer '設定の切上値(未使用領域の表示のみ)
+    Dim _i高さ切上四角数 As Integer '設定の切上(整数)値・未使用領域の表示用
 
+    Dim _i高さ半四角 As Integer = 0  '実高さ、+1:+0.5/-1:-0.5/0:そのまま
+    Dim _b縁四角付加 As Boolean = True  '高さ半四角の時、側面領域判定に0.5四角分を加える
 
     Dim _i領域四角数 As Integer = 0
     Dim _is底位置表示 As Boolean = False 'IsValidかつサイズ一致時
@@ -33,10 +35,11 @@ Public Class clsSquare45Bottom
         End Get
     End Property
 
-    Sub New(ByVal yoko As Integer, ByVal tate As Integer, ByVal takasa As Integer)
+    Sub New(ByVal yoko As Integer, ByVal tate As Integer, ByVal takasa As Integer, ByVal iHalf As Integer)
         _i横の四角数 = yoko
         _i縦の四角数 = tate
         _i高さ切上四角数 = takasa
+        _i高さ半四角 = iHalf
 
         calcBasicCount()
     End Sub
@@ -59,6 +62,20 @@ Public Class clsSquare45Bottom
         Else
             Return True
         End If
+    End Function
+
+    '編集領域を縦・横・高さと合わせる
+    Function SetJustSize() As Boolean
+        If Not IsValid Then
+            Return False
+        End If
+        _b縁四角付加 = False
+        _i高さ編集四角数 = _i高さ切上四角数
+        _IsOnce = True
+        _EditHorizontal = _i横の四角数 + _i縦の四角数 + 2 * _i高さ編集四角数
+        _EditVertical = _EditHorizontal
+
+        Return calcBasicCount()
     End Function
 
     '「合わせる」領域を作れればTrue 作れなければmsg #85
@@ -188,6 +205,9 @@ Public Class clsSquare45Bottom
         _side_line_sideR  '側面の辺・側面側
         _height_over45R '高さの外45
         _height_over '高さの外
+        '縁の位置は、その四角の対角線が高さ
+        _side135_edge '側面135の縁
+        _side45R_edge '側面45の縁
     End Enum
 
     Shared ColorsON() As Color = {
@@ -201,7 +221,9 @@ Public Class clsSquare45Bottom
     Color.FromArgb(46, 118, 184), '側面の辺・正面と背面側
     Color.FromArgb(0, 51, 154), '側面の辺・側面側 ※
     Color.FromArgb(240, 240, 240), '高さの外45 ※
-    Color.FromArgb(160, 160, 160) '高さの外
+    Color.FromArgb(160, 160, 160), '高さの外
+    Color.FromArgb(223, 189, 89), '側面135の縁
+    Color.FromArgb(220, 199, 187) '側面45の縁 ※
 }
 
     Shared ColorsOFF() As Color = {
@@ -215,7 +237,9 @@ Public Class clsSquare45Bottom
     Color.FromArgb(155, 194, 230), '側面の辺・前面と背面側
     Color.FromArgb(0, 32, 96), '側面の辺・側面側 ※
     Color.FromArgb(170, 170, 170), '高さの外45 ※
-    Color.White '高さの外
+    Color.White, '高さの外
+    Color.FromArgb(223, 211, 178), '側面135の縁
+    Color.FromArgb(213, 154, 115) '側面45の縁 ※
 }
 
     '底表示時は正方形(1～_i領域四角数)
@@ -224,7 +248,7 @@ Public Class clsSquare45Bottom
             Return If(value, ColorsON(bottom_category._height_over), ColorsOFF(bottom_category._height_over))
         End If
         If _is底位置表示 Then
-            Dim cat As bottom_category = checkIsInBottom(horzIdx, vertIdx)
+            Dim cat As bottom_category = CheckIsInBottom(horzIdx, vertIdx)
             Return If(value, ColorsON(cat), ColorsOFF(cat))
         Else
             Return If(value, ColorsON(bottom_category._bottom), ColorsOFF(bottom_category._bottom))
@@ -250,6 +274,8 @@ Public Class clsSquare45Bottom
     '         ＼／          ＼／ 左下ライン  verIdx=horIdx+横の四角数     
     '                   
     '　　←-------------------------→ 領域四角数=縦の四角数+横の四角数+2*高さ編集四角数
+    '
+    '※clsUpDownの色表示は、縁ラインは+1(ギザ折りの間の目も表示対象、0.5目は1目表示)
 
 
     '45度(左上ラインと右下ライン) に対応する定数定義（1桁の値）
@@ -261,11 +287,30 @@ Public Class clsSquare45Bottom
     Const area45_下外 As Integer = 6
     Const area45_下枠外 As Integer = 7
 
+    '45度の枠ライン(add_sq=True :縁に四角を追加する)
+    Private Function get_y_左上枠45ライン(ByVal horzIdx As Integer, ByVal add_sq As Boolean) As Integer
+        Dim y0 As Integer = -horzIdx + _i領域四角数 - _i縦の四角数 + 1 - 2 * _i高さ切上四角数
+        If add_sq Then
+            Return y0 'プラスした値
+        Else
+            Return y0 - _i高さ半四角 'ジャスト値(+で下げる)
+        End If
+    End Function
+    Private Function get_y_右下枠45ライン(ByVal horzIdx As Integer, ByVal add_sq As Boolean) As Integer
+        Dim y3 As Integer = -horzIdx + _i領域四角数 + _i縦の四角数 + 1 + 2 * _i高さ切上四角数
+        If add_sq Then
+            Return y3 'プラスした値
+        Else
+            Return y3 + _i高さ半四角 'ジャスト値(-で下げる)
+        End If
+    End Function
+
     '45度ライン位置
     Private Function area45(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Integer
         Dim i45 As Integer
         '左上枠ライン
-        Dim y0 As Integer = -horzIdx + _i領域四角数 - _i縦の四角数 + 1 - 2 * _i高さ切上四角数
+        'Dim y0 As Integer = -horzIdx + _i領域四角数 - _i縦の四角数 + 1 - 2 * _i高さ切上四角数
+        Dim y0 As Integer = get_y_左上枠45ライン(horzIdx, _b縁四角付加)
         If vertIdx < y0 Then
             i45 = area45_上枠外
         Else
@@ -284,7 +329,8 @@ Public Class clsSquare45Bottom
                     i45 = area45_下線
                 Else
                     '右下枠ライン
-                    Dim y3 As Integer = -horzIdx + _i領域四角数 + _i縦の四角数 + 1 + 2 * _i高さ切上四角数
+                    'Dim y3 As Integer = -horzIdx + _i領域四角数 + _i縦の四角数 + 1 + 2 * _i高さ切上四角数
+                    Dim y3 As Integer = get_y_右下枠45ライン(horzIdx, _b縁四角付加)
                     If vertIdx <= y3 Then
                         i45 = area45_下外
                     Else
@@ -297,6 +343,8 @@ Public Class clsSquare45Bottom
         Return i45
     End Function
 
+
+
     '135度(右上ラインと左下ライン) に対応する定数定義（100の位）
     Const area135_上枠外 As Integer = 100
     Const area135_上外 As Integer = 200
@@ -306,11 +354,30 @@ Public Class clsSquare45Bottom
     Const area135_下外 As Integer = 600
     Const area135_下枠外 As Integer = 700
 
+    '135度の枠ライン(add_sq=True :縁に四角を追加する)
+    Private Function get_y_右上枠135ライン(ByVal horzIdx As Integer, ByVal add_sq As Boolean) As Integer
+        Dim y0 As Integer = horzIdx - _i横の四角数 - 2 * _i高さ切上四角数
+        If add_sq Then
+            Return y0 'プラスした値
+        Else
+            Return y0 - _i高さ半四角 'ジャスト値(+で下げる)
+        End If
+    End Function
+    Private Function get_y_左下枠135ライン(ByVal horzIdx As Integer, ByVal add_sq As Boolean) As Integer
+        Dim y3 As Integer = horzIdx + _i横の四角数 + 2 * _i高さ切上四角数
+        If add_sq Then
+            Return y3 'プラスした値
+        Else
+            Return y3 + _i高さ半四角 'ジャスト値(-で下げる)
+        End If
+    End Function
+
     '135度ライン位置
     Private Function area135(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As Integer
         Dim i135 As Integer
         '右上枠ライン
-        Dim y0 As Integer = horzIdx - _i横の四角数 - 2 * _i高さ切上四角数
+        'Dim y0 As Integer = horzIdx - _i横の四角数 - 2 * _i高さ切上四角数
+        Dim y0 As Integer = get_y_右上枠135ライン(horzIdx, _b縁四角付加)
         If vertIdx < y0 Then
             i135 = area135_上枠外
         Else
@@ -329,7 +396,8 @@ Public Class clsSquare45Bottom
                     i135 = area135_下線
                 Else
                     '左下枠ライン
-                    Dim y3 As Integer = horzIdx + _i横の四角数 + 2 * _i高さ切上四角数
+                    'Dim y3 As Integer = horzIdx + _i横の四角数 + 2 * _i高さ切上四角数
+                    Dim y3 As Integer = get_y_左下枠135ライン(horzIdx, _b縁四角付加)
                     If vertIdx <= y3 Then
                         i135 = area135_下外
                     Else
@@ -389,7 +457,7 @@ Public Class clsSquare45Bottom
 
 
     '45度ラインと135度ラインで区切られる領域
-    Private Function checkIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As bottom_category
+    Function CheckIsInBottom(ByVal horzIdx As Integer, ByVal vertIdx As Integer) As bottom_category
         '45度ライン位置
         Dim i45 As Integer = area45(horzIdx, vertIdx)
         '135度ライン位置
@@ -407,7 +475,11 @@ Public Class clsSquare45Bottom
             Case area45_上外 + area135_上線
                 Return bottom_category._side_line_front
             Case area45_上外 + area135_間
-                Return bottom_category._side135
+                If vertIdx = get_y_左上枠45ライン(horzIdx, False) Then
+                    Return bottom_category._side135_edge
+                Else
+                    Return bottom_category._side135
+                End If
             Case area45_上外 + area135_下線
                 Return bottom_category._side_line_front
 
@@ -427,7 +499,11 @@ Public Class clsSquare45Bottom
             Case area45_間 + area135_上枠外
                 Return bottom_category._height_over45R
             Case area45_間 + area135_上外
-                Return bottom_category._side45R
+                If vertIdx = get_y_右上枠135ライン(horzIdx, False) Then
+                    Return bottom_category._side45R_edge
+                Else
+                    Return bottom_category._side45R
+                End If
             Case area45_間 + area135_上線
                 Return bottom_category._bottom_line
             Case area45_間 + area135_間
@@ -439,7 +515,11 @@ Public Class clsSquare45Bottom
             Case area45_間 + area135_下線
                 Return bottom_category._bottom_line
             Case area45_間 + area135_下外
-                Return bottom_category._side45R
+                If vertIdx = get_y_左下枠135ライン(horzIdx, False) Then
+                    Return bottom_category._side45R_edge
+                Else
+                    Return bottom_category._side45R
+                End If
             Case area45_間 + area135_下枠外
                 Return bottom_category._height_over45R
 
@@ -459,7 +539,11 @@ Public Class clsSquare45Bottom
             Case area45_下外 + area135_上線
                 Return bottom_category._side_line_front
             Case area45_下外 + area135_間
-                Return bottom_category._side135
+                If vertIdx = get_y_右下枠45ライン(horzIdx, False) Then
+                    Return bottom_category._side135_edge
+                Else
+                    Return bottom_category._side135
+                End If
             Case area45_下外 + area135_下線
                 Return bottom_category._side_line_front
 
@@ -807,14 +891,15 @@ Public Class clsSquare45Bottom
                 Continue For
             End If
 
-            dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
-            dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
-            checklist.Add(dd)
-
-            If Not dd.isOK Then
-                updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
-                ret = False
+            If updown IsNot Nothing Then
+                dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
+                dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
+                If Not dd.isOK Then
+                    updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
+                    ret = False
+                End If
             End If
+            checklist.Add(dd)
         Next
 
         Return ret
@@ -868,20 +953,30 @@ Public Class clsSquare45Bottom
                 Continue For
             End If
 
-            dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
-            dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
-            checklist.Add(dd)
-
-            If Not dd.isOK Then
-                updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
-                ret = False
+            If updown IsNot Nothing Then
+                dd.val = updown.GetIsUp(dd.horzIdx, dd.vertIdx)
+                dd.valRef = updown.GetIsUp(dd.horzIdxRef, dd.vertIdxRef)
+                If Not dd.isOK Then
+                    updown.SetReverse(dd.horzIdxRef, dd.vertIdxRef)
+                    ret = False
+                End If
             End If
+            checklist.Add(dd)
         Next
 
         Return ret
     End Function
 
+    Function GetSamePointPairList() As CSamePointPairList
+        '左上ライン・右上ライン
+        Dim checklist As New CSamePointPairList
+        Dim ret As Boolean = checkSideLineLeft(Nothing, checklist)
+        ret = ret And checkSideLineRight(Nothing, checklist)
 
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CheckSideLine({0}) {1}{2}", ret, vbCrLf, checklist.ToString())
+
+        Return checklist
+    End Function
 
 
 End Class
