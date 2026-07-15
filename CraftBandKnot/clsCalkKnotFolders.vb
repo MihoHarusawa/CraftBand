@@ -3,12 +3,25 @@ Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsSquare45Bottom
 Imports CraftBand.Tables.dstDataTables
-Imports CraftBandKnot.clsCalcKnot
 
 Partial Public Class clsCalcKnot
 
     '底展開状態の全コマ位置
     Dim _KnotFolderSpace As New CKnotFolder.CKnotFolderSpace
+
+    'コマ空間 (コマ単位の整数グリッド)
+    '・ →
+    '↓   1    2    3   → HorizontalCount           　　　　   
+    '   +----+----+----+ ...               　　　　　　
+    ' 1 |    |    |    | ...       中心からの位置　│　　　　　
+    '   +----+----+----+  ...     1/2があるので小数│　　　　　
+    ' 2 |    |    |    | ...               　　　　│
+    '   +----+----+----+ ...               　　　　│原点はグリッドの中心　　　　　
+    ' 3 |    |    |    | ...               ────・────→ coorBaseX
+    '   +----+----+----+ ...               　　　　│　　　　　
+    ' ↓  ....　　　　　　　　 　　　　　　　　　　↓　      toPoint関数で座標に変換
+    'VerticalCount　                             coorBaseY     (_dコマベース寸法を掛ける)
+
 
     'Enum emExp を_Yoko,_Tate のみで使用する
     Const cExpYTCount As Integer = 2 '縦横のみ
@@ -27,19 +40,6 @@ Partial Public Class clsCalcKnot
         End If
     End Function
 
-
-    'コマ空間 (コマ単位の整数グリッド)
-    '・ →
-    '↓   1    2    3   → HorizontalCount           　　　　   
-    '   +----+----+----+ ...               　　　　　　
-    ' 1 |    |    |    | ...       中心からの位置　│　　　　　
-    '   +----+----+----+  ...     1/2があるので小数│　　　　　
-    ' 2 |    |    |    | ...               　　　　│
-    '   +----+----+----+ ...               　　　　│原点はグリッドの中心　　　　　
-    ' 3 |    |    |    | ...               ────・────→ coorBaseX
-    '   +----+----+----+ ...               　　　　│　　　　　
-    ' ↓  ....　　　　　　　　 　　　　　　　　　　↓　      toPoint関数で座標に変換
-    'VerticalCount　                             coorBaseY     (_dコマベース寸法を掛ける)
 
 
 #Region "計算用プロパティ"
@@ -171,6 +171,8 @@ Partial Public Class clsCalcKnot
         Friend m_knot As CKnot = Nothing
         Friend m_knotSide As DirectionEnum = cDirectionEnumNone
         Dim m_positionSameKnot As SPosition '同一コマの相手方
+
+        Friend Property IsAddBottomBase As Boolean = False '底編み領域
 
         Friend Property IsBottomBase As Boolean = False '底編み領域
 
@@ -497,19 +499,19 @@ Partial Public Class clsCalcKnot
                     Return Nothing
                 End If
                 Dim position As SPosition = GetAt(StartPosition).m_position
-                Dim knots(3) As Integer
+                Dim knots(cSideCount - 1) As Integer
                 If _isDiagonal Then
                     '折り返しつつのびる
-                    knots(0) = GetKomaCount(position, New SPosition(0, -1)) 'U
-                    knots(1) = GetKomaCount(position, New SPosition(0, 1)) 'D
-                    knots(2) = GetKomaCount(position, New SPosition(-1, 0)) 'L
-                    knots(3) = GetKomaCount(position, New SPosition(1, 0)) 'R
+                    knots(SideEnum._上) = GetKomaCount(position, New SPosition(0, -1)) 'U
+                    knots(SideEnum._下) = GetKomaCount(position, New SPosition(0, 1)) 'D
+                    knots(SideEnum._左) = GetKomaCount(position, New SPosition(-1, 0)) 'L
+                    knots(SideEnum._右) = GetKomaCount(position, New SPosition(1, 0)) 'R
                 Else
                     '縦横にのびる
-                    knots(0) = position.VertIndex - 1
-                    knots(1) = VerticalCount - position.VertIndex
-                    knots(2) = position.HorzIndex - 1
-                    knots(3) = HorizontalCount - position.HorzIndex
+                    knots(SideEnum._上) = position.VertIndex - 1
+                    knots(SideEnum._下) = VerticalCount - position.VertIndex
+                    knots(SideEnum._左) = position.HorzIndex - 1
+                    knots(SideEnum._右) = HorizontalCount - position.HorzIndex
                 End If
 
                 Return knots

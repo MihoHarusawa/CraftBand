@@ -533,7 +533,7 @@ Partial Public Class clsCalcKnot
         pD2 += _unit45 * _dコマベース寸法
         pA2 += _unit45 * _dコマベース寸法
 
-        Dim alfa As Integer = 180
+        Dim alfa As Integer = 160
         item = New clsImageItem(clsImageItem.ImageTypeEnum._半透明白, 1)
         item.m_a四隅 = New S四隅(New S線分(pA3, pA2).p中点, pA3, pA1, pA2)
         item.m_alfa = alfa
@@ -742,22 +742,22 @@ Partial Public Class clsCalcKnot
 
         '各方向の説明文字列 
         If True Then
-            Dim p文字(3) As S実座標
+            Dim p文字(cSideCount - 1) As S実座標
             '上のひも
-            p文字(0).X = pコマ位置.X + dひも幅 * 2
-            p文字(0).Y = pコマ位置.Y + dバンド長
+            p文字(SideEnum._上).X = pコマ位置.X + dひも幅 * 2
+            p文字(SideEnum._上).Y = pコマ位置.Y + dバンド長
             '下のひも
-            p文字(1).X = pコマ位置.X + dひも幅 * 2
-            p文字(1).Y = pコマ位置.Y - 2 * dバンド長 / 3
+            p文字(SideEnum._下).X = pコマ位置.X + dひも幅 * 2
+            p文字(SideEnum._下).Y = pコマ位置.Y - 2 * dバンド長 / 3
             '左のひも
-            p文字(2).X = pコマ位置.X - dバンド長 - dひも幅 * 15 '想定文字数分
-            p文字(2).Y = pコマ位置.Y - dひも幅 * 1.5
+            p文字(SideEnum._左).X = pコマ位置.X - dバンド長 - dひも幅 * 15 '想定文字数分
+            p文字(SideEnum._左).Y = pコマ位置.Y - dひも幅 * 1.5
             '右のひも
-            p文字(3).X = pコマ位置.X + dバンド長 + _dコマの寸法
-            p文字(3).Y = pコマ位置.Y + dひも幅
+            p文字(SideEnum._右).X = pコマ位置.X + dバンド長 + _dコマの寸法
+            p文字(SideEnum._右).Y = pコマ位置.Y + dひも幅
 
             startInfo.setMyValue(True) 'マイひも長係数を乗算する
-            For i As Integer = 0 To 3
+            For i As Integer = 0 To cSideCount - 1
                 With startInfo
                     '<コマの{0}>
                     Dim str1 As String = String.Format(My.Resources.CalcOutKnotOf, .getSideString(i))
@@ -786,42 +786,42 @@ Partial Public Class clsCalcKnot
         If True Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 2)
             Dim d1本幅 As Double = dひも幅 / _I基本のひも幅
-            If Abs(startInfo.getDiff(0)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
+            If Abs(startInfo.getDiff(SideEnum._上)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
                 '上下中央の横線
                 Dim pp As New S実座標(pコマ位置.X - dひも幅 * 1.5, pコマ位置.Y)
                 line = New S線分(pp, pp + Unit0 * dひも幅 * 3)
-                If Abs(startInfo.getDiff(0)) < d1本幅 Then
+                If Abs(startInfo.getDiff(SideEnum._上)) < d1本幅 Then
                     '1本幅以下
                     item.m_lineList.Add(line)
-                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(0) Then
+                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(SideEnum._上) Then
                     '要尺以上、上が長いので中央点は上にある
-                    Dim distance_from_knot_area As Double = (startInfo.getDiff(0) - _dコマベース要尺) / 2
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(SideEnum._上) - _dコマベース要尺) / 2
                     line = line + Unit90 * (_dコマベース寸法 / 2 + distance_from_knot_area)
                     item.m_lineList.Add(line)
-                ElseIf startInfo.getDiff(0) <= -(_dコマの要尺 / 2 - d1本幅) Then
+                ElseIf startInfo.getDiff(SideEnum._上) <= -(_dコマの要尺 / 2 - d1本幅) Then
                     '要尺以上、下が長いので中央点は下にある
-                    Dim distance_from_knot_area As Double = (startInfo.getDiff(1) - _dコマベース要尺) / 2
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(SideEnum._下) - _dコマベース要尺) / 2
                     line = line + Unit270 * (_dコマベース寸法 / 2 + distance_from_knot_area)
                     item.m_lineList.Add(line)
                 Else
                     '描けません
                 End If
             End If
-            If Abs(startInfo.getDiff(2)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
+            If Abs(startInfo.getDiff(SideEnum._左)) < dバンド長 * 2 + _dコマベース要尺 + d1本幅 Then
                 '左右中央の縦線
                 Dim pp As New S実座標(pコマ位置.X, pコマ位置.Y - dひも幅 * 1.5)
                 line = New S線分(pp, pp + Unit90 * dひも幅 * 3)
-                If Abs(startInfo.getDiff(2)) < d1本幅 Then
+                If Abs(startInfo.getDiff(SideEnum._左)) < d1本幅 Then
                     '1本幅以下
                     item.m_lineList.Add(line)
-                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(2) Then
+                ElseIf (_dコマの要尺 / 2 - d1本幅) <= startInfo.getDiff(SideEnum._左) Then
                     '要尺以上、左が長いので中央点は左にある
-                    Dim distance_from_knot_area As Double = (startInfo.getDiff(2) - _dコマベース要尺) / 2
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(SideEnum._左) - _dコマベース要尺) / 2
                     line = line + Unit180 * (_dコマベース寸法 / 2 + distance_from_knot_area)
                     item.m_lineList.Add(line)
-                ElseIf startInfo.getDiff(2) <= -(_dコマの要尺 / 2 - d1本幅) Then
+                ElseIf startInfo.getDiff(SideEnum._左) <= -(_dコマの要尺 / 2 - d1本幅) Then
                     '要尺以上、右が長いので中央点は右にある
-                    Dim distance_from_knot_area As Double = (startInfo.getDiff(3) - _dコマベース要尺) / 2
+                    Dim distance_from_knot_area As Double = (startInfo.getDiff(SideEnum._右) - _dコマベース要尺) / 2
                     line = line + Unit0 * (_dコマベース寸法 / 2 + distance_from_knot_area)
                     item.m_lineList.Add(line)
                 Else
