@@ -1515,7 +1515,11 @@ Public Class frmMain
             End If
             Exit Sub
         End If
+        If _clsCalcKnot.p_b斜め立ち上げ Then
+            Exit Sub
+        End If
 
+        '以下、縦横の場合のみ
         Dim table As tbl側面DataTable = Nothing
         Dim currow As tbl側面Row = Nothing
 

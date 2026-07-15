@@ -1972,7 +1972,7 @@ Public Class clsImageItem
     'クリップ
     Public m_fpath As String 'jpg
     Public m_angle As Double = 0                   '付属品
-    Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明
+    Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明,半透明白
     Public m_image As Image = Nothing '読み込み済み画像
 
 
@@ -1989,6 +1989,8 @@ Public Class clsImageItem
         _編みかた   'm_groupRow,m_a四隅,m_lineList,_r文字領域
 
         _付属品0   'システム用。_付属品と同処理・保存画像に描画
+
+        _半透明白   'm_a四隅,m_alfa
 
         _画像貼付   'm_a四隅
         '_折り返し線 'm_listLine
@@ -2292,7 +2294,7 @@ Public Class clsImageItem
                 '描画領域の後に作成されるが一応
                 r描画領域 = m_lineList.Get描画領域()
 
-            Case ImageTypeEnum._画像保存, ImageTypeEnum._画像貼付
+            Case ImageTypeEnum._画像保存, ImageTypeEnum._画像貼付, ImageTypeEnum._半透明白
                 r描画領域 = m_a四隅.r外接領域
 
         End Select

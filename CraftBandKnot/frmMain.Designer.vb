@@ -1001,7 +1001,7 @@ Partial Class frmMain
         ' btn削除_側面
         ' 
         btn削除_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        btn削除_側面.Location = New Point(6, 339)
+        btn削除_側面.Location = New Point(6, 381)
         btn削除_側面.Name = "btn削除_側面"
         btn削除_側面.Size = New Size(111, 43)
         btn削除_側面.TabIndex = 1
@@ -1012,7 +1012,7 @@ Partial Class frmMain
         ' btn追加_側面
         ' 
         btn追加_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn追加_側面.Location = New Point(721, 339)
+        btn追加_側面.Location = New Point(721, 381)
         btn追加_側面.Name = "btn追加_側面"
         btn追加_側面.Size = New Size(111, 43)
         btn追加_側面.TabIndex = 4
@@ -1672,7 +1672,7 @@ Partial Class frmMain
         ' 
         lbl編みかた名_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lbl編みかた名_側面.AutoSize = True
-        lbl編みかた名_側面.Location = New Point(409, 352)
+        lbl編みかた名_側面.Location = New Point(409, 394)
         lbl編みかた名_側面.Name = "lbl編みかた名_側面"
         lbl編みかた名_側面.Size = New Size(96, 19)
         lbl編みかた名_側面.TabIndex = 2
@@ -1682,7 +1682,7 @@ Partial Class frmMain
         ' 
         cmb編みかた名_側面.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         cmb編みかた名_側面.FormattingEnabled = True
-        cmb編みかた名_側面.Location = New Point(522, 348)
+        cmb編みかた名_側面.Location = New Point(522, 390)
         cmb編みかた名_側面.Name = "cmb編みかた名_側面"
         cmb編みかた名_側面.Size = New Size(185, 27)
         cmb編みかた名_側面.TabIndex = 3
@@ -1700,7 +1700,7 @@ Partial Class frmMain
         dgv側面と縁.Name = "dgv側面と縁"
         dgv側面と縁.RowHeadersWidth = 51
         dgv側面と縁.RowTemplate.Height = 29
-        dgv側面と縁.Size = New Size(827, 328)
+        dgv側面と縁.Size = New Size(827, 370)
         dgv側面と縁.TabIndex = 0
         ' 
         ' BindingSource側面と縁

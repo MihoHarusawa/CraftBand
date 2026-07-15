@@ -77,7 +77,7 @@ Partial Public Class clsCalcKnot
         If knotfolder Is Nothing OrElse knotfolder.BandSetCount < 2 Then
             Return False
         End If
-        If isBottomOnly AndAlso Not knotfolder.IsInBottom() Then
+        If isBottomOnly AndAlso Not knotfolder.IsBottomBase Then
             Return True
         End If
 
@@ -338,6 +338,13 @@ Partial Public Class clsCalcKnot
         Return itemlist
     End Function
 
+
+    '側面の外向きベクトル(長さ1)
+    Shared _unit225 As New S差分(225) '左側面
+    Shared _unit135 As New S差分(135) '前面
+    Shared _unit45 As New S差分(45) '右側面
+    Shared _unit315 As New S差分(315) '背面
+
     '底と側面枠(斜め)
     '底のみ=isBottomOnly
     Function imageList斜め描画要素(ByVal isBottomOnly As Boolean) As clsImageItemList
@@ -373,11 +380,6 @@ Partial Public Class clsCalcKnot
         Dim pD2 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1 + d + p_iコマ空間幅, 1 - d + _i縦のコマ数))
         Dim pD3 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1 + d + p_iコマ空間幅, 1 + d + _i縦のコマ数 + 2 * p_i側面の切捨コマ数))
 
-        '側面の外向き
-        Dim unit45 As New S差分(45) '右
-        Dim unit135 As New S差分(135) '前
-        Dim unit225 As New S差分(225) '左
-        Dim unit315 As New S差分(315) '後
 
         '折り返し線
         Dim d折り返し高さ As Double = 0
@@ -405,111 +407,152 @@ Partial Public Class clsCalcKnot
         item = New clsImageItem(clsImageItem.ImageTypeEnum._底枠, 1)
         item.m_a四隅 = a底
         itemlist.AddItem(item)
+        '底編みの枠
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 0)
+        item.m_a四隅 = New S四隅(a底.r外接領域)
+        itemlist.AddItem(item)
 
-        '** 前面(左上の側面)
+        '** 前面(左上の側面)_unit135
         Dim a前面 As New S四隅(pA3, pB3, pB1, pA1)
-        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._front, False)) Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 2)
-            item.m_a四隅 = a前面
-            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._front, False)
-            item.m_angle = _PlateAngle45(enumBasketPlateIdx._front)
-            itemlist.AddItem(item)
-        End If
         '枠線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
         item.m_a四隅 = a前面
         If 0 < _d縁の高さ Then
             line = New S線分(a前面.pA, a前面.pB)
-            line += unit135 * _d縁の高さ
+            line += _unit135 * _d縁の高さ
             item.m_lineList.Add(line)
         End If
         itemlist.AddItem(item)
         '折り返し線
+        line = New S線分(a前面.pA, a前面.pB)
+        line += _unit135 * d折り返し高さ
         If itemFolding IsNot Nothing Then
-            line = New S線分(a前面.pA, a前面.pB)
-            line += unit135 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-
-        '** 背面(右下の側面)
-        Dim a背面 As New S四隅(pD1, pC1, pC3, pD3)
-        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._back, False)) Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 3)
-            item.m_a四隅 = a背面
-            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._back, False)
-            item.m_angle = _PlateAngle45(enumBasketPlateIdx._back)
+        '画像
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._front, False)) Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 2)
+            item.m_a四隅 = New S四隅(line.p開始, line.p終了, a前面.pC, a前面.pD)
+            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._front, False)
+            item.m_angle = _PlateAngle45(enumBasketPlateIdx._front)
             itemlist.AddItem(item)
         End If
+
+        '** 背面(右下の側面)_unit315
+        Dim a背面 As New S四隅(pD1, pC1, pC3, pD3)
         '枠線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
         item.m_a四隅 = a背面
         If 0 < _d縁の高さ Then
             line = New S線分(a背面.pC, a背面.pD)
-            line += unit315 * _d縁の高さ
+            line += _unit315 * _d縁の高さ
             item.m_lineList.Add(line)
         End If
         itemlist.AddItem(item)
         '折り返し線
+        line = New S線分(a背面.pC, a背面.pD)
+        line += _unit315 * d折り返し高さ
         If itemFolding IsNot Nothing Then
-            line = New S線分(a背面.pC, a背面.pD)
-            line += unit315 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-
-        '** 左側面(左下の側面)
-        Dim a左側面 As New S四隅(pB1, pB2, pC2, pC1)
-        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)) Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 4)
-            item.m_a四隅 = a左側面
-            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)
-            item.m_angle = _PlateAngle45(enumBasketPlateIdx._leftside)
+        '画像
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._back, False)) Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 3)
+            item.m_a四隅 = New S四隅(a背面.pA, a背面.pB, line.p開始, line.p終了)
+            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._back, False)
+            item.m_angle = _PlateAngle45(enumBasketPlateIdx._back)
             itemlist.AddItem(item)
         End If
+
+
+        '** 左側面(左下の側面)_unit225
+        Dim a左側面 As New S四隅(pB1, pB2, pC2, pC1)
         '枠線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
         item.m_a四隅 = a左側面
         If 0 < _d縁の高さ Then
             line = New S線分(a左側面.pB, a左側面.pC)
-            line += unit225 * _d縁の高さ
+            line += _unit225 * _d縁の高さ
             item.m_lineList.Add(line)
         End If
         itemlist.AddItem(item)
         '折り返し線
+        line = New S線分(a左側面.pB, a左側面.pC)
+        line += _unit225 * d折り返し高さ
         If itemFolding IsNot Nothing Then
-            line = New S線分(a左側面.pB, a左側面.pC)
-            line += unit225 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
         End If
-
-        '** 右側面(右上の側面)
-        Dim a右側面 As New S四隅(pA2, pA1, pD1, pD2)
-        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)) Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 5)
-            item.m_a四隅 = a右側面
-            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)
-            item.m_angle = _PlateAngle45(enumBasketPlateIdx._rightside)
+        '画像
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)) Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 4)
+            item.m_a四隅 = New S四隅(a左側面.pA, line.p開始, line.p終了, a左側面.pD)
+            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._leftside, False)
+            item.m_angle = _PlateAngle45(enumBasketPlateIdx._leftside)
             itemlist.AddItem(item)
         End If
+
+        '** 右側面(右上の側面)_unit45
+        Dim a右側面 As New S四隅(pA2, pA1, pD1, pD2)
         '枠線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
         item.m_a四隅 = a右側面
         If 0 < _d縁の高さ Then
             line = New S線分(a右側面.pD, a右側面.pA)
-            line += unit45 * _d縁の高さ
+            line += _unit45 * _d縁の高さ
             item.m_lineList.Add(line)
         End If
         itemlist.AddItem(item)
         '折り返し線
+        line = New S線分(a右側面.pD, a右側面.pA)
+        line += _unit45 * d折り返し高さ
         If itemFolding IsNot Nothing Then
-            line = New S線分(a右側面.pD, a右側面.pA)
-            line += unit45 * d折り返し高さ
             itemFolding.m_lineList.Add(line)
+        End If
+        '画像
+        If Not String.IsNullOrWhiteSpace(p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)) Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._画像保存, 5)
+            item.m_a四隅 = New S四隅(line.p終了, a右側面.pB, a右側面.pC, line.p開始)
+            item.m_fpath = p_sPlatePngFilePath(enumBasketPlateIdx._rightside, False)
+            item.m_angle = _PlateAngle45(enumBasketPlateIdx._rightside)
+            itemlist.AddItem(item)
         End If
 
         '折り返し線
         If itemFolding IsNot Nothing Then
             itemlist.AddItem(itemFolding)
         End If
+
+
+        '面から出る部分は半透明化
+        pA3 += _unit135 * _dコマベース寸法
+        pB3 += _unit135 * _dコマベース寸法
+        pB2 += _unit225 * _dコマベース寸法
+        pC2 += _unit225 * _dコマベース寸法
+        pC3 += _unit315 * _dコマベース寸法
+        pD3 += _unit315 * _dコマベース寸法
+        pD2 += _unit45 * _dコマベース寸法
+        pA2 += _unit45 * _dコマベース寸法
+
+        Dim alfa As Integer = 180
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._半透明白, 1)
+        item.m_a四隅 = New S四隅(New S線分(pA3, pA2).p中点, pA3, pA1, pA2)
+        item.m_alfa = alfa
+        itemlist.AddItem(item)
+        '
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._半透明白, 2)
+        item.m_a四隅 = New S四隅(pB3, New S線分(pB3, pB2).p中点, pB2, pB1)
+        item.m_alfa = alfa
+        itemlist.AddItem(item)
+        '
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._半透明白, 3)
+        item.m_a四隅 = New S四隅(pC1, pC2, New S線分(pC2, pC3).p中点, pC3)
+        item.m_alfa = alfa
+        itemlist.AddItem(item)
+        '
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._半透明白, 4)
+        item.m_a四隅 = New S四隅(pD2, pD1, pD3, New S線分(pD3, pD2).p中点)
+        item.m_alfa = alfa
+        itemlist.AddItem(item)
 
         Return itemlist
     End Function
@@ -530,14 +573,23 @@ Partial Public Class clsCalcKnot
             'コマ空間の左上位置
             'Dim p要尺位置 As S実座標 = toPoint(-(_i横のコマ数 / 2) - p_i編みひもの本数, -(_i縦のコマ数 / 2) - p_i編みひもの本数)
             Dim p要尺位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1, 1))
-            If p_i編みひもの本数 = 0 Then
-                p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
-            End If
-            If (p_i編みひもの本数 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
-                p要尺位置.X = -(1 + _i横のコマ数 / 2) * _dコマベース寸法 - (_dコマベース要尺 / 2)
+
+            If _b斜め立ち上げ Then
+                If _i横のコマ数 * _dコマベース寸法 / ROOT2 < _dコマベース要尺 Then
+                    p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
+                End If
+
             Else
-                p要尺位置.X = p要尺位置.X + (_dコマベース要尺 / 2)
+                If p_i編みひもの本数 = 0 Then
+                    p要尺位置 = p要尺位置 + Unit90 * (_dコマベース寸法)
+                End If
+                If (p_i編みひもの本数 - 1) * _dコマベース寸法 < _dコマベース要尺 Then
+                    p要尺位置.X = -(1 + _i横のコマ数 / 2) * _dコマベース寸法 - (_dコマベース要尺 / 2)
+                Else
+                    p要尺位置.X = p要尺位置.X + (_dコマベース要尺 / 2)
+                End If
             End If
+
             item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 9)
             Dim delta As S差分 = Unit270 * dひも幅
             item.m_a四隅.p左上 = p要尺位置 + Unit180 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
@@ -578,7 +630,8 @@ Partial Public Class clsCalcKnot
         '底の開始位置のマーク
         If True Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
-            Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (startInfo.i左から何番目 - 1), -(_i縦のコマ数 / 2) + (startInfo.i上から何番目 - 1))
+            'Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (startInfo.i左から何番目 - 1), -(_i縦のコマ数 / 2) + (startInfo.i上から何番目 - 1))
+            Dim pコマ左上 As S実座標 = toPoint(startInfo.KnotStart.coorBaseXY())
             Dim pコマ右下 As S実座標 = pコマ左上 + Unit315 * _dコマベース寸法
 
             line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit0 * _dコマベース寸法)
@@ -597,8 +650,10 @@ Partial Public Class clsCalcKnot
         '開始位置のコマの転記
         Dim dバンド長 As Double = _dコマベース要尺
         'コマ空間の下中央位置
-        Dim pコマ位置 As S実座標 = toPoint(0, _i縦のコマ数 / 2 + p_i編みひもの本数 + 1) + Unit270 * dバンド長
-        'Dim pコマ位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(p_iコマ空間幅 / 2, p_iコマ空間高さ + 2)) + Unit270 * dバンド長
+        Dim pコマ位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1 + p_iコマ空間幅 / 2, 2 + p_iコマ空間高さ)) + Unit270 * dバンド長
+        If p_b斜め立ち上げ Then
+            pコマ位置 += Unit270 * _dコマベース寸法
+        End If
 
         Dim knot = New CKnot(pコマ位置, _dコマの寸法, _dコマ間のすき間, isKnotLeft)
 

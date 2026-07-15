@@ -415,6 +415,10 @@ Public Class CImageDraw
             Case ImageTypeEnum._縦軸線
                 Return draw軸線(item)
 
+            Case ImageTypeEnum._半透明白
+                Return draw半透明白(item)
+
+
             Case Else
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Trouble, "CImageDraw.DrawItem:No Def({0}:{1})", item.m_ImageType, item)
                 Return False
@@ -1253,6 +1257,22 @@ Public Class CImageDraw
             g_clsLog.LogException(ex, "CImageDraw.load画像")
             Return False
         End Try
+    End Function
+
+    Function draw半透明白(ByVal item As clsImageItem) As Boolean
+        If item.m_a四隅.IsEmpty Then
+            Return True '対象外
+        End If
+        Dim points() As PointF = pixcel_lines(item.m_a四隅)
+
+        'アルファ値の白
+        Dim semiTransparentWhite As Color = Color.FromArgb(item.m_alfa, 255, 255, 255)
+
+        Using brush As New SolidBrush(semiTransparentWhite)
+            ' 既存の描画の上に、半透明の白を重ねる
+            _Graphic.FillPolygon(brush, points)
+        End Using
+        Return True
     End Function
 
 

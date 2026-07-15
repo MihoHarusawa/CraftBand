@@ -110,6 +110,13 @@ Partial Public Class clsCalcKnot
             End Get
         End Property
 
+        '有効な値(上限も要チェックだが..)
+        ReadOnly Property IsValid() As Boolean
+            Get
+                Return 0 < HorzIndex AndAlso 0 < VertIndex
+            End Get
+        End Property
+
         '比較演算子 =
         Shared Operator =(ByVal c1 As SPosition, ByVal c2 As SPosition) As Boolean
             Return (c1.HorzIndex = c2.HorzIndex) AndAlso (c1.VertIndex = c2.VertIndex)
@@ -153,16 +160,19 @@ Partial Public Class clsCalcKnot
     Public Class CKnotFolder
         Private m_spaceParent As CKnotFolderSpace
 
+        '空間内の位置
+        Friend m_position As SPosition
+
         '横バンド・縦バンド
         Friend m_row縦横展開(cExpYTCount - 1) As tbl縦横展開Row
-
-        Friend m_position As SPosition
 
         Friend m_bottom_category As bottom_category = bottom_category._nodef
 
         Friend m_knot As CKnot = Nothing
         Friend m_knotSide As DirectionEnum = cDirectionEnumNone
-        Private m_positionSameKnot As SPosition
+        Dim m_positionSameKnot As SPosition '同一コマの相手方
+
+        Friend Property IsBottomBase As Boolean = False '底編み領域
 
         '中心から横方向の位置・コマの左
         Friend ReadOnly Property coorBaseX As Double
@@ -210,7 +220,7 @@ Partial Public Class clsCalcKnot
             Return False
         End Function
 
-        '側面に位置する
+        '側面に位置する ※側面内に収まるコマのみを描く
         Function IsInSide() As Boolean
             '半分になる縁のコマは描かない :_side135_edge, _side45R_edge,
             If {bottom_category._side135, bottom_category._side45R,
@@ -221,7 +231,6 @@ Partial Public Class clsCalcKnot
             Return False
         End Function
 
-        '面内にある
         Function IsInPlate() As Boolean
             If IsInBottom() Then
                 Return True
@@ -287,7 +296,7 @@ Partial Public Class clsCalcKnot
                     sb.Append("                        /")
                 End If
             Next
-            sb.AppendFormat("{0} {1}", bottom_category_mark(), m_bottom_category.ToString)
+            sb.AppendFormat("{0} {1} IsBottomBase={2}", bottom_category_mark(), m_bottom_category.ToString, IsBottomBase)
             If m_knot IsNot Nothing Then
                 sb.AppendLine(m_knot.ToString)
             End If
@@ -301,6 +310,7 @@ Partial Public Class clsCalcKnot
 
             ' 内部データ
             Dim _folders(,) As CKnotFolder
+            Dim _isDiagonal As Boolean
 
             Public ReadOnly Property IsValid As Boolean = False
             '領域サイズ
@@ -318,7 +328,7 @@ Partial Public Class clsCalcKnot
             End Sub
 
             'サイズ再設定と初期化
-            Public Sub Reinitialize(ByVal width As Integer, ByVal height As Integer)
+            Public Sub Reinitialize(ByVal width As Integer, ByVal height As Integer, ByVal isdiag As Boolean)
                 If width < 1 OrElse width < 1 Then
                     _folders = Nothing
                     _IsValid = False
@@ -326,6 +336,7 @@ Partial Public Class clsCalcKnot
 
                 _HorizontalCount = width
                 _VerticalCount = height
+                _isDiagonal = isdiag
 
                 '内部の2次元配列は (行=縦, 列=横) で確保する
                 _folders = New CKnotFolder(VerticalCount - 1, HorizontalCount - 1) {}
@@ -397,7 +408,7 @@ Partial Public Class clsCalcKnot
             End Function
 
             '底のバンドを側面に延長　※側面に既に入っている分は上書きします
-            Public Function BottomExtendToSideLine(ByVal pos_from As SPosition, ByVal pos_to As SPosition, ByVal pos_step As SPosition, ByVal expYT As emExp) As Boolean
+            Private Function BottomExtendToSideLine(ByVal pos_from As SPosition, ByVal pos_to As SPosition, ByVal pos_step As SPosition, ByVal expYT As emExp) As Boolean
                 Dim knotline1 As CKnotFolder = Nothing
                 Dim knotline2 As CKnotFolder = Nothing
                 Dim knotfolder As CKnotFolder
@@ -456,24 +467,86 @@ Partial Public Class clsCalcKnot
             End Function
 
             Public Function BottomExtendToSides() As Boolean
+                Dim ret = True
                 For vidx As Integer = 1 To VerticalCount
-                    BottomExtendToSideLine(New SPosition(1, vidx), New SPosition(HorizontalCount, vidx), New SPosition(1, 0), emExp._Yoko)
-                    BottomExtendToSideLine(New SPosition(HorizontalCount, vidx), New SPosition(1, vidx), New SPosition(-1, 0), emExp._Yoko)
+                    ret = ret And BottomExtendToSideLine(New SPosition(1, vidx), New SPosition(HorizontalCount, vidx), New SPosition(1, 0), emExp._Yoko)
+                    ret = ret And BottomExtendToSideLine(New SPosition(HorizontalCount, vidx), New SPosition(1, vidx), New SPosition(-1, 0), emExp._Yoko)
                 Next
                 For hidx As Integer = 1 To HorizontalCount
-                    BottomExtendToSideLine(New SPosition(hidx, 1), New SPosition(hidx, VerticalCount), New SPosition(0, 1), emExp._Tate)
-                    BottomExtendToSideLine(New SPosition(hidx, VerticalCount), New SPosition(hidx, 1), New SPosition(0, -1), emExp._Tate)
+                    ret = ret And BottomExtendToSideLine(New SPosition(hidx, 1), New SPosition(hidx, VerticalCount), New SPosition(0, 1), emExp._Tate)
+                    ret = ret And BottomExtendToSideLine(New SPosition(hidx, VerticalCount), New SPosition(hidx, 1), New SPosition(0, -1), emExp._Tate)
                 Next
-
-                Return True
+                Return ret
             End Function
 
-            '開始位置のコマ
+            '開始位置のコマ位置情報
             Public Function GetStartKnot() As CKnotFolder
-                If Not IsValid Then
+                If Not IsValid OrElse Not StartPosition.IsValid Then
                     Return Nothing
                 End If
-                Return GetAt(StartPosition)
+                Dim knotStart As CKnotFolder = GetAt(StartPosition)
+                If knotStart.IsBottomBase Then
+                    Return knotStart
+                End If
+                Return Nothing
+            End Function
+
+            '指定位置から外側のコマ数, 上,下,左,右の順
+            Public Function GetStartKnotCountUDLR() As Integer()
+                If Not IsValid OrElse Not StartPosition.IsValid Then
+                    Return Nothing
+                End If
+                Dim position As SPosition = GetAt(StartPosition).m_position
+                Dim knots(3) As Integer
+                If _isDiagonal Then
+                    '折り返しつつのびる
+                    knots(0) = GetKomaCount(position, New SPosition(0, -1)) 'U
+                    knots(1) = GetKomaCount(position, New SPosition(0, 1)) 'D
+                    knots(2) = GetKomaCount(position, New SPosition(-1, 0)) 'L
+                    knots(3) = GetKomaCount(position, New SPosition(1, 0)) 'R
+                Else
+                    '縦横にのびる
+                    knots(0) = position.VertIndex - 1
+                    knots(1) = VerticalCount - position.VertIndex
+                    knots(2) = position.HorzIndex - 1
+                    knots(3) = HorizontalCount - position.HorzIndex
+                End If
+
+                Return knots
+            End Function
+
+            '指定方向、指定位置から外側のコマ数
+            Private Function GetKomaCount(ByVal pos_center As SPosition, ByVal delta As SPosition) As Integer
+                Dim knotfolder As CKnotFolder = GetAt(pos_center)
+                If knotfolder Is Nothing OrElse Not knotfolder.IsBottomBase OrElse delta.IsZero Then
+                    Return 0
+                End If
+
+                Dim count As Integer = 0
+                '開始位置
+                Dim position As New SPosition(pos_center)
+                '進行方向にひとつ進める
+                position += delta
+                knotfolder = GetAt(position)
+                Do While knotfolder IsNot Nothing AndAlso knotfolder.IsInPlate
+                    count += 1
+                    Dim pair As CKnotFolder = knotfolder.SameKnotFolder()
+                    If pair IsNot Nothing Then
+                        Dim k1 As CKnotFolder = knotfolder
+                        Dim k2 As CKnotFolder = pair
+                        delta = New SPosition(k1.m_position, k2.m_position)
+                        If delta.IsZero Then
+                            '差があるはずだけど、なければ終わり
+                            Return count
+                        End If
+                        position = pair.m_position
+                    End If
+
+                    position += delta
+                    knotfolder = GetAt(position)
+                Loop
+
+                Return count
             End Function
 
             '中心から横方向の位置・コマの左
@@ -587,8 +660,6 @@ Partial Public Class clsCalcKnot
         '_Data.p_tbl側面→_tbl縦横展開(emExp._Side)
         tbl側面to縦横展開DataTable()
 
-        '再初期化
-        _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ)
         'コマ配置
         If _b斜め立ち上げ Then
             ret = SetTablesDiagonal()
@@ -647,6 +718,9 @@ Partial Public Class clsCalcKnot
     Function SetTables() As Boolean
         Dim ret As Boolean = True
 
+        '再初期化
+        _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ, False)
+
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
         _KnotFolderSpace.StartPosition = New SPosition(p_i編みひもの本数 + _i左から何番目, p_i編みひもの本数 + _i上から何番目)
@@ -678,6 +752,7 @@ Partial Public Class clsCalcKnot
                             knotfolder = _KnotFolderSpace.GetAt(hidx, p_i編みひもの本数 + idx)
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Yoko) = row
+                                knotfolder.IsBottomBase = True
                                 If hidx = 1 Then
                                     knotfolder.m_knotSide = DirectionEnum._左
                                 End If
@@ -698,6 +773,7 @@ Partial Public Class clsCalcKnot
                             knotfolder = _KnotFolderSpace.GetAt(p_i編みひもの本数 + idx, vidx)
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Tate) = row
+                                knotfolder.IsBottomBase = True
                                 If vidx = 1 Then
                                     knotfolder.m_knotSide = DirectionEnum._上
                                 End If
@@ -719,11 +795,13 @@ Partial Public Class clsCalcKnot
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Yoko) = row
                                 knotfolder.m_bottom_category = bottom_category._side45R
+                                knotfolder.IsBottomBase = False
                             End If
                             knotfolder = _KnotFolderSpace.GetAt(hidx + p_i編みひもの本数, p_i編みひもの本数 + p_i横ひもの本数 + idx)
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Yoko) = row
                                 knotfolder.m_bottom_category = bottom_category._side45R
+                                knotfolder.IsBottomBase = False
                                 If hidx = 1 Then
                                     knotfolder.m_knotSide = DirectionEnum._左
                                 End If
@@ -735,11 +813,13 @@ Partial Public Class clsCalcKnot
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Tate) = row
                                 knotfolder.m_bottom_category = bottom_category._side135
+                                knotfolder.IsBottomBase = False
                             End If
                             knotfolder = _KnotFolderSpace.GetAt(p_i編みひもの本数 + p_i縦ひもの本数 + idx, p_i編みひもの本数 + vidx)
                             If knotfolder IsNot Nothing Then
                                 knotfolder.m_row縦横展開(emExp._Tate) = row
                                 knotfolder.m_bottom_category = bottom_category._side135
+                                knotfolder.IsBottomBase = False
                             End If
                         Next
 
@@ -771,8 +851,17 @@ Partial Public Class clsCalcKnot
     Function SetTablesDiagonal() As Boolean
         Dim ret As Boolean = True
 
-        _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ)
+        _KnotFolderSpace.Reinitialize(p_iコマ空間幅, p_iコマ空間高さ, True)
 
+        '底編み領域
+        For vidx As Integer = 1 To p_iひもの本数
+            For hidx As Integer = 1 To p_iひもの本数
+                Dim knotfolder As CKnotFolder = _KnotFolderSpace.GetAt(hidx + p_i側面の切捨コマ数, vidx + p_i側面の切捨コマ数)
+                knotfolder.IsBottomBase = True
+            Next
+        Next
+
+        '展開状態の面
         Dim map As New clsSquare45Bottom(_i横のコマ数, _i縦のコマ数, p_i側面の切捨コマ数, IIf(p_b側面半コマ, 1, 0))
         If Not map.SetJustSize Then
             Return False
@@ -829,8 +918,9 @@ Partial Public Class clsCalcKnot
                 End If
             Next
         Next
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_knot_band)
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_knot_band)
 
+        '側面への編み上げ
         _KnotFolderSpace.BottomExtendToSides()
 
         Return ret

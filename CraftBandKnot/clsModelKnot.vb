@@ -179,7 +179,9 @@ Public Class clsModelKnot
         _data画像生成用.p_row底_縦横.Value("f_i上から何番目") = 0
 
         '折り返しなし
-        _data画像生成用.p_row底_縦横.Value("f_i折り返しコマ数") = 0
+        If Not _calc.p_b斜め立ち上げ Then
+            _data画像生成用.p_row底_縦横.Value("f_i折り返しコマ数") = 0
+        End If
 
         '追加品なし
         _data画像生成用.p_tbl追加品.Clear()

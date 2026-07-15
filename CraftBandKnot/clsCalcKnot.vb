@@ -154,13 +154,6 @@ Class clsCalcKnot
     End Function
 
 #Region "プロパティ値"
-
-    'ReadOnly Property p_i高さコマ数計 As Integer
-    '    Get
-    '        Return _i高さのコマ数 + _i折り返しコマ数
-    '    End Get
-    'End Property
-
     '* 外部参照
 
     ReadOnly Property p_d縁の高さ As Double
@@ -172,6 +165,12 @@ Class clsCalcKnot
     ReadOnly Property p_dコマの寸法 As Double
         Get
             Return _dコマの寸法
+        End Get
+    End Property
+
+    ReadOnly Property p_b斜め立ち上げ As Boolean
+        Get
+            Return _b斜め立ち上げ
         End Get
     End Property
 
@@ -214,6 +213,15 @@ Class clsCalcKnot
         End Get
     End Property
 
+    ReadOnly Property p_dコマベース_計算 As Double
+        Get
+            If _b斜め立ち上げ Then
+                Return _dコマベース寸法_対角
+            Else
+                Return _dコマベース寸法
+            End If
+        End Get
+    End Property
 
     ReadOnly Property p_dコマベース_横 As Double
         Get
@@ -277,6 +285,46 @@ Class clsCalcKnot
         End Get
     End Property
 
+    'iひも本数: 縦横時は逆(コマ数)・斜め時はいずれも同じ(同数)
+    ReadOnly Property p_i底のコマ数(ByVal iひも番号 As Integer, ByVal iひも本数 As Integer) As Integer
+        Get
+            If _b斜め立ち上げ Then
+                If iひも番号 < 1 OrElse iひも本数 < iひも番号 Then
+                    Return 0    'ないはず
+                End If
+
+                '両端は1/2ずつで合わせて1とします
+                If iひも番号 <= p_i縦横コマ数の小さい方 Then
+                    Return iひも番号 * 2 - 1
+                ElseIf iひも番号 <= (p_i縦横コマ数の小さい方 + p_i縦横コマ数の差) Then
+                    Return p_i縦横コマ数の小さい方 * 2
+                Else
+                    Return (iひも本数 - iひも番号) * 2 + 1
+                End If
+            Else
+                'コマ数
+                Return iひも本数
+            End If
+        End Get
+    End Property
+
+    '両側面のコマ数の計(片側は0.5もありますが、両側合わせると整数)
+    ReadOnly Property p_i側面のコマ数計() As Integer
+        Get
+            If _b斜め立ち上げ Then
+                If p_i側面の切捨コマ数 = 0 Then
+                    Return 1
+                Else
+                    Return (_d高さのコマ数 + _i折り返しコマ数) * 4 - 1
+                End If
+            Else
+                Return 2 * p_i編みひもの本数
+            End If
+        End Get
+    End Property
+
+
+    '* 斜めでのみ使用
     ReadOnly Property p_i側面の切捨コマ数 As Integer
         Get
             Return CInt(Math.Floor(_d高さのコマ数)) + _i折り返しコマ数
@@ -323,8 +371,6 @@ Class clsCalcKnot
             Return _i横のコマ数 + _i縦のコマ数
         End Get
     End Property
-
-
 
 
 
@@ -716,7 +762,7 @@ Class clsCalcKnot
     End Function
 
 
-#Region "コマ"
+#Region "設定値の取得"
 
     '目標寸法の取得
     Private Function set_目標寸法(ByVal needTarget As Boolean) As Boolean
@@ -924,9 +970,9 @@ Class clsCalcKnot
 
     '横寸法から横のコマ数
     Private Function calc_Target_横() As Boolean
-        Dim i横の四角数 As Integer = Int(_d横_目標 / _dコマベース寸法)
+        Dim i横の四角数 As Integer = Int(_d横_目標 / p_dコマベース_計算)
         If Not _b内側区分 Then
-            Do While i横の四角数 * _dコマベース寸法 < _d横_目標
+            Do While i横の四角数 * p_dコマベース_計算 < _d横_目標
                 i横の四角数 += 1
             Loop
         End If
@@ -942,9 +988,9 @@ Class clsCalcKnot
 
     '縦寸法から縦のコマ数
     Private Function calc_Target_縦()
-        Dim i縦の四角数 As Integer = Int(_d縦_目標 / _dコマベース寸法)
+        Dim i縦の四角数 As Integer = Int(_d縦_目標 / p_dコマベース_計算)
         If Not _b内側区分 Then
-            Do While i縦の四角数 * _dコマベース寸法 < _d縦_目標
+            Do While i縦の四角数 * p_dコマベース_計算 < _d縦_目標
                 i縦の四角数 += 1
             Loop
         End If
@@ -960,9 +1006,9 @@ Class clsCalcKnot
 
     '高さ寸法から高さのコマ数
     Private Function calc_Target_高さ()
-        Dim i高さのコマ数 As Integer = Int(_d高さ_目標 / _dコマベース寸法)
+        Dim i高さのコマ数 As Integer = Int(_d高さ_目標 / p_dコマベース_計算)
         If Not _b内側区分 Then
-            Do While i高さのコマ数 * _dコマベース寸法 < _d高さ_目標
+            Do While i高さのコマ数 * p_dコマベース_計算 < _d高さ_目標
                 i高さのコマ数 += 1
             Loop
         End If
@@ -990,7 +1036,7 @@ Class clsCalcKnot
         Dim table As tbl側面DataTable = _Data.p_tbl側面
         Dim row As tbl側面Row
 
-        If 0 < _i高さのコマ数 Then
+        If 0 < _i高さのコマ数 AndAlso Not _b斜め立ち上げ Then
             For i As Integer = 1 To _i高さのコマ数
                 row = clsDataTables.NumberSubRecord(table, cIdxHeight, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -1037,7 +1083,7 @@ Class clsCalcKnot
             RemoveNumberFromTable(table, cIdxHeight)
         End If
 
-        If 0 < _i折り返しコマ数 Then
+        If 0 < _i折り返しコマ数 AndAlso Not _b斜め立ち上げ Then
             For i As Integer = 1 To _i折り返しコマ数
                 row = clsDataTables.NumberSubRecord(table, cIdxFolding, i)
                 If i = 1 OrElse _b縦横側面を展開する Then
@@ -1354,17 +1400,6 @@ Class clsCalcKnot
             End If
             '
             Dim add As tbl側面Row = table.Newtbl側面Row
-            'add.f_i番号 = currow.f_i番号
-            'add.f_iひも番号 = bandnum
-            'add.f_s編みかた名 = currow.f_s編みかた名
-            'add.f_s編みひも名 = currow.f_s編みひも名
-            'add.f_iひも本数 = currow.f_iひも本数
-            'add.f_i何本幅 = currow.f_i何本幅
-            'add.f_d高さ = currow.f_d高さ
-            'add.f_d垂直ひも長 = currow.f_d垂直ひも長
-            'add.f_d周長 = currow.f_d周長
-            'add.f_dひも長 = currow.f_dひも長
-            'add.f_d厚さ = currow.f_d厚さ
             add.ItemArray = currow.ItemArray
             add.f_iひも番号 = bandnum
             add.Setf_sメモNull()
@@ -1435,8 +1470,9 @@ Class clsCalcKnot
 
 #Region "縦横展開"
 
-    'f_iVal1:
-    'f_iVal2:
+    '*set横展開DataTable,set縦展開DataTable が呼ばれるたびにセット
+    'f_iVal1: 底のコマ数         ※斜めの場合、ひも番号の関数
+    'f_iVal2: 側面のコマ数計
     'f_iVal3:
     'f_iVal4:
     'f_dVal1:
@@ -1445,6 +1481,11 @@ Class clsCalcKnot
     'f_dVal4:
     'f_sVal1:
     'f_sVal2:
+    'f_d長さ: コマ数 * _dコマベース寸法
+    'f_dひも長: コマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
+
+    '*set縦横_出力ひも長 でセット、画面入力を反映
+    'f_d出力ひも長: (f_dひも長+f_dひも長加算,f_dひも長加算2) * p_dマイひも長係数
 
 
 
@@ -1457,19 +1498,18 @@ Class clsCalcKnot
         tmptable.Clear()
 
         Dim row As tbl縦横展開Row
-        'Dim pos As Integer = -(p_i横ひもの本数 \ 2)
-        'Dim zero As Integer = p_i横ひもの本数 Mod 2
 
         '横置き数分のレコード作成 (色,記号,メモは初期値)
         For idx As Integer = 1 To p_i横ひもの本数
             row = tmptable.Newtbl縦横展開Row
 
             row.f_iひも種 = enumひも種.i_横
-            'row.f_i位置番号 = pos
             row.f_i位置番号 = p_i位置番号(idx, p_i横ひもの本数)
             row.f_sひも名 = text横ひも()
             row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i横のコマ数 + 2 * p_i編みひもの本数
+            row.f_iVal1 = p_i底のコマ数(idx, p_i縦ひもの本数)
+            row.f_iVal2 = p_i側面のコマ数計
+            Dim iコマ数 As Integer = row.f_iVal1 + row.f_iVal2
             row.f_d長さ = iコマ数 * _dコマベース寸法
             row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
             row.f_i何本幅 = _I基本のひも幅
@@ -1478,10 +1518,6 @@ Class clsCalcKnot
             row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
 
             tmptable.Rows.Add(row)
-            'pos += 1
-            'If pos = 0 AndAlso zero = 0 Then
-            '    pos = 1
-            'End If
         Next
 
         '指定があれば既存情報反映
@@ -1504,20 +1540,19 @@ Class clsCalcKnot
         tmptable.Clear()
 
         Dim row As tbl縦横展開Row
-        'Dim pos As Integer = (p_i縦ひもの本数 \ 2)
-        'Dim zero As Integer = p_i縦ひもの本数 Mod 2
 
         '縦置き数分のレコード作成 (色,記号,メモは初期値)
         For idx As Integer = 1 To p_i縦ひもの本数
             row = tmptable.Newtbl縦横展開Row
 
             row.f_iひも種 = enumひも種.i_縦
-            'row.f_i位置番号 = pos
             '先には降順でしたが、他と同様の昇順に変更。画面表示だけ
             row.f_i位置番号 = p_i位置番号(idx, p_i縦ひもの本数)
             row.f_sひも名 = text縦ひも()
             row.f_iひも番号 = idx
-            Dim iコマ数 As Integer = _i縦のコマ数 + 2 * p_i編みひもの本数
+            row.f_iVal1 = p_i底のコマ数(idx, p_i横ひもの本数)
+            row.f_iVal2 = p_i側面のコマ数計
+            Dim iコマ数 As Integer = row.f_iVal1 + row.f_iVal2
             row.f_d長さ = iコマ数 * _dコマベース寸法
             row.f_dひも長 = iコマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
             row.f_i何本幅 = _I基本のひも幅
@@ -1526,10 +1561,6 @@ Class clsCalcKnot
             row.f_d出力ひも長 = row.f_dひも長 '加算ゼロ
 
             tmptable.Rows.Add(row)
-            'pos -= 1
-            'If pos = 0 AndAlso zero = 0 Then
-            '    pos = -1
-            'End If
         Next
 
         '指定があれば既存情報反映
@@ -1615,7 +1646,7 @@ Class clsCalcKnot
         Dim _parent As clsCalcKnot  '親クラス
 
         '各方向の計算値　上,下,左,右の順
-        Dim _knots(3) As Integer 'コマ数
+        Dim _knots(3) As Integer 'コマ数 ※開始位置から外へ
         Dim _addeach(3) As Double '個別の加算長
         Dim _addsum(3) As Double '加算合計
         Dim _bandlen(3) As Double 'ひもの長さ ※開始位置コマのすき間を含まない
@@ -1632,6 +1663,8 @@ Class clsCalcKnot
         Friend row横展開 As tbl縦横展開Row '横バンド
         Friend row縦展開 As tbl縦横展開Row '縦バンド
 
+        Friend KnotStart As CKnotFolder '開始位置のコマ
+
         ReadOnly Property IsValid As Boolean = False
 
         Sub New(ByVal parent As clsCalcKnot, ByVal i左 As Integer, ByVal i上 As Integer)
@@ -1640,13 +1673,22 @@ Class clsCalcKnot
             i左から何番目 = i左
             i上から何番目 = i上
 
-            Dim knotStart As CKnotFolder = _parent._KnotFolderSpace.GetStartKnot()
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "knotStart={0}", knotStart)
+            KnotStart = _parent._KnotFolderSpace.GetStartKnot()
+            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "knotStart={0}", knotStart)
             If knotStart Is Nothing OrElse knotStart.BandSetCount() < 2 Then
                 Return
             End If
-            row横展開 = knotStart.m_row縦横展開(emExp._Yoko)
-            row縦展開 = knotStart.m_row縦横展開(emExp._Tate)
+            row横展開 = KnotStart.m_row縦横展開(emExp._Yoko)
+            row縦展開 = KnotStart.m_row縦横展開(emExp._Tate)
+
+            Dim gskc() As Integer = _parent._KnotFolderSpace.GetStartKnotCountUDLR()
+            If gskc Is Nothing OrElse gskc.Length < 4 Then
+                Return
+            End If
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "GetStartKnotCountUDLR={0},{1},{2},{3}", gskc(0), gskc(1), gskc(2), gskc(3))
+            If gskc(0) < 0 OrElse gskc(1) < 0 OrElse gskc(2) < 0 OrElse gskc(3) < 0 Then
+                Return
+            End If
 
             _IsValid = True
 
@@ -1658,17 +1700,22 @@ Class clsCalcKnot
             _SideString(3) = My.Resources.CalcOutSideRight '左
 
             With _parent
+
                 '上のひも
-                _knots(0) = ._i高さのコマ数 + ._i折り返しコマ数 + (i上から何番目 - 1)
+                '_knots(0) = ._i高さのコマ数 + ._i折り返しコマ数 + (i上から何番目 - 1)
+                _knots(0) = gskc(0)
                 _addeach(0) = row縦展開.f_dひも長加算
                 '下のひも
-                _knots(1) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i縦のコマ数 - i上から何番目)
+                '_knots(1) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i縦のコマ数 - i上から何番目)
+                _knots(1) = gskc(1)
                 _addeach(1) = row縦展開.f_dひも長加算2
                 '左のひも
-                _knots(2) = ._i高さのコマ数 + ._i折り返しコマ数 + (i左から何番目 - 1)
+                '_knots(2) = ._i高さのコマ数 + ._i折り返しコマ数 + (i左から何番目 - 1)
+                _knots(2) = gskc(2)
                 _addeach(2) = row横展開.f_dひも長加算
                 '右のひも
-                _knots(3) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i横のコマ数 - i左から何番目)
+                '_knots(3) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i横のコマ数 - i左から何番目)
+                _knots(3) = gskc(3)
                 _addeach(3) = row横展開.f_dひも長加算2
 
                 For i As Integer = 0 To 3
@@ -1856,13 +1903,12 @@ Class clsCalcKnot
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
 
-        If _i左から何番目 <= 0 OrElse _i横のコマ数 < _i左から何番目 OrElse
-            _i上から何番目 <= 0 OrElse _i縦のコマ数 < _i上から何番目 Then
-            Return Nothing '開始位置の対象外
-        End If
+        'If _i左から何番目 <= 0 OrElse _i横のコマ数 < _i左から何番目 OrElse
+        '    _i上から何番目 <= 0 OrElse _i縦のコマ数 < _i上から何番目 Then
+        '    Return Nothing '開始位置の対象外
+        'End If
 
-        Dim startInfo As CStartInfo
-        startInfo = New CStartInfo(Me, _i左から何番目, _i上から何番目)
+        Dim startInfo As New CStartInfo(Me, _i左から何番目, _i上から何番目)
         If startInfo.IsValid Then
             Return startInfo
         Else
@@ -1927,7 +1973,12 @@ Class clsCalcKnot
 
         '底
         row = output.NextNewRow
-        row.f_sカテゴリー = My.Resources.OutputTextBottom
+        If _b斜め立ち上げ Then
+            row.f_sカテゴリー = String.Format("{0}({1})", My.Resources.OutputTextBottom, text斜め立ち上げ())
+            row.f_sメモ = text対角サイズ() & output.outLengthTextWithUnit(_dコマの寸法_対角)
+        Else
+            row.f_sカテゴリー = My.Resources.OutputTextBottom
+        End If
         row.f_s長さ = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         '
@@ -2013,10 +2064,12 @@ Class clsCalcKnot
                     Select Case lasttmp.f_sひも名
                         Case text横ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i横ひもの本数, row.f_s編みひも名)
-                            row.f_i段数 = _i横のコマ数 + 2 * p_i編みひもの本数
+                            'row.f_i段数 = _i横のコマ数 + 2 * p_i編みひもの本数
+                            row.f_i段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                         Case text縦ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i縦ひもの本数, row.f_s編みひも名)
-                            row.f_i段数 = _i縦のコマ数 + 2 * p_i編みひもの本数
+                            'row.f_i段数 = _i縦のコマ数 + 2 * p_i編みひもの本数
+                            row.f_i段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                     End Select
 
                     row = output.NextNewRow
@@ -2329,6 +2382,14 @@ Class clsCalcKnot
     Private Function text要尺() As String
         Return _frmMain.lbl要尺.Text
     End Function
+
+    Private Function text斜め立ち上げ() As String
+        Return _frmMain.chk斜め立ち上げ.Text
+    End Function
+    Private Function text対角サイズ() As String
+        Return _frmMain.lbl対角サイズ.Text
+    End Function
+
 #End Region
 
     'Protected Overridable Sub Dispose(disposing As Boolean)
