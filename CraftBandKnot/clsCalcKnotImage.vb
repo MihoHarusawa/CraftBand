@@ -631,7 +631,7 @@ Partial Public Class clsCalcKnot
         If True Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
             'Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (startInfo.i左から何番目 - 1), -(_i縦のコマ数 / 2) + (startInfo.i上から何番目 - 1))
-            Dim pコマ左上 As S実座標 = toPoint(startInfo.KnotStart.coorBaseXY())
+            Dim pコマ左上 As S実座標 = toPoint(startInfo.StartKoma.coorBaseXY())
             Dim pコマ右下 As S実座標 = pコマ左上 + Unit315 * _dコマベース寸法
 
             line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit0 * _dコマベース寸法)

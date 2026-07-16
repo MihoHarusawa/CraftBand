@@ -23,24 +23,6 @@ Partial Public Class clsCalcKnot
     'VerticalCount　                             coorBaseY     (_dコマベース寸法を掛ける)
 
 
-    'Enum emExp を_Yoko,_Tate のみで使用する
-    Const cExpYTCount As Integer = 2 '縦横のみ
-    Shared Function next_expi(ByVal i As Integer) As Integer
-        Dim ne As Integer = i + 1
-        If ne = cExpYTCount Then
-            Return 0
-        End If
-        Return ne
-    End Function
-    Shared Function next_exp(ByVal yt As emExp) As emExp
-        If yt = emExp._Yoko Then
-            Return emExp._Tate
-        Else
-            Return emExp._Yoko
-        End If
-    End Function
-
-
 
 #Region "計算用プロパティ"
     ReadOnly Property p_iコマ空間幅 As Integer
@@ -160,6 +142,8 @@ Partial Public Class clsCalcKnot
     Public Class CKnotFolder
         Private m_spaceParent As CKnotFolderSpace
 
+#Region "コマ1点の情報"
+
         '空間内の位置
         Friend m_position As SPosition
 
@@ -243,6 +227,7 @@ Partial Public Class clsCalcKnot
             Return False
         End Function
 
+        '同一コマの相手方があれば返す
         Function SameKnotFolder() As CKnotFolder
             If m_positionSameKnot.IsZero Then
                 Return Nothing
@@ -250,6 +235,22 @@ Partial Public Class clsCalcKnot
             Return m_spaceParent.GetAt(m_positionSameKnot)
         End Function
 
+        '各方向の加算長を返す
+        Public Function GetAdditionalEach() As Double()
+            Dim addeach(cSideCount - 1) As Double
+            '上下
+            If m_row縦横展開(emExp._Tate) IsNot Nothing Then
+                addeach(SideEnum._上) = m_row縦横展開(emExp._Tate).f_dひも長加算
+                addeach(SideEnum._下) = m_row縦横展開(emExp._Tate).f_dひも長加算2
+            End If
+            '左右
+            If m_row縦横展開(emExp._Yoko) IsNot Nothing Then
+                addeach(SideEnum._左) = m_row縦横展開(emExp._Yoko).f_dひも長加算
+                addeach(SideEnum._右) = m_row縦横展開(emExp._Yoko).f_dひも長加算2
+            End If
+
+            Return addeach
+        End Function
 
 
         Private Function bottom_category_mark() As String
@@ -305,6 +306,7 @@ Partial Public Class clsCalcKnot
             Return sb.ToString
         End Function
 
+#End Region
 
         'コマが配置される領域全体
         Public Class CKnotFolderSpace
@@ -318,8 +320,9 @@ Partial Public Class clsCalcKnot
             '領域サイズ
             Public ReadOnly Property HorizontalCount As Integer  ' 
             Public ReadOnly Property VerticalCount As Integer '
-            '
-            Public Property StartPosition As SPosition
+
+            '開始位置のコマ位置
+            Public Property StartKomaPosition As SPosition
 
 
             Public Sub New()
@@ -482,23 +485,42 @@ Partial Public Class clsCalcKnot
             End Function
 
             '開始位置のコマ位置情報
-            Public Function GetStartKnot() As CKnotFolder
-                If Not IsValid OrElse Not StartPosition.IsValid Then
+            Public Function GetStartKoma() As CKnotFolder
+                If Not IsValid OrElse Not StartKomaPosition.IsValid Then
                     Return Nothing
                 End If
-                Dim knotStart As CKnotFolder = GetAt(StartPosition)
-                If knotStart.IsBottomBase Then
-                    Return knotStart
+                Dim startKoma As CKnotFolder = GetAt(StartKomaPosition)
+                If startKoma.IsBottomBase AndAlso 2 <= startKoma.BandSetCount() Then
+                    Return startKoma
                 End If
                 Return Nothing
             End Function
 
-            '指定位置から外側のコマ数, 上,下,左,右の順
-            Public Function GetStartKnotCountUDLR() As Integer()
-                If Not IsValid OrElse Not StartPosition.IsValid Then
+            '開始位置の各方向の加算長を返す
+            Public Function GetStartKomaAdditionalEach() As Double()
+                Dim koma As CKnotFolder = GetStartKoma()
+                If koma IsNot Nothing Then
+                    Return koma.GetAdditionalEach
+                End If
+                Return Nothing
+            End Function
+
+            '開始位置から外側のコマ数をセットで返す
+            Public Function GetStartKomaCountEach() As Integer()
+                Dim koma As CKnotFolder = GetStartKoma()
+                If koma IsNot Nothing Then
+                    Return GetKomaCountEach(StartKomaPosition)
+                End If
+                Return Nothing
+            End Function
+
+            '指定位置から外側のコマ数をセットで返す(底編み位置から)
+            Public Function GetKomaCountEach(ByVal position As SPosition) As Integer()
+                Dim knotfolder As CKnotFolder = GetAt(position)
+                If knotfolder Is Nothing OrElse Not knotfolder.IsBottomBase Then
                     Return Nothing
                 End If
-                Dim position As SPosition = GetAt(StartPosition).m_position
+
                 Dim knots(cSideCount - 1) As Integer
                 If _isDiagonal Then
                     '折り返しつつのびる
@@ -517,7 +539,7 @@ Partial Public Class clsCalcKnot
                 Return knots
             End Function
 
-            '指定方向、指定位置から外側のコマ数
+            '指定方向、指定位置から外側のコマ数(底編み位置から)
             Private Function GetKomaCount(ByVal pos_center As SPosition, ByVal delta As SPosition) As Integer
                 Dim knotfolder As CKnotFolder = GetAt(pos_center)
                 If knotfolder Is Nothing OrElse Not knotfolder.IsBottomBase OrElse delta.IsZero Then
@@ -551,6 +573,7 @@ Partial Public Class clsCalcKnot
                 Return count
             End Function
 
+
             '中心から横方向の位置・コマの左
             Friend Function coorBaseX(ByVal hidx As Double) As Double
                 Return (hidx - 1) - (HorizontalCount / 2)
@@ -569,10 +592,11 @@ Partial Public Class clsCalcKnot
                 Return coorBaseXY(position.HorzIndex, position.VertIndex)
             End Function
 
+#Region "Basics"
 
             Public Overrides Function ToString() As String
                 Dim sb As New System.Text.StringBuilder
-                sb.AppendFormat("CKnotFolderSpace({0}) HorizontalCount={1} VerticalCount={2} StartPosition={3}", IsValid, HorizontalCount, VerticalCount, StartPosition).AppendLine()
+                sb.AppendFormat("CKnotFolderSpace({0}) HorizontalCount={1} VerticalCount={2} StartPosition={3}", IsValid, HorizontalCount, VerticalCount, StartKomaPosition).AppendLine()
                 For x As Integer = 1 To HorizontalCount
                     For y As Integer = 1 To VerticalCount
                         Dim knot As CKnotFolder = GetAt(x, y)
@@ -595,7 +619,7 @@ Partial Public Class clsCalcKnot
                     For x As Integer = 1 To HorizontalCount
                         Dim knot As CKnotFolder = GetAt(x, y)
                         If knot.BandSetCount() = 2 Then
-                            If StartPosition = knot.m_position Then
+                            If StartKomaPosition = knot.m_position Then
                                 sb.Append("■")
                             Else
                                 'sb.Append("田")
@@ -648,6 +672,8 @@ Partial Public Class clsCalcKnot
                 Return GetEnumerator()
             End Function
         End Class
+#End Region
+
     End Class
 
 #End Region
@@ -725,7 +751,7 @@ Partial Public Class clsCalcKnot
 
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
-        _KnotFolderSpace.StartPosition = New SPosition(p_i編みひもの本数 + _i左から何番目, p_i編みひもの本数 + _i上から何番目)
+        _KnotFolderSpace.StartKomaPosition = New SPosition(p_i編みひもの本数 + _i左から何番目, p_i編みひもの本数 + _i上から何番目)
 
         For i As Integer = 0 To cExpYTSCount - 1
             Dim bcount As Integer
@@ -879,7 +905,7 @@ Partial Public Class clsCalcKnot
 
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
-        _KnotFolderSpace.StartPosition = New SPosition(p_i側面の切捨コマ数 + _i左から何番目, p_i側面の切捨コマ数 + _i上から何番目)
+        _KnotFolderSpace.StartKomaPosition = New SPosition(p_i側面の切捨コマ数 + _i左から何番目, p_i側面の切捨コマ数 + _i上から何番目)
 
         '横ひも
         For Each row As tbl縦横展開Row In _tbl縦横展開(emExp._Yoko).Select(Nothing, "f_iひも番号 ASC")

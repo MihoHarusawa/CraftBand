@@ -92,6 +92,16 @@ Class clsCalcKnot
         _Side = 2
     End Enum
     Const cExpYTSCount As Integer = 3 '縦横側面
+    Const cExpYTCount As Integer = 2 '_Yoko,_Tate のみで使用する場合
+
+    Shared Function next_exp(ByVal yt As emExp) As emExp
+        If yt = emExp._Yoko Then
+            Return emExp._Tate
+        Else
+            Return emExp._Yoko
+        End If
+    End Function
+
 
 
     Dim _tbl縦横展開(cExpYTSCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提
@@ -1018,6 +1028,7 @@ Class clsCalcKnot
         End If
 
         _Data.p_row底_縦横.Value("f_i高さのコマ数") = i高さのコマ数
+        _Data.p_row底_縦横.Value("f_d高さの四角数") = i高さのコマ数
         _Data.p_row底_縦横.Value("f_i折り返しコマ数") = 0
 
         Return True
@@ -1645,10 +1656,6 @@ Class clsCalcKnot
 
     'コマの4方向
     Enum SideEnum
-        '_上 = 0
-        '_下 = 1
-        '_左 = 2
-        '_右 = 3
         _右 = 0
         _上 = 1
         _左 = 2
@@ -1658,19 +1665,24 @@ Class clsCalcKnot
 
     '開始位置情報
     Private Class CStartInfo
-        Dim _parent As clsCalcKnot  '親クラス
+        Private Shared ReadOnly _SideString() As String '定数文字列
 
-        '各方向の計算値　上,下,左,右の順
-        Dim _knots(cSideCount - 1) As Integer 'コマ数 ※開始位置から外へ
-        Dim _addeach(cSideCount - 1) As Double '個別の加算長
+        '親クラス
+        Dim _parent As clsCalcKnot
+        '数値にマイひも長係数を掛けるか
+        Dim _isMyValue As Boolean = False
+
+
+        '各方向の計算値
+        Dim _knots() As Integer 'コマ数 ※開始位置から外へ
+        Dim _addeach() As Double '個別の加算長
+
         Dim _addsum(cSideCount - 1) As Double '加算合計
         Dim _bandlen(cSideCount - 1) As Double 'ひもの長さ ※開始位置コマのすき間を含まない
         Dim _diff(cSideCount - 1) As Double '差,中央線で参照
         Dim _foldinglen(cSideCount - 1) As Double '折り位置からのひも長
         Dim _foldingdiff(cSideCount - 1) As Double '折り位置前後の差
 
-        Dim _isMyValue As Boolean = False
-        Dim _SideString() As String
 
         Friend i左から何番目 As Integer
         Friend i上から何番目 As Integer
@@ -1678,62 +1690,53 @@ Class clsCalcKnot
         Friend row横展開 As tbl縦横展開Row '横バンド
         Friend row縦展開 As tbl縦横展開Row '縦バンド
 
-        Friend KnotStart As CKnotFolder '開始位置のコマ
+        '開始位置のコマ
+        Friend StartKoma As CKnotFolder
 
         ReadOnly Property IsValid As Boolean = False
 
         Sub New(ByVal parent As clsCalcKnot, ByVal i左 As Integer, ByVal i上 As Integer)
-            _parent = parent
+            If i左 <= 0 OrElse i上 <= 0 Then
+                Return
+            End If
 
+            _parent = parent
             i左から何番目 = i左
             i上から何番目 = i上
 
-            KnotStart = _parent._KnotFolderSpace.GetStartKnot()
-            'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "knotStart={0}", knotStart)
-            If KnotStart Is Nothing OrElse KnotStart.BandSetCount() < 2 Then
+            '開始位置のコマ
+            StartKoma = _parent._KnotFolderSpace.GetStartKoma()
+            If StartKoma Is Nothing Then
                 Return
             End If
-            row横展開 = KnotStart.m_row縦横展開(emExp._Yoko)
-            row縦展開 = KnotStart.m_row縦横展開(emExp._Tate)
+            row横展開 = StartKoma.m_row縦横展開(emExp._Yoko)
+            row縦展開 = StartKoma.m_row縦横展開(emExp._Tate)
 
-            Dim gskc() As Integer = _parent._KnotFolderSpace.GetStartKnotCountUDLR()
-            If gskc Is Nothing OrElse gskc.Length < cSideCount Then
+            '開始位置から外側のコマ数
+            _knots = _parent._KnotFolderSpace.GetStartKomaCountEach()
+            If _knots Is Nothing OrElse _knots.Length < cSideCount Then
                 Return
             End If
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "GetStartKnotCountUDLR={0},{1},{2},{3}", gskc(0), gskc(1), gskc(2), gskc(3))
-            For i As Integer = 0 To cSideCount - 1
-                If gskc(i) < 0 Then
-                    Return
-                End If
-            Next
+            If knots(0) < 0 OrElse knots(1) < 0 OrElse knots(2) < 0 OrElse knots(3) < 0 OrElse
+                (knots(0) = 0 AndAlso knots(1) = 0 AndAlso knots(2) = 0 AndAlso knots(3) = 0) Then
+                Return
+            End If
+
+            '開始位置のひも長加算
+            _addeach = _parent._KnotFolderSpace.GetStartKomaAdditionalEach()
+            If _addeach Is Nothing OrElse _addeach.Length < cSideCount Then
+                Return
+            End If
+
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "StartPoint From Left={0} FromUpper={1}", i左から何番目, i上から何番目)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count U({0})D({1}) Bottom({2})SideSum({3})", _knots(SideEnum._上), _knots(SideEnum._下), row縦展開.f_iVal1, row縦展開.f_iVal2)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count L({0})R({1}) Bottom({2})SideSum({3})", _knots(SideEnum._左), _knots(SideEnum._右), row横展開.f_iVal1, row横展開.f_iVal2)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Additional U({0})D({1}) L({2})R({3})", _addeach(SideEnum._上), _addeach(SideEnum._下), _addeach(SideEnum._左), _addeach(SideEnum._右))
 
             _IsValid = True
 
-
-            ReDim _SideString(cSideCount - 1)
-            _SideString(SideEnum._上) = My.Resources.CalcOutSideUpper '下
-            _SideString(SideEnum._下) = My.Resources.CalcOutSideLower '上
-            _SideString(SideEnum._左) = My.Resources.CalcOutSideLeft '右
-            _SideString(SideEnum._右) = My.Resources.CalcOutSideRight '左
-
+            'clsCalcKnotの数値で計算
             With _parent
-
-                '上のひも
-                '_knots(0) = ._i高さのコマ数 + ._i折り返しコマ数 + (i上から何番目 - 1)
-                _knots(SideEnum._上) = gskc(SideEnum._上)
-                _addeach(SideEnum._上) = row縦展開.f_dひも長加算
-                '下のひも
-                '_knots(1) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i縦のコマ数 - i上から何番目)
-                _knots(SideEnum._下) = gskc(SideEnum._下)
-                _addeach(SideEnum._下) = row縦展開.f_dひも長加算2
-                '左のひも
-                '_knots(2) = ._i高さのコマ数 + ._i折り返しコマ数 + (i左から何番目 - 1)
-                _knots(SideEnum._左) = gskc(SideEnum._左)
-                _addeach(SideEnum._左) = row横展開.f_dひも長加算
-                '右のひも
-                '_knots(3) = ._i高さのコマ数 + ._i折り返しコマ数 + (._i横のコマ数 - i左から何番目)
-                _knots(SideEnum._右) = gskc(SideEnum._右)
-                _addeach(SideEnum._右) = row横展開.f_dひも長加算2
 
                 For i As Integer = 0 To cSideCount - 1
                     _addsum(i) = ._d縁の垂直ひも長 + ._dひも長加算_縦横端 + _addeach(i)
@@ -1747,14 +1750,23 @@ Class clsCalcKnot
                 _diff(SideEnum._右) = -_diff(SideEnum._左)
 
                 For i As Integer = 0 To cSideCount - 1
-                    Dim foldingLen As Double = c_foldingRatio * _parent._dコマの要尺
+                    Dim foldingLen As Double = c_foldingRatio * ._dコマの要尺
                     '折り位置からのひも長
-                    _foldinglen(i) = _bandlen(i) + foldingLen + (_parent._dコマ間のすき間 / 2)
+                    _foldinglen(i) = _bandlen(i) + foldingLen + (._dコマ間のすき間 / 2)
                     '折り位置前後の差
-                    _foldingdiff(i) = _diff(i) - (_parent._dコマの要尺 - 2 * foldingLen)
+                    _foldingdiff(i) = _diff(i) - (._dコマの要尺 - 2 * foldingLen)
                 Next
             End With
 
+        End Sub
+
+        Shared Sub New()
+            '共通の準備を1度だけ行う
+            ReDim _SideString(cSideCount - 1)
+            _SideString(SideEnum._上) = My.Resources.CalcOutSideUpper '下
+            _SideString(SideEnum._下) = My.Resources.CalcOutSideLower '上
+            _SideString(SideEnum._左) = My.Resources.CalcOutSideLeft '右
+            _SideString(SideEnum._右) = My.Resources.CalcOutSideRight '左
         End Sub
 
         'マイひも長係数を掛けた値を返すときTrue
@@ -1771,12 +1783,6 @@ Class clsCalcKnot
 
         '反対方向の文字列
         Function getPairSideString(ByVal i As Integer) As String
-            'If i = 0 Or i = 2 Then
-            '    Return _SideString(i + 1)
-            'End If
-            'If i = 1 Or i = 3 Then
-            '    Return _SideString(i - 1)
-            'End If
             If i = SideEnum._上 Then
                 Return _SideString(SideEnum._下)
             End If
@@ -1931,11 +1937,6 @@ Class clsCalcKnot
     Private Function setStartInfo() As CStartInfo
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
-
-        'If _i左から何番目 <= 0 OrElse _i横のコマ数 < _i左から何番目 OrElse
-        '    _i上から何番目 <= 0 OrElse _i縦のコマ数 < _i上から何番目 Then
-        '    Return Nothing '開始位置の対象外
-        'End If
 
         Dim startInfo As New CStartInfo(Me, _i左から何番目, _i上から何番目)
         If startInfo.IsValid Then
