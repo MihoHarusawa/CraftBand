@@ -329,20 +329,20 @@ Partial Public Class clsCalcSquare45
         End Get
     End Property
 
-    ReadOnly Property p_d底の角度(ByVal pos As DirectionEnum) As Double
+    ReadOnly Property p_d底の角度(ByVal pos As SideIndexEnum) As Double
         Get
             Dim angle As Double
             Select Case pos
-                Case DirectionEnum._上   '(A) AD-AB
+                Case SideIndexEnum._上側   '(A) AD-AB
                     angle = New S差分(_a底領域.pA, _a底領域.pD).Angle - New S差分(_a底領域.pA, _a底領域.pB).Angle
 
-                Case DirectionEnum._左   '(B) BA-BC
+                Case SideIndexEnum._左側   '(B) BA-BC
                     angle = New S差分(_a底領域.pB, _a底領域.pA).Angle - New S差分(_a底領域.pB, _a底領域.pC).Angle
 
-                Case DirectionEnum._下   '(C) CB-CD
+                Case SideIndexEnum._下側   '(C) CB-CD
                     angle = New S差分(_a底領域.pC, _a底領域.pB).Angle - New S差分(_a底領域.pC, _a底領域.pD).Angle
 
-                Case DirectionEnum._右   '(D) DC-DA
+                Case SideIndexEnum._右側   '(D) DC-DA
                     angle = New S差分(_a底領域.pD, _a底領域.pC).Angle - New S差分(_a底領域.pD, _a底領域.pA).Angle
 
                 Case Else

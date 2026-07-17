@@ -3,10 +3,10 @@
 Imports System.Reflection
 Imports CraftBand
 Imports CraftBand.clsDataTables
+Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
-Imports CraftBandKnot.clsCalcKnot
 
 Class clsCalcKnot
     Private _disposedValue As Boolean
@@ -77,6 +77,8 @@ Class clsCalcKnot
     Private Property _b縦横側面を展開する As Boolean
     Private Property _b斜め立ち上げ As Boolean
 
+    Private Property _bコマ上縦ひも左側 As Boolean
+
 
 
     '縁部分のみの集計値
@@ -137,6 +139,7 @@ Class clsCalcKnot
 
         _b縦横側面を展開する = False
         _b斜め立ち上げ = False
+        _bコマ上縦ひも左側 = False
 
         _d縁の高さ = 0
         _d縁の垂直ひも長 = 0
@@ -809,6 +812,15 @@ Class clsCalcKnot
             _dひも長加算_縦横端 = .Value("f_dひも長加算")
             _dひも長加算_側面 = .Value("f_dひも長加算_側面")
             _b縦横側面を展開する = .Value("f_b展開区分")
+
+            Select Case _Data.p_row底_縦横.Value("f_iコマ上側の縦ひも")
+                Case enumコマ上側の縦ひも.i_どちらでも
+                    _bコマ上縦ひも左側 = My.Settings.IsKnotLeft
+                Case enumコマ上側の縦ひも.i_左側
+                    _bコマ上縦ひも左側 = True
+                Case enumコマ上側の縦ひも.i_右側
+                    _bコマ上縦ひも左側 = False
+            End Select
 
             If .Value("f_i織りタイプ") = enum立ち上げタイプ.i_斜め Then
                 _b斜め立ち上げ = True
@@ -1483,22 +1495,21 @@ Class clsCalcKnot
 #Region "縦横展開"
 
     '*set横展開DataTable,set縦展開DataTable が呼ばれるたびにセット
-    'f_iVal1: 底のコマ数         ※斜めの場合、ひも番号の関数
-    'f_iVal2: 側面のコマ数計
+    'f_iVal1: 底のコマ数       ※斜めの場合、ひも番号で異なる
+    'f_iVal2: 側面のコマ数計   ※両側の合計なので整数
     'f_iVal3:
     'f_iVal4:
-    'f_dVal1:
-    'f_dVal2:
-    'f_dVal3:
-    'f_dVal4:
     'f_sVal1:
     'f_sVal2:
     'f_d長さ: コマ数 * _dコマベース寸法
     'f_dひも長: コマ数 * _dコマベース要尺 + 2 * (_d縁の垂直ひも長 + _dひも長加算_縦横端)
 
     '*set縦横_出力ひも長 でセット、画面入力を反映
-    'f_d出力ひも長: (f_dひも長+f_dひも長加算,f_dひも長加算2) * p_dマイひも長係数
-
+    'f_dVal1: f_dひも長加算  + _d縁の垂直ひも長 + _dひも長加算_縦横端
+    'f_dVal2: f_dひも長加算2 + _d縁の垂直ひも長 + _dひも長加算_縦横端
+    'f_dVal3: f_dVal1 * p_dマイひも長係数
+    'f_dVal4: f_dVal2 * p_dマイひも長係数
+    'f_d出力ひも長: (f_dひも長+f_dひも長加算+f_dひも長加算2) * p_dマイひも長係数
 
 
     '横ひもの展開テーブル作成 ※入力値ベース
@@ -1654,14 +1665,10 @@ Class clsCalcKnot
 
 #Region "開始位置"
 
-    'コマの4方向
-    Enum SideEnum
-        _右 = 0
-        _上 = 1
-        _左 = 2
-        _下 = 3
-    End Enum
-    Public Const cSideCount As Integer = 4
+    'コマが編まれた箇所は、要尺*マイひも長係数 を消費
+    '編まれていない長さ(余裕含む)に対してマイひも長係数 を掛ける
+    'マイひも長係数は、コマ寸法を変えずに要尺を可変するためのもの
+
 
     '開始位置情報
     Private Class CStartInfo
@@ -1677,11 +1684,11 @@ Class clsCalcKnot
         Dim _knots() As Integer 'コマ数 ※開始位置から外へ
         Dim _addeach() As Double '個別の加算長
 
-        Dim _addsum(cSideCount - 1) As Double '加算合計
-        Dim _bandlen(cSideCount - 1) As Double 'ひもの長さ ※開始位置コマのすき間を含まない
-        Dim _diff(cSideCount - 1) As Double '差,中央線で参照
-        Dim _foldinglen(cSideCount - 1) As Double '折り位置からのひも長
-        Dim _foldingdiff(cSideCount - 1) As Double '折り位置前後の差
+        Dim _addsum(cSideIndexEnumCount - 1) As Double '加算合計
+        Dim _bandlen(cSideIndexEnumCount - 1) As Double 'ひもの長さ ※開始位置コマのすき間を含まない
+        Dim _diff(cSideIndexEnumCount - 1) As Double '差,中央線で参照
+        Dim _foldinglen(cSideIndexEnumCount - 1) As Double '折り位置からのひも長
+        Dim _foldingdiff(cSideIndexEnumCount - 1) As Double '折り位置前後の差
 
 
         Friend i左から何番目 As Integer
@@ -1714,7 +1721,7 @@ Class clsCalcKnot
 
             '開始位置から外側のコマ数
             _knots = _parent._KnotFolderSpace.GetStartKomaCountEach()
-            If _knots Is Nothing OrElse _knots.Length < cSideCount Then
+            If _knots Is Nothing OrElse _knots.Length < cSideIndexEnumCount Then
                 Return
             End If
             If knots(0) < 0 OrElse knots(1) < 0 OrElse knots(2) < 0 OrElse knots(3) < 0 OrElse
@@ -1724,32 +1731,32 @@ Class clsCalcKnot
 
             '開始位置のひも長加算
             _addeach = _parent._KnotFolderSpace.GetStartKomaAdditionalEach()
-            If _addeach Is Nothing OrElse _addeach.Length < cSideCount Then
+            If _addeach Is Nothing OrElse _addeach.Length < cSideIndexEnumCount Then
                 Return
             End If
 
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "StartPoint From Left={0} FromUpper={1}", i左から何番目, i上から何番目)
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count U({0})D({1}) Bottom({2})SideSum({3})", _knots(SideEnum._上), _knots(SideEnum._下), row縦展開.f_iVal1, row縦展開.f_iVal2)
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count L({0})R({1}) Bottom({2})SideSum({3})", _knots(SideEnum._左), _knots(SideEnum._右), row横展開.f_iVal1, row横展開.f_iVal2)
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Additional U({0})D({1}) L({2})R({3})", _addeach(SideEnum._上), _addeach(SideEnum._下), _addeach(SideEnum._左), _addeach(SideEnum._右))
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count U({0})D({1}) Bottom({2})SideSum({3})", _knots(SideIndexEnum._上側), _knots(SideIndexEnum._下側), row縦展開.f_iVal1, row縦展開.f_iVal2)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Koma Count L({0})R({1}) Bottom({2})SideSum({3})", _knots(SideIndexEnum._左側), _knots(SideIndexEnum._右側), row横展開.f_iVal1, row横展開.f_iVal2)
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, " Additional U({0})D({1}) L({2})R({3})", _addeach(SideIndexEnum._上側), _addeach(SideIndexEnum._下側), _addeach(SideIndexEnum._左側), _addeach(SideIndexEnum._右側))
 
             _IsValid = True
 
             'clsCalcKnotの数値で計算
             With _parent
 
-                For i As Integer = 0 To cSideCount - 1
+                For i As Integer = 0 To cSideIndexEnumCount - 1
                     _addsum(i) = ._d縁の垂直ひも長 + ._dひも長加算_縦横端 + _addeach(i)
                     _bandlen(i) = _knots(i) * ._dコマベース要尺 + _addsum(i)
                 Next
 
-                _diff(SideEnum._上) = _bandlen(SideEnum._上) - _bandlen(SideEnum._下)
-                _diff(SideEnum._下) = -_diff(SideEnum._上)
+                _diff(SideIndexEnum._上側) = _bandlen(SideIndexEnum._上側) - _bandlen(SideIndexEnum._下側)
+                _diff(SideIndexEnum._下側) = -_diff(SideIndexEnum._上側)
 
-                _diff(SideEnum._左) = _bandlen(SideEnum._左) - _bandlen(SideEnum._右)
-                _diff(SideEnum._右) = -_diff(SideEnum._左)
+                _diff(SideIndexEnum._左側) = _bandlen(SideIndexEnum._左側) - _bandlen(SideIndexEnum._右側)
+                _diff(SideIndexEnum._右側) = -_diff(SideIndexEnum._左側)
 
-                For i As Integer = 0 To cSideCount - 1
+                For i As Integer = 0 To cSideIndexEnumCount - 1
                     Dim foldingLen As Double = c_foldingRatio * ._dコマの要尺
                     '折り位置からのひも長
                     _foldinglen(i) = _bandlen(i) + foldingLen + (._dコマ間のすき間 / 2)
@@ -1762,11 +1769,11 @@ Class clsCalcKnot
 
         Shared Sub New()
             '共通の準備を1度だけ行う
-            ReDim _SideString(cSideCount - 1)
-            _SideString(SideEnum._上) = My.Resources.CalcOutSideUpper '下
-            _SideString(SideEnum._下) = My.Resources.CalcOutSideLower '上
-            _SideString(SideEnum._左) = My.Resources.CalcOutSideLeft '右
-            _SideString(SideEnum._右) = My.Resources.CalcOutSideRight '左
+            ReDim _SideString(cSideIndexEnumCount - 1)
+            _SideString(SideIndexEnum._上側) = My.Resources.CalcOutSideUpper '下
+            _SideString(SideIndexEnum._下側) = My.Resources.CalcOutSideLower '上
+            _SideString(SideIndexEnum._左側) = My.Resources.CalcOutSideLeft '右
+            _SideString(SideIndexEnum._右側) = My.Resources.CalcOutSideRight '左
         End Sub
 
         'マイひも長係数を掛けた値を返すときTrue
@@ -1783,17 +1790,17 @@ Class clsCalcKnot
 
         '反対方向の文字列
         Function getPairSideString(ByVal i As Integer) As String
-            If i = SideEnum._上 Then
-                Return _SideString(SideEnum._下)
+            If i = SideIndexEnum._上側 Then
+                Return _SideString(SideIndexEnum._下側)
             End If
-            If i = SideEnum._左 Then
-                Return _SideString(SideEnum._右)
+            If i = SideIndexEnum._左側 Then
+                Return _SideString(SideIndexEnum._右側)
             End If
-            If i = SideEnum._下 Then
-                Return _SideString(SideEnum._上)
+            If i = SideIndexEnum._下側 Then
+                Return _SideString(SideIndexEnum._上側)
             End If
-            If i = SideEnum._右 Then
-                Return _SideString(SideEnum._左)
+            If i = SideIndexEnum._右側 Then
+                Return _SideString(SideIndexEnum._左側)
             End If
             Return Nothing
         End Function
@@ -1975,7 +1982,18 @@ Class clsCalcKnot
         tmptable.AcceptChanges()
         Return True
     End Function
+
     Private Sub set縦横_出力ひも長(ByVal row As tbl縦横展開Row)
+        'f_dVal1: f_dひも長加算  + _d縁の垂直ひも長 + _dひも長加算_縦横端
+        'f_dVal2: f_dひも長加算2 + _d縁の垂直ひも長 + _dひも長加算_縦横端
+        'f_dVal3: f_dVal1 * p_dマイひも長係数
+        'f_dVal4: f_dVal2 * p_dマイひも長係数
+        row.f_dVal1 = row.f_dひも長加算 + _d縁の垂直ひも長 + _dひも長加算_縦横端
+        row.f_dVal2 = row.f_dひも長加算2 + _d縁の垂直ひも長 + _dひも長加算_縦横端
+        row.f_dVal3 = row.f_dVal1 * p_dマイひも長係数
+        row.f_dVal4 = row.f_dVal2 * p_dマイひも長係数
+
+        'f_d出力ひも長: (f_dひも長+f_dひも長加算+f_dひも長加算2) * p_dマイひも長係数
         row.f_d出力ひも長 = (row.f_dひも長 + row.f_dひも長加算 + row.f_dひも長加算2) * p_dマイひも長係数
     End Sub
 
@@ -2226,17 +2244,17 @@ Class clsCalcKnot
 
             '左
             row = output.NextNewRow
-            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideEnum._左)) '<コマの{0}> 
-            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideEnum._左, output)
-            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideEnum._左))
-            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideEnum._左))
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideIndexEnum._左側)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._左側, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._左側))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._左側))
 
             '右
             row = output.NextNewRow
-            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideEnum._右)) '<コマの{0}> 
-            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideEnum._右, output)
-            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideEnum._右))
-            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideEnum._右))
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideIndexEnum._右側)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._右側, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._右側))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._右側))
 
             '縦ひも
             row = output.NextNewRow
@@ -2251,17 +2269,17 @@ Class clsCalcKnot
 
             '上
             row = output.NextNewRow
-            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideEnum._上)) '<コマの{0}> 
-            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideEnum._上, output)
-            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideEnum._上))
-            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideEnum._上))
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideIndexEnum._上側)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._上側, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._上側))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._上側))
 
             '下
             row = output.NextNewRow
-            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideEnum._下)) '<コマの{0}> 
-            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideEnum._下, output)
-            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideEnum._下))
-            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideEnum._下))
+            row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, startInfo.getSideString(SideIndexEnum._下側)) '<コマの{0}> 
+            row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._下側, output)
+            row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._下側))
+            row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._下側))
 
             output.AddBlankLine()
         End If

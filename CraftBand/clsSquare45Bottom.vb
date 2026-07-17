@@ -973,7 +973,7 @@ Public Class clsSquare45Bottom
         Dim ret As Boolean = checkSideLineLeft(Nothing, checklist)
         ret = ret And checkSideLineRight(Nothing, checklist)
 
-        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CheckSideLine({0}) {1}{2}", ret, vbCrLf, checklist.ToString())
+        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "CheckSideLine({0}) {1}{2}", ret, vbCrLf, checklist.ToString())
 
         Return checklist
     End Function

@@ -551,8 +551,8 @@ Class clsCalcSquare45
         sb.AppendFormat("WidthChange({0}) IsRectangle({1}) {2}", p_b本幅変更あり, p_b長方形である, _a底領域).AppendLine()
         sb.AppendFormat("AllSameWidth({0}) HeightByBand({1})", p_i同じ本幅, _dバンド側面の高さ).AppendLine()
         sb.AppendFormat("Up{0:f3}° Left{1:f3}° Bottom{2:f3}° Right{3:f3}°",
-                        p_d底の角度(DirectionEnum._上), p_d底の角度(DirectionEnum._左),
-                        p_d底の角度(DirectionEnum._下), p_d底の角度(DirectionEnum._右)).AppendLine()
+                        p_d底の角度(SideIndexEnum._上側), p_d底の角度(SideIndexEnum._左側),
+                        p_d底の角度(SideIndexEnum._下側), p_d底の角度(SideIndexEnum._右側)).AppendLine()
         sb.AppendFormat("Bottom H:{0:f3} {1:f3}  D:{2:f3} {3:f3}", p_d底の横長, p_d底の横長(True), p_d底の縦長, p_d底の縦長(True))
 
         Return sb.ToString
@@ -2240,8 +2240,8 @@ Class clsCalcSquare45
         Else
             row.f_s編みかた名 = output.outLengthText(p_d底の横長)
             row.f_s編みひも名 = output.outLengthText(p_d底の横長(True))
-            row.f_i周数 = p_d底の角度(DirectionEnum._上)
-            row.f_i段数 = p_d底の角度(DirectionEnum._左)
+            row.f_i周数 = p_d底の角度(SideIndexEnum._上側)
+            row.f_i段数 = p_d底の角度(SideIndexEnum._左側)
         End If
 
         row = output.NextNewRow
@@ -2253,8 +2253,8 @@ Class clsCalcSquare45
         Else
             row.f_s編みかた名 = output.outLengthText(p_d底の縦長)
             row.f_s編みひも名 = output.outLengthText(p_d底の縦長(True))
-            row.f_i周数 = p_d底の角度(DirectionEnum._下)
-            row.f_i段数 = p_d底の角度(DirectionEnum._右)
+            row.f_i周数 = p_d底の角度(SideIndexEnum._下側)
+            row.f_i段数 = p_d底の角度(SideIndexEnum._右側)
         End If
 
         row = output.NextNewRow

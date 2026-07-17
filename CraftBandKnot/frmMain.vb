@@ -859,8 +859,11 @@ Public Class frmMain
             Return False
         End If
 
+        '記号表示
+        Dim isDrawMark As Boolean = Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         Dim stepImageData As New clsImageData(Nothing)
-        Dim ret As Boolean = calc.CalcImage(stepImageData,
+        Dim ret As Boolean = calc.CalcImage(stepImageData, isDrawMark,
             chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
@@ -945,8 +948,11 @@ Public Class frmMain
             Return False
         End If
 
+        '記号表示
+        Dim isDrawMark As Boolean = Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         Dim imgData As New clsImageData(Nothing)
-        Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData,
+        Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData, isDrawMark,
             chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
@@ -1476,6 +1482,10 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub rad左右どちらでも_CheckedChanged(sender As Object, e As EventArgs) Handles radどちらでも.CheckedChanged, rad左側.CheckedChanged, rad右側.CheckedChanged
+        '長さに変更はないが、読み取り値をキャッシュするため
+        recalc(CalcCategory.Knot, sender)
+    End Sub
 
 #End Region
 
@@ -1807,8 +1817,11 @@ Public Class frmMain
         picプレビュー.Image = Nothing
         _clsImageData = New clsImageData(_sFilePath)
 
+        '記号表示
+        Dim isDrawMark As Boolean = Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
+
         Cursor.Current = Cursors.WaitCursor
-        Dim ret As Boolean = _clsCalcKnot.CalcImage(_clsImageData,
+        Dim ret As Boolean = _clsCalcKnot.CalcImage(_clsImageData, isDrawMark,
             chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
         Cursor.Current = Cursors.Default
 

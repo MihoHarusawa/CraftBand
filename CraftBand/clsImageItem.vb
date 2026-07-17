@@ -4,6 +4,7 @@ Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageItem.CBand
 Imports CraftBand.clsInsertExpand
 Imports CraftBand.Tables.dstDataTables
+Imports Microsoft.VisualBasic.Logging
 
 Public Class clsImageItem
     Implements IComparable(Of clsImageItem)
@@ -19,13 +20,35 @@ Public Class clsImageItem
 
     <Flags()>
     Enum DirectionEnum
-        _上 = 1
-        _左 = 2
-        _下 = 4
-        _右 = 8
+        _右 = 1
+        _上 = 2
+        _左 = 4
+        _下 = 8
     End Enum
     Public Const cDirectionEnumNone As DirectionEnum = 0
     Public Const cDirectionEnumAll As DirectionEnum = DirectionEnum._上 Or DirectionEnum._左 Or DirectionEnum._右 Or DirectionEnum._下
+
+    Enum SideIndexEnum
+        _右側 = 0
+        _上側 = 1
+        _左側 = 2
+        _下側 = 3
+    End Enum
+    Public Const cSideIndexEnumCount As Integer = 4
+    Public Const cSideIndexEnumString As String = "RULD" 'Substring(SideIndexEnum, 1)
+
+    Public Shared Function SideIndexToDirection(ByVal side As SideIndexEnum) As DirectionEnum
+        Return CType(1 << CInt(side), DirectionEnum)
+    End Function
+    Public Shared Function DirectionToSideIndex(ByVal dir As DirectionEnum) As SideIndexEnum()
+        Dim sidelist As New List(Of SideIndexEnum)(4) 'Max4
+        For i As Integer = 0 To 3
+            If dir.HasFlag(CType(1 << i, DirectionEnum)) Then 'Shif Bit(1, 2, 4, 8)
+                sidelist.Add(CType(i, SideIndexEnum))
+            End If
+        Next
+        Return sidelist.ToArray()
+    End Function
 
 #Region "配置構造体"
 
@@ -1302,6 +1325,7 @@ Public Class clsImageItem
         Dim _dコマ寸法 As Double   'コマを囲む正方形の辺
         Dim _dすき間 As Double     '隣のコマとの間隔(まわりに1/2ずつ)
         Dim _isKnotLeft As Boolean '左綾
+        Dim _dひも幅 As Double     'ひも幅
 
         Dim _isDrawUnit As Boolean = False  'コマの枠線を描く
         Dim _isDrawArea As Boolean = False  '領域の枠線を描く
@@ -1313,6 +1337,14 @@ Public Class clsImageItem
 
         Dim _d描画幅 As Double = 0
 
+        '  band縦上  B│  │                        
+        '           ┌┤D │              
+        '   _____C_／ ├─┤C   band横上   ・～上は定数ベース             
+        '       D │ A│   ＼ B            ・～下は、～上の点対称(中心A)        
+        '   ──┬┴─┼─┬┴───       ・_isKnotLeftの場合は左右反転              
+        '        ＼   │A │________                  
+        ' band横下├─┤ ／                
+        '         │  ├┘  band縦下                      
 
         Sub New(ByVal p As S実座標, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean)
             _p中心 = p
@@ -1324,6 +1356,8 @@ Public Class clsImageItem
 
         'isgauge:Tureの時は開始位置表示用に傾き補正する
         Sub SetBandYH(ByVal bandY As CBand, ByVal bandT As CBand, ByVal dひも幅 As Double, ByVal isgauge As Boolean)
+            _dひも幅 = dひも幅
+
             band横上 = bandY
             band横下 = New CBand(bandY)
             band縦上 = bandT
@@ -1379,20 +1413,22 @@ Public Class clsImageItem
                 '左綾
                 If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横下
+                    '要確認
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
 
                 End If
                 If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
                     markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅, Unit180 * _d描画幅 * 2.5)
-
                 End If
                 If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横上
                     markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit270 * _d描画幅 * 3.2)
-
                 End If
                 If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
+                    '要確認
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
 
                 End If
 
@@ -1400,26 +1436,126 @@ Public Class clsImageItem
                 '右綾
                 If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横上
+                    '要確認
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
 
 
                 End If
                 If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
                     markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
-
                 End If
                 If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横下
                     markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit90 * _d描画幅)
-
                 End If
                 If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
+                    '要確認
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
 
                 End If
 
             End If
         End Sub
+
+        '外側に向かうバンドの始点F→始点F
+        Private Function GetSideLine(ByVal side As SideIndexEnum) As S線分
+            If _isKnotLeft Then
+                Select Case side
+                    Case SideIndexEnum._右側
+                        Return New S線分(band縦上.aバンド位置.pD, band縦上.aバンド位置.pC)
+                    Case SideIndexEnum._上側
+                        Return New S線分(band横上.aバンド位置.pD, band横上.aバンド位置.pC)
+                    Case SideIndexEnum._左側
+                        Return New S線分(band縦下.aバンド位置.pD, band縦下.aバンド位置.pC)
+                    Case SideIndexEnum._下側
+                        Return New S線分(band横下.aバンド位置.pD, band横下.aバンド位置.pC)
+                End Select
+            Else
+                Select Case side
+                    Case SideIndexEnum._右側
+                        Return New S線分(band縦下.aバンド位置.pC, band縦下.aバンド位置.pD)
+                    Case SideIndexEnum._上側
+                        Return New S線分(band横上.aバンド位置.pC, band横上.aバンド位置.pD)
+                    Case SideIndexEnum._左側
+                        Return New S線分(band縦上.aバンド位置.pC, band縦上.aバンド位置.pD)
+                    Case SideIndexEnum._下側
+                        Return New S線分(band横下.aバンド位置.pC, band横下.aバンド位置.pD)
+
+                End Select
+            End If
+        End Function
+
+        Private Function GetSideBandAngle(ByVal side As SideIndexEnum) As Double
+            'side値は、右側=0 1,2,3　の順
+            If _isKnotLeft Then
+                Return -c_angle + CInt(side) * 90
+            Else
+                Return c_angle + CInt(side) * 90
+            End If
+        End Function
+
+
+        Function GetExBand(ByVal side As SideIndexEnum, ByVal len As Double) As CBand
+            Dim band As CBand
+            'バンド色・記号・幅
+            If side = SideIndexEnum._右側 Or side = SideIndexEnum._左側 Then
+                band = New CBand(band横上)
+            Else
+                band = New CBand(band縦上)
+            End If
+            '始点F始点Fライン
+            Dim line As S線分 = GetSideLine(side)
+            line.Length = _dひも幅
+
+            band.p始点F = line.p開始
+            band.p始点T = line.p終了
+
+            Dim delta As New S差分(GetSideBandAngle(side))
+            delta *= len
+            line += delta
+            band.p終点F = line.p開始
+            band.p終点T = line.p終了
+
+            band.is始点FT線 = False
+            Return band
+        End Function
+
+        Function GetExBand始点(ByVal side As SideIndexEnum) As CBand
+            Dim band As CBand
+            'バンド色・記号・幅
+            If side = SideIndexEnum._右側 Or side = SideIndexEnum._左側 Then
+                band = New CBand(band横上)
+            Else
+                band = New CBand(band縦上)
+            End If
+            '始点F始点Fライン
+            Dim line As S線分 = GetSideLine(side)
+            line.Length = _dひも幅
+
+            band.p始点F = line.p開始
+            band.p始点T = line.p終了
+            band.is始点FT線 = False
+
+            Return band
+        End Function
+
+        Function SetExBand終点(ByVal band As CBand, ByVal side As SideIndexEnum) As Boolean
+            If band Is Nothing Then
+                Return False
+            End If
+            'FTラインとしてセット
+            Dim line As S線分 = GetSideLine(side)
+            line.Length = _dひも幅
+
+            '逆方向
+            band.p終点F = line.p終了
+            band.p終点T = line.p開始
+            band.is終点FT線 = False
+
+            Return True
+        End Function
 
         Function Get描画幅() As Double
             Return _d描画幅
