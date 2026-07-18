@@ -2111,8 +2111,10 @@ Public Class clsImageItem
 
     '領域の四隅(左<=右, 下<=上)
     Public m_a四隅 As S四隅
-    Public m_is円 As Boolean = False
     Public m_ltype As LineTypeEnum = LineTypeEnum._nodef
+    Public m_is円 As Boolean = False
+    Public m_angleStart As Double
+    Public m_angleSweep As Double
 
     '縦バンド・横バンド・コマ・付属品
     Public m_dひも幅 As Double = 0
@@ -2170,8 +2172,8 @@ Public Class clsImageItem
         _底枠     'm_a四隅,m_lineList,m_is円
         _横の側面   'm_a四隅,m_lineList
         _縦の側面   'm_a四隅,m_lineList
-        _四隅領域 'm_a四隅,m_lineList,m_is円
-        _四隅領域線    'm_a四隅,m_lineList,m_is円,m_ltype
+        _四隅領域       'm_a四隅,m_lineList,m_is円
+        _四隅領域線     'm_a四隅,m_lineList,m_is円,m_ltype,m_angleStart,m_angleSweep
         _底枠2     'm_lineList        (Hexagonの底)
         _底楕円    'm_groupRow,m_a四隅,m_lineList,_r文字領域,m_is円,m_dひも幅 (Meshの底)
 

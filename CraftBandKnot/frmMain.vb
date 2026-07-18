@@ -864,7 +864,7 @@ Public Class frmMain
 
         Dim stepImageData As New clsImageData(Nothing)
         Dim ret As Boolean = calc.CalcImage(stepImageData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
             msg = calc.p_sメッセージ
@@ -953,7 +953,7 @@ Public Class frmMain
 
         Dim imgData As New clsImageData(Nothing)
         Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
             msg = _clsCalcKnot.p_sメッセージ
@@ -1822,7 +1822,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         Dim ret As Boolean = _clsCalcKnot.CalcImage(_clsImageData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked)
+            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
@@ -1833,17 +1833,32 @@ Public Class frmMain
     End Sub
 
     Private Sub chk底のみ_CheckedChanged(sender As Object, e As EventArgs) Handles chk底のみ.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
         calcImageAndShow()
     End Sub
 
     Private Sub chkひも全体_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
         calcImageAndShow()
     End Sub
 
     Private Sub chkコマ枠_CheckedChanged(sender As Object, e As EventArgs) Handles chkコマ枠.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
         calcImageAndShow()
     End Sub
 
+    Private Sub chk開始位置_CheckedChanged(sender As Object, e As EventArgs) Handles chk開始位置.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        calcImageAndShow()
+    End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
         picプレビュー.Image = Nothing

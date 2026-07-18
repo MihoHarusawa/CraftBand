@@ -125,6 +125,7 @@ Partial Class frmMain
         lbl対角サイズ = New Label()
         txtコマベース_対角 = New TextBox()
         txtコマ_対角 = New TextBox()
+        chk開始位置 = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -646,7 +647,7 @@ Partial Class frmMain
         btn画像ファイル.Location = New Point(606, 382)
         btn画像ファイル.Name = "btn画像ファイル"
         btn画像ファイル.Size = New Size(111, 43)
-        btn画像ファイル.TabIndex = 3
+        btn画像ファイル.TabIndex = 4
         btn画像ファイル.Text = "画像ファイル(&I)"
         ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
         btn画像ファイル.UseVisualStyleBackColor = True
@@ -657,7 +658,7 @@ Partial Class frmMain
         btnブラウザ.Location = New Point(723, 382)
         btnブラウザ.Name = "btnブラウザ"
         btnブラウザ.Size = New Size(111, 43)
-        btnブラウザ.TabIndex = 4
+        btnブラウザ.TabIndex = 5
         btnブラウザ.Text = "ブラウザ(&B)"
         ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
         btnブラウザ.UseVisualStyleBackColor = True
@@ -1123,24 +1124,24 @@ Partial Class frmMain
         ' 
         chkコマ枠.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         chkコマ枠.AutoSize = True
-        chkコマ枠.Location = New Point(205, 394)
+        chkコマ枠.Location = New Point(209, 394)
         chkコマ枠.Name = "chkコマ枠"
         chkコマ枠.Size = New Size(63, 23)
         chkコマ枠.TabIndex = 2
         chkコマ枠.Text = "コマ枠"
-        ToolTip1.SetToolTip(chkコマ枠, "コマ寸法の枠を表示")
+        ToolTip1.SetToolTip(chkコマ枠, "コマごとにサイズ枠を表示します")
         chkコマ枠.UseVisualStyleBackColor = True
         ' 
         ' chkひも全体
         ' 
         chkひも全体.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         chkひも全体.AutoSize = True
-        chkひも全体.Location = New Point(105, 394)
+        chkひも全体.Location = New Point(107, 394)
         chkひも全体.Name = "chkひも全体"
         chkひも全体.Size = New Size(78, 23)
         chkひも全体.TabIndex = 1
         chkひも全体.Text = "ひも全体"
-        ToolTip1.SetToolTip(chkひも全体, "残りのひもをすべて表示")
+        ToolTip1.SetToolTip(chkひも全体, "ひもの全長を表示します")
         chkひも全体.UseVisualStyleBackColor = True
         ' 
         ' chk底のみ
@@ -1152,7 +1153,7 @@ Partial Class frmMain
         chk底のみ.Size = New Size(65, 23)
         chk底のみ.TabIndex = 0
         chk底のみ.Text = "底のみ"
-        ToolTip1.SetToolTip(chk底のみ, "立ち上げなしの底編みのみ")
+        ToolTip1.SetToolTip(chk底のみ, "底編み箇所のみ表示します")
         chk底のみ.UseVisualStyleBackColor = True
         ' 
         ' lbl対角サイズ
@@ -1190,6 +1191,20 @@ Partial Class frmMain
         txtコマ_対角.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtコマ_対角, "コマ寸法の対角線のサイズ")
         txtコマ_対角.Visible = False
+        ' 
+        ' chk開始位置
+        ' 
+        chk開始位置.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk開始位置.AutoSize = True
+        chk開始位置.Checked = True
+        chk開始位置.CheckState = CheckState.Checked
+        chk開始位置.Location = New Point(296, 394)
+        chk開始位置.Name = "chk開始位置"
+        chk開始位置.Size = New Size(84, 23)
+        chk開始位置.TabIndex = 3
+        chk開始位置.Text = "開始位置"
+        ToolTip1.SetToolTip(chk開始位置, "開始位置情報を表示します")
+        chk開始位置.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1793,6 +1808,7 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
+        tpageプレビュー.Controls.Add(chk開始位置)
         tpageプレビュー.Controls.Add(chkコマ枠)
         tpageプレビュー.Controls.Add(chkひも全体)
         tpageプレビュー.Controls.Add(chk底のみ)
@@ -2660,6 +2676,7 @@ Partial Class frmMain
     Friend WithEvents lbl対角サイズ As Label
     Friend WithEvents txtコマベース_対角 As TextBox
     Friend WithEvents txtコマ_対角 As TextBox
+    Friend WithEvents chk開始位置 As CheckBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

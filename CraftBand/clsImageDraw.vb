@@ -665,7 +665,14 @@ Public Class CImageDraw
     Function draw四隅領域線(ByVal item As clsImageItem) As Boolean
         Dim ret As Boolean = True
         If item.m_is円 Then
-            ret = ret And draw_ellipse(item.m_a四隅.r外接領域, item.m_ltype)
+            If 0 < item.m_angleSweep Then
+                '角度指定あり
+                ret = ret And draw_arc(item.m_a四隅.r外接領域, item.m_ltype, item.m_angleStart, item.m_angleSweep)
+            Else
+                '角度指定なし
+                ret = ret And draw_ellipse(item.m_a四隅.r外接領域, item.m_ltype)
+            End If
+
         Else
             ret = ret And draw_area(item.m_a四隅, item.m_ltype)
         End If
@@ -749,6 +756,27 @@ Public Class CImageDraw
         Return True
     End Function
 
+    Private Function draw_arc(ByVal region As S領域, ByVal ltype As LineTypeEnum, ByVal angleStart As Double, ByVal angleSweep As Double)
+        If region.IsEmpty Then
+            Return True
+        End If
+        Dim rect As RectangleF = pixcel_rectangle(region)
+        Select Case ltype
+            Case LineTypeEnum._black_thin
+                _Graphic.DrawArc(_Pen_black_thin, rect, angleStart, angleSweep)
+            Case LineTypeEnum._black_thick
+                _Graphic.DrawArc(_Pen_black_thick, rect, angleStart, angleSweep)
+            Case LineTypeEnum._black_dot
+                _Graphic.DrawArc(_Pen_black_dot, rect, angleStart, angleSweep)
+            Case LineTypeEnum._red
+                _Graphic.DrawArc(_Pen_red, rect, angleStart, angleSweep)
+            Case LineTypeEnum._blue
+                _Graphic.DrawArc(_Pen_blue, rect, angleStart, angleSweep)
+            Case Else 'nodef
+                Return False
+        End Select
+        Return True
+    End Function
 
     Function draw文字列(ByVal item As clsImageItem) As Boolean
         'If item.m_aryString Is Nothing OrElse item.m_sizeFont <= 0 Then

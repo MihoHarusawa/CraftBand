@@ -1,10 +1,7 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
+﻿Imports System.DirectoryServices
 Imports CraftBand
-Imports CraftBand.clsDataTables
 Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
-Imports CraftBand.clsSquare45Bottom
-Imports CraftBandKnot.clsCalcKnot
 
 Partial Public Class clsCalcKnot
 
@@ -670,9 +667,59 @@ Partial Public Class clsCalcKnot
         End If
 
 
-        '面から出る部分は半透明化
-        If Not isAllBand Then
-            Dim over As Double = _dコマベース寸法 / 2
+        If isAllBand Then
+
+            For i As Integer = 1 To p_i側面の切捨コマ数
+                Dim len As Double = _dコマベース寸法_対角 * (i - 0.5)
+                Dim aR As New S四隅(New S領域(New S実座標(-len, -len), New S実座標(len, len)))
+                Dim delta As New S差分(pOrigin, pD1)
+                '右
+                'D1
+                item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
+                item.m_a四隅 = aR + New S差分(pOrigin, pD1)
+                item.m_is円 = True
+                item.m_ltype = LineTypeEnum._black_dot
+                item.m_angleStart = -45
+                item.m_angleSweep = 90
+                itemlist.AddItem(item)
+
+                '上
+                'A1
+                item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
+                item.m_a四隅 = aR + New S差分(pOrigin, pA1)
+                item.m_is円 = True
+                item.m_ltype = LineTypeEnum._black_dot
+                item.m_angleStart = 225
+                item.m_angleSweep = 90
+                itemlist.AddItem(item)
+
+
+                '左
+                'B1
+                item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
+                item.m_a四隅 = aR + New S差分(pOrigin, pB1)
+                item.m_is円 = True
+                item.m_ltype = LineTypeEnum._black_dot
+                item.m_angleStart = 135
+                item.m_angleSweep = 90
+                itemlist.AddItem(item)
+
+                '下
+                'C1
+                item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
+                item.m_a四隅 = aR + New S差分(pOrigin, pC1)
+                item.m_is円 = True
+                item.m_ltype = LineTypeEnum._black_dot
+                item.m_angleStart = 45
+                item.m_angleSweep = 90
+                itemlist.AddItem(item)
+
+            Next
+
+
+        Else
+            '面から出る部分は半透明化
+            Dim over As Double = _dコマの寸法 / 2
             pA3 += _unit135 * over
             pB3 += _unit135 * over
             pB2 += _unit225 * over
@@ -709,7 +756,7 @@ Partial Public Class clsCalcKnot
 
 #Region "開始位置"
 
-    Function imageList開始位置(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean, ByVal outp As clsOutput, ByVal isKnotFrame As Boolean) As clsImageItemList
+    Function imageList開始位置(ByVal dひも幅 As Double, ByVal isKnotLeft As Boolean, ByVal outp As clsOutput, ByVal isKnotFrame As Boolean, ByVal isStartPosition As Boolean) As clsImageItemList
 
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
@@ -768,6 +815,12 @@ Partial Public Class clsCalcKnot
             line = New S線分(New S実座標(p要尺位置.X - len_1, p要尺位置.Y - dひも幅 / 2), New S実座標(p要尺位置.X - len_2, p要尺位置.Y + dひも幅 / 2))
             item.m_lineList.Add(line)
             itemlist.AddItem(item)
+        End If
+
+
+        '開始位置情報
+        If Not isStartPosition Then
+            Return itemlist 'ここまでの結果
         End If
 
         '開始位置の情報をセット
@@ -994,15 +1047,12 @@ Partial Public Class clsCalcKnot
     'プレビュー画像生成
     '底のみ=isBottomOnly, ひも全体=isAllBand, コマ枠=isKnotFrame
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isDrawMark As Boolean,
-                              ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean) As Boolean
+                              ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean, ByVal isStartPosition As Boolean) As Boolean
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
         End If
-
-        ''記号表示
-        'Dim isDrawMark As Boolean = Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
 
         '念のため
         _ImageListコマ = Nothing
@@ -1036,7 +1086,7 @@ Partial Public Class clsCalcKnot
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
         End If
-        _ImageList開始位置 = imageList開始位置(_d基本のひも幅, _bコマ上縦ひも左側, outp, isKnotFrame)
+        _ImageList開始位置 = imageList開始位置(_d基本のひも幅, _bコマ上縦ひも左側, outp, isKnotFrame, isStartPosition)
 
         '底と側面枠
         If _b斜め立ち上げ Then
