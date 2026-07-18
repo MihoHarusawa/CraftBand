@@ -12,6 +12,10 @@ Partial Public Class clsCalcKnot
     Const c_foldingRatio As Double = 2 / 6.43   '要尺の折り位置までの比
     Const c_tiltRatio As Double = 0.216   '折りの傾き(幅に対する差の比)
 
+    'この長さより短いバンドは描かない
+    Shared c_minBandLength As Double = New Length(0.5, "mm").Value
+
+
     'プレビュー時に生成
     Dim _ImageListコマ As clsImageItemList
     Dim _ImageList描画要素 As clsImageItemList '底や側面の展開図
@@ -97,23 +101,46 @@ Partial Public Class clsCalcKnot
         End If
 
         '記号
-        If isDispMark AndAlso knotfolder.m_knotMarkSide <> cDirectionEnumNone Then
+        If isDispMark AndAlso knotfolder.KnotMarkSide <> cDirectionEnumNone Then
             If (isBottomOnly AndAlso knotfolder.IsBottomBase) OrElse
                     (Not isBottomOnly AndAlso Not knotfolder.IsBottomBase) Then
-                knot.SetMarkDisp(knotfolder.m_knotMarkSide)
+                knot.SetMarkDisp(knotfolder.KnotMarkSide)
             End If
         End If
 
-        '縁の残りひも
-        If isAllBand AndAlso knotfolder.m_knotRimSide <> cDirectionEnumNone Then
-            If (isBottomOnly AndAlso knotfolder.IsBottomBase) OrElse
-                    (Not isBottomOnly AndAlso Not knotfolder.IsBottomBase) Then
+        '「ひも全体」指定の時
+        Dim isDraw As Boolean = isAllBand
+        isDraw = isDraw AndAlso
+                knotfolder.KnotRimSide <> cDirectionEnumNone '縁(ひもが延びる)側
+        isDraw = isDraw AndAlso
+                ((isBottomOnly AndAlso knotfolder.IsBottomBase) OrElse
+                (Not isBottomOnly AndAlso Not knotfolder.IsBottomBase)) '記載面
 
+        'バンド表示
+        If isDraw Then
+
+            Dim sideDraw As DirectionEnum = cDirectionEnumNone
+            If _b斜め立ち上げ Then
+                sideDraw = knotfolder.KnotRimSide
+            Else
+                '除外:縦横時の側面の辺
+                sideDraw = (knotfolder.KnotRimSide(emExp._Tate) Or knotfolder.KnotRimSide(emExp._Yoko))
+            End If
+
+            If sideDraw <> cDirectionEnumNone Then
                 Dim bandlist As New CBandList
-                Dim sides() As SideIndexEnum = DirectionToSideIndex(knotfolder.m_knotRimSide)
+                '指定のある側
+                Dim sides() As SideIndexEnum = DirectionToSideIndex(sideDraw)
                 For Each side As SideIndexEnum In sides
-                    Dim band As CBand = knot.GetExBand(side, knotfolder.AdditionalLength(side))
-                    bandlist.Add(band)
+                    Dim addlen As Double = knotfolder.AdditionalLength(side)
+                    '底のみの場合は側面ぶんの長さを加える
+                    If isBottomOnly Then
+                        addlen += knotfolder.SideKomaCount(side) * _dコマベース要尺 * p_dマイひも長係数
+                    End If
+                    If c_minBandLength < addlen Then
+                        Dim band As CBand = knot.GetExBand(side, addlen)
+                        bandlist.Add(band)
+                    End If
                 Next
 
                 If 0 < bandlist.Count Then
@@ -126,26 +153,72 @@ Partial Public Class clsCalcKnot
         Dim knotitem As New clsImageItem(knot, knotfolder.m_position.HorzIndex, knotfolder.m_position.VertIndex)
         _ImageListコマ.Add(knotitem)
 
-        knotfolder.m_knot = knot
+        knotfolder.Knot = knot
         Return True
     End Function
 
+    '隣接するコマがある場合は、コマをバンドで繋ぐ
     Private Function bridgeコマ(ByVal knotfolder As CKnotFolder, ByVal bandlist As CBandList) As Boolean
-        'コマのあるknotfolderであることまではチェック済
+        'すき間が一定以上で、コマのあるknotfolderであることまではチェック済
 
+
+        '右方向
         Dim knotRight As CKnotFolder = knotfolder.NextSideKnotFolder(SideIndexEnum._右側)
-        If knotRight IsNot Nothing AndAlso knotRight.m_knot IsNot Nothing Then
-            Dim band As CBand = knotfolder.m_knot.GetExBand始点(SideIndexEnum._右側)
-            knotRight.m_knot.SetExBand終点(band, SideIndexEnum._左側)
-            bandlist.Add(band)
+        If knotRight IsNot Nothing AndAlso knotRight.Knot IsNot Nothing Then
+            '斜めのワープでなければ
+            If knotfolder.SameKnotFolder Is Nothing OrElse
+               knotRight.SameKnotFolder Is Nothing OrElse
+               New SPosition(knotfolder.m_position, knotRight.m_position).GetSide <> SideIndexEnum._右側 Then
+
+                Dim band As CBand = knotfolder.Knot.GetExBand始点(SideIndexEnum._右側)
+                knotRight.Knot.SetExBand終点(band, SideIndexEnum._左側)
+                bandlist.Add(band)
+            End If
         End If
 
+        '下方向
         Dim knotDown As CKnotFolder = knotfolder.NextSideKnotFolder(SideIndexEnum._下側)
-        If knotDown IsNot Nothing AndAlso knotDown.m_knot IsNot Nothing Then
-            Dim band As CBand = knotfolder.m_knot.GetExBand始点(SideIndexEnum._下側)
-            knotDown.m_knot.SetExBand終点(band, SideIndexEnum._上側)
-            bandlist.Add(band)
+        If knotDown IsNot Nothing AndAlso knotDown.Knot IsNot Nothing Then
+            '斜めのワープでなければ
+            If knotfolder.SameKnotFolder Is Nothing OrElse
+               knotDown.SameKnotFolder Is Nothing OrElse
+               New SPosition(knotfolder.m_position, knotDown.m_position).GetSide <> SideIndexEnum._下側 Then
+
+                Dim band As CBand = knotfolder.Knot.GetExBand始点(SideIndexEnum._下側)
+                knotDown.Knot.SetExBand終点(band, SideIndexEnum._上側)
+                bandlist.Add(band)
+            End If
         End If
+
+        '縦横の場合、となりの側面へのつなぎ
+        If _b斜め立ち上げ Then
+            Return True
+        End If
+
+        Dim sides() As SideIndexEnum = DirectionToSideIndex(knotfolder.KnotRimSide(emExp._Side))
+        For Each side As SideIndexEnum In sides
+#If 0 Then
+            Dim addlen As Double = knotfolder.AdditionalLength(side)
+            addlen = addlen / 2
+            If addlen <= c_minBandLength Then
+                Continue For
+            End If
+            Dim band As CBand = knotfolder.Knot.GetExBand(side, addlen)
+            band.is終点FT線 = False
+#Else
+            Dim dir As New SPosition(side)
+            Dim delta As New S差分(dir.HorzIndex, -dir.VertIndex) 'Y軸逆
+            delta *= _dコマベース寸法
+
+            Dim tmpKnot As New CKnot(knotfolder.Knot)
+            tmpKnot.Move(delta)
+
+            Dim opside As SideIndexEnum = (-dir).GetSide()
+            Dim band As CBand = knotfolder.Knot.GetExBand始点(side)
+            tmpKnot.SetExBand終点(band, opside)
+#End If
+            bandlist.Add(band)
+        Next
 
         Return True
     End Function
@@ -180,21 +253,22 @@ Partial Public Class clsCalcKnot
             End If
         Next
         'コマ間の接続
-        If isAllBand AndAlso New Length(1, "mm").Value < _dコマ間のすき間 Then
+        If c_minBandLength < _dコマ間のすき間 Then
             Dim bandlist As New CBandList
             For Each knotfolder In _KnotFolderSpace
-                If knotfolder IsNot Nothing AndAlso knotfolder.m_knot IsNot Nothing Then
+                If knotfolder IsNot Nothing AndAlso knotfolder.Knot IsNot Nothing Then
                     bridgeコマ(knotfolder, bandlist)
                 End If
             Next
             If 0 < bandlist.Count Then
                 Dim item As New clsImageItem(bandlist, IdxDrawBandBridge, 1)
                 _ImageListコマ.Add(item)
+
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "bridgeコマ={0}", bandlist.ToString)
             End If
         End If
 
 
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_ImageListコマ={0}", _ImageListコマ.ToString)
         Return True
     End Function
 
@@ -722,14 +796,17 @@ Partial Public Class clsCalcKnot
             itemlist.AddItem(item)
         End If
 
+        'コマが描かれた領域
+        Dim rDraw As S領域 = clsImageData.ItemDrawingRect(_ImageListコマ)
+        'コマ空間の下中央位置
+        Dim pコマ空間下 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1 + p_iコマ空間幅 / 2, 1 + p_iコマ空間高さ))
+        If rDraw.y最下 < pコマ空間下.Y Then
+            pコマ空間下.Y = rDraw.y最下
+        End If
 
         '開始位置のコマの転記
         Dim dバンド長 As Double = _dコマベース要尺
-        'コマ空間の下中央位置
-        Dim pコマ位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1 + p_iコマ空間幅 / 2, 2 + p_iコマ空間高さ)) + Unit270 * dバンド長
-        If p_b斜め立ち上げ Then
-            pコマ位置 += Unit270 * _dコマベース寸法
-        End If
+        Dim pコマ位置 As S実座標 = pコマ空間下 + Unit270 * (dバンド長 + _dコマベース寸法)
 
         Dim knot = New CKnot(pコマ位置, _dコマの寸法, _dコマ間のすき間, isKnotLeft)
 

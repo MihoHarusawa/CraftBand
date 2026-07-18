@@ -1346,6 +1346,24 @@ Public Class clsImageItem
         ' band横下├─┤ ／                
         '         │  ├┘  band縦下                      
 
+        Sub New(ByVal ref As CKnot)
+            _p中心 = ref._p中心
+            _dコマ寸法 = ref._dコマ寸法
+            _dすき間 = ref._dすき間
+            _isKnotLeft = ref._isKnotLeft
+            _dひも幅 = ref._dひも幅
+
+            _isDrawUnit = ref._isDrawUnit
+            _isDrawArea = ref._isDrawArea
+
+            band横上 = New CBand(ref.band横上)
+            band横下 = New CBand(ref.band横下)
+            band縦上 = New CBand(ref.band縦上)
+            band縦下 = New CBand(ref.band縦下)
+
+            _d描画幅 = ref._d描画幅
+        End Sub
+
         Sub New(ByVal p As S実座標, ByVal dコマ寸法 As Double, ByVal dすき間 As Double, ByVal isleft As Boolean)
             _p中心 = p
             _dコマ寸法 = dコマ寸法
@@ -1353,7 +1371,6 @@ Public Class clsImageItem
             _isKnotLeft = isleft
 
         End Sub
-
         'isgauge:Tureの時は開始位置表示用に傾き補正する
         Sub SetBandYH(ByVal bandY As CBand, ByVal bandT As CBand, ByVal dひも幅 As Double, ByVal isgauge As Boolean)
             _dひも幅 = dひも幅
@@ -1371,6 +1388,7 @@ Public Class clsImageItem
             If c_dMaxRatio < (_d描画幅 / dひも幅) Then
                 _d描画幅 = dひも幅 * c_dMaxRatio
             End If
+            '※角度も調整した方がよさそうですが、とりあえず2D図位置で
 
 
             band横上.aバンド位置 = c_a横上単位 * _d描画幅
@@ -1459,7 +1477,12 @@ Public Class clsImageItem
             End If
         End Sub
 
-        '外側に向かうバンドの始点F→始点F
+        '    ↗ ＼                ／ ↖                              
+        '  ／＼／↘              ↙＼／＼
+        '   ↖／＼／            ＼／＼↗   
+        '    ＼↙                 ↘ ／   _isKnotLeft   
+        '
+        '外側に向かうバンドの始点F→始点T
         Private Function GetSideLine(ByVal side As SideIndexEnum) As S線分
             If _isKnotLeft Then
                 Select Case side
@@ -1487,6 +1510,7 @@ Public Class clsImageItem
             End If
         End Function
 
+        '外側に向かうバンドの始点→終点
         Private Function GetSideBandAngle(ByVal side As SideIndexEnum) As Double
             'side値は、右側=0 1,2,3　の順
             If _isKnotLeft Then
@@ -1496,7 +1520,7 @@ Public Class clsImageItem
             End If
         End Function
 
-
+        '指定の側から外側に向かうバンド
         Function GetExBand(ByVal side As SideIndexEnum, ByVal len As Double) As CBand
             Dim band As CBand
             'バンド色・記号・幅
@@ -1507,11 +1531,12 @@ Public Class clsImageItem
             End If
             '始点F始点Fライン
             Dim line As S線分 = GetSideLine(side)
-            line.Length = _dひも幅
+            line.Length = _dひも幅 '中心基点
 
             band.p始点F = line.p開始
             band.p始点T = line.p終了
 
+            '外側へ
             Dim delta As New S差分(GetSideBandAngle(side))
             delta *= len
             line += delta
@@ -1522,6 +1547,7 @@ Public Class clsImageItem
             Return band
         End Function
 
+        '隣のコマとの始点になるバンド
         Function GetExBand始点(ByVal side As SideIndexEnum) As CBand
             Dim band As CBand
             'バンド色・記号・幅
@@ -1532,7 +1558,6 @@ Public Class clsImageItem
             End If
             '始点F始点Fライン
             Dim line As S線分 = GetSideLine(side)
-            line.Length = _dひも幅
 
             band.p始点F = line.p開始
             band.p始点T = line.p終了
@@ -1541,21 +1566,31 @@ Public Class clsImageItem
             Return band
         End Function
 
+        '隣のコマからのバンドに終点をセット
         Function SetExBand終点(ByVal band As CBand, ByVal side As SideIndexEnum) As Boolean
             If band Is Nothing Then
                 Return False
             End If
-            'FTラインとしてセット
+            'FTラインを得る
             Dim line As S線分 = GetSideLine(side)
-            line.Length = _dひも幅
 
-            '逆方向
+            'FTは逆方向
             band.p終点F = line.p終了
             band.p終点T = line.p開始
             band.is終点FT線 = False
 
             Return True
         End Function
+
+        '位置を移動
+        Sub Move(ByVal delta As S差分)
+            _p中心 = _p中心 + delta
+            band横上.MoveBand(delta)
+            band横下.MoveBand(delta)
+            band縦上.MoveBand(delta)
+            band縦下.MoveBand(delta)
+        End Sub
+
 
         Function Get描画幅() As Double
             Return _d描画幅
@@ -1862,7 +1897,7 @@ Public Class clsImageItem
             End If
         End Sub
 
-        'Xの始点側を除去, クロスしなければFalse
+        '縦線(xを指定)に対して始点側/終点側を除去, クロスしなければFalse
         Function TrimBandX(ByVal x As Double, Optional is始点側 As Boolean = True)
             Dim p始点FT As S実座標 = New S線分(p始点F, p始点T).p中点
             Dim p終点FT As S実座標 = New S線分(p終点F, p終点T).p中点
@@ -1888,7 +1923,7 @@ Public Class clsImageItem
             Return True
         End Function
 
-        'Yの始点側を除去, クロスしなければFalse
+        '横線(yを指定)に対して始点側/終点側を除去, クロスしなければFalse
         Function TrimBandY(ByVal y As Double, Optional is始点側 As Boolean = True)
             Dim p始点FT As S実座標 = New S線分(p始点F, p始点T).p中点
             Dim p終点FT As S実座標 = New S線分(p終点F, p終点T).p中点

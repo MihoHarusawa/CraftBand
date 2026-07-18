@@ -75,12 +75,18 @@ Public Class clsImageData
         End If
     End Sub
 
+    Shared Function ItemDrawingRect(ByVal imglist As clsImageItemList) As S領域
+        Dim rRect As S領域
+        For Each item As clsImageItem In imglist
+            rRect = rRect.get拡大領域(item.Get描画領域)
+        Next
+        Return rRect
+    End Function
+
+
     '現clsImageItemが占める領域　_rDrawingRectにセット
     Function CurrentItemDrawingRect() As S領域
-        _rDrawingRect.Clear()
-        For Each item As clsImageItem In _ImageList
-            _rDrawingRect = _rDrawingRect.get拡大領域(item.Get描画領域)
-        Next
+        _rDrawingRect = ItemDrawingRect(_ImageList)
         Return _rDrawingRect
     End Function
 
