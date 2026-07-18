@@ -212,12 +212,14 @@ Partial Public Class clsCalcKnot
         '描画情報
         Property Knot As CKnot = Nothing
 
-        '底編み領域である
+        '底編み領域の情報
         Friend ReadOnly Property IsBottomBase As Boolean = False
+        ReadOnly Property BottomBaseMarkSide As DirectionEnum = cDirectionEnumNone
+        ReadOnly Property BottomBaseRimSide As DirectionEnum = cDirectionEnumNone
 
-        '縁のひも長加算値(斜めの場合上下/左右が同一扱いなので、底から来たひもの側)
+        '縁のひも長加算値上下/左右が反転しているかどうか)
         Dim m_valAdditional(cSideIndexEnumCount - 1) As Double
-        Dim m_hasAdditional(cSideIndexEnumCount - 1) As Boolean
+        Dim m_isRowReverse(cSideIndexEnumCount - 1) As Boolean
         Dim m_existAdditional As Boolean = False
 
         'プレ処理済・指定側の加算値
@@ -257,7 +259,7 @@ Partial Public Class clsCalcKnot
             End Get
             Set(value As Double)
                 m_existAdditional = True
-                m_hasAdditional(side) = True
+                m_isRowReverse(side) = True
                 m_valAdditional(side) = value
             End Set
         End Property
@@ -417,8 +419,11 @@ Partial Public Class clsCalcKnot
             End If
         End Function
 
-        '各方向に設定された加算長を返す(セットされている前提)
+        '各方向に設定された入力加算値をそのまま返す
         Public Function GetAdditionalEach() As Double()
+            If BandSetCount() < 2 Then
+                Return Nothing
+            End If
             Dim addeach(cSideIndexEnumCount - 1) As Double
             '上下
             If m_row縦横展開(emExp._Tate) IsNot Nothing Then
@@ -438,6 +443,8 @@ Partial Public Class clsCalcKnot
             _bottom_plate_category '底配置分類
             _knot_band_count 'バンド(縦横展開レコード)のセット状況
             _is_bottom_base '底編み位置
+            _bottom_base_rim_side '底編み位置の縁
+            _bottom_base_mark_side '底編み位置の記号表示位置
             _has_additional 'セットされた加算長がある
             _mark_knot_side '記号表示位置
             _knot_rim_side  '縁(残りひもがある)側
@@ -451,6 +458,10 @@ Partial Public Class clsCalcKnot
                     Return knot_band_count()
                 Case enumDumpType._is_bottom_base
                     Return is_bottom_base()
+                Case enumDumpType._bottom_base_rim_side
+                    Return bottom_base_rim_side()
+                Case enumDumpType._bottom_base_mark_side
+                    Return bottom_base_mark_side()
                 Case enumDumpType._has_additional
                     Return has_additional()
                 Case enumDumpType._mark_knot_side
@@ -462,10 +473,9 @@ Partial Public Class clsCalcKnot
             End Select
         End Function
 
-        '縁(残りひもがある)側
-        Private Function knot_rim_side() As String
+        Private Function DirectionEnumString(ByVal dir As DirectionEnum) As String
             Dim str As String = String.Empty
-            Dim sides() As SideIndexEnum = DirectionToSideIndex(m_knotRimSide)
+            Dim sides() As SideIndexEnum = DirectionToSideIndex(dir)
             For i As Integer = 0 To sides.Length - 1
                 str += cSideIndexEnumString.Substring(sides(i), 1)
             Next
@@ -473,15 +483,15 @@ Partial Public Class clsCalcKnot
             Return str.Substring(0, 2)
         End Function
 
+
+        '縁(残りひもがある)側
+        Private Function knot_rim_side() As String
+            Return DirectionEnumString(m_knotRimSide)
+        End Function
+
         '記号表示位置
         Private Function mark_knot_side() As String
-            Dim str As String = String.Empty
-            Dim sides() As SideIndexEnum = DirectionToSideIndex(_KnotMarkSide)
-            For i As Integer = 0 To sides.Length - 1
-                str += cSideIndexEnumString.Substring(sides(i), 1)
-            Next
-            str += "  "
-            Return str.Substring(0, 2)
+            Return DirectionEnumString(_KnotMarkSide)
         End Function
 
         'セットされた加算長の側
@@ -489,7 +499,7 @@ Partial Public Class clsCalcKnot
             If m_existAdditional Then
                 Dim str As String = String.Empty
                 For i As Integer = 0 To cSideIndexEnumCount - 1
-                    If m_hasAdditional(i) Then
+                    If m_isRowReverse(i) Then
                         str += cSideIndexEnumString.Substring(i, 1)
                     End If
                 Next
@@ -501,6 +511,15 @@ Partial Public Class clsCalcKnot
         End Function
 
         '底編み位置
+        Private Function bottom_base_mark_side() As String
+            Return DirectionEnumString(BottomBaseMarkSide)
+        End Function
+
+        Private Function bottom_base_rim_side() As String
+            Return DirectionEnumString(BottomBaseRimSide)
+        End Function
+
+
         Private Function is_bottom_base() As String
             If IsBottomBase Then
                 Return ("■")
@@ -508,6 +527,7 @@ Partial Public Class clsCalcKnot
                 Return ("・")
             End If
         End Function
+
 
         'バンド(縦横展開レコード)のセット状況
         Private Function knot_band_count() As String
@@ -679,26 +699,6 @@ Partial Public Class clsCalcKnot
                     Return False
                 End If
 
-                '底編み領域
-                For vidx As Integer = 1 To DepthCount + WidthCount
-                    For hidx As Integer = 1 To WidthCount + DepthCount
-                        Dim knotfolder As CKnotFolder = GetAt(hidx + HeightCount, vidx + HeightCount)
-                        knotfolder._IsBottomBase = True
-                        If hidx = 1 Then
-                            knotfolder.m_knotRimSide += DirectionEnum._左
-                            knotfolder._KnotMarkSide += DirectionEnum._左
-                        ElseIf hidx = WidthCount + DepthCount Then
-                            knotfolder.m_knotRimSide += DirectionEnum._右
-                        End If
-                        If vidx = 1 Then
-                            knotfolder.m_knotRimSide += DirectionEnum._上
-                            knotfolder._KnotMarkSide += DirectionEnum._上
-                        ElseIf vidx = DepthCount + WidthCount Then
-                            knotfolder.m_knotRimSide += DirectionEnum._下
-                        End If
-                    Next
-                Next
-
                 '各コマの位置属性
                 For x As Integer = 1 To HorizontalCount
                     For y As Integer = 1 To VerticalCount
@@ -730,6 +730,49 @@ Partial Public Class clsCalcKnot
                 Next
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "List Count={0}  SameCount={1}", samePointPairList.Count, samecount)
 
+                '底編み領域
+                For vidx As Integer = HeightCount + 1 To HeightCount + DepthCount + WidthCount
+                    Dim isFirstHidx As Boolean = True
+                    Dim lastKnotfolder As CKnotFolder = Nothing
+                    For hidx As Integer = HeightCount + 1 To HeightCount + WidthCount + DepthCount
+                        Dim knotfolder As CKnotFolder = GetAt(hidx, vidx)
+                        If Not knotfolder.IsInBottomOrSidePlate() Then
+                            Continue For
+                        End If
+                        knotfolder._IsBottomBase = True
+                        If isFirstHidx Then
+                            knotfolder._BottomBaseMarkSide += DirectionEnum._左
+                            knotfolder._BottomBaseRimSide += DirectionEnum._左
+                            isFirstHidx = False
+                        End If
+                        lastKnotfolder = knotfolder
+                    Next
+                    If lastKnotfolder IsNot Nothing Then
+                        lastKnotfolder._BottomBaseRimSide += DirectionEnum._右
+                        'lastKnotfolder._BottomBaseMarkSide += DirectionEnum._右
+                    End If
+                Next
+                For hidx As Integer = HeightCount + 1 To HeightCount + WidthCount + DepthCount
+                    Dim isFirstVidx As Boolean = True
+                    Dim lastKnotfolder As CKnotFolder = Nothing
+                    For vidx As Integer = HeightCount + 1 To DepthCount + HeightCount + WidthCount
+                        Dim knotfolder As CKnotFolder = GetAt(hidx, vidx)
+                        If Not knotfolder.IsInBottomOrSidePlate() Then
+                            Continue For
+                        End If
+                        If isFirstVidx Then
+                            knotfolder._BottomBaseMarkSide += DirectionEnum._上
+                            knotfolder._BottomBaseRimSide += DirectionEnum._上
+                            isFirstVidx = False
+                        End If
+                        lastKnotfolder = knotfolder
+                    Next
+                    If lastKnotfolder IsNot Nothing Then
+                        lastKnotfolder._BottomBaseRimSide += DirectionEnum._下
+                        'lastKnotfolder._BottomBaseMarkSide += DirectionEnum._下
+                    End If
+                Next
+
                 Return True
             End Function
 
@@ -754,6 +797,8 @@ Partial Public Class clsCalcKnot
                             If HeightCount = 0 Then
                                 knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._bottom_line
                                 knotfolder._IsBottomBase = True
+                                knotfolder._BottomBaseMarkSide += DirectionEnum._左
+                                knotfolder._BottomBaseRimSide += DirectionEnum._左
                             Else
                                 knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._side135
                                 '上下端にひも
@@ -779,8 +824,8 @@ Partial Public Class clsCalcKnot
 
                         ElseIf hidx = HeightCount + 1 Then
                             '底の左端
-                            knotfolder._KnotMarkSide += DirectionEnum._左
-                            knotfolder.m_knotRimSide += DirectionEnum._左
+                            knotfolder._BottomBaseMarkSide += DirectionEnum._左
+                            knotfolder._BottomBaseRimSide += DirectionEnum._左
                             knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._bottom_line
                             knotfolder._IsBottomBase = True
                         ElseIf hidx < HeightCount + WidthCount Then
@@ -791,8 +836,10 @@ Partial Public Class clsCalcKnot
                             '底の右端
                             knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._bottom_line
                             knotfolder._IsBottomBase = True
-                            knotfolder.m_knotRimSide += DirectionEnum._右
-
+                            knotfolder._BottomBaseRimSide += DirectionEnum._右
+                            If HeightCount = 0 Then
+                                knotfolder.m_knotRimSide += DirectionEnum._右
+                            End If
                         Else
                             '右側面内
                             knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._side135
@@ -825,6 +872,8 @@ Partial Public Class clsCalcKnot
                             If HeightCount = 0 Then
                                 knotfolder.m_bottom_category = bottom_category._bottom_line
                                 knotfolder._IsBottomBase = True
+                                knotfolder._BottomBaseMarkSide += DirectionEnum._上
+                                knotfolder._BottomBaseRimSide += DirectionEnum._上
                             Else
                                 knotfolder.m_bottom_category = bottom_category._side45R
                                 '左右端にひも
@@ -850,8 +899,8 @@ Partial Public Class clsCalcKnot
 
                         ElseIf vidx = HeightCount + 1 Then
                             '底の上端
-                            knotfolder.m_knotRimSide += DirectionEnum._上
-                            knotfolder._KnotMarkSide += DirectionEnum._上
+                            knotfolder._BottomBaseMarkSide += DirectionEnum._上
+                            knotfolder._BottomBaseRimSide += DirectionEnum._上
                             knotfolder.m_bottom_category = clsSquare45Bottom.bottom_category._bottom_line
                             knotfolder._IsBottomBase = True
                         ElseIf vidx < HeightCount + DepthCount Then
@@ -861,7 +910,10 @@ Partial Public Class clsCalcKnot
                             '底の下端
                             knotfolder.m_bottom_category = bottom_category._bottom_line
                             knotfolder._IsBottomBase = True
-                            knotfolder.m_knotRimSide += DirectionEnum._下
+                            knotfolder._BottomBaseRimSide += DirectionEnum._下
+                            If HeightCount = 0 Then
+                                knotfolder.m_knotRimSide += DirectionEnum._下
+                            End If
                         ElseIf vidx = VerticalCount Then
                             '下側面の下端
                             knotfolder.m_knotRimSide += DirectionEnum._下
@@ -908,7 +960,7 @@ Partial Public Class clsCalcKnot
                 Dim knotline2 As CKnotFolder = Nothing
                 Dim knotfolder As CKnotFolder
 
-                '底の境界点2点を取得
+                'sideで指定した方向に、底の境界点2点を取得
                 For pos As SPosition = pos_from To pos_to Step pos_step
                     knotfolder = GetAt(pos)
                     If knotfolder Is Nothing Then Continue For
@@ -1184,7 +1236,9 @@ Partial Public Class clsCalcKnot
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._bottom_plate_category))
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._knot_band_count))
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._is_bottom_base))
-        'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._has_additional))
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._bottom_base_rim_side))
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._bottom_base_mark_side))
+        g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._has_additional))
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._mark_knot_side))
         g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "{0}", _KnotFolderSpace.dump_mark(enumDumpType._knot_rim_side))
         'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_KnotFolderSpace={0}", _KnotFolderSpace.ToString)

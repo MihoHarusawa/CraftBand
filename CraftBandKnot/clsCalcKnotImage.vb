@@ -98,26 +98,33 @@ Partial Public Class clsCalcKnot
         End If
 
         '記号
-        If isDispMark AndAlso knotfolder.KnotMarkSide <> cDirectionEnumNone Then
-            If (isBottomOnly AndAlso knotfolder.IsBottomBase) OrElse
-                    (Not isBottomOnly AndAlso Not knotfolder.IsBottomBase) Then
-                knot.SetMarkDisp(knotfolder.KnotMarkSide)
+        If isDispMark Then
+            If isBottomOnly Then
+                If knotfolder.BottomBaseMarkSide <> cDirectionEnumNone Then
+                    knot.SetMarkDisp(knotfolder.BottomBaseMarkSide)
+                End If
+            Else
+                If knotfolder.KnotMarkSide <> cDirectionEnumNone Then
+                    knot.SetMarkDisp(knotfolder.KnotMarkSide)
+                End If
             End If
         End If
 
-        '「ひも全体」指定の時
+        '「ひも全体」指定の時はバンドを表示
         Dim isDraw As Boolean = isAllBand
-        isDraw = isDraw AndAlso
-                knotfolder.KnotRimSide <> cDirectionEnumNone '縁(ひもが延びる)側
-        isDraw = isDraw AndAlso
-                ((isBottomOnly AndAlso knotfolder.IsBottomBase) OrElse
-                (Not isBottomOnly AndAlso Not knotfolder.IsBottomBase)) '記載面
-
+        If isBottomOnly AndAlso knotfolder.BottomBaseRimSide = cDirectionEnumNone Then
+            isDraw = False
+        End If
+        If Not isBottomOnly AndAlso knotfolder.KnotRimSide = cDirectionEnumNone Then
+            isDraw = False
+        End If
         'バンド表示
         If isDraw Then
 
             Dim sideDraw As DirectionEnum = cDirectionEnumNone
-            If _b斜め立ち上げ Then
+            If isBottomOnly Then
+                sideDraw = knotfolder.BottomBaseRimSide
+            ElseIf _b斜め立ち上げ Then
                 sideDraw = knotfolder.KnotRimSide
             Else
                 '除外:縦横時の側面の辺
@@ -261,7 +268,7 @@ Partial Public Class clsCalcKnot
                 Dim item As New clsImageItem(bandlist, IdxDrawBandBridge, 1)
                 _ImageListコマ.Add(item)
 
-                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "bridgeコマ={0}", bandlist.ToString)
+                'g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "bridgeコマ={0}", bandlist.ToString)
             End If
         End If
 
@@ -666,15 +673,17 @@ Partial Public Class clsCalcKnot
             itemlist.AddItem(itemFolding)
         End If
 
-
+        '以下、ペアのコマがあるとき
+        If 0 = p_i側面の切捨コマ数 OrElse isBottomOnly Then
+            Return itemlist
+        End If
         If isAllBand Then
-
+            'ペアのコマを接続
             For i As Integer = 1 To p_i側面の切捨コマ数
                 Dim len As Double = _dコマベース寸法_対角 * (i - 0.5)
                 Dim aR As New S四隅(New S領域(New S実座標(-len, -len), New S実座標(len, len)))
                 Dim delta As New S差分(pOrigin, pD1)
                 '右
-                'D1
                 item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
                 item.m_a四隅 = aR + New S差分(pOrigin, pD1)
                 item.m_is円 = True
@@ -684,7 +693,6 @@ Partial Public Class clsCalcKnot
                 itemlist.AddItem(item)
 
                 '上
-                'A1
                 item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
                 item.m_a四隅 = aR + New S差分(pOrigin, pA1)
                 item.m_is円 = True
@@ -693,9 +701,7 @@ Partial Public Class clsCalcKnot
                 item.m_angleSweep = 90
                 itemlist.AddItem(item)
 
-
                 '左
-                'B1
                 item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
                 item.m_a四隅 = aR + New S差分(pOrigin, pB1)
                 item.m_is円 = True
@@ -705,7 +711,6 @@ Partial Public Class clsCalcKnot
                 itemlist.AddItem(item)
 
                 '下
-                'C1
                 item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 100 + i)
                 item.m_a四隅 = aR + New S差分(pOrigin, pC1)
                 item.m_is円 = True
@@ -713,9 +718,7 @@ Partial Public Class clsCalcKnot
                 item.m_angleStart = 45
                 item.m_angleSweep = 90
                 itemlist.AddItem(item)
-
             Next
-
 
         Else
             '面から出る部分は半透明化

@@ -1431,47 +1431,38 @@ Public Class clsImageItem
                 '左綾
                 If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横下
-                    '要確認
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
-
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 0.4 + _dすき間 / 2, Unit90 * _d描画幅 * 0.2)
                 End If
                 If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅, Unit180 * _d描画幅 * 2.5)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 0.2 + _dすき間 / 2, Unit180 * _d描画幅 * 2)
                 End If
                 If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit270 * _d描画幅 * 3.2)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 2.4 + _dすき間 / 2, Unit270 * _d描画幅 * 2.7)
                 End If
                 If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
-                    '要確認
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
-
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 2.5 + _dすき間 / 2, Unit0 * _d描画幅 * 0.8)
                 End If
 
             Else
                 '右綾
                 If disp.HasFlag(DirectionEnum._右) Then
                     markAt = band横上
-                    '要確認
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
-
-
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 0.4 + _dすき間 / 2, Unit270 * _d描画幅 * 2)
                 End If
                 If disp.HasFlag(DirectionEnum._上) Then
                     markAt = band縦上
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 0.4 + _dすき間 / 2)
                 End If
                 If disp.HasFlag(DirectionEnum._左) Then
                     markAt = band横下
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 3, Unit90 * _d描画幅)
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 2.4 + _dすき間 / 2, Unit90 * _d描画幅 * 0.8)
                 End If
                 If disp.HasFlag(DirectionEnum._下) Then
                     markAt = band縦下
-                    '要確認
-                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅)
-
+                    markAt.SetMarkPosition(enumMarkPosition._終点の後, _d描画幅 * 2.5 + _dすき間 / 2, Unit180 * _d描画幅 * 3)
                 End If
 
             End If
