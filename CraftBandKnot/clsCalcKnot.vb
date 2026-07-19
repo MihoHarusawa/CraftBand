@@ -94,16 +94,6 @@ Class clsCalcKnot
         _Side = 2
     End Enum
     Const cExpYTSCount As Integer = 3 '縦横側面
-    Const cExpYTCount As Integer = 2 '_Yoko,_Tate のみで使用する場合
-
-    Shared Function next_exp(ByVal yt As emExp) As emExp
-        If yt = emExp._Yoko Then
-            Return emExp._Tate
-        Else
-            Return emExp._Yoko
-        End If
-    End Function
-
 
 
     Dim _tbl縦横展開(cExpYTSCount - 1) As tbl縦横展開DataTable 'New時に作成、以降は存在が前提

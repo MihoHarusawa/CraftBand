@@ -37,6 +37,10 @@ Public Class clsImageItem
     Public Const cSideIndexEnumCount As Integer = 4
     Public Const cSideIndexEnumString As String = "RULD" 'Substring(SideIndexEnum, 1)
 
+    '反対側: 0→2,1→3,2→0,3→1
+    Public Shared Function SideIndexOpposite(ByVal side As SideIndexEnum) As SideIndexEnum
+        Return CType((CInt(side) + 2) Mod 4, SideIndexEnum)
+    End Function
     Public Shared Function SideIndexToDirection(ByVal side As SideIndexEnum) As DirectionEnum
         Return CType(1 << CInt(side), DirectionEnum)
     End Function
@@ -1424,6 +1428,7 @@ Public Class clsImageItem
             _isDrawArea = isArea
         End Sub
 
+        '文字位置(現物合わせ)
         Sub SetMarkDisp(ByVal disp As DirectionEnum)
             Dim markAt As CBand = Nothing
 
