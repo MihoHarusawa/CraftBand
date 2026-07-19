@@ -928,6 +928,8 @@ Partial Public Class clsCalcKnot
             Dim band2 As New CBand(startInfo.row横展開)
             band1.aバンド位置 = New S四隅(item1r.p左下, item1r.p右下, item1r.p右上, item1r.p左上)
             band2.aバンド位置 = New S四隅(item2r.p左下, item2r.p右下, item2r.p右上, item2r.p左上)
+            band1.is終点FT線 = False
+            band2.is始点FT線 = False
             Dim item1 As New clsImageItem(band1, IdxDrawBandStart, 1) '右
             Dim item2 As New clsImageItem(band2, IdxDrawBandStart, 2) '左
 
@@ -954,8 +956,10 @@ Partial Public Class clsCalcKnot
             Dim band4 As New CBand(startInfo.row縦展開)
             band3.aバンド位置 = New S四隅(item3r.p左上, item3r.p左下, item3r.p右下, item3r.p右上)
             band4.aバンド位置 = New S四隅(item4r.p左上, item4r.p左下, item4r.p右下, item4r.p右上)
-            Dim item3 As New clsImageItem(band3, IdxDrawBandStart, 3)
-            Dim item4 As New clsImageItem(band4, IdxDrawBandStart, 4)
+            band3.is始点FT線 = False
+            band4.is終点FT線 = False
+            Dim item3 As New clsImageItem(band3, IdxDrawBandStart, 3) '下
+            Dim item4 As New clsImageItem(band4, IdxDrawBandStart, 4) '上
 
             itemlist.AddItem(item3)
             itemlist.AddItem(item4)

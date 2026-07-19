@@ -2021,6 +2021,7 @@ Class clsCalcKnot
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         '
         If 0 < _dコマ間のすき間 Then
+            row.f_s色 = textコマ間のすき間()
             row.f_sタイプ = output.outLengthTextWithUnit(_dコマ間のすき間)
         End If
         row.f_s編みかた名 = text寸法() & output.outLengthTextWithUnit(_dコマの寸法)
@@ -2196,8 +2197,10 @@ Class clsCalcKnot
         row.f_s本幅 = _i縦のコマ数
         row.f_sひも本数 = output.outLengthText(p_dコマベース_縦)
         row.f_sひも長 = output.outLengthText(p_d縁厚さプラス_縦)
-        row.f_sメモ = textひも長加算_側面()
-        row.f_s長さ = output.outLengthText(_dひも長加算_側面)
+        If Not _b斜め立ち上げ Then
+            row.f_sメモ = textひも長加算_側面()
+            row.f_s長さ = output.outLengthText(_dひも長加算_側面)
+        End If
 
         row = output.NextNewRow
         row.f_s色 = text高さ寸法()
@@ -2426,6 +2429,10 @@ Class clsCalcKnot
     End Function
     Private Function text対角サイズ() As String
         Return _frmMain.lbl対角サイズ.Text
+    End Function
+
+    Private Function textコマ間のすき間() As String
+        Return _frmMain.lblコマ間のすき間.Text
     End Function
 
 #End Region

@@ -55,7 +55,7 @@ Partial Class frmMain
         lbl垂直ひも数 = New Label()
         txt垂直ひも数 = New TextBox()
         nudコマ間のすき間 = New NumericUpDown()
-        lblひも間のすき間 = New Label()
+        lblコマ間のすき間 = New Label()
         nudひも長加算_縦横 = New NumericUpDown()
         lblひも長加算_縦横端 = New Label()
         btn規定値 = New Button()
@@ -421,15 +421,15 @@ Partial Class frmMain
         nudコマ間のすき間.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(nudコマ間のすき間, "ひもとひものすき間の寸法")
         ' 
-        ' lblひも間のすき間
+        ' lblコマ間のすき間
         ' 
-        lblひも間のすき間.AutoSize = True
-        lblひも間のすき間.Location = New Point(447, 86)
-        lblひも間のすき間.Name = "lblひも間のすき間"
-        lblひも間のすき間.Size = New Size(91, 19)
-        lblひも間のすき間.TabIndex = 4
-        lblひも間のすき間.Text = "コマ間のすき間"
-        ToolTip1.SetToolTip(lblひも間のすき間, "ひもと横ひものすき間の寸法")
+        lblコマ間のすき間.AutoSize = True
+        lblコマ間のすき間.Location = New Point(447, 86)
+        lblコマ間のすき間.Name = "lblコマ間のすき間"
+        lblコマ間のすき間.Size = New Size(91, 19)
+        lblコマ間のすき間.TabIndex = 4
+        lblコマ間のすき間.Text = "コマ間のすき間"
+        ToolTip1.SetToolTip(lblコマ間のすき間, "ひもと横ひものすき間の寸法")
         ' 
         ' nudひも長加算_縦横
         ' 
@@ -1141,7 +1141,7 @@ Partial Class frmMain
         chkひも全体.Size = New Size(78, 23)
         chkひも全体.TabIndex = 1
         chkひも全体.Text = "ひも全体"
-        ToolTip1.SetToolTip(chkひも全体, "ひもの全長を表示します")
+        ToolTip1.SetToolTip(chkひも全体, "ひもの全長を表示します" & vbCrLf & "「底のみ」の場合、非常に長くなり描画できないことがあります")
         chkひも全体.UseVisualStyleBackColor = True
         ' 
         ' chk底のみ
@@ -1203,7 +1203,7 @@ Partial Class frmMain
         chk開始位置.Size = New Size(84, 23)
         chk開始位置.TabIndex = 3
         chk開始位置.Text = "開始位置"
-        ToolTip1.SetToolTip(chk開始位置, "開始位置情報を表示します")
+        ToolTip1.SetToolTip(chk開始位置, "オフにすると、一時的に要尺や開始位置情報を非表示にできます")
         chk開始位置.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
@@ -1475,7 +1475,7 @@ Partial Class frmMain
         tpageコマ数.Controls.Add(nudコマ間のすき間)
         tpageコマ数.Controls.Add(lblコマ間のすき間_単位)
         tpageコマ数.Controls.Add(lblひも長加算_縦横端)
-        tpageコマ数.Controls.Add(lblひも間のすき間)
+        tpageコマ数.Controls.Add(lblコマ間のすき間)
         tpageコマ数.Controls.Add(grp縦置き)
         tpageコマ数.Controls.Add(grp横置き)
         tpageコマ数.Location = New Point(4, 28)
@@ -2583,7 +2583,7 @@ Partial Class frmMain
     Friend WithEvents lblひも長加算_縦横端 As Label
     Friend WithEvents nudコマ間のすき間 As NumericUpDown
     Friend WithEvents lblコマ間のすき間_単位 As Label
-    Friend WithEvents lblひも間のすき間 As Label
+    Friend WithEvents lblコマ間のすき間 As Label
     Friend WithEvents tpageメモ他 As TabPage
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents btn規定値 As Button
