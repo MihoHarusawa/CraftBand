@@ -1421,6 +1421,11 @@ Public Class clsImageItem
             band縦上.MoveBand(delta)
             band縦下.MoveBand(delta)
 
+            band横上.is始点FT線 = False
+            band横下.is始点FT線 = False
+            band縦上.is始点FT線 = False
+            band縦下.is始点FT線 = False
+
         End Sub
 
         Sub SetRegionDisp(ByVal isUnit As Boolean, ByVal isArea As Boolean)

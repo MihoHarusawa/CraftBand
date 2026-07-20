@@ -14,8 +14,8 @@
     <Copyright>Copyright © CraftBandLabo 2023-2026</Copyright>
     <PackageIcon>IconKnot.ico</PackageIcon>
     <ApplicationIcon>IconKnot.ico</ApplicationIcon>
-    <AssemblyVersion>1.5.2.0</AssemblyVersion>
-    <FileVersion>1.5.2.0</FileVersion>
+    <AssemblyVersion>1.5.3.0</AssemblyVersion>
+    <FileVersion>1.5.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
