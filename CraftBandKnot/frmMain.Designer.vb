@@ -1733,11 +1733,11 @@ Partial Class frmMain
         ' 
         ' ctrPreview1
         ' 
-        ctrPreview1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        ctrPreview1.Location = New Point(-3, -3)
+        ctrPreview1.Dock = DockStyle.Fill
+        ctrPreview1.Location = New Point(3, 3)
         ctrPreview1.Name = "ctrPreview1"
         ctrPreview1.PanelSize = New Size(713, 339)
-        ctrPreview1.Size = New Size(905, 479)
+        ctrPreview1.Size = New Size(834, 427)
         ctrPreview1.TabIndex = 4
         ' 
         ' tpageプレビュー2
@@ -1753,11 +1753,11 @@ Partial Class frmMain
         ' 
         ' ctrPreview2
         ' 
-        ctrPreview2.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        ctrPreview2.Location = New Point(-3, -3)
+        ctrPreview2.Dock = DockStyle.Fill
+        ctrPreview2.Location = New Point(3, 3)
         ctrPreview2.Name = "ctrPreview2"
         ctrPreview2.PanelSize = New Size(713, 339)
-        ctrPreview2.Size = New Size(894, 467)
+        ctrPreview2.Size = New Size(834, 427)
         ctrPreview2.TabIndex = 0
         ' 
         ' f_i段数2

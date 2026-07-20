@@ -87,7 +87,7 @@ Public Class clsModelSquare
 
     '3Dモデルを開く
     'saveDir: 空はGUI問い合わせ、指定されたらGUIなしで保存のみ
-    Function ModelFileOpen(ByVal saveDir As String) As Boolean
+    Public Overrides Function ModelFileOpen(ByVal saveDir As String) As Boolean
 
         Dim height As Double = _delta画像サイズ(1).dY '左側面
         If Not NearlyEqual(height, _delta画像サイズ(2).dY) OrElse
@@ -101,7 +101,7 @@ Public Class clsModelSquare
         Dim outpath As String = Nothing
         If String.IsNullOrEmpty(saveDir) Then
             '画面操作
-            If _calc._frmMain.radビューア.Checked Then
+            If _calc._frmMain.ctrPreview2.IsRadioViewerChecked Then
                 outpath = IO.Path.Combine(IO.Path.GetTempPath, "Square_model")
             End If
         Else

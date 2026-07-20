@@ -44,12 +44,12 @@ Partial Class ctrPreview
         ' Panel
         ' 
         Panel.Controls.Add(panelPreview)
-        Panel.Controls.Add(trkbarPreviewImage)
         Panel.Controls.Add(grp3D)
         Panel.Controls.Add(btn3Dモデル)
         Panel.Controls.Add(btn画像ファイル)
         Panel.Controls.Add(btnブラウザ)
-        Panel.Location = New System.Drawing.Point(3, 3)
+        Panel.Controls.Add(trkbarPreviewImage)
+        Panel.Location = New System.Drawing.Point(0, 0)
         Panel.Name = "Panel"
         Panel.Size = New System.Drawing.Size(713, 339)
         Panel.TabIndex = 1

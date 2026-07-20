@@ -107,6 +107,9 @@ Public Class frmMain
         expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
         expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
+        editMemo.SetNames(Me.Text, tpageメモ他.Text)
+        ctrPreview1.SetNames(Me.Text, tpageプレビュー.Text, False)
+        ctrPreview2.SetNames(Me.Text, tpageプレビュー2.Text, True)
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
 #Else
@@ -950,7 +953,7 @@ Public Class frmMain
 
             IO.File.Move(stepModelImageData.GifFilePath, fpath)
             'No Check
-            If isShow3D AndAlso radビューア.Checked Then
+            If isShow3D AndAlso ctrPreview2.IsRadioViewerChecked Then
                 stepModelImageData.ModelFileOpen(Nothing)
             End If
             Return True
@@ -2134,7 +2137,9 @@ Public Class frmMain
 #Region "プレビュー"
     Dim _clsImageData As clsImageData
     Private Sub Showプレビュー()
-        picプレビュー.Image = Nothing
+        ctrPreview1.PanelSize = tpageプレビュー.Size
+        'picプレビュー.Image = Nothing
+        ctrPreview1.ClearImage()
         _clsImageData = Nothing
 
         SaveTables(_clsDataTables)
@@ -2164,34 +2169,41 @@ Public Class frmMain
             MessageBox.Show(calc.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
-        picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+        'picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+        ctrPreview1.ShowImage(_clsImageData)
     End Sub
 
     Private Sub Hideプレビュー()
-        picプレビュー.Image = Nothing
+        'picプレビュー.Image = Nothing
+        ctrPreview1.ClearImage()
         If _clsImageData IsNot Nothing Then
             _clsImageData.Clear()
             _clsImageData = Nothing
         End If
     End Sub
 
-    Private Sub btnブラウザ_Click(sender As Object, e As EventArgs) Handles btnブラウザ.Click
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsImageData.ImgBrowserOpen(IIf(radうら.Checked, clsImageData.cBrowserBackFace, clsImageData.cBrowserBasicInfo)) Then
-            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+    Private Sub tpageプレビュー_Resize(sender As Object, e As EventArgs) Handles tpageプレビュー.Resize
+        ctrPreview1.PanelSize = tpageプレビュー.Size
     End Sub
 
-    Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs) Handles btn画像ファイル.Click
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsImageData.ImgFileOpen() Then
-            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
+
+    'Private Sub btnブラウザ_Click(sender As Object, e As EventArgs)
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsImageData.ImgBrowserOpen(IIf(radうら.Checked, clsImageData.cBrowserBackFace, clsImageData.cBrowserBasicInfo)) Then
+    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
+
+    'Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs)
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsImageData.ImgFileOpen Then
+    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
 
     Private Sub radおもてうら_CheckChanged(sender As Object, e As EventArgs) Handles radおもて.CheckedChanged ', radうら.CheckedChanged
         If _clsImageData Is Nothing Then
@@ -2205,7 +2217,9 @@ Public Class frmMain
 #Region "プレビュー2"
     Dim _clsModelImageData As clsModelSquare45
     Private Sub Showプレビュー2()
-        picプレビュー2.Image = Nothing
+        ctrPreview2.PanelSize = tpageプレビュー2.Size
+        'picプレビュー2.Image = Nothing
+        ctrPreview2.ClearImage()
         _clsModelImageData = Nothing
 
         SaveTables(_clsDataTables)
@@ -2225,43 +2239,49 @@ Public Class frmMain
             MessageBox.Show(_clsModelImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
-        picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+        'picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+        ctrPreview2.ShowImage(_clsModelImageData)
     End Sub
 
     Private Sub Hideプレビュー2()
-        picプレビュー2.Image = Nothing
+        'picプレビュー2.Image = Nothing
+        ctrPreview2.ClearImage()
         If _clsModelImageData IsNot Nothing Then
             _clsModelImageData.Clear()
             _clsModelImageData = Nothing
         End If
     End Sub
 
-    Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs) Handles btn3Dモデル.Click
-        If _clsModelImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsModelImageData.ModelFileOpen(Nothing) Then
-            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+    Private Sub tpageプレビュー2_Resize(sender As Object, e As EventArgs) Handles tpageプレビュー2.Resize
+        ctrPreview2.PanelSize = tpageプレビュー2.Size
     End Sub
 
-    Private Sub btn画像ファイル2_Click(sender As Object, e As EventArgs) Handles btn画像ファイル2.Click
-        If _clsModelImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsModelImageData.ImgFileOpen Then
-            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
+    'Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs)
+    '    If _clsModelImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsModelImageData.ModelFileOpen(Nothing) Then
+    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
 
-    Private Sub btnブラウザ2_Click(sender As Object, e As EventArgs) Handles btnブラウザ2.Click
-        If _clsModelImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsModelImageData.ImgBrowserOpen(clsImageData.cBrowserSize) Then
-            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
+    'Private Sub btn画像ファイル2_Click(sender As Object, e As EventArgs)
+    '    If _clsModelImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsModelImageData.ImgFileOpen Then
+    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
+
+    'Private Sub btnブラウザ2_Click(sender As Object, e As EventArgs)
+    '    If _clsModelImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsModelImageData.ImgBrowserOpen(clsImageData.cBrowserSize) Then
+    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
 
     '#96 Before/After 変更
     Private Sub radBeforeAfter_CheckedChanged(sender As Object, e As EventArgs) Handles radBefore.CheckedChanged, radAfter.CheckedChanged
@@ -2282,7 +2302,8 @@ Public Class frmMain
             MessageBox.Show(_clsModelImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
-        picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+        'picプレビュー2.Image = System.Drawing.Image.FromFile(_clsModelImageData.GifFilePath)
+        ctrPreview2.ShowImage(_clsModelImageData)
     End Sub
 
 #End Region

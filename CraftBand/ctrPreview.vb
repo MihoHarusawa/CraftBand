@@ -5,12 +5,14 @@ Imports System.Windows.Forms
 Public Class ctrPreview
 
     'Panelを置き、各ControlはPanelにAnchorし、Panelをコードでリサイズする
-    '※ユーザーコントロールとしてのサイズでは制御できない・表示がずれる
+    '※Panelは(0,0)位置に置いています。(3,3)→(-3,-3)ではない。
+    'タブコントロールに配置する際は、Dock=Full としてください。
 
     Public Property PanelSize As Drawing.Size
         Set(value As Drawing.Size)
             If Not _isLoadingData Then
                 Panel.Size = New Size(value.Width, value.Height)
+                LayoutControls()
             End If
         End Set
         Get
@@ -48,13 +50,15 @@ Public Class ctrPreview
 
 
     Public Sub ShowImage(ByVal clsImageData As clsImageData)
+        unloadImage()
+
         _clsImageData = clsImageData
         loadImage(_clsImageData.GifFilePath)
     End Sub
 
     Public Sub ClearImage()
-        m_Image = Nothing
         _clsImageData = Nothing
+        unloadImage()
     End Sub
 
     Public Function IsRadioViewerChecked() As Boolean
@@ -72,15 +76,33 @@ Public Class ctrPreview
 
     '
     Private Sub loadImage(filename As String)
-
         m_Image = Image.FromFile(filename)
 
         picPreview.Image = m_Image
+
+        'スクロール位置リセット
+        panelPreview.AutoScrollPosition = New Point(0, 0)
+
+        'PictureBox位置リセット
+        picPreview.Location = Point.Empty
+
+        '全体表示倍率を再計算
         calcFitZoom()
+
+        'スライダーを最小(全体表示)へ
         trkbarPreviewImage.Value = trkbarPreviewImage.Minimum
+
         m_Zoom = m_FitZoom
 
         applyZoom()
+    End Sub
+
+    Private Sub unloadImage()
+        If m_Image IsNot Nothing Then
+            picPreview.Image = Nothing
+            m_Image.Dispose()
+            m_Image = Nothing
+        End If
     End Sub
 
     'Fit倍率計算
@@ -102,7 +124,6 @@ Public Class ctrPreview
 
     'ズーム適用
     Private Sub applyZoom()
-
         If m_Image Is Nothing Then Return
 
         Dim oldCenterX As Integer = -panelPreview.AutoScrollPosition.X + panelPreview.ClientSize.Width \ 2
@@ -179,7 +200,7 @@ Public Class ctrPreview
         End If
 
         applyZoom()
-        'LayoutControls()
+        LayoutControls()
     End Sub
 
     Private Sub panelPreview_Resize(sender As Object, e As EventArgs) Handles panelPreview.Resize
@@ -192,7 +213,7 @@ Public Class ctrPreview
         End If
 
         applyZoom()
-        'LayoutControls()
+        LayoutControls()
     End Sub
 #End Region
 

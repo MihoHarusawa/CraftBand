@@ -1938,14 +1938,14 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs)
-        If _clsModelImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsModelImageData.ModelFileOpen(Nothing) Then
-            MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
+    'Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs)
+    '    If _clsModelImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsModelImageData.ModelFileOpen(Nothing) Then
+    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
 
     Private Sub tpageプレビュー2_Resize(sender As Object, e As EventArgs) Handles tpageプレビュー2.Resize
         ctrPreview2.PanelSize = tpageプレビュー2.Size

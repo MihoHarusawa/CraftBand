@@ -78,8 +78,6 @@ Partial Class frmMain
         txt対角線_目 = New TextBox()
         txtひもに垂直_ひも幅プラス = New TextBox()
         txtひもに垂直_目 = New TextBox()
-        btn画像ファイル = New Button()
-        btnブラウザ = New Button()
         lbl横並び六つ目 = New Label()
         lbl高さの六つ目数 = New Label()
         nud高さの六つ目数 = New NumericUpDown()
@@ -215,6 +213,28 @@ Partial Class frmMain
         rad上から下へ = New RadioButton()
         rad下から上へ = New RadioButton()
         dgv側面 = New CraftBand.ctrDataGridView()
+        f_i番号2 = New DataGridViewTextBoxColumn()
+        f_s編みかた名2 = New DataGridViewTextBoxColumn()
+        f_s編みひも名2 = New DataGridViewTextBoxColumn()
+        f_iひも番号2 = New DataGridViewTextBoxColumn()
+        f_i何本幅2 = New DataGridViewComboBoxColumn()
+        f_i周数2 = New DataGridViewTextBoxColumn()
+        f_b集計対象外区分2 = New DataGridViewCheckBoxColumn()
+        f_iひも本数2 = New DataGridViewTextBoxColumn()
+        f_s色2 = New DataGridViewComboBoxColumn()
+        f_d高さ2 = New DataGridViewTextBoxColumn()
+        f_d垂直ひも長2 = New DataGridViewTextBoxColumn()
+        f_d周長比率対底の周2 = New DataGridViewTextBoxColumn()
+        f_d周長2 = New DataGridViewTextBoxColumn()
+        f_dひも長2 = New DataGridViewTextBoxColumn()
+        f_dひも長加算2 = New DataGridViewTextBoxColumn()
+        f_d連続ひも長2 = New DataGridViewTextBoxColumn()
+        f_d厚さ2 = New DataGridViewTextBoxColumn()
+        f_s記号2 = New DataGridViewTextBoxColumn()
+        f_i表示順2 = New DataGridViewTextBoxColumn()
+        f_i非表示順2 = New DataGridViewTextBoxColumn()
+        f_sメモ2 = New DataGridViewTextBoxColumn()
+        f_bError2 = New DataGridViewCheckBoxColumn()
         BindingSource側面 = New BindingSource(components)
         tpage差しひも = New TabPage()
         editInsertBand = New CraftBand.ctrInsertBand()
@@ -229,7 +249,7 @@ Partial Class frmMain
         tpageプレビュー = New TabPage()
         radうら = New RadioButton()
         radおもて = New RadioButton()
-        picプレビュー = New PictureBox()
+        CtrPreview1 = New CraftBand.ctrPreview()
         tpage斜め120度 = New TabPage()
         expand斜め120度 = New CraftBand.ctrExpanding()
         tpage横ひも = New TabPage()
@@ -264,28 +284,6 @@ Partial Class frmMain
         lblひも本幅変更 = New Label()
         lbl60度本幅変更 = New Label()
         lbl周円の径 = New Label()
-        f_i番号2 = New DataGridViewTextBoxColumn()
-        f_s編みかた名2 = New DataGridViewTextBoxColumn()
-        f_s編みひも名2 = New DataGridViewTextBoxColumn()
-        f_iひも番号2 = New DataGridViewTextBoxColumn()
-        f_i何本幅2 = New DataGridViewComboBoxColumn()
-        f_i周数2 = New DataGridViewTextBoxColumn()
-        f_b集計対象外区分2 = New DataGridViewCheckBoxColumn()
-        f_iひも本数2 = New DataGridViewTextBoxColumn()
-        f_s色2 = New DataGridViewComboBoxColumn()
-        f_d高さ2 = New DataGridViewTextBoxColumn()
-        f_d垂直ひも長2 = New DataGridViewTextBoxColumn()
-        f_d周長比率対底の周2 = New DataGridViewTextBoxColumn()
-        f_d周長2 = New DataGridViewTextBoxColumn()
-        f_dひも長2 = New DataGridViewTextBoxColumn()
-        f_dひも長加算2 = New DataGridViewTextBoxColumn()
-        f_d連続ひも長2 = New DataGridViewTextBoxColumn()
-        f_d厚さ2 = New DataGridViewTextBoxColumn()
-        f_s記号2 = New DataGridViewTextBoxColumn()
-        f_i表示順2 = New DataGridViewTextBoxColumn()
-        f_i非表示順2 = New DataGridViewTextBoxColumn()
-        f_sメモ2 = New DataGridViewTextBoxColumn()
-        f_bError2 = New DataGridViewCheckBoxColumn()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud縦寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -323,7 +321,6 @@ Partial Class frmMain
         tpage追加品.SuspendLayout()
         tpageメモ他.SuspendLayout()
         tpageプレビュー.SuspendLayout()
-        CType(picプレビュー, ComponentModel.ISupportInitialize).BeginInit()
         tpage斜め120度.SuspendLayout()
         tpage横ひも.SuspendLayout()
         tpage斜め60度.SuspendLayout()
@@ -742,28 +739,6 @@ Partial Class frmMain
         txtひもに垂直_目.TabIndex = 34
         txtひもに垂直_目.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txtひもに垂直_目, "ひもに平行方向の目(六角の最小径)")
-        ' 
-        ' btn画像ファイル
-        ' 
-        btn画像ファイル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル.Location = New Point(677, 376)
-        btn画像ファイル.Name = "btn画像ファイル"
-        btn画像ファイル.Size = New Size(111, 43)
-        btn画像ファイル.TabIndex = 7
-        btn画像ファイル.Text = "画像ファイル(&I)"
-        ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
-        btn画像ファイル.UseVisualStyleBackColor = True
-        ' 
-        ' btnブラウザ
-        ' 
-        btnブラウザ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ.Location = New Point(793, 376)
-        btnブラウザ.Name = "btnブラウザ"
-        btnブラウザ.Size = New Size(111, 43)
-        btnブラウザ.TabIndex = 8
-        btnブラウザ.Text = "ブラウザ(&B)"
-        ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
-        btnブラウザ.UseVisualStyleBackColor = True
         ' 
         ' lbl横並び六つ目
         ' 
@@ -2153,6 +2128,256 @@ Partial Class frmMain
         dgv側面.Size = New Size(910, 323)
         dgv側面.TabIndex = 2
         ' 
+        ' f_i番号2
+        ' 
+        f_i番号2.DataPropertyName = "f_i番号"
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i番号2.DefaultCellStyle = DataGridViewCellStyle1
+        f_i番号2.HeaderText = "番号"
+        f_i番号2.MinimumWidth = 6
+        f_i番号2.Name = "f_i番号2"
+        f_i番号2.ReadOnly = True
+        f_i番号2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_i番号2.Width = 59
+        ' 
+        ' f_s編みかた名2
+        ' 
+        f_s編みかた名2.DataPropertyName = "f_s編みかた名"
+        f_s編みかた名2.HeaderText = "編みかた名"
+        f_s編みかた名2.MinimumWidth = 6
+        f_s編みかた名2.Name = "f_s編みかた名2"
+        f_s編みかた名2.ReadOnly = True
+        f_s編みかた名2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s編みかた名2.Width = 125
+        ' 
+        ' f_s編みひも名2
+        ' 
+        f_s編みひも名2.DataPropertyName = "f_s編みひも名"
+        f_s編みひも名2.HeaderText = "編みひも名"
+        f_s編みひも名2.MinimumWidth = 6
+        f_s編みひも名2.Name = "f_s編みひも名2"
+        f_s編みひも名2.ReadOnly = True
+        f_s編みひも名2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s編みひも名2.Width = 112
+        ' 
+        ' f_iひも番号2
+        ' 
+        f_iひも番号2.DataPropertyName = "f_iひも番号"
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle2
+        f_iひも番号2.HeaderText = "ひも番号"
+        f_iひも番号2.MinimumWidth = 6
+        f_iひも番号2.Name = "f_iひも番号2"
+        f_iひも番号2.ReadOnly = True
+        f_iひも番号2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iひも番号2.Width = 81
+        ' 
+        ' f_i何本幅2
+        ' 
+        f_i何本幅2.DataPropertyName = "f_i何本幅"
+        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
+        f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle3
+        f_i何本幅2.HeaderText = "何本幅"
+        f_i何本幅2.MinimumWidth = 6
+        f_i何本幅2.Name = "f_i何本幅2"
+        f_i何本幅2.Resizable = DataGridViewTriState.True
+        f_i何本幅2.Width = 77
+        ' 
+        ' f_i周数2
+        ' 
+        f_i周数2.DataPropertyName = "f_i周数"
+        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i周数2.DefaultCellStyle = DataGridViewCellStyle4
+        f_i周数2.HeaderText = "周数"
+        f_i周数2.MinimumWidth = 6
+        f_i周数2.Name = "f_i周数2"
+        f_i周数2.ReadOnly = True
+        f_i周数2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_i周数2.Width = 60
+        ' 
+        ' f_b集計対象外区分2
+        ' 
+        f_b集計対象外区分2.DataPropertyName = "f_b集計対象外区分"
+        f_b集計対象外区分2.HeaderText = "集計対象外"
+        f_b集計対象外区分2.MinimumWidth = 6
+        f_b集計対象外区分2.Name = "f_b集計対象外区分2"
+        f_b集計対象外区分2.ReadOnly = True
+        f_b集計対象外区分2.Width = 125
+        ' 
+        ' f_iひも本数2
+        ' 
+        f_iひも本数2.DataPropertyName = "f_iひも本数"
+        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle5
+        f_iひも本数2.HeaderText = "ひも本数"
+        f_iひも本数2.MinimumWidth = 6
+        f_iひも本数2.Name = "f_iひも本数2"
+        f_iひも本数2.ReadOnly = True
+        f_iひも本数2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_iひも本数2.Width = 125
+        ' 
+        ' f_s色2
+        ' 
+        f_s色2.DataPropertyName = "f_s色"
+        f_s色2.HeaderText = "色"
+        f_s色2.MinimumWidth = 6
+        f_s色2.Name = "f_s色2"
+        f_s色2.Resizable = DataGridViewTriState.True
+        f_s色2.Width = 80
+        ' 
+        ' f_d高さ2
+        ' 
+        f_d高さ2.DataPropertyName = "f_d高さ"
+        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.Format = "N2"
+        DataGridViewCellStyle6.NullValue = Nothing
+        f_d高さ2.DefaultCellStyle = DataGridViewCellStyle6
+        f_d高さ2.HeaderText = "高さ"
+        f_d高さ2.MinimumWidth = 6
+        f_d高さ2.Name = "f_d高さ2"
+        f_d高さ2.ReadOnly = True
+        f_d高さ2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d高さ2.ToolTipText = "ひも幅分プラス目"
+        f_d高さ2.Width = 125
+        ' 
+        ' f_d垂直ひも長2
+        ' 
+        f_d垂直ひも長2.DataPropertyName = "f_d垂直ひも長"
+        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle7.Format = "N2"
+        DataGridViewCellStyle7.NullValue = Nothing
+        f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle7
+        f_d垂直ひも長2.HeaderText = "斜めひも長"
+        f_d垂直ひも長2.MinimumWidth = 6
+        f_d垂直ひも長2.Name = "f_d垂直ひも長2"
+        f_d垂直ひも長2.ReadOnly = True
+        f_d垂直ひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d垂直ひも長2.ToolTipText = "高さ分のひも長、縁については折り返し分が含まれる"
+        f_d垂直ひも長2.Width = 125
+        ' 
+        ' f_d周長比率対底の周2
+        ' 
+        f_d周長比率対底の周2.DataPropertyName = "f_d周長比率対底の周"
+        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_d周長比率対底の周2.DefaultCellStyle = DataGridViewCellStyle8
+        f_d周長比率対底の周2.HeaderText = "周長比率対底の周"
+        f_d周長比率対底の周2.MinimumWidth = 6
+        f_d周長比率対底の周2.Name = "f_d周長比率対底の周2"
+        f_d周長比率対底の周2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d周長比率対底の周2.ToolTipText = "底の周長に対する比率"
+        f_d周長比率対底の周2.Width = 125
+        ' 
+        ' f_d周長2
+        ' 
+        f_d周長2.DataPropertyName = "f_d周長"
+        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle9.Format = "N2"
+        DataGridViewCellStyle9.NullValue = Nothing
+        f_d周長2.DefaultCellStyle = DataGridViewCellStyle9
+        f_d周長2.HeaderText = "周長"
+        f_d周長2.MinimumWidth = 6
+        f_d周長2.Name = "f_d周長2"
+        f_d周長2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d周長2.Width = 125
+        ' 
+        ' f_dひも長2
+        ' 
+        f_dひも長2.DataPropertyName = "f_dひも長"
+        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle10.Format = "N2"
+        DataGridViewCellStyle10.NullValue = Nothing
+        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle10
+        f_dひも長2.HeaderText = "ひも長"
+        f_dひも長2.MinimumWidth = 6
+        f_dひも長2.Name = "f_dひも長2"
+        f_dひも長2.ReadOnly = True
+        f_dひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_dひも長2.ToolTipText = "周長×ひも長係数"
+        f_dひも長2.Width = 125
+        ' 
+        ' f_dひも長加算2
+        ' 
+        f_dひも長加算2.DataPropertyName = "f_dひも長加算"
+        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle11
+        f_dひも長加算2.HeaderText = "ひも長加算"
+        f_dひも長加算2.MinimumWidth = 6
+        f_dひも長加算2.Name = "f_dひも長加算2"
+        f_dひも長加算2.ToolTipText = "出力時に加える余裕長"
+        f_dひも長加算2.Width = 125
+        ' 
+        ' f_d連続ひも長2
+        ' 
+        f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
+        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle12.Format = "N2"
+        DataGridViewCellStyle12.NullValue = Nothing
+        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle12
+        f_d連続ひも長2.HeaderText = "出力ひも長"
+        f_d連続ひも長2.MinimumWidth = 6
+        f_d連続ひも長2.Name = "f_d連続ひも長2"
+        f_d連続ひも長2.ReadOnly = True
+        f_d連続ひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_d連続ひも長2.Width = 125
+        ' 
+        ' f_d厚さ2
+        ' 
+        f_d厚さ2.DataPropertyName = "f_d厚さ"
+        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle13
+        f_d厚さ2.HeaderText = "厚さ"
+        f_d厚さ2.MinimumWidth = 6
+        f_d厚さ2.Name = "f_d厚さ2"
+        f_d厚さ2.ReadOnly = True
+        f_d厚さ2.Width = 125
+        ' 
+        ' f_s記号2
+        ' 
+        f_s記号2.DataPropertyName = "f_s記号"
+        f_s記号2.HeaderText = "f_s記号"
+        f_s記号2.MinimumWidth = 6
+        f_s記号2.Name = "f_s記号2"
+        f_s記号2.Visible = False
+        f_s記号2.Width = 125
+        ' 
+        ' f_i表示順2
+        ' 
+        f_i表示順2.DataPropertyName = "f_i表示順"
+        DataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i表示順2.DefaultCellStyle = DataGridViewCellStyle14
+        f_i表示順2.HeaderText = "表示順"
+        f_i表示順2.Name = "f_i表示順2"
+        f_i表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_i表示順2.Visible = False
+        ' 
+        ' f_i非表示順2
+        ' 
+        f_i非表示順2.DataPropertyName = "f_i非表示順"
+        DataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleRight
+        f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle15
+        f_i非表示順2.HeaderText = "非表示順"
+        f_i非表示順2.Name = "f_i非表示順2"
+        f_i非表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_i非表示順2.Visible = False
+        ' 
+        ' f_sメモ2
+        ' 
+        f_sメモ2.DataPropertyName = "f_sメモ"
+        f_sメモ2.HeaderText = "メモ"
+        f_sメモ2.MinimumWidth = 6
+        f_sメモ2.Name = "f_sメモ2"
+        f_sメモ2.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_sメモ2.Width = 125
+        ' 
+        ' f_bError2
+        ' 
+        f_bError2.DataPropertyName = "f_bError"
+        f_bError2.HeaderText = "Error"
+        f_bError2.MinimumWidth = 6
+        f_bError2.Name = "f_bError2"
+        f_bError2.Visible = False
+        f_bError2.Width = 125
+        ' 
         ' BindingSource側面
         ' 
         BindingSource側面.DataMember = "tbl側面"
@@ -2276,9 +2501,7 @@ Partial Class frmMain
         tpageプレビュー.Controls.Add(chk斜め120度)
         tpageプレビュー.Controls.Add(chk斜め60度)
         tpageプレビュー.Controls.Add(chk横ひも)
-        tpageプレビュー.Controls.Add(btn画像ファイル)
-        tpageプレビュー.Controls.Add(btnブラウザ)
-        tpageプレビュー.Controls.Add(picプレビュー)
+        tpageプレビュー.Controls.Add(CtrPreview1)
         tpageプレビュー.Location = New Point(4, 28)
         tpageプレビュー.Name = "tpageプレビュー"
         tpageプレビュー.Padding = New Padding(3)
@@ -2311,15 +2534,14 @@ Partial Class frmMain
         radおもて.Text = "おもて"
         radおもて.UseVisualStyleBackColor = True
         ' 
-        ' picプレビュー
+        ' CtrPreview1
         ' 
-        picプレビュー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        picプレビュー.Location = New Point(6, 5)
-        picプレビュー.Name = "picプレビュー"
-        picプレビュー.Size = New Size(897, 362)
-        picプレビュー.SizeMode = PictureBoxSizeMode.Zoom
-        picプレビュー.TabIndex = 1
-        picプレビュー.TabStop = False
+        CtrPreview1.Dock = DockStyle.Fill
+        CtrPreview1.Location = New Point(3, 3)
+        CtrPreview1.Name = "CtrPreview1"
+        CtrPreview1.PanelSize = New Size(713, 339)
+        CtrPreview1.Size = New Size(914, 422)
+        CtrPreview1.TabIndex = 9
         ' 
         ' tpage斜め120度
         ' 
@@ -2644,256 +2866,6 @@ Partial Class frmMain
         lbl周円の径.TabIndex = 53
         lbl周円の径.Text = "周円の径"
         ' 
-        ' f_i番号2
-        ' 
-        f_i番号2.DataPropertyName = "f_i番号"
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i番号2.DefaultCellStyle = DataGridViewCellStyle1
-        f_i番号2.HeaderText = "番号"
-        f_i番号2.MinimumWidth = 6
-        f_i番号2.Name = "f_i番号2"
-        f_i番号2.ReadOnly = True
-        f_i番号2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i番号2.Width = 59
-        ' 
-        ' f_s編みかた名2
-        ' 
-        f_s編みかた名2.DataPropertyName = "f_s編みかた名"
-        f_s編みかた名2.HeaderText = "編みかた名"
-        f_s編みかた名2.MinimumWidth = 6
-        f_s編みかた名2.Name = "f_s編みかた名2"
-        f_s編みかた名2.ReadOnly = True
-        f_s編みかた名2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_s編みかた名2.Width = 125
-        ' 
-        ' f_s編みひも名2
-        ' 
-        f_s編みひも名2.DataPropertyName = "f_s編みひも名"
-        f_s編みひも名2.HeaderText = "編みひも名"
-        f_s編みひも名2.MinimumWidth = 6
-        f_s編みひも名2.Name = "f_s編みひも名2"
-        f_s編みひも名2.ReadOnly = True
-        f_s編みひも名2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_s編みひも名2.Width = 112
-        ' 
-        ' f_iひも番号2
-        ' 
-        f_iひも番号2.DataPropertyName = "f_iひも番号"
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも番号2.DefaultCellStyle = DataGridViewCellStyle2
-        f_iひも番号2.HeaderText = "ひも番号"
-        f_iひも番号2.MinimumWidth = 6
-        f_iひも番号2.Name = "f_iひも番号2"
-        f_iひも番号2.ReadOnly = True
-        f_iひも番号2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iひも番号2.Width = 81
-        ' 
-        ' f_i何本幅2
-        ' 
-        f_i何本幅2.DataPropertyName = "f_i何本幅"
-        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
-        f_i何本幅2.DefaultCellStyle = DataGridViewCellStyle3
-        f_i何本幅2.HeaderText = "何本幅"
-        f_i何本幅2.MinimumWidth = 6
-        f_i何本幅2.Name = "f_i何本幅2"
-        f_i何本幅2.Resizable = DataGridViewTriState.True
-        f_i何本幅2.Width = 77
-        ' 
-        ' f_i周数2
-        ' 
-        f_i周数2.DataPropertyName = "f_i周数"
-        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i周数2.DefaultCellStyle = DataGridViewCellStyle4
-        f_i周数2.HeaderText = "周数"
-        f_i周数2.MinimumWidth = 6
-        f_i周数2.Name = "f_i周数2"
-        f_i周数2.ReadOnly = True
-        f_i周数2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i周数2.Width = 60
-        ' 
-        ' f_b集計対象外区分2
-        ' 
-        f_b集計対象外区分2.DataPropertyName = "f_b集計対象外区分"
-        f_b集計対象外区分2.HeaderText = "集計対象外"
-        f_b集計対象外区分2.MinimumWidth = 6
-        f_b集計対象外区分2.Name = "f_b集計対象外区分2"
-        f_b集計対象外区分2.ReadOnly = True
-        f_b集計対象外区分2.Width = 125
-        ' 
-        ' f_iひも本数2
-        ' 
-        f_iひも本数2.DataPropertyName = "f_iひも本数"
-        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_iひも本数2.DefaultCellStyle = DataGridViewCellStyle5
-        f_iひも本数2.HeaderText = "ひも本数"
-        f_iひも本数2.MinimumWidth = 6
-        f_iひも本数2.Name = "f_iひも本数2"
-        f_iひも本数2.ReadOnly = True
-        f_iひも本数2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_iひも本数2.Width = 125
-        ' 
-        ' f_s色2
-        ' 
-        f_s色2.DataPropertyName = "f_s色"
-        f_s色2.HeaderText = "色"
-        f_s色2.MinimumWidth = 6
-        f_s色2.Name = "f_s色2"
-        f_s色2.Resizable = DataGridViewTriState.True
-        f_s色2.Width = 80
-        ' 
-        ' f_d高さ2
-        ' 
-        f_d高さ2.DataPropertyName = "f_d高さ"
-        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle6.Format = "N2"
-        DataGridViewCellStyle6.NullValue = Nothing
-        f_d高さ2.DefaultCellStyle = DataGridViewCellStyle6
-        f_d高さ2.HeaderText = "高さ"
-        f_d高さ2.MinimumWidth = 6
-        f_d高さ2.Name = "f_d高さ2"
-        f_d高さ2.ReadOnly = True
-        f_d高さ2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d高さ2.ToolTipText = "ひも幅分プラス目"
-        f_d高さ2.Width = 125
-        ' 
-        ' f_d垂直ひも長2
-        ' 
-        f_d垂直ひも長2.DataPropertyName = "f_d垂直ひも長"
-        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle7.Format = "N2"
-        DataGridViewCellStyle7.NullValue = Nothing
-        f_d垂直ひも長2.DefaultCellStyle = DataGridViewCellStyle7
-        f_d垂直ひも長2.HeaderText = "斜めひも長"
-        f_d垂直ひも長2.MinimumWidth = 6
-        f_d垂直ひも長2.Name = "f_d垂直ひも長2"
-        f_d垂直ひも長2.ReadOnly = True
-        f_d垂直ひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d垂直ひも長2.ToolTipText = "高さ分のひも長、縁については折り返し分が含まれる"
-        f_d垂直ひも長2.Width = 125
-        ' 
-        ' f_d周長比率対底の周2
-        ' 
-        f_d周長比率対底の周2.DataPropertyName = "f_d周長比率対底の周"
-        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_d周長比率対底の周2.DefaultCellStyle = DataGridViewCellStyle8
-        f_d周長比率対底の周2.HeaderText = "周長比率対底の周"
-        f_d周長比率対底の周2.MinimumWidth = 6
-        f_d周長比率対底の周2.Name = "f_d周長比率対底の周2"
-        f_d周長比率対底の周2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d周長比率対底の周2.ToolTipText = "底の周長に対する比率"
-        f_d周長比率対底の周2.Width = 125
-        ' 
-        ' f_d周長2
-        ' 
-        f_d周長2.DataPropertyName = "f_d周長"
-        DataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle9.Format = "N2"
-        DataGridViewCellStyle9.NullValue = Nothing
-        f_d周長2.DefaultCellStyle = DataGridViewCellStyle9
-        f_d周長2.HeaderText = "周長"
-        f_d周長2.MinimumWidth = 6
-        f_d周長2.Name = "f_d周長2"
-        f_d周長2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d周長2.Width = 125
-        ' 
-        ' f_dひも長2
-        ' 
-        f_dひも長2.DataPropertyName = "f_dひも長"
-        DataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle10.Format = "N2"
-        DataGridViewCellStyle10.NullValue = Nothing
-        f_dひも長2.DefaultCellStyle = DataGridViewCellStyle10
-        f_dひも長2.HeaderText = "ひも長"
-        f_dひも長2.MinimumWidth = 6
-        f_dひも長2.Name = "f_dひも長2"
-        f_dひも長2.ReadOnly = True
-        f_dひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_dひも長2.ToolTipText = "周長×ひも長係数"
-        f_dひも長2.Width = 125
-        ' 
-        ' f_dひも長加算2
-        ' 
-        f_dひも長加算2.DataPropertyName = "f_dひも長加算"
-        DataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_dひも長加算2.DefaultCellStyle = DataGridViewCellStyle11
-        f_dひも長加算2.HeaderText = "ひも長加算"
-        f_dひも長加算2.MinimumWidth = 6
-        f_dひも長加算2.Name = "f_dひも長加算2"
-        f_dひも長加算2.ToolTipText = "出力時に加える余裕長"
-        f_dひも長加算2.Width = 125
-        ' 
-        ' f_d連続ひも長2
-        ' 
-        f_d連続ひも長2.DataPropertyName = "f_d連続ひも長"
-        DataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle12.Format = "N2"
-        DataGridViewCellStyle12.NullValue = Nothing
-        f_d連続ひも長2.DefaultCellStyle = DataGridViewCellStyle12
-        f_d連続ひも長2.HeaderText = "出力ひも長"
-        f_d連続ひも長2.MinimumWidth = 6
-        f_d連続ひも長2.Name = "f_d連続ひも長2"
-        f_d連続ひも長2.ReadOnly = True
-        f_d連続ひも長2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_d連続ひも長2.Width = 125
-        ' 
-        ' f_d厚さ2
-        ' 
-        f_d厚さ2.DataPropertyName = "f_d厚さ"
-        DataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_d厚さ2.DefaultCellStyle = DataGridViewCellStyle13
-        f_d厚さ2.HeaderText = "厚さ"
-        f_d厚さ2.MinimumWidth = 6
-        f_d厚さ2.Name = "f_d厚さ2"
-        f_d厚さ2.ReadOnly = True
-        f_d厚さ2.Width = 125
-        ' 
-        ' f_s記号2
-        ' 
-        f_s記号2.DataPropertyName = "f_s記号"
-        f_s記号2.HeaderText = "f_s記号"
-        f_s記号2.MinimumWidth = 6
-        f_s記号2.Name = "f_s記号2"
-        f_s記号2.Visible = False
-        f_s記号2.Width = 125
-        ' 
-        ' f_i表示順2
-        ' 
-        f_i表示順2.DataPropertyName = "f_i表示順"
-        DataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i表示順2.DefaultCellStyle = DataGridViewCellStyle14
-        f_i表示順2.HeaderText = "表示順"
-        f_i表示順2.Name = "f_i表示順2"
-        f_i表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i表示順2.Visible = False
-        ' 
-        ' f_i非表示順2
-        ' 
-        f_i非表示順2.DataPropertyName = "f_i非表示順"
-        DataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i非表示順2.DefaultCellStyle = DataGridViewCellStyle15
-        f_i非表示順2.HeaderText = "非表示順"
-        f_i非表示順2.Name = "f_i非表示順2"
-        f_i非表示順2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i非表示順2.Visible = False
-        ' 
-        ' f_sメモ2
-        ' 
-        f_sメモ2.DataPropertyName = "f_sメモ"
-        f_sメモ2.HeaderText = "メモ"
-        f_sメモ2.MinimumWidth = 6
-        f_sメモ2.Name = "f_sメモ2"
-        f_sメモ2.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_sメモ2.Width = 125
-        ' 
-        ' f_bError2
-        ' 
-        f_bError2.DataPropertyName = "f_bError"
-        f_bError2.HeaderText = "Error"
-        f_bError2.MinimumWidth = 6
-        f_bError2.Name = "f_bError2"
-        f_bError2.Visible = False
-        f_bError2.Width = 125
-        ' 
         ' frmMain
         ' 
         AllowDrop = True
@@ -3019,7 +2991,6 @@ Partial Class frmMain
         tpageメモ他.ResumeLayout(False)
         tpageプレビュー.ResumeLayout(False)
         tpageプレビュー.PerformLayout()
-        CType(picプレビュー, ComponentModel.ISupportInitialize).EndInit()
         tpage斜め120度.ResumeLayout(False)
         tpage斜め120度.PerformLayout()
         tpage横ひも.ResumeLayout(False)
@@ -3163,9 +3134,6 @@ Partial Class frmMain
     Friend WithEvents tpage斜め120度 As TabPage
     Friend WithEvents chk縦横側面を展開する As CheckBox
     Friend WithEvents tpageプレビュー As TabPage
-    Friend WithEvents picプレビュー As PictureBox
-    Friend WithEvents btn画像ファイル As Button
-    Friend WithEvents btnブラウザ As Button
     Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
     Friend WithEvents nudひも長加算_側面 As NumericUpDown
     Friend WithEvents lblひも長加算_側面_単位 As Label
@@ -3285,4 +3253,5 @@ Partial Class frmMain
     Friend WithEvents f_i非表示順2 As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ2 As DataGridViewTextBoxColumn
     Friend WithEvents f_bError2 As DataGridViewCheckBoxColumn
+    Friend WithEvents CtrPreview1 As CraftBand.ctrPreview
 End Class

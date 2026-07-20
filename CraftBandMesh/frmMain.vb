@@ -111,6 +111,8 @@ Public Class frmMain
         expand横ひも.SetNames(Me.Text, tpage横ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand8To2, My.Resources.CaptionExpand4To6)
         expand縦ひも.SetNames(Me.Text, tpage縦ひも.Text, True, ctrExpanding.enumVisible.i_幅 Or ctrExpanding.enumVisible.i_出力ひも長, My.Resources.CaptionExpand4To6, My.Resources.CaptionExpand8To2)
 
+        editMemo.SetNames(Me.Text, tpageメモ他.Text)
+        ctrPreview1.SetNames(Me.Text, tpageプレビュー.Text, False)
 
 #If DEBUG Then
         btnDEBUG.Visible = (clsLog.LogLevel.Trouble <= g_clsLog.Level)
@@ -2217,7 +2219,9 @@ Public Class frmMain
 #Region "プレビュー"
     Dim _clsImageData As clsImageData
     Private Sub Showプレビュー(works As clsDataTables)
-        picプレビュー.Image = Nothing
+        ctrPreview1.PanelSize = tpageプレビュー.Size
+        'picプレビュー.Image = Nothing
+        ctrPreview1.ClearImage()
         _clsImageData = Nothing
 
         SaveTables(_clsDataTables)
@@ -2252,35 +2256,42 @@ Public Class frmMain
 
                 Exit Sub
             End If
-            picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+            'picプレビュー.Image = System.Drawing.Image.FromFile(_clsImageData.GifFilePath)
+            ctrPreview1.ShowImage(_clsImageData)
         End If
     End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
-        picプレビュー.Image = Nothing
+        'picプレビュー.Image = Nothing
+        ctrPreview1.ClearImage()
         If _clsImageData IsNot Nothing Then
             _clsImageData.Clear()
             _clsImageData = Nothing
         End If
     End Sub
 
-    Private Sub btnブラウザ_Click(sender As Object, e As EventArgs) Handles btnブラウザ.Click
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsImageData.ImgBrowserOpen(clsImageData.cBrowserBasicInfo) Then
-            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+    Private Sub tpageプレビュー_Resize(sender As Object, e As EventArgs) Handles tpageプレビュー.Resize
+        ctrPreview1.PanelSize = tpageプレビュー.Size
     End Sub
 
-    Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs) Handles btn画像ファイル.Click
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        If Not _clsImageData.ImgFileOpen() Then
-            MessageBox.Show(_clsImageData.LastError, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
-    End Sub
+
+    'Private Sub btnブラウザ_Click(sender As Object, e As EventArgs)
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsImageData.ImgBrowserOpen(clsImageData.cBrowserBasicInfo) Then
+    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
+
+    'Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs)
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    If Not _clsImageData.ImgFileOpen Then
+    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+    '    End If
+    'End Sub
 
     Private Sub rad右上全体_CheckedChanged(sender As Object, e As EventArgs) Handles rad右上.CheckedChanged, rad全体.CheckedChanged
         If _clsImageData IsNot Nothing Then

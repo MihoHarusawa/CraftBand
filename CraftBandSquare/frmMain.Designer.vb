@@ -77,8 +77,6 @@ Partial Class frmMain
         txt対角線_目 = New TextBox()
         txt縦横_四角 = New TextBox()
         txt縦横_目 = New TextBox()
-        btn画像ファイル = New Button()
-        btnブラウザ = New Button()
         lbl縦の目の数 = New Label()
         lbl高さの目の数 = New Label()
         nud高さの目の数 = New NumericUpDown()
@@ -116,11 +114,6 @@ Partial Class frmMain
         rad側面_下左 = New RadioButton()
         rad側面_上右 = New RadioButton()
         rad底 = New RadioButton()
-        radファイル = New RadioButton()
-        radビューア = New RadioButton()
-        btn3Dモデル = New Button()
-        btn画像ファイル2 = New Button()
-        btnブラウザ2 = New Button()
         btn一時保存 = New Button()
         nud高さの目 = New NumericUpDown()
         lbl高さの目 = New Label()
@@ -213,20 +206,19 @@ Partial Class frmMain
         editMemo = New CraftBand.ctrMemo()
         tpageプレビュー = New TabPage()
         grp差しひも = New GroupBox()
+        rad非表示 = New RadioButton()
         rad回り込み = New RadioButton()
         rad底置き = New RadioButton()
-        rad非表示 = New RadioButton()
         chk底のみ = New CheckBox()
         radうら = New RadioButton()
         radおもて = New RadioButton()
-        picプレビュー = New PictureBox()
+        ctrPreview1 = New CraftBand.ctrPreview()
         tpage縦ひも = New TabPage()
         expand縦ひも = New CraftBand.ctrExpanding()
         tpage横ひも = New TabPage()
         expand横ひも = New CraftBand.ctrExpanding()
         tpageプレビュー2 = New TabPage()
-        grp3D = New GroupBox()
-        picプレビュー2 = New PictureBox()
+        ctrPreview2 = New CraftBand.ctrPreview()
         f_i段数2 = New DataGridViewTextBoxColumn()
         lbl縦横 = New Label()
         lbl計算寸法 = New Label()
@@ -308,12 +300,9 @@ Partial Class frmMain
         tpageメモ他.SuspendLayout()
         tpageプレビュー.SuspendLayout()
         grp差しひも.SuspendLayout()
-        CType(picプレビュー, ComponentModel.ISupportInitialize).BeginInit()
         tpage縦ひも.SuspendLayout()
         tpage横ひも.SuspendLayout()
         tpageプレビュー2.SuspendLayout()
-        grp3D.SuspendLayout()
-        CType(picプレビュー2, ComponentModel.ISupportInitialize).BeginInit()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
         ' 
@@ -730,28 +719,6 @@ Partial Class frmMain
         txt縦横_目.TextAlign = HorizontalAlignment.Right
         ToolTip1.SetToolTip(txt縦横_目, "縦横方向の目(すき間)")
         ' 
-        ' btn画像ファイル
-        ' 
-        btn画像ファイル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル.Location = New Point(607, 387)
-        btn画像ファイル.Name = "btn画像ファイル"
-        btn画像ファイル.Size = New Size(111, 43)
-        btn画像ファイル.TabIndex = 4
-        btn画像ファイル.Text = "画像ファイル(&I)"
-        ToolTip1.SetToolTip(btn画像ファイル, "生成した画像ファイルを開きます")
-        btn画像ファイル.UseVisualStyleBackColor = True
-        ' 
-        ' btnブラウザ
-        ' 
-        btnブラウザ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ.Location = New Point(725, 387)
-        btnブラウザ.Name = "btnブラウザ"
-        btnブラウザ.Size = New Size(111, 43)
-        btnブラウザ.TabIndex = 5
-        btnブラウザ.Text = "ブラウザ(&B)"
-        ToolTip1.SetToolTip(btnブラウザ, "生成した画像ファイルをブラウザで開きます")
-        btnブラウザ.UseVisualStyleBackColor = True
-        ' 
         ' lbl縦の目の数
         ' 
         lbl縦の目の数.AutoSize = True
@@ -1159,63 +1126,6 @@ Partial Class frmMain
         rad底.Text = "底"
         ToolTip1.SetToolTip(rad底, "底に適用されるパターンを編集します")
         rad底.UseVisualStyleBackColor = True
-        ' 
-        ' radファイル
-        ' 
-        radファイル.AutoSize = True
-        radファイル.Location = New Point(114, 18)
-        radファイル.Name = "radファイル"
-        radファイル.Size = New Size(68, 23)
-        radファイル.TabIndex = 1
-        radファイル.Text = "ファイル"
-        ToolTip1.SetToolTip(radファイル, "3Dファイルを圧縮ファイルにします")
-        radファイル.UseVisualStyleBackColor = True
-        ' 
-        ' radビューア
-        ' 
-        radビューア.AutoSize = True
-        radビューア.Checked = True
-        radビューア.Location = New Point(29, 18)
-        radビューア.Name = "radビューア"
-        radビューア.Size = New Size(65, 23)
-        radビューア.TabIndex = 0
-        radビューア.TabStop = True
-        radビューア.Text = "ビューア"
-        ToolTip1.SetToolTip(radビューア, "3Dファイルを標準ビューアで開きます")
-        radビューア.UseVisualStyleBackColor = True
-        ' 
-        ' btn3Dモデル
-        ' 
-        btn3Dモデル.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn3Dモデル.Location = New Point(489, 387)
-        btn3Dモデル.Name = "btn3Dモデル"
-        btn3Dモデル.Size = New Size(111, 43)
-        btn3Dモデル.TabIndex = 6
-        btn3Dモデル.Text = "3Dモデル(&M)"
-        ToolTip1.SetToolTip(btn3Dモデル, "生成した画像ファイルを開きます")
-        btn3Dモデル.UseVisualStyleBackColor = True
-        ' 
-        ' btn画像ファイル2
-        ' 
-        btn画像ファイル2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btn画像ファイル2.Location = New Point(606, 387)
-        btn画像ファイル2.Name = "btn画像ファイル2"
-        btn画像ファイル2.Size = New Size(111, 43)
-        btn画像ファイル2.TabIndex = 7
-        btn画像ファイル2.Text = "画像ファイル(&I)"
-        ToolTip1.SetToolTip(btn画像ファイル2, "生成した画像ファイルを開きます")
-        btn画像ファイル2.UseVisualStyleBackColor = True
-        ' 
-        ' btnブラウザ2
-        ' 
-        btnブラウザ2.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnブラウザ2.Location = New Point(723, 387)
-        btnブラウザ2.Name = "btnブラウザ2"
-        btnブラウザ2.Size = New Size(111, 43)
-        btnブラウザ2.TabIndex = 8
-        btnブラウザ2.Text = "ブラウザ(&B)"
-        ToolTip1.SetToolTip(btnブラウザ2, "生成した画像ファイルをブラウザで開きます")
-        btnブラウザ2.UseVisualStyleBackColor = True
         ' 
         ' btn一時保存
         ' 
@@ -2094,9 +2004,7 @@ Partial Class frmMain
         tpageプレビュー.Controls.Add(chk底のみ)
         tpageプレビュー.Controls.Add(radうら)
         tpageプレビュー.Controls.Add(radおもて)
-        tpageプレビュー.Controls.Add(btn画像ファイル)
-        tpageプレビュー.Controls.Add(btnブラウザ)
-        tpageプレビュー.Controls.Add(picプレビュー)
+        tpageプレビュー.Controls.Add(ctrPreview1)
         tpageプレビュー.Location = New Point(4, 28)
         tpageプレビュー.Name = "tpageプレビュー"
         tpageプレビュー.Padding = New Padding(3)
@@ -2108,15 +2016,25 @@ Partial Class frmMain
         ' grp差しひも
         ' 
         grp差しひも.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        grp差しひも.Controls.Add(rad非表示)
         grp差しひも.Controls.Add(rad回り込み)
         grp差しひも.Controls.Add(rad底置き)
-        grp差しひも.Controls.Add(rad非表示)
         grp差しひも.Location = New Point(248, 383)
         grp差しひも.Name = "grp差しひも"
         grp差しひも.Size = New Size(293, 47)
         grp差しひも.TabIndex = 3
         grp差しひも.TabStop = False
         grp差しひも.Text = "差しひも"
+        ' 
+        ' rad非表示
+        ' 
+        rad非表示.AutoSize = True
+        rad非表示.Location = New Point(42, 17)
+        rad非表示.Name = "rad非表示"
+        rad非表示.Size = New Size(69, 23)
+        rad非表示.TabIndex = 0
+        rad非表示.Text = "非表示"
+        rad非表示.UseVisualStyleBackColor = True
         ' 
         ' rad回り込み
         ' 
@@ -2139,16 +2057,6 @@ Partial Class frmMain
         rad底置き.TabStop = True
         rad底置き.Text = "底置き"
         rad底置き.UseVisualStyleBackColor = True
-        ' 
-        ' rad非表示
-        ' 
-        rad非表示.AutoSize = True
-        rad非表示.Location = New Point(42, 17)
-        rad非表示.Name = "rad非表示"
-        rad非表示.Size = New Size(69, 23)
-        rad非表示.TabIndex = 0
-        rad非表示.Text = "非表示"
-        rad非表示.UseVisualStyleBackColor = True
         ' 
         ' chk底のみ
         ' 
@@ -2185,15 +2093,14 @@ Partial Class frmMain
         radおもて.Text = "おもて"
         radおもて.UseVisualStyleBackColor = True
         ' 
-        ' picプレビュー
+        ' ctrPreview1
         ' 
-        picプレビュー.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        picプレビュー.Location = New Point(6, 5)
-        picプレビュー.Name = "picプレビュー"
-        picプレビュー.Size = New Size(827, 376)
-        picプレビュー.SizeMode = PictureBoxSizeMode.Zoom
-        picプレビュー.TabIndex = 1
-        picプレビュー.TabStop = False
+        ctrPreview1.Dock = DockStyle.Fill
+        ctrPreview1.Location = New Point(3, 3)
+        ctrPreview1.Name = "ctrPreview1"
+        ctrPreview1.PanelSize = New Size(713, 339)
+        ctrPreview1.Size = New Size(834, 429)
+        ctrPreview1.TabIndex = 4
         ' 
         ' tpage縦ひも
         ' 
@@ -2239,11 +2146,7 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー2
         ' 
-        tpageプレビュー2.Controls.Add(grp3D)
-        tpageプレビュー2.Controls.Add(btn3Dモデル)
-        tpageプレビュー2.Controls.Add(btn画像ファイル2)
-        tpageプレビュー2.Controls.Add(btnブラウザ2)
-        tpageプレビュー2.Controls.Add(picプレビュー2)
+        tpageプレビュー2.Controls.Add(ctrPreview2)
         tpageプレビュー2.Location = New Point(4, 28)
         tpageプレビュー2.Name = "tpageプレビュー2"
         tpageプレビュー2.Padding = New Padding(3)
@@ -2252,29 +2155,14 @@ Partial Class frmMain
         tpageプレビュー2.Text = "プレビュー2"
         tpageプレビュー2.UseVisualStyleBackColor = True
         ' 
-        ' grp3D
+        ' ctrPreview2
         ' 
-        grp3D.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        grp3D.Controls.Add(radファイル)
-        grp3D.Controls.Add(radビューア)
-        grp3D.Location = New Point(283, 381)
-        grp3D.Margin = New Padding(3, 4, 3, 4)
-        grp3D.Name = "grp3D"
-        grp3D.Padding = New Padding(3, 4, 3, 4)
-        grp3D.Size = New Size(199, 48)
-        grp3D.TabIndex = 5
-        grp3D.TabStop = False
-        grp3D.Text = "3D"
-        ' 
-        ' picプレビュー2
-        ' 
-        picプレビュー2.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        picプレビュー2.Location = New Point(6, 5)
-        picプレビュー2.Name = "picプレビュー2"
-        picプレビュー2.Size = New Size(827, 376)
-        picプレビュー2.SizeMode = PictureBoxSizeMode.Zoom
-        picプレビュー2.TabIndex = 9
-        picプレビュー2.TabStop = False
+        ctrPreview2.Dock = DockStyle.Fill
+        ctrPreview2.Location = New Point(3, 3)
+        ctrPreview2.Name = "ctrPreview2"
+        ctrPreview2.PanelSize = New Size(713, 339)
+        ctrPreview2.Size = New Size(834, 429)
+        ctrPreview2.TabIndex = 9
         ' 
         ' f_i段数2
         ' 
@@ -2868,15 +2756,11 @@ Partial Class frmMain
         tpageプレビュー.PerformLayout()
         grp差しひも.ResumeLayout(False)
         grp差しひも.PerformLayout()
-        CType(picプレビュー, ComponentModel.ISupportInitialize).EndInit()
         tpage縦ひも.ResumeLayout(False)
         tpage縦ひも.PerformLayout()
         tpage横ひも.ResumeLayout(False)
         tpage横ひも.PerformLayout()
         tpageプレビュー2.ResumeLayout(False)
-        grp3D.ResumeLayout(False)
-        grp3D.PerformLayout()
-        CType(picプレビュー2, ComponentModel.ISupportInitialize).EndInit()
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
         ResumeLayout(False)
@@ -3013,9 +2897,6 @@ Partial Class frmMain
     Friend WithEvents tpage縦ひも As TabPage
     Friend WithEvents chk縦横側面を展開する As CheckBox
     Friend WithEvents tpageプレビュー As TabPage
-    Friend WithEvents picプレビュー As PictureBox
-    Friend WithEvents btn画像ファイル As Button
-    Friend WithEvents btnブラウザ As Button
     Friend WithEvents ToolStripMenuItemSettingColor As ToolStripMenuItem
     Friend WithEvents nudひも長加算_側面 As NumericUpDown
     Friend WithEvents lblひも長加算_側面_単位 As Label
@@ -3073,13 +2954,6 @@ Partial Class frmMain
     Friend WithEvents editInsertBand As CraftBand.ctrInsertBand
     Friend WithEvents ToolStripMenuItemEditColorRepeat As ToolStripMenuItem
     Friend WithEvents tpageプレビュー2 As TabPage
-    Friend WithEvents grp3D As GroupBox
-    Friend WithEvents radファイル As RadioButton
-    Friend WithEvents radビューア As RadioButton
-    Friend WithEvents btn3Dモデル As Button
-    Friend WithEvents btn画像ファイル2 As Button
-    Friend WithEvents btnブラウザ2 As Button
-    Friend WithEvents picプレビュー2 As PictureBox
     Friend WithEvents ToolStripMenuItemEditSaveTemporarily As ToolStripMenuItem
     Friend WithEvents btn一時保存 As Button
     Friend WithEvents nud高さの目 As NumericUpDown
@@ -3102,6 +2976,8 @@ Partial Class frmMain
     Friend WithEvents lblフラップの縦ひも_単位 As Label
     Friend WithEvents nudフラップの縦ひも As NumericUpDown
     Friend WithEvents lblフラップの縦ひも As Label
+    Friend WithEvents ctrPreview1 As CraftBand.ctrPreview
+    Friend WithEvents ctrPreview2 As CraftBand.ctrPreview
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn
