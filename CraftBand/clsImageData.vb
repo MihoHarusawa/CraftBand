@@ -393,6 +393,12 @@ Public Class clsImageData
     End Function
 
 
+    Public Overridable Function ModelFileOpen(ByVal saveDir As String) As Boolean
+        _LastError = "Not Implemented."
+        Return False
+    End Function
+
+
     '面の順序
     Public Enum enumBasketPlateIdx
         _bottom = 0 '底面         横と縦

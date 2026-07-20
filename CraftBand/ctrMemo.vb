@@ -18,10 +18,19 @@ Public Class ctrMemo
     End Property
 
     Dim _isLoadingData As Boolean = True 'Designer.vb描画
+    Dim _FormCaption As String
+    Dim _TabPageName As String
 
     Private Sub ctrMemo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         '※フォームのデザイン時にもLoadされますので、グローバル参照値は参照できない
         _isLoadingData = False 'Designer.vb描画完了
+    End Sub
+
+
+    'Load後に一度だけセットしてください
+    Sub SetNames(ByVal formcaption As String, ByVal tabname As String)
+        _FormCaption = formcaption
+        _TabPageName = tabname
     End Sub
 
     Public Sub DispMemo(ByVal row目標寸法 As clsDataRow)
@@ -72,7 +81,7 @@ Public Class ctrMemo
             'もし画像があれば、クリアするか問い合わせる
             If picロゴ画像.Image IsNot Nothing Then
                 '現在の画像をクリアしますか？
-                If MessageBox.Show(My.Resources.AskClearCurrentTexture, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                If MessageBox.Show(My.Resources.AskClearCurrentTexture, _FormCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                     picロゴ画像.Image = Nothing
                 End If
             End If
@@ -94,7 +103,7 @@ Public Class ctrMemo
             If b64.Length > MaxImageStringLen Then
                 '画像のサイズ({0})が大きすぎます。小さくしてください。
                 Dim msg As String = String.Format(My.Resources.ErrMsgColorFileTooLarge, b64.Length)
-                MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                MessageBox.Show(msg, _FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
             End If
             'セット
@@ -104,7 +113,7 @@ Public Class ctrMemo
             g_clsLog.LogException(ex, "ctrMemo.picロゴ画像_Click")
             '画像ファイル'{0}'を読み取れませんでした。
             Dim msg As String = String.Format(My.Resources.ErrMsgColorBadTexture, filepath)
-            MessageBox.Show(msg, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(msg, _FormCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             'クリア
             picロゴ画像.Image = Nothing
             Exit Sub
