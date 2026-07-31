@@ -839,5 +839,31 @@
 //]]>
 </script>
 
+    <!-- [AI / Developer API Reference] (Placed outside the WordPress Custom HTML Block) -->
+    <div class="api-docs" style="max-width: 700px; margin: 32px auto 0 auto; padding: 20px; border-top: 1px dashed #d1d5db; font-size: 11px; color: #7f8c8d; line-height: 1.6; font-family: monospace; background-color: #f9f9f9; border-radius: 8px;">
+        <h3 style="font-size: 12px; color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-weight: bold;">[AI / Developer API Reference]</h3>
+        <p style="margin-bottom: 8px;">This page supports initialization and deep-linking via URL query parameters for the Craft Band Along-Lines Base Pattern Simulator (縦横ベース模様シミュレーター).</p>
+
+        <strong style="color: #34495e; display: block; margin-bottom: 4px;">Supported Query Parameters:</strong>
+        <ul style="margin: 0; padding-left: 16px; margin-bottom: 10px; list-style-type: square;">
+            <li><code>cb_code</code> : Pattern code string formatted as <code>BASE-OVERLAY</code> (8 characters of A/B total, e.g. <code>AAAA-BBBB</code>, <code>ABAB-AAAA</code>).
+                <br>- First 4 chars (<code>BASE</code>): Base pattern ①②③④ (①② = horizontal/side rim, ③④ = vertical/base cords).
+                <br>- Last 4 chars (<code>OVERLAY</code>): Overlay pattern <code>abcd</code> (<code>ab</code> = horizontal L1, <code>cd</code> = vertical L2).
+            </li>
+            <li><code>cb_colorA</code> : HEX color code for Color A (e.g. <code>#87CEEB</code> or <code>87CEEB</code>). Default: <code>#87CEEB</code>.</li>
+            <li><code>cb_colorB</code> : HEX color code for Color B (e.g. <code>#ffffff</code> or <code>ffffff</code>). Default: <code>#ffffff</code>.</li>
+        </ul>
+
+        <strong style="color: #34495e; display: block; margin-bottom: 4px;">Preset Patterns Reference (PATTERNS_DB):</strong>
+        <ul style="margin: 0; padding-left: 16px; margin-bottom: 10px; list-style-type: square;">
+            <li><strong>Grid (井桁)</strong> : <code>AAAA-BBBB</code></li>
+            <li><strong>Beams (梁)</strong> : <code>BBAA-AABB</code></li>
+            <li><strong>Windowpane (窓)</strong> : <code>ABAB-AAAA</code></li>
+            <li><strong>Linked Window (連窓)</strong> : <code>BBAB-AAAA</code></li>
+        </ul>
+
+        <strong style="color: #34495e; display: block; margin-bottom: 4px;">Credit & Licensing:</strong>
+        <p style="margin-top: 0; margin-bottom: 0;">Original Logic: <a href="https://labo.com/CraftBand/sharing/along-lines-calc/" target="_blank" style="color: #7f8c8d;">https://labo.com/CraftBand/sharing/along-lines-calc/</a> (Licensed under CC BY 4.0)</p>
+    </div>
 </body>
 </html>

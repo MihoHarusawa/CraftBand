@@ -964,5 +964,24 @@
 //]]>
 </script>
 
+    <!-- [AI / Developer API Reference] (Placed outside the WordPress Custom HTML Block) -->
+    <div class="api-docs" style="max-width: 600px; margin: 32px auto 0 auto; padding: 20px; border-top: 1px dashed #d1d5db; font-size: 11px; color: #7f8c8d; line-height: 1.6; font-family: monospace; background-color: #f9f9f9; border-radius: 8px;">
+        <h3 style="font-size: 12px; color: #2c3e50; margin-top: 0; margin-bottom: 10px; font-weight: bold;">[AI / Developer API Reference]</h3>
+        <p style="margin-bottom: 8px;">This page supports initialization and deep-linking via URL query parameters for the Craft Band Cross-Base Pattern Simulator (クロスベース模様シミュレーター).</p>
+
+        <strong style="color: #34495e; display: block; margin-bottom: 4px;">Supported Query Parameters:</strong>
+        <ul style="margin: 0; padding-left: 16px; margin-bottom: 10px; list-style-type: square;">
+            <li><code>cb_code</code> : Pattern code string formatted as <code>BASE-L1-L2</code> (e.g. <code>AAAA-BB-BB</code>, <code>BAAA-BA-BBAA</code>).
+                <br>- 1st part (4 chars of A/B): Base pattern ①②③④ (①② = horizontal/side rim, ③④ = vertical/base cords).
+                <br>- 2nd part (2 chars of A/B): Horizontal L1 overlay <code>ab</code>.
+                <br>- 3rd part (2 or 4 chars of A/B): Diagonal L2 overlay for 45°/135° cords (<code>あ</code> <code>い</code> <code>う</code> <code>え</code>). If 2 chars provided (e.g. <code>BB</code>), it expands to <code>BBBB</code>.
+            </li>
+            <li><code>cb_colorA</code> : HEX color code for Color A (e.g. <code>#87CEEB</code> or <code>87CEEB</code>). Default: <code>#87CEEB</code>.</li>
+            <li><code>cb_colorB</code> : HEX color code for Color B (e.g. <code>#FFC0CB</code> or <code>FFC0CB</code>). Default: <code>#FFC0CB</code>.</li>
+        </ul>
+
+        <strong style="color: #34495e; display: block; margin-bottom: 4px;">Credit & Licensing:</strong>
+        <p style="margin-top: 0; margin-bottom: 0;">Original Logic: <a href="https://labo.com/CraftBand/sharing/cross-base-calc/" target="_blank" style="color: #7f8c8d;">https://labo.com/CraftBand/sharing/cross-base-calc/</a> (Licensed under CC BY 4.0)</p>
+    </div>
 </body>
 </html>
