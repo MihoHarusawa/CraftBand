@@ -867,7 +867,7 @@ Public Class frmMain
 
         Dim stepImageData As New clsImageData(Nothing)
         Dim ret As Boolean = calc.CalcImage(stepImageData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
+            chk底編み.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked, chk開始ライン.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
             msg = calc.p_sメッセージ
@@ -957,7 +957,7 @@ Public Class frmMain
 
         Dim imgData As New clsImageData(Nothing)
         Dim ret As Boolean = _clsCalcKnot.CalcImage(imgData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
+            chk底編み.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked, chk開始ライン.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
             msg = _clsCalcKnot.p_sメッセージ
@@ -1423,6 +1423,8 @@ Public Class frmMain
         If Val(txt縦ひもの本数.Text) < nud左から何番目のコマ.Value Then
             nud左から何番目のコマ.Value = Val(txt縦ひもの本数.Text)
         End If
+        chk開始位置.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
+        chk開始ライン.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
     End Sub
 
     Private Sub nud上から何番目のコマ_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何番目のコマ.ValueChanged
@@ -1435,6 +1437,8 @@ Public Class frmMain
         If Val(txt横ひもの本数.Text) < nud上から何番目のコマ.Value Then
             nud上から何番目のコマ.Value = Val(txt横ひもの本数.Text)
         End If
+        chk開始位置.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
+        chk開始ライン.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
     End Sub
 
     Private Sub nud高さのコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さのコマ数.ValueChanged
@@ -1829,7 +1833,7 @@ Public Class frmMain
 
         Cursor.Current = Cursors.WaitCursor
         Dim ret As Boolean = _clsCalcKnot.CalcImage(_clsImageData, isDrawMark,
-            chk底のみ.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked)
+            chk底編み.Checked, chkひも全体.Checked, chkコマ枠.Checked, chk開始位置.Checked, chk開始ライン.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcKnot.p_sメッセージ) Then
@@ -1845,33 +1849,60 @@ Public Class frmMain
         ctrPreview1.PanelSize = tpageプレビュー.Size
     End Sub
 
-    Private Sub chk底のみ_CheckedChanged(sender As Object, e As EventArgs) Handles chk底のみ.CheckedChanged
+
+    Private _changingCheck As Boolean = False
+    Private Sub chk描画変更_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged, chkコマ枠.CheckedChanged, chk開始位置.CheckedChanged
         If _clsImageData Is Nothing Then
             Return
         End If
         calcImageAndShow()
     End Sub
 
-    Private Sub chkひも全体_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged
+    Private Sub chk底編み_CheckedChanged(sender As Object, e As EventArgs) Handles chk底編み.CheckedChanged
         If _clsImageData Is Nothing Then
             Return
+        End If
+        If _changingCheck Then Return
+        If Not chk底編み.Checked Then
+            _changingCheck = True
+            chk開始ライン.Checked = False
+            _changingCheck = False
+        End If
+        calcImageAndShow()
+    End Sub
+    Private Sub chk開始ライン_CheckedChanged(sender As Object, e As EventArgs) Handles chk開始ライン.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        If _changingCheck Then Return
+        If chk開始ライン.Checked Then
+            _changingCheck = True
+            chk底編み.Checked = True
+            _changingCheck = False
         End If
         calcImageAndShow()
     End Sub
 
-    Private Sub chkコマ枠_CheckedChanged(sender As Object, e As EventArgs) Handles chkコマ枠.CheckedChanged
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        calcImageAndShow()
-    End Sub
+    'Private Sub chkひも全体_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    calcImageAndShow()
+    'End Sub
 
-    Private Sub chk開始位置_CheckedChanged(sender As Object, e As EventArgs) Handles chk開始位置.CheckedChanged
-        If _clsImageData Is Nothing Then
-            Return
-        End If
-        calcImageAndShow()
-    End Sub
+    'Private Sub chkコマ枠_CheckedChanged(sender As Object, e As EventArgs) Handles chkコマ枠.CheckedChanged
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    calcImageAndShow()
+    'End Sub
+
+    'Private Sub chk開始位置_CheckedChanged(sender As Object, e As EventArgs) Handles chk開始位置.CheckedChanged
+    '    If _clsImageData Is Nothing Then
+    '        Return
+    '    End If
+    '    calcImageAndShow()
+    'End Sub
 
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
         'picプレビュー.Image = Nothing

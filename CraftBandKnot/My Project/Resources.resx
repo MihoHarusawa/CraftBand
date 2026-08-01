@@ -247,4 +247,10 @@
   <data name="ModelDiffHeight" xml:space="preserve">
     <value>側面の高さが異なるため直方体になりません。</value>
   </data>
+  <data name="CalcOutOrder" xml:space="preserve">
+    <value>番目の</value>
+  </data>
+  <data name="CalcImageBadStartLine" xml:space="preserve">
+    <value>開始位置が底編み外のため、開始ラインを描画できません。</value>
+  </data>
 </root>

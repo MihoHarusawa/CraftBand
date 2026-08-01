@@ -115,6 +115,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  開始位置が底編み外のため、開始ラインを描画できません。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcImageBadStartLine() As String
+            Get
+                Return ResourceManager.GetString("CalcImageBadStartLine", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  {0}追加用の番号がとれません。 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcNoAddNumber() As String
@@ -282,6 +291,15 @@ Namespace My.Resources
         Friend ReadOnly Property CalcOutLong() As String
             Get
                 Return ResourceManager.GetString("CalcOutLong", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  番目の に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutOrder() As String
+            Get
+                Return ResourceManager.GetString("CalcOutOrder", resourceCulture)
             End Get
         End Property
         

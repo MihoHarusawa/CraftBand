@@ -59,6 +59,9 @@ Partial Public Class clsCalcKnot
         End If
     End Function
 
+    Const cFirstSideDirection As DirectionEnum = DirectionEnum._上 Or DirectionEnum._左
+
+
 #Region "計算用プロパティ"
     ReadOnly Property p_iコマ空間幅 As Integer
         Get
@@ -190,6 +193,12 @@ Partial Public Class clsCalcKnot
                 Return 0 < HorzIndex AndAlso 0 < VertIndex
             End Get
         End Property
+
+        '無効化する
+        Sub InValidate()
+            HorzIndex = 0
+            VertIndex = 0
+        End Sub
 
         '単項-演算子(マイナス符号)
         Shared Operator -(ByVal c As SPosition) As SPosition
@@ -413,6 +422,26 @@ Partial Public Class clsCalcKnot
             Return False
         End Function
 
+        '開始ライン上にある
+        Public ReadOnly Property IsInStartLine() As Boolean
+            Get
+                Return IsBottomBase AndAlso m_spaceParent.IsInStartLine(m_position)
+            End Get
+        End Property
+
+        '開始ラインのコマの編まれていない方向を返す
+        Public ReadOnly Property StartLineRimSide() As DirectionEnum
+            Get
+                Return m_spaceParent.GetStartLineRimSide(m_position)
+            End Get
+        End Property
+
+        '開始ラインのコマの記号を表示する方向を返す
+        Public ReadOnly Property StartLineMarkSide() As DirectionEnum
+            Get
+                Return m_spaceParent.GetStartLineRimSide(m_position) And cFirstSideDirection
+            End Get
+        End Property
 
         Function IsInBottomOrSidePlate() As Boolean
             If IsInBottomPlate() Then
@@ -650,7 +679,7 @@ Partial Public Class clsCalcKnot
             Public ReadOnly Property IsHalfHeight As Integer '高さ半角ブラス
 
             '開始位置のコマ位置
-            Public Property StartKomaPosition As SPosition
+            Public ReadOnly Property StartKomaPosition As SPosition
 
 
             Public Sub New()
@@ -754,10 +783,10 @@ Partial Public Class clsCalcKnot
                 g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "List Count={0}  SameCount={1}", samePointPairList.Count, samecount)
 
                 '底編み領域
-                For vidx As Integer = HeightCount + 1 To HeightCount + DepthCount + WidthCount
+                For vidx As Integer = HeightCount + 1 To HeightCount + BottomBaseVerticalCount
                     Dim isFirstHidx As Boolean = True
                     Dim lastKnotfolder As CKnotFolder = Nothing
-                    For hidx As Integer = HeightCount + 1 To HeightCount + WidthCount + DepthCount
+                    For hidx As Integer = HeightCount + 1 To HeightCount + BottomBaseHorizontalCount
                         Dim knotfolder As CKnotFolder = GetAt(hidx, vidx)
                         If Not knotfolder.IsInBottomOrSidePlate() Then
                             Continue For
@@ -775,10 +804,10 @@ Partial Public Class clsCalcKnot
                         'lastKnotfolder._BottomBaseMarkSide += DirectionEnum._右
                     End If
                 Next
-                For hidx As Integer = HeightCount + 1 To HeightCount + WidthCount + DepthCount
+                For hidx As Integer = HeightCount + 1 To HeightCount + BottomBaseHorizontalCount
                     Dim isFirstVidx As Boolean = True
                     Dim lastKnotfolder As CKnotFolder = Nothing
-                    For vidx As Integer = HeightCount + 1 To DepthCount + HeightCount + WidthCount
+                    For vidx As Integer = HeightCount + 1 To HeightCount + BottomBaseVerticalCount
                         Dim knotfolder As CKnotFolder = GetAt(hidx, vidx)
                         If Not knotfolder.IsInBottomOrSidePlate() Then
                             Continue For
@@ -1095,6 +1124,80 @@ Partial Public Class clsCalcKnot
                 Return ret
             End Function
 
+
+            '底編み領域のサイズ
+            Public ReadOnly Property BottomBaseHorizontalCount As Integer '横
+                Get
+                    If IsDiagonal Then
+                        Return DepthCount + WidthCount
+                    Else
+                        Return WidthCount
+                    End If
+                End Get
+            End Property
+            Public ReadOnly Property BottomBaseVerticalCount As Integer '縦
+                Get
+                    If IsDiagonal Then
+                        Return WidthCount + DepthCount
+                    Else
+                        Return DepthCount
+                    End If
+                End Get
+            End Property
+
+            '底編み領域内の位置
+            Public Function BottomBasePosition(ByVal i左から As Integer, ByVal i上から As Integer) As SPosition
+                Return New SPosition(HeightCount + i左から, HeightCount + i上から)
+            End Function
+
+            '底編み領域内にあるかどうか
+            Public Function IsInBottomBase(ByVal position As SPosition) As Boolean
+                Return HeightCount < position.HorzIndex AndAlso
+                position.HorzIndex <= HeightCount + BottomBaseHorizontalCount AndAlso
+                HeightCount < position.VertIndex AndAlso
+                position.VertIndex <= HeightCount + BottomBaseVerticalCount
+            End Function
+
+            '開始位置のコマを指定する(範囲チェックのみ、コマの有無はチェックしない)
+            Public Sub SetStartKomaSetting(ByVal i左から As Integer, ByVal i上から As Integer)
+                _StartKomaPosition = BottomBasePosition(i左から, i上から)
+                If Not IsInBottomBase(_StartKomaPosition) Then
+                    _StartKomaPosition.InValidate()
+                End If
+            End Sub
+
+            '底編み領域内の開始ライン上にある
+            Friend Function IsInStartLine(ByVal position As SPosition) As Boolean
+                If Not IsValid OrElse Not StartKomaPosition.IsValid Then
+                    Return False
+                End If
+                If position.HorzIndex <> StartKomaPosition.HorzIndex AndAlso
+                   position.VertIndex <> StartKomaPosition.VertIndex Then
+                    Return False
+                End If
+                Return IsInBottomBase(position)
+            End Function
+
+            '開始ラインのコマの編まれていない方向を返す
+            Friend Function GetStartLineRimSide(ByVal position As SPosition) As DirectionEnum
+                If Not IsValid OrElse Not StartKomaPosition.IsValid Then
+                    Return cDirectionEnumNone
+                End If
+                If Not IsInStartLine(position) Then
+                    Return cDirectionEnumNone
+                End If
+                '各、隣のコマが開始ラインにあるかどうかで判定する
+                Dim rims As DirectionEnum = cDirectionEnumNone
+                For Each side As SideIndexEnum In [Enum].GetValues(GetType(SideIndexEnum))
+                    Dim neighbor As New SPosition(side)
+                    neighbor += position
+                    If Not IsInStartLine(neighbor) Then
+                        rims += SideIndexToDirection(side)
+                    End If
+                Next
+                Return rims
+            End Function
+
             '開始位置のコマ位置情報
             Public Function GetStartKoma() As CKnotFolder
                 If Not IsValid OrElse Not StartKomaPosition.IsValid Then
@@ -1107,26 +1210,26 @@ Partial Public Class clsCalcKnot
                 Return Nothing
             End Function
 
-            '開始位置の各方向に入力された加算長値を返す
-            Public Function GetStartKomaAdditionalEach() As Double()
-                Dim koma As CKnotFolder = GetStartKoma()
-                If koma IsNot Nothing Then
-                    Return koma.GetAdditionalEach
-                End If
-                Return Nothing
-            End Function
+            ''開始位置の各方向に入力された加算長値を返す
+            'Public Function GetStartKomaAdditionalEach() As Double()
+            '    Dim koma As CKnotFolder = GetStartKoma()
+            '    If koma IsNot Nothing Then
+            '        Return koma.GetAdditionalEach
+            '    End If
+            '    Return Nothing
+            'End Function
 
-            '開始位置から外側のコマ数をセットで返す
-            Public Function GetStartKomaCountEach() As Integer()
-                Dim koma As CKnotFolder = GetStartKoma()
-                If koma IsNot Nothing Then
-                    Return getKomaCountEach(StartKomaPosition)
-                End If
-                Return Nothing
-            End Function
+            ''開始位置から外側のコマ数をセットで返す
+            'Public Function GetStartKomaCountEach() As Integer()
+            '    Dim koma As CKnotFolder = GetStartKoma()
+            '    If koma IsNot Nothing Then
+            '        Return getKomaCountEach(StartKomaPosition)
+            '    End If
+            '    Return Nothing
+            'End Function
 
             '指定位置から外側のコマ数をセットで返す(底編み位置であること)
-            Private Function getKomaCountEach(ByVal position As SPosition) As Integer()
+            Public Function getKomaCountEach(ByVal position As SPosition) As Integer()
                 Dim knotfolder As CKnotFolder = GetAt(position)
                 If knotfolder Is Nothing OrElse Not knotfolder.IsBottomBase Then
                     Return Nothing
@@ -1361,7 +1464,8 @@ Partial Public Class clsCalcKnot
 
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
-        _KnotFolderSpace.StartKomaPosition = New SPosition(p_i編みひもの本数 + _i左から何番目, p_i編みひもの本数 + _i上から何番目)
+        '_KnotFolderSpace.StartKomaPosition = New SPosition(p_i編みひもの本数 + _i左から何番目, p_i編みひもの本数 + _i上から何番目)
+        _KnotFolderSpace.SetStartKomaSetting(_i左から何番目, _i上から何番目)
 
         For i As Integer = 0 To cExpYTSCount - 1
             Dim bcount As Integer
@@ -1463,7 +1567,8 @@ Partial Public Class clsCalcKnot
 
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
-        _KnotFolderSpace.StartKomaPosition = New SPosition(p_i側面の切捨コマ数 + _i左から何番目, p_i側面の切捨コマ数 + _i上から何番目)
+        '_KnotFolderSpace.StartKomaPosition = New SPosition(p_i側面の切捨コマ数 + _i左から何番目, p_i側面の切捨コマ数 + _i上から何番目)
+        _KnotFolderSpace.SetStartKomaSetting(_i左から何番目, _i上から何番目)
 
         '横ひも
         For Each row As tbl縦横展開Row In _tbl縦横展開(emExp._Yoko).Select(Nothing, "f_iひも番号 ASC")

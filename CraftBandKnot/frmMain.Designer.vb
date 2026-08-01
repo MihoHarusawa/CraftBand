@@ -114,11 +114,12 @@ Partial Class frmMain
         chk斜め立ち上げ = New CheckBox()
         chkコマ枠 = New CheckBox()
         chkひも全体 = New CheckBox()
-        chk底のみ = New CheckBox()
+        chk底編み = New CheckBox()
         lbl対角サイズ = New Label()
         txtコマベース_対角 = New TextBox()
         txtコマ_対角 = New TextBox()
         chk開始位置 = New CheckBox()
+        chk開始ライン = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1034,10 +1035,10 @@ Partial Class frmMain
         ' 
         chkコマ枠.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         chkコマ枠.AutoSize = True
-        chkコマ枠.Location = New Point(209, 394)
+        chkコマ枠.Location = New Point(189, 394)
         chkコマ枠.Name = "chkコマ枠"
         chkコマ枠.Size = New Size(63, 23)
-        chkコマ枠.TabIndex = 2
+        chkコマ枠.TabIndex = 3
         chkコマ枠.Text = "コマ枠"
         ToolTip1.SetToolTip(chkコマ枠, "コマごとにサイズ枠を表示します")
         chkコマ枠.UseVisualStyleBackColor = True
@@ -1046,25 +1047,25 @@ Partial Class frmMain
         ' 
         chkひも全体.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         chkひも全体.AutoSize = True
-        chkひも全体.Location = New Point(107, 394)
+        chkひも全体.Location = New Point(97, 394)
         chkひも全体.Name = "chkひも全体"
         chkひも全体.Size = New Size(78, 23)
-        chkひも全体.TabIndex = 1
+        chkひも全体.TabIndex = 2
         chkひも全体.Text = "ひも全体"
-        ToolTip1.SetToolTip(chkひも全体, "ひもの全長を表示します" & vbCrLf & "「底のみ」の場合、非常に長くなり描画できないことがあります")
+        ToolTip1.SetToolTip(chkひも全体, "ひもの全長を表示します" & vbCrLf & "「底編み」や「開始ライン」では、非常に長くなり描画できないことがあります")
         chkひも全体.UseVisualStyleBackColor = True
         ' 
-        ' chk底のみ
+        ' chk底編み
         ' 
-        chk底のみ.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        chk底のみ.AutoSize = True
-        chk底のみ.Location = New Point(18, 394)
-        chk底のみ.Name = "chk底のみ"
-        chk底のみ.Size = New Size(65, 23)
-        chk底のみ.TabIndex = 0
-        chk底のみ.Text = "底のみ"
-        ToolTip1.SetToolTip(chk底のみ, "底編み箇所のみ表示します")
-        chk底のみ.UseVisualStyleBackColor = True
+        chk底編み.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk底編み.AutoSize = True
+        chk底編み.Location = New Point(18, 394)
+        chk底編み.Name = "chk底編み"
+        chk底編み.Size = New Size(68, 23)
+        chk底編み.TabIndex = 1
+        chk底編み.Text = "底編み"
+        ToolTip1.SetToolTip(chk底編み, "底編み箇所のみ表示します")
+        chk底編み.UseVisualStyleBackColor = True
         ' 
         ' lbl対角サイズ
         ' 
@@ -1108,13 +1109,25 @@ Partial Class frmMain
         chk開始位置.AutoSize = True
         chk開始位置.Checked = True
         chk開始位置.CheckState = CheckState.Checked
-        chk開始位置.Location = New Point(296, 394)
+        chk開始位置.Location = New Point(266, 394)
         chk開始位置.Name = "chk開始位置"
         chk開始位置.Size = New Size(84, 23)
-        chk開始位置.TabIndex = 3
+        chk開始位置.TabIndex = 4
         chk開始位置.Text = "開始位置"
         ToolTip1.SetToolTip(chk開始位置, "オフにすると、一時的に要尺や開始位置情報を非表示にできます")
         chk開始位置.UseVisualStyleBackColor = True
+        ' 
+        ' chk開始ライン
+        ' 
+        chk開始ライン.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk開始ライン.AutoSize = True
+        chk開始ライン.Location = New Point(364, 394)
+        chk開始ライン.Name = "chk開始ライン"
+        chk開始ライン.Size = New Size(86, 23)
+        chk開始ライン.TabIndex = 5
+        chk開始ライン.Text = "開始ライン"
+        ToolTip1.SetToolTip(chk開始ライン, "開始位置を中心に十字のコマのみ表示")
+        chk開始ライン.UseVisualStyleBackColor = True
         ' 
         ' MenuStrip1
         ' 
@@ -1718,10 +1731,11 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
+        tpageプレビュー.Controls.Add(chk開始ライン)
         tpageプレビュー.Controls.Add(chk開始位置)
         tpageプレビュー.Controls.Add(chkコマ枠)
         tpageプレビュー.Controls.Add(chkひも全体)
-        tpageプレビュー.Controls.Add(chk底のみ)
+        tpageプレビュー.Controls.Add(chk底編み)
         tpageプレビュー.Controls.Add(ctrPreview1)
         tpageプレビュー.Location = New Point(4, 28)
         tpageプレビュー.Name = "tpageプレビュー"
@@ -1738,7 +1752,7 @@ Partial Class frmMain
         ctrPreview1.Name = "ctrPreview1"
         ctrPreview1.PanelSize = New Size(713, 339)
         ctrPreview1.Size = New Size(834, 427)
-        ctrPreview1.TabIndex = 4
+        ctrPreview1.TabIndex = 0
         ' 
         ' tpageプレビュー2
         ' 
@@ -2545,7 +2559,7 @@ Partial Class frmMain
     Friend WithEvents ToolStripMenuItemEditStepImage As ToolStripMenuItem
     Friend WithEvents chk斜め立ち上げ As CheckBox
     Friend WithEvents chkひも全体 As CheckBox
-    Friend WithEvents chk底のみ As CheckBox
+    Friend WithEvents chk底編み As CheckBox
     Friend WithEvents chkコマ枠 As CheckBox
     Friend WithEvents lbl対角サイズ As Label
     Friend WithEvents txtコマベース_対角 As TextBox
@@ -2553,6 +2567,7 @@ Partial Class frmMain
     Friend WithEvents chk開始位置 As CheckBox
     Friend WithEvents ctrPreview1 As CraftBand.ctrPreview
     Friend WithEvents ctrPreview2 As CraftBand.ctrPreview
+    Friend WithEvents chk開始ライン As CheckBox
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

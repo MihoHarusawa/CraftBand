@@ -75,10 +75,13 @@ Partial Public Class clsCalcKnot
 
     '条件に合うコマとバンドの描画
     Private Function addコマ(ByVal knotfolder As CKnotFolder, ByVal isleft As Boolean, ByVal isDispMark As Boolean,
-                           ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean) As Boolean
+                           ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean, ByVal isStartLine As Boolean) As Boolean
 
         '有効なknotfolderであることまではチェック済
         If isBottomOnly AndAlso Not knotfolder.IsBottomBase Then
+            Return True
+        End If
+        If isStartLine AndAlso Not knotfolder.IsInStartLine Then
             Return True
         End If
 
@@ -112,18 +115,23 @@ Partial Public Class clsCalcKnot
 
         '「ひも全体」指定の時は縁のバンド＆記号を表示
         Dim isDraw As Boolean = isAllBand
-        If isBottomOnly AndAlso knotfolder.BottomBaseRimSide = cDirectionEnumNone Then
-            isDraw = False
-        End If
-        If Not isBottomOnly AndAlso knotfolder.KnotRimSide = cDirectionEnumNone Then
-            isDraw = False
+        If Not isStartLine Then
+            If isBottomOnly AndAlso knotfolder.BottomBaseRimSide = cDirectionEnumNone Then
+                isDraw = False
+            End If
+            If Not isBottomOnly AndAlso knotfolder.KnotRimSide = cDirectionEnumNone Then
+                isDraw = False
+            End If
         End If
         'バンド表示
         If isDraw Then
 
             Dim sideRimDraw As DirectionEnum = cDirectionEnumNone
             Dim sideMarkDraw As DirectionEnum = cDirectionEnumNone
-            If isBottomOnly Then
+            If isStartLine Then
+                sideRimDraw = knotfolder.StartLineRimSide
+                sideMarkDraw = knotfolder.StartLineMarkSide
+            ElseIf isBottomOnly Then
                 sideRimDraw = knotfolder.BottomBaseRimSide
                 sideMarkDraw = knotfolder.BottomBaseMarkSide
             ElseIf _b斜め立ち上げ Then
@@ -141,7 +149,7 @@ Partial Public Class clsCalcKnot
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(sideRimDraw)
                 For Each side As SideIndexEnum In sides
                     Dim addlen As Double = knotfolder.AdditionalLength(side)
-                    '底のみの場合は側面ぶんの長さを加える
+                    '底編みの場合は側面ぶんの長さを加える
                     If isBottomOnly Then
                         addlen += knotfolder.GetKomaCount(side) * _dコマベース要尺 * p_dマイひも長係数
                     End If
@@ -256,9 +264,16 @@ Partial Public Class clsCalcKnot
     End Function
 
     Private Function imagelistコマ配置(ByVal isKnotLeft As Boolean, ByVal isDispMark As Boolean,
-                                   ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean) As Boolean
+                                   ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean, ByVal isStartLine As Boolean) As Boolean
         '_KnotFolderSpace 設定済のこと
         If Not _KnotFolderSpace.IsValid Then
+            Return False
+        End If
+
+        '開始ラインは開始位置があること
+        If isStartLine AndAlso _KnotFolderSpace.GetStartKoma() Is Nothing Then
+            '開始位置が底編み外のため、開始ラインを描画できません。
+            p_sメッセージ = String.Format(My.Resources.CalcImageBadStartLine)
             Return False
         End If
 
@@ -266,8 +281,8 @@ Partial Public Class clsCalcKnot
             _ImageListコマ = New clsImageItemList
         End If
 
-        '高さゼロは底のみと同じ
-        Dim iBottomBaseOnly As Boolean = isBottomOnly
+        '高さゼロは底編みと同じ
+        Dim iBottomBaseOnly As Boolean = isBottomOnly OrElse isStartLine
         If _b斜め立ち上げ Then
             If p_i側面の切捨コマ数 = 0 Then
                 iBottomBaseOnly = True
@@ -281,7 +296,7 @@ Partial Public Class clsCalcKnot
         '各コマ描画
         For Each knotfolder In _KnotFolderSpace
             If knotfolder IsNot Nothing AndAlso 2 <= knotfolder.BandSetCount Then
-                addコマ(knotfolder, isKnotLeft, isDispMark, iBottomBaseOnly, isAllBand, isKnotFrame)
+                addコマ(knotfolder, isKnotLeft, isDispMark, iBottomBaseOnly, isAllBand, isKnotFrame, isStartLine)
             End If
         Next
         'コマ間の接続
@@ -306,7 +321,7 @@ Partial Public Class clsCalcKnot
 
 
     '底と側面枠(縦横)
-    '底のみ=isBottomOnly
+    '底編み=isBottomOnly
     Function imageList描画要素(ByVal isBottomOnly As Boolean) As clsImageItemList
         Dim basecross As Boolean = False '底のグリッド
         Dim sideline As Boolean = False '側面のコマライン
@@ -525,8 +540,8 @@ Partial Public Class clsCalcKnot
     Shared _unit315 As New S差分(315) '背面
 
     '底と側面枠(斜め)
-    '底のみ=isBottomOnly =isAllBand
-    Function imageList斜め描画要素(ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean) As clsImageItemList
+    '底編み=isBottomOnly =isAllBand
+    Function imageList斜め描画要素(ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isStartLine As Boolean) As clsImageItemList
         '
         '    (1,1)    A3        A2      → p_iコマ空間幅
         '       +----------------------+                                  
@@ -701,8 +716,36 @@ Partial Public Class clsCalcKnot
             itemlist.AddItem(itemFolding)
         End If
 
-        '以下、ペアのコマがあるとき
-        If 0 = p_i側面の切捨コマ数 OrElse isBottomOnly Then
+
+        '** 底の中央線
+        item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
+
+        'クロス点
+        Dim p上クロス点 As New S実座標(pA1.X, Max(pB1.Y, pD1.Y))
+        Dim p下クロス点 As New S実座標(pC1.X, Min(pB1.Y, pD1.Y))
+        If p下クロス点.X < p上クロス点.X Then
+            line = New clsImageItem.S線分(p上クロス点, pD1)
+            item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(p下クロス点, pB1)
+            item.m_lineList.Add(line)
+        Else
+            line = New clsImageItem.S線分(p上クロス点, pB1)
+            item.m_lineList.Add(line)
+            line = New clsImageItem.S線分(p下クロス点, pD1)
+            item.m_lineList.Add(line)
+        End If
+        '
+        line = New clsImageItem.S線分(pA1, p上クロス点)
+        item.m_lineList.Add(line)
+        line = New clsImageItem.S線分(p下クロス点, pC1)
+        item.m_lineList.Add(line)
+        line = New clsImageItem.S線分(p下クロス点, p上クロス点)
+        item.m_lineList.Add(line)
+        itemlist.AddItem(item)
+
+
+        '**ペアのコマ線(ペアがあるとき)
+        If 0 = p_i側面の切捨コマ数 OrElse isBottomOnly OrElse isStartLine Then
             Return itemlist
         End If
         If isAllBand Then
@@ -803,8 +846,13 @@ Partial Public Class clsCalcKnot
         '要尺
         If True Then
             '左上位置
-            'Dim p要尺位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1, 1))'コマ空間の左上
-            Dim p要尺位置 As S実座標 = rDrawコマ.p左上
+            Dim p要尺位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1, 1)) 'コマ空間の左上
+            If rDrawコマ.x最左 < p要尺位置.X Then
+                p要尺位置.X = rDrawコマ.x最左
+            End If
+            If p要尺位置.Y < rDrawコマ.y最上 Then
+                p要尺位置.Y = rDrawコマ.y最上
+            End If
 
             If _b斜め立ち上げ Then
                 If _i横のコマ数 * _dコマベース寸法 / ROOT2 < _dコマベース要尺 Then
@@ -854,7 +902,7 @@ Partial Public Class clsCalcKnot
 
 
         '開始位置の情報をセット
-        Dim startInfo As CStartInfo = setStartInfo()
+        Dim startInfo As CBottomBaseBandInfo = setStartInfo()
         If startInfo Is Nothing Then
             '設定されていなければ
             Return itemlist 'ここまでの結果
@@ -864,7 +912,7 @@ Partial Public Class clsCalcKnot
         If True Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
             'Dim pコマ左上 As S実座標 = toPoint(-(_i横のコマ数 / 2) + (startInfo.i左から何番目 - 1), -(_i縦のコマ数 / 2) + (startInfo.i上から何番目 - 1))
-            Dim pコマ左上 As S実座標 = toPoint(startInfo.StartKoma.coorBaseXY())
+            Dim pコマ左上 As S実座標 = toPoint(startInfo.CurrentKoma.coorBaseXY())
             Dim pコマ右下 As S実座標 = pコマ左上 + Unit315 * _dコマベース寸法
 
             line = New clsImageItem.S線分(pコマ左上, pコマ左上 + Unit0 * _dコマベース寸法)
@@ -930,6 +978,8 @@ Partial Public Class clsCalcKnot
             band2.aバンド位置 = New S四隅(item2r.p左下, item2r.p右下, item2r.p右上, item2r.p左上)
             band1.is終点FT線 = False
             band2.is始点FT線 = False
+            band1.is始点FT線 = False
+            band2.is終点FT線 = False
             Dim item1 As New clsImageItem(band1, IdxDrawBandStart, 1) '右
             Dim item2 As New clsImageItem(band2, IdxDrawBandStart, 2) '左
 
@@ -958,6 +1008,8 @@ Partial Public Class clsCalcKnot
             band4.aバンド位置 = New S四隅(item4r.p左上, item4r.p左下, item4r.p右下, item4r.p右上)
             band3.is始点FT線 = False
             band4.is終点FT線 = False
+            band3.is終点FT線 = False
+            band4.is始点FT線 = False
             Dim item3 As New clsImageItem(band3, IdxDrawBandStart, 3) '下
             Dim item4 As New clsImageItem(band4, IdxDrawBandStart, 4) '上
 
@@ -998,14 +1050,14 @@ Partial Public Class clsCalcKnot
             For i As Integer = 0 To cSideIndexEnumCount - 1
                 With startInfo
                     '<コマの{0}>
-                    Dim str1 As String = String.Format(My.Resources.CalcOutKnotOf, .getSideString(i))
+                    Dim str1 As String = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(i))
                     str1 += outp.outLengthTextWithUnit(.getBandLength(i))
                     str1 += "  "
                     str1 += .getDiffString(i, outp)
 
                     '加算計 {0} (縁の始末:{1} ひも長加算:{2} {3}加算:{4})
                     Dim str2 As String = String.Format(My.Resources.CalcOutAddLen,
-                        outp.outLengthTextWithUnit(.getAddSum(i)), outp.outLengthText(.getAddHem()), outp.outLengthText(.getAddVert()), .getSideString(i), outp.outLengthText(.getAddEach(i)))
+                        outp.outLengthTextWithUnit(.getAddSum(i)), outp.outLengthText(.getAddHem()), outp.outLengthText(.getAddVert()), CBottomBaseBandInfo.getSideString(i), outp.outLengthText(.getAddEach(i)))
 
                     '折り位置から
                     Dim str3 As String = String.Format(My.Resources.CalcOutFromFolding)
@@ -1077,9 +1129,9 @@ Partial Public Class clsCalcKnot
 #End Region
 
     'プレビュー画像生成
-    '底のみ=isBottomOnly, ひも全体=isAllBand, コマ枠=isKnotFrame
+    '底編み=isBottomOnly, ひも全体=isAllBand, コマ枠=isKnotFrame, 開始位置=isStartPosition, 開始ライン=isStartLine
     Public Function CalcImage(ByVal imgData As clsImageData, ByVal isDrawMark As Boolean,
-                              ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean, ByVal isStartPosition As Boolean) As Boolean
+                              ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isKnotFrame As Boolean, ByVal isStartPosition As Boolean, ByVal isStartLine As Boolean) As Boolean
         If imgData Is Nothing Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
@@ -1113,9 +1165,11 @@ Partial Public Class clsCalcKnot
 
         '_ImageListコマにセット(CalcOutput結果に基づく)
         If Not imagelistコマ配置(_bコマ上縦ひも左側, isDrawMark,
-                             isBottomOnly, isAllBand, isKnotFrame) Then
-            '処理に必要な情報がありません。
-            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
+                             isBottomOnly, isAllBand, isKnotFrame, isStartLine) Then
+            If String.IsNullOrWhiteSpace(p_sメッセージ) Then
+                '処理に必要な情報がありません。
+                p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
+            End If
             Return False
         End If
 
@@ -1126,7 +1180,7 @@ Partial Public Class clsCalcKnot
 
         '底と側面枠
         If _b斜め立ち上げ Then
-            _ImageList描画要素 = imageList斜め描画要素(isBottomOnly, isAllBand)
+            _ImageList描画要素 = imageList斜め描画要素(isBottomOnly, isAllBand, isStartLine)
         Else
             _ImageList描画要素 = imageList描画要素(isBottomOnly)
         End If

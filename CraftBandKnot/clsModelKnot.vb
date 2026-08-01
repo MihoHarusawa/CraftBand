@@ -206,7 +206,7 @@ Public Class clsModelKnot
 
             Dim imgdata As New clsImageData(_PlateNames(0)) '仮の名前で
             If Not calcTmp.CalcImage(imgdata, False,
-                False, False, _calc._frmMain.chkコマ枠.Checked, False) Then
+                False, False, _calc._frmMain.chkコマ枠.Checked, False, False) Then
                 _LastError = calcTmp.p_sメッセージ
                 ret = False
             Else
