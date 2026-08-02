@@ -9,6 +9,13 @@ Public Class frmSelectBand
     Public Property p_bIsKnotLeft As Boolean
     Public Property p_dMySafetyFactor As Double
 
+    '文字列
+    Public ReadOnly Property text上の縦ひも位置 As String
+        Get
+            Return grp四つ畳み編みの上の縦ひも位置.Text
+        End Get
+    End Property
+
     Private Sub frmTargetBand_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         '四つ畳み編み専用
         If g_enumExeName <> enumExeName.CraftBandKnot Then

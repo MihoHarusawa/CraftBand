@@ -1689,7 +1689,7 @@ Class clsCalcKnot
 
         '指定位置のコマ
         Dim _currentPosition As SPosition
-        Friend CurrentKoma As CKnotFolder
+        Public ReadOnly Property CurrentKoma As CKnotFolder
 
         ReadOnly Property IsValid As Boolean = False
 
@@ -2231,9 +2231,14 @@ Class clsCalcKnot
             '***開始位置
             row = output.NextNewRow
             row.f_sカテゴリー = text開始位置()
+            row.f_sひも本数 = text上の縦ひも位置()
+            row.f_sタイプ = text右側左側(_bコマ上縦ひも左側)
+            row.f_s編みかた名 = text寸法() & output.outLengthTextWithUnit(_dコマの寸法)
+            row.f_s編みひも名 = text要尺() & output.outLengthTextWithUnit(_dコマの要尺)
 
             '横ひも
             row = output.NextNewRow
+            row.f_s番号 = startInfo.row横展開.f_iひも番号
             row.f_s記号 = startInfo.row横展開.f_s記号
             row.f_s色 = startInfo.row横展開.f_s色
             row.f_s本幅 = output.outLaneText(startInfo.row横展開.f_i何本幅)
@@ -2261,6 +2266,7 @@ Class clsCalcKnot
 
             '縦ひも
             row = output.NextNewRow
+            row.f_s番号 = startInfo.row縦展開.f_iひも番号
             row.f_s記号 = startInfo.row縦展開.f_s記号
             row.f_s色 = startInfo.row縦展開.f_s色
             row.f_s本幅 = output.outLaneText(startInfo.row縦展開.f_i何本幅)
@@ -2312,6 +2318,7 @@ Class clsCalcKnot
         row = output.NextNewRow
         row.f_sカテゴリー = text開始ライン()
 
+        'コマが縦に並ぶライン
         row = output.NextNewRow
         row.f_s番号 = text左から() & _i左から何番目.ToString & My.Resources.CalcOutOrder & text横ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
@@ -2331,7 +2338,11 @@ Class clsCalcKnot
 
         For iv As Integer = 1 To _KnotFolderSpace.BottomBaseVerticalCount
             row = output.NextNewRow
-            row.f_s番号 = iv
+            If _i上から何番目 = iv Then
+                row.f_s番号 = String.Format("*{0}*", iv)
+            Else
+                row.f_s番号 = iv
+            End If
 
             Dim komaInfo As New CBottomBaseBandInfo(Me, _i左から何番目, iv)
             If komaInfo.IsValid Then
@@ -2357,6 +2368,7 @@ Class clsCalcKnot
             End If
         Next
 
+        'コマが横に並ぶライン
         row = output.NextNewRow
         row.f_s番号 = text上から() & _i上から何番目.ToString & My.Resources.CalcOutOrder & text縦ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
@@ -2376,7 +2388,11 @@ Class clsCalcKnot
 
         For ih As Integer = 1 To _KnotFolderSpace.BottomBaseHorizontalCount
             row = output.NextNewRow
-            row.f_s番号 = ih
+            If _i左から何番目 = ih Then
+                row.f_s番号 = String.Format("*{0}*", ih)
+            Else
+                row.f_s番号 = ih
+            End If
 
             Dim komaInfo As New CBottomBaseBandInfo(Me, ih, _i上から何番目)
             If komaInfo.IsValid Then
@@ -2560,6 +2576,23 @@ Class clsCalcKnot
         Return _frmMain.chk開始ライン.Text
     End Function
 
+    Public Function text上の縦ひも位置() As String
+        Static cache As String = Nothing
+        If cache Is Nothing Then
+            Using dlg As New frmSelectBand()
+                cache = dlg.text上の縦ひも位置
+            End Using
+        End If
+        Return cache
+    End Function
+
+    Private Function text右側左側(ByVal isLeft As Boolean) As String
+        If isLeft Then
+            Return _frmMain.rad左側.Text
+        Else
+            Return _frmMain.rad右側.Text
+        End If
+    End Function
 
 #End Region
 

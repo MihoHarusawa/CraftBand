@@ -1883,27 +1883,6 @@ Public Class frmMain
         calcImageAndShow()
     End Sub
 
-    'Private Sub chkひも全体_CheckedChanged(sender As Object, e As EventArgs) Handles chkひも全体.CheckedChanged
-    '    If _clsImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    calcImageAndShow()
-    'End Sub
-
-    'Private Sub chkコマ枠_CheckedChanged(sender As Object, e As EventArgs) Handles chkコマ枠.CheckedChanged
-    '    If _clsImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    calcImageAndShow()
-    'End Sub
-
-    'Private Sub chk開始位置_CheckedChanged(sender As Object, e As EventArgs) Handles chk開始位置.CheckedChanged
-    '    If _clsImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    calcImageAndShow()
-    'End Sub
-
     Private Sub Hideプレビュー(clsDataTables As clsDataTables)
         'picプレビュー.Image = Nothing
         ctrPreview1.ClearImage()
@@ -1913,23 +1892,6 @@ Public Class frmMain
         End If
     End Sub
 
-    'Private Sub btnブラウザ_Click(sender As Object, e As EventArgs)
-    '    If _clsImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    If Not _clsImageData.ImgBrowserOpen(clsImageData.cBrowserBasicInfo) Then
-    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '    End If
-    'End Sub
-
-    'Private Sub btn画像ファイル_Click(sender As Object, e As EventArgs)
-    '    If _clsImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    If Not _clsImageData.ImgFileOpen Then
-    '        MessageBox.Show(_clsImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '    End If
-    'End Sub
 #End Region
 
 #Region "プレビュー2"
@@ -1969,37 +1931,10 @@ Public Class frmMain
         End If
     End Sub
 
-    'Private Sub btn3Dモデル_Click(sender As Object, e As EventArgs)
-    '    If _clsModelImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    If Not _clsModelImageData.ModelFileOpen(Nothing) Then
-    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '    End If
-    'End Sub
-
     Private Sub tpageプレビュー2_Resize(sender As Object, e As EventArgs) Handles tpageプレビュー2.Resize
         ctrPreview2.PanelSize = tpageプレビュー2.Size
     End Sub
 
-
-    'Private Sub btn画像ファイル2_Click(sender As Object, e As EventArgs)
-    '    If _clsModelImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    If Not _clsModelImageData.ImgFileOpen Then
-    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '    End If
-    'End Sub
-
-    'Private Sub btnブラウザ2_Click(sender As Object, e As EventArgs)
-    '    If _clsModelImageData Is Nothing Then
-    '        Return
-    '    End If
-    '    If Not _clsModelImageData.ImgBrowserOpen(clsImageData.cBrowserSize) Then
-    '        MessageBox.Show(_clsModelImageData.LastError, Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-    '    End If
-    'End Sub
 #End Region
 
 #Region "メモ他"
