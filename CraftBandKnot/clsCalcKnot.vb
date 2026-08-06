@@ -2309,7 +2309,7 @@ Class clsCalcKnot
         Return True
     End Function
 
-    '開始ライン情報
+    '開始ライン情報(斜め立ち上げ時)
     Private Sub outputStartLineInfo(ByVal output As clsOutput)
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
@@ -2317,14 +2317,17 @@ Class clsCalcKnot
 
         row = output.NextNewRow
         row.f_sカテゴリー = text開始ライン()
+        row.f_s編みかた名 = text寸法() & output.outLengthTextWithUnit(_dコマの寸法)
+        row.f_s編みひも名 = text要尺() & output.outLengthTextWithUnit(_dコマの要尺)
+        row.f_sメモ = text対角サイズ() & output.outLengthTextWithUnit(_dコマの寸法_対角)
 
         'コマが縦に並ぶライン
         row = output.NextNewRow
         row.f_s番号 = text左から() & _i左から何番目.ToString & My.Resources.CalcOutOrder & text横ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
-        row.f_s編みひも名 = My.Resources.CalcOutFromFolding '折り位置から
+        row.f_s編みひも名 = My.Resources.CalcOutArrowDown '↓
         row.f_s高さ = My.Resources.CalcOutFromKnot 'コマから
-        row.f_s長さ = My.Resources.CalcOutFromKnot 'コマから
+        row.f_s長さ = My.Resources.CalcOutArrowDown '↓
 
         row = output.NextNewRow
         row.f_s番号 = text上から()
@@ -2372,9 +2375,9 @@ Class clsCalcKnot
         row = output.NextNewRow
         row.f_s番号 = text上から() & _i上から何番目.ToString & My.Resources.CalcOutOrder & text縦ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
-        row.f_s編みひも名 = My.Resources.CalcOutFromFolding '折り位置から
+        row.f_s編みひも名 = My.Resources.CalcOutArrowRight '→
         row.f_s高さ = My.Resources.CalcOutFromKnot 'コマから
-        row.f_s長さ = My.Resources.CalcOutFromKnot 'コマから
+        row.f_s長さ = My.Resources.CalcOutArrowRight '→
 
         row = output.NextNewRow
         row.f_s番号 = text左から()

@@ -253,4 +253,10 @@
   <data name="CalcImageBadStartLine" xml:space="preserve">
     <value>開始位置が底編み外のため、開始ラインを描画できません。</value>
   </data>
+  <data name="CalcOutArrowDown" xml:space="preserve">
+    <value>↓</value>
+  </data>
+  <data name="CalcOutArrowRight" xml:space="preserve">
+    <value>→</value>
+  </data>
 </root>

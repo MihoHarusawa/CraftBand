@@ -1388,9 +1388,14 @@ Public Class frmMain
     End Sub
 
     Private Sub nud横のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud横のコマ数.ValueChanged
-        'If Not _isLoadingData Then
-        '    nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
-        'End If
+        If Not _isLoadingData Then
+            If chk斜め立ち上げ.Checked Then
+                nud上から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+                nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+            Else
+                nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
+            End If
+        End If
         recalc(CalcCategory.Knot, sender)
     End Sub
 
@@ -1407,38 +1412,37 @@ Public Class frmMain
     End Sub
 
     Private Sub nud縦のコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud縦のコマ数.ValueChanged
-        'If Not _isLoadingData Then
-        '    nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
-        'End If
+        If Not _isLoadingData Then
+            If chk斜め立ち上げ.Checked Then
+                nud上から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+                nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+            Else
+                nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
+            End If
+        End If
         recalc(CalcCategory.Knot, sender)
     End Sub
 
     Private Sub nud左から何番目のコマ_ValueChanged(sender As Object, e As EventArgs) Handles nud左から何番目のコマ.ValueChanged
-        If nud横のコマ数.Value <= 0 Then
-            Exit Sub
+        If Not _isLoadingData Then
+            If Val(txt縦ひもの本数.Text) < nud左から何番目のコマ.Value Then
+                nud左から何番目のコマ.Value = Val(txt縦ひもの本数.Text)
+            End If
         End If
-        'If nud横のコマ数.Value < nud左から何番目のコマ.Value Then
-        '    nud左から何番目のコマ.Value = nud横のコマ数.Value
-        'End If
-        If Val(txt縦ひもの本数.Text) < nud左から何番目のコマ.Value Then
-            nud左から何番目のコマ.Value = Val(txt縦ひもの本数.Text)
-        End If
-        chk開始位置.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
-        chk開始ライン.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
+
+        chk開始位置.Enabled = (0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value)
+        chk開始ライン.Enabled = (0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value)
     End Sub
 
     Private Sub nud上から何番目のコマ_ValueChanged(sender As Object, e As EventArgs) Handles nud上から何番目のコマ.ValueChanged
-        If nud縦のコマ数.Value <= 0 Then
-            Exit Sub
+        If Not _isLoadingData Then
+            If Val(txt横ひもの本数.Text) < nud上から何番目のコマ.Value Then
+                nud上から何番目のコマ.Value = Val(txt横ひもの本数.Text)
+            End If
         End If
-        'If nud縦のコマ数.Value < nud上から何番目のコマ.Value Then
-        '    nud上から何番目のコマ.Value = nud縦のコマ数.Value
-        'End If
-        If Val(txt横ひもの本数.Text) < nud上から何番目のコマ.Value Then
-            nud上から何番目のコマ.Value = Val(txt横ひもの本数.Text)
-        End If
-        chk開始位置.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
-        chk開始ライン.Enabled = 0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value
+
+        chk開始位置.Enabled = (0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value)
+        chk開始ライン.Enabled = (0 < nud左から何番目のコマ.Value AndAlso 0 < nud上から何番目のコマ.Value)
     End Sub
 
     Private Sub nud高さのコマ数_ValueChanged(sender As Object, e As EventArgs) Handles nud高さのコマ数.ValueChanged
@@ -1474,20 +1478,37 @@ Public Class frmMain
             nud高さのコマ数.Value = Int(nud高さのコマ数.Value)
         End If
 
-        ShowDefaultTabControlPage(enumReason._Gauge) '描きなおし
-        recalc(CalcCategory.SideFolding, sender)
+        If Not _isLoadingData Then
+            If 0 < nud上から何番目のコマ.Value Then
+                If checked Then
+                    nud上から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+                Else
+                    nud上から何番目のコマ.Value = KnotsCenter(nud縦のコマ数.Value)
+                End If
+            End If
+            If 0 < nud左から何番目のコマ.Value Then
+                If checked Then
+                    nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value + nud縦のコマ数.Value)
+                Else
+                    nud左から何番目のコマ.Value = KnotsCenter(nud横のコマ数.Value)
+                End If
+            End If
+
+            ShowDefaultTabControlPage(enumReason._Gauge) '描きなおし
+            recalc(CalcCategory.SideFolding, sender)
+        End If
     End Sub
 
     Private Sub txt横ひもの本数_TextChanged(sender As Object, e As EventArgs) Handles txt横ひもの本数.TextChanged
-        If Not _isLoadingData Then
-            nud上から何番目のコマ.Value = KnotsCenter(Val(txt横ひもの本数.Text))
-        End If
+        'If Not _isLoadingData Then
+        '    nud上から何番目のコマ.Value = KnotsCenter(Val(txt横ひもの本数.Text))
+        'End If
     End Sub
 
     Private Sub txt縦ひもの本数_TextChanged(sender As Object, e As EventArgs) Handles txt縦ひもの本数.TextChanged
-        If Not _isLoadingData Then
-            nud左から何番目のコマ.Value = KnotsCenter(Val(txt縦ひもの本数.Text))
-        End If
+        'If Not _isLoadingData Then
+        '    nud左から何番目のコマ.Value = KnotsCenter(Val(txt縦ひもの本数.Text))
+        'End If
     End Sub
 
     Private Sub rad左右どちらでも_CheckedChanged(sender As Object, e As EventArgs) Handles radどちらでも.CheckedChanged, rad左側.CheckedChanged, rad右側.CheckedChanged

@@ -223,6 +223,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  ↓ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutArrowDown() As String
+            Get
+                Return ResourceManager.GetString("CalcOutArrowDown", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  → に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcOutArrowRight() As String
+            Get
+                Return ResourceManager.GetString("CalcOutArrowRight", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  コマの{0}より に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CalcOutDiffFrom() As String

@@ -1,5 +1,4 @@
-﻿Imports System.DirectoryServices
-Imports CraftBand
+﻿Imports CraftBand
 Imports CraftBand.clsImageData
 Imports CraftBand.clsImageItem
 
@@ -1143,12 +1142,16 @@ Partial Public Class clsCalcKnot
         Dim _i左から何番目 As Integer = _Data.p_row底_縦横.Value("f_i左から何番目")
         Dim _i上から何番目 As Integer = _Data.p_row底_縦横.Value("f_i上から何番目")
 
+        Dim p底右 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + _KnotFolderSpace.BottomBaseHorizontalCount + 3, 1))
+        Dim p底上 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + 1, _KnotFolderSpace.HeightCount - 1))
+
         Dim item As clsImageItem
         Dim delta左 As New S差分(-_d基本のひも幅 * 3.5, _d基本のひも幅 * 1.5) '左下に対して
         Dim delta右 As New S差分(_d基本のひも幅, _d基本のひも幅 * 1.5) '右下に対して
         Dim delta上 As New S差分(_d基本のひも幅 / 2, _d基本のひも幅) '左上に対して
         Dim delta下 As New S差分(_d基本のひも幅 / 2, -_d基本のひも幅 / 2) '左下に対して
         Dim dSiz As Double = _d基本のひも幅 * 1 / 2
+
 
         'コマが縦に並ぶライン
         For iv As Integer = 1 To _KnotFolderSpace.BottomBaseVerticalCount
@@ -1157,6 +1160,13 @@ Partial Public Class clsCalcKnot
                 komaInfo.setMyValue(True)
                 '横ひも
                 Dim rKoma As S領域 = komaInfo.CurrentKoma.Knot.GetDrawUnit(True)
+
+                '全長
+                Dim strLen As String = outp.outLengthText(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_d出力ひも長)
+                strLen = Parentheses(iv) & " " & strLen
+                item = New clsImageItem(New S実座標(p底右.X, rKoma.p右下.Y + delta右.dY), {strLen}, _d基本のひも幅 * 2 / 3, iv)
+                itemlist.AddItem(item)
+                '
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(komaInfo.CurrentKoma.StartLineRimSide)
                 For Each side As SideIndexEnum In sides
                     Dim str As String = outp.outLengthText(komaInfo.getBandLength(side))
@@ -1191,6 +1201,13 @@ Partial Public Class clsCalcKnot
                 komaInfo.setMyValue(True)
                 '縦ひも
                 Dim rKoma As S領域 = komaInfo.CurrentKoma.Knot.GetDrawUnit(True)
+
+                '全長
+                Dim strLen As String = outp.outLengthText(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_d出力ひも長)
+                strLen = Parentheses(ih) & " " & strLen
+                item = New clsImageItem(New S実座標(rKoma.p左下.X, p底上.Y + ((ih - 1) Mod 5) * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
+                itemlist.AddItem(item)
+                '
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(komaInfo.CurrentKoma.StartLineRimSide)
                 For Each side As SideIndexEnum In sides
                     Dim str As String = outp.outLengthText(komaInfo.getBandLength(side))

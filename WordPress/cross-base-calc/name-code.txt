@@ -17,14 +17,14 @@
 連花	Linked Flowers	BBAA-AB-AB					
 糸巻	Spool	BBAA-BA-AB					
 							
-キャンディー	candy	ABAB-AB-BB					
+キャンディー	Candy	ABAB-AB-BB					
 インベーダー	Invader 	ABAB-BB-AB					
 E.T.	ET	ABAB-BA-AB					
 スズラン	Lily-of-the-Valley 	ABAB-AA-AB					
 連提灯	Lantern Row 	ABAB-AA-BB					
 							
 リボン	Ribbon	BAAB-BB-AB					
-水晶	Cristal	BAAB-BB-BB					
+水晶	Crystal	BAAB-BB-BB					
 ろうそく	Candle	BAAB-AA-AB					
 鉄アレイ	Dumbbell	BAAB-AB-AB					
 猫目	Cat's Eye	BAAB-BB-AA					
@@ -32,7 +32,7 @@ E.T.	ET	ABAB-BA-AB
 ダマスク	Damask	BAAA-BA-ABBA					
 丸花	Rosette	BAAA-BA-AB					
 大花	Big Flower	BAAA-BB-AB					
-松皮菱	Overlapping diamond	ABAA-BB-AB					
+松皮菱	Overlapping Diamond	ABAA-BB-AB					
 X	X 	ABAA-AA-AB					
 バックル	Buckle	ABAA-BA-AB					
 鎖	Chain	ABAA-BA-BB					
