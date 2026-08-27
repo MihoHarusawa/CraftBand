@@ -242,6 +242,8 @@ Partial Class ctrExpanding
         ' 
         f_dひも長加算4.DataPropertyName = "f_dひも長加算"
         DataGridViewCellStyle6.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle6.Format = "N2"
+        DataGridViewCellStyle6.NullValue = Nothing
         f_dひも長加算4.DefaultCellStyle = DataGridViewCellStyle6
         f_dひも長加算4.HeaderText = "ひも長加算"
         f_dひも長加算4.MinimumWidth = 6
@@ -253,6 +255,8 @@ Partial Class ctrExpanding
         ' 
         f_dひも長加算24.DataPropertyName = "f_dひも長加算2"
         DataGridViewCellStyle7.Alignment = Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle7.Format = "N2"
+        DataGridViewCellStyle7.NullValue = Nothing
         f_dひも長加算24.DefaultCellStyle = DataGridViewCellStyle7
         f_dひも長加算24.HeaderText = "ひも長加算2"
         f_dひも長加算24.MinimumWidth = 6

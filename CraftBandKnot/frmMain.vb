@@ -1360,7 +1360,8 @@ Public Class frmMain
 
 #Region "コントロール変更イベント"
     '縦横の展開チェックボックス　※チェックは最初のタブにある
-    Private Sub chk縦横を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横側面を展開する.CheckedChanged
+    Private Sub chk縦横側面を展開する_CheckedChanged(sender As Object, e As EventArgs) Handles chk縦横側面を展開する.CheckedChanged
+        btn同一長の底編み.Visible = chk縦横側面を展開する.Checked AndAlso chk斜め立ち上げ.Checked
         set底の縦横展開(chk縦横側面を展開する.Checked)
         recalc(CalcCategory.Expand, Nothing, Nothing) '高さのコマ数の展開状態
     End Sub
@@ -1460,6 +1461,8 @@ Public Class frmMain
     End Sub
 
     Private Sub chk斜め立ち上げ_CheckedChanged(sender As Object, e As EventArgs) Handles chk斜め立ち上げ.CheckedChanged
+        btn同一長の底編み.Visible = chk縦横側面を展開する.Checked AndAlso chk斜め立ち上げ.Checked
+
         Dim checked As Boolean = chk斜め立ち上げ.Checked
         lblひも長加算_側面.Visible = Not checked
         nudひも長加算_側面.Visible = Not checked
@@ -1514,6 +1517,18 @@ Public Class frmMain
     Private Sub rad左右どちらでも_CheckedChanged(sender As Object, e As EventArgs) Handles radどちらでも.CheckedChanged, rad左側.CheckedChanged, rad右側.CheckedChanged
         '長さに変更はないが、読み取り値をキャッシュするため
         recalc(CalcCategory.Knot, sender)
+    End Sub
+
+    Private Sub btn同一長の底編み_Click(sender As Object, e As EventArgs) Handles btn同一長の底編み.Click
+        If Not _isLoadingData Then
+            If Not _clsCalcKnot.setaddlen_同一長の底編み() Then
+                MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Else
+                '同一長で底編みするための「ひも長加算」値をセットしました。
+                '縦横のコマ数を変更した場合は、再度呼び出してください。
+                MessageBox.Show(My.Resources.MsgSetAdditionals, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+        End If
     End Sub
 
 #End Region

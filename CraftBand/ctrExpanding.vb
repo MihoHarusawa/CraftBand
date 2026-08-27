@@ -36,6 +36,9 @@ Public Class ctrExpanding
             Me.f_dひも長4.DefaultCellStyle.Format = format
             Me.f_d出力ひも長4.DefaultCellStyle.Format = format
             Me.f_d幅4.DefaultCellStyle.Format = format
+            '
+            Me.f_dひも長加算4.DefaultCellStyle.Format = format
+            Me.f_dひも長加算24.DefaultCellStyle.Format = format
         End With
     End Sub
 

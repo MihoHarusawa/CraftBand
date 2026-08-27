@@ -120,6 +120,7 @@ Partial Class frmMain
         txtコマ_対角 = New TextBox()
         chk開始位置 = New CheckBox()
         chk開始ライン = New CheckBox()
+        btn同一長の底編み = New Button()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -1129,6 +1130,17 @@ Partial Class frmMain
         ToolTip1.SetToolTip(chk開始ライン, "開始位置を中心に十字のコマのみ表示")
         chk開始ライン.UseVisualStyleBackColor = True
         ' 
+        ' btn同一長の底編み
+        ' 
+        btn同一長の底編み.Location = New Point(705, 115)
+        btn同一長の底編み.Name = "btn同一長の底編み"
+        btn同一長の底編み.Size = New Size(111, 43)
+        btn同一長の底編み.TabIndex = 26
+        btn同一長の底編み.Text = "同一長の底編み"
+        ToolTip1.SetToolTip(btn同一長の底編み, "縦ひも・横ひもそれぞれについて、" & vbCrLf & "最長のひもに合わせた加算長を加えます")
+        btn同一長の底編み.UseVisualStyleBackColor = True
+        btn同一長の底編み.Visible = False
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1375,6 +1387,7 @@ Partial Class frmMain
         ' 
         ' tpageコマ数
         ' 
+        tpageコマ数.Controls.Add(btn同一長の底編み)
         tpageコマ数.Controls.Add(chk斜め立ち上げ)
         tpageコマ数.Controls.Add(txt編みひも)
         tpageコマ数.Controls.Add(lbl編みひも_単位)
@@ -2568,6 +2581,7 @@ Partial Class frmMain
     Friend WithEvents ctrPreview1 As CraftBand.ctrPreview
     Friend WithEvents ctrPreview2 As CraftBand.ctrPreview
     Friend WithEvents chk開始ライン As CheckBox
+    Friend WithEvents btn同一長の底編み As Button
     Friend WithEvents f_i番号2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名2 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名2 As DataGridViewTextBoxColumn

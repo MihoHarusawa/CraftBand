@@ -367,6 +367,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  底編みを正方形にするには、{0}以上の高さが必要です。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CalcShortSquareBase() As String
+            Get
+                Return ResourceManager.GetString("CalcShortSquareBase", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  左,右 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionExpand4To6() As String
@@ -426,6 +435,16 @@ Namespace My.Resources
         Friend ReadOnly Property ModelNoImage() As String
             Get
                 Return ResourceManager.GetString("ModelNoImage", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  同一長で底編みするための「ひも長加算」値をセットしました。
+        '''縦横のコマ数を変更した場合は、再度呼び出してください。 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property MsgSetAdditionals() As String
+            Get
+                Return ResourceManager.GetString("MsgSetAdditionals", resourceCulture)
             End Get
         End Property
         

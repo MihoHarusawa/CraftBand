@@ -369,6 +369,17 @@ Class clsCalcKnot
         End Get
     End Property
 
+    ReadOnly Property p_i縦横コマ数の大きい方 As Integer '縦横同じならそのコマ数
+        Get
+            If _i横のコマ数 < _i縦のコマ数 Then
+                Return _i縦のコマ数
+            Else
+                Return _i横のコマ数
+            End If
+        End Get
+    End Property
+
+
     'ひも数として縦横同じに扱う
     ReadOnly Property p_iひもの本数 As Integer
         Get
@@ -1648,6 +1659,58 @@ Class clsCalcKnot
 
         '出力ひも長をセット
         set縦横_出力ひも長(row)
+        Return True
+    End Function
+
+    '同一長の底編み:縦横展開のひも長加算を計算
+    '他の変更は全て反映済の状態で呼出し
+    Function setaddlen_同一長の底編み() As Boolean
+        If p_iひもの本数 = 0 OrElse Not _b縦横側面を展開する OrElse Not _b斜め立ち上げ Then
+            '処理に必要な情報がありません。
+            p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
+            Return False
+        End If
+        Dim dHalf As Double = p_i縦横コマ数の大きい方 / 2
+        If _d高さのコマ数 + _i折り返しコマ数 < dHalf Then
+            '底編みを正方形にするには、{0}以上の高さが必要です。
+            p_sメッセージ = String.Format(My.Resources.CalcShortSquareBase, dHalf)
+            Return False
+        End If
+        '
+        Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
+        If yokotable IsNot Nothing AndAlso 0 < yokotable.Count Then
+            For Each row As tbl縦横展開Row In yokotable
+                If row.f_iひも番号 <= _i横のコマ数 Then
+                    row.f_dひも長加算 = (_i横のコマ数 - row.f_iひも番号) * _dコマベース要尺
+                Else
+                    row.f_dひも長加算 = (row.f_iひも番号 - _i横のコマ数 - 1) * _dコマベース要尺
+                End If
+                If row.f_iひも番号 <= _i縦のコマ数 Then
+                    row.f_dひも長加算2 = (_i縦のコマ数 - row.f_iひも番号) * _dコマベース要尺
+                Else
+                    row.f_dひも長加算2 = (row.f_iひも番号 - _i縦のコマ数 - 1) * _dコマベース要尺
+                End If
+            Next
+        End If
+        _Data.FromTmpTable(enumひも種.i_横, yokotable)
+        '
+        Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
+        If tatetable IsNot Nothing AndAlso 0 < tatetable.Count Then
+            For Each row As tbl縦横展開Row In tatetable
+                If row.f_iひも番号 <= _i横のコマ数 Then
+                    row.f_dひも長加算 = (_i横のコマ数 - row.f_iひも番号) * _dコマベース要尺
+                Else
+                    row.f_dひも長加算 = (row.f_iひも番号 - _i横のコマ数 - 1) * _dコマベース要尺
+                End If
+                If row.f_iひも番号 <= _i縦のコマ数 Then
+                    row.f_dひも長加算2 = (_i縦のコマ数 - row.f_iひも番号) * _dコマベース要尺
+                Else
+                    row.f_dひも長加算2 = (row.f_iひも番号 - _i縦のコマ数 - 1) * _dコマベース要尺
+                End If
+            Next
+        End If
+        _Data.FromTmpTable(enumひも種.i_縦, tatetable)
+
         Return True
     End Function
 
