@@ -2130,6 +2130,27 @@ Class clsCalcKnot
         row.f_s編みかた名 = text寸法() & output.outLengthTextWithUnit(_dコマの寸法)
         row.f_s編みひも名 = text要尺() & output.outLengthTextWithUnit(_dコマの要尺)
 
+        '長い順に記号を振る
+        Dim yokoTable As tbl縦横展開DataTable = set横展開DataTable(_b縦横側面を展開する)
+        set縦横_出力ひも長(yokoTable)
+        Dim tateTable As tbl縦横展開DataTable = set縦展開DataTable(_b縦横側面を展開する)
+        set縦横_出力ひも長(tateTable)
+
+        If _b斜め立ち上げ Then
+            '両方のテーブルを AsEnumerable() で繋ぐ
+            Dim query = yokoTable.AsEnumerable().Concat(tateTable.AsEnumerable())
+
+            'LINQを使ってソートし、List(Of tbl縦横展開Row) として取得する
+            Dim sortedRows As List(Of tbl縦横展開Row) = query.OrderByDescending(Function(r) r.Field(Of Double)("f_d出力ひも長")) _
+                                              .ThenBy(Function(r) row.Field(Of String)("f_s色")) _
+                                              .ToList()
+            For Each tt As tbl縦横展開Row In sortedRows
+                tt.f_s記号 = output.GetBandMark(tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
+            Next
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(yokoTable).ToString())
+            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tateTable).ToString())
+        End If
+
         '***底
         'このカテゴリーは先に行をつくる
         row = output.NextNewRow
@@ -2140,25 +2161,30 @@ Class clsCalcKnot
 
             If yokotate = 1 Then
                 row.f_sタイプ = text横置き()
-                tmpTable = set横展開DataTable(_b縦横側面を展開する)
+                'tmpTable = set横展開DataTable(_b縦横側面を展開する)
+                tmpTable = yokoTable
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
             Else
                 row.f_sタイプ = text縦置き()
-                tmpTable = set縦展開DataTable(_b縦横側面を展開する)
+                'tmpTable = set縦展開DataTable(_b縦横側面を展開する)
+                tmpTable = tateTable
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
                 Continue For
             End If
             'レコードあり
+            'set縦横_出力ひも長(tmpTable)
 
             '長い順に記号を振る
-            set縦横_出力ひも長(tmpTable)
-            Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
-            For Each tt As tbl縦横展開Row In tmps
-                tt.f_s記号 = output.GetBandMark(tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
-            Next
-            g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tmpTable).ToString())
+            Dim tmps() As tbl縦横展開Row
+            If Not _b斜め立ち上げ Then
+                tmps = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
+                For Each tt As tbl縦横展開Row In tmps
+                    tt.f_s記号 = output.GetBandMark(tt.f_i何本幅, tt.f_d出力ひも長, tt.f_s色)
+                Next
+                g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "DEBUG:{0}", New clsGroupDataRow(tmpTable).ToString())
+            End If
 
             'リスト出力
             tmps = tmpTable.Select(Nothing, "f_iひも種 ASC, f_iひも番号 ASC")

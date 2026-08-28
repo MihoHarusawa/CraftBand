@@ -308,7 +308,7 @@ Public Class CImageDraw
         _Pen_black_thin = New Pen(Color.Black, cThinPenWidth)
         _Pen_black_thick = New Pen(Drawing.Color.Black, cThickPenWidth)
         _Pen_black_dot = New Pen(Drawing.Color.Black, cThinPenWidth)
-        '_Pen_black_dot.DashStyle = Drawing2D.DashStyle.Dot {1F,1F}
+        '_Pen_black_dot.DashStyle = Drawing2D.DashStyle.Dot {1.0F,1.0F}
         _Pen_black_dot.DashPattern = New Single() {2.0F, 2.0F}
         _Pen_red = New Pen(Drawing.Color.Red, cThickPenWidth)
         _Pen_blue = New Pen(Drawing.Color.Blue, cThickPenWidth)
