@@ -1520,14 +1520,22 @@ Public Class frmMain
     End Sub
 
     Private Sub btn同一長の底編み_Click(sender As Object, e As EventArgs) Handles btn同一長の底編み.Click
-        If Not _isLoadingData Then
-            If Not _clsCalcKnot.setaddlen_同一長の底編み() Then
-                MessageBox.Show(_clsCalcKnot.p_sメッセージ, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Else
-                '同一長で底編みするための「ひも長加算」値をセットしました。
-                '縦横のコマ数を変更した場合は、再度呼び出してください。
-                MessageBox.Show(My.Resources.MsgSetAdditionals, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        If _isLoadingData Then
+            Exit Sub
+        End If
+
+        If Not _clsCalcKnot.Check_同一長の底編み() Then
+            Dim msg As String = _clsCalcKnot.p_sメッセージ
+            '「ひも長加算」値をすべてクリアしますか？
+            msg &= vbCrLf & My.Resources.AskClearAdditionals
+            Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+            If r = DialogResult.Yes Then
+                _clsCalcKnot.Clear_同一長の底編み()
             End If
+        ElseIf _clsCalcKnot.Set_同一長の底編み() Then
+            '同一長で底編みするための「ひも長加算」値をセットしました。
+            '縦横のコマ数を変更した場合は、再度呼び出してください。
+            MessageBox.Show(My.Resources.MsgSetAdditionals, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 

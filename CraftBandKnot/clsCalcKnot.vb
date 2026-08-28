@@ -1662,10 +1662,13 @@ Class clsCalcKnot
         Return True
     End Function
 
-    '同一長の底編み:縦横展開のひも長加算を計算
-    '他の変更は全て反映済の状態で呼出し
-    Function setaddlen_同一長の底編み() As Boolean
-        If p_iひもの本数 = 0 OrElse Not _b縦横側面を展開する OrElse Not _b斜め立ち上げ Then
+
+    '*同一長の底編み:縦横展開のひも長加算を計算
+    '他の変更は全て反映済の状態で呼出される想定
+
+    '処理可能かチェック、可能ならTrue、不可ならFalseを返す
+    Function Check_同一長の底編み() As Boolean
+        If p_iひもの本数 < 3 OrElse Not _b縦横側面を展開する OrElse Not _b斜め立ち上げ Then
             '処理に必要な情報がありません。
             p_sメッセージ = String.Format(My.Resources.CalcNoInformation)
             Return False
@@ -1676,6 +1679,35 @@ Class clsCalcKnot
             p_sメッセージ = String.Format(My.Resources.CalcShortSquareBase, dHalf)
             Return False
         End If
+
+        Return True
+    End Function
+
+    'ひも長加算をクリアする
+    Function Clear_同一長の底編み() As Boolean
+        Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
+        If yokotable IsNot Nothing AndAlso 0 < yokotable.Count Then
+            For Each row As tbl縦横展開Row In yokotable
+                row.f_dひも長加算 = 0
+                row.f_dひも長加算2 = 0
+            Next
+        End If
+        _Data.FromTmpTable(enumひも種.i_横, yokotable)
+        '
+        Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
+        If tatetable IsNot Nothing AndAlso 0 < tatetable.Count Then
+            For Each row As tbl縦横展開Row In tatetable
+                row.f_dひも長加算 = 0
+                row.f_dひも長加算2 = 0
+            Next
+        End If
+        _Data.FromTmpTable(enumひも種.i_縦, tatetable)
+
+        Return True
+    End Function
+
+    'ひも長加算値をセットする
+    Function Set_同一長の底編み() As Boolean
         '
         Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
         If yokotable IsNot Nothing AndAlso 0 < yokotable.Count Then

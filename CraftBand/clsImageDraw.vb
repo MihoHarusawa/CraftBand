@@ -308,7 +308,8 @@ Public Class CImageDraw
         _Pen_black_thin = New Pen(Color.Black, cThinPenWidth)
         _Pen_black_thick = New Pen(Drawing.Color.Black, cThickPenWidth)
         _Pen_black_dot = New Pen(Drawing.Color.Black, cThinPenWidth)
-        _Pen_black_dot.DashStyle = Drawing2D.DashStyle.Dot
+        '_Pen_black_dot.DashStyle = Drawing2D.DashStyle.Dot {1F,1F}
+        _Pen_black_dot.DashPattern = New Single() {2.0F, 2.0F}
         _Pen_red = New Pen(Drawing.Color.Red, cThickPenWidth)
         _Pen_blue = New Pen(Drawing.Color.Blue, cThickPenWidth)
         _Brush_black = New SolidBrush(Drawing.Color.Black)
@@ -687,7 +688,7 @@ Public Class CImageDraw
     Function draw折り返し線(ByVal item As clsImageItem) As Boolean
         Dim ltype As LineTypeEnum = item.m_ltype
         If ltype = LineTypeEnum._nodef Then
-            ltype = LineTypeEnum._red
+            ltype = LineTypeEnum._blue '底の中央線と異なる色
         End If
         Return draw_linelist(item.m_lineList, ltype)
     End Function
@@ -1185,7 +1186,8 @@ Public Class CImageDraw
 
     Function draw軸線(ByVal item As clsImageItem) As Boolean
         For Each line As S線分 In item.m_lineList
-            _Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+            '_Graphic.DrawLine(_Pen_black_dot, pixcel_point(line.p開始), pixcel_point(line.p終了))
+            _Graphic.DrawLine(_Pen_black_thin, pixcel_point(line.p開始), pixcel_point(line.p終了))
         Next
         Return True
     End Function

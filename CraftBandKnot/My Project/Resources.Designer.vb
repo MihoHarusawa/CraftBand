@@ -70,6 +70,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  「ひも長加算」値をすべてクリアしますか？ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property AskClearAdditionals() As String
+            Get
+                Return ResourceManager.GetString("AskClearAdditionals", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  このままリスト出力を行いますか？ に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property AskOutput() As String

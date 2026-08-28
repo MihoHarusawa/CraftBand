@@ -102,10 +102,8 @@ Partial Public Class clsCalcKnot
         'コマへの記号(記号表示⊂縁側)
         If isDispMark AndAlso Not isAllBand Then
             If isBottomOnly Then
-                If isStartLine AndAlso Not isStartPosition Then
+                If isStartLine Then
                     knot.SetMarkDisp(knotfolder.StartLineMarkSide)
-                ElseIf isStartLine AndAlso isStartPosition Then
-                    '記号なし
                 ElseIf knotfolder.BottomBaseMarkSide <> cDirectionEnumNone Then
                     knot.SetMarkDisp(knotfolder.BottomBaseMarkSide)
                 End If
@@ -747,7 +745,44 @@ Partial Public Class clsCalcKnot
         itemlist.AddItem(item)
 
 
-        '**ペアのコマ線(ペアがあるとき)
+        '** 同一＆最長の範囲ライン
+        If isStartLine Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
+            item.m_ltype = LineTypeEnum._black_dot
+
+            'クロス点の正方形
+            Dim r中央領域 As New S領域(p上クロス点, p下クロス点)
+            item.m_a四隅 = New S四隅(r中央領域)
+            Dim mlen As Double = p_i縦横コマ数の小さい方 * _dコマベース寸法
+            If p下クロス点.X < p上クロス点.X Then
+                Dim p左上点 As S実座標 = r中央領域.p左上
+                Dim p右下点 As S実座標 = r中央領域.p右下
+                line = New clsImageItem.S線分(p左上点, p左上点 + Unit90 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p左上点, p左上点 + Unit180 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p右下点, p右下点 + Unit0 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p右下点, p右下点 + Unit270 * mlen)
+                item.m_lineList.Add(line)
+            Else
+                Dim p右上点 As S実座標 = r中央領域.p右上
+                Dim p左下点 As S実座標 = r中央領域.p左下
+                line = New clsImageItem.S線分(p右上点, p右上点 + Unit90 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p右上点, p右上点 + Unit0 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p左下点, p左下点 + Unit180 * mlen)
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p左下点, p左下点 + Unit270 * mlen)
+                item.m_lineList.Add(line)
+            End If
+            itemlist.AddItem(item)
+
+        End If
+
+
+        '**側面ペアのコマ線(ペアがあるとき)
         If 0 = p_i側面の切捨コマ数 OrElse isBottomOnly OrElse isStartLine Then
             Return itemlist
         End If
@@ -1146,9 +1181,9 @@ Partial Public Class clsCalcKnot
         Dim p底上 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + 1, _KnotFolderSpace.HeightCount - 1))
 
         Dim item As clsImageItem
-        Dim delta左 As New S差分(-_d基本のひも幅 * 3.5, _d基本のひも幅 * 1.5) '左下に対して
+        Dim delta左 As New S差分(-_d基本のひも幅 * 5, _d基本のひも幅 * 1.5) '左下に対して
         Dim delta右 As New S差分(_d基本のひも幅, _d基本のひも幅 * 1.5) '右下に対して
-        Dim delta上 As New S差分(_d基本のひも幅 / 2, _d基本のひも幅) '左上に対して
+        Dim delta上 As New S差分(_d基本のひも幅 / 2, _d基本のひも幅 * 3) '左上に対して
         Dim delta下 As New S差分(_d基本のひも幅 / 2, -_d基本のひも幅 / 2) '左下に対して
         Dim dSiz As Double = _d基本のひも幅 * 1 / 2
 
@@ -1163,7 +1198,7 @@ Partial Public Class clsCalcKnot
 
                 '全長
                 Dim strLen As String = outp.outLengthText(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_d出力ひも長)
-                strLen = Parentheses(iv) & " " & strLen
+                strLen = "[" & iv.ToString & "] " & strLen
                 item = New clsImageItem(New S実座標(p底右.X, rKoma.p右下.Y + delta右.dY), {strLen}, _d基本のひも幅 * 2 / 3, iv)
                 itemlist.AddItem(item)
                 '
@@ -1184,7 +1219,7 @@ Partial Public Class clsCalcKnot
                             p = rKoma.p左下 + delta下
                         Case SideIndexEnum._左側
                             p = rKoma.p左下 + delta左
-                            str = Parentheses(iv) & " " & str
+                            str = Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号) & " " & str
                         Case SideIndexEnum._右側
                             p = rKoma.p右下 + delta右
                     End Select
@@ -1195,6 +1230,8 @@ Partial Public Class clsCalcKnot
         Next
 
         'コマが横に並ぶライン
+        Dim iy_pos As Integer = 0
+        Dim last_strlen As String = ""
         For ih As Integer = 1 To _KnotFolderSpace.BottomBaseHorizontalCount
             Dim komaInfo As New CBottomBaseBandInfo(Me, ih, _i上から何番目)
             If komaInfo.IsValid Then
@@ -1204,8 +1241,20 @@ Partial Public Class clsCalcKnot
 
                 '全長
                 Dim strLen As String = outp.outLengthText(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_d出力ひも長)
-                strLen = Parentheses(ih) & " " & strLen
-                item = New clsImageItem(New S実座標(rKoma.p左下.X, p底上.Y + ((ih - 1) Mod 5) * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
+                If last_strlen = strLen Then
+                    last_strlen = strLen
+                    strLen = ""
+                Else
+                    If Val(last_strlen) < Val(strLen) Then
+                        iy_pos += 1
+                    Else
+                        iy_pos -= 1
+                    End If
+                    last_strlen = strLen
+                End If
+                '
+                strLen = "[" & ih.ToString & "] " & strLen
+                item = New clsImageItem(New S実座標(rKoma.p左下.X, p底上.Y + iy_pos * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
                 itemlist.AddItem(item)
                 '
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(komaInfo.CurrentKoma.StartLineRimSide)
@@ -1217,7 +1266,7 @@ Partial Public Class clsCalcKnot
                         Case SideIndexEnum._上側
                             p = rKoma.p左上 + delta上
                         Case SideIndexEnum._下側
-                            ary = {Parentheses(ih), str}
+                            ary = {Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号), str}
                             p = rKoma.p左下 + delta下
                         Case SideIndexEnum._左側 'ih=1のみ
                             If _i左から何番目 = 1 Then
