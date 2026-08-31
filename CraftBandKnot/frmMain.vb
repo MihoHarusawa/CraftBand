@@ -6,6 +6,7 @@ Imports CraftBand.ctrDataGridView
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandKnot.clsCalcKnot
+Imports CraftBandKnot.frmSameSelect
 
 Public Class frmMain
     Implements ICommonActions
@@ -1519,24 +1520,31 @@ Public Class frmMain
         recalc(CalcCategory.Knot, sender)
     End Sub
 
+
+    Private _currentSelection As EnumSameSelect = EnumSameSelect.Same_クリア
+
     Private Sub btn同一長の底編み_Click(sender As Object, e As EventArgs) Handles btn同一長の底編み.Click
         If _isLoadingData Then
             Exit Sub
         End If
 
+        Dim errMsg As String = String.Empty
         If Not _clsCalcKnot.Check_同一長の底編み() Then
-            Dim msg As String = _clsCalcKnot.p_sメッセージ
-            '「ひも長加算」値をすべてクリアしますか？
-            msg &= vbCrLf & My.Resources.AskClearAdditionals
-            Dim r As DialogResult = MessageBox.Show(msg, Me.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
-            If r = DialogResult.Yes Then
-                _clsCalcKnot.Clear_同一長の底編み()
-            End If
-        ElseIf _clsCalcKnot.Set_同一長の底編み() Then
-            '同一長で底編みするための「ひも長加算」値をセットしました。
-            '縦横のコマ数を変更した場合は、再度呼び出してください。
-            MessageBox.Show(My.Resources.MsgSetAdditionals, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            errMsg = _clsCalcKnot.p_sメッセージ
         End If
+
+        Using dlg As New frmSameSelect(_currentSelection, errMsg)
+            If dlg.ShowDialog() = DialogResult.OK Then
+                _currentSelection = dlg.SelectedResult
+
+                If _clsCalcKnot.Set_同一長の底編み(_currentSelection) Then
+                    '同一長で底編みするための「ひも長加算」値をセットしました。
+                    '縦横のコマ数を変更した場合は、再度呼び出してください。
+                    MessageBox.Show(My.Resources.MsgSetAdditionals, Me.Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+                Exit Sub
+            End If
+        End Using 'dlg破棄(Dispose)
     End Sub
 
 #End Region

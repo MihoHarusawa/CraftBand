@@ -268,7 +268,9 @@ Partial Public Class clsCalcKnot
         '縁のひも長加算値上下/左右が反転しているかどうか)
         Dim m_isRowReverse(cExpYTCount - 1) As Boolean
 
-        '描画情報
+        '描画位置(コマ寸法)
+        Friend m_regionKnotDraw As S領域
+        'コマ情報
         Property Knot As CKnot = Nothing
 
         '底編み領域の情報

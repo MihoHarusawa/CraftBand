@@ -7,6 +7,7 @@ Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBand.Tables.dstOutput
+Imports CraftBandKnot.frmSameSelect
 
 Class clsCalcKnot
     Private _disposedValue As Boolean
@@ -1683,45 +1684,56 @@ Class clsCalcKnot
         Return True
     End Function
 
-    'ひも長加算をクリアする
-    Function Clear_同一長の底編み() As Boolean
-        Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
-        If yokotable IsNot Nothing AndAlso 0 < yokotable.Count Then
-            For Each row As tbl縦横展開Row In yokotable
-                row.f_dひも長加算 = 0
-                row.f_dひも長加算2 = 0
-            Next
-        End If
-        _Data.FromTmpTable(enumひも種.i_横, yokotable)
-        '
-        Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
-        If tatetable IsNot Nothing AndAlso 0 < tatetable.Count Then
-            For Each row As tbl縦横展開Row In tatetable
-                row.f_dひも長加算 = 0
-                row.f_dひも長加算2 = 0
-            Next
-        End If
-        _Data.FromTmpTable(enumひも種.i_縦, tatetable)
+    Private Function get_ひも長加算(ByVal selection As EnumSameSelect, ByVal iひも番号 As Integer) As Integer
+        Select Case selection
+            Case EnumSameSelect.Same_縦横
+                If iひも番号 <= _i横のコマ数 Then
+                    Return (_i横のコマ数 - iひも番号)
+                Else
+                    Return (iひも番号 - _i横のコマ数 - 1)
+                End If
 
-        Return True
+            Case EnumSameSelect.Same_対角線
+                If iひも番号 <= _i横のコマ数 Then
+                    Return (_i横のコマ数 - iひも番号) * 2 + 1
+                Else
+                    Return 0
+                End If
+
+            Case Else
+                Return 0
+        End Select
+    End Function
+
+    Private Function get_ひも長加算2(ByVal selection As EnumSameSelect, ByVal iひも番号 As Integer) As Integer
+        Select Case selection
+            Case EnumSameSelect.Same_縦横
+                If iひも番号 <= _i縦のコマ数 Then
+                    Return (_i縦のコマ数 - iひも番号)
+                Else
+                    Return (iひも番号 - _i縦のコマ数 - 1)
+                End If
+
+            Case EnumSameSelect.Same_対角線
+                If iひも番号 <= _i縦のコマ数 Then
+                    Return 0
+                Else
+                    Return (iひも番号 - _i縦のコマ数) * 2 - 1
+                End If
+
+            Case Else
+                Return 0
+        End Select
     End Function
 
     'ひも長加算値をセットする
-    Function Set_同一長の底編み() As Boolean
+    Function Set_同一長の底編み(ByVal selection As EnumSameSelect) As Boolean
         '
         Dim yokotable As tbl縦横展開DataTable = set横展開DataTable(True)
         If yokotable IsNot Nothing AndAlso 0 < yokotable.Count Then
             For Each row As tbl縦横展開Row In yokotable
-                If row.f_iひも番号 <= _i横のコマ数 Then
-                    row.f_dひも長加算 = (_i横のコマ数 - row.f_iひも番号) * _dコマベース要尺
-                Else
-                    row.f_dひも長加算 = (row.f_iひも番号 - _i横のコマ数 - 1) * _dコマベース要尺
-                End If
-                If row.f_iひも番号 <= _i縦のコマ数 Then
-                    row.f_dひも長加算2 = (_i縦のコマ数 - row.f_iひも番号) * _dコマベース要尺
-                Else
-                    row.f_dひも長加算2 = (row.f_iひも番号 - _i縦のコマ数 - 1) * _dコマベース要尺
-                End If
+                row.f_dひも長加算 = get_ひも長加算(selection, row.f_iひも番号) * _dコマベース要尺
+                row.f_dひも長加算2 = get_ひも長加算2(selection, row.f_iひも番号) * _dコマベース要尺
             Next
         End If
         _Data.FromTmpTable(enumひも種.i_横, yokotable)
@@ -1729,22 +1741,16 @@ Class clsCalcKnot
         Dim tatetable As tbl縦横展開DataTable = set縦展開DataTable(True)
         If tatetable IsNot Nothing AndAlso 0 < tatetable.Count Then
             For Each row As tbl縦横展開Row In tatetable
-                If row.f_iひも番号 <= _i横のコマ数 Then
-                    row.f_dひも長加算 = (_i横のコマ数 - row.f_iひも番号) * _dコマベース要尺
-                Else
-                    row.f_dひも長加算 = (row.f_iひも番号 - _i横のコマ数 - 1) * _dコマベース要尺
-                End If
-                If row.f_iひも番号 <= _i縦のコマ数 Then
-                    row.f_dひも長加算2 = (_i縦のコマ数 - row.f_iひも番号) * _dコマベース要尺
-                Else
-                    row.f_dひも長加算2 = (row.f_iひも番号 - _i縦のコマ数 - 1) * _dコマベース要尺
-                End If
+                row.f_dひも長加算 = get_ひも長加算(selection, row.f_iひも番号) * _dコマベース要尺
+                row.f_dひも長加算2 = get_ひも長加算2(selection, row.f_iひも番号) * _dコマベース要尺
             Next
         End If
         _Data.FromTmpTable(enumひも種.i_縦, tatetable)
 
-        Return True
+        Return {EnumSameSelect.Same_縦横, EnumSameSelect.Same_対角線}.Contains(selection)
     End Function
+
+
 
 #End Region
 
@@ -1807,6 +1813,7 @@ Class clsCalcKnot
             If CurrentKoma Is Nothing OrElse Not CurrentKoma.IsBottomBase OrElse CurrentKoma.BandSetCount() < 2 Then
                 Return
             End If
+            'CurrentKoma.Knot はコマが描画対象の時のみ生成
 
             row横展開 = CurrentKoma.m_row縦横展開(emExp._Yoko)
             row縦展開 = CurrentKoma.m_row縦横展開(emExp._Tate)
@@ -2204,7 +2211,8 @@ Class clsCalcKnot
                     tmp = tmps(i)
                 End If
                 If tmp IsNot Nothing AndAlso
-                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 Then
+                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 AndAlso
+                    lasttmp.f_dひも長加算 = tmp.f_dひも長加算 AndAlso lasttmp.f_dひも長加算2 = tmp.f_dひも長加算2 Then
                     '同じひも種・記号の継続
                     contcount += 1
                     If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
