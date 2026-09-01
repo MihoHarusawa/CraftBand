@@ -32,6 +32,7 @@ An application for calculating sizes for Yotsudatami
 Each band type has its own gauge, and required length and unit size can be calculated using
 measured values, calculated coefficients, or default coefficients.  
 Preview images reflect unit shape (left/right) and band colors.
+Now supports diagonal weaving as well.
 
 ## CraftBandSquare / CraftBandSquare.exe
 An application for calculating sizes when raising a vertically and horizontally woven base directly.  
@@ -169,14 +170,14 @@ echo Exit code: %ERRORLEVEL%
 
 
 # Current Binary Version
-- Installer         1.9.3
-- CraftBand.dll     1.9.3.0
-- CraftBandMesh     1.9.3.0
-- CraftBandSqare45  1.6.3.0
-- CraftBandKnot     1.5.3.0
-- CraftBandSquare   1.4.3.0
-- CraftBandHexagon  1.1.3.0
-- CbMesh            1.0.3.0
+- Installer         1.9.4
+- CraftBand.dll     1.9.4.0
+- CraftBandMesh     1.9.4.0
+- CraftBandSqare45  1.6.4.0
+- CraftBandKnot     1.5.4.0
+- CraftBandSquare   1.4.4.0
+- CraftBandHexagon  1.1.4.0
+- CbMesh            1.0.4.0
 
 
 # Documentation

@@ -30,6 +30,7 @@ CraftBandMesh シリーズは、クラフトバンド／紙バンドなどの帯
 バンドの種類ごとにゲージを持ち、要尺やコマ寸法について  
 実測値／実測値から算出した係数／既定の係数のいずれを使用するか設定できます。  
 コマの形状（右側・左側）やひもの色に応じたプレビュー画像で完成形を確認できます。
+斜め編みにも対応しました。
 
 ## CraftBandSquare / CraftBandSquare.exe
 縦横に組んだ底をそのまま立ち上げる方式のサイズ計算を行うアプリです。  
@@ -166,14 +167,14 @@ echo Exit code: %ERRORLEVEL%
 
 
 # Current Binary Version
-- Installer         1.9.3
-- CraftBand.dll     1.9.3.0
-- CraftBandMesh     1.9.3.0
-- CraftBandSqare45  1.6.3.0
-- CraftBandKnot     1.5.3.0
-- CraftBandSquare   1.4.3.0
-- CraftBandHexagon  1.1.3.0
-- CbMesh            1.0.3.0
+- Installer         1.9.4
+- CraftBand.dll     1.9.4.0
+- CraftBandMesh     1.9.4.0
+- CraftBandSqare45  1.6.4.0
+- CraftBandKnot     1.5.4.0
+- CraftBandSquare   1.4.4.0
+- CraftBandHexagon  1.1.4.0
+- CbMesh            1.0.4.0
 
 
 # Documentation
