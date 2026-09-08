@@ -751,10 +751,29 @@ Partial Public Class clsCalcKnot
         item.m_lineList.Add(line)
         itemlist.AddItem(item)
 
+        '** 中央線の斜めライン延長
+        If isBottomOnly AndAlso _KnotFolderSpace.IsDiagonalSameLength Then
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
+            item.m_ltype = LineTypeEnum._red
+
+            If p下クロス点.X < p上クロス点.X Then
+                line = New clsImageItem.S線分(p上クロス点, New S実座標(pD1.X, pA1.Y))
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p下クロス点, New S実座標(pB1.X, pC1.Y))
+                item.m_lineList.Add(line)
+            Else
+                line = New clsImageItem.S線分(p上クロス点, New S実座標(pB1.X, pA1.Y))
+                item.m_lineList.Add(line)
+                line = New clsImageItem.S線分(p下クロス点, New S実座標(pD1.X, pC1.Y))
+                item.m_lineList.Add(line)
+            End If
+            item.m_lineList.Add(line)
+            itemlist.AddItem(item)
+        End If
 
         '** 同一＆最長の範囲ライン
         If isStartLine Then
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 2)
             item.m_ltype = LineTypeEnum._black_dot
 
             'クロス点の正方形
@@ -1186,7 +1205,7 @@ Partial Public Class clsCalcKnot
             ElseIf startInfo.i上から何番目 = p_iひもの本数 Then
                 dir = dir And Not DirectionEnum._下
             End If
-            bottomBaseLength(dir, outp, itemlist)
+            bottomBaseLength(startInfo.i左から何番目, startInfo.i上から何番目, dir, outp, itemlist)
         End If
 
 
@@ -1288,7 +1307,8 @@ Partial Public Class clsCalcKnot
     End Function
 
     '上下左右の残り長さと全体長さ
-    Private Function bottomBaseLength(ByVal dir As DirectionEnum, ByVal outp As clsOutput, ByVal itemlist As clsImageItemList) As Boolean
+    Private Function bottomBaseLength(ByVal _i左から何番目 As Integer, ByVal _i上から何番目 As Integer,
+                                      ByVal dir As DirectionEnum, ByVal outp As clsOutput, ByVal itemlist As clsImageItemList) As Boolean
 
         Dim p底右 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + _KnotFolderSpace.BottomBaseHorizontalCount + 3, 1))
         Dim p底上 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + 1, _KnotFolderSpace.HeightCount - 1))
@@ -1327,6 +1347,11 @@ Partial Public Class clsCalcKnot
                 item = New clsImageItem(New S実座標(p底右.X + ix_pos * dSiz, rKomaR.p右下.Y + delta右.dY), {strLen}, _d基本のひも幅 * 2 / 3, iv)
                 itemlist.AddItem(item)
 
+                '開始位置からの相対番号
+                Dim strDif As String = Parentheses(Math.Abs(iv - _i上から何番目) + 1)
+                item = New clsImageItem(New S実座標(p底右.X - dSiz * 3, rKomaR.p右下.Y + delta右.dY), {strDif}, _d基本のひも幅 * 2 / 3, iv)
+                itemlist.AddItem(item)
+
 
                 Dim p As S実座標
 
@@ -1342,6 +1367,7 @@ Partial Public Class clsCalcKnot
                     item = New clsImageItem(p, {strR}, dSiz, iv)
                     itemlist.AddItem(item)
                 End If
+
             End If
         Next
 
@@ -1375,6 +1401,12 @@ Partial Public Class clsCalcKnot
                 strLen = "[" & ih.ToString & "] " & strLen
                 item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y + iy_pos * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
                 itemlist.AddItem(item)
+
+                '開始位置からの相対番号
+                Dim strDif As String = Parentheses(Math.Abs(ih - _i左から何番目) + 1)
+                item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y - _d基本のひも幅), {strDif}, _d基本のひも幅 * 2 / 3, ih)
+                itemlist.AddItem(item)
+
 
                 Dim p As S実座標
 

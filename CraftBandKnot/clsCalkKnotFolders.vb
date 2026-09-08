@@ -683,6 +683,10 @@ Partial Public Class clsCalcKnot
             '開始位置のコマ位置
             Public ReadOnly Property StartKomaPosition As SPosition
 
+            '斜め配置かつ同一長のフラグ
+            Friend Property IsDiagonalSameLength As Boolean
+
+
 
             Public Sub New()
             End Sub
@@ -698,6 +702,7 @@ Partial Public Class clsCalcKnot
                     _IsValid = False
                 End If
 
+                _IsDiagonalSameLength = False
                 _HorizontalCount = width
                 _VerticalCount = height
 
@@ -1572,6 +1577,10 @@ Partial Public Class clsCalcKnot
         '_KnotFolderSpace.StartKomaPosition = New SPosition(p_i側面の切捨コマ数 + _i左から何番目, p_i側面の切捨コマ数 + _i上から何番目)
         _KnotFolderSpace.SetStartKomaSetting(_i左から何番目, _i上から何番目)
 
+        '長さ比較
+        Dim flgLen As Integer = 0   '0:対象なし 1:一致 -1:不一致
+        Dim sameLen As Integer = 0 '単位によらず整数化の簡易比較
+
         '横ひも
         For Each row As tbl縦横展開Row In _tbl縦横展開(emExp._Yoko).Select(Nothing, "f_iひも番号 ASC")
             Dim idx As Integer = row.f_iひも番号
@@ -1587,6 +1596,13 @@ Partial Public Class clsCalcKnot
                 If knotfolder IsNot Nothing Then
                     If knotfolder.IsInBottomOrSidePlate() Then
                         knotfolder.m_row縦横展開(emExp._Yoko) = row
+                        '長さ比較
+                        If flgLen = 0 Then
+                            sameLen = CInt(row.f_d出力ひも長)
+                            flgLen = 1
+                        ElseIf 0 < flgLen AndAlso sameLen <> CInt(row.f_d出力ひも長) Then
+                            flgLen = -1
+                        End If
                     End If
                 End If
             Next
@@ -1607,10 +1623,23 @@ Partial Public Class clsCalcKnot
                 If knotfolder IsNot Nothing Then
                     If knotfolder.IsInBottomOrSidePlate Then
                         knotfolder.m_row縦横展開(emExp._Tate) = row
+                        '長さ比較
+                        If flgLen = 0 Then
+                            sameLen = CInt(row.f_d出力ひも長)
+                            flgLen = 1
+                        ElseIf 0 < flgLen AndAlso sameLen <> CInt(row.f_d出力ひも長) Then
+                            flgLen = -1
+                        End If
+
                     End If
                 End If
             Next
         Next
+
+        If flgLen = 1 Then
+            '長さがほぼ一致
+            _KnotFolderSpace.IsDiagonalSameLength = True
+        End If
 
         '側面への編み上げ
         Return _KnotFolderSpace.BottomExtendToSides()

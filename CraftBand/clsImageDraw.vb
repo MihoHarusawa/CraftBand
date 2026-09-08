@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar
 Imports CraftBand.clsImageItem
 Imports CraftBand.clsMasterTables
 
@@ -610,6 +611,16 @@ Public Class CImageDraw
     End Function
 
     Function drawコマ(ByVal item As clsImageItem) As Boolean
+        '縦横がともに描画対象であること
+        Dim colsetY As CPenBrush = GetBandPenBrush(item.m_knot.band横上._s色)
+        If colsetY Is Nothing OrElse colsetY.IsNoDrawing Then
+            Return True 'skip
+        End If
+        Dim colsetT As CPenBrush = GetBandPenBrush(item.m_knot.band縦上._s色)
+        If colsetT Is Nothing OrElse colsetT.IsNoDrawing Then
+            Return True 'skip
+        End If
+
         drawバンド(item.m_knot.band横上)
         drawバンド(item.m_knot.band横下)
         drawバンド(item.m_knot.band縦上)
