@@ -1205,7 +1205,7 @@ Partial Public Class clsCalcKnot
             ElseIf startInfo.i上から何番目 = p_iひもの本数 Then
                 dir = dir And Not DirectionEnum._下
             End If
-            bottomBaseLength(startInfo.i左から何番目, startInfo.i上から何番目, dir, outp, itemlist)
+            bottomBaseLength(dir, outp, itemlist)
         End If
 
 
@@ -1251,7 +1251,8 @@ Partial Public Class clsCalcKnot
                         '    p = rKoma.p左下 + delta下
                         Case SideIndexEnum._左側
                             p = rKoma.p左下 + delta左
-                            str = Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号) & " " & str
+                            'str = Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号) & " " & str
+                            str = Parentheses(Math.Abs(iv - _i上から何番目) + 1) & " " & str'開始位置からの相対番号
                         Case SideIndexEnum._右側
                             p = rKoma.p右下 + delta右
                         Case Else
@@ -1292,7 +1293,8 @@ Partial Public Class clsCalcKnot
                         Case SideIndexEnum._上側
                             p = rKoma.p左上 + delta上
                         Case SideIndexEnum._下側
-                            ary = {str, Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号)}
+                            'ary = {str, Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号)}
+                            ary = {str, Parentheses(Math.Abs(ih - _i左から何番目) + 1)} '開始位置からの相対番号
                             p = rKoma.p左下 + delta下
                         Case Else
                             Continue For
@@ -1307,8 +1309,7 @@ Partial Public Class clsCalcKnot
     End Function
 
     '上下左右の残り長さと全体長さ
-    Private Function bottomBaseLength(ByVal _i左から何番目 As Integer, ByVal _i上から何番目 As Integer,
-                                      ByVal dir As DirectionEnum, ByVal outp As clsOutput, ByVal itemlist As clsImageItemList) As Boolean
+    Private Function bottomBaseLength(ByVal dir As DirectionEnum, ByVal outp As clsOutput, ByVal itemlist As clsImageItemList) As Boolean
 
         Dim p底右 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + _KnotFolderSpace.BottomBaseHorizontalCount + 3, 1))
         Dim p底上 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(_KnotFolderSpace.HeightCount + 1, _KnotFolderSpace.HeightCount - 1))
@@ -1347,8 +1348,9 @@ Partial Public Class clsCalcKnot
                 item = New clsImageItem(New S実座標(p底右.X + ix_pos * dSiz, rKomaR.p右下.Y + delta右.dY), {strLen}, _d基本のひも幅 * 2 / 3, iv)
                 itemlist.AddItem(item)
 
-                '開始位置からの相対番号
-                Dim strDif As String = Parentheses(Math.Abs(iv - _i上から何番目) + 1)
+                '位置番号
+                'Dim strDif As String = Parentheses(Math.Abs(iv - _i上から何番目) + 1)
+                Dim strDif As String = Parentheses(komaInfoR.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号)
                 item = New clsImageItem(New S実座標(p底右.X - dSiz * 3, rKomaR.p右下.Y + delta右.dY), {strDif}, _d基本のひも幅 * 2 / 3, iv)
                 itemlist.AddItem(item)
 
@@ -1402,8 +1404,9 @@ Partial Public Class clsCalcKnot
                 item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y + iy_pos * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
                 itemlist.AddItem(item)
 
-                '開始位置からの相対番号
-                Dim strDif As String = Parentheses(Math.Abs(ih - _i左から何番目) + 1)
+                '位置番号
+                'Dim strDif As String = Parentheses(Math.Abs(ih - _i左から何番目) + 1)
+                Dim strDif As String = Parentheses(komaInfoU.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号)
                 item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y - _d基本のひも幅), {strDif}, _d基本のひも幅 * 2 / 3, ih)
                 itemlist.AddItem(item)
 
