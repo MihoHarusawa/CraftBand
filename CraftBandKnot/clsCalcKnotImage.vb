@@ -383,7 +383,7 @@ Partial Public Class clsCalcKnot
 
         '折り返し線
         Dim itemFolding As clsImageItem = Nothing
-        If 0 < d折り返し高さ AndAlso Not isBottomOnly Then
+        If 0 < d折り返し高さ Then 'AndAlso Not isBottomOnly Then '#115
             itemFolding = New clsImageItem(clsImageItem.ImageTypeEnum._折り返し線, 1)
         End If
 
