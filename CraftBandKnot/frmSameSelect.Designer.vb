@@ -117,9 +117,11 @@ Partial Class frmSameSelect
         Controls.Add(rad対角線同一)
         Controls.Add(rad縦横同一)
         Controls.Add(lbl長さ指定)
+        FormBorderStyle = FormBorderStyle.FixedDialog
         MaximizeBox = False
         MinimizeBox = False
         Name = "frmSameSelect"
+        SizeGripStyle = SizeGripStyle.Hide
         StartPosition = FormStartPosition.CenterParent
         Text = "同一長の指定"
         ResumeLayout(False)
