@@ -1684,6 +1684,7 @@ Class clsCalcKnot
         Return True
     End Function
 
+    'コマ単位の加算値(左・上)
     Private Function get_ひも長加算(ByVal selection As EnumSameSelect, ByVal iひも番号 As Integer) As Integer
         Select Case selection
             Case EnumSameSelect.Same_縦横
@@ -1694,10 +1695,22 @@ Class clsCalcKnot
                 End If
 
             Case EnumSameSelect.Same_対角線
-                If iひも番号 <= _i横のコマ数 Then
-                    Return (_i横のコマ数 - iひも番号) * 2 + 1
+                If p_b横のコマ数が縦以上 Then
+                    '右上がり
+                    If iひも番号 <= _i横のコマ数 Then
+                        Return 0
+                    Else
+                        Return (iひも番号 - _i横のコマ数) * 2 - 1
+                    End If
+
                 Else
-                    Return 0
+                    '左上がり
+                    If iひも番号 <= _i横のコマ数 Then
+                        Return (_i横のコマ数 - iひも番号) * 2 + 1
+                    Else
+                        Return 0
+                    End If
+
                 End If
 
             Case Else
@@ -1705,6 +1718,7 @@ Class clsCalcKnot
         End Select
     End Function
 
+    'コマ単位の加算値(右・下)
     Private Function get_ひも長加算2(ByVal selection As EnumSameSelect, ByVal iひも番号 As Integer) As Integer
         Select Case selection
             Case EnumSameSelect.Same_縦横
@@ -1715,10 +1729,22 @@ Class clsCalcKnot
                 End If
 
             Case EnumSameSelect.Same_対角線
-                If iひも番号 <= _i縦のコマ数 Then
-                    Return 0
+                If p_b横のコマ数が縦以上 Then
+                    '右上がり
+                    If iひも番号 <= _i縦のコマ数 Then
+                        Return (_i縦のコマ数 - iひも番号) * 2 + 1
+                    Else
+                        Return 0
+                    End If
+
                 Else
-                    Return (iひも番号 - _i縦のコマ数) * 2 - 1
+                    '左上がり
+                    If iひも番号 <= _i縦のコマ数 Then
+                        Return 0
+                    Else
+                        Return (iひも番号 - _i縦のコマ数) * 2 - 1
+                    End If
+
                 End If
 
             Case Else

@@ -731,7 +731,7 @@ Partial Public Class clsCalcKnot
         'クロス点
         Dim p上クロス点 As New S実座標(pA1.X, Max(pB1.Y, pD1.Y))
         Dim p下クロス点 As New S実座標(pC1.X, Min(pB1.Y, pD1.Y))
-        If p下クロス点.X < p上クロス点.X Then
+        If p下クロス点.X <= p上クロス点.X Then
             line = New clsImageItem.S線分(p上クロス点, pD1)
             item.m_lineList.Add(line)
             line = New clsImageItem.S線分(p下クロス点, pB1)
@@ -756,7 +756,8 @@ Partial Public Class clsCalcKnot
             item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
             item.m_ltype = LineTypeEnum._red
 
-            If p下クロス点.X < p上クロス点.X Then
+            If p下クロス点.X <= p上クロス点.X Then
+                '右上がり、正方形もこちら
                 line = New clsImageItem.S線分(p上クロス点, New S実座標(pD1.X, pA1.Y))
                 item.m_lineList.Add(line)
                 line = New clsImageItem.S線分(p下クロス点, New S実座標(pB1.X, pC1.Y))
@@ -780,7 +781,7 @@ Partial Public Class clsCalcKnot
             Dim r中央領域 As New S領域(p上クロス点, p下クロス点)
             item.m_a四隅 = New S四隅(r中央領域)
             Dim mlen As Double = p_i縦横コマ数の小さい方 * _dコマベース寸法
-            If p下クロス点.X < p上クロス点.X Then
+            If p下クロス点.X <= p上クロス点.X Then
                 Dim p左上点 As S実座標 = r中央領域.p左上
                 Dim p右下点 As S実座標 = r中央領域.p右下
                 line = New clsImageItem.S線分(p左上点, p左上点 + Unit90 * mlen)
