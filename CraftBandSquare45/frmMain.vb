@@ -891,7 +891,7 @@ Public Class frmMain
         End If
 
         Dim stepImageData As New clsImageData(Nothing)
-        Dim ret As Boolean = calc.CalcImage(stepImageData, isBackFace)
+        Dim ret As Boolean = calc.CalcImage(stepImageData, isBackFace, chk底編み.Checked)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
             msg = calc.p_sメッセージ
@@ -976,7 +976,7 @@ Public Class frmMain
         End If
 
         Dim imgData As New clsImageData(Nothing)
-        Dim ret As Boolean = _clsCalcSquare45.CalcImage(imgData, False)
+        Dim ret As Boolean = _clsCalcSquare45.CalcImage(imgData, False, False)
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(_clsCalcSquare45.p_sメッセージ) Then
             msg = _clsCalcSquare45.p_sメッセージ
@@ -1179,6 +1179,7 @@ Public Class frmMain
         '表面プレビュー
         radおもて.Checked = True
         radBefore.Checked = True
+        chk底編み.Checked = False
     End Sub
 
     '新規作成
@@ -2162,7 +2163,7 @@ Public Class frmMain
         End If
         Cursor.Current = Cursors.WaitCursor
         _clsImageData = New clsImageData(_sFilePath)
-        ret = calc.CalcImage(_clsImageData, isBackFace)
+        ret = calc.CalcImage(_clsImageData, isBackFace, chk底編み.Checked)
         Cursor.Current = Cursors.Default
 
         If Not ret AndAlso Not String.IsNullOrWhiteSpace(calc.p_sメッセージ) Then
@@ -2212,6 +2213,12 @@ Public Class frmMain
         Showプレビュー()
     End Sub
 
+    Private Sub chk底編み_CheckedChanged(sender As Object, e As EventArgs) Handles chk底編み.CheckedChanged
+        If _clsImageData Is Nothing Then
+            Return
+        End If
+        Showプレビュー()
+    End Sub
 #End Region
 
 #Region "プレビュー2"

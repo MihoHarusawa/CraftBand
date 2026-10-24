@@ -119,6 +119,9 @@ Partial Class frmMain
         btn選択をON_折り = New Button()
         btn選択をOFF_折り = New Button()
         btn外側反転 = New Button()
+        radうら = New RadioButton()
+        radおもて = New RadioButton()
+        chk底編み = New CheckBox()
         MenuStrip1 = New MenuStrip()
         ToolStripMenuItemFile = New ToolStripMenuItem()
         ToolStripMenuItemFileNew = New ToolStripMenuItem()
@@ -206,11 +209,10 @@ Partial Class frmMain
         tpage縦ひも = New TabPage()
         expand縦ひも = New ctrExpanding()
         tpageプレビュー = New TabPage()
-        radうら = New RadioButton()
-        radおもて = New RadioButton()
         ctrPreview1 = New ctrPreview()
         tpageプレビュー2 = New TabPage()
         grp折り返し = New GroupBox()
+        ctrPreview2 = New ctrPreview()
         tpageひも上下 = New TabPage()
         grp縦横の四角 = New GroupBox()
         lbl底に = New Label()
@@ -275,7 +277,6 @@ Partial Class frmMain
         lbl単位 = New Label()
         btnDEBUG = New Button()
         timer折りカラー = New Timer(components)
-        ctrPreview2 = New ctrPreview()
         CType(BindingSource縁の始末, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud基本のひも幅, ComponentModel.ISupportInitialize).BeginInit()
         CType(nud横寸法, ComponentModel.ISupportInitialize).BeginInit()
@@ -1114,6 +1115,44 @@ Partial Class frmMain
         ToolTip1.SetToolTip(btn外側反転, "外側45と135が同時にONならば反転します")
         btn外側反転.UseVisualStyleBackColor = True
         ' 
+        ' radうら
+        ' 
+        radうら.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        radうら.AutoSize = True
+        radうら.Location = New Point(105, 353)
+        radうら.Name = "radうら"
+        radうら.Size = New Size(46, 23)
+        radうら.TabIndex = 2
+        radうら.Text = "うら"
+        ToolTip1.SetToolTip(radうら, "うら(内側から見た図)")
+        radうら.UseVisualStyleBackColor = True
+        ' 
+        ' radおもて
+        ' 
+        radおもて.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        radおもて.AutoSize = True
+        radおもて.Checked = True
+        radおもて.Location = New Point(23, 353)
+        radおもて.Name = "radおもて"
+        radおもて.Size = New Size(58, 23)
+        radおもて.TabIndex = 1
+        radおもて.TabStop = True
+        radおもて.Text = "おもて"
+        ToolTip1.SetToolTip(radおもて, "おもて(外側から見た図)")
+        radおもて.UseVisualStyleBackColor = True
+        ' 
+        ' chk底編み
+        ' 
+        chk底編み.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
+        chk底編み.AutoSize = True
+        chk底編み.Location = New Point(175, 353)
+        chk底編み.Name = "chk底編み"
+        chk底編み.Size = New Size(68, 23)
+        chk底編み.TabIndex = 3
+        chk底編み.Text = "底編み"
+        ToolTip1.SetToolTip(chk底編み, "底編み箇所のみ表示")
+        chk底編み.UseVisualStyleBackColor = True
+        ' 
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(20, 20)
@@ -1916,6 +1955,7 @@ Partial Class frmMain
         ' 
         ' tpageプレビュー
         ' 
+        tpageプレビュー.Controls.Add(chk底編み)
         tpageプレビュー.Controls.Add(radうら)
         tpageプレビュー.Controls.Add(radおもて)
         tpageプレビュー.Controls.Add(ctrPreview1)
@@ -1927,30 +1967,6 @@ Partial Class frmMain
         tpageプレビュー.Text = "プレビュー"
         tpageプレビュー.UseVisualStyleBackColor = True
         ' 
-        ' radうら
-        ' 
-        radうら.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        radうら.AutoSize = True
-        radうら.Location = New Point(109, 353)
-        radうら.Name = "radうら"
-        radうら.Size = New Size(46, 23)
-        radうら.TabIndex = 1
-        radうら.Text = "うら"
-        radうら.UseVisualStyleBackColor = True
-        ' 
-        ' radおもて
-        ' 
-        radおもて.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        radおもて.AutoSize = True
-        radおもて.Checked = True
-        radおもて.Location = New Point(23, 353)
-        radおもて.Name = "radおもて"
-        radおもて.Size = New Size(58, 23)
-        radおもて.TabIndex = 0
-        radおもて.TabStop = True
-        radおもて.Text = "おもて"
-        radおもて.UseVisualStyleBackColor = True
-        ' 
         ' ctrPreview1
         ' 
         ctrPreview1.Dock = DockStyle.Fill
@@ -1958,7 +1974,7 @@ Partial Class frmMain
         ctrPreview1.Name = "ctrPreview1"
         ctrPreview1.PanelSize = New Size(713, 339)
         ctrPreview1.Size = New Size(834, 385)
-        ctrPreview1.TabIndex = 2
+        ctrPreview1.TabIndex = 0
         ' 
         ' tpageプレビュー2
         ' 
@@ -1986,6 +2002,15 @@ Partial Class frmMain
         grp折り返し.TabStop = False
         grp折り返し.Text = "折り返し"
         grp折り返し.Visible = False
+        ' 
+        ' ctrPreview2
+        ' 
+        ctrPreview2.Dock = DockStyle.Fill
+        ctrPreview2.Location = New Point(3, 3)
+        ctrPreview2.Name = "ctrPreview2"
+        ctrPreview2.PanelSize = New Size(713, 339)
+        ctrPreview2.Size = New Size(834, 385)
+        ctrPreview2.TabIndex = 1
         ' 
         ' tpageひも上下
         ' 
@@ -2615,15 +2640,6 @@ Partial Class frmMain
         ' 
         timer折りカラー.Interval = 300
         ' 
-        ' ctrPreview2
-        ' 
-        ctrPreview2.Dock = DockStyle.Fill
-        ctrPreview2.Location = New Point(3, 3)
-        ctrPreview2.Name = "ctrPreview2"
-        ctrPreview2.PanelSize = New Size(713, 339)
-        ctrPreview2.Size = New Size(834, 385)
-        ctrPreview2.TabIndex = 1
-        ' 
         ' frmMain
         ' 
         AllowDrop = True
@@ -2990,4 +3006,5 @@ Partial Class frmMain
     Friend WithEvents f_bError As DataGridViewCheckBoxColumn
     Friend WithEvents ctrPreview1 As ctrPreview
     Friend WithEvents ctrPreview2 As ctrPreview
+    Friend WithEvents chk底編み As CheckBox
 End Class

@@ -385,7 +385,6 @@ Partial Public Class clsCalcSquare45
             _a底領域.pD = New S実座標(_BandPositions(emExp._Tate).p_d幅の累計(p_iひもの本数),
              _BandPositions(emExp._Yoko).p_d幅の累計(_i横の四角数))
 
-
             g_clsLog.LogFormatMessage(clsLog.LogLevel.Debug, "_a底={0}", _a底領域.ToString)
 
             '縦ひも・横ひもが底とクロスする領域
@@ -502,7 +501,7 @@ Partial Public Class clsCalcSquare45
             _Idx = i
         End Sub
 
-        Function ToBandImageItem(ByVal dir As emExp, ByVal idx As Integer) As clsImageItem
+        Function ToBandImageItem(ByVal dir As emExp, ByVal idx As Integer, ByVal r底編み As S領域) As clsImageItem
             If m_row縦横展開 Is Nothing Then
                 Return Nothing
             End If
@@ -512,12 +511,35 @@ Partial Public Class clsCalcSquare45
             Dim index1 As Integer
             With m_row縦横展開
                 If dir = emExp._Yoko Then
-                    '左→右
-                    band.SetBand(
-                        New S実座標(p中央.X - .f_dVal1, p中央.Y),
-                        New S実座標(p中央.X + .f_dVal2, p中央.Y),
-                        m_dひも幅,
-                        Unit90)
+                    '左→右 
+                    '#117
+                    Dim xLeft As Double = p中央.X - .f_dVal1
+                    Dim xRight As Double = p中央.X + .f_dVal2
+                    Dim isShortLeft As Boolean = False
+                    Dim isShortRight As Boolean = False
+                    If Not r底編み.IsEmpty Then
+                        If xLeft < r底編み.x最左 Then
+                            xLeft = r底編み.x最左
+                            isShortLeft = True
+                        End If
+                        If r底編み.x最右 < xRight Then
+                            xRight = r底編み.x最右
+                            isShortRight = True
+                        End If
+                    End If
+
+                    'band.SetBand(
+                    '    New S実座標(p中央.X - .f_dVal1, p中央.Y),
+                    '    New S実座標(p中央.X + .f_dVal2, p中央.Y),
+                    '    m_dひも幅,
+                    '    Unit90)
+                    band.SetBand(New S実座標(xLeft, p中央.Y), New S実座標(xRight, p中央.Y), m_dひも幅, Unit90)
+                    If isShortLeft Then
+                        band.is始点FT線 = False
+                    End If
+                    If isShortRight Then
+                        band.is終点FT線 = False
+                    End If
 
                     If IsDrawMarkCurrent Then
                         '横バンドの左
@@ -527,11 +549,34 @@ Partial Public Class clsCalcSquare45
 
                 ElseIf dir = emExp._Tate Then
                     '下→上
-                    band.SetBand(
-                        New S実座標(p中央.X, p中央.Y - .f_dVal2),
-                        New S実座標(p中央.X, p中央.Y + .f_dVal1),
-                        m_dひも幅,
-                        Unit180)
+                    '#117
+                    Dim yDown As Double = p中央.Y - .f_dVal2
+                    Dim yUp As Double = p中央.Y + .f_dVal1
+                    Dim isShortDown As Boolean = False
+                    Dim isShortUp As Boolean = False
+                    If Not r底編み.IsEmpty Then
+                        If yDown < r底編み.y最下 Then
+                            yDown = r底編み.y最下
+                            isShortDown = True
+                        End If
+                        If r底編み.y最上 < yUp Then
+                            yUp = r底編み.y最上
+                            isShortUp = True
+                        End If
+                    End If
+
+                    'band.SetBand(
+                    '    New S実座標(p中央.X, p中央.Y - .f_dVal2),
+                    '    New S実座標(p中央.X, p中央.Y + .f_dVal1),
+                    '    m_dひも幅,
+                    '    Unit180)
+                    band.SetBand(New S実座標(p中央.X, yDown), New S実座標(p中央.X, yUp), m_dひも幅, Unit180)
+                    If isShortDown Then
+                        band.is始点FT線 = False
+                    End If
+                    If isShortUp Then
+                        band.is終点FT線 = False
+                    End If
 
                     If IsDrawMarkCurrent Then
                         '縦バンドの上
@@ -799,13 +844,13 @@ Partial Public Class clsCalcSquare45
         End Sub
 
         '位置リストをもとに描画用のリストを作成する
-        Function ConvertToImageList() As clsImageItemList
+        Function ConvertToImageList(ByVal r底編み As S領域) As clsImageItemList
             Dim imglist As New clsImageItemList
 
             For idx As Integer = 1 To _iひもの本数
                 Dim bandposition As CBandPosition = ByIdx(idx)
                 'bandposition.AddImageItemToList(imglist, _Direction)
-                Dim item As clsImageItem = bandposition.ToBandImageItem(_Direction, idx)
+                Dim item As clsImageItem = bandposition.ToBandImageItem(_Direction, idx, r底編み)
                 imglist.Add(item)
             Next
             Return imglist
@@ -840,7 +885,7 @@ Partial Public Class clsCalcSquare45
     Shared IsDrawMarkCurrent As Boolean = True
 
     'プレビュー処理
-    Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean) As Boolean
+    Public Function CalcImage(ByVal imgData As clsImageData, ByVal isBackFace As Boolean, ByVal isBottomBase As Boolean) As Boolean
         '記号順が変わるので裏面には表示しない
         IsDrawMarkCurrent = Not isBackFace AndAlso
             Not String.IsNullOrWhiteSpace(g_clsSelectBasics.p_sリスト出力記号)
@@ -860,12 +905,19 @@ Partial Public Class clsCalcSquare45
             Return False 'p_sメッセージあり
         End If
 
+        Dim r底編み As New S領域
+        If isBottomBase Then
+            r底編み = _a底領域.r外接領域
+            r底編み.enLarge(_dひも幅の一辺 * 2)
+        End If
+
+
         Dim _ImageList横ひも As clsImageItemList = Nothing
         Dim _ImageList縦ひも As clsImageItemList = Nothing
 
         Try
-            _ImageList横ひも = _BandPositions(emExp._Yoko).ConvertToImageList()
-            _ImageList縦ひも = _BandPositions(emExp._Tate).ConvertToImageList()
+            _ImageList横ひも = _BandPositions(emExp._Yoko).ConvertToImageList(r底編み)
+            _ImageList縦ひも = _BandPositions(emExp._Tate).ConvertToImageList(r底編み)
             If _ImageList横ひも Is Nothing OrElse _ImageList横ひも Is Nothing Then
                 Throw New Exception()
             End If
@@ -897,9 +949,9 @@ Partial Public Class clsCalcSquare45
         _ImageList縦ひも = Nothing
 
         'その他の描画パーツ
-        imgData.MoveList(imageList描画要素())
+        imgData.MoveList(imageList描画要素(isBottomBase))
 
-        If Not isBackFace Then
+        If Not isBackFace AndAlso Not isBottomBase Then
             '付属品
             'AddPartsImage(imgData, _frmMain.editAddParts, False) '描画
             AddPartsImage(imgData, _Data, False) '描画
@@ -940,7 +992,7 @@ Partial Public Class clsCalcSquare45
     End Function
 
 
-    Function imageList描画要素() As clsImageItemList
+    Function imageList描画要素(ByVal isBottomBase As Boolean) As clsImageItemList
 
         Dim item As clsImageItem
         Dim itemlist As New clsImageItemList
@@ -1002,23 +1054,32 @@ Partial Public Class clsCalcSquare45
         item.m_a四隅 = _a底領域
         itemlist.AddItem(item)
 
-        '横の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
-        getSideRectangle(item, _a底領域.pB, _a底領域.pA)
-        itemlist.AddItem(item)
+        '#117
+        If isBottomBase Then
+            '底編み領域
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 0)
+            item.m_a四隅 = New S四隅(_a底領域.r外接領域)
+            itemlist.AddItem(item)
 
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
-        getSideRectangle(item, _a底領域.pD, _a底領域.pC)
-        itemlist.AddItem(item)
+        Else
+            '横の側面
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 1)
+            getSideRectangle(item, _a底領域.pB, _a底領域.pA)
+            itemlist.AddItem(item)
 
-        '縦の側面
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
-        getSideRectangle(item, _a底領域.pA, _a底領域.pD)
-        itemlist.AddItem(item)
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 2)
+            getSideRectangle(item, _a底領域.pD, _a底領域.pC)
+            itemlist.AddItem(item)
 
-        item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
-        getSideRectangle(item, _a底領域.pC, _a底領域.pB)
-        itemlist.AddItem(item)
+            '縦の側面
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 1)
+            getSideRectangle(item, _a底領域.pA, _a底領域.pD)
+            itemlist.AddItem(item)
+
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._縦の側面, 2)
+            getSideRectangle(item, _a底領域.pC, _a底領域.pB)
+            itemlist.AddItem(item)
+        End If
 
         '底の中央線
         item = New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 1)
@@ -1053,7 +1114,7 @@ Partial Public Class clsCalcSquare45
         itemlist.AddItem(item)
 
         '#98 2倍高さライン
-        If p_is折りカラー処理 Then
+        If p_is折りカラー処理 AndAlso Not isBottomBase Then
             item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域線, 1)
             Dim bt_sq As Double = p_d四角ベース_縦 / ROOT2
             Dim sd_sq As Double = p_d四角ベース_高さ * ROOT2

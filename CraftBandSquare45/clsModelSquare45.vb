@@ -792,7 +792,7 @@ Public Class clsModelSquare45
                 End If
 
                 Dim imgdata As New clsImageData(_PlateNames(pidx)) '仮の名前で
-                If Not calcTmp.CalcImage(imgdata, False) Then
+                If Not calcTmp.CalcImage(imgdata, False, False) Then
                     _LastError = calcTmp.p_sメッセージ
                     ret = False
                 ElseIf String.IsNullOrEmpty(calcTmp.p_sBottomPngFilePath(True)) Then
