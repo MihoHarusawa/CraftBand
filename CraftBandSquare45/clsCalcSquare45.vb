@@ -1469,17 +1469,28 @@ Class clsCalcSquare45
                 '係数と加算値 #92
                 .f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + .f_dひも長加算2 +
                     (_dひも長加算 + _d縁の垂直ひも長) * 2
-                row.f_dVal1 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算 + (_dひも長加算 + _d縁の垂直ひも長)
-                row.f_dVal2 = (.f_dひも長 * _dひも長係数) / 2 + row.f_dひも長加算2 + (_dひも長加算 + _d縁の垂直ひも長)
+                .f_dVal1 = (.f_dひも長 * _dひも長係数) / 2 + .f_dひも長加算 + (_dひも長加算 + _d縁の垂直ひも長)
+                .f_dVal2 = (.f_dひも長 * _dひも長係数) / 2 + .f_dひも長加算2 + (_dひも長加算 + _d縁の垂直ひも長)
+
+                'そんな値いれないでください
+                If .f_dVal1 < 0 OrElse .f_dVal2 < 0 Then
+                    .f_dひも長加算 = 0
+                    .f_dひも長加算2 = 0
+                    .f_d出力ひも長 = .f_dひも長 * _dひも長係数 + .f_dひも長加算 + .f_dひも長加算2 +
+                    (_dひも長加算 + _d縁の垂直ひも長) * 2
+                    .f_dVal1 = (.f_dひも長 * _dひも長係数) / 2 + .f_dひも長加算 + (_dひも長加算 + _d縁の垂直ひも長)
+                    .f_dVal2 = (.f_dひも長 * _dひも長係数) / 2 + .f_dひも長加算2 + (_dひも長加算 + _d縁の垂直ひも長)
+                End If
+
                 '#96
                 If p_is折りカラー処理 Then
-                    If row.f_b内側区分 OrElse row.f_b外側区分 Then
-                        row.f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
-                        row.f_dVal1 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                    If .f_b内側区分 OrElse .f_b外側区分 Then
+                        .f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                        .f_dVal1 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                     End If
-                    If row.f_b内側区分2 OrElse row.f_b外側区分2 Then
-                        row.f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
-                        row.f_dVal2 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                    If .f_b内側区分2 OrElse .f_b外側区分2 Then
+                        .f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
+                        .f_dVal2 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                     End If
                 End If
             End If

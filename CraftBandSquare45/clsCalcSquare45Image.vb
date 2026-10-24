@@ -502,42 +502,6 @@ Partial Public Class clsCalcSquare45
             _Idx = i
         End Sub
 
-        '        Function AddImageItemToList(ByVal imglist As clsImageItemList, dir As emExp) As Boolean
-        '            If m_row縦横展開 Is Nothing Then
-        '                Return False
-        '            End If
-        '            Dim item As New clsImageItem(m_row縦横展開, Not IsDrawMarkCurrent)
-        '            item.m_a四隅 = m_a底の四隅
-
-        '            Dim p中央 As S実座標 = m_a底の四隅.p中央
-
-        '            item.m_dひも幅 = m_dひも幅
-        '            With item.m_row縦横展開
-        '                If dir = emExp._Yoko Then
-        '                    item.m_rひも位置.y最上 = p中央.Y + item.m_dひも幅 / 2
-        '                    item.m_rひも位置.y最下 = p中央.Y - item.m_dひも幅 / 2
-        '                    item.m_rひも位置.x最右 = p中央.X + .f_dVal2 '右 .f_d出力ひも長 / 2
-        '                    item.m_rひも位置.x最左 = p中央.X - .f_dVal1 '左 .f_d出力ひも長 / 2
-
-        '                ElseIf dir = emExp._Tate Then
-        '                    item.m_rひも位置.x最右 = p中央.X + item.m_dひも幅 / 2
-        '                    item.m_rひも位置.x最左 = p中央.X - item.m_dひも幅 / 2
-        '                    item.m_rひも位置.y最上 = p中央.Y + .f_dVal1 '上.f_d出力ひも長 / 2
-        '                    item.m_rひも位置.y最下 = p中央.Y - .f_dVal2 '下.f_d出力ひも長 / 2
-
-        '                End If
-        '            End With
-        '            imglist.Add(item)
-
-        '#If 0 Then
-        '            '四隅領域の描画
-        '            item = New clsImageItem(clsImageItem.ImageTypeEnum._四隅領域, _Idx)
-        '            item.m_a四隅 = m_a底の四隅
-        '            imglist.AddItem(item)
-        '#End If
-        '            Return True
-        '        End Function
-
         Function ToBandImageItem(ByVal dir As emExp, ByVal idx As Integer) As clsImageItem
             If m_row縦横展開 Is Nothing Then
                 Return Nothing

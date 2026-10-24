@@ -2110,6 +2110,14 @@ Class clsCalcKnot
     End Function
 
     Private Sub set縦横_出力ひも長(ByVal row As tbl縦横展開Row)
+        'コマが編めなくなるので、マイナスにはさせない
+        If row.f_dひも長加算 < 0 Then
+            row.f_dひも長加算 = 0
+        End If
+        If row.f_dひも長加算2 < 0 Then
+            row.f_dひも長加算2 = 0
+        End If
+
         'f_dVal1: f_dひも長加算  + _d縁の垂直ひも長 + _dひも長加算_縦横端
         'f_dVal2: f_dひも長加算2 + _d縁の垂直ひも長 + _dひも長加算_縦横端
         'f_dVal3: f_dVal1 * p_dマイひも長係数

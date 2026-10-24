@@ -918,6 +918,12 @@ Partial Public Class clsCalcKnot
             If p要尺位置.Y < rDrawコマ.y最上 Then
                 p要尺位置.Y = rDrawコマ.y最上
             End If
+            '要尺と幅の文字列
+            Dim strLen As String = outp.outLengthTextWithUnit(_dコマの要尺)
+            '端～折り位置
+            Dim strFold1 As String = outp.outLengthText(foldingLen)
+            '折り位置間
+            Dim strFold2 As String = outp.outLengthText(_dコマの要尺 - foldingLen * 2)
 
             If _b斜め立ち上げ Then
                 If _i横のコマ数 * _dコマベース寸法 / ROOT2 < _dコマベース要尺 Then
@@ -941,6 +947,9 @@ Partial Public Class clsCalcKnot
             item.m_a四隅.p右上 = p要尺位置 + Unit0 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
             item.m_a四隅.p左下 = item.m_a四隅.p左上 + delta
             item.m_a四隅.p右下 = item.m_a四隅.p右上 + delta
+            Dim p要尺文字位置 As S実座標 = item.m_a四隅.p右上 + Unit0 * (dひも幅 / 2)
+            Dim p折り文字位置 As S実座標 = item.m_a四隅.p左下 + Unit270 * (dひも幅 / 2)
+
             Dim p As S実座標 = p要尺位置
             If 0 < _dコマ間のすき間 Then
                 p = item.m_a四隅.p左上 + Unit0 * (_dコマ間のすき間 / 2)
@@ -949,11 +958,14 @@ Partial Public Class clsCalcKnot
                 p = item.m_a四隅.p右上 + Unit180 * (_dコマ間のすき間 / 2)
                 line = New S線分(p, p + delta)
                 item.m_lineList.Add(line)
+
+                strLen += " + " + outp.outLengthText(_dコマ間のすき間)
+                strFold1 = outp.outLengthText(_dコマ間のすき間 / 2) + " + " + strFold1
             End If
             '中心から各折り位置まで
             Dim len_1 As Double = (_dコマの要尺 - foldingLen * 2) / 2 - (c_tiltRatio * dひも幅 / 2)
             Dim len_2 As Double = (_dコマの要尺 - foldingLen * 2) / 2 + (c_tiltRatio * dひも幅 / 2)
-            If isKnotLeft Then
+            If Not isKnotLeft Then '#115 谷折り
                 Dim tmp As Double = len_1
                 len_1 = len_2
                 len_2 = tmp
@@ -963,6 +975,19 @@ Partial Public Class clsCalcKnot
             line = New S線分(New S実座標(p要尺位置.X - len_1, p要尺位置.Y - dひも幅 / 2), New S実座標(p要尺位置.X - len_2, p要尺位置.Y + dひも幅 / 2))
             item.m_lineList.Add(line)
             itemlist.AddItem(item)
+
+            '#115
+            If isStartLine Then
+                '要尺と幅の文字列
+                item = New clsImageItem(p要尺文字位置, {strLen, outp.outLengthTextWithUnit(_d基本のひも幅)}, _d基本のひも幅 / 2, 9)
+                itemlist.AddItem(item)
+                '端～折り位置
+                item = New clsImageItem(p折り文字位置, {strFold1}, _d基本のひも幅 / 2, 9)
+                itemlist.AddItem(item)
+                '折り位置間
+                item = New clsImageItem(New S実座標(p要尺位置.X, p折り文字位置.Y), {strFold2}, _d基本のひも幅 / 2, 9)
+                itemlist.AddItem(item)
+            End If
         End If
 
 
