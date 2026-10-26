@@ -2011,7 +2011,7 @@ Class clsCalcHexagon
                     tmp = tmps(i)
                 End If
                 If tmp IsNot Nothing AndAlso
-                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_sひも名 = tmp.f_sひも名 AndAlso lasttmp.f_s記号 = tmp.f_s記号 Then
+                lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_sひも名 = tmp.f_sひも名 AndAlso lasttmp.f_s記号 = tmp.f_s記号 AndAlso lasttmp.f_dひも長加算 = tmp.f_dひも長加算 Then
                     '同じひも種・ひも名・記号の継続
                     contcount += 1
                     If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
@@ -2030,7 +2030,8 @@ Class clsCalcHexagon
                         output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                         row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                         If 0 <> lasttmp.f_dひも長加算 OrElse 0 <> lasttmp.f_dひも長加算2 Then
-                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
+                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
+                                "+" + output.outLengthText(lasttmp.f_dひも長加算2)
                         End If
                     End If
 

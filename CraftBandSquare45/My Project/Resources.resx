@@ -235,4 +235,16 @@
     <value>折りカラー処理できません。高さをセットし本幅を一致させてください。</value>
     <comment>frmMain</comment>
   </data>
+  <data name="CaptionLength" xml:space="preserve">
+    <value>長さ</value>
+  </data>
+  <data name="CaptionRatioAll" xml:space="preserve">
+    <value>全係数分</value>
+  </data>
+  <data name="CaptionRatioUsed" xml:space="preserve">
+    <value>消費係数分</value>
+  </data>
+  <data name="CaptionToCenter" xml:space="preserve">
+    <value>～ひも中心</value>
+  </data>
 </root>

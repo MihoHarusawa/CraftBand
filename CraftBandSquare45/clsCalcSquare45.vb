@@ -65,7 +65,7 @@ Class clsCalcSquare45
     Private Property _i縦の四角数 As Integer
     Private Property _d高さの四角数 As Double
     Private Property _dひも間のすき間 As Double 'nudゼロ以上
-    Private Property _dひも長係数 As Double 'nudゼロ以上
+    Private Property _dひも長係数 As Double 'nudゼロ以上、編み部分に適用
     Private Property _dひも長加算 As Double 'プラスマイナス可
     Private Property _b縦横を展開する As Boolean
     Private Property _b折りカラー編み As Boolean
@@ -1329,6 +1329,7 @@ Class clsCalcSquare45
     'f_dVal4:
     'f_sVal1:非端側の重ね色
     'f_sVal2:端側の重ね色
+    '端:ひも長加算2の側(右・上)
 
     'New時に作成、以降は存在が前提
     '入力変更イベントで内容を更新し、常に最新の状態を保持する
@@ -1453,7 +1454,7 @@ Class clsCalcSquare45
         '本幅の変更、もしくは再計算
         'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
         'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
-        'f_dVal1,f_dVal2 に、中心からの各長さ
+        'f_dVal1,f_dVal2 に、中心からの各長さをセットする
         With row
             .f_d幅 = g_clsSelectBasics.p_d指定本幅(.f_i何本幅) + _dひも間のすき間
             If is補強ひも(row) Then
@@ -2133,7 +2134,8 @@ Class clsCalcSquare45
                 If tmp IsNot Nothing AndAlso
                 lasttmp.f_iひも種 = tmp.f_iひも種 AndAlso lasttmp.f_s記号 = tmp.f_s記号 AndAlso
                     lasttmp.f_b内側区分 = tmp.f_b内側区分 AndAlso lasttmp.f_b内側区分2 = tmp.f_b内側区分2 AndAlso
-                    lasttmp.f_b外側区分 = tmp.f_b外側区分 AndAlso lasttmp.f_b外側区分2 = tmp.f_b外側区分2 Then
+                    lasttmp.f_b外側区分 = tmp.f_b外側区分 AndAlso lasttmp.f_b外側区分2 = tmp.f_b外側区分2 AndAlso
+                    lasttmp.f_dひも長加算 = tmp.f_dひも長加算 Then
                     '同じひも種・記号の継続
                     contcount += 1
                     If Not String.IsNullOrWhiteSpace(tmp.f_sメモ) Then
@@ -2161,7 +2163,8 @@ Class clsCalcSquare45
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                     If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
+                            "+" + output.outLengthText(lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     'If _Data.p_row底_縦横.Value("f_b展開区分") Then
@@ -2276,6 +2279,11 @@ Class clsCalcSquare45
 
         output.AddBlankLine()
 
+        '***底編み
+        If _frmMain.chk底編み.Checked Then
+            outputBottomBase(output)
+        End If
+
         '集計値
         output.OutSummery() '間に空行
 
@@ -2284,6 +2292,215 @@ Class clsCalcSquare45
 
         Return True
     End Function
+
+
+    '底編みからの残りひも長を計算(#117)
+    ' ひも長 = 編み部分
+    ' 出力ひも長 = (ひも長 * _dひも長係数) + 全ての加算
+    ' f_dVal1 = (ひも長 * _dひも長係数)/2 + ひも長加算側の加算
+    ' f_dVal2 = (ひも長 * _dひも長係数)/2 + ひも長加算2側の加算
+    Private Sub outputBottomBase(ByVal output As clsOutput)
+        Dim row As tblOutputRow
+
+        row = output.NextNewRow
+        row.f_sカテゴリー = text底編み()
+
+        Dim r底編み As S領域 = _a底領域.r外接領域
+        Dim d側面高 As Double = p_d四角ベース_高さ * ROOT2
+
+        '横ひも
+        row = output.NextNewRow
+        row.f_sタイプ = _dひも長係数
+        row.f_s編みかた名 = text底編み() + text横()
+        row.f_s編みひも名 = output.outLengthText(r底編み.x幅)
+
+        row = output.NextNewRow
+        row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        row.f_sタイプ = text全係数分() ' "全係数分"
+        row.f_s編みかた名 = text横端名(False) + textからひも中心() ' "左からひも中心"
+        row.f_s編みひも名 = text横端名(True) + textからひも中心() ' "右からひも中心"
+        'row.f_i周数 = "位置"
+        row.f_s高さ = text横端名(False) + text長さ() ' "左長さ"
+        row.f_s長さ = text横端名(True) + text長さ() '"右長さ"
+        row.f_sメモ = text消費係数分() '"係数消費分"
+
+        For ih As Integer = 1 To p_i横ひもの本数
+            row = output.NextNewRow
+            row.f_s番号 = ih
+
+            Dim bandPosition As CBandPosition = _BandPositions(emExp._Yoko).ByIdx(ih)
+            If bandPosition Is Nothing Then
+                Continue For
+            End If
+
+            Dim d端から左枠 As Double '端→底編み枠(左)
+            Dim d左枠から辺 As Double '底編み枠→底の辺(左)
+            '辺から辺 = .f_d長さ
+            Dim d辺から右枠 As Double '底の辺→底編み枠(右)
+            Dim d右枠から端 As Double '底編み枠→端(右)
+
+            'CalcBandLength()
+            d左枠から辺 = ((bandPosition.m_a底の四隅.p左上.X + bandPosition.m_a底の四隅.p左下.X) / 2) - r底編み.x最左
+            d辺から右枠 = r底編み.x最右 - ((bandPosition.m_a底の四隅.p右上.X + bandPosition.m_a底の四隅.p右下.X) / 2)
+
+            With bandPosition.m_row縦横展開
+                row.f_s記号 = .f_s記号
+                row.f_s本幅 = output.outLaneText(.f_i何本幅)
+                row.f_sひも本数 = .f_sひも名
+                row.f_sひも長 = output.outLengthText(.f_d出力ひも長)
+                row.f_s色 = .f_s色
+                row.f_i段数 = .f_i位置番号
+
+                '係数全体と枠情報
+                Dim d全係数分 As Double = .f_dひも長 * (_dひも長係数 - 1) '係数分(全体)
+                Dim d左から中心 As Double = d左枠から辺 + .f_d長さ / 2 '左からひも中心
+                Dim d中心から右 As Double = .f_d長さ / 2 + d辺から右枠 '右からひも中心
+
+                bandPosition.m_diff中央 = 0
+                If .f_dひも長加算 <> .f_dひも長加算2 Then
+                    bandPosition.m_diff中央 = (.f_dひも長加算2 - .f_dひも長加算) / 2
+                    d左から中心 += bandPosition.m_diff中央
+                    d中心から右 -= bandPosition.m_diff中央
+                    If 0 < bandPosition.m_diff中央 Then
+                        row.f_i周数 = 1
+                    Else
+                        row.f_i周数 = -1
+                    End If
+                End If
+                row.f_sタイプ = output.outLengthText(d全係数分)
+                row.f_s編みかた名 = output.outLengthText(d左から中心)
+                row.f_s編みひも名 = output.outLengthText(d中心から右)
+
+                '中心から右側(f_dVal2)
+                Dim dWeaveR As Double '枠内の編み長さ
+                Dim dWeavedR As Double '係数の消費分
+                If d辺から右枠 <= d側面高 Then
+                    dWeaveR = .f_d長さ / 2 + d辺から右枠
+                Else
+                    dWeaveR = .f_d長さ / 2 + d側面高
+                End If
+                dWeavedR = dWeaveR * (_dひも長係数 - 1)
+                d右枠から端 = .f_dVal2 - (.f_d長さ / 2 + d辺から右枠) - dWeavedR
+
+                '中心から左側(f_dVal1)
+                Dim dWeavL As Double '枠内の編み長さ
+                Dim dWeavedL As Double '係数の消費分
+                If d左枠から辺 <= d側面高 Then
+                    dWeavL = d左枠から辺 + .f_d長さ / 2
+                Else
+                    dWeavL = d側面高 + .f_d長さ / 2
+                End If
+                dWeavedL = dWeavL * (_dひも長係数 - 1)
+                d端から左枠 = .f_dVal1 - (d左枠から辺 + .f_d長さ / 2) - dWeavedL
+
+                row.f_sメモ = output.outLengthText(dWeavedR + dWeavedL) '係数のうち枠内で消費した分
+                row.f_s高さ = output.outLengthText(d端から左枠) '左長さ
+                row.f_s長さ = output.outLengthText(d右枠から端) '右長さ
+                '
+                bandPosition.m_s端から枠 = row.f_s高さ '左
+                bandPosition.m_s枠から端 = row.f_s長さ '右
+                bandPosition.m_sひも出力長 = row.f_sひも長
+            End With
+        Next
+
+        '縦ひも
+        row = output.NextNewRow
+        row.f_sタイプ = _dひも長係数
+        row.f_s編みかた名 = text底編み() + text縦()
+        row.f_s編みひも名 = output.outLengthText(r底編み.y高さ)
+
+        row = output.NextNewRow
+        row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
+        row.f_sタイプ = text全係数分() ' "全係数分"
+        row.f_s編みかた名 = text縦端名(True) + textからひも中心() ' "下からひも中心"
+        row.f_s編みひも名 = text縦端名(False) + textからひも中心() '"上からひも中心"
+        'row.f_i周数 = "位置"
+        row.f_s高さ = text縦端名(True) + text長さ() ' "下長さ"
+        row.f_s長さ = text縦端名(False) + text長さ() ' "上長さ"
+        row.f_sメモ = text消費係数分() '"係数消費分"
+
+        For iv As Integer = 1 To p_i縦ひもの本数
+            row = output.NextNewRow
+            row.f_s番号 = iv
+
+            Dim bandPosition As CBandPosition = _BandPositions(emExp._Tate).ByIdx(iv)
+            If bandPosition Is Nothing Then
+                Continue For
+            End If
+
+            Dim d端から下枠 As Double '端→底編み枠(下)
+            Dim d下枠から辺 As Double '底編み枠→底の辺(下)
+            '辺から辺 = .f_d長さ
+            Dim d辺から上枠 As Double '底の辺→底編み枠(上)
+            Dim d上枠から端 As Double '底編み枠→端(上)
+
+            'CalcBandLength()
+            d辺から上枠 = r底編み.y最上 - ((bandPosition.m_a底の四隅.p左上.Y + bandPosition.m_a底の四隅.p右上.Y) / 2)
+            d下枠から辺 = ((bandPosition.m_a底の四隅.p左下.Y + bandPosition.m_a底の四隅.p右下.Y) / 2) - r底編み.y最下
+
+            With bandPosition.m_row縦横展開
+                row.f_s記号 = .f_s記号
+                row.f_s本幅 = output.outLaneText(.f_i何本幅)
+                row.f_sひも本数 = .f_sひも名
+                row.f_sひも長 = output.outLengthText(.f_d出力ひも長)
+                row.f_s色 = .f_s色
+                row.f_i段数 = .f_i位置番号
+
+                '係数全体と枠情報
+                Dim d全係数分 As Double = .f_dひも長 * (_dひも長係数 - 1) '係数分(全体)
+                Dim d下から中心 As Double = d下枠から辺 + .f_d長さ / 2 '下からひも中心
+                Dim d中心から上 As Double = .f_d長さ / 2 + d辺から上枠 '上からひも中心
+
+                bandPosition.m_diff中央 = 0
+                If .f_dひも長加算 <> .f_dひも長加算2 Then
+                    bandPosition.m_diff中央 = (.f_dひも長加算 - .f_dひも長加算2) / 2
+                    d下から中心 += bandPosition.m_diff中央
+                    d中心から上 -= bandPosition.m_diff中央
+                    If 0 < bandPosition.m_diff中央 Then
+                        row.f_i周数 = 1
+                    Else
+                        row.f_i周数 = -1
+                    End If
+                End If
+                row.f_sタイプ = output.outLengthText(d全係数分)
+                row.f_s編みかた名 = output.outLengthText(d下から中心)
+                row.f_s編みひも名 = output.outLengthText(d中心から上)
+
+                '中心から上側(f_dVal1)
+                Dim dWeaveU As Double '枠内の編み長さ
+                Dim dWeavedU As Double '係数の消費分
+                If d辺から上枠 <= d側面高 Then
+                    dWeaveU = .f_d長さ / 2 + d辺から上枠
+                Else
+                    dWeaveU = .f_d長さ / 2 + d側面高
+                End If
+                dWeavedU = dWeaveU * (_dひも長係数 - 1)
+                d上枠から端 = .f_dVal1 - (.f_d長さ / 2 + d辺から上枠) - dWeavedU
+
+                '中心から下側(f_dVal2)
+                Dim dWeavD As Double '枠内の編み長さ
+                Dim dWeavedD As Double '係数の消費分
+                If d下枠から辺 <= d側面高 Then
+                    dWeavD = d下枠から辺 + .f_d長さ / 2
+                Else
+                    dWeavD = d側面高 + .f_d長さ / 2
+                End If
+                dWeavedD = dWeavD * (_dひも長係数 - 1)
+                d端から下枠 = .f_dVal2 - (d下枠から辺 + .f_d長さ / 2) - dWeavedD
+
+                row.f_sメモ = output.outLengthText(dWeavedU + dWeavedD) '係数のうち枠内で消費した分
+                row.f_s高さ = output.outLengthText(d端から下枠) '下長さ
+                row.f_s長さ = output.outLengthText(d上枠から端) '上長さ
+                '
+                bandPosition.m_s端から枠 = row.f_s高さ '下
+                bandPosition.m_s枠から端 = row.f_s長さ '上
+                bandPosition.m_sひも出力長 = row.f_sひも長
+            End With
+        Next
+
+        output.AddBlankLine()
+    End Sub
+
 #End Region
 
 #Region "画面から文字列取得"
@@ -2416,6 +2633,37 @@ Class clsCalcSquare45
     Private Function text内折り() As String
         Return My.Resources.CaptionOriInside
     End Function
+
+    Private Function text底編み() As String
+        Return _frmMain.chk底編み.Text
+    End Function
+
+    Private Function text横() As String
+        Return _frmMain.lbl計算寸法横.Text
+    End Function
+    Private Function text縦() As String
+        Return _frmMain.lbl計算寸法縦.Text
+    End Function
+
+    Private Function textからひも中心() As String
+        '～ひも中心
+        Return My.Resources.CaptionToCenter
+    End Function
+
+    Private Function text長さ() As String
+        '長さ
+        Return My.Resources.CaptionLength
+    End Function
+    Private Function text全係数分() As String
+        '全係数分
+        Return My.Resources.CaptionRatioAll
+    End Function
+
+    Private Function text消費係数分() As String
+        '消費係数分
+        Return My.Resources.CaptionRatioUsed
+    End Function
+
 
 #End Region
 

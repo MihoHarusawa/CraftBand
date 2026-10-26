@@ -643,7 +643,7 @@ Partial Class frmMain
         nudひも長係数.Size = New Size(69, 26)
         nudひも長係数.TabIndex = 8
         nudひも長係数.TextAlign = HorizontalAlignment.Right
-        ToolTip1.SetToolTip(nudひも長係数, "すべてのひもの計算値に乗算する値")
+        ToolTip1.SetToolTip(nudひも長係数, "すべてのひもの編み目部分の長さに乗算する値")
         nudひも長係数.Value = New Decimal(New Integer() {1, 0, 0, 0})
         ' 
         ' nud高さの四角数
@@ -709,7 +709,7 @@ Partial Class frmMain
         Label10.Size = New Size(73, 19)
         Label10.TabIndex = 7
         Label10.Text = "ひも長係数"
-        ToolTip1.SetToolTip(Label10, "すべてのひもの計算値に乗算する値")
+        ToolTip1.SetToolTip(Label10, "すべてのひもの編み目部分の長さに乗算する値")
         ' 
         ' txt縦ひもの本数
         ' 

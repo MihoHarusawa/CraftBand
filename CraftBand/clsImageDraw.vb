@@ -803,13 +803,34 @@ Public Class CImageDraw
 
         'フォントオブジェクトの作成
         Dim fontsize As Single = pixcel_width(sizeFont)
-        Dim font = New Font(My.Resources.FontNameString, fontsize)
-        Dim p As PointF = pixcel_point(item.p_p文字位置)
-        For Each str As String In item.m_aryString
-            _Graphic.DrawString(str, font, _Brush_black, p)
-            p.Y += fontsize * 2
-        Next
-        font.Dispose()
+        Using font As New Font(My.Resources.FontNameString, fontsize)
+            Dim p As PointF = pixcel_point(item.p_p文字位置)
+            Dim angle As Single = item.m_angle ' 回転角度(度)
+            If NearlyEqual(angle, 0.0) Then
+                '回転なし
+                For Each str As String In item.m_aryString
+                    _Graphic.DrawString(str, font, _Brush_black, p)
+                    p.Y += fontsize * 2
+                Next
+
+            Else
+                ' 1. 現在の描画座標系の状態を保存
+                Dim state As Drawing2D.GraphicsState = _Graphic.Save()
+                ' 2. 回転の中心位置（元の描画開始位置）へ原点を移動
+                _Graphic.TranslateTransform(p.X, p.Y)
+                ' 3. 指定した角度（度）で回転
+                _Graphic.RotateTransform(angle)
+                ' 4. ローカル座標系（0, 0）を基準に複数行を描画
+                Dim yOffset As Single = 0
+                For Each str As String In item.m_aryString
+                    _Graphic.DrawString(str, font, _Brush_black, New PointF(0, yOffset))
+                    yOffset += fontsize * 2
+                Next
+                ' 5. 座標系を元の状態に完全復元
+                _Graphic.Restore(state)
+            End If
+        End Using
+
         Return True
     End Function
 

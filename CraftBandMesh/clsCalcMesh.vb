@@ -3112,8 +3112,9 @@ Class clsCalcMesh
                     row.f_s編みかた名 = lasttmp.f_sひも名
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
-                    If (lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2) <> 0 Then
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2)
+                    If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
+                            "+" + output.outLengthText(lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     If _b縦横を展開する Then

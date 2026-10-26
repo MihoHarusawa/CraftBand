@@ -2145,7 +2145,7 @@ Public Class clsImageItem
 
     'クリップ
     Public m_fpath As String 'jpg
-    Public m_angle As Double = 0                   '付属品
+    Public m_angle As Double = 0                   '付属品・文字列
     Public m_alfa As Integer = 100 '保存の透明度 0=完全透明 255=不透明,半透明白
     Public m_image As Image = Nothing '読み込み済み画像
 
@@ -2183,7 +2183,7 @@ Public Class clsImageItem
         _底の中央線  'm_listLine
         _付属品   'm_row追加品,m_rひも位置,m_dひも幅,_r文字領域,m_bandList
 
-        _文字列 'm_p位置,_r文字領域
+        _文字列 'm_p位置,_r文字領域,m_angle,m_aryString,m_sizeFont
 
         _横軸線 'm_listLine
         _縦軸線 'm_listLine
@@ -2261,7 +2261,7 @@ Public Class clsImageItem
     End Sub
 
     '文字列
-    Sub New(ByVal p As S実座標, ByVal arystr() As String, ByVal siz As Double, ByVal idx As Integer)
+    Sub New(ByVal p As S実座標, ByVal arystr() As String, ByVal siz As Double, ByVal idx As Integer, Optional angle As Integer = 0)
         m_ImageType = ImageTypeEnum._文字列
         m_Index = idx
         m_sizeFont = siz
@@ -2269,6 +2269,7 @@ Public Class clsImageItem
         If arystr Is Nothing Then
             Return
         End If
+        m_angle = angle
 
         '_r文字領域セット
         p_p文字位置 = p
@@ -2409,6 +2410,12 @@ Public Class clsImageItem
                 If 0 < line AndAlso 0 < chars Then
                     Dim delta As New S差分(chars * siz, line * siz * 2)
                     _r文字領域 = New S領域(p_p文字位置, p_p文字位置 + delta)
+
+                    '角度があるときの概算
+                    If m_ImageType = ImageTypeEnum._文字列 AndAlso m_angle <> 0 Then
+                        Dim len As Double = Max(delta.dX, delta.dY)
+                        _r文字領域 = New S領域(New S実座標(p_p文字位置.X - len, p_p文字位置.Y - len), New S実座標(p_p文字位置.X + len, p_p文字位置.Y + len))
+                    End If
                 End If
             End If
         End Set

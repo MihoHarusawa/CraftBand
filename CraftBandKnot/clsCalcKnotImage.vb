@@ -910,6 +910,8 @@ Partial Public Class clsCalcKnot
 
         '要尺
         If True Then
+            Const c_idxKoma As Integer = 9
+
             '左上位置
             Dim p要尺位置 As S実座標 = toPoint(_KnotFolderSpace.coorBaseXY(1, 1)) 'コマ空間の左上
             If rDrawコマ.x最左 < p要尺位置.X Then
@@ -941,7 +943,7 @@ Partial Public Class clsCalcKnot
                 End If
             End If
 
-            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 9)
+            item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, c_idxKoma)
             Dim delta As S差分 = Unit270 * dひも幅
             item.m_a四隅.p左上 = p要尺位置 + Unit180 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
             item.m_a四隅.p右上 = p要尺位置 + Unit0 * (_dコマベース要尺 / 2) + Unit90 * (dひも幅 / 2)
@@ -979,13 +981,13 @@ Partial Public Class clsCalcKnot
             '#115
             If isStartLine Then
                 '要尺と幅の文字列
-                item = New clsImageItem(p要尺文字位置, {strLen, outp.outLengthTextWithUnit(_d基本のひも幅)}, _d基本のひも幅 / 2, 9)
+                item = New clsImageItem(p要尺文字位置, {strLen, outp.outLengthTextWithUnit(_d基本のひも幅)}, _d基本のひも幅 / 2, c_idxKoma)
                 itemlist.AddItem(item)
                 '端～折り位置
-                item = New clsImageItem(p折り文字位置, {strFold1}, _d基本のひも幅 / 2, 9)
+                item = New clsImageItem(p折り文字位置, {strFold1}, _d基本のひも幅 / 2, c_idxKoma)
                 itemlist.AddItem(item)
                 '折り位置間
-                item = New clsImageItem(New S実座標(p要尺位置.X, p折り文字位置.Y), {strFold2}, _d基本のひも幅 / 2, 9)
+                item = New clsImageItem(New S実座標(p要尺位置.X, p折り文字位置.Y), {strFold2}, _d基本のひも幅 / 2, c_idxKoma)
                 itemlist.AddItem(item)
             End If
         End If
@@ -1349,8 +1351,6 @@ Partial Public Class clsCalcKnot
 
 
         'コマが縦に並ぶライン
-        Dim ix_pos As Integer = 0
-        Dim last_len As Double = 0
         For iv As Integer = 1 To _KnotFolderSpace.BottomBaseVerticalCount
             Dim komaInfoL As New CBottomBaseBandInfo(Me, 1, iv)
             Dim komaInfoR As New CBottomBaseBandInfo(Me, p_iひもの本数, iv)
@@ -1362,27 +1362,12 @@ Partial Public Class clsCalcKnot
                 Dim rKomaR As S領域 = komaInfoR.CurrentKoma.m_regionKnotDraw
 
                 '全長を右の外に
-                Dim len As Double = komaInfoR.CurrentKoma.m_row縦横展開(emExp._Yoko).f_d出力ひも長
-                Dim strLen As String = "[" & iv.ToString & "] " & outp.outLengthText(len)
-                If last_len < len Then
-                    ix_pos += 1
-                ElseIf len < last_len Then
-                    ix_pos -= 1
-                End If
-                last_len = len
-                '
-                item = New clsImageItem(New S実座標(p底右.X + ix_pos * dSiz, rKomaR.p右下.Y + delta右.dY), {strLen}, _d基本のひも幅 * 2 / 3, iv)
+                Dim pR As New S実座標(p底右.X - dSiz * 3, rKomaR.p右下.Y + delta右.dY)
+                Dim str As String = String.Format("{0,3} [{1,2}]{2,7}", komaInfoR.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号, iv, outp.outLengthText(komaInfoR.CurrentKoma.m_row縦横展開(emExp._Yoko).f_d出力ひも長))
+                item = New clsImageItem(pR, {str}, _d基本のひも幅 * 2 / 3, iv)
                 itemlist.AddItem(item)
-
-                '位置番号
-                'Dim strDif As String = Parentheses(Math.Abs(iv - _i上から何番目) + 1)
-                Dim strDif As String = Parentheses(komaInfoR.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号)
-                item = New clsImageItem(New S実座標(p底右.X - dSiz * 3, rKomaR.p右下.Y + delta右.dY), {strDif}, _d基本のひも幅 * 2 / 3, iv)
-                itemlist.AddItem(item)
-
 
                 Dim p As S実座標
-
                 If dir.HasFlag(DirectionEnum._左) Then
                     Dim strL As String = outp.outLengthText(komaInfoL.getBandLength(SideIndexEnum._左側))
                     p = rKomaL.p左下 + delta左
@@ -1400,8 +1385,6 @@ Partial Public Class clsCalcKnot
         Next
 
         'コマが横に並ぶライン
-        Dim iy_pos As Integer = 0
-        last_len = 0
         For ih As Integer = 1 To _KnotFolderSpace.BottomBaseHorizontalCount
             Dim komaInfoU As New CBottomBaseBandInfo(Me, ih, 1)
             Dim komaInfoD As New CBottomBaseBandInfo(Me, ih, p_iひもの本数)
@@ -1412,33 +1395,13 @@ Partial Public Class clsCalcKnot
                 Dim rKomaU As S領域 = komaInfoU.CurrentKoma.m_regionKnotDraw
                 Dim rKomaD As S領域 = komaInfoD.CurrentKoma.m_regionKnotDraw
 
-                '全長
-                Dim len As Double = komaInfoU.CurrentKoma.m_row縦横展開(emExp._Tate).f_d出力ひも長
-                Dim strLen As String = outp.outLengthText(len)
-                If last_len = len Then
-                    strLen = ""
-                Else
-                    If last_len < len Then
-                        iy_pos += 1
-                    Else
-                        iy_pos -= 1
-                    End If
-                    last_len = len
-                End If
-                '
-                strLen = "[" & ih.ToString & "] " & strLen
-                item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y + iy_pos * _d基本のひも幅), {strLen}, _d基本のひも幅 * 2 / 3, ih)
+                '全長を上の外に
+                Dim pU As New S実座標(rKomaU.p左下.X + _d基本のひも幅 * 0.5, p底上.Y - _d基本のひも幅 * 0.2)
+                Dim str As String = String.Format("{0,3} [{1,2}]{2,7}", komaInfoU.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号, ih, outp.outLengthText(komaInfoU.CurrentKoma.m_row縦横展開(emExp._Tate).f_d出力ひも長))
+                item = New clsImageItem(pU, {str}, _d基本のひも幅 * 2 / 3, ih, -90)
                 itemlist.AddItem(item)
-
-                '位置番号
-                'Dim strDif As String = Parentheses(Math.Abs(ih - _i左から何番目) + 1)
-                Dim strDif As String = Parentheses(komaInfoU.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号)
-                item = New clsImageItem(New S実座標(rKomaU.p左下.X, p底上.Y - _d基本のひも幅), {strDif}, _d基本のひも幅 * 2 / 3, ih)
-                itemlist.AddItem(item)
-
 
                 Dim p As S実座標
-
                 If dir.HasFlag(DirectionEnum._上) Then
                     Dim strU As String = outp.outLengthText(komaInfoU.getBandLength(SideIndexEnum._上側))
                     p = rKomaU.p左上 + delta上

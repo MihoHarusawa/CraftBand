@@ -250,6 +250,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  長さ に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionLength() As String
+            Get
+                Return ResourceManager.GetString("CaptionLength", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  内折り に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionOriInside() As String
@@ -268,11 +277,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  全係数分 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionRatioAll() As String
+            Get
+                Return ResourceManager.GetString("CaptionRatioAll", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  消費係数分 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionRatioUsed() As String
+            Get
+                Return ResourceManager.GetString("CaptionRatioUsed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  端 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionTerminal() As String
             Get
                 Return ResourceManager.GetString("CaptionTerminal", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  ～ひも中心 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionToCenter() As String
+            Get
+                Return ResourceManager.GetString("CaptionToCenter", resourceCulture)
             End Get
         End Property
         
