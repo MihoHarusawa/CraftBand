@@ -916,9 +916,11 @@ Partial Public Class clsCalcSquare45
             Return False 'p_sメッセージあり
         End If
 
+        '#117
         Dim r底編み表示 As New S領域
         If isBottomBase Then
-            r底編み表示 = _a底領域.r外接領域
+            r底編み表示 = _a底領域.r外接領域 '底編み
+            'ひも2本分の表示を追加
             r底編み表示.enLarge(_dひも幅の一辺 * 2)
         End If
 
@@ -968,7 +970,6 @@ Partial Public Class clsCalcSquare45
             Dim strH As String = text底編み() + text縦() + " " + outp.outLengthText(_a底領域.r外接領域.y高さ)
             Dim itemH As New clsImageItem(_a底領域.r外接領域.p右上 + Unit90 * _dひも幅の一辺 * 0.7, {strH}, _dひも幅の一辺 * 0.4, 0)
             _ImageList描画要素.AddItem(itemH)
-
         End If
 
 
