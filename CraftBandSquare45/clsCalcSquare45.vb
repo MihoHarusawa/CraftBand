@@ -1326,7 +1326,7 @@ Class clsCalcSquare45
     'f_dVal1:中心からのバンドの長さ
     'f_dVal2:中心からのバンドの長さ(端側)
     'f_dVal3:
-    'f_dVal4:
+    'f_dVal4:ひも長　※折りカラー反映・係数未
     'f_sVal1:非端側の重ね色
     'f_sVal2:端側の重ね色
     '端:ひも長加算2の側(右・上)
@@ -1452,7 +1452,7 @@ Class clsCalcSquare45
         End If
 
         '本幅の変更、もしくは再計算
-        'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス
+        'f_dひも長 :四角の一辺(角から出る分)と高さ*2 をプラス　→f_dVal4
         'f_d出力ひも長 :ひも長に係数をかけて、+2*(ひも長加算(一端)+縁の垂直ひも長)+ひも長加算
         'f_dVal1,f_dVal2 に、中心からの各長さをセットする
         With row
@@ -1484,12 +1484,15 @@ Class clsCalcSquare45
                 End If
 
                 '#96
+                .f_dVal4 = .f_dひも長
                 If p_is折りカラー処理 Then
                     If .f_b内側区分 OrElse .f_b外側区分 Then
+                        .f_dVal4 += p_d四角ベース_高さ * ROOT2
                         .f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                         .f_dVal1 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                     End If
                     If .f_b内側区分2 OrElse .f_b外側区分2 Then
+                        .f_dVal4 += p_d四角ベース_高さ * ROOT2
                         .f_d出力ひも長 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                         .f_dVal2 += p_d四角ベース_高さ * ROOT2 * _dひも長係数
                     End If
@@ -2280,9 +2283,9 @@ Class clsCalcSquare45
         output.AddBlankLine()
 
         '***底編み
-        If _frmMain.chk底編み.Checked Then
-            outputBottomBase(output)
-        End If
+        'If _frmMain.chk底編み.Checked Then
+        outputBottomBase(output)
+        'End If
 
         '集計値
         output.OutSummery() '間に空行
@@ -2295,10 +2298,10 @@ Class clsCalcSquare45
 
 
     '底編みからの残りひも長を計算(#117)
-    ' ひも長 = 編み部分
-    ' 出力ひも長 = (ひも長 * _dひも長係数) + 全ての加算
-    ' f_dVal1 = (ひも長 * _dひも長係数)/2 + ひも長加算側の加算
-    ' f_dVal2 = (ひも長 * _dひも長係数)/2 + ひも長加算2側の加算
+    ' f_dVal4 = 編み部分のひも長、係数なし　※折りカラー込み
+    ' 出力ひも長 = (ひも長 * _dひも長係数) + 全ての加算　※折りカラー込み
+    ' f_dVal1 = (ひも長 * _dひも長係数)/2 + ひも長加算側の加算　※折りカラー込み
+    ' f_dVal2 = (ひも長 * _dひも長係数)/2 + ひも長加算2側の加算　※折りカラー込み
     Private Sub outputBottomBase(ByVal output As clsOutput)
         Dim row As tblOutputRow
 
@@ -2309,7 +2312,6 @@ Class clsCalcSquare45
         Dim d側面高 As Double = p_d四角ベース_高さ * ROOT2
 
         '横ひも
-        row = output.NextNewRow
         row.f_sタイプ = _dひも長係数
         row.f_s編みかた名 = text底編み() + text横()
         row.f_s編みひも名 = output.outLengthText(r底編み.x幅)
@@ -2317,11 +2319,11 @@ Class clsCalcSquare45
         row = output.NextNewRow
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sタイプ = text全係数分() ' "全係数分"
-        row.f_s編みかた名 = text横端名(False) + textからひも中心() ' "左からひも中心"
-        row.f_s編みひも名 = text横端名(True) + textからひも中心() ' "右からひも中心"
+        row.f_s編みかた名 = text左右(False) + textからひも中心() ' "左からひも中心"
+        row.f_s編みひも名 = text左右(True) + textからひも中心() ' "右からひも中心"
         'row.f_i周数 = "位置"
-        row.f_s高さ = text横端名(False) + text長さ() ' "左長さ"
-        row.f_s長さ = text横端名(True) + text長さ() '"右長さ"
+        row.f_s高さ = text横端名(False) + text長さ() ' "左端長さ"
+        row.f_s長さ = text横端名(True) + text長さ() '"右端長さ"
         row.f_sメモ = text消費係数分() '"係数消費分"
 
         For ih As Integer = 1 To p_i横ひもの本数
@@ -2352,13 +2354,13 @@ Class clsCalcSquare45
                 row.f_i段数 = .f_i位置番号
 
                 '係数全体と枠情報
-                Dim d全係数分 As Double = .f_dひも長 * (_dひも長係数 - 1) '係数分(全体)
+                Dim d全係数分 As Double = .f_dVal4 * (_dひも長係数 - 1) 'ひも長の係数分(全体)
                 Dim d左から中心 As Double = d左枠から辺 + .f_d長さ / 2 '左からひも中心
                 Dim d中心から右 As Double = .f_d長さ / 2 + d辺から右枠 '右からひも中心
 
                 bandPosition.m_diff中央 = 0
-                If .f_dひも長加算 <> .f_dひも長加算2 Then
-                    bandPosition.m_diff中央 = (.f_dひも長加算2 - .f_dひも長加算) / 2
+                If .f_dVal1 <> .f_dVal2 Then
+                    bandPosition.m_diff中央 = (.f_dVal2 - .f_dVal1) / 2
                     d左から中心 += bandPosition.m_diff中央
                     d中心から右 -= bandPosition.m_diff中央
                     If 0 < bandPosition.m_diff中央 Then
@@ -2412,11 +2414,11 @@ Class clsCalcSquare45
         row = output.NextNewRow
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sタイプ = text全係数分() ' "全係数分"
-        row.f_s編みかた名 = text縦端名(True) + textからひも中心() ' "下からひも中心"
-        row.f_s編みひも名 = text縦端名(False) + textからひも中心() '"上からひも中心"
+        row.f_s編みかた名 = text上下(True) + textからひも中心() ' "下からひも中心"
+        row.f_s編みひも名 = text上下(False) + textからひも中心() '"上からひも中心"
         'row.f_i周数 = "位置"
-        row.f_s高さ = text縦端名(True) + text長さ() ' "下長さ"
-        row.f_s長さ = text縦端名(False) + text長さ() ' "上長さ"
+        row.f_s高さ = text縦端名(True) + text長さ() ' "下端長さ"
+        row.f_s長さ = text縦端名(False) + text長さ() ' "上端長さ"
         row.f_sメモ = text消費係数分() '"係数消費分"
 
         For iv As Integer = 1 To p_i縦ひもの本数
@@ -2447,13 +2449,13 @@ Class clsCalcSquare45
                 row.f_i段数 = .f_i位置番号
 
                 '係数全体と枠情報
-                Dim d全係数分 As Double = .f_dひも長 * (_dひも長係数 - 1) '係数分(全体)
+                Dim d全係数分 As Double = .f_dVal4 * (_dひも長係数 - 1) 'ひも長の係数分(全体)
                 Dim d下から中心 As Double = d下枠から辺 + .f_d長さ / 2 '下からひも中心
                 Dim d中心から上 As Double = .f_d長さ / 2 + d辺から上枠 '上からひも中心
 
                 bandPosition.m_diff中央 = 0
-                If .f_dひも長加算 <> .f_dひも長加算2 Then
-                    bandPosition.m_diff中央 = (.f_dひも長加算 - .f_dひも長加算2) / 2
+                If .f_dVal1 <> .f_dVal2 Then
+                    bandPosition.m_diff中央 = (.f_dVal1 - .f_dVal2) / 2
                     d下から中心 += bandPosition.m_diff中央
                     d中心から上 -= bandPosition.m_diff中央
                     If 0 < bandPosition.m_diff中央 Then
@@ -2601,20 +2603,37 @@ Class clsCalcSquare45
         Return _frmMain.chk折りカラー編み.Text
     End Function
 
-    Private Function text横端名(ByVal isTerminal As Boolean) As String
+    Private Function text左右(ByVal isTerminal As Boolean) As String
         If isTerminal Then
-            Return _ary左右(1) & My.Resources.CaptionTerminal  '右
+            Return _ary左右(1)   '右
         Else
-            Return _ary左右(0) & My.Resources.CaptionTerminal '左
+            Return _ary左右(0)  '左
         End If
     End Function
 
-    Private Function text縦端名(ByVal isTerminal As Boolean) As String
+    Private Function text上下(ByVal isTerminal As Boolean) As String
         If isTerminal Then
-            Return _ary上下(1) & My.Resources.CaptionTerminal '下
+            Return _ary上下(1)  '下
         Else
-            Return _ary上下(0) & My.Resources.CaptionTerminal '上
+            Return _ary上下(0)  '上
         End If
+    End Function
+    Private Function text横端名(ByVal isTerminal As Boolean) As String
+        'If isTerminal Then
+        '    Return _ary左右(1) & My.Resources.CaptionTerminal  '右
+        'Else
+        '    Return _ary左右(0) & My.Resources.CaptionTerminal '左
+        'End If
+        Return text左右(isTerminal) & My.Resources.CaptionTerminal
+    End Function
+
+    Private Function text縦端名(ByVal isTerminal As Boolean) As String
+        'If isTerminal Then
+        '    Return _ary上下(1) & My.Resources.CaptionTerminal '下
+        'Else
+        '    Return _ary上下(0) & My.Resources.CaptionTerminal '上
+        'End If
+        Return text上下(isTerminal) & My.Resources.CaptionTerminal
     End Function
 
     Private Function text端名(ByVal iひも種 As enumひも種, ByVal isTerminal As Boolean) As String

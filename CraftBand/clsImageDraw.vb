@@ -693,7 +693,11 @@ Public Class CImageDraw
     End Function
 
     Function draw底の中央線(ByVal item As clsImageItem) As Boolean
-        Return draw_linelist(item.m_lineList, LineTypeEnum._red)
+        Dim ltype As LineTypeEnum = item.m_ltype
+        If ltype = LineTypeEnum._nodef Then
+            ltype = LineTypeEnum._red '底の中央線色
+        End If
+        Return draw_linelist(item.m_lineList, ltype)
     End Function
 
     Function draw折り返し線(ByVal item As clsImageItem) As Boolean

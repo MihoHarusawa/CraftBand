@@ -1177,7 +1177,7 @@ Partial Public Class clsCalcSquare45
         Dim dSiz As Double = _dひも幅の一辺 * 1 / 3
 
         'ひも中心
-        Dim itemDiff As New clsImageItem(clsImageItem.ImageTypeEnum._折り返し線, 1)
+        Dim itemDiff As New clsImageItem(clsImageItem.ImageTypeEnum._底の中央線, 2)
 
         For ih As Integer = 1 To p_i横ひもの本数
             Dim bandPosition As CBandPosition = _BandPositions(emExp._Yoko).ByIdx(ih)
