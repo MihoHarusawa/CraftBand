@@ -334,9 +334,9 @@ Namespace Tables
             
             Private columnf_s編みひも名 As Global.System.Data.DataColumn
             
-            Private columnf_i周数 As Global.System.Data.DataColumn
+            Private columnf_s周数 As Global.System.Data.DataColumn
             
-            Private columnf_i段数 As Global.System.Data.DataColumn
+            Private columnf_s段数 As Global.System.Data.DataColumn
             
             Private columnf_s高さ As Global.System.Data.DataColumn
             
@@ -453,17 +453,17 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property f_i周数Column() As Global.System.Data.DataColumn
+            Public ReadOnly Property f_s周数Column() As Global.System.Data.DataColumn
                 Get
-                    Return Me.columnf_i周数
+                    Return Me.columnf_s周数
                 End Get
             End Property
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public ReadOnly Property f_i段数Column() As Global.System.Data.DataColumn
+            Public ReadOnly Property f_s段数Column() As Global.System.Data.DataColumn
                 Get
-                    Return Me.columnf_i段数
+                    Return Me.columnf_s段数
                 End Get
             End Property
             
@@ -569,8 +569,8 @@ Namespace Tables
                         ByVal f_sタイプ As String,  _
                         ByVal f_s編みかた名 As String,  _
                         ByVal f_s編みひも名 As String,  _
-                        ByVal f_i周数 As Integer,  _
-                        ByVal f_i段数 As Short,  _
+                        ByVal f_s周数 As String,  _
+                        ByVal f_s段数 As String,  _
                         ByVal f_s高さ As String,  _
                         ByVal f_s長さ As String,  _
                         ByVal f_s本幅 As String,  _
@@ -579,7 +579,7 @@ Namespace Tables
                         ByVal f_s色 As String,  _
                         ByVal f_sメモ As String) As tblOutputRow
                 Dim rowtblOutputRow As tblOutputRow = CType(Me.NewRow,tblOutputRow)
-                Dim columnValuesArray() As Object = New Object() {f_iNo, f_b空行区分, f_sカテゴリー, f_s記号, f_s番号, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sメモ}
+                Dim columnValuesArray() As Object = New Object() {f_iNo, f_b空行区分, f_sカテゴリー, f_s記号, f_s番号, f_sタイプ, f_s編みかた名, f_s編みひも名, f_s周数, f_s段数, f_s高さ, f_s長さ, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sメモ}
                 rowtblOutputRow.ItemArray = columnValuesArray
                 Me.Rows.Add(rowtblOutputRow)
                 Return rowtblOutputRow
@@ -616,8 +616,8 @@ Namespace Tables
                 Me.columnf_sタイプ = MyBase.Columns("f_sタイプ")
                 Me.columnf_s編みかた名 = MyBase.Columns("f_s編みかた名")
                 Me.columnf_s編みひも名 = MyBase.Columns("f_s編みひも名")
-                Me.columnf_i周数 = MyBase.Columns("f_i周数")
-                Me.columnf_i段数 = MyBase.Columns("f_i段数")
+                Me.columnf_s周数 = MyBase.Columns("f_s周数")
+                Me.columnf_s段数 = MyBase.Columns("f_s段数")
                 Me.columnf_s高さ = MyBase.Columns("f_s高さ")
                 Me.columnf_s長さ = MyBase.Columns("f_s長さ")
                 Me.columnf_s本幅 = MyBase.Columns("f_s本幅")
@@ -646,10 +646,10 @@ Namespace Tables
                 MyBase.Columns.Add(Me.columnf_s編みかた名)
                 Me.columnf_s編みひも名 = New Global.System.Data.DataColumn("f_s編みひも名", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s編みひも名)
-                Me.columnf_i周数 = New Global.System.Data.DataColumn("f_i周数", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
-                MyBase.Columns.Add(Me.columnf_i周数)
-                Me.columnf_i段数 = New Global.System.Data.DataColumn("f_i段数", GetType(Short), Nothing, Global.System.Data.MappingType.Element)
-                MyBase.Columns.Add(Me.columnf_i段数)
+                Me.columnf_s周数 = New Global.System.Data.DataColumn("f_s周数", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s周数)
+                Me.columnf_s段数 = New Global.System.Data.DataColumn("f_s段数", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+                MyBase.Columns.Add(Me.columnf_s段数)
                 Me.columnf_s高さ = New Global.System.Data.DataColumn("f_s高さ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
                 MyBase.Columns.Add(Me.columnf_s高さ)
                 Me.columnf_s長さ = New Global.System.Data.DataColumn("f_s長さ", GetType(String), Nothing, Global.System.Data.MappingType.Element)
@@ -1295,31 +1295,31 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_i周数() As Integer
+            Public Property f_s周数() As String
                 Get
-                    If Me.Isf_i周数Null Then
-                        Return 0
+                    If Me.Isf_s周数Null Then
+                        Return "0"
                     Else
-                        Return CType(Me(Me.tabletblOutput.f_i周数Column),Integer)
+                        Return CType(Me(Me.tabletblOutput.f_s周数Column),String)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletblOutput.f_i周数Column) = value
+                    Me(Me.tabletblOutput.f_s周数Column) = value
                 End Set
             End Property
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Property f_i段数() As Short
+            Public Property f_s段数() As String
                 Get
-                    If Me.Isf_i段数Null Then
-                        Return 0
+                    If Me.Isf_s段数Null Then
+                        Return "0"
                     Else
-                        Return CType(Me(Me.tabletblOutput.f_i段数Column),Short)
+                        Return CType(Me(Me.tabletblOutput.f_s段数Column),String)
                     End If
                 End Get
                 Set
-                    Me(Me.tabletblOutput.f_i段数Column) = value
+                    Me(Me.tabletblOutput.f_s段数Column) = value
                 End Set
             End Property
             
@@ -1514,26 +1514,26 @@ Namespace Tables
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function Isf_i周数Null() As Boolean
-                Return Me.IsNull(Me.tabletblOutput.f_i周数Column)
+            Public Function Isf_s周数Null() As Boolean
+                Return Me.IsNull(Me.tabletblOutput.f_s周数Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub Setf_i周数Null()
-                Me(Me.tabletblOutput.f_i周数Column) = Global.System.Convert.DBNull
+            Public Sub Setf_s周数Null()
+                Me(Me.tabletblOutput.f_s周数Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Function Isf_i段数Null() As Boolean
-                Return Me.IsNull(Me.tabletblOutput.f_i段数Column)
+            Public Function Isf_s段数Null() As Boolean
+                Return Me.IsNull(Me.tabletblOutput.f_s段数Column)
             End Function
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
              Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")>  _
-            Public Sub Setf_i段数Null()
-                Me(Me.tabletblOutput.f_i段数Column) = Global.System.Convert.DBNull
+            Public Sub Setf_s段数Null()
+                Me(Me.tabletblOutput.f_s段数Column) = Global.System.Convert.DBNull
             End Sub
             
             <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

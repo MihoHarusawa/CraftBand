@@ -53,8 +53,8 @@ Partial Class frmOutput
         f_sタイプ = New DataGridViewTextBoxColumn()
         f_s編みかた名 = New DataGridViewTextBoxColumn()
         f_s編みひも名 = New DataGridViewTextBoxColumn()
-        f_i周数 = New DataGridViewTextBoxColumn()
-        f_i段数 = New DataGridViewTextBoxColumn()
+        f_s周数 = New DataGridViewTextBoxColumn()
+        f_s段数 = New DataGridViewTextBoxColumn()
         f_s高さ = New DataGridViewTextBoxColumn()
         f_s長さ = New DataGridViewTextBoxColumn()
         f_sメモ = New DataGridViewTextBoxColumn()
@@ -70,7 +70,7 @@ Partial Class frmOutput
         dgvOutput.AutoGenerateColumns = False
         dgvOutput.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         dgvOutput.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        dgvOutput.Columns.AddRange(New DataGridViewColumn() {f_iNo, f_b空行区分, f_sカテゴリー, f_s番号, f_s記号, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sタイプ, f_s編みかた名, f_s編みひも名, f_i周数, f_i段数, f_s高さ, f_s長さ, f_sメモ})
+        dgvOutput.Columns.AddRange(New DataGridViewColumn() {f_iNo, f_b空行区分, f_sカテゴリー, f_s番号, f_s記号, f_s本幅, f_sひも本数, f_sひも長, f_s色, f_sタイプ, f_s編みかた名, f_s編みひも名, f_s周数, f_s段数, f_s高さ, f_s長さ, f_sメモ})
         dgvOutput.DataSource = BindingSourceOutput
         dgvOutput.Location = New System.Drawing.Point(12, 11)
         dgvOutput.Name = "dgvOutput"
@@ -248,29 +248,29 @@ Partial Class frmOutput
         f_s編みひも名.SortMode = DataGridViewColumnSortMode.NotSortable
         f_s編みひも名.Width = 98
         ' 
-        ' f_i周数
+        ' f_s周数
         ' 
-        f_i周数.DataPropertyName = "f_i周数"
+        f_s周数.DataPropertyName = "f_s周数"
         DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i周数.DefaultCellStyle = DataGridViewCellStyle6
-        f_i周数.HeaderText = "周数"
-        f_i周数.MinimumWidth = 6
-        f_i周数.Name = "f_i周数"
-        f_i周数.ReadOnly = True
-        f_i周数.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i周数.Width = 46
+        f_s周数.DefaultCellStyle = DataGridViewCellStyle6
+        f_s周数.HeaderText = "周数"
+        f_s周数.MinimumWidth = 6
+        f_s周数.Name = "f_s周数"
+        f_s周数.ReadOnly = True
+        f_s周数.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s周数.Width = 46
         ' 
-        ' f_i段数
+        ' f_s段数
         ' 
-        f_i段数.DataPropertyName = "f_i段数"
+        f_s段数.DataPropertyName = "f_s段数"
         DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight
-        f_i段数.DefaultCellStyle = DataGridViewCellStyle7
-        f_i段数.HeaderText = "段数"
-        f_i段数.MinimumWidth = 6
-        f_i段数.Name = "f_i段数"
-        f_i段数.ReadOnly = True
-        f_i段数.SortMode = DataGridViewColumnSortMode.NotSortable
-        f_i段数.Width = 37
+        f_s段数.DefaultCellStyle = DataGridViewCellStyle7
+        f_s段数.HeaderText = "段数"
+        f_s段数.MinimumWidth = 6
+        f_s段数.Name = "f_s段数"
+        f_s段数.ReadOnly = True
+        f_s段数.SortMode = DataGridViewColumnSortMode.NotSortable
+        f_s段数.Width = 37
         ' 
         ' f_s高さ
         ' 
@@ -344,8 +344,8 @@ Partial Class frmOutput
     Friend WithEvents f_sタイプ As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みかた名 As DataGridViewTextBoxColumn
     Friend WithEvents f_s編みひも名 As DataGridViewTextBoxColumn
-    Friend WithEvents f_i周数 As DataGridViewTextBoxColumn
-    Friend WithEvents f_i段数 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s周数 As DataGridViewTextBoxColumn
+    Friend WithEvents f_s段数 As DataGridViewTextBoxColumn
     Friend WithEvents f_s高さ As DataGridViewTextBoxColumn
     Friend WithEvents f_s長さ As DataGridViewTextBoxColumn
     Friend WithEvents f_sメモ As DataGridViewTextBoxColumn

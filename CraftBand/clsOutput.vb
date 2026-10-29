@@ -302,7 +302,7 @@ Public Class clsOutput
             _CurrentRow.f_s番号 = r.f_i番号.ToString
             _CurrentRow.f_s編みかた名 = r.f_s付属品名
             _CurrentRow.f_s編みひも名 = r.f_s付属品ひも名
-            _CurrentRow.f_i周数 = r.f_i点数
+            _CurrentRow.f_s周数 = r.f_i点数
             _CurrentRow.f_s長さ = outLengthText(r.f_d長さ)
             If 0 < r.f_iひも本数 AndAlso Not r.f_b集計対象外区分 Then
                 r.f_s記号 = SetBandRow(r.f_iひも本数, r.f_i何本幅, r.f_d出力ひも長, r.f_s色)

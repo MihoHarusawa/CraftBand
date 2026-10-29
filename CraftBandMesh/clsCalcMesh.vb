@@ -3160,8 +3160,8 @@ Class clsCalcMesh
                 row.f_s番号 = r.f_i番号.ToString
                 row.f_s編みかた名 = r.f_s編みかた名
                 row.f_s編みひも名 = r.f_s編みひも名
-                row.f_i周数 = r.f_i周数
-                row.f_i段数 = r.f_i段数
+                row.f_s周数 = r.f_i周数
+                row.f_s段数 = r.f_i段数
                 row.f_s高さ = output.outLengthText(r.f_d径)
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
@@ -3238,8 +3238,8 @@ Class clsCalcMesh
                 End If
                 row.f_s編みかた名 = r.f_s編みかた名
                 row.f_s編みひも名 = r.f_s編みひも名
-                row.f_i周数 = r.f_i周数
-                row.f_i段数 = r.f_i段数
+                row.f_s周数 = r.f_i周数
+                row.f_s段数 = r.f_i段数
                 row.f_s高さ = output.outLengthText(r.f_d高さ)
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then

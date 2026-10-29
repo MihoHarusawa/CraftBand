@@ -2369,7 +2369,7 @@ Class clsCalcSquare
                         row.f_s編みひも名 = r_prv.f_s編みひも名
                     End If
 
-                    row.f_i周数 = contcount
+                    row.f_s周数 = contcount
                     If isSameHeight Then
                         row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
                     End If
@@ -2401,7 +2401,7 @@ Class clsCalcSquare
                 row.f_s編みかた名 = r_prv.f_s編みかた名
                 row.f_s編みひも名 = r_prv.f_s編みひも名
             End If
-            row.f_i周数 = contcount
+            row.f_s周数 = contcount
             If isSameHeight Then
                 row.f_s高さ = output.outLengthText(r_prv.f_d高さ)
             End If
@@ -2637,8 +2637,8 @@ Class clsCalcSquare
                 row.f_sタイプ = PlateString(r.f_i配置面)
                 row.f_s編みかた名 = AngleString(r.f_i角度)
                 row.f_s編みひも名 = CenterString(r.f_i中心点)
-                row.f_i周数 = r.f_i開始位置
-                row.f_i段数 = r.f_i何本ごと
+                row.f_s周数 = r.f_i開始位置
+                row.f_s段数 = r.f_i何本ごと
                 row.f_sメモ = r.f_sメモ
                 If Not r.f_b有効区分 Then
                     Continue For

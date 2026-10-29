@@ -2276,11 +2276,11 @@ Class clsCalcKnot
                         Case text横ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i横ひもの本数, row.f_s編みひも名)
                             'row.f_i段数 = _i横のコマ数 + 2 * p_i編みひもの本数
-                            row.f_i段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
+                            row.f_s段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                         Case text縦ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i縦ひもの本数, row.f_s編みひも名)
                             'row.f_i段数 = _i縦のコマ数 + 2 * p_i編みひもの本数
-                            row.f_i段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
+                            row.f_s段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                     End Select
 
                     row = output.NextNewRow
@@ -2327,7 +2327,7 @@ Class clsCalcKnot
                     row.f_s編みひも名 = r.f_s編みひも名
                     lastname = r.f_s編みひも名
                 End If
-                row.f_i段数 = r.f_i段数
+                row.f_s段数 = r.f_i段数
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
                     If 0 <= r.f_d連続ひも長 Then
@@ -2418,7 +2418,7 @@ Class clsCalcKnot
             row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._左側, output)
             row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._左側))
             row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._左側))
-            row.f_i段数 = startInfo.knots(SideIndexEnum._左側)
+            row.f_s段数 = startInfo.knots(SideIndexEnum._左側)
 
             '右
             row = output.NextNewRow
@@ -2426,7 +2426,7 @@ Class clsCalcKnot
             row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._右側, output)
             row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._右側))
             row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._右側))
-            row.f_i段数 = startInfo.knots(SideIndexEnum._右側)
+            row.f_s段数 = startInfo.knots(SideIndexEnum._右側)
 
             '縦ひも
             row = output.NextNewRow
@@ -2446,7 +2446,7 @@ Class clsCalcKnot
             row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._上側, output)
             row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._上側))
             row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._上側))
-            row.f_i段数 = startInfo.knots(SideIndexEnum._上側)
+            row.f_s段数 = startInfo.knots(SideIndexEnum._上側)
 
             '下
             row = output.NextNewRow
@@ -2454,7 +2454,7 @@ Class clsCalcKnot
             row.f_s編みひも名 = startInfo.getDiffFoldingString(SideIndexEnum._下側, output)
             row.f_s高さ = output.outLengthText(startInfo.getFoldingLength(SideIndexEnum._下側))
             row.f_s長さ = output.outLengthText(startInfo.getBandLength(SideIndexEnum._下側))
-            row.f_i段数 = startInfo.knots(SideIndexEnum._下側)
+            row.f_s段数 = startInfo.knots(SideIndexEnum._下側)
 
             output.AddBlankLine()
 
@@ -2525,13 +2525,13 @@ Class clsCalcKnot
                 row.f_sタイプ = komaInfo.getDiffFoldingString(SideIndexEnum._左側, output)
                 row.f_s編みかた名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._左側))
                 row.f_s高さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._左側))
-                row.f_i周数 = komaInfo.knots(SideIndexEnum._左側)
+                row.f_s周数 = komaInfo.knots(SideIndexEnum._左側)
 
                 '右
                 row.f_sメモ = komaInfo.getDiffFoldingString(SideIndexEnum._右側, output)
                 row.f_s編みひも名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._右側))
                 row.f_s長さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._右側))
-                row.f_i段数 = komaInfo.knots(SideIndexEnum._右側)
+                row.f_s段数 = komaInfo.knots(SideIndexEnum._右側)
             End If
         Next
 
@@ -2575,13 +2575,13 @@ Class clsCalcKnot
                 row.f_sタイプ = komaInfo.getDiffFoldingString(SideIndexEnum._上側, output)
                 row.f_s編みかた名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._上側))
                 row.f_s高さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._上側))
-                row.f_i周数 = komaInfo.knots(SideIndexEnum._上側)
+                row.f_s周数 = komaInfo.knots(SideIndexEnum._上側)
 
                 '下
                 row.f_sメモ = komaInfo.getDiffFoldingString(SideIndexEnum._下側, output)
                 row.f_s編みひも名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._下側))
                 row.f_s長さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._下側))
-                row.f_i段数 = komaInfo.knots(SideIndexEnum._下側)
+                row.f_s段数 = komaInfo.knots(SideIndexEnum._下側)
             End If
         Next
 

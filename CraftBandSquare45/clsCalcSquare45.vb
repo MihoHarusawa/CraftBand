@@ -2217,8 +2217,8 @@ Class clsCalcSquare45
                 End If
                 row.f_s編みかた名 = r.f_s編みかた名
                 row.f_s編みひも名 = r.f_s編みひも名
-                row.f_i周数 = r.f_i周数
-                row.f_i段数 = r.f_i段数
+                row.f_s周数 = r.f_i周数
+                row.f_s段数 = r.f_i段数
                 row.f_s高さ = output.outLengthText(r.f_d高さ)
                 row.f_s長さ = output.outLengthText(r.f_d周長)
                 If 0 < r.f_iひも本数 Then
@@ -2257,8 +2257,8 @@ Class clsCalcSquare45
         Else
             row.f_s編みかた名 = output.outLengthText(p_d底の横長)
             row.f_s編みひも名 = output.outLengthText(p_d底の横長(True))
-            row.f_i周数 = p_d底の角度(SideIndexEnum._上側)
-            row.f_i段数 = p_d底の角度(SideIndexEnum._左側)
+            row.f_s周数 = p_d底の角度(SideIndexEnum._上側)
+            row.f_s段数 = p_d底の角度(SideIndexEnum._左側)
         End If
 
         row = output.NextNewRow
@@ -2270,8 +2270,8 @@ Class clsCalcSquare45
         Else
             row.f_s編みかた名 = output.outLengthText(p_d底の縦長)
             row.f_s編みひも名 = output.outLengthText(p_d底の縦長(True))
-            row.f_i周数 = p_d底の角度(SideIndexEnum._下側)
-            row.f_i段数 = p_d底の角度(SideIndexEnum._右側)
+            row.f_s周数 = p_d底の角度(SideIndexEnum._下側)
+            row.f_s段数 = p_d底の角度(SideIndexEnum._右側)
         End If
 
         row = output.NextNewRow
@@ -2351,7 +2351,7 @@ Class clsCalcSquare45
                 row.f_sひも本数 = .f_sひも名
                 row.f_sひも長 = output.outLengthText(.f_d出力ひも長)
                 row.f_s色 = .f_s色
-                row.f_i段数 = .f_i位置番号
+                row.f_s段数 = .f_i位置番号
 
                 '係数全体と枠情報
                 Dim d全係数分 As Double = .f_dVal4 * (_dひも長係数 - 1) 'ひも長の係数分(全体)
@@ -2364,9 +2364,9 @@ Class clsCalcSquare45
                     d左から中心 += bandPosition.m_diff中央
                     d中心から右 -= bandPosition.m_diff中央
                     If 0 < bandPosition.m_diff中央 Then
-                        row.f_i周数 = 1
+                        row.f_s周数 = 1
                     Else
-                        row.f_i周数 = -1
+                        row.f_s周数 = -1
                     End If
                 End If
                 row.f_sタイプ = output.outLengthText(d全係数分)
@@ -2446,7 +2446,7 @@ Class clsCalcSquare45
                 row.f_sひも本数 = .f_sひも名
                 row.f_sひも長 = output.outLengthText(.f_d出力ひも長)
                 row.f_s色 = .f_s色
-                row.f_i段数 = .f_i位置番号
+                row.f_s段数 = .f_i位置番号
 
                 '係数全体と枠情報
                 Dim d全係数分 As Double = .f_dVal4 * (_dひも長係数 - 1) 'ひも長の係数分(全体)
@@ -2459,9 +2459,9 @@ Class clsCalcSquare45
                     d下から中心 += bandPosition.m_diff中央
                     d中心から上 -= bandPosition.m_diff中央
                     If 0 < bandPosition.m_diff中央 Then
-                        row.f_i周数 = 1
+                        row.f_s周数 = 1
                     Else
-                        row.f_i周数 = -1
+                        row.f_s周数 = -1
                     End If
                 End If
                 row.f_sタイプ = output.outLengthText(d全係数分)
