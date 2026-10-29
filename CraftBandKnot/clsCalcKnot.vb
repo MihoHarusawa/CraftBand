@@ -2204,18 +2204,27 @@ Class clsCalcKnot
                 row.f_sタイプ = text横置き()
                 'tmpTable = set横展開DataTable(_b縦横側面を展開する)
                 tmpTable = yokoTable
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s横ひものメモ")
+                row.f_s周数 = textコマ数()
+                row.f_s段数 = text左右(False)
+                row.f_s高さ = text左右(True)
             Else
                 row.f_sタイプ = text縦置き()
                 'tmpTable = set縦展開DataTable(_b縦横側面を展開する)
                 tmpTable = tateTable
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s縦ひものメモ")
+                row.f_s周数 = textコマ数()
+                row.f_s段数 = text上下(False)
+                row.f_s高さ = text上下(True)
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
                 Continue For
             End If
             'レコードあり
             'set縦横_出力ひも長(tmpTable)
+            row = output.NextNewRow
 
             '長い順に記号を振る
             Dim tmps() As tbl縦横展開Row
@@ -2261,9 +2270,9 @@ Class clsCalcKnot
                     row.f_s編みかた名 = lasttmp.f_sひも名
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
-                    If lasttmp.f_dひも長加算 + lasttmp.f_dひも長加算2 <> 0 Then
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
-                            "+" + output.outLengthText(lasttmp.f_dひも長加算2)
+                    If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then
+                        row.f_s段数 = output.outLengthText(lasttmp.f_dひも長加算)
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     '
@@ -2276,11 +2285,11 @@ Class clsCalcKnot
                         Case text横ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i横ひもの本数, row.f_s編みひも名)
                             'row.f_i段数 = _i横のコマ数 + 2 * p_i編みひもの本数
-                            row.f_s段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
+                            row.f_s周数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                         Case text縦ひも()
                             row.f_s編みひも名 = String.Format("[{0}] {1}", p_i縦ひもの本数, row.f_s編みひも名)
                             'row.f_i段数 = _i縦のコマ数 + 2 * p_i編みひもの本数
-                            row.f_s段数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
+                            row.f_s周数 = lasttmp.f_iVal1 + lasttmp.f_iVal2
                     End Select
 
                     row = output.NextNewRow
@@ -2490,6 +2499,8 @@ Class clsCalcKnot
         row.f_s番号 = text左から() & _i左から何番目.ToString & My.Resources.CalcOutOrder & text横ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
         row.f_s編みひも名 = My.Resources.CalcOutArrowDown '↓
+        row.f_s周数 = My.Resources.CalcOutFromKnot 'コマから
+        row.f_s段数 = My.Resources.CalcOutArrowDown '↓
         row.f_s高さ = My.Resources.CalcOutFromKnot 'コマから
         row.f_s長さ = My.Resources.CalcOutArrowDown '↓
 
@@ -2498,8 +2509,10 @@ Class clsCalcKnot
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sタイプ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._左側)) '<コマの{0}> 
         row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._左側))
-        row.f_s高さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._左側))
         row.f_s編みひも名 = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._右側)) '<コマの{0}> 
+        row.f_s周数 = CBottomBaseBandInfo.getSideString(SideIndexEnum._左側) & textコマ数()
+        row.f_s段数 = CBottomBaseBandInfo.getSideString(SideIndexEnum._右側) & textコマ数()
+        row.f_s高さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._左側))
         row.f_s長さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._右側))
         row.f_sメモ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._右側))
 
@@ -2525,13 +2538,13 @@ Class clsCalcKnot
                 row.f_sタイプ = komaInfo.getDiffFoldingString(SideIndexEnum._左側, output)
                 row.f_s編みかた名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._左側))
                 row.f_s高さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._左側))
-                row.f_s周数 = komaInfo.knots(SideIndexEnum._左側)
+                row.f_s周数 = textKnotUnit(komaInfo, SideIndexEnum._左側)
 
                 '右
                 row.f_sメモ = komaInfo.getDiffFoldingString(SideIndexEnum._右側, output)
                 row.f_s編みひも名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._右側))
                 row.f_s長さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._右側))
-                row.f_s段数 = komaInfo.knots(SideIndexEnum._右側)
+                row.f_s段数 = textKnotUnit(komaInfo, SideIndexEnum._右側)
             End If
         Next
 
@@ -2540,6 +2553,8 @@ Class clsCalcKnot
         row.f_s番号 = text上から() & _i上から何番目.ToString & My.Resources.CalcOutOrder & text縦ひも() '番目の
         row.f_s編みかた名 = My.Resources.CalcOutFromFolding '折り位置から
         row.f_s編みひも名 = My.Resources.CalcOutArrowRight '→
+        row.f_s周数 = My.Resources.CalcOutFromKnot 'コマから
+        row.f_s段数 = My.Resources.CalcOutArrowRight '→
         row.f_s高さ = My.Resources.CalcOutFromKnot 'コマから
         row.f_s長さ = My.Resources.CalcOutArrowRight '→
 
@@ -2548,8 +2563,10 @@ Class clsCalcKnot
         row.f_sひも長 = g_clsSelectBasics.p_unit出力時の寸法単位.Str
         row.f_sタイプ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._上側)) '<コマの{0}> 
         row.f_s編みかた名 = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._上側))
-        row.f_s高さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._上側))
         row.f_s編みひも名 = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._下側)) '<コマの{0}> 
+        row.f_s周数 = CBottomBaseBandInfo.getSideString(SideIndexEnum._上側) & textコマ数()
+        row.f_s段数 = CBottomBaseBandInfo.getSideString(SideIndexEnum._下側) & textコマ数()
+        row.f_s高さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._上側))
         row.f_s長さ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._下側))
         row.f_sメモ = String.Format(My.Resources.CalcOutKnotOf, CBottomBaseBandInfo.getSideString(SideIndexEnum._下側))
 
@@ -2575,20 +2592,24 @@ Class clsCalcKnot
                 row.f_sタイプ = komaInfo.getDiffFoldingString(SideIndexEnum._上側, output)
                 row.f_s編みかた名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._上側))
                 row.f_s高さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._上側))
-                row.f_s周数 = komaInfo.knots(SideIndexEnum._上側)
+                row.f_s周数 = textKnotUnit(komaInfo, SideIndexEnum._上側)
 
                 '下
                 row.f_sメモ = komaInfo.getDiffFoldingString(SideIndexEnum._下側, output)
                 row.f_s編みひも名 = output.outLengthText(komaInfo.getFoldingLength(SideIndexEnum._下側))
                 row.f_s長さ = output.outLengthText(komaInfo.getBandLength(SideIndexEnum._下側))
-                row.f_s段数 = komaInfo.knots(SideIndexEnum._下側)
+                row.f_s段数 = textKnotUnit(komaInfo, SideIndexEnum._下側)
             End If
         Next
 
         output.AddBlankLine()
     End Sub
 
-
+    Private Function textKnotUnit(ByVal komaInfo As CBottomBaseBandInfo, ByVal sideindex As SideIndexEnum) As String
+        Dim knot As Integer = komaInfo.knots(sideindex)
+        Dim len As Double = komaInfo.getBandLength(sideindex)
+        Return String.Format("{0}+{1:F1}", knot, (len / _dコマベース要尺) - knot)
+    End Function
 
 #End Region
 
@@ -2760,6 +2781,26 @@ Class clsCalcKnot
             Return _frmMain.rad右側.Text
         End If
     End Function
+
+    Shared _ary左右() As String = My.Resources.CaptionExpand4To6.Split(",")
+    Shared _ary上下() As String = My.Resources.CaptionExpand8To2.Split(",")
+
+    Private Function text左右(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary左右(1)   '右
+        Else
+            Return _ary左右(0)  '左
+        End If
+    End Function
+
+    Private Function text上下(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary上下(1)  '下
+        Else
+            Return _ary上下(0)  '上
+        End If
+    End Function
+
 
 #End Region
 

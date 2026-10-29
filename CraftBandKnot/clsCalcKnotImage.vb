@@ -1247,7 +1247,7 @@ Partial Public Class clsCalcKnot
         Dim item As clsImageItem
         Dim delta左 As New S差分(-_d基本のひも幅 * 5, _d基本のひも幅 * 1.5) '左下に対して
         Dim delta右 As New S差分(_d基本のひも幅, _d基本のひも幅 * 1.5) '右下に対して
-        Dim delta上 As New S差分(_d基本のひも幅 / 2, _d基本のひも幅 * 3) '左上に対して
+        Dim delta上 As New S差分(_d基本のひも幅 / 2, _d基本のひも幅 * 3.7) '左上に対して
         Dim delta下 As New S差分(_d基本のひも幅 / 2, -_d基本のひも幅 / 2) '左下に対して
         Dim dSiz As Double = _d基本のひも幅 * 1 / 2
 
@@ -1265,28 +1265,21 @@ Partial Public Class clsCalcKnot
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(komaInfo.CurrentKoma.StartLineRimSide)
                 For Each side As SideIndexEnum In sides
                     Dim str As String = outp.outLengthText(komaInfo.getBandLength(side))
+                    Dim str2 As String = Nothing
                     Dim p As S実座標
                     Select Case side
-                        'Case SideIndexEnum._上側 'iv=1のみ
-                        '    If _i上から何番目 = 1 Then
-                        '        Continue For
-                        '    End If
-                        '    p = rKoma.p左上 + delta上
-                        'Case SideIndexEnum._下側 'iv=BottomBaseVerticalCountのみ
-                        '    If _i上から何番目 = _KnotFolderSpace.BottomBaseVerticalCount Then
-                        '        Continue For
-                        '    End If
-                        '    p = rKoma.p左下 + delta下
                         Case SideIndexEnum._左側
                             p = rKoma.p左下 + delta左
-                            'str = Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Yoko).f_i位置番号) & " " & str
-                            str = Parentheses(Math.Abs(iv - _i上から何番目) + 1) & " " & str'開始位置からの相対番号
+                            'str = String.Format("No.{0} {1}", (Math.Abs(iv - _i上から何番目) + 1), str) '開始位置からの相対番号
+                            str = Parentheses(Math.Abs(iv - _i上から何番目) + 1) & " " & str '開始位置からの相対番号
+                            str2 = "    " & textKnotUnit(komaInfo, SideIndexEnum._左側)
                         Case SideIndexEnum._右側
                             p = rKoma.p右下 + delta右
+                            str2 = "   " & textKnotUnit(komaInfo, SideIndexEnum._右側)
                         Case Else
                             Continue For
                     End Select
-                    item = New clsImageItem(p, {str}, dSiz, iv)
+                    item = New clsImageItem(p, {str, str2}, dSiz, iv)
                     itemlist.AddItem(item)
                 Next
             End If
@@ -1304,30 +1297,20 @@ Partial Public Class clsCalcKnot
 
                 Dim sides() As SideIndexEnum = DirectionToSideIndex(komaInfo.CurrentKoma.StartLineRimSide)
                 For Each side As SideIndexEnum In sides
-                    Dim str As String = outp.outLengthText(komaInfo.getBandLength(side))
                     Dim p As S実座標
-                    Dim ary() As String = {str}
+                    Dim strlst As New List(Of String)
                     Select Case side
-                        'Case SideIndexEnum._左側 'ih=1のみ
-                        '    If _i左から何番目 = 1 Then
-                        '        Continue For
-                        '    End If
-                        '    p = rKoma.p左下 + delta左 + Unit0 * _d基本のひも幅
-                        'Case SideIndexEnum._右側 'ih=BottomBaseHorizontalCountのみ
-                        '    If _i左から何番目 = _KnotFolderSpace.BottomBaseHorizontalCount Then
-                        '        Continue For
-                        '    End If
-                        '    p = rKoma.p右下 + delta右
                         Case SideIndexEnum._上側
                             p = rKoma.p左上 + delta上
                         Case SideIndexEnum._下側
-                            'ary = {str, Parentheses(komaInfo.CurrentKoma.m_row縦横展開(emExp._Tate).f_i位置番号)}
-                            ary = {str, Parentheses(Math.Abs(ih - _i左から何番目) + 1)} '開始位置からの相対番号
+                            strlst.Add(Parentheses(Math.Abs(ih - _i左から何番目) + 1)) '開始位置からの相対番号
                             p = rKoma.p左下 + delta下
                         Case Else
                             Continue For
                     End Select
-                    item = New clsImageItem(p, ary, dSiz, ih)
+                    strlst.Add(outp.outLengthText(komaInfo.getBandLength(side)))
+                    strlst.Add(textKnotUnit(komaInfo, side))
+                    item = New clsImageItem(p, strlst.ToArray, dSiz, ih)
                     itemlist.AddItem(item)
                 Next
             End If

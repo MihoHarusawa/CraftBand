@@ -277,6 +277,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  位置 に類似しているローカライズされた文字列を検索します。
+        '''</summary>
+        Friend ReadOnly Property CaptionPosition() As String
+            Get
+                Return ResourceManager.GetString("CaptionPosition", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  全係数分 に類似しているローカライズされた文字列を検索します。
         '''</summary>
         Friend ReadOnly Property CaptionRatioAll() As String

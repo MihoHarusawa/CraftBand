@@ -1,11 +1,9 @@
 ﻿Imports System.IO
-Imports System.Windows
 Imports CraftBand
 Imports CraftBand.clsDataTables
 Imports CraftBand.ctrAddParts
 Imports CraftBand.ctrDataGridView
 Imports CraftBand.ctrExpanding
-Imports CraftBand.ctrInsertBand
 Imports CraftBand.Tables
 Imports CraftBand.Tables.dstDataTables
 Imports CraftBandHexagon.clsCalcHexagon

@@ -247,4 +247,7 @@
   <data name="CaptionToCenter" xml:space="preserve">
     <value>～ひも中心</value>
   </data>
+  <data name="CaptionPosition" xml:space="preserve">
+    <value>位置</value>
+  </data>
 </root>

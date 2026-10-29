@@ -2099,16 +2099,23 @@ Class clsCalcSquare45
             If yokotate = 1 Then
                 row.f_sタイプ = text横置き()
                 tmpTable = get横展開DataTable() '直前のCalcSizeの結果
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s横ひものメモ")
+                row.f_s段数 = text左右(False)
+                row.f_s高さ = text左右(True)
             Else
                 row.f_sタイプ = text縦置き()
                 tmpTable = get縦展開DataTable() '直前のCalcSizeの結果
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s縦ひものメモ")
+                row.f_s段数 = text上下(False)
+                row.f_s高さ = text上下(True)
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
                 Continue For
             End If
             'レコードあり
+            row = output.NextNewRow
 
             '長い順に記号を振る
             Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
@@ -2166,8 +2173,8 @@ Class clsCalcSquare45
                     output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                     row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                     If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
-                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
-                            "+" + output.outLengthText(lasttmp.f_dひも長加算2)
+                        row.f_s段数 = output.outLengthText(lasttmp.f_dひも長加算)
+                        row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算2)
                     End If
                     row.f_sメモ = sbMemo.ToString
                     'If _Data.p_row底_縦横.Value("f_b展開区分") Then
@@ -2321,7 +2328,7 @@ Class clsCalcSquare45
         row.f_sタイプ = text全係数分() ' "全係数分"
         row.f_s編みかた名 = text左右(False) + textからひも中心() ' "左からひも中心"
         row.f_s編みひも名 = text左右(True) + textからひも中心() ' "右からひも中心"
-        'row.f_i周数 = "位置"
+        row.f_s段数 = text位置()
         row.f_s高さ = text横端名(False) + text長さ() ' "左端長さ"
         row.f_s長さ = text横端名(True) + text長さ() '"右端長さ"
         row.f_sメモ = text消費係数分() '"係数消費分"
@@ -2363,11 +2370,12 @@ Class clsCalcSquare45
                     bandPosition.m_diff中央 = (.f_dVal2 - .f_dVal1) / 2
                     d左から中心 += bandPosition.m_diff中央
                     d中心から右 -= bandPosition.m_diff中央
-                    If 0 < bandPosition.m_diff中央 Then
-                        row.f_s周数 = 1
-                    Else
-                        row.f_s周数 = -1
-                    End If
+                    row.f_s周数 = output.outLengthText(bandPosition.m_diff中央)
+                    'If 0 < bandPosition.m_diff中央 Then
+                    '    row.f_s周数 = ">>"
+                    'Else
+                    '    row.f_s周数 = "<<"
+                    'End If
                 End If
                 row.f_sタイプ = output.outLengthText(d全係数分)
                 row.f_s編みかた名 = output.outLengthText(d左から中心)
@@ -2416,7 +2424,7 @@ Class clsCalcSquare45
         row.f_sタイプ = text全係数分() ' "全係数分"
         row.f_s編みかた名 = text上下(True) + textからひも中心() ' "下からひも中心"
         row.f_s編みひも名 = text上下(False) + textからひも中心() '"上からひも中心"
-        'row.f_i周数 = "位置"
+        row.f_s段数 = text位置()
         row.f_s高さ = text縦端名(True) + text長さ() ' "下端長さ"
         row.f_s長さ = text縦端名(False) + text長さ() ' "上端長さ"
         row.f_sメモ = text消費係数分() '"係数消費分"
@@ -2458,11 +2466,12 @@ Class clsCalcSquare45
                     bandPosition.m_diff中央 = (.f_dVal1 - .f_dVal2) / 2
                     d下から中心 += bandPosition.m_diff中央
                     d中心から上 -= bandPosition.m_diff中央
-                    If 0 < bandPosition.m_diff中央 Then
-                        row.f_s周数 = 1
-                    Else
-                        row.f_s周数 = -1
-                    End If
+                    row.f_s周数 = output.outLengthText(bandPosition.m_diff中央)
+                    'If 0 < bandPosition.m_diff中央 Then
+                    '    row.f_s周数 = "^"
+                    'Else
+                    '    row.f_s周数 = "U"
+                    'End If
                 End If
                 row.f_sタイプ = output.outLengthText(d全係数分)
                 row.f_s編みかた名 = output.outLengthText(d下から中心)
@@ -2603,36 +2612,26 @@ Class clsCalcSquare45
         Return _frmMain.chk折りカラー編み.Text
     End Function
 
-    Private Function text左右(ByVal isTerminal As Boolean) As String
-        If isTerminal Then
+    Private Function text左右(ByVal is2 As Boolean) As String
+        If is2 Then
             Return _ary左右(1)   '右
         Else
             Return _ary左右(0)  '左
         End If
     End Function
 
-    Private Function text上下(ByVal isTerminal As Boolean) As String
-        If isTerminal Then
+    Private Function text上下(ByVal is2 As Boolean) As String
+        If is2 Then
             Return _ary上下(1)  '下
         Else
             Return _ary上下(0)  '上
         End If
     End Function
     Private Function text横端名(ByVal isTerminal As Boolean) As String
-        'If isTerminal Then
-        '    Return _ary左右(1) & My.Resources.CaptionTerminal  '右
-        'Else
-        '    Return _ary左右(0) & My.Resources.CaptionTerminal '左
-        'End If
         Return text左右(isTerminal) & My.Resources.CaptionTerminal
     End Function
 
     Private Function text縦端名(ByVal isTerminal As Boolean) As String
-        'If isTerminal Then
-        '    Return _ary上下(1) & My.Resources.CaptionTerminal '下
-        'Else
-        '    Return _ary上下(0) & My.Resources.CaptionTerminal '上
-        'End If
         Return text上下(isTerminal) & My.Resources.CaptionTerminal
     End Function
 
@@ -2683,6 +2682,10 @@ Class clsCalcSquare45
         Return My.Resources.CaptionRatioUsed
     End Function
 
+    Private Function text位置() As String
+        '位置
+        Return My.Resources.CaptionPosition
+    End Function
 
 #End Region
 

@@ -1972,11 +1972,16 @@ Class clsCalcHexagon
             If aidx = AngleIndex._0deg Then
                 row.f_sタイプ = text横置き()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                row.f_s段数 = text左右(False)
+                row.f_s高さ = text左右(True)
             ElseIf aidx = AngleIndex._60deg Then
                 row.f_sタイプ = text斜め置き()
                 sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
-            Else
-
+                row.f_s段数 = text左下右上(False)
+                row.f_s高さ = text左下右上(True)
+            ElseIf aidx = AngleIndex._120deg Then
+                row.f_s段数 = text左上右下(False)
+                row.f_s高さ = text左上右下(True)
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
                 Continue For
@@ -2030,8 +2035,8 @@ Class clsCalcHexagon
                         output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                         row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                         If 0 <> lasttmp.f_dひも長加算 OrElse 0 <> lasttmp.f_dひも長加算2 Then
-                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
-                                "+" + output.outLengthText(lasttmp.f_dひも長加算2)
+                            row.f_s段数 = output.outLengthText(lasttmp.f_dひも長加算)
+                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算2)
                         End If
                     End If
 
@@ -2507,6 +2512,39 @@ Class clsCalcHexagon
     Private Function PositionString(ByVal i As Integer) As String
         Return _frmMain.editInsertBand.PositionString(i)
     End Function
+
+    Shared _ary左右() As String = My.Resources.CaptionExpand4To6.Split(",")
+    Shared _ary左下右上() As String = My.Resources.CaptionExpand1to9.Split(",")
+    Shared _ary左上右下() As String = My.Resources.CaptionExpand7to3.Split(",")
+
+    '横ひもの加算
+    Private Function text左右(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary左右(1)   '右
+        Else
+            Return _ary左右(0)  '左
+        End If
+    End Function
+
+    '斜め60度ひもの加算
+    Private Function text左下右上(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary左下右上(1)  '右上
+        Else
+            Return _ary左下右上(0)  '左下
+        End If
+    End Function
+
+    '斜め120度ひもの加算
+    Private Function text左上右下(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary左上右下(1)  '右下
+        Else
+            Return _ary左上右下(0)  '左上
+        End If
+    End Function
+
+
 #End Region
 
 End Class

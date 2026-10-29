@@ -2466,16 +2466,23 @@ Class clsCalcSquare
             If yokotate = 1 Then
                 row.f_sタイプ = text横置き()
                 tmpTable = _tbl縦横展開_横ひも 'set横展開DataTable(_b縦横側面を展開する)
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s横ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s横ひものメモ")
+                row.f_s段数 = text左右(False)
+                row.f_s高さ = text左右(True)
             Else
                 row.f_sタイプ = text縦置き()
                 tmpTable = _tbl縦横展開_縦ひも 'set縦展開DataTable(_b縦横側面を展開する)
-                sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                'sbMemo.Append(_Data.p_row底_縦横.Value("f_s縦ひものメモ"))
+                row.f_sメモ = _Data.p_row底_縦横.Value("f_s縦ひものメモ")
+                row.f_s段数 = text上下(False)
+                row.f_s高さ = text上下(True)
             End If
             If tmpTable Is Nothing OrElse tmpTable.Rows.Count = 0 Then
                 Continue For
             End If
             'レコードあり
+            row = output.NextNewRow
 
             '長い順に記号を振る
             Dim tmps() As tbl縦横展開Row = tmpTable.Select(Nothing, "f_iひも種 ASC, f_d出力ひも長 DESC, f_s色")
@@ -2523,8 +2530,8 @@ Class clsCalcSquare
                         output.SetBandRow(contcount, lasttmp.f_i何本幅, lasttmp.f_d出力ひも長, lasttmp.f_s色)
                         row.f_s長さ = output.outLengthText(lasttmp.f_d長さ)
                         If lasttmp.f_dひも長加算 <> 0 OrElse lasttmp.f_dひも長加算2 <> 0 Then '#92
-                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算) +
-                                "+" + output.outLengthText(lasttmp.f_dひも長加算2)
+                            row.f_s段数 = output.outLengthText(lasttmp.f_dひも長加算)
+                            row.f_s高さ = output.outLengthText(lasttmp.f_dひも長加算2)
                         End If
                     End If
 
@@ -2930,6 +2937,24 @@ Class clsCalcSquare
         End With
     End Function
 
+    Shared _ary左右() As String = My.Resources.CaptionExpand4To6.Split(",")
+    Shared _ary上下() As String = My.Resources.CaptionExpand8To2.Split(",")
+
+    Private Function text左右(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary左右(1)   '右
+        Else
+            Return _ary左右(0)  '左
+        End If
+    End Function
+
+    Private Function text上下(ByVal is2 As Boolean) As String
+        If is2 Then
+            Return _ary上下(1)  '下
+        Else
+            Return _ary上下(0)  '上
+        End If
+    End Function
 
 #End Region
 
