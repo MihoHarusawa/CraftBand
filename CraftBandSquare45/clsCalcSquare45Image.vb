@@ -963,6 +963,7 @@ Partial Public Class clsCalcSquare45
         'その他の描画パーツ
         Dim _ImageList描画要素 As clsImageItemList = imageList描画要素(r底編み表示)
         If isBottomBase Then
+            '底編み領域値
             Dim strW As String = text底編み() + text横() + " " + outp.outLengthText(_a底領域.r外接領域.x幅)
             Dim itemW As New clsImageItem(_a底領域.r外接領域.p右下 + Unit270 * _dひも幅の一辺 * 0.1, {strW}, _dひも幅の一辺 * 0.4, 0)
             _ImageList描画要素.AddItem(itemW)
@@ -970,6 +971,12 @@ Partial Public Class clsCalcSquare45
             Dim strH As String = text底編み() + text縦() + " " + outp.outLengthText(_a底領域.r外接領域.y高さ)
             Dim itemH As New clsImageItem(_a底領域.r外接領域.p右上 + Unit90 * _dひも幅の一辺 * 0.7, {strH}, _dひも幅の一辺 * 0.4, 0)
             _ImageList描画要素.AddItem(itemH)
+
+            Dim strB1 As String = textひも幅() + " " + g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(_dひも幅の一辺))
+            Dim strB2 As String = textひも間のすき間() + " " + g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(_dひも間のすき間))
+            Dim delta As New S差分(_dひも幅の一辺 * -5.8, _dひも幅の一辺 * 1.8)
+            Dim itemB As New clsImageItem(_a底領域.r外接領域.p左上 + delta, {strB1, strB2}, _dひも幅の一辺 * 0.4, 0)
+            _ImageList描画要素.AddItem(itemB)
         End If
 
 

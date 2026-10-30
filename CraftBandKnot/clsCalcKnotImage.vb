@@ -921,11 +921,14 @@ Partial Public Class clsCalcKnot
                 p要尺位置.Y = rDrawコマ.y最上
             End If
             '要尺と幅の文字列
-            Dim strLen As String = outp.outLengthTextWithUnit(_dコマの要尺)
+            'Dim strLen As String = outp.outLengthTextWithUnit(_dコマの要尺)
+            Dim strLen As String = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(_dコマの要尺))
             '端～折り位置
-            Dim strFold1 As String = outp.outLengthText(foldingLen)
+            'Dim strFold1 As String = outp.outLengthText(foldingLen)
+            Dim strFold1 As String = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(foldingLen))
             '折り位置間
-            Dim strFold2 As String = outp.outLengthText(_dコマの要尺 - foldingLen * 2)
+            'Dim strFold2 As String = outp.outLengthText(_dコマの要尺 - foldingLen * 2)
+            Dim strFold2 As String = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(_dコマの要尺 - foldingLen * 2))
 
             If _b斜め立ち上げ Then
                 If _i横のコマ数 * _dコマベース寸法 / ROOT2 < _dコマベース要尺 Then
@@ -961,8 +964,10 @@ Partial Public Class clsCalcKnot
                 line = New S線分(p, p + delta)
                 item.m_lineList.Add(line)
 
-                strLen += " + " + outp.outLengthText(_dコマ間のすき間)
-                strFold1 = outp.outLengthText(_dコマ間のすき間 / 2) + " + " + strFold1
+                'strLen += " + " + outp.outLengthText(_dコマ間のすき間)
+                strLen += " + " + g_clsSelectBasics.p_unit設定時の寸法単位.Text(New Length(_dコマ間のすき間))
+                'strFold1 = outp.outLengthText(_dコマ間のすき間 / 2) + " + " + strFold1
+                strFold1 = g_clsSelectBasics.p_unit設定時の寸法単位.Text(New Length(_dコマ間のすき間 / 2)) + " + " + strFold1
             End If
             '中心から各折り位置まで
             Dim len_1 As Double = (_dコマの要尺 - foldingLen * 2) / 2 - (c_tiltRatio * dひも幅 / 2)
@@ -981,7 +986,8 @@ Partial Public Class clsCalcKnot
             '#115
             If isStartLine Then
                 '要尺と幅の文字列
-                item = New clsImageItem(p要尺文字位置, {strLen, outp.outLengthTextWithUnit(_d基本のひも幅)}, _d基本のひも幅 / 2, c_idxKoma)
+                Dim strWid As String = g_clsSelectBasics.p_unit設定時の寸法単位.TextWithUnit(New Length(_d基本のひも幅))
+                item = New clsImageItem(p要尺文字位置, {strLen, strWid}, _d基本のひも幅 / 2, c_idxKoma)
                 itemlist.AddItem(item)
                 '端～折り位置
                 item = New clsImageItem(p折り文字位置, {strFold1}, _d基本のひも幅 / 2, c_idxKoma)

@@ -2314,6 +2314,9 @@ Class clsCalcSquare45
 
         row = output.NextNewRow
         row.f_sカテゴリー = text底編み()
+        row.f_s高さ = textひも幅() & output.outLengthText(_dひも幅の一辺)
+        row.f_s長さ = output.outLengthText(_dひも間のすき間)
+        row.f_sメモ = text対角線() & output.outLengthText(_d四角の対角線)
 
         Dim r底編み As S領域 = _a底領域.r外接領域
         Dim d側面高 As Double = p_d四角ベース_高さ * ROOT2
@@ -2685,6 +2688,21 @@ Class clsCalcSquare45
     Private Function text位置() As String
         '位置
         Return My.Resources.CaptionPosition
+    End Function
+
+    Private Function text対角線() As String
+        '位置
+        Return _frmMain.lbl対角線.Text
+    End Function
+
+    Private Function textひも幅() As String
+        '位置
+        Return _frmMain.lblひも幅.Text
+    End Function
+
+    Private Function textひも間のすき間() As String
+        '位置
+        Return _frmMain.lblひも間のすき間.Text
     End Function
 
 #End Region
