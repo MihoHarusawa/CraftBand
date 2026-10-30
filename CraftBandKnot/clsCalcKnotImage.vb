@@ -549,7 +549,7 @@ Partial Public Class clsCalcKnot
 
     '底と側面枠(斜め)
     '底編み=isBottomOnly =isAllBand
-    Function imageList斜め描画要素(ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isStartLine As Boolean) As clsImageItemList
+    Function imageList斜め描画要素(ByVal outp As clsOutput, ByVal isBottomOnly As Boolean, ByVal isAllBand As Boolean, ByVal isStartLine As Boolean) As clsImageItemList
         '
         '    (1,1)    A3        A2      → p_iコマ空間幅
         '       +----------------------+                                  
@@ -613,6 +613,19 @@ Partial Public Class clsCalcKnot
         item = New clsImageItem(clsImageItem.ImageTypeEnum._横の側面, 0)
         item.m_a四隅 = New S四隅(a底.r外接領域)
         itemlist.AddItem(item)
+        'サイズ値
+        If isStartLine Then
+            '領域サイズ
+            Dim strW As String = text底編み() + CBottomBaseBandInfo.getSideString(SideIndexEnum._左側) + CBottomBaseBandInfo.getSideString(SideIndexEnum._右側) +
+            " " + outp.outLengthTextWithUnit(a底.r外接領域.x幅)
+            Dim itemW As New clsImageItem(a底.r外接領域.p右下 + Unit270 * _d基本のひも幅 * 0.5, {strW}, _d基本のひも幅 * 0.8, 0)
+            itemlist.AddItem(itemW)
+
+            Dim strH As String = text底編み() + CBottomBaseBandInfo.getSideString(SideIndexEnum._上側) + CBottomBaseBandInfo.getSideString(SideIndexEnum._下側) +
+            " " + outp.outLengthTextWithUnit(a底.r外接領域.y高さ)
+            Dim itemH As New clsImageItem(a底.r外接領域.p右上 + Unit90 * _d基本のひも幅 * 1.3, {strH}, _d基本のひも幅 * 0.8, 0)
+            itemlist.AddItem(itemH)
+        End If
 
         '** 前面(左上の側面)_unit135
         Dim a前面 As New S四隅(pA3, pB3, pB1, pA1)
@@ -1453,7 +1466,7 @@ Partial Public Class clsCalcKnot
 
         '底と側面枠
         If _b斜め立ち上げ Then
-            _ImageList描画要素 = imageList斜め描画要素(isBottomOnly, isAllBand, isStartLine)
+            _ImageList描画要素 = imageList斜め描画要素(outp, isBottomOnly, isAllBand, isStartLine)
         Else
             _ImageList描画要素 = imageList描画要素(isBottomOnly)
         End If

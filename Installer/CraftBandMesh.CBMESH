@@ -1966,6 +1966,60 @@
     <f_bCraftBandHexagon>true</f_bCraftBandHexagon>
     <f_s備考>折り返し位置の上に4四角×2を置く</f_s備考>
   </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマの裏で片側を渡し片側を巻き付ける(斜め編み)</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0.2</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>9</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
+    <f_d厚さ>5</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>false</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>false</f_bCraftBandHexagon>
+    <f_s備考>水平に2コマ通す、巻き付けて2コマ通す</f_s備考>
+  </tbl編みかた>
+  <tbl編みかた>
+    <f_s編みかた名>コマ間を渡し山形にクロスさせて裏に折り込む(斜め編み)</f_s編みかた名>
+    <f_iひも番号>1</f_iひも番号>
+    <f_s編みひも名>(ひも使用なし)</f_s編みひも名>
+    <f_b縁専用区分>true</f_b縁専用区分>
+    <f_b底使用区分>false</f_b底使用区分>
+    <f_i周あたり段数>0</f_i周あたり段数>
+    <f_i本幅初期値>0</f_i本幅初期値>
+    <f_iひも数>0</f_iひも数>
+    <f_b周連続区分>false</f_b周連続区分>
+    <f_d高さ比率対ひも幅>0.8</f_d高さ比率対ひも幅>
+    <f_d垂直ひも長比率対ひも幅>9</f_d垂直ひも長比率対ひも幅>
+    <f_dひも長比率対周長>1</f_dひも長比率対周長>
+    <f_dひも長加算1目あたり>0</f_dひも長加算1目あたり>
+    <f_dひも1幅係数1目あたり>0</f_dひも1幅係数1目あたり>
+    <f_dひも長加算1周あたり>0</f_dひも長加算1周あたり>
+    <f_dひも長加算ひもあたり>0</f_dひも長加算ひもあたり>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_b集計対象外区分初期値>false</f_b集計対象外区分初期値>
+    <f_d厚さ>5</f_d厚さ>
+    <f_bCraftBandMesh>false</f_bCraftBandMesh>
+    <f_bCraftBandSquare45>false</f_bCraftBandSquare45>
+    <f_bCraftBandKnot>true</f_bCraftBandKnot>
+    <f_bCraftBandSquare>false</f_bCraftBandSquare>
+    <f_bCraftBandHexagon>false</f_bCraftBandHexagon>
+    <f_s備考>目を作って水平・垂直を交差</f_s備考>
+  </tbl編みかた>
   <tblバンドの種類>
     <f_sバンドの種類名>クラフトバンド</f_sバンドの種類名>
     <f_i本幅>12</f_i本幅>
@@ -3541,7 +3595,7 @@
   <tbl基本値>
     <f_s単位>mm</f_s単位>
     <f_sバージョン>1.8.5</f_sバージョン>
-    <f_s識別情報>Ver.1.9.4添付</f_s識別情報>
+    <f_s識別情報>Ver.1.9.5添付</f_s識別情報>
     <f_s備考 />
   </tbl基本値>
   <tbl描画色>
@@ -4638,6 +4692,22 @@
     <f_b実測値使用区分>false</f_b実測値使用区分>
     <f_dコマ寸法実測値>33.2</f_dコマ寸法実測値>
     <f_dコマ要尺実測値>100.2</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド12</f_sバンドの種類名>
+    <f_i本幅>4</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>13</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>42.3</f_dコマ要尺実測値>
+    <f_s備考 />
+  </tblゲージ>
+  <tblゲージ>
+    <f_sバンドの種類名>クラフトバンド12</f_sバンドの種類名>
+    <f_i本幅>6</f_i本幅>
+    <f_b実測値使用区分>true</f_b実測値使用区分>
+    <f_dコマ寸法実測値>18.7</f_dコマ寸法実測値>
+    <f_dコマ要尺実測値>57.6</f_dコマ要尺実測値>
     <f_s備考 />
   </tblゲージ>
   <tbl上下図>

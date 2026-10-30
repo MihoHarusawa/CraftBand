@@ -2764,6 +2764,10 @@ Class clsCalcKnot
         Return _frmMain.chk開始ライン.Text
     End Function
 
+    Private Function text底編み() As String
+        Return _frmMain.chk底編み.Text
+    End Function
+
     Public Function text上の縦ひも位置() As String
         Static cache As String = Nothing
         If cache Is Nothing Then

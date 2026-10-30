@@ -964,11 +964,11 @@ Partial Public Class clsCalcSquare45
         Dim _ImageList描画要素 As clsImageItemList = imageList描画要素(r底編み表示)
         If isBottomBase Then
             '底編み領域値
-            Dim strW As String = text底編み() + text横() + " " + outp.outLengthText(_a底領域.r外接領域.x幅)
+            Dim strW As String = text底編み() + text横() + " " + outp.outLengthTextWithUnit(_a底領域.r外接領域.x幅)
             Dim itemW As New clsImageItem(_a底領域.r外接領域.p右下 + Unit270 * _dひも幅の一辺 * 0.1, {strW}, _dひも幅の一辺 * 0.4, 0)
             _ImageList描画要素.AddItem(itemW)
 
-            Dim strH As String = text底編み() + text縦() + " " + outp.outLengthText(_a底領域.r外接領域.y高さ)
+            Dim strH As String = text底編み() + text縦() + " " + outp.outLengthTextWithUnit(_a底領域.r外接領域.y高さ)
             Dim itemH As New clsImageItem(_a底領域.r外接領域.p右上 + Unit90 * _dひも幅の一辺 * 0.7, {strH}, _dひも幅の一辺 * 0.4, 0)
             _ImageList描画要素.AddItem(itemH)
 

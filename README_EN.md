@@ -170,14 +170,14 @@ echo Exit code: %ERRORLEVEL%
 
 
 # Current Binary Version
-- Installer         1.9.4
-- CraftBand.dll     1.9.4.0
-- CraftBandMesh     1.9.4.0
-- CraftBandSqare45  1.6.4.0
-- CraftBandKnot     1.5.4.0
-- CraftBandSquare   1.4.4.0
-- CraftBandHexagon  1.1.4.0
-- CbMesh            1.0.4.0
+- Installer         1.9.5
+- CraftBand.dll     1.9.5.0
+- CraftBandMesh     1.9.5.0
+- CraftBandSqare45  1.6.5.0
+- CraftBandKnot     1.5.5.0
+- CraftBandSquare   1.4.5.0
+- CraftBandHexagon  1.1.5.0
+- CbMesh            1.0.5.0
 
 
 # Documentation
