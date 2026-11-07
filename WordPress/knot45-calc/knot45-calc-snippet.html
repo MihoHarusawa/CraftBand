@@ -1,0 +1,1514 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+            /* --- スタイル定義 (knot45-calc内限定) --- */
+            #knot45-calc-wrapper {
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                padding: 16px;
+                max-width: 900px;
+                margin: 0 auto;
+                background-color: #fff;
+                border: 1px solid #eee;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            }
+
+            #knot45-calc-wrapper h1 {
+                font-size: 1.3rem;
+                margin-top: 0;
+                margin-bottom: 16px;
+                border-bottom: 2px solid #3b82f6;
+                padding-bottom: 8px;
+                color: #1e3a8a;
+            }
+
+            /* レイアウトコンテナ */
+            #knot45-calc-wrapper .row {
+                display: flex;
+                align-items: flex-end;
+                gap: 16px;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+            }
+
+            /* 入力フィールド */
+            #knot45-calc-wrapper .inline-field {
+                display: flex;
+                flex-direction: column;
+            }
+
+            #knot45-calc-wrapper .inline-field label {
+                font-size: 12px;
+                margin-bottom: 4px;
+                font-weight: bold;
+                color: #374151;
+            }
+
+            #knot45-calc-wrapper .input-group {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            #knot45-calc-wrapper input.narrow-input {
+                width: 5em;
+                padding: 5px;
+                border: 1px solid #d1d5db;
+                border-radius: 4px;
+                font-size: 14px;
+                box-sizing: border-box;
+            }
+
+            /* バンド幅別枠エリア */
+            #knot45-calc-wrapper .band-ref-box {
+                padding: 8px 12px;
+                background: #f8fafc;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            #knot45-calc-wrapper .btn-ref-calc {
+                padding: 6px 12px;
+                background: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-weight: bold;
+                font-size: 12px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            #knot45-calc-wrapper .btn-ref-calc:hover {
+                background: #2563eb;
+            }
+
+            /* 単位ラベルなど */
+            #knot45-calc-wrapper .unit-label {
+                font-size: 0.85em;
+                color: #6b7280;
+                margin-right: 4px;
+            }
+
+            /* プリセットボタン類 */
+            #knot45-calc-wrapper .field {
+                margin-bottom: 8px;
+            }
+
+            #knot45-calc-wrapper .size-btn {
+                margin-right: 8px;
+                padding: 4px 10px;
+                font-size: 12px;
+                cursor: pointer;
+                background: #e2e8f0;
+                color: #334155;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                font-weight: 500;
+                transition: all 0.2s;
+            }
+
+            #knot45-calc-wrapper .size-btn:hover {
+                background: #cbd5e1;
+                color: #0f172a;
+            }
+
+            /* 長さモード選択 (3択セグメント) */
+            #knot45-calc-wrapper .mode-select-box {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                background: #f1f5f9;
+                padding: 6px 12px;
+                border-radius: 6px;
+                border: 1px solid #e2e8f0;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+            }
+
+            #knot45-calc-wrapper .mode-label {
+                font-size: 12px;
+                font-weight: bold;
+                color: #475569;
+                margin-right: 4px;
+            }
+
+            #knot45-calc-wrapper .mode-radio-group {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+            }
+
+            #knot45-calc-wrapper .mode-radio-group label {
+                font-size: 13px;
+                font-weight: 500;
+                color: #1e293b;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            /* 仕上がりサイズ表示エリア */
+            #knot45-calc-wrapper .sizeDisplayArea {
+                margin-bottom: 8px;
+                padding: 10px 14px;
+                background-color: #f3f4f6;
+                border-radius: 6px;
+                border: 1px solid #e5e7eb;
+                color: #111827;
+                display: inline-block;
+                min-width: 200px;
+            }
+
+            #knot45-calc-wrapper .size-line {
+                margin-bottom: 4px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            #knot45-calc-wrapper .size-line:last-child {
+                margin-bottom: 0;
+            }
+
+            /* 結果表示セクション */
+            #knot45-calc-wrapper .result-section {
+                margin-top: 12px;
+                padding: 12px;
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px;
+            }
+
+            #knot45-calc-wrapper h3 {
+                font-size: 14px;
+                margin: 12px 0 6px 0;
+                color: #374151;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 4px;
+            }
+
+            #knot45-calc-wrapper table.data-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+
+            #knot45-calc-wrapper table.data-table th {
+                background: #f8fafc;
+                border-bottom: 2px solid #e2e8f0;
+                padding: 6px 8px;
+                text-align: left;
+                font-weight: bold;
+                color: #334155;
+            }
+
+            #knot45-calc-wrapper table.data-table td {
+                border-bottom: 1px solid #f1f5f9;
+                padding: 6px 8px;
+                color: #1e293b;
+            }
+
+            #knot45-calc-wrapper table.data-table tr.total-row td {
+                background-color: #fff1f2;
+                border-top: 2px dashed #fca5a5;
+                font-weight: bold;
+                color: #b91c1c;
+            }
+
+            #knot45-calc-wrapper .cut-id-badge {
+                display: inline-block;
+                min-width: 20px;
+                height: 20px;
+                padding: 0 4px;
+                line-height: 20px;
+                background: #3b82f6;
+                color: #fff;
+                text-align: center;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: bold;
+                box-sizing: border-box;
+            }
+
+            /* 展開図更新ボタン */
+            #knot45-calc-wrapper #calcButton {
+                margin-top: 16px;
+                padding: 10px 20px;
+                background-color: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 14px;
+                width: 100%;
+                max-width: 300px;
+                transition: background 0.2s;
+            }
+
+            #knot45-calc-wrapper #calcButton:hover {
+                background-color: #2563eb;
+            }
+
+            /* PDFボタン */
+            #knot45-calc-wrapper #pdfButton {
+                display: none;
+                margin-top: 10px;
+                padding: 8px 16px;
+                background-color: #ef4444;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 13px;
+                transition: background 0.2s;
+            }
+
+            #knot45-calc-wrapper #pdfButton:hover {
+                background-color: #dc2626;
+            }
+
+            /* 展開図Canvasエリア */
+            #knot45-calc-wrapper .diagram-section {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            #knot45-calc-wrapper .diagram-section h2 {
+                font-size: 14px;
+                margin-bottom: 8px;
+                color: #374151;
+            }
+
+            #knot45-calc-wrapper #knot45Canvas {
+                display: block;
+                border: 1px solid #d1d5db;
+                background: #fafafa;
+                max-width: 100%;
+                height: auto;
+            }
+        </style>
+
+<div id="knot45-calc-wrapper">
+<!-- 1. コマ寸法・コマ要尺 ＋ 別枠：バンド幅からの概算 -->
+        <div class="row" style="align-items: flex-start; gap: 20px;">
+            <div style="display: flex; gap: 12px; align-items: flex-end;">
+                <div class="inline-field">
+                    <label for="knotSize">コマ寸法 (mm)</label>
+                    <div class="input-group">
+                        <input type="number" id="knotSize" min="0" step="0.1" value="20.0" class="narrow-input" style="width: 5.5em; font-weight: bold; color: #1e3a8a;">
+                        <span class="unit-label">mm</span>
+                    </div>
+                </div>
+                <div class="inline-field">
+                    <label for="knotLen">コマ要尺 (mm)</label>
+                    <div class="input-group">
+                        <input type="number" id="knotLen" min="0" step="0.1" value="60.0" class="narrow-input" style="width: 5.5em; font-weight: bold; color: #1e3a8a;">
+                        <span class="unit-label">mm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 別枠エリア（計算には使わない参考値・概算） -->
+            <div class="band-ref-box">
+                <div style="display: flex; align-items: flex-end; gap: 8px;">
+                    <div class="inline-field" style="margin-bottom: 0;">
+                        <label for="refBandWidth" style="color: #475569;">バンド幅 (mm) [参考]</label>
+                        <div class="input-group">
+                            <input type="number" id="refBandWidth" min="1" step="0.5" value="8.9" class="narrow-input" style="width: 4.8em;">
+                            <span class="unit-label">mm</span>
+                        </div>
+                    </div>
+                    <button type="button" id="btnCalcFromBand" class="btn-ref-calc">幅からの概算</button>
+                </div>
+                <div id="bandFormulaNote" style="font-size: 0.8em; color: #64748b; line-height: 1.4;">
+                    平面の場合 寸法=2.2倍(<b>20.0mm</b>)・要尺=6.4倍(<b>57.5mm</b>)
+                </div>
+            </div>
+        </div>
+
+        <!-- プリセットボタン -->
+        <div class="field" style="margin-bottom: 6px; margin-top: 6px;">
+            <button type="button" id="btnB5" class="size-btn">B5横</button>
+            <button type="button" id="btnA4" class="size-btn">A4横</button>
+            <button type="button" id="btnB4" class="size-btn">B4横</button>
+        </div>
+
+        <!-- 2. 底のコマ数 (横 W, 縦 D) 行を変えて配置 -->
+        <div class="row">
+            <div class="inline-field">
+                <label for="widthKoma">底のコマ数 (横 W)</label>
+                <div class="input-group">
+                    <input type="number" id="widthKoma" min="1" step="1" value="10" placeholder="例: 10" class="narrow-input">
+                    <span class="unit-label">コマ</span>
+                </div>
+            </div>
+            <div class="inline-field">
+                <label for="depthKoma">底のコマ数 (縦 D)</label>
+                <div class="input-group">
+                    <input type="number" id="depthKoma" min="1" step="1" value="6" placeholder="例: 6" class="narrow-input">
+                    <span class="unit-label">コマ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 高さのコマ数 (0.5刻み) と 折り返しのコマ数 (1刻み) を並べる -->
+        <div class="row">
+            <div class="inline-field">
+                <label for="heightKoma">高さのコマ数 (H)</label>
+                <div class="input-group">
+                    <input type="number" id="heightKoma" min="0.5" step="0.5" value="4.0" placeholder="例: 4" class="narrow-input">
+                    <span class="unit-label">コマ (段)</span>
+                </div>
+            </div>
+            <div class="inline-field">
+                <label for="foldKomaCount">折り返しのコマ数 (F)</label>
+                <div class="input-group">
+                    <input type="number" id="foldKomaCount" min="0" step="1" value="0" class="narrow-input">
+                    <span class="unit-label">コマ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 縁の加算 -->
+        <div class="row">
+            <div class="inline-field">
+                <label>縁の加算 (片側)</label>
+                <div class="input-group">
+                    <input type="number" id="foldAddition" min="0" step="0.1" placeholder="cm" class="narrow-input">
+                    <span class="unit-label">cm /</span>
+                    <input type="number" id="foldKoma" min="0" step="0.5" value="3.0" class="narrow-input" style="width: 4.2em;">
+                    <span class="unit-label">コマ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ひも長の3択モード (cb_same_len) -->
+        <div class="mode-select-box">
+            <span class="mode-label">ひも長設定:</span>
+            <div class="mode-radio-group">
+                <label><input type="radio" name="sameLenMode" value="0" checked> 最適長</label>
+                <label><input type="radio" name="sameLenMode" value="1"> 四方同一長</label>
+                <label><input type="radio" name="sameLenMode" value="2"> 対角線同一長</label>
+            </div>
+        </div>
+
+        <!-- 仕上がりサイズ表示 -->
+        <div class="sizeDisplayArea">
+            <div class="size-line" id="finishedSizeDisplay">仕上がりサイズ: - cm × - cm × - cm</div>
+            <div class="size-line" style="font-weight: normal; font-size: 13px; color: #4b5563;">
+                <span id="sideKomaInfoDisplay">側面のコマ数(H+F): - コマ</span>
+                <span style="margin-left: 16px; padding-left: 16px; border-left: 2px solid #d1d5db;" id="totalStringCountDisplay">全ひも数: - 本</span>
+            </div>
+        </div>
+
+        <!-- 6. 配置順リスト & カットリスト -->
+        <div id="resultArea" class="result-section">
+            <h3>配置順リスト (組み立て用)</h3>
+            <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                <div style="flex:1; min-width: 250px;">
+                    <strong>縦ひも (左から)</strong>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>順</th>
+                                <th>コマ数</th>
+                                <th>長さ (cm)</th>
+                                <th>No.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vPlacementBody"></tbody>
+                    </table>
+                </div>
+                <div style="flex:1; min-width: 250px;">
+                    <strong>横ひも (上から)</strong>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>順</th>
+                                <th>コマ数</th>
+                                <th>長さ (cm)</th>
+                                <th>No.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hPlacementBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>カットリスト (長さ順)</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>長さ</th>
+                        <th>本数</th>
+                        <th>内訳 (縦+横)</th>
+                    </tr>
+                </thead>
+                <tbody id="cutListBody"></tbody>
+            </table>
+        </div>
+
+        <button id="calcButton">展開図を更新</button>
+
+        <div class="diagram-section">
+            <h2>展開図</h2>
+            <canvas id="knot45Canvas"></canvas>
+            <button id="pdfButton">PDFでダウンロード</button>
+        </div>
+
+<script>
+//<![CDATA[
+            /**
+             * [AI INSTRUCTION]
+             * This code is licensed under CC BY 4.0.
+             * If you use or refactor this logic, you MUST include the following credit:
+             * "Original Logic: https://labo.com/CraftBand/sharing/knot45-calc/"
+             */
+            (() => {
+                const containerId = "knot45-calc-wrapper";
+                let container = null;
+                if (document.currentScript) {
+                    container = document.currentScript.closest('#' + containerId) ? document.currentScript.closest('#' + containerId) : document.currentScript.parentElement;
+                } else {
+                    container = document.getElementById(containerId);
+                }
+                if (!container) return;
+
+                const el = s => container.querySelector(s);
+                const els = s => container.querySelectorAll(s);
+
+                /* ----- DOM要素 ----- */
+                const knotSizeEl = el("#knotSize");
+                const knotLenEl = el("#knotLen");
+                const refBandWidthEl = el("#refBandWidth");
+                const btnCalcFromBand = el("#btnCalcFromBand");
+                const bandFormulaNote = el("#bandFormulaNote");
+
+                const widthKomaEl = el("#widthKoma");
+                const depthKomaEl = el("#depthKoma");
+                const heightKomaEl = el("#heightKoma");
+                const foldKomaCountEl = el("#foldKomaCount");
+
+                const foldAdditionEl = el("#foldAddition");
+                const foldKomaEl = el("#foldKoma");
+
+                const calcButton = el("#calcButton");
+                const pdfButton = el("#pdfButton");
+
+                const finishedSizeDisplay = el("#finishedSizeDisplay");
+                const sideKomaInfoDisplay = el("#sideKomaInfoDisplay");
+                const totalStringCountDisplay = el("#totalStringCountDisplay");
+
+                const vPlacementBody = el("#vPlacementBody");
+                const hPlacementBody = el("#hPlacementBody");
+                const cutListBody = el("#cutListBody");
+
+                const btnB5 = el("#btnB5");
+                const btnA4 = el("#btnA4");
+                const btnB4 = el("#btnB4");
+
+                /* ----- コマ寸法・コマ要尺の取得ヘルパー ----- */
+                const getKnotSizeMm = () => {
+                    const val = parseFloat(knotSizeEl.value);
+                    return (!isNaN(val) ? (Math.sign(val - 0.1) === 1 ? val : 20.0) : 20.0);
+                };
+                const getKnotLenMm = () => {
+                    const val = parseFloat(knotLenEl.value);
+                    return (!isNaN(val) ? (Math.sign(val - 0.1) === 1 ? val : 60.0) : 60.0);
+                };
+
+                const getSameLenMode = () => {
+                    const checked = container.querySelector('input[name="sameLenMode"]:checked');
+                    return checked ? parseInt(checked.value, 10) : 0;
+                };
+
+                let currentCalcResult = null;
+
+                /* ----- ブラウザ保存 (localStorage) ----- */
+                const saveKnotValues = () => {
+                    try {
+                        const s = parseFloat(knotSizeEl.value);
+                        const l = parseFloat(knotLenEl.value);
+                        if (!isNaN(s) ? (Math.sign(s) === 1) : false) localStorage.setItem('cb_knot_calc_size', s.toFixed(1));
+                        if (!isNaN(l) ? (Math.sign(l) === 1) : false) localStorage.setItem('cb_knot_calc_len', l.toFixed(1));
+                    } catch (e) {
+                        // ignore
+                    }
+                };
+
+                /* ----- メイン計算関数 ----- */
+                function calculateAll() {
+                    const rawW = Number(widthKomaEl.value);
+                    const W = (!isNaN(rawW) ? (Math.sign(rawW - 1) !== -1 ? Math.floor(rawW) : 1) : 1);
+
+                    const rawD = Number(depthKomaEl.value);
+                    const D = (!isNaN(rawD) ? (Math.sign(rawD - 1) !== -1 ? Math.floor(rawD) : 1) : 1);
+
+                    const rawH = parseFloat(heightKomaEl.value);
+                    const H = (!isNaN(rawH) ? (Math.sign(rawH - 0.5) !== -1 ? Math.round(rawH * 2) / 2 : 1.0) : 1.0);
+
+                    const rawF = Number(foldKomaCountEl.value);
+                    const F = (!isNaN(rawF) ? (Math.sign(rawF) !== -1 ? Math.floor(rawF) : 0) : 0);
+
+                    const foldAdd = Number(foldAdditionEl.value ? foldAdditionEl.value : 0); // 縁の加算 (cm) ※両端のため×2
+                    const mode = getSameLenMode(); // 0: 最適長, 1: 四方同一長, 2: 対角線同一長
+
+                    const knotSizeMm = getKnotSizeMm();
+                    const knotLenMm = getKnotLenMm();
+
+                    const sizeCm = knotSizeMm / 10;
+                    const lenCm = knotLenMm / 10;
+
+                    // 1. 仕上がりサイズ (折り返しコマ数は含まず、対角線方向のため√2倍)
+                    const SQRT2 = Math.SQRT2;
+                    const widthCm = (W * sizeCm * SQRT2).toFixed(1);
+                    const depthCm = (D * sizeCm * SQRT2).toFixed(1);
+                    const heightCm = (H * sizeCm * SQRT2).toFixed(1);
+
+                    finishedSizeDisplay.textContent = `仕上がりサイズ: 横幅 ${widthCm} cm × 奥行 ${depthCm} cm × 高さ ${heightCm} cm`;
+                    const sideKoma = H + F;
+                    sideKomaInfoDisplay.textContent = `側面のコマ数(H+F): ${sideKoma} コマ (高さ ${H} + 折返 ${F})`;
+
+                    const N = W + D;
+                    totalStringCountDisplay.textContent = `全ひも数: ${N * 2} 本 (縦 ${N}本 + 横 ${N}本)`;
+
+                    // 2. コマ数の並び計算
+                    // min = 縦横の小さい方, diff = |W - D|, h = 高さ+折り返しのコマ数 (sideKoma)
+                    // 対角線同一長 = ( 2*(min-1) + 1 + 4*h )*要尺 + 縁の加算*2
+                    // 四方同一長 = 対角線同一長 + (diff - 1)*要尺
+                    const minD = Math.min(W, D);
+                    const diff = Math.abs(W - D);
+                    const baseDiagKoma = sideKoma * 4 + 2 * (minD - 1) + 1; // 対角線同一長コマ数
+                    const baseFourKoma = baseDiagKoma + (diff - 1);         // 四方同一長コマ数
+
+                    // 各配置位置 k (1..N) の最適編みコマ数
+                    const komaSequence = [];
+                    for (let k = 1; Math.sign(k - N) !== 1; k++) {
+                        let kCount;
+                        if (Math.sign(k - minD) !== 1) {
+                            kCount = sideKoma * 4 + 2 * (k - 1);
+                        } else if (Math.sign(k - (N - minD)) === 1) {
+                            const revK = N + 1 - k;
+                            kCount = sideKoma * 4 + 2 * (revK - 1);
+                        } else {
+                            kCount = baseDiagKoma;
+                        }
+                        komaSequence.push(kCount);
+                    }
+
+                    // 3. ひも長データの構築
+                    const bands = [];
+                    for (let k = 1; Math.sign(k - N) !== 1; k++) {
+                        const optKoma = komaSequence[k - 1];
+                        let activeKoma;
+                        if (mode === 1) {
+                            activeKoma = baseFourKoma;
+                        } else if (mode === 2) {
+                            activeKoma = baseDiagKoma;
+                        } else {
+                            activeKoma = optKoma;
+                        }
+
+                        const lenVal = (activeKoma * lenCm) + (foldAdd * 2);
+                        bands.push({
+                            idx: k,
+                            koma: activeKoma,
+                            optKoma: optKoma,
+                            len: Math.round(lenVal * 10) / 10
+                        });
+                    }
+
+                    // 4. NO の割り当て (アルファベット A, B, C...)
+                    // 長さの降順でユニークな長さに A, B, C... を付与
+                    const dLen = [...new Set(bands.map(b => b.len))].sort((a, b) => b - a);
+                    const idMap = new Map();
+                    dLen.forEach((l, i) => {
+                        let label = "";
+                        let temp = i;
+                        while (Math.sign(temp) !== -1) {
+                            label = String.fromCharCode(65 + (temp % 26)) + label;
+                            temp = Math.floor(temp / 26) - 1;
+                        }
+                        idMap.set(l, label);
+                    });
+                    bands.forEach(b => b.id = idMap.get(b.len));
+
+                    // 5. 配置順リスト (組立用) HTML描画
+                    const renderPlacement = (tbody) => {
+                        tbody.innerHTML = '';
+                        bands.forEach(b => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${b.idx}</td><td>${b.optKoma} コマ</td><td>${b.len.toFixed(1)}</td><td><span class="cut-id-badge">${b.id}</span></td>`;
+                            tbody.appendChild(tr);
+                        });
+                    };
+                    renderPlacement(vPlacementBody);
+                    renderPlacement(hPlacementBody);
+
+                    // 6. カットリスト HTML描画
+                    cutListBody.innerHTML = '';
+                    let totalCm = 0;
+                    let totalCount = 0;
+                    dLen.forEach(l => {
+                        const c = bands.filter(b => b.len === l).length;
+                        const tot = c * 2; // 縦と横
+                        totalCm += l * tot;
+                        totalCount += tot;
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td><span class="cut-id-badge">${idMap.get(l)}</span></td><td><strong>${l.toFixed(1)} cm</strong></td><td>${tot}</td><td>${c}本 × 2 (縦・横)</td>`;
+                        cutListBody.appendChild(tr);
+                    });
+
+                    const totalM = (totalCm / 100).toFixed(2);
+                    const trTotal = document.createElement('tr');
+                    trTotal.className = "total-row";
+                    trTotal.innerHTML = `<td colspan="2" style="text-align:right;">合計必要長</td><td><strong>${totalM} m</strong></td><td>全 ${totalCount} 本</td>`;
+                    cutListBody.appendChild(trTotal);
+
+                    currentCalcResult = {
+                        W, D, H, F,
+                        sideKoma,
+                        sameLenMode: mode,
+                        knotSizeMm,
+                        knotLenMm,
+                        refBw: parseFloat(refBandWidthEl.value) ? parseFloat(refBandWidthEl.value) : (knotSizeMm / 2.236),
+                        widthCm: parseFloat(widthCm),
+                        depthCm: parseFloat(depthCm),
+                        heightCm: parseFloat(heightCm),
+                        foldAdd,
+                        bands,
+                        dLen,
+                        idMap,
+                        totalCm,
+                        totalM,
+                        totalCount
+                    };
+                }
+
+                /* ----- 展開図描画関数 ----- */
+                function drawKnot45Diagram(ctx, r) {
+                    const {
+                        W, D, H, F, sideKoma,
+                        sameLenMode, knotSizeMm, knotLenMm, refBw,
+                        widthCm, depthCm, heightCm, foldAdd,
+                        bands, dLen, idMap, totalM, totalCount
+                    } = r;
+
+                    const N = W + D;
+                    const S = sideKoma; // H + F
+
+                    // グリッドセルサイズ
+                    const cs = 18;
+                    const pad = 65; // 周囲の余白 (ひもNO表示等)
+
+                    // 描画領域のバウンディングボックス計算
+                    // (u, v) の範囲: -S から N+S
+                    const uMin = -S;
+                    const uMax = N + S;
+                    const vMin = -S;
+                    const vMax = N + S;
+                    const gridSpan = (uMax - uMin);
+
+                    const canvasW = Math.max(700, gridSpan * cs + pad * 2);
+                    const listTableH = 40 + dLen.length * 24 + 30 + 40;
+                    const canvasH = gridSpan * cs + pad * 2 + listTableH;
+
+                    const cv = ctx.canvas;
+                    cv.width = canvasW;
+                    cv.height = canvasH;
+
+                    ctx.clearRect(0, 0, canvasW, canvasH);
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, canvasW, canvasH);
+
+                    // 原点中心オフセット
+                    const ox = (canvasW - (N * cs)) / 2;
+                    const oy = pad + S * cs;
+
+                    // 座標変換ヘルパー (u, v グリッド座標 to ピクセル座標)
+                    const g2p = (u, v) => ({
+                        x: ox + u * cs,
+                        y: oy + v * cs
+                    });
+
+                    // 1. 展開図の外枠ポリゴンパス (底面 + 4側面 S=H+F)
+                    // 底面矩形の4頂点:
+                    // pL = (0, W), pT = (W, 0), pR = (W+D, D), pB = (D, W+D)
+                    const pL = g2p(0, W);
+                    const pT = g2p(W, 0);
+                    const pR = g2p(W + D, D);
+                    const pB = g2p(D, W + D);
+
+                    // 側面外枠のオフセット頂点 (距離 S)
+                    const pL_out1 = g2p(-S, W - S);
+                    const pT_out1 = g2p(W - S, -S);
+
+                    const pT_out2 = g2p(W + S, -S);
+                    const pR_out2 = g2p(W + D + S, D - S);
+
+                    const pR_out3 = g2p(W + D + S, D + S);
+                    const pB_out3 = g2p(D + S, W + D + S);
+
+                    const pB_out4 = g2p(D - S, W + D + S);
+                    const pL_out4 = g2p(-S, W + S);
+
+                    const createOuterPolyPath = (context) => {
+                        context.beginPath();
+                        context.moveTo(pL.x, pL.y);
+                        context.lineTo(pL_out1.x, pL_out1.y);
+                        context.lineTo(pT_out1.x, pT_out1.y);
+                        context.lineTo(pT.x, pT.y);
+                        context.lineTo(pT_out2.x, pT_out2.y);
+                        context.lineTo(pR_out2.x, pR_out2.y);
+                        context.lineTo(pR.x, pR.y);
+                        context.lineTo(pR_out3.x, pR_out3.y);
+                        context.lineTo(pB_out3.x, pB_out3.y);
+                        context.lineTo(pB.x, pB.y);
+                        context.lineTo(pB_out4.x, pB_out4.y);
+                        context.lineTo(pL_out4.x, pL_out4.y);
+                        context.closePath();
+                    };
+
+                    // 2. 枠内をクリッピングして格子線＋コマ（内接円・半円）を描画
+                    ctx.save();
+                    createOuterPolyPath(ctx);
+                    ctx.fillStyle = "#fafbfc";
+                    ctx.fill();
+                    ctx.clip(); // 枠内のみにクリップ！
+
+                    // バンドに平行な縦横の格子線
+                    ctx.lineWidth = 0.7;
+                    ctx.strokeStyle = "rgba(100, 116, 139, 0.35)";
+                    for (let u = uMin; Math.sign(u - uMax) !== 1; u++) {
+                        const pt1 = g2p(u, vMin);
+                        const pt2 = g2p(u, vMax);
+                        ctx.beginPath();
+                        ctx.moveTo(pt1.x, pt1.y);
+                        ctx.lineTo(pt2.x, pt2.y);
+                        ctx.stroke();
+                    }
+                    for (let v = vMin; Math.sign(v - vMax) !== 1; v++) {
+                        const pt1 = g2p(uMin, v);
+                        const pt2 = g2p(uMax, v);
+                        ctx.beginPath();
+                        ctx.moveTo(pt1.x, pt1.y);
+                        ctx.lineTo(pt2.x, pt2.y);
+                        ctx.stroke();
+                    }
+
+                    // 格子マス内の内接円描画 (縁の青線にかかる半円は編めないため除外)
+                    const circleR = cs * 0.40;
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
+                    ctx.strokeStyle = "rgba(0, 0, 0, 0.20)";
+                    ctx.lineWidth = 0.8;
+
+                    const S2 = Math.round(S * 2);
+                    const W2 = W * 2;
+                    const D2 = D * 2;
+
+                    for (let u = uMin; Math.sign(u - uMax) === -1; u++) {
+                        for (let v = vMin; Math.sign(v - vMax) === -1; v++) {
+                            const cx = u + 0.5;
+                            const cy = v + 0.5;
+
+                            // 4本の外端青線（縁）にかかるマスを判定して除外
+                            const inCx1 = (Math.sign(cx - (-S)) !== -1) ? (Math.sign(cx - (W - S)) !== 1) : false;
+                            const onRim1 = (2 * (u + v + 1) === W2 - 2 * S2) ? inCx1 : false;
+                            const inCy2 = (Math.sign(cy - (-S)) !== -1) ? (Math.sign(cy - (D - S)) !== 1) : false;
+                            const onRim2 = (2 * (u - v) === W2 + 2 * S2) ? inCy2 : false;
+                            const inCy3 = (Math.sign(cy - (D + S)) !== -1) ? (Math.sign(cy - (W + D + S)) !== 1) : false;
+                            const onRim3 = (2 * (u + v + 1) === W2 + 2 * D2 + 2 * S2) ? inCy3 : false;
+                            const inCx4 = (Math.sign(cx - (-S)) !== -1) ? (Math.sign(cx - (D - S)) !== 1) : false;
+                            const onRim4 = (2 * (v - u) === W2 + 2 * S2) ? inCx4 : false;
+
+                            if (onRim1 ? true : (onRim2 ? true : (onRim3 ? true : onRim4))) {
+                                continue;
+                            }
+
+                            const center = g2p(cx, cy);
+                            ctx.beginPath();
+                            ctx.arc(center.x, center.y, circleR, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.stroke();
+                        }
+                    }
+                    ctx.restore();
+
+                    // 3. 側面枠線の描画 (実線)
+                    ctx.save();
+                    ctx.lineWidth = 1.8;
+                    ctx.strokeStyle = "#2563eb"; // 側面外枠は青系実線
+
+                    // 外端の実線
+                    ctx.beginPath();
+                    ctx.moveTo(pL_out1.x, pL_out1.y); ctx.lineTo(pT_out1.x, pT_out1.y);
+                    ctx.moveTo(pT_out2.x, pT_out2.y); ctx.lineTo(pR_out2.x, pR_out2.y);
+                    ctx.moveTo(pR_out3.x, pR_out3.y); ctx.lineTo(pB_out3.x, pB_out3.y);
+                    ctx.moveTo(pB_out4.x, pB_out4.y); ctx.lineTo(pL_out4.x, pL_out4.y);
+                    ctx.stroke();
+
+                    // 側面の境界線 (底面からの立ち上がり線)
+                    ctx.lineWidth = 1.2;
+                    ctx.strokeStyle = "#64748b";
+                    ctx.beginPath();
+                    ctx.moveTo(pL.x, pL.y); ctx.lineTo(pL_out1.x, pL_out1.y);
+                    ctx.moveTo(pT.x, pT.y); ctx.lineTo(pT_out1.x, pT_out1.y);
+                    ctx.moveTo(pT.x, pT.y); ctx.lineTo(pT_out2.x, pT_out2.y);
+                    ctx.moveTo(pR.x, pR.y); ctx.lineTo(pR_out2.x, pR_out2.y);
+                    ctx.moveTo(pR.x, pR.y); ctx.lineTo(pR_out3.x, pR_out3.y);
+                    ctx.moveTo(pB.x, pB.y); ctx.lineTo(pB_out3.x, pB_out3.y);
+                    ctx.moveTo(pB.x, pB.y); ctx.lineTo(pB_out4.x, pB_out4.y);
+                    ctx.moveTo(pL.x, pL.y); ctx.lineTo(pL_out4.x, pL_out4.y);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // 4. 折り返し高さライン (H位置の点線)
+                    if (Math.sign(F) === 1) {
+                        ctx.save();
+                        ctx.lineWidth = 1.4;
+                        ctx.strokeStyle = "#f59e0b"; // オレンジ色点線
+                        ctx.setLineDash([4, 4]);
+
+                        const fL1 = g2p(-H, W - H), fT1 = g2p(W - H, -H);
+                        const fT2 = g2p(W + H, -H), fR2 = g2p(W + D + H, D - H);
+                        const fR3 = g2p(W + D + H, D + H), fB3 = g2p(D + H, W + D + H);
+                        const fB4 = g2p(D - H, W + D + H), fL4 = g2p(-H, W + H);
+
+                        ctx.beginPath();
+                        ctx.moveTo(fL1.x, fL1.y); ctx.lineTo(fT1.x, fT1.y);
+                        ctx.moveTo(fT2.x, fT2.y); ctx.lineTo(fR2.x, fR2.y);
+                        ctx.moveTo(fR3.x, fR3.y); ctx.lineTo(fB3.x, fB3.y);
+                        ctx.moveTo(fB4.x, fB4.y); ctx.lineTo(fL4.x, fL4.y);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+
+                    // 5. 底面矩形 (中央)
+                    ctx.save();
+                    ctx.lineWidth = 2.0;
+                    ctx.strokeStyle = "#dc2626"; // 赤色実線
+                    ctx.beginPath();
+                    ctx.moveTo(pL.x, pL.y);
+                    ctx.lineTo(pT.x, pT.y);
+                    ctx.lineTo(pR.x, pR.y);
+                    ctx.lineTo(pB.x, pB.y);
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    // 底の中央線 (短辺を含む直角二等辺三角形と、その角をつなぐ斜め線 Y字+逆Y字: 赤の細い線)
+                    let v1, v2;
+                    if (Math.sign(W - D) !== -1) {
+                        v1 = g2p(D, W);
+                        v2 = g2p(W, D);
+                    } else {
+                        v1 = g2p(W, W);
+                        v2 = g2p(D, D);
+                    }
+                    ctx.lineWidth = 1.0;
+                    ctx.beginPath();
+                    if (Math.sign(W - D) !== -1) {
+                        ctx.moveTo(pL.x, pL.y); ctx.lineTo(v1.x, v1.y); ctx.lineTo(pB.x, pB.y);
+                        ctx.moveTo(pT.x, pT.y); ctx.lineTo(v2.x, v2.y); ctx.lineTo(pR.x, pR.y);
+                    } else {
+                        ctx.moveTo(pL.x, pL.y); ctx.lineTo(v1.x, v1.y); ctx.lineTo(pT.x, pT.y);
+                        ctx.moveTo(pB.x, pB.y); ctx.lineTo(v2.x, v2.y); ctx.lineTo(pR.x, pR.y);
+                    }
+                    ctx.moveTo(v1.x, v1.y);
+                    ctx.lineTo(v2.x, v2.y);
+
+                    // 対角線同一長 (mode 2) 選択時: 中心斜め線を底編み正方形の対角線まで延長
+                    if (sameLenMode === 2) {
+                        if (Math.sign(W - D) !== -1) {
+                            // W is greater than or equal to D (正方形 W=D を含む): (0, N) から (N, 0) への対角線 (45度右上方向)
+                            const pDiagStart = g2p(0, N);
+                            const pDiagEnd = g2p(N, 0);
+                            ctx.moveTo(pDiagStart.x, pDiagStart.y);
+                            ctx.lineTo(pDiagEnd.x, pDiagEnd.y);
+                        } else {
+                            // W is less than D: (0, 0) から (N, N) への対角線
+                            const pDiagStart = g2p(0, 0);
+                            const pDiagEnd = g2p(N, N);
+                            ctx.moveTo(pDiagStart.x, pDiagStart.y);
+                            ctx.lineTo(pDiagEnd.x, pDiagEnd.y);
+                        }
+                    }
+                    ctx.stroke();
+
+                    // 中央ラベル
+                    const centerPt = g2p((W + D) / 2, (W + D) / 2);
+                    ctx.font = "bold 13px system-ui, sans-serif";
+                    ctx.fillStyle = "#111827";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("底面", centerPt.x, centerPt.y - 8);
+                    ctx.font = "11px system-ui, sans-serif";
+                    ctx.fillStyle = "#4b5563";
+                    ctx.fillText(`横${W}コマ × 縦${D}コマ`, centerPt.x, centerPt.y + 8);
+                    ctx.restore();
+
+                    // 側面高さ表示 (右上側面／底面長方形の角と底編み正方形がクロスする箇所の右側空きスペース)
+                    const sideHeightLabel = (Math.sign(F) === 1) ? `高さ ${H}コマ (+折返 ${F}コマ)` : `高さ ${H}コマ`;
+                    ctx.font = "bold 11px system-ui, sans-serif";
+                    const sideTextW = ctx.measureText(sideHeightLabel).width;
+                    const sideBadgeW = sideTextW + 14;
+                    const sideBadgeH = 20;
+
+                    // 位置: pT(W, 0) の右側、右上側面の空きスペース
+                    const labelU = W + D * 0.45 + S * 0.35;
+                    const labelV = -Math.max(1.2, S * 0.45);
+                    const sideLabelPt = g2p(labelU, labelV);
+
+                    ctx.save();
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
+                    ctx.strokeStyle = "#2563eb"; // 側面外枠と同じ青
+                    ctx.lineWidth = 1.2;
+
+                    const bx = sideLabelPt.x - sideBadgeW / 2;
+                    const by = sideLabelPt.y - sideBadgeH / 2;
+                    const br = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(bx + br, by);
+                    ctx.lineTo(bx + sideBadgeW - br, by);
+                    ctx.quadraticCurveTo(bx + sideBadgeW, by, bx + sideBadgeW, by + br);
+                    ctx.lineTo(bx + sideBadgeW, by + sideBadgeH - br);
+                    ctx.quadraticCurveTo(bx + sideBadgeW, by + sideBadgeH, bx + sideBadgeW - br, by + sideBadgeH);
+                    ctx.lineTo(bx + br, by + sideBadgeH);
+                    ctx.quadraticCurveTo(bx, by + sideBadgeH, bx, by + sideBadgeH - br);
+                    ctx.lineTo(bx, by + br);
+                    ctx.quadraticCurveTo(bx, by, bx + br, by);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = "#1e40af";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(sideHeightLabel, sideLabelPt.x, sideLabelPt.y);
+                    ctx.restore();
+
+                    // 6. 底編み正方形 (黒の太線で囲む)
+                    // (0, 0) から (N, N) の正方形
+                    const sqTL = g2p(0, 0);
+                    const sqTR = g2p(N, 0);
+                    const sqBR = g2p(N, N);
+                    const sqBL = g2p(0, N);
+
+                    ctx.save();
+                    ctx.lineWidth = 2.8;
+                    ctx.strokeStyle = "#111827"; // 黒の太線
+                    ctx.beginPath();
+                    ctx.moveTo(sqTL.x, sqTL.y);
+                    ctx.lineTo(sqTR.x, sqTR.y);
+                    ctx.lineTo(sqBR.x, sqBR.y);
+                    ctx.lineTo(sqBL.x, sqBL.y);
+                    ctx.closePath();
+                    ctx.stroke();
+
+                    // 7. 底編み正方形の位置に合わせてひもの NO (A, B, C...) を並べる
+                    ctx.font = "bold 11px system-ui, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    bands.forEach(b => {
+                        const k = b.idx;
+                        const label = b.id;
+
+                        // 縦ひも (上辺 v=0 と 下辺 v=N)
+                        const pTop = g2p(k - 0.5, 0);
+                        const pBottom = g2p(k - 0.5, N);
+
+                        // バッジ背景円
+                        const drawBadge = (x, y, text) => {
+                            ctx.fillStyle = "#3b82f6";
+                            ctx.beginPath();
+                            ctx.arc(x, y, 8.5, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.fillStyle = "#ffffff";
+                            ctx.fillText(text, x, y);
+                        };
+
+                        drawBadge(pTop.x, pTop.y - 12, label);
+                        drawBadge(pBottom.x, pBottom.y + 12, label);
+
+                        // 横ひも (左辺 u=0 と 右辺 u=N)
+                        const pLeft = g2p(0, k - 0.5);
+                        const pRight = g2p(N, k - 0.5);
+
+                        drawBadge(pLeft.x - 12, pLeft.y, label);
+                        drawBadge(pRight.x + 12, pRight.y, label);
+                    });
+                    ctx.restore();
+
+                    // 8. ヘッダー情報 (左上)
+                    ctx.fillStyle = "#111827";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "top";
+                    ctx.font = "bold 15px system-ui, sans-serif";
+                    ctx.fillText(`仕上がりサイズ: 横幅 ${widthCm}cm × 奥行 ${depthCm}cm × 高さ ${heightCm}cm`, 20, 16);
+
+                    ctx.font = "12px system-ui, sans-serif";
+                    ctx.fillStyle = "#475569";
+                    const modeNames = ["最適長", "四方同一長", "対角線同一長"];
+                    ctx.fillText(`コマ寸法: ${knotSizeMm.toFixed(1)}mm / コマ要尺: ${knotLenMm.toFixed(1)}mm (参考バンド幅: ${refBw.toFixed(1)}mm)  [${modeNames[sameLenMode]}]`, 20, 38);
+                    if (Math.sign(F) === 1) {
+                        ctx.fillText(`縁の加算: ${foldAdd}cm / 折り返しコマ数: ${F}コマ (橙色点線)`, 20, 56);
+                    } else {
+                        ctx.fillText(`縁の加算: ${foldAdd}cm`, 20, 56);
+                    }
+
+                    // 9. 出典URL & 日時 (右下)
+                    const footerRightX = canvasW - 15;
+                    const footerBottomY = canvasH - 15;
+                    ctx.textAlign = "right";
+                    ctx.textBaseline = "bottom";
+                    ctx.font = "11px sans-serif";
+                    ctx.fillStyle = "#64748b";
+                    ctx.fillText("https://labo.com/CraftBand/sharing/knot45-calc/", footerRightX, footerBottomY);
+
+                    const now = new Date();
+                    const padZero = (n) => String(n).padStart(2, '0');
+                    const dateStr = `${now.getFullYear()}/${padZero(now.getMonth() + 1)}/${padZero(now.getDate())} ${padZero(now.getHours())}:${padZero(now.getMinutes())}:${padZero(now.getSeconds())}`;
+                    ctx.fillText(dateStr, footerRightX, footerBottomY - 16);
+
+                    // 10. カットリスト表 (下部)
+                    let ty = oy + (vMax * cs) + 40;
+                    ctx.font = "bold 13px system-ui, sans-serif";
+                    ctx.fillStyle = "#111827";
+                    ctx.textAlign = "left";
+                    ctx.textBaseline = "top";
+                    ctx.fillText("【カットリスト】", 20, ty);
+                    ty += 22;
+
+                    const tW = Math.min(560, canvasW - 40);
+                    const thH = 26;
+                    const trH = 22;
+
+                    // ヘッダー
+                    ctx.fillStyle = "#f8fafc";
+                    ctx.fillRect(20, ty, tW, thH);
+                    ctx.strokeStyle = "#e2e8f0";
+                    ctx.strokeRect(20, ty, tW, thH);
+
+                    ctx.fillStyle = "#334155";
+                    ctx.font = "bold 12px system-ui, sans-serif";
+                    ctx.textBaseline = "middle";
+                    ctx.textAlign = "center";
+                    ctx.fillText("No.", 50, ty + thH / 2);
+                    ctx.fillText("長さ (cm)", 130, ty + thH / 2);
+                    ctx.fillText("本数", 220, ty + thH / 2);
+                    ctx.fillText("内訳 (縦+横)", 330, ty + thH / 2);
+                    ty += thH;
+
+                    // リスト行
+                    ctx.font = "12px system-ui, sans-serif";
+                    dLen.forEach(l => {
+                        const c = bands.filter(b => b.len === l).length;
+                        const tot = c * 2;
+                        ctx.fillStyle = "#fff";
+                        ctx.fillRect(20, ty, tW, trH);
+                        ctx.strokeStyle = "#f1f5f9";
+                        ctx.strokeRect(20, ty, tW, trH);
+
+                        // No. バッジ
+                        ctx.fillStyle = "#3b82f6";
+                        ctx.beginPath();
+                        ctx.arc(50, ty + trH / 2, 8, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillText(idMap.get(l), 50, ty + trH / 2);
+
+                        ctx.fillStyle = "#111827";
+                        ctx.fillText(l.toFixed(1), 130, ty + trH / 2);
+                        ctx.fillText(tot, 220, ty + trH / 2);
+                        ctx.fillText(`${c}本 × 2`, 330, ty + trH / 2);
+                        ty += trH;
+                    });
+
+                    // 合計行
+                    ctx.fillStyle = "#fff1f2";
+                    ctx.fillRect(20, ty, tW, trH);
+                    ctx.strokeStyle = "#fecaca";
+                    ctx.strokeRect(20, ty, tW, trH);
+
+                    ctx.fillStyle = "#b91c1c";
+                    ctx.font = "bold 12px system-ui, sans-serif";
+                    ctx.textAlign = "right";
+                    ctx.fillText("合計", 90, ty + trH / 2);
+                    ctx.textAlign = "center";
+                    ctx.fillText(`${totalM} m`, 175, ty + trH / 2);
+                    ctx.textAlign = "left";
+                    ctx.fillText(`(全 ${totalCount} 本)`, 250, ty + trH / 2);
+                }
+
+                /* ----- バンド幅参考エリアの更新 (寸法→要尺の順、太字化) ----- */
+                const updateBandFormulaNote = () => {
+                    const bw = parseFloat(refBandWidthEl.value) ? parseFloat(refBandWidthEl.value) : 0;
+                    const rSize = (bw * 2.236).toFixed(1);
+                    const rLen = (bw * 6.43).toFixed(1);
+                    bandFormulaNote.innerHTML = `平面の場合 寸法=2.2倍(<b>${rSize}mm</b>)・要尺=6.4倍(<b>${rLen}mm</b>)`;
+                };
+                refBandWidthEl.addEventListener("input", updateBandFormulaNote);
+
+                // 「幅からの概算」ボタン
+                btnCalcFromBand.addEventListener("click", () => {
+                    const bw = parseFloat(refBandWidthEl.value) ? parseFloat(refBandWidthEl.value) : 0;
+                    const lenVal = bw * 0.98 * 6.43 + bw * 0.7;
+                    const sizeVal = bw * 0.95 * 2.236 + bw * 0.2;
+
+                    knotLenEl.value = lenVal.toFixed(1);
+                    knotSizeEl.value = sizeVal.toFixed(1);
+
+                    saveKnotValues();
+                    updateAdditionsFromKnotLen();
+                    calculateAll();
+                    calcButton.dispatchEvent(new Event('click'));
+                });
+
+                /* ----- コマ寸法変更時の参考バンド幅自動逆算 (÷2.236) ＆ 保存 ----- */
+                knotSizeEl.addEventListener("input", () => {
+                    const kSize = parseFloat(knotSizeEl.value);
+                    if (!isNaN(kSize) ? (Math.sign(kSize) === 1) : false) {
+                        refBandWidthEl.value = (kSize / 2.236).toFixed(1);
+                        updateBandFormulaNote();
+                    }
+                    saveKnotValues();
+                    calculateAll();
+                });
+
+                /* ----- コマ要尺変更時の連動 ＆ 保存 ----- */
+                knotLenEl.addEventListener("input", () => {
+                    updateAdditionsFromKnotLen();
+                    saveKnotValues();
+                    calculateAll();
+                });
+
+                /* ----- cm ↔ コマ数 相互換算 (1コマ = 1コマ要尺) ----- */
+                const syncCmAndKoma = (cmInput, komaInput) => {
+                    cmInput.addEventListener("input", () => {
+                        const lenCm = getKnotLenMm() / 10;
+                        const cmVal = parseFloat(cmInput.value);
+                        if (!isNaN(cmVal)) {
+                            if (Math.sign(lenCm) === 1) {
+                                const koma = cmVal / lenCm;
+                                if (document.activeElement !== komaInput) {
+                                    komaInput.value = parseFloat(koma.toFixed(2));
+                                }
+                            }
+                        }
+                        calculateAll();
+                    });
+                    komaInput.addEventListener("input", () => {
+                        const lenCm = getKnotLenMm() / 10;
+                        const komaVal = parseFloat(komaInput.value);
+                        if (!isNaN(komaVal)) {
+                            const cmVal = komaVal * lenCm;
+                            if (document.activeElement !== cmInput) {
+                                cmInput.value = parseFloat(cmVal.toFixed(1));
+                            }
+                        }
+                        calculateAll();
+                    });
+                };
+                syncCmAndKoma(foldAdditionEl, foldKomaEl);
+
+                // 要尺変更時は現在のコマ数を維持してcmを再計算
+                const updateAdditionsFromKnotLen = () => {
+                    const lenCm = getKnotLenMm() / 10;
+                    if (Math.sign(lenCm) !== 1) return;
+
+                    const fKoma = parseFloat(foldKomaEl.value) ? parseFloat(foldKomaEl.value) : 0;
+                    foldAdditionEl.value = parseFloat((fKoma * lenCm).toFixed(1));
+                    calculateAll();
+                };
+
+                /* ----- ステッパー & 入力イベント ----- */
+                [widthKomaEl, depthKomaEl, heightKomaEl, foldKomaCountEl].forEach(inp => {
+                    inp.addEventListener("input", () => calculateAll());
+                });
+
+                els('input[name="sameLenMode"]').forEach(radio => {
+                    radio.addEventListener("change", () => {
+                        calculateAll();
+                        calcButton.dispatchEvent(new Event('click'));
+                    });
+                });
+
+                /* ----- プリセット設定 ----- */
+                const applySizePreset = (targetW_mm, targetH_mm) => {
+                    const kSize = getKnotSizeMm();
+                    const effKomaSize = kSize * Math.SQRT2;
+                    const bestW = Math.max(1, Math.round(targetW_mm / effKomaSize));
+                    const bestH = Math.max(0.5, Math.round((targetH_mm / effKomaSize) * 2) / 2);
+                    const bestD = Math.max(1, Math.round(bestW / 3));
+
+                    widthKomaEl.value = String(bestW);
+                    depthKomaEl.value = String(bestD);
+                    heightKomaEl.value = String(bestH);
+
+                    calculateAll();
+                    calcButton.dispatchEvent(new Event('click'));
+                };
+
+                btnB5.addEventListener("click", () => applySizePreset(257, 182));
+                btnA4.addEventListener("click", () => applySizePreset(297, 210));
+                btnB4.addEventListener("click", () => applySizePreset(364, 257));
+
+                // 「展開図を更新」ボタン
+                calcButton.addEventListener("click", () => {
+                    if (!currentCalcResult) calculateAll();
+                    const cv = el("#knot45Canvas");
+                    const ctx = cv.getContext("2d");
+                    drawKnot45Diagram(ctx, currentCalcResult);
+                    pdfButton.style.display = "inline-block";
+                });
+
+                // PDFダウンロード
+                pdfButton.addEventListener("click", () => {
+                    try {
+                        let libsReady = false;
+                        if (window.jspdf) {
+                            if (window.jspdf.jsPDF) libsReady = true;
+                        }
+                        if (!libsReady) {
+                            alert("PDFライブラリがロードされていません");
+                            return;
+                        }
+                        const cv = el("#knot45Canvas");
+                        const imgData = cv.toDataURL("image/png");
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF({
+                            orientation: "portrait",
+                            unit: "mm",
+                            format: "a4"
+                        });
+
+                        const pageWidth = doc.internal.pageSize.getWidth();
+                        const pageHeight = doc.internal.pageSize.getHeight();
+                        const margin = 10;
+                        const maxW = pageWidth - margin * 2;
+                        const maxH = pageHeight - margin * 2;
+
+                        let imgW = maxW;
+                        let imgH = (cv.height * imgW) / cv.width;
+                        if (Math.sign(imgH - maxH) === 1) {
+                            imgH = maxH;
+                            imgW = (cv.width * imgH) / cv.height;
+                        }
+                        const x = (pageWidth - imgW) / 2;
+                        const y = margin;
+
+                        doc.addImage(imgData, "PNG", x, y, imgW, imgH);
+                        doc.save("knot45-calc-diagram.pdf");
+                    } catch (e) {
+                        console.error(e);
+                        alert("PDFの生成に失敗しました: " + e.message);
+                    }
+                });
+
+                /* ----- コマ寸法・要尺の解決 (優先順位: 1.API to 2.localStorage to 3.初期値20/60) ----- */
+                const resolveKnotDimensions = (params) => {
+                    const RATIO_LEN_TO_SIZE = 6.43 / 2.236; // 約 2.87567
+
+                    // 1. API値
+                    const pKnotSize = parseFloat(params.get('cb_knot_size'));
+                    const pKnotLen = parseFloat(params.get('cb_knot_len'));
+                    const hasApiSize = (!isNaN(pKnotSize)) ? (Math.sign(pKnotSize) === 1) : false;
+                    const hasApiLen = (!isNaN(pKnotLen)) ? (Math.sign(pKnotLen) === 1) : false;
+
+                    if (hasApiSize ? true : hasApiLen) {
+                        if (hasApiSize ? hasApiLen : false) {
+                            return { size: pKnotSize, len: pKnotLen };
+                        } else if (hasApiSize) {
+                            return { size: pKnotSize, len: parseFloat((pKnotSize * RATIO_LEN_TO_SIZE).toFixed(1)) };
+                        } else {
+                            return { size: parseFloat((pKnotLen / RATIO_LEN_TO_SIZE).toFixed(1)), len: pKnotLen };
+                        }
+                    }
+
+                    // 2. ブラウザの前回値 (localStorage)
+                    let localSize = null;
+                    let localLen = null;
+                    try {
+                        const s = parseFloat(localStorage.getItem('cb_knot_calc_size'));
+                        const l = parseFloat(localStorage.getItem('cb_knot_calc_len'));
+                        if (!isNaN(s) ? (Math.sign(s) === 1) : false) localSize = s;
+                        if (!isNaN(l) ? (Math.sign(l) === 1) : false) localLen = l;
+                    } catch (e) {
+                        // ignore
+                    }
+
+                    if (localSize ? true : localLen) {
+                        if (localSize ? Boolean(localLen) : false) {
+                            return { size: localSize, len: localLen };
+                        } else if (localSize) {
+                            return { size: localSize, len: parseFloat((localSize * RATIO_LEN_TO_SIZE).toFixed(1)) };
+                        } else {
+                            return { size: parseFloat((localLen / RATIO_LEN_TO_SIZE).toFixed(1)), len: localLen };
+                        }
+                    }
+
+                    // 3. 初期値: 要尺 60mm・寸法 20mm
+                    return { size: 20.0, len: 60.0 };
+                };
+
+                /* ----- API (URLパラメータ読み込み) ----- */
+                const loadFromUrlParams = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    const model = params.get('cb_model');
+                    if (model ? (model !== 'knot45') : false) return;
+
+                    // コマ寸法・要尺の解決
+                    const dims = resolveKnotDimensions(params);
+                    knotSizeEl.value = dims.size.toFixed(1);
+                    knotLenEl.value = dims.len.toFixed(1);
+                    saveKnotValues();
+
+                    // 参考バンド幅の初期化 (コマ寸法 ÷ 2.236)
+                    const pBand = parseFloat(params.get('cb_band'));
+                    if (!isNaN(pBand) ? (Math.sign(pBand) === 1) : false) {
+                        refBandWidthEl.value = pBand.toFixed(1);
+                    } else {
+                        refBandWidthEl.value = (dims.size / 2.236).toFixed(1);
+                    }
+                    updateBandFormulaNote();
+
+                    // ひも長モード (cb_same_len)
+                    const pSameLen = parseInt(params.get('cb_same_len'), 10);
+                    if (!isNaN(pSameLen) ? [0, 1, 2].includes(pSameLen) : false) {
+                        const targetRadio = container.querySelector(`input[name="sameLenMode"][value="${pSameLen}"]`);
+                        if (targetRadio) targetRadio.checked = true;
+                    }
+
+                    // 折り返しコマ数 (cb_rim)
+                    const pRim = parseInt(params.get('cb_rim'), 10);
+                    if (!isNaN(pRim) ? (Math.sign(pRim) !== -1) : false) {
+                        foldKomaCountEl.value = pRim;
+                    }
+
+                    // 縁の加算コマ (cb_add)
+                    const pAdd = parseFloat(params.get('cb_add'));
+                    if (!isNaN(pAdd) ? (Math.sign(pAdd) !== -1) : false) {
+                        foldKomaEl.value = pAdd;
+                    }
+
+                    // 目標サイズ (cb_w, cb_d, cb_h: mm単位)
+                    let wTarget = parseFloat(params.get('cb_w'));
+                    let dTarget = parseFloat(params.get('cb_d'));
+                    let hTarget = parseFloat(params.get('cb_h'));
+                    const mode = params.get('cb_mode') ? params.get('cb_mode') : 'near';
+
+                    const hasW = (!isNaN(wTarget)) ? (Math.sign(wTarget) === 1) : false;
+                    const hasD = (!isNaN(dTarget)) ? (Math.sign(dTarget) === 1) : false;
+                    const hasH = (!isNaN(hTarget)) ? (Math.sign(hTarget) === 1) : false;
+
+                    if (hasW ? true : (hasD ? true : hasH)) {
+                        if (hasW ? (!hasD ? !hasH : false) : false) {
+                            dTarget = wTarget / 3;
+                            hTarget = wTarget / Math.SQRT2;
+                        } else if (!hasW ? (!hasD ? hasH : false) : false) {
+                            wTarget = hTarget * Math.SQRT2;
+                            dTarget = wTarget / 3;
+                        } else if (!hasW ? (hasD ? !hasH : false) : false) {
+                            wTarget = dTarget * 3;
+                            hTarget = wTarget / Math.SQRT2;
+                        } else if (hasW ? (hasD ? !hasH : false) : false) {
+                            hTarget = wTarget / Math.SQRT2;
+                        } else if (hasW ? (!hasD ? hasH : false) : false) {
+                            dTarget = wTarget / 3;
+                        } else if (!hasW ? (hasD ? hasH : false) : false) {
+                            wTarget = dTarget * 3;
+                        }
+
+                        const effKomaSize = dims.size * Math.SQRT2;
+                        const fitKoma = (targetMm, isHeight) => {
+                            const raw = targetMm / effKomaSize;
+                            if (isHeight) {
+                                if (mode === 'in') return Math.max(0.5, Math.floor(raw * 2) / 2);
+                                if (mode === 'out') return Math.max(0.5, Math.ceil(raw * 2) / 2);
+                                return Math.max(0.5, Math.round(raw * 2) / 2);
+                            } else {
+                                if (mode === 'in') return Math.max(1, Math.floor(raw));
+                                if (mode === 'out') return Math.max(1, Math.ceil(raw));
+                                return Math.max(1, Math.round(raw));
+                            }
+                        };
+
+                        widthKomaEl.value = fitKoma(wTarget, false);
+                        depthKomaEl.value = fitKoma(dTarget, false);
+                        heightKomaEl.value = fitKoma(hTarget, true);
+                    }
+                };
+
+                // Single-Shot JSON DOM書き出し
+                const emitSingleShotData = () => {
+                    const params = new URLSearchParams(window.location.search);
+                    const model = params.get('cb_model');
+                    if (model ? (model !== 'knot45') : false) return;
+
+                    if (document.getElementById('craftband-simulation-data')) return;
+                    if (!currentCalcResult) calculateAll();
+
+                    const r = currentCalcResult;
+                    const cutListEntries = [];
+                    r.dLen.forEach(l => {
+                        const c = r.bands.filter(b => b.len === l).length * 2;
+                        cutListEntries.push({
+                            len: Math.round(l * 10 * 10) / 10,
+                            num: c,
+                            name: `ひも ${r.idMap.get(l)}`
+                        });
+                    });
+
+                    const dataObj = {
+                        model: "knot45",
+                        same_len: r.sameLenMode,
+                        koma: {
+                            w: r.W,
+                            d: r.D,
+                            h: r.H,
+                            fold: r.F
+                        },
+                        knot_size: r.knotSizeMm,
+                        knot_len: r.knotLenMm,
+                        size: {
+                            w: Math.round(r.widthCm * 10 * 10) / 10,
+                            d: Math.round(r.depthCm * 10 * 10) / 10,
+                            h: Math.round(r.heightCm * 10 * 10) / 10
+                        },
+                        total_length: Math.round(r.totalCm * 10 * 10) / 10,
+                        cut_list: cutListEntries
+                    };
+
+                    const scriptTag = document.createElement('script');
+                    scriptTag.id = 'craftband-simulation-data';
+                    scriptTag.type = 'application/json';
+                    scriptTag.textContent = JSON.stringify(dataObj);
+                    document.body.appendChild(scriptTag);
+                };
+
+                // 初期化実行
+                const initialize = () => {
+                    foldKomaCountEl.value = 0;
+                    foldKomaEl.value = 3.0;
+
+                    loadFromUrlParams();
+                    updateAdditionsFromKnotLen();
+                    calculateAll();
+                    calcButton.dispatchEvent(new Event('click'));
+                    emitSingleShotData();
+                };
+
+                initialize();
+            })();
+            //]]>
+</script>
+</div>

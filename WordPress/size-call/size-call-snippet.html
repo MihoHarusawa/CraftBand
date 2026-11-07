@@ -73,12 +73,13 @@
         /* ラジオボタン選択肢 */
         #purakago-size-call-app .radio-group {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             margin-bottom: 16px;
             background-color: #fff5f2; /* 薄いオレンジ背景 */
             padding: 12px;
             border-radius: 8px;
             border: 1px dashed #fca5a5;
+            flex-wrap: wrap;
         }
 
         #purakago-size-call-app .radio-label {
@@ -128,6 +129,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
         }
 
         #purakago-size-call-app .unit-label {
@@ -154,6 +156,23 @@
             background-color: #e05d22; /* ホバー時にテーマの赤オレンジに */
             border-color: #d94412;
             color: #ffffff;
+        }
+
+        #purakago-size-call-app .btn-ref-calc {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #2563eb;
+            border: 1px solid #1d4ed8;
+            border-bottom: 2px solid #1e40af;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        #purakago-size-call-app .btn-ref-calc:hover {
+            background-color: #1d4ed8;
         }
 
         /* クイック倍数ボタンの並び */
@@ -257,7 +276,7 @@
 
     <h2>📐 かごサイズ概算ランチャー</h2>
 
-    <!-- 1. モデル選択 -->
+    <!-- 1. モデル選択 (4択) -->
     <div class="radio-group">
         <label class="radio-label">
             <input type="radio" name="cb_model" value="square" checked>
@@ -267,10 +286,41 @@
             <input type="radio" name="cb_model" value="square45">
             斜めに立ち上げる（北欧編み）
         </label>
+        <label class="radio-label">
+            <input type="radio" name="cb_model" value="knot">
+            四つ畳みで縦横に立ち上げる
+        </label>
+        <label class="radio-label">
+            <input type="radio" name="cb_model" value="knot45">
+            四つ畳みで斜めに立ち上げる
+        </label>
     </div>
 
-    <!-- 2. バンド設定グループ -->
-    <div class="section-group">
+    <!-- 2. 四つ畳み編みの設定グループ (四つ畳み時のみ表示) -->
+    <div class="section-group" id="knotSection" style="display: none;">
+        <div class="section-title">
+            <span>🧶</span> 四つ畳み編みの設定
+        </div>
+        <div class="row">
+            <div class="field">
+                <label for="knotSize">コマ寸法</label>
+                <div class="input-group">
+                    <input type="number" id="knotSize" min="0.1" step="0.1" value="20.0" class="narrow-input" style="font-weight: bold; color: #1e3a8a;">
+                    <span class="unit-label">mm</span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="knotLen">コマ要尺</label>
+                <div class="input-group">
+                    <input type="number" id="knotLen" min="0.1" step="0.1" value="60.0" class="narrow-input" style="font-weight: bold; color: #1e3a8a;">
+                    <span class="unit-label">mm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. バンド設定グループ -->
+    <div class="section-group" id="bandSection">
         <div class="section-title">
             <span>🎨</span> バンドとすき間の設定
         </div>
@@ -296,9 +346,10 @@
                         <button type="button" id="btnHalf" class="calc-btn">1/2</button>
                         <button type="button" id="btnThird" class="calc-btn">1/3</button>
                     </div>
+                    <button type="button" id="btnCalcFromBand" class="btn-ref-calc" style="display: none;">幅からの概算</button>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" id="gapContainer">
                 <label>すき間</label>
                 <div class="input-group">
                     <input type="number" id="bandGap" min="0" step="0.1" value="0.5" class="narrow-input">
@@ -306,53 +357,53 @@
                 </div>
             </div>
         </div>
-        <div style="margin-top: 8px;">
+        <div id="unitDisplayContainer" style="margin-top: 8px;">
             <div id="unitDisplay" class="info-badge">1コマ ＝ <span>-</span> mm</div>
             <div id="diagDisplay" class="info-badge" style="display: none;">対角 ＝ <span>-</span> mm</div>
         </div>
     </div>
 
-    <!-- 3. 加算余裕値設定グループ -->
+    <!-- 4. 加算余裕値設定グループ -->
     <div class="section-group">
         <div class="section-title">
             <span>📏</span> 加算余裕値の設定
         </div>
         <div class="row">
-            <!-- 折り返し加算 (共通) -->
+            <!-- 折り返し加算 (片側) -->
             <div class="field">
                 <label>折り返し加算 (片側)</label>
                 <div class="input-group">
                     <input type="number" id="foldCm" min="0" step="0.1" class="narrow-input">
                     <span class="unit-label">cm /</span>
                     <input type="number" id="foldKoma" min="0" step="0.5" class="narrow-input">
-                    <span class="unit-label">コマ</span>
+                    <span class="unit-label koma-unit-label">コマ</span>
                 </div>
             </div>
 
-            <!-- 側面ひも加算 (縦横のみ) -->
+            <!-- 側面ひも加算 (縦横のみ: square または knot) -->
             <div class="field" id="cordAddContainer">
                 <label>側面の編みひも加算</label>
                 <div class="input-group">
                     <input type="number" id="cordCm" min="0" step="0.1" class="narrow-input">
                     <span class="unit-label">cm /</span>
                     <input type="number" id="cordKoma" min="0" step="0.5" class="narrow-input">
-                    <span class="unit-label">コマ</span>
+                    <span class="unit-label koma-unit-label">コマ</span>
                 </div>
             </div>
         </div>
         <div class="row" id="rimContainer">
-            <!-- 縁重ね本数 (縦横のみ) -->
+            <!-- 縁重ね本数 (square) / 折り返しのコマ数 (knot/knot45) -->
             <div class="field">
-                <label>縁に重ねる本数</label>
+                <label id="edgeLabel">縁に重ねる本数</label>
                 <div class="input-group">
                     <input type="number" id="edgeCount" min="0" step="1" value="2" class="narrow-input">
-                    <span class="unit-label">本</span>
+                    <span class="unit-label" id="edgeUnit">本</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 4. 目標サイズ設定グループ -->
+    <!-- 5. 目標サイズ設定グループ -->
     <div class="section-group">
         <div class="section-title">
             <span>🎯</span> 目標サイズ
@@ -377,9 +428,7 @@
                 <div class="step-container">
                     <button type="button" class="step-btn minus" data-target="targetW" data-val="-10">-10</button>
                     <button type="button" class="step-btn minus" data-target="targetW" data-val="-1">-1</button>
-                    <button type="button" class="step-btn minus" data-target="targetW" data-val="-0.1">-0.1</button>
                     <input type="number" id="targetW" min="0.1" step="0.1" value="25.0" class="narrow-input">
-                    <button type="button" class="step-btn" data-target="targetW" data-val="0.1">+0.1</button>
                     <button type="button" class="step-btn" data-target="targetW" data-val="1">+1</button>
                     <button type="button" class="step-btn" data-target="targetW" data-val="10">+10</button>
                 </div>
@@ -393,9 +442,7 @@
                 <div class="step-container">
                     <button type="button" class="step-btn minus" data-target="targetD" data-val="-10">-10</button>
                     <button type="button" class="step-btn minus" data-target="targetD" data-val="-1">-1</button>
-                    <button type="button" class="step-btn minus" data-target="targetD" data-val="-0.1">-0.1</button>
                     <input type="number" id="targetD" min="0.1" step="0.1" value="10.0" class="narrow-input">
-                    <button type="button" class="step-btn" data-target="targetD" data-val="0.1">+0.1</button>
                     <button type="button" class="step-btn" data-target="targetD" data-val="1">+1</button>
                     <button type="button" class="step-btn" data-target="targetD" data-val="10">+10</button>
                 </div>
@@ -409,9 +456,7 @@
                 <div class="step-container">
                     <button type="button" class="step-btn minus" data-target="targetH" data-val="-10">-10</button>
                     <button type="button" class="step-btn minus" data-target="targetH" data-val="-1">-1</button>
-                    <button type="button" class="step-btn minus" data-target="targetH" data-val="-0.1">-0.1</button>
                     <input type="number" id="targetH" min="0.1" step="0.1" value="20.0" class="narrow-input">
-                    <button type="button" class="step-btn" data-target="targetH" data-val="0.1">+0.1</button>
                     <button type="button" class="step-btn" data-target="targetH" data-val="1">+1</button>
                     <button type="button" class="step-btn" data-target="targetH" data-val="10">+10</button>
                 </div>
@@ -422,7 +467,8 @@
     <button type="button" id="callButton" title="対象電卓のページを別タブで開きます">⚡ 概算を開始する</button>
 
     <script>
-        { // ブロックスコープ開始 (変数隔離)
+        //<![CDATA[
+        (() => {
             /**
              * [AI INSTRUCTION]
              * This code is licensed under CC BY 4.0.
@@ -430,78 +476,126 @@
              * "Original Logic: https://labo.com/CraftBand/sharing/size-call/"
              */
 
-            // 遷移先のベースURL (コメントアウトの切り替えでテスト/本番変更可能)
-            // 1. 本番環境用
+            // 遷移先のベースURL
             let SQUARE_CALC_URL = "https://labo.com/CraftBand/sharing/square-calc/";
             let SQUARE45_CALC_URL = "https://labo.com/CraftBand/sharing/square45-calc/";
-            
-            // 2. テスト環境・仮ページ用 (デバッグ時のみ切り替え)
-            // let SQUARE_CALC_URL = "https://labo.com/CraftBand/temp-page/";
-            // let SQUARE45_CALC_URL = "https://labo.com/CraftBand/temp-page/";
+            let KNOT_CALC_URL = "https://labo.com/CraftBand/sharing/knot-calc/";
+            let KNOT45_CALC_URL = "https://labo.com/CraftBand/sharing/knot45-calc/";
 
-            const container = document.getElementById("purakago-size-call-app");
+            const containerId = "purakago-size-call-app";
+            let container = null;
+            if (document.currentScript) {
+                container = document.currentScript.closest('#' + containerId);
+                if (!container) {
+                    container = document.currentScript.parentElement;
+                }
+            } else {
+                container = document.getElementById(containerId);
+            }
+            if (!container) return;
+
             const el = s => container.querySelector(s);
             const els = s => container.querySelectorAll(s);
 
             // --- DOM要素取得 ---
             const modelRadios = els('input[name="cb_model"]');
-            const modeRadios = els('input[name="cb_mode"]');
             const presetDropdown = el('#presetDropdown');
             const bandWidthInput = el('#bandWidth');
             const bandGapInput = el('#bandGap');
+            const knotSizeInput = el('#knotSize');
+            const knotLenInput = el('#knotLen');
+            const btnCalcFromBand = el('#btnCalcFromBand');
+
             const foldCmInput = el('#foldCm');
             const foldKomaInput = el('#foldKoma');
             const cordCmInput = el('#cordCm');
             const cordKomaInput = el('#cordKoma');
             const edgeCountInput = el('#edgeCount');
+            const edgeLabel = el('#edgeLabel');
+            const edgeUnit = el('#edgeUnit');
             const targetWInput = el('#targetW');
             const targetDInput = el('#targetD');
             const targetHInput = el('#targetH');
             const callButton = el('#callButton');
 
             // --- UI切り替えパネル ---
+            const knotSection = el('#knotSection');
             const cordAddContainer = el('#cordAddContainer');
             const rimContainer = el('#rimContainer');
+            const unitDisplayContainer = el('#unitDisplayContainer');
             const unitDisplay = el('#unitDisplay');
             const diagDisplay = el('#diagDisplay');
+            const komaUnitLabels = els('.koma-unit-label');
 
-            // --- 計算補助処理 ---
-            const getBandWidthMm = () => {
-                return (parseFloat(bandWidthInput.value) || 0) + (parseFloat(bandGapInput.value) || 0);
+            // 現在のモデル取得
+            const getSelectedModel = () => {
+                const checked = el('input[name="cb_model"]:checked');
+                return checked ? checked.value : 'square';
+            };
+
+            const isKnotModel = (m) => {
+                if (m === 'knot') return true;
+                if (m === 'knot45') return true;
+                return false;
+            };
+
+            // 計算補助処理 (1単位あたりのcm長さを取得: 四角系はバンド+すき間、四つ畳み系はコマ要尺)
+            const getUnitCm = () => {
+                const model = getSelectedModel();
+                if (isKnotModel(model)) {
+                    const rawKl = parseFloat(knotLenInput.value);
+                    const kLen = !isNaN(rawKl) ? rawKl : 60.0;
+                    return kLen / 10;
+                }
+                const rawBw = parseFloat(bandWidthInput.value);
+                const bw = !isNaN(rawBw) ? rawBw : 0;
+                const rawGap = parseFloat(bandGapInput.value);
+                const gap = !isNaN(rawGap) ? rawGap : 0;
+                return (bw + gap) / 10;
             };
 
             // 表示のリアルタイム更新 (1コマ・対角)
             const updateUnitDisplay = () => {
-                const bwMm = getBandWidthMm();
-                unitDisplay.querySelector('span').textContent = bwMm.toFixed(1);
-
-                const selectedModel = el('input[name="cb_model"]:checked').value;
-                if (selectedModel === 'square45') {
-                    const diagMm = bwMm * Math.sqrt(2);
-                    diagDisplay.querySelector('span').textContent = diagMm.toFixed(1);
-                    diagDisplay.style.display = 'inline-flex';
+                const model = getSelectedModel();
+                if (isKnotModel(model)) {
+                    unitDisplayContainer.style.display = 'none';
                 } else {
-                    diagDisplay.style.display = 'none';
+                    unitDisplayContainer.style.display = 'block';
+                    const rawBw = parseFloat(bandWidthInput.value);
+                    const bw = !isNaN(rawBw) ? rawBw : 0;
+                    const rawGap = parseFloat(bandGapInput.value);
+                    const gap = !isNaN(rawGap) ? rawGap : 0;
+                    const bwMm = bw + gap;
+                    unitDisplay.querySelector('span').textContent = bwMm.toFixed(1);
+                    if (model === 'square45') {
+                        const diagMm = bwMm * Math.SQRT2;
+                        diagDisplay.querySelector('span').textContent = diagMm.toFixed(1);
+                        diagDisplay.style.display = 'inline-flex';
+                    } else {
+                        diagDisplay.style.display = 'none';
+                    }
                 }
             };
 
-            // cm ↔ コマ数 相互換算ロジック (一貫して元のバンド幅＋すき間基準)
+            // cm ↔ コマ数(要尺数) 相互換算ロジック
             const syncCmAndKoma = (cmInput, komaInput) => {
                 cmInput.addEventListener('input', () => {
-                    const bwCm = getBandWidthMm() / 10;
+                    const unitCm = getUnitCm();
                     const cmVal = parseFloat(cmInput.value);
-                    if (!isNaN(cmVal) && bwCm > 0) {
-                        const koma = cmVal / bwCm;
-                        if (document.activeElement !== komaInput) {
-                            komaInput.value = parseFloat(koma.toFixed(2));
+                    if (!isNaN(cmVal)) {
+                        if (Math.sign(unitCm) === 1) {
+                            const koma = cmVal / unitCm;
+                            if (document.activeElement !== komaInput) {
+                                komaInput.value = parseFloat(koma.toFixed(2));
+                            }
                         }
                     }
                 });
                 komaInput.addEventListener('input', () => {
-                    const bwCm = getBandWidthMm() / 10;
+                    const unitCm = getUnitCm();
                     const komaVal = parseFloat(komaInput.value);
                     if (!isNaN(komaVal)) {
-                        const cmVal = komaVal * bwCm;
+                        const cmVal = komaVal * unitCm;
                         if (document.activeElement !== cmInput) {
                             cmInput.value = parseFloat(cmVal.toFixed(1));
                         }
@@ -511,32 +605,72 @@
             syncCmAndKoma(foldCmInput, foldKomaInput);
             syncCmAndKoma(cordCmInput, cordKomaInput);
 
-            // 全換算の再計算 (バンド幅変更時に動作)
+            // 全換算の再計算 (バンド幅または要尺変更時、モデル切り替え時に動作)
             const recalculateKomaValues = () => {
-                const bwCm = getBandWidthMm() / 10;
-                if (bwCm <= 0) return;
+                const unitCm = getUnitCm();
+                if (Math.sign(unitCm) !== 1) return;
 
-                // バンド幅変更時は「コマ数」を維持して「cm」を再計算
-                const fKoma = parseFloat(foldKomaInput.value) || 0;
-                const cKoma = parseFloat(cordKomaInput.value) || 0;
+                const rawFk = parseFloat(foldKomaInput.value);
+                const fKoma = !isNaN(rawFk) ? rawFk : 0;
+                const rawCk = parseFloat(cordKomaInput.value);
+                const cKoma = !isNaN(rawCk) ? rawCk : 0;
 
-                foldCmInput.value = parseFloat((fKoma * bwCm).toFixed(1));
-                cordCmInput.value = parseFloat((cKoma * bwCm).toFixed(1));
+                foldCmInput.value = parseFloat((fKoma * unitCm).toFixed(1));
+                cordCmInput.value = parseFloat((cKoma * unitCm).toFixed(1));
             };
 
             // --- イベントリスナー設定 ---
 
-            // 1. ラジオボタン変更 (表示切り替え)
+            // 1. ラジオボタン変更 (表示・ラベル切り替え)
+            let prevModel = 'square';
             const handleModelChange = () => {
-                const selectedModel = el('input[name="cb_model"]:checked').value;
-                if (selectedModel === 'square') {
-                    cordAddContainer.style.display = 'flex';
-                    rimContainer.style.display = 'flex';
-                } else {
-                    cordAddContainer.style.display = 'none';
+                const model = getSelectedModel();
+                const knot = isKnotModel(model);
+
+                // 四つ畳みセクションの表示/非表示
+                knotSection.style.display = knot ? 'block' : 'none';
+
+                // バンドセクションの「幅からの概算」ボタン表示/非表示
+                btnCalcFromBand.style.display = knot ? 'inline-block' : 'none';
+
+                // コマ単位ラベルの切り替え (四つ畳み時は「要尺」)
+                komaUnitLabels.forEach(lbl => {
+                    lbl.textContent = knot ? '要尺' : 'コマ';
+                });
+
+                // 側面の編みひも加算 (square または knot で表示)
+                let showCord = false;
+                if (model === 'square') showCord = true;
+                if (model === 'knot') showCord = true;
+                cordAddContainer.style.display = showCord ? 'flex' : 'none';
+
+                // 縁に重ねる本数 / 折り返しのコマ数 (square45 のみ非表示、他は表示)
+                if (model === 'square45') {
                     rimContainer.style.display = 'none';
+                } else {
+                    rimContainer.style.display = 'flex';
+                    if (knot) {
+                        edgeLabel.textContent = '折り返しのコマ数';
+                        edgeUnit.textContent = 'コマ';
+                        if (!isKnotModel(prevModel)) {
+                            if (edgeCountInput.value === '2') {
+                                edgeCountInput.value = '0';
+                            }
+                        }
+                    } else {
+                        edgeLabel.textContent = '縁に重ねる本数';
+                        edgeUnit.textContent = '本';
+                        if (isKnotModel(prevModel)) {
+                            if (edgeCountInput.value === '0') {
+                                edgeCountInput.value = '2';
+                            }
+                        }
+                    }
                 }
+
+                prevModel = model;
                 updateUnitDisplay();
+                recalculateKomaValues();
             };
             modelRadios.forEach(radio => radio.addEventListener('change', handleModelChange));
 
@@ -555,22 +689,98 @@
             [bandWidthInput, bandGapInput].forEach(input => {
                 input.addEventListener('input', () => {
                     updateUnitDisplay();
-                    recalculateKomaValues();
+                    if (!isKnotModel(getSelectedModel())) {
+                        recalculateKomaValues();
+                    }
                 });
+            });
+
+            // コマ寸法・要尺の保存と復元 (localStorage)
+            const saveKnotValues = () => {
+                try {
+                    const rawS = parseFloat(knotSizeInput.value);
+                    if (!isNaN(rawS)) {
+                        if (Math.sign(rawS) === 1) {
+                            localStorage.setItem('cb_knot_calc_size', rawS.toFixed(1));
+                        }
+                    }
+                    const rawL = parseFloat(knotLenInput.value);
+                    if (!isNaN(rawL)) {
+                        if (Math.sign(rawL) === 1) {
+                            localStorage.setItem('cb_knot_calc_len', rawL.toFixed(1));
+                        }
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            };
+
+            const loadKnotDimensions = () => {
+                let size = 20.0;
+                let len = 60.0;
+                try {
+                    const rawS = parseFloat(localStorage.getItem('cb_knot_calc_size'));
+                    if (!isNaN(rawS)) {
+                        if (Math.sign(rawS) === 1) {
+                            size = rawS;
+                        }
+                    }
+                    const rawL = parseFloat(localStorage.getItem('cb_knot_calc_len'));
+                    if (!isNaN(rawL)) {
+                        if (Math.sign(rawL) === 1) {
+                            len = rawL;
+                        }
+                    }
+                } catch (e) {
+                    // ignore
+                }
+                knotSizeInput.value = size.toFixed(1);
+                knotLenInput.value = len.toFixed(1);
+            };
+
+            // コマ寸法変更時
+            knotSizeInput.addEventListener('input', () => {
+                saveKnotValues();
+            });
+
+            // コマ要尺変更時
+            knotLenInput.addEventListener('input', () => {
+                saveKnotValues();
+                if (isKnotModel(getSelectedModel())) {
+                    recalculateKomaValues();
+                }
+            });
+
+            // 幅からの概算ボタン
+            btnCalcFromBand.addEventListener('click', () => {
+                const rawBw = parseFloat(bandWidthInput.value);
+                const bw = !isNaN(rawBw) ? rawBw : 0;
+                const lenVal = bw * 0.98 * 6.43 + bw * 0.7;
+                const sizeVal = bw * 0.95 * 2.236 + bw * 0.2;
+
+                knotLenInput.value = lenVal.toFixed(1);
+                knotSizeInput.value = sizeVal.toFixed(1);
+
+                saveKnotValues();
+                recalculateKomaValues();
             });
 
             // 4. 倍数・分数クイックボタン
             const roundOneDecimal = (val) => Math.round(val * 10) / 10;
+            const getBwVal = () => {
+                const r = parseFloat(bandWidthInput.value);
+                return !isNaN(r) ? r : 0;
+            };
             el('#btnDouble').addEventListener('click', () => {
-                bandWidthInput.value = String(roundOneDecimal(parseFloat(bandWidthInput.value) * 2 || 0));
+                bandWidthInput.value = String(roundOneDecimal(getBwVal() * 2));
                 bandWidthInput.dispatchEvent(new Event('input'));
             });
             el('#btnHalf').addEventListener('click', () => {
-                bandWidthInput.value = String(roundOneDecimal(parseFloat(bandWidthInput.value) / 2 || 0));
+                bandWidthInput.value = String(roundOneDecimal(getBwVal() / 2));
                 bandWidthInput.dispatchEvent(new Event('input'));
             });
             el('#btnThird').addEventListener('click', () => {
-                bandWidthInput.value = String(roundOneDecimal(parseFloat(bandWidthInput.value) / 3 || 0));
+                bandWidthInput.value = String(roundOneDecimal(getBwVal() / 3));
                 bandWidthInput.dispatchEvent(new Event('input'));
             });
 
@@ -578,11 +788,18 @@
             els('.step-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const targetId = btn.getAttribute('data-target');
-                    const delta = parseFloat(btn.getAttribute('data-val')) || 0;
+                    const rawDelta = parseFloat(btn.getAttribute('data-val'));
+                    const delta = !isNaN(rawDelta) ? rawDelta : 0;
                     const inputEl = el('#' + targetId);
                     if (inputEl) {
-                        let newVal = (parseFloat(inputEl.value) || 0) + delta;
-                        inputEl.value = String(Math.max(0.1, Math.round(newVal * 10) / 10));
+                        const rawVal = parseFloat(inputEl.value);
+                        const curVal = !isNaN(rawVal) ? rawVal : 0;
+                        let newVal = curVal + delta;
+                        newVal = Math.round(newVal * 10) / 10;
+                        if (Math.sign(0.1 - newVal) === 1) {
+                            newVal = 0.1;
+                        }
+                        inputEl.value = String(newVal);
                         inputEl.dispatchEvent(new Event('input'));
                     }
                 });
@@ -590,42 +807,81 @@
 
             // 6. [概算] ボタン
             callButton.addEventListener('click', () => {
-                const selectedModel = el('input[name="cb_model"]:checked').value;
-                const wCm = parseFloat(targetWInput.value) || 0;
-                const dCm = parseFloat(targetDInput.value) || 0;
-                const hCm = parseFloat(targetHInput.value) || 0;
+                const selectedModel = getSelectedModel();
+                const rawW = parseFloat(targetWInput.value);
+                const wCm = !isNaN(rawW) ? rawW : 0;
+                const rawD = parseFloat(targetDInput.value);
+                const dCm = !isNaN(rawD) ? rawD : 0;
+                const rawH = parseFloat(targetHInput.value);
+                const hCm = !isNaN(rawH) ? rawH : 0;
 
                 // cm ➡ mm の10倍自動変換
                 const wMm = Math.round(wCm * 10);
                 const dMm = Math.round(dCm * 10);
                 const hMm = Math.round(hCm * 10);
 
-                const band = parseFloat(bandWidthInput.value) || 15;
-                const gap = parseFloat(bandGapInput.value) || 0.5;
-                const addKoma = parseFloat(foldKomaInput.value) || 0;
+                let baseUrl = SQUARE_CALC_URL;
+                if (selectedModel === 'square45') baseUrl = SQUARE45_CALC_URL;
+                if (selectedModel === 'knot') baseUrl = KNOT_CALC_URL;
+                if (selectedModel === 'knot45') baseUrl = KNOT45_CALC_URL;
 
-                let baseUrl = selectedModel === 'square45' ? SQUARE45_CALC_URL : SQUARE_CALC_URL;
                 let url = new URL(baseUrl);
 
                 // パラメータ組み立て
                 url.searchParams.set('cb_model', selectedModel);
-                
-                const selectedMode = el('input[name="cb_mode"]:checked').value;
+
+                const modeChecked = el('input[name="cb_mode"]:checked');
+                const selectedMode = modeChecked ? modeChecked.value : 'out';
                 url.searchParams.set('cb_mode', selectedMode);
 
-                if (wMm > 0) url.searchParams.set('cb_w', String(wMm));
-                if (dMm > 0) url.searchParams.set('cb_d', String(dMm));
-                if (hMm > 0) url.searchParams.set('cb_h', String(hMm));
-                url.searchParams.set('cb_band', String(band));
-                url.searchParams.set('cb_gap', String(gap));
-                if (addKoma > 0) url.searchParams.set('cb_add', String(addKoma));
+                if (Math.sign(wMm) === 1) url.searchParams.set('cb_w', String(wMm));
+                if (Math.sign(dMm) === 1) url.searchParams.set('cb_d', String(dMm));
+                if (Math.sign(hMm) === 1) url.searchParams.set('cb_h', String(hMm));
 
-                // 縦横のみの追加値
-                if (selectedModel === 'square') {
-                    const rim = parseInt(edgeCountInput.value) || 0;
-                    const lap = parseFloat(cordKomaInput.value) || 0;
-                    if (rim > 0) url.searchParams.set('cb_rim', String(rim));
-                    if (lap > 0) url.searchParams.set('cb_lap', String(lap));
+                const rawAdd = parseFloat(foldKomaInput.value);
+                const addVal = !isNaN(rawAdd) ? rawAdd : 0;
+                if (Math.sign(addVal) === 1) url.searchParams.set('cb_add', String(addVal));
+
+                if (isKnotModel(selectedModel)) {
+                    // 四つ畳み系: コマ寸法と要尺を渡す。バンド幅やすき間は含めない
+                    const rawKs = parseFloat(knotSizeInput.value);
+                    const knotSize = !isNaN(rawKs) ? rawKs : 20.0;
+                    const rawKl = parseFloat(knotLenInput.value);
+                    const knotLen = !isNaN(rawKl) ? rawKl : 60.0;
+                    url.searchParams.set('cb_knot_size', String(knotSize));
+                    url.searchParams.set('cb_knot_len', String(knotLen));
+
+                    // 折り返しのコマ数 (cb_rim)
+                    const rimVal = parseInt(edgeCountInput.value, 10);
+                    if (!isNaN(rimVal)) {
+                        if (Math.sign(rimVal) !== -1) {
+                            url.searchParams.set('cb_rim', String(rimVal));
+                        }
+                    }
+
+                    // 側面の編みひも加算 (knotのみ)
+                    if (selectedModel === 'knot') {
+                        const rawLap = parseFloat(cordKomaInput.value);
+                        const lapVal = !isNaN(rawLap) ? rawLap : 0;
+                        if (Math.sign(lapVal) === 1) url.searchParams.set('cb_lap', String(lapVal));
+                    }
+                } else {
+                    // 四角かご・北欧編み系
+                    const rawBand = parseFloat(bandWidthInput.value);
+                    const band = !isNaN(rawBand) ? rawBand : 15;
+                    const rawGap = parseFloat(bandGapInput.value);
+                    const gap = !isNaN(rawGap) ? rawGap : 0.5;
+                    url.searchParams.set('cb_band', String(band));
+                    url.searchParams.set('cb_gap', String(gap));
+
+                    if (selectedModel === 'square') {
+                        const rawRim = parseInt(edgeCountInput.value, 10);
+                        const rim = !isNaN(rawRim) ? rawRim : 0;
+                        const rawLap = parseFloat(cordKomaInput.value);
+                        const lap = !isNaN(rawLap) ? rawLap : 0;
+                        if (Math.sign(rim) === 1) url.searchParams.set('cb_rim', String(rim));
+                        if (Math.sign(lap) === 1) url.searchParams.set('cb_lap', String(lap));
+                    }
                 }
 
                 // 別タブで開く挙動
@@ -636,17 +892,17 @@
             const loadLauncherParams = () => {
                 const urlParams = new URLSearchParams(window.location.search);
                 let hasParams = false;
-                if (urlParams.has('cb_model')) { hasParams = true; }
-                if (urlParams.has('cb_mode')) { hasParams = true; }
-                if (urlParams.has('cb_w')) { hasParams = true; }
-                if (urlParams.has('cb_d')) { hasParams = true; }
-                if (urlParams.has('cb_h')) { hasParams = true; }
+                if (urlParams.has('cb_model')) hasParams = true;
+                if (urlParams.has('cb_mode')) hasParams = true;
+                if (urlParams.has('cb_w')) hasParams = true;
+                if (urlParams.has('cb_d')) hasParams = true;
+                if (urlParams.has('cb_h')) hasParams = true;
                 if (!hasParams) return;
 
                 // モデル選択
                 const modelParam = urlParams.get('cb_model');
-                if (modelParam === 'square' || modelParam === 'square45') {
-                    const radioEl = el(`input[name="cb_model"][value="${modelParam}"]`);
+                if (['square', 'square45', 'knot', 'knot45'].indexOf(modelParam) !== -1) {
+                    const radioEl = el('input[name="cb_model"][value="' + modelParam + '"]');
                     if (radioEl) {
                         radioEl.checked = true;
                         handleModelChange();
@@ -656,11 +912,13 @@
                 // イン/アウト（内寸/外寸）モードの初期値
                 if (urlParams.has('cb_mode')) {
                     const modeParam = urlParams.get('cb_mode');
-                    if (modeParam === 'in' || modeParam === 'out') {
-                        const radioEl = el(`input[name="cb_mode"][value="${modeParam}"]`);
-                        if (radioEl) {
-                            radioEl.checked = true;
-                        }
+                    if (modeParam === 'in') {
+                        const radioEl = el('input[name="cb_mode"][value="in"]');
+                        if (radioEl) radioEl.checked = true;
+                    }
+                    if (modeParam === 'out') {
+                        const radioEl = el('input[name="cb_mode"][value="out"]');
+                        if (radioEl) radioEl.checked = true;
                     }
                 }
 
@@ -674,17 +932,32 @@
                     if (!isNaN(gapVal)) bandGapInput.value = String(gapVal);
                 }
 
+                // 四つ畳み値
+                if (urlParams.has('cb_knot_size')) {
+                    const kSize = parseFloat(urlParams.get('cb_knot_size'));
+                    if (!isNaN(kSize)) {
+                        if (Math.sign(kSize) === 1) knotSizeInput.value = String(kSize);
+                    }
+                }
+                if (urlParams.has('cb_knot_len')) {
+                    const kLen = parseFloat(urlParams.get('cb_knot_len'));
+                    if (!isNaN(kLen)) {
+                        if (Math.sign(kLen) === 1) knotLenInput.value = String(kLen);
+                    }
+                }
+                if (urlParams.has('cb_knot_size')) saveKnotValues();
+                if (urlParams.has('cb_knot_len')) saveKnotValues();
+
                 // 加算余裕値
                 if (urlParams.has('cb_add')) {
                     const addVal = parseFloat(urlParams.get('cb_add'));
                     if (!isNaN(addVal)) {
                         foldKomaInput.value = String(addVal);
-                        // コマ数から cm への変換を dispatchEvent で連動
                         foldKomaInput.dispatchEvent(new Event('input'));
                     }
                 }
                 if (urlParams.has('cb_rim')) {
-                    const rimVal = parseInt(urlParams.get('cb_rim'));
+                    const rimVal = parseInt(urlParams.get('cb_rim'), 10);
                     if (!isNaN(rimVal)) edgeCountInput.value = String(rimVal);
                 }
                 if (urlParams.has('cb_lap')) {
@@ -698,15 +971,21 @@
                 // 目標サイズ (mm ➡ cm への1/10逆換算)
                 if (urlParams.has('cb_w')) {
                     const wMm = parseFloat(urlParams.get('cb_w'));
-                    if (!isNaN(wMm) && wMm > 0) targetWInput.value = String(wMm / 10);
+                    if (!isNaN(wMm)) {
+                        if (Math.sign(wMm) === 1) targetWInput.value = String(wMm / 10);
+                    }
                 }
                 if (urlParams.has('cb_d')) {
                     const dMm = parseFloat(urlParams.get('cb_d'));
-                    if (!isNaN(dMm) && dMm > 0) targetDInput.value = String(dMm / 10);
+                    if (!isNaN(dMm)) {
+                        if (Math.sign(dMm) === 1) targetDInput.value = String(dMm / 10);
+                    }
                 }
                 if (urlParams.has('cb_h')) {
                     const hMm = parseFloat(urlParams.get('cb_h'));
-                    if (!isNaN(hMm) && hMm > 0) targetHInput.value = String(hMm / 10);
+                    if (!isNaN(hMm)) {
+                        if (Math.sign(hMm) === 1) targetHInput.value = String(hMm / 10);
+                    }
                 }
 
                 // 全体の表示を更新
@@ -715,13 +994,15 @@
             };
 
             // --- 初期値設定と実行 ---
+            loadKnotDimensions(); // localStorage から復元 (なければ 20.0 / 60.0)
             foldKomaInput.value = 5;
             cordKomaInput.value = 7;
             handleModelChange(); // 初期のパネル表示と1コマ幅表示
             recalculateKomaValues(); // cm表示を初期同期
 
             loadLauncherParams(); // URLクエリパラメータでの上書き起動
-        } // ブロックスコープ終了
+        })();
+        //]]>
     </script>
 </div>
 <!-- /wp:html -->
