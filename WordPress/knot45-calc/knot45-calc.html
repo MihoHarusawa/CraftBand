@@ -240,6 +240,16 @@
                 color: #b91c1c;
             }
 
+            #knot45-calc-app table.data-table tr.note-row td {
+                background-color: #fff;
+                border-bottom: none;
+                color: #b91c1c;
+                font-size: 12px;
+                text-align: left;
+                padding-top: 6px;
+                padding-bottom: 0;
+            }
+
             #knot45-calc-app .cut-id-badge {
                 display: inline-block;
                 min-width: 20px;
@@ -702,6 +712,19 @@
                     trTotal.className = "total-row";
                     trTotal.innerHTML = `<td colspan="2" style="text-align:right;">合計必要長</td><td><strong>${totalM} m</strong></td><td>全 ${totalCount} 本</td>`;
                     cutListBody.appendChild(trTotal);
+
+                    const maxD = Math.max(W, D);
+                    const isCornerClipped = (Math.sign(sideKoma * 2 - maxD) === -1);
+                    const isSameLenMode = (mode === 1) ? true : (mode === 2);
+                    if (isCornerClipped ? isSameLenMode : false) {
+                        const trNote = document.createElement('tr');
+                        trNote.className = "note-row";
+                        const tdNote = document.createElement('td');
+                        tdNote.colSpan = 4;
+                        tdNote.textContent = "注: 正方形の底編みの場合の同一長です";
+                        trNote.appendChild(tdNote);
+                        cutListBody.appendChild(trNote);
+                    }
 
                     currentCalcResult = {
                         W, D, H, F,
