@@ -1,7 +1,7 @@
 # square-calc ツール仕様書 & テスト報告書
 
 本ドキュメントは、WordPress上で動作する `square-calc`（縦横編みプラかご・四角かごサイズ計算ツール）の個別仕様、計算ロジック、およびテスト検証結果をまとめたものです。
-全体共通のAPI規格については、ルートディレクトリの [`api_specification.md`](file:///c:/Users/miho/source/repos/WordPress/api_specification.md) を参照してください。
+全体共通のAPI規格については、ルートディレクトリの [`api_specification.md`](../api_specification.md) を参照してください。
 
 ---
 

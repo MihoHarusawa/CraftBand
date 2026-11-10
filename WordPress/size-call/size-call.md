@@ -1,7 +1,7 @@
 # size-call ツール仕様書 & テスト報告書
 
 本ドキュメントは、WordPress上で動作する `size-call`（かごサイズ概算ランチャー）の個別仕様、操作連動ロジック、外部電卓へのパラメータ転送仕様、およびテスト検証結果をまとめたものです。
-全体共通のAPI規格については、ルートディレクトリの [`api_specification.md`](file:///c:/Users/miho/source/repos/WordPress/api_specification.md) を参照してください。
+全体共通のAPI規格については、ルートディレクトリの [`api_specification.md`](../api_specification.md) を参照してください。
 
 ---
 
@@ -9,10 +9,10 @@
 
 ### 1.1 役割と基本概念
 `size-call` は、ユーザーが希望する目標サイズ（横幅・奥行・高さ）、バンド仕様、または四つ畳み編みのゲージ値を入力することで、以下の4つの専用計算ツールへパラメータを引き継いで別タブで開くランチャー（統合起点）ツールです：
-1. **縦横に立ち上げる（四角かご）** $\to$ [`square-calc`](file:///c:/Users/miho/source/repos/WordPress/square-calc/square-calc.md)
-2. **斜めに立ち上げる（北欧編み）** $\to$ [`square45-calc`](file:///c:/Users/miho/source/repos/WordPress/square45-calc/square45-calc.md)
-3. **四つ畳みで縦横に立ち上げる** $\to$ [`knot-calc`](file:///c:/Users/miho/source/repos/WordPress/knot-calc/knot-calc.md)
-4. **四つ畳みで斜めに立ち上げる** $\to$ [`knot45-calc`](file:///c:/Users/miho/source/repos/WordPress/knot45-calc/knot45-calc.md)
+1. **縦横に立ち上げる（四角かご）** $\to$ [`square-calc`](../square-calc/square-calc.md)
+2. **斜めに立ち上げる（北欧編み）** $\to$ [`square45-calc`](../square45-calc/square45-calc.md)
+3. **四つ畳みで縦横に立ち上げる** $\to$ [`knot-calc`](../knot-calc/knot-calc.md)
+4. **四つ畳みで斜めに立ち上げる** $\to$ [`knot45-calc`](../knot45-calc/knot45-calc.md)
 
 ---
 

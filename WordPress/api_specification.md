@@ -108,10 +108,10 @@ console.log(result);
 
 | ツール識別子 | ツール名称 | 編み方・立ち上げ構造 | 1コマの基準単位 | 適合単位の制限 | 主なパラメータ |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `square` | [square-calc](file:///c:/Users/miho/source/repos/WordPress/square-calc/square-calc.md) | 四角かご（縦横立ち上げ） | バンド幅＋すき間 ($1.0\times$) | 底面は**奇数本**制限 | `cb_band`, `cb_gap`, `cb_rim`, `cb_lap` |
-| `square45` | [square45-calc](file:///c:/Users/miho/source/repos/WordPress/square45-calc/square45-calc.md) | 北欧編み（斜め45度立ち上げ） | 対角線長 ($\sqrt{2}\times$) | 底面整数、高さ**0.5刻み** | `cb_band`, `cb_gap`, `cb_add` |
-| `knot` | [knot-calc](file:///c:/Users/miho/source/repos/WordPress/knot-calc/knot-calc.md) | 四つ畳み編み（縦横立ち上げ） | コマ寸法 ($1.0\times$) / コマ要尺 | 整数コマ | `cb_knot_size`, `cb_knot_len`, `cb_rim`, `cb_lap` |
-| `knot45` | [knot45-calc](file:///c:/Users/miho/source/repos/WordPress/knot45-calc/knot45-calc.md) | 四つ畳み編み（斜め45度立ち上げ） | 対角線長 ($\sqrt{2}\times$) / コマ要尺 | 底面整数、高さ**0.5刻み** | `cb_knot_size`, `cb_knot_len`, `cb_same_len`, `cb_rim` |
+| `square` | [square-calc](./square-calc/square-calc.md) | 四角かご（縦横立ち上げ） | バンド幅＋すき間 ($1.0\times$) | 底面は**奇数本**制限 | `cb_band`, `cb_gap`, `cb_rim`, `cb_lap` |
+| `square45` | [square45-calc](./square45-calc/square45-calc.md) | 北欧編み（斜め45度立ち上げ） | 対角線長 ($\sqrt{2}\times$) | 底面整数、高さ**0.5刻み** | `cb_band`, `cb_gap`, `cb_add` |
+| `knot` | [knot-calc](./knot-calc/knot-calc.md) | 四つ畳み編み（縦横立ち上げ） | コマ寸法 ($1.0\times$) / コマ要尺 | 整数コマ | `cb_knot_size`, `cb_knot_len`, `cb_rim`, `cb_lap` |
+| `knot45` | [knot45-calc](./knot45-calc/knot45-calc.md) | 四つ畳み編み（斜め45度立ち上げ） | 対角線長 ($\sqrt{2}\times$) / コマ要尺 | 底面整数、高さ**0.5刻み** | `cb_knot_size`, `cb_knot_len`, `cb_same_len`, `cb_rim` |
 
 ---
 
