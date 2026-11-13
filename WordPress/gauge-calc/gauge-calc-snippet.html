@@ -643,7 +643,8 @@
             <div class="alert-content">
                 <strong>【重要】測定値の入力単位について</strong><br>
                 使用ひも長（cm）以外の<strong>すべての測定値（ひもの残り長さ・コマ寸法）は【 mm（ミリ）単位 】で入力してください。</strong><br>
-                ※ cm で入力すると正しく計算されませんのでご注意ください（例: 8.5 cm の場合は <code>85</code> mm と入力）。
+                ※ <strong>小数以下の値も入力可能</strong>です（例: <code>85.5</code> mm、<code>20.3</code> mm など、ノギス等の細かな実測値もそのまま入力いただけます）。<br>
+                ※ cm で入力すると正しく計算されませんのでご注意ください（例: 8.5 cm の場合は <code>85</code> mm または <code>85.0</code> mm と入力）。
             </div>
         </div>
 
@@ -653,7 +654,7 @@
                 <span>✂️</span> 2. ひもの残り長さの測定（コマ要尺）
             </div>
             <div class="section-desc">
-                編み終わったゲージの各ひもについて、<strong style="color: #c2410c;">それぞれの端の残りひも長</strong>（コマ端から先端まで）を <strong style="color: #c2410c;">mm 単位</strong> で入力してください。<br>
+                編み終わったゲージの各ひもについて、<strong style="color: #c2410c;">それぞれの端の残りひも長</strong>（コマ端から先端まで）を <strong style="color: #c2410c;">mm 単位</strong> で入力してください（小数以下の入力も可能です）。<br>
                 1コマあたりの要尺 ＝ (ひも長(mm) － 残り1(mm) － 残り2(mm)) ÷ コマ数
             </div>
 
@@ -683,7 +684,7 @@
                 <span>📐</span> 3. コマ寸法の測定
             </div>
             <div class="section-desc">
-                隣り合うコマの「<strong style="color: #c2410c;">中心から中心まで</strong>（結び目の中心間）」の距離を <strong style="color: #c2410c;">mm 単位</strong> で入力してください。<br>
+                隣り合うコマの「<strong style="color: #c2410c;">中心から中心まで</strong>（結び目の中心間）」の距離を <strong style="color: #c2410c;">mm 単位</strong> で入力してください（小数以下の入力も可能です）。<br>
                 のこりひもは省略し、コマ部分を拡大表示しています。矢印が結ぶコマ間の寸法を測定してください。
             </div>
 
@@ -728,6 +729,7 @@
                     <div class="stat-value" id="valLen">-- <span class="unit">mm</span></div>
                     <div class="stat-sub" id="subLenSpread">最大ブレ幅: --</div>
                     <div class="stat-sub" id="subLenCv">編み目の安定度: --</div>
+                    <div class="stat-sub" id="subLenAspect">縦横比: --</div>
                 </div>
 
                 <!-- コマ寸法カード -->
@@ -739,6 +741,7 @@
                     <div class="stat-value" id="valSize">-- <span class="unit">mm</span></div>
                     <div class="stat-sub" id="subSizeSpread">最大ブレ幅: --</div>
                     <div class="stat-sub" id="subSizeCv">編み目の安定度: --</div>
+                    <div class="stat-sub" id="subSizeAspect">縦横比: --</div>
                 </div>
 
                 <!-- 要尺/寸法 比率カード -->
@@ -883,11 +886,13 @@
                 const valLen = el('#valLen');
                 const subLenSpread = el('#subLenSpread');
                 const subLenCv = el('#subLenCv');
+                const subLenAspect = el('#subLenAspect');
 
                 const countSize = el('#countSize');
                 const valSize = el('#valSize');
                 const subSizeSpread = el('#subSizeSpread');
                 const subSizeCv = el('#subSizeCv');
+                const subSizeAspect = el('#subSizeAspect');
 
                 const cardRatio = el('#cardRatio');
                 const valRatio = el('#valRatio');
@@ -1079,6 +1084,8 @@
                     for (let i = 1; i !== k + 1; i++) cordNames.push(`H${i}`);
 
                     const lenValues = [];
+                    const lenVValues = [];
+                    const lenHValues = [];
 
                     cordNames.forEach(name => {
                         const inp1 = el(`.len-input[data-cord="${name}"][data-end="1"]`);
@@ -1138,6 +1145,11 @@
                             resCell.textContent = `${komaLenMm.toFixed(1)} mm`;
                             resCell.style.color = '#0369a1';
                             lenValues.push(komaLenMm);
+                            if (name.startsWith('V')) {
+                                lenVValues.push(komaLenMm);
+                            } else {
+                                lenHValues.push(komaLenMm);
+                            }
                         } else {
                             resCell.textContent = '-- mm';
                             resCell.style.color = '#94a3b8';
@@ -1146,6 +1158,8 @@
 
                     // 2. コマ寸法計算 (キャッシュおよび画面入力値から取得)
                     const sizeValues = [];
+                    const sizeHValues = [];
+                    const sizeVValues = [];
 
                     for (let r = 1; r !== k + 1; r++) {
                         for (let c = 1; c !== k; c++) {
@@ -1154,7 +1168,10 @@
                             if ((typeof val === 'number') ? !isNaN(val) : false) {
                                 if (Math.sign(val) === -1) hasNegative = true;
                                 else if (val === 0) hasZero = true;
-                                else sizeValues.push(val);
+                                else {
+                                    sizeValues.push(val);
+                                    sizeHValues.push(val);
+                                }
                             }
                         }
                     }
@@ -1165,7 +1182,10 @@
                             if ((typeof val === 'number') ? !isNaN(val) : false) {
                                 if (Math.sign(val) === -1) hasNegative = true;
                                 else if (val === 0) hasZero = true;
-                                else sizeValues.push(val);
+                                else {
+                                    sizeValues.push(val);
+                                    sizeVValues.push(val);
+                                }
                             }
                         }
                     }
@@ -1184,6 +1204,10 @@
                     // 3. 統計算出
                     const statLen = calcStats(lenValues);
                     const statSize = calcStats(sizeValues);
+                    const statLenV = calcStats(lenVValues);
+                    const statLenH = calcStats(lenHValues);
+                    const statSizeV = calcStats(sizeVValues);
+                    const statSizeH = calcStats(sizeHValues);
 
                     // 4. UI 表示
                     const totalCords = k * 2;
@@ -1197,10 +1221,12 @@
                         valLen.innerHTML = `-- <span class="unit">mm</span>`;
                         subLenSpread.textContent = `最大ブレ幅: --`;
                         subLenCv.textContent = `編み目の安定度: --`;
+                        subLenAspect.textContent = `縦横比: --`;
                     } else if (statLen.n === 1) {
                         valLen.innerHTML = `${statLen.mean.toFixed(1)} <span class="unit">mm</span>`;
                         subLenSpread.textContent = `最大ブレ幅: ※ 2点以上で表示`;
                         subLenCv.textContent = `編み目の安定度: ※ 4点以上で表示`;
+                        subLenAspect.textContent = `縦横比: ※ 縦横各1本以上で表示`;
                     } else if (Math.sign(statLen.n - 3) !== 1) {
                         valLen.innerHTML = `${statLen.mean.toFixed(2)} <span class="unit">mm</span>`;
                         subLenSpread.innerHTML = `最大ブレ幅: <b>${statLen.spreadPct.toFixed(1)}%</b> (${getSpreadText(statLen.spreadPct)})`;
@@ -1211,15 +1237,31 @@
                         subLenCv.innerHTML = `編み目の安定度: <b>CV ${statLen.cvPct.toFixed(1)}%</b> (${getCvText(statLen.cvPct)})`;
                     }
 
+                    // 要尺の縦横比表示
+                    
+                    let aspectLenPct = null;
+                    const hasVLen = Math.sign(statLenV.n - 1) !== -1;
+                    const hasHLen = Math.sign(statLenH.n - 1) !== -1;
+                    const hasHMean = statLenH.mean ? (Math.sign(statLenH.mean) === 1) : false;
+                    if ((hasVLen ? hasHLen : false) ? hasHMean : false) {
+                        aspectLenPct = (statLenV.mean / statLenH.mean) * 100;
+                        const aspectComment = getAspectText(aspectLenPct);
+                        subLenAspect.innerHTML = `縦横比: <b>${aspectLenPct.toFixed(1)}%</b>${aspectComment ? ` (${aspectComment})` : ''}`;
+                    } else if (Math.sign(statLen.n) === 1) {
+                        subLenAspect.textContent = `縦横比: ※ 縦横各1本以上で表示`;
+                    }
+
                     // コマ寸法
                     if (statSize.n === 0) {
                         valSize.innerHTML = `-- <span class="unit">mm</span>`;
                         subSizeSpread.textContent = `最大ブレ幅: --`;
                         subSizeCv.textContent = `編み目の安定度: --`;
+                        subSizeAspect.textContent = `縦横比: --`;
                     } else if (statSize.n === 1) {
                         valSize.innerHTML = `${statSize.mean.toFixed(1)} <span class="unit">mm</span>`;
                         subSizeSpread.textContent = `最大ブレ幅: ※ 2点以上で表示`;
                         subSizeCv.textContent = `編み目の安定度: ※ 4点以上で表示`;
+                        subSizeAspect.textContent = `縦横比: ※ 縦横各1点以上で表示`;
                     } else if (Math.sign(statSize.n - 3) !== 1) {
                         valSize.innerHTML = `${statSize.mean.toFixed(2)} <span class="unit">mm</span>`;
                         subSizeSpread.innerHTML = `最大ブレ幅: <b>${statSize.spreadPct.toFixed(1)}%</b> (${getSpreadText(statSize.spreadPct)})`;
@@ -1228,6 +1270,19 @@
                         valSize.innerHTML = `${statSize.mean.toFixed(2)} <span class="unit">mm</span>`;
                         subSizeSpread.innerHTML = `最大ブレ幅: <b>${statSize.spreadPct.toFixed(1)}%</b> (${getSpreadText(statSize.spreadPct)})`;
                         subSizeCv.innerHTML = `編み目の安定度: <b>CV ${statSize.cvPct.toFixed(1)}%</b> (${getCvText(statSize.cvPct)})`;
+                    }
+
+                    // 寸法の縦横比表示
+                    let aspectSizePct = null;
+                    const hasVSize = Math.sign(statSizeV.n - 1) !== -1;
+                    const hasHSize = Math.sign(statSizeH.n - 1) !== -1;
+                    const hasHSizeMean = statSizeH.mean ? (Math.sign(statSizeH.mean) === 1) : false;
+                    if ((hasVSize ? hasHSize : false) ? hasHSizeMean : false) {
+                        aspectSizePct = (statSizeV.mean / statSizeH.mean) * 100;
+                        const aspectComment = getAspectText(aspectSizePct);
+                        subSizeAspect.innerHTML = `縦横比: <b>${aspectSizePct.toFixed(1)}%</b>${aspectComment ? ` (${aspectComment})` : ''}`;
+                    } else if (Math.sign(statSize.n) === 1) {
+                        subSizeAspect.textContent = `縦横比: ※ 縦横各1点以上で表示`;
                     }
 
                     // 比率
@@ -1286,6 +1341,12 @@
                         totalCordCm,
                         statLen,
                         statSize,
+                        statLenV,
+                        statLenH,
+                        statSizeV,
+                        statSizeH,
+                        aspectLenPct,
+                        aspectSizePct,
                         ratio: (statSize.mean ? (Math.sign(statSize.mean) === 1) : false) ? (statLen.mean / statSize.mean) : null
                     };
                 };
@@ -1304,8 +1365,22 @@
                     return "編み加減にムラあり";
                 };
 
+                const getAspectText = (ratioPct) => {
+                    if ((typeof ratioPct !== 'number') ? true : isNaN(ratioPct)) return "";
+                    const diff = Math.abs(ratioPct - 100);
+                    if (Math.sign(diff - 0.05) === -1) return "完全に同一";
+                    if (Math.sign(diff - 1.0) !== 1) return "同一";
+                    if (Math.sign(diff - 10.0) !== 1) return "概ね同一";
+                    if (Math.sign(diff - 20.0) !== 1) return "ほぼ同じ";
+                    return "";
+                };
+
                 // 要尺 / 寸法 比率の判定テーブル (暫定値・将来の調整対応)
                 const getRatioText = (r) => {
+                    const THEORETICAL_RATIO = 6.43 / 2.236; // 約 2.87567
+                    const isRSmall = Math.sign(r - THEORETICAL_RATIO) === -1;
+                    const isRLarge = Math.sign(r - 4.0) !== -1;
+                    if (isRSmall ? true : isRLarge) return "異常値・要確認";
                     if (Math.sign(r - 2.90) === -1) return "幅に対して非常に薄い";
                     if (Math.sign(r - 2.95) === -1) return "幅に対してかなり薄い";
                     if (Math.sign(r - 3.00) === -1) return "幅に対して薄い";
@@ -1899,6 +1974,7 @@
                         const lenMeanStr = r.statLen.mean ? `${r.statLen.mean.toFixed(2)} mm` : "-- mm";
                         const lenSpreadStr = r.statLen.spreadPct !== null ? `${r.statLen.spreadPct.toFixed(1)}% (${getSpreadText(r.statLen.spreadPct)})` : "--";
                         const lenCvStr = r.statLen.cvPct !== null ? `CV ${r.statLen.cvPct.toFixed(1)}% (${getCvText(r.statLen.cvPct)})` : "※4点以上で表示";
+                        const lenAspectStr = (r.aspectLenPct !== null) ? `${r.aspectLenPct.toFixed(1)}%${getAspectText(r.aspectLenPct) ? ` (${getAspectText(r.aspectLenPct)})` : ''}` : "--";
 
                         pctx.fillStyle = "#b45309";
                         pctx.font = "bold 15px sans-serif";
@@ -1906,13 +1982,14 @@
                         curY += 24;
                         pctx.fillStyle = "#475569";
                         pctx.font = "14px sans-serif";
-                        pctx.fillText(`   有効測定数: ${r.statLen.n}本 / 最大ブレ幅: ${lenSpreadStr} / 安定度: ${lenCvStr}`, leftX + 15, curY);
+                        pctx.fillText(`   有効測定数: ${r.statLen.n}本 / 最大ブレ幅: ${lenSpreadStr} / 安定度: ${lenCvStr} / 縦横比: ${lenAspectStr}`, leftX + 15, curY);
                         curY += 34;
 
                         // コマ寸法サマリー
                         const sizeMeanStr = r.statSize.mean ? `${r.statSize.mean.toFixed(2)} mm` : "-- mm";
                         const sizeSpreadStr = r.statSize.spreadPct !== null ? `${r.statSize.spreadPct.toFixed(1)}% (${getSpreadText(r.statSize.spreadPct)})` : "--";
                         const sizeCvStr = r.statSize.cvPct !== null ? `CV ${r.statSize.cvPct.toFixed(1)}% (${getCvText(r.statSize.cvPct)})` : "※4点以上で表示";
+                        const sizeAspectStr = (r.aspectSizePct !== null) ? `${r.aspectSizePct.toFixed(1)}%${getAspectText(r.aspectSizePct) ? ` (${getAspectText(r.aspectSizePct)})` : ''}` : "--";
 
                         pctx.fillStyle = "#1e40af";
                         pctx.font = "bold 15px sans-serif";
@@ -1920,7 +1997,7 @@
                         curY += 24;
                         pctx.fillStyle = "#475569";
                         pctx.font = "14px sans-serif";
-                        pctx.fillText(`   有効測定数: ${r.statSize.n}点 / 最大ブレ幅: ${sizeSpreadStr} / 安定度: ${sizeCvStr}`, leftX + 15, curY);
+                        pctx.fillText(`   有効測定数: ${r.statSize.n}点 / 最大ブレ幅: ${sizeSpreadStr} / 安定度: ${sizeCvStr} / 縦横比: ${sizeAspectStr}`, leftX + 15, curY);
                         curY += 34;
 
                         // 比率サマリー
