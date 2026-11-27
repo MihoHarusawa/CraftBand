@@ -1,0 +1,223 @@
+<?xml version="1.0" standalone="yes"?>
+<dstMasterTables xmlns="http://tempuri.org/dstMasterTables.xsd">
+  <xs:schema id="dstMasterTables" targetNamespace="http://tempuri.org/dstMasterTables.xsd" xmlns:mstns="http://tempuri.org/dstMasterTables.xsd" xmlns="http://tempuri.org/dstMasterTables.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified">
+    <xs:element name="dstMasterTables" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="tbl編みかた">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_s編みかた名" msdata:Caption="編みかた名" type="xs:string" default="" />
+                <xs:element name="f_iひも番号" type="xs:short" default="1" />
+                <xs:element name="f_s編みひも名" type="xs:string" default="" />
+                <xs:element name="f_b縁専用区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_b底使用区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_i周あたり段数" type="xs:short" default="1" minOccurs="0" />
+                <xs:element name="f_i本幅初期値" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_iひも数" type="xs:short" default="1" minOccurs="0" />
+                <xs:element name="f_b周連続区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_d高さ比率対ひも幅" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_d垂直ひも長比率対ひも幅" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_dひも長比率対周長" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_dひも長加算1目あたり" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも1幅係数1目あたり" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも長加算1周あたり" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも長加算ひもあたり" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_b集計対象外区分初期値" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_d厚さ" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_bCraftBandMesh" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandSquare45" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandKnot" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandSquare" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandHexagon" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tblバンドの種類">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_sバンドの種類名" type="xs:string" />
+                <xs:element name="f_i本幅" type="xs:short" default="1" minOccurs="0" />
+                <xs:element name="f_dバンド幅" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_i基本のひも幅" type="xs:string" default="0" minOccurs="0" />
+                <xs:element name="f_s長さと重さ" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_d短い横ひも長のばらつき" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d縦ひも間の最小間隔" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d差しひもの径" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d差しひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d垂直ひも加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d底の厚さ" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d立ち上げ時の四角底周の増分" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d立ち上げ時の楕円底周の増分" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d楕円底円弧の半径加算" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d楕円底周の加算" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも間のすき間初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも長係数初期値" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_s色リスト" msdata:Caption="色リスト" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_dコマ寸法係数a" type="xs:double" default="0.95" minOccurs="0" />
+                <xs:element name="f_dコマ寸法係数b" type="xs:double" default="0.2" minOccurs="0" />
+                <xs:element name="f_dコマ要尺係数a" type="xs:double" default="0.98" minOccurs="0" />
+                <xs:element name="f_dコマ要尺係数b" type="xs:double" default="0.7" minOccurs="0" />
+                <xs:element name="f_d四つ畳みひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d目と数える端の目" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_s本幅の幅リスト" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s製品情報" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tbl付属品">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_s付属品名" type="xs:string" default="" />
+                <xs:element name="f_iひも番号" type="xs:short" default="1" />
+                <xs:element name="f_s付属品ひも名" type="xs:string" default="" />
+                <xs:element name="f_b巻きひも区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_i本幅初期値" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_iひも数" type="xs:short" default="1" minOccurs="0" />
+                <xs:element name="f_d長さ比率対ひも1" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_d長さ加減対ひも1" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dひも長比率対長さ" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_dひも長加算" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d巻きの厚み" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_d巻き回数比率" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_dひも長加算初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_b集計対象外区分初期値" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_i描画形状" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_i描画位置" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_d描画厚初期値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_b描画区分初期値" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_bCraftBandMesh" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandSquare45" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandKnot" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandSquare" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_bCraftBandHexagon" type="xs:boolean" default="true" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tbl基本値">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_s単位" type="xs:string" default="mm" minOccurs="0" />
+                <xs:element name="f_sバージョン" type="xs:string" default="1.8.5" minOccurs="0" />
+                <xs:element name="f_s識別情報" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tbl描画色">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_s色" type="xs:string" />
+                <xs:element name="f_sバンドの種類名" type="xs:string" default="-" />
+                <xs:element name="f_i赤" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_i緑" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_i青" type="xs:short" default="0" minOccurs="0" />
+                <xs:element name="f_d線幅" type="xs:double" default="1" minOccurs="0" />
+                <xs:element name="f_d中線幅" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_i透明度" type="xs:short" default="255" minOccurs="0" />
+                <xs:element name="f_s線色" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s中線色" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s画像情報" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s画像文字列" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s製品情報" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tblゲージ">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_sバンドの種類名" type="xs:string" default="" />
+                <xs:element name="f_i本幅" type="xs:short" default="1" />
+                <xs:element name="f_b実測値使用区分" type="xs:boolean" default="false" minOccurs="0" />
+                <xs:element name="f_dコマ寸法実測値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_dコマ要尺実測値" type="xs:double" default="0" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="tbl上下図">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="f_s上下図名" type="xs:string" default="" />
+                <xs:element name="f_i水平本数" type="xs:int" default="0" minOccurs="0" />
+                <xs:element name="f_i垂直本数" type="xs:int" default="0" minOccurs="0" />
+                <xs:element name="f_s上下" type="xs:string" default="" minOccurs="0" />
+                <xs:element name="f_s備考" type="xs:string" default="" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+      <xs:unique name="tbl編みかたPKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tbl編みかた" />
+        <xs:field xpath="mstns:f_s編みかた名" />
+        <xs:field xpath="mstns:f_iひも番号" />
+      </xs:unique>
+      <xs:unique name="tblバンドの種類_PKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tblバンドの種類" />
+        <xs:field xpath="mstns:f_sバンドの種類名" />
+      </xs:unique>
+      <xs:unique name="tbl付属品PKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tbl付属品" />
+        <xs:field xpath="mstns:f_s付属品名" />
+        <xs:field xpath="mstns:f_iひも番号" />
+      </xs:unique>
+      <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tbl描画色" />
+        <xs:field xpath="mstns:f_s色" />
+        <xs:field xpath="mstns:f_sバンドの種類名" />
+      </xs:unique>
+      <xs:unique name="tblゲージPKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tblゲージ" />
+        <xs:field xpath="mstns:f_sバンドの種類名" />
+        <xs:field xpath="mstns:f_i本幅" />
+      </xs:unique>
+      <xs:unique name="tbl上下図PKey" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//mstns:tbl上下図" />
+        <xs:field xpath="mstns:f_s上下図名" />
+      </xs:unique>
+    </xs:element>
+  </xs:schema>
+  <tblバンドの種類>
+    <f_sバンドの種類名>default-band</f_sバンドの種類名>
+    <f_i本幅>2</f_i本幅>
+    <f_dバンド幅>15</f_dバンド幅>
+    <f_i基本のひも幅>0</f_i基本のひも幅>
+    <f_s長さと重さ />
+    <f_d短い横ひも長のばらつき>0</f_d短い横ひも長のばらつき>
+    <f_d縦ひも間の最小間隔>0</f_d縦ひも間の最小間隔>
+    <f_d差しひもの径>0</f_d差しひもの径>
+    <f_d差しひも長加算初期値>0</f_d差しひも長加算初期値>
+    <f_d垂直ひも加算初期値>0</f_d垂直ひも加算初期値>
+    <f_d底の厚さ>0</f_d底の厚さ>
+    <f_d立ち上げ時の四角底周の増分>0</f_d立ち上げ時の四角底周の増分>
+    <f_d立ち上げ時の楕円底周の増分>0</f_d立ち上げ時の楕円底周の増分>
+    <f_d楕円底円弧の半径加算>0</f_d楕円底円弧の半径加算>
+    <f_d楕円底周の加算>0</f_d楕円底周の加算>
+    <f_dひも間のすき間初期値>0</f_dひも間のすき間初期値>
+    <f_dひも長係数初期値>1</f_dひも長係数初期値>
+    <f_dひも長加算初期値>0</f_dひも長加算初期値>
+    <f_s色リスト />
+    <f_dコマ寸法係数a>0.95</f_dコマ寸法係数a>
+    <f_dコマ寸法係数b>0.2</f_dコマ寸法係数b>
+    <f_dコマ要尺係数a>0.98</f_dコマ要尺係数a>
+    <f_dコマ要尺係数b>0.7</f_dコマ要尺係数b>
+    <f_d四つ畳みひも長加算初期値>0</f_d四つ畳みひも長加算初期値>
+    <f_d目と数える端の目>1</f_d目と数える端の目>
+    <f_s本幅の幅リスト />
+    <f_s製品情報 />
+    <f_s備考 />
+  </tblバンドの種類>
+  <tbl基本値>
+    <f_s単位>mm</f_s単位>
+    <f_sバージョン>1.8.5</f_sバージョン>
+    <f_s識別情報>color-viewer</f_s識別情報>
+    <f_s備考 />
+  </tbl基本値>
+</dstMasterTables>

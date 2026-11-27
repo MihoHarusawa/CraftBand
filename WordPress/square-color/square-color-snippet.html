@@ -1,5 +1,6 @@
+<!-- wp:html -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <div id="square-color-app">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         /* --- Styles derived from square45-calc --- */
         #square-color-app {
@@ -11,6 +12,7 @@
             border: 1px solid #eee;
             border-radius: 8px;
             font-size: 14px;
+            box-sizing: border-box;
         }
 
         #square-color-app .row {
@@ -51,8 +53,15 @@
             box-sizing: border-box;
         }
 
-        #square-color-app input.mini {
-            width: 3.2em;
+        #square-color-app input.updown-input {
+            flex: 1;
+            min-width: 120px;
+            padding: 4px 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: monospace;
+            font-size: 12px;
         }
 
         #square-color-app select {
@@ -60,6 +69,7 @@
             border: 1px solid #d1d5db;
             border-radius: 4px;
             background: #fff;
+            max-width: 100%;
         }
 
         #square-color-app .btn-blue {
@@ -74,6 +84,7 @@
             font-size: 13px;
             transition: background 0.2s;
             text-align: center;
+            flex-shrink: 0;
         }
 
         #square-color-app .btn-blue:hover {
@@ -83,11 +94,6 @@
         #square-color-app .btn-blue.small {
             padding: 4px 8px;
             font-size: 12px;
-        }
-
-        #square-color-app .btn-blue.block {
-            display: block;
-            margin-top: 8px;
         }
 
         #square-color-app #pdfButton {
@@ -113,6 +119,7 @@
             border-radius: 6px;
             border: 1px solid #e5e7eb;
             color: #111827;
+            box-sizing: border-box;
         }
 
         #square-color-app h3 {
@@ -121,14 +128,6 @@
             color: #374151;
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 4px;
-        }
-
-        #square-color-app .color-preview {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #9ca3af;
-            border-radius: 4px;
-            display: inline-block;
         }
 
         /* --- Collapsible and UI enhancements --- */
@@ -170,12 +169,6 @@
             color: #6b7280;
         }
 
-        #square-color-app .toggle-icon::after {
-            content: "\25BC";
-            font-size: 10px;
-            color: #6b7280;
-        }
-
         #square-color-app .collapsed .toggle-icon::after {
             content: "\25B6";
         }
@@ -193,6 +186,7 @@
             border-radius: 4px;
             cursor: pointer;
             background: #fff;
+            box-sizing: border-box;
         }
 
         #square-color-app #undoButton {
@@ -226,41 +220,109 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: flex-start;
         }
 
         #square-color-app .col-main {
             flex: 1;
-            min-width: 300px;
+            min-width: 280px;
         }
 
         #square-color-app .col-side {
-            width: 140px;
+            width: 220px;
+            max-width: 100%;
             flex-shrink: 0;
             background: #fff;
             padding: 10px;
             border: 1px solid #e5e7eb;
             border-radius: 6px;
+            box-sizing: border-box;
         }
 
-        #square-color-app .presets-list {
+        #square-color-app .palette-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
             margin-top: 8px;
         }
 
-        #square-color-app .preset-item {
+        #square-color-app .palette-item {
             display: flex;
             align-items: center;
             gap: 6px;
+            min-width: 0;
+            padding: 3px 4px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            transition: background-color 0.15s, border-color 0.15s;
         }
 
-        #square-color-app .preset-btn {
+        #square-color-app .palette-item.is-current {
+            background-color: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        #square-color-app .palette-slot-label {
+            width: 14px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #374151;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        #square-color-app .palette-item.is-current .palette-slot-label {
+            color: #1d4ed8;
+        }
+
+        #square-color-app .palette-btn {
             width: 24px;
             height: 24px;
+            padding: 0;
             border: 1px solid #6b7280;
             border-radius: 4px;
+            background-image: none !important;
             cursor: pointer;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        #square-color-app .palette-item.is-current .palette-btn {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+
+        #square-color-app .palette-name-box {
+            flex: 1;
+            min-width: 0;
+            height: 26px;
+            padding: 0 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background: #f9fafb;
+            color: #111827;
+            font-size: 12px;
+            line-height: 24px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        #square-color-app .palette-item.is-current .palette-name-box {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+
+        #square-color-app .palette-name-box:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
         }
 
         #square-color-app canvas {
@@ -269,7 +331,6 @@
             background: #fafafa;
             margin-bottom: 10px;
             cursor: pointer;
-            /* Managed by JS */
         }
 
         #square-color-app .canvas-hint {
@@ -298,6 +359,7 @@
             gap: 10px;
             margin-top: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         #square-color-app .mod-block {
@@ -355,7 +417,7 @@
         </div>
 
         <!-- ひも上下 -->
-        <div id="sectionPattern" class="section collapsed" style="flex: 1; min-width: 200px;">
+        <div id="sectionPattern" class="section collapsed" style="flex: 1; min-width: 240px;">
             <div class="collapsible-header" id="headerPattern">
                 <h3>ひも上下</h3>
                 <span class="toggle-icon"></span>
@@ -365,19 +427,19 @@
                     <label>上下図名</label>
                     <select id="patternDropdown">
                         <option value="10;01" data-name="平編み">平編み</option>
-                        <option value="1100;0110;0011;1001;" data-name="網代編み2つ飛び">網代編み2つ飛び</option>
-                        <option value="111000;011100;001110;000111;100011;110001;" data-name="網代編み3つ飛び">網代編み3つ飛び
-                        </option>
-                        <option value="110;011;101;" data-name="3x3 2-1">3x3 2-1</option>
-                        <option value="011;110;101;" data-name="3x3 1-2">3x3 1-2</option>
-                        <option
-                            value="1110000011;0111000111;0011101110;0001111100;1000111000;0001111100;0011101110;0111000111;1110000011;1100010001;"
-                            data-name="花桝網代">花桝網代</option>
+                        <option value="1100;0110;0011;1001" data-name="網代編み2つ飛び">網代編み2つ飛び</option>
+                        <option value="111000;011100;001110;000111;100011;110001" data-name="網代編み3つ飛び">網代編み3つ飛び</option>
+                        <option value="110;011;101" data-name="3x3 2-1">3x3 2-1</option>
+                        <option value="011;110;101" data-name="3x3 1-2">3x3 1-2</option>
+                        <option value="1110000011;0111000111;0011101110;0001111100;1000111000;0001111100;0011101110;0111000111;1110000011;1100010001" data-name="花桝網代">花桝網代</option>
                     </select>
                 </div>
-                <div
-                    style="margin-top: 8px; font-size: 12px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
-                    内部ロジック: <span id="patternCodeDisplay">10;01</span>
+                <div class="inline-field" style="margin-top: 8px;">
+                    <label for="upDownInput">UpDown</label>
+                    <div class="input-group">
+                        <input type="text" id="upDownInput" value="10;01" class="updown-input" spellcheck="false">
+                        <button type="button" class="btn-blue small" id="btnApplyUpDown">適用</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -391,8 +453,7 @@
                 <div class="row">
                     <div class="inline-field">
                         <label>現在の色</label>
-                        <input type="color" id="currentColorInput" value="#0000ff" class="integrated-picker"
-                            title="カラーピッカーを開く">
+                        <input type="color" id="currentColorInput" value="#0000ff" class="integrated-picker" title="カラーピッカーを開く">
                     </div>
                     <div class="inline-field">
                         <label>代表色から選ぶ</label>
@@ -415,11 +476,18 @@
                         </select>
                     </div>
                     <div class="inline-field">
-                        <label>RGB入力</label>
-                        <div class="input-group" style="font-size:12px;">
-                            R <input type="number" id="rgb_r" min="0" max="255" value="255" class="narrow-input mini">
-                            G <input type="number" id="rgb_g" min="0" max="255" value="20" class="narrow-input mini">
-                            B <input type="number" id="rgb_b" min="0" max="255" value="147" class="narrow-input mini">
+                        <label>パレットへ複写</label>
+                        <div class="input-group">
+                            <select id="paletteSlotSelect" aria-label="複写先パレットスロット">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                            <button type="button" class="btn-blue small" id="btnSetPalette">パレットにセット</button>
                         </div>
                     </div>
                 </div>
@@ -430,10 +498,8 @@
                 <h3>一括色割り当て</h3>
                 <div class="bulk-control-row">
                     <div class="bulk-radios">
-                        <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="vertical" checked>
-                            垂直ひも(左から)</label>
-                        <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="horizontal">
-                            編みひも(下から)</label>
+                        <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="vertical" checked> 垂直ひも(左から)</label>
+                        <label style="font-size: 13px;"><input type="radio" name="bulkTarget" value="horizontal"> 編みひも(下から)</label>
                     </div>
 
                     <div class="inline-field" style="margin-left:8px;">
@@ -460,10 +526,10 @@
         </div>
 
         <div class="col-side">
-            <div style="font-size:12px; font-weight:bold; color:#374151; margin-bottom:4px;">プリセット色</div>
-            <div style="font-size:10px; color:#6b7280;">クリックで現在の色へ</div>
-            <div class="presets-list" id="presetsContainer">
-                <!-- JS generated presets -->
+            <div style="font-size:12px; font-weight:bold; color:#374151; margin-bottom:4px;">&#x1F3A8; 色パレット</div>
+            <div style="font-size:10px; color:#6b7280;">色ボタンで選択、名前のタップで<strong>色見本帳</strong></div>
+            <div class="palette-list" id="paletteContainer">
+                <!-- JS generated palette -->
             </div>
         </div>
     </div>
@@ -471,13 +537,11 @@
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
         <button id="undoButton" title="1手戻す" type="button">&#x21B6;</button>
         <div class="canvas-hint" style="margin-bottom: 0;">&#x1F4A1;
-            図やバンドの端をクリックすると「現在の色」に変わります。<br><span style="display:inline-block; width:2em;"></span>左上セルで垂直ひも全て・左下セルで編みひも全てが現在の色になります。</div>
+            端の番号セル・中のセルをタップすると、該当バンドが「現在の色」に変わります。<br><span style="display:inline-block; width:2em;"></span>全指定 : 左上セル&#x2192;垂直ひも(縦)すべて　左下セル&#x2192;編みひも(横)すべて</div>
     </div>
     <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
         <canvas id="weaveCanvas"></canvas>
     </div>
-
-    <!-- Pattern Name moved to canvas -->
 
     <div class="modifier-blocks">
         <div class="mod-block" id="modMirrorX">左右反転</div>
@@ -495,11 +559,10 @@
          * If you use or refactor this logic, you MUST include the following credit:
          * "Original Logic: https://labo.com/CraftBand/sharing/square-color/"
          */
-        (() => {
+        (function () {
             // --- Elements and State ---
             const containerId = "square-color-app";
 
-            // In WordPress Page Preview, block IDs might be duplicated. We find the container reliably using currentScript.
             let container = null;
             if (document.currentScript) {
                 const closest = document.currentScript.closest('#' + containerId);
@@ -509,17 +572,43 @@
             }
             if (!container) return;
 
-            const el = s => container.querySelector(s);
+            const el = function (s) { return container.querySelector(s); };
+            const els = function (s) { return container.querySelectorAll(s); };
 
-            const CELL_SIZE = 24; // Pixel size per grid cell
+            const CELL_SIZE = 24;
+            const SLOT_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+            const STORAGE_KEY_PALETTE = 'cb_square_color_palette_v1';
+            const STORAGE_KEY_BRIDGE_EVENT = 'craftband_color_viewer_bridge_event_v1';
+            const VIEWER_CHANNEL_NAME = 'craftband_color_viewer_channel_v1';
+            const DROPDOWN_NAME_MAX_LEN = 24;
+
+            const DEFAULT_PALETTE = {
+                A: { hex: '#ff1493', name: '濃いピンク' },
+                B: { hex: '#00bfff', name: '水色' },
+                C: { hex: '#0000ff', name: '青' },
+                D: { hex: '#8b4513', name: '茶' },
+                E: { hex: '#000000', name: '黒' },
+                F: { hex: '#ffffff', name: '白' },
+                G: { hex: '#808080', name: 'グレー' }
+            };
 
             let vBands = 19;
             let hBands = 12;
-            let currentColor = '#0000ff'; // Blue Default
+            let currentColor = '#0000ff';
             let currentPatternStr = '10;01';
+            let currentPatternName = '平編み';
 
             let verticalColors = [];
             let horizontalColors = [];
+
+            let palette = {};
+            for (let i = 0; i !== SLOT_KEYS.length; i++) {
+                const k = SLOT_KEYS[i];
+                palette[k] = {
+                    hex: DEFAULT_PALETTE[k].hex,
+                    name: DEFAULT_PALETTE[k].name
+                };
+            }
 
             // Undo Cache (1-level)
             let undoCache = null;
@@ -528,44 +617,258 @@
             let modMirrorX = false;
             let modInvertY = false;
 
-            // Pre-defined presets logic
-            const presets = [
-                { hex: '#ff1493' }, // Color 1: Deep Pink
-                { hex: '#00bfff' }, // Color 2: Deep Sky Blue
-                { hex: '#0000ff' }, // Color 3: Blue
-                { hex: '#8b4513' }, // Color 4: Brown
-                { hex: '#000000' }, // Color 5: Black
-                { hex: '#ffffff' }  // Color 6: White
-            ];
+            // Color Viewer Bridge State
+            let activeViewerReqId = '';
+            const handledViewerReqs = {};
 
-            // --- Utily Functions ---
-            const hexToRgb = (hex) => {
-                let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? {
-                    r: parseInt(result[1], 16),
-                    g: parseInt(result[2], 16),
-                    b: parseInt(result[3], 16)
-                } : { r: 0, g: 0, b: 0 };
+            // --- Utility Functions ---
+            const normalizeHex = function (raw) {
+                if (typeof raw !== 'string') return null;
+                let s = raw.trim();
+                if (s.charAt(0) === '#') {
+                    s = s.slice(1);
+                }
+                if (/^[0-9a-fA-F]{6}$/.test(s)) {
+                    return '#' + s.toLowerCase();
+                }
+                if (/^[0-9a-fA-F]{3}$/.test(s)) {
+                    const r = s.charAt(0);
+                    const g = s.charAt(1);
+                    const b = s.charAt(2);
+                    return '#' + (r + r + g + g + b + b).toLowerCase();
+                }
+                return null;
             };
-            const rgbToHex = (r, g, b) => {
-                return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+
+            const truncateLabel = function (str, maxLen) {
+                if (Math.sign(str.length - maxLen) === 1) {
+                    return str.slice(0, maxLen) + '...';
+                }
+                return str;
+            };
+
+            const parseUpDown = function (rawStr) {
+                const cleaned = String(rawStr ? rawStr : '').replace(/[^01;]/g, '');
+                const rawRows = cleaned.split(';');
+                const rows = [];
+                for (let i = 0; i !== rawRows.length; i++) {
+                    if (rawRows[i] !== '') {
+                        rows.push(rawRows[i]);
+                    }
+                }
+                if (rows.length === 0) return null;
+
+                let minLen = rows[0].length;
+                for (let i = 1; i !== rows.length; i++) {
+                    if (Math.sign(minLen - rows[i].length) === 1) {
+                        minLen = rows[i].length;
+                    }
+                }
+                if (minLen === 0) return null;
+
+                const trimmedRows = [];
+                const matrix = [];
+                for (let i = 0; i !== rows.length; i++) {
+                    const rStr = rows[i].slice(0, minLen);
+                    trimmedRows.push(rStr);
+                    const numRow = [];
+                    for (let j = 0; j !== rStr.length; j++) {
+                        numRow.push(rStr.charAt(j) === '1' ? 1 : 0);
+                    }
+                    matrix.push(numRow);
+                }
+                return {
+                    normalized: trimmedRows.join(';'),
+                    matrix: matrix
+                };
+            };
+
+            const getColorViewerUrl = function () {
+                const proto = window.location.protocol;
+                const host = window.location.hostname;
+                const isLocal = proto === 'file:' ? true : (host === 'localhost' ? true : host === '127.0.0.1');
+                if (isLocal) {
+                    return new URL('../nowp-pages/color-viewer.html', window.location.href).toString();
+                }
+                return new URL('/CraftBand/nowp-pages/color-viewer.html', window.location.origin).toString();
+            };
+
+            const tryFocusMainWindow = function () {
+                try {
+                    window.focus();
+                } catch (e) {
+                    // Ignore focus restriction
+                }
+            };
+
+            // --- Palette Storage ---
+            const loadPaletteFromStorage = function () {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY_PALETTE);
+                    if (!raw) return;
+                    const parsed = JSON.parse(raw);
+                    if (!parsed) return;
+                    if (typeof parsed !== 'object') return;
+                    for (let i = 0; i !== SLOT_KEYS.length; i++) {
+                        const k = SLOT_KEYS[i];
+                        const item = parsed[k];
+                        if (item) {
+                            if (typeof item === 'object') {
+                                const hex = normalizeHex(item.hex);
+                                if (hex) {
+                                    const nameRaw = typeof item.name === 'string' ? item.name.trim() : '';
+                                    palette[k] = {
+                                        hex: hex,
+                                        name: nameRaw !== '' ? nameRaw : hex
+                                    };
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Ignore localStorage restrictions or malformed JSON
+                }
+            };
+
+            const savePaletteToStorage = function () {
+                try {
+                    localStorage.setItem(STORAGE_KEY_PALETTE, JSON.stringify(palette));
+                } catch (e) {
+                    // Ignore localStorage restrictions
+                }
+            };
+
+            // --- Color Viewer Bridge ---
+            const openColorViewer = function (slotKey) {
+                const slotId = 'color' + slotKey;
+                activeViewerReqId = slotId + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+                const windowName = 'color-viewer_' + activeViewerReqId;
+
+                const url = new URL(getColorViewerUrl());
+                url.searchParams.set('cb_req_id', activeViewerReqId);
+                url.searchParams.set('cb_slot', slotId);
+
+                const win = window.open(url.toString(), windowName);
+                if (win) {
+                    if (!win.closed) {
+                        try {
+                            win.focus();
+                        } catch (e) {
+                            // Ignore focus restriction
+                        }
+                    }
+                }
+            };
+
+            const resolveSlotKey = function (rawSlot) {
+                if (typeof rawSlot !== 'string') return null;
+                const s = rawSlot.trim();
+                for (let i = 0; i !== SLOT_KEYS.length; i++) {
+                    const k = SLOT_KEYS[i];
+                    if (s === 'color' + k) return k;
+                    if (s === k) return k;
+                }
+                return null;
+            };
+
+            const handleViewerMessage = function (data) {
+                if (!data) return;
+                if (typeof data !== 'object') return;
+
+                const isSelect = data.type === 'COLOR_VIEWER_SELECT';
+                const isCancel = data.type === 'COLOR_VIEWER_CANCEL';
+                if (!isSelect) {
+                    if (!isCancel) return;
+                }
+
+                if (activeViewerReqId === '') return;
+                const reqId = typeof data.cb_req_id === 'string' ? data.cb_req_id.trim() : '';
+                if (reqId !== activeViewerReqId) return;
+
+                const dedupeKey = data.type + ':' + reqId;
+                if (handledViewerReqs[dedupeKey]) return;
+                handledViewerReqs[dedupeKey] = true;
+
+                if (isSelect) {
+                    const slotKey = resolveSlotKey(data.cb_slot);
+                    const hex = normalizeHex(data.color);
+                    if (slotKey) {
+                        if (hex) {
+                            const nameRaw = typeof data.name === 'string' ? data.name.trim() : '';
+                            palette[slotKey] = {
+                                hex: hex,
+                                name: nameRaw !== '' ? nameRaw : hex
+                            };
+                            renderPalette();
+                            savePaletteToStorage();
+                            setCurrentColor(hex);
+                            tryFocusMainWindow();
+                        }
+                    }
+                } else if (isCancel) {
+                    tryFocusMainWindow();
+                }
+            };
+
+            const setupColorViewerListeners = function () {
+                window.addEventListener('message', function (event) {
+                    if (window.location.protocol !== 'file:') {
+                        if (event.origin !== window.location.origin) return;
+                    }
+                    handleViewerMessage(event.data);
+                });
+
+                try {
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel(VIEWER_CHANNEL_NAME);
+                        channel.addEventListener('message', function (event) {
+                            handleViewerMessage(event.data);
+                        });
+                    }
+                } catch (e) {
+                    // BroadcastChannel unsupported or blocked
+                }
+
+                window.addEventListener('storage', function (event) {
+                    if (event.key !== STORAGE_KEY_BRIDGE_EVENT) return;
+                    if (!event.newValue) return;
+                    try {
+                        const parsed = JSON.parse(event.newValue);
+                        handleViewerMessage(parsed);
+                        try {
+                            localStorage.removeItem(STORAGE_KEY_BRIDGE_EVENT);
+                        } catch (e2) {
+                            // Ignore cleanup restriction
+                        }
+                    } catch (e) {
+                        // Ignore malformed JSON
+                    }
+                });
             };
 
             // --- Size Logic ---
-            const performAdjustSize = (type, delta) => {
-                let elem = type === 'vertical' ? el('#numVertical') : el('#numHorizontal');
-                let rawVal = parseInt(elem.value);
-                let val = !isNaN(rawVal) ? rawVal : 0;
-                let newVal = Math.max(1, val + delta);
+            const performAdjustSize = function (type, delta) {
+                const elem = type === 'vertical' ? el('#numVertical') : el('#numHorizontal');
+                const rawVal = parseInt(elem.value, 10);
+                const val = !isNaN(rawVal) ? rawVal : 0;
+                const newVal = Math.max(1, val + delta);
                 elem.value = newVal;
 
                 if (type === 'vertical') {
-                    while (verticalColors.length < newVal) verticalColors.push(currentColor);
-                    if (verticalColors.length > newVal) verticalColors.length = newVal;
+                    while (Math.sign(newVal - verticalColors.length) === 1) {
+                        verticalColors.push(currentColor);
+                    }
+                    if (Math.sign(verticalColors.length - newVal) === 1) {
+                        verticalColors.length = newVal;
+                    }
                     vBands = newVal;
                 } else {
-                    while (horizontalColors.length < newVal) horizontalColors.push(currentColor);
-                    if (horizontalColors.length > newVal) horizontalColors.length = newVal;
+                    while (Math.sign(newVal - horizontalColors.length) === 1) {
+                        horizontalColors.push(currentColor);
+                    }
+                    if (Math.sign(horizontalColors.length - newVal) === 1) {
+                        horizontalColors.length = newVal;
+                    }
                     hBands = newVal;
                 }
                 clearUndoCache();
@@ -573,52 +876,59 @@
             };
 
             // --- Color Logic ---
-            const setCurrentColor = (hex, skipRgbUpdate = false) => {
-                currentColor = hex.toLowerCase();
-                el('#currentColorInput').value = hex;
-
-                // Update dropdown if matches
+            const findRepresentativeColorName = function (hex) {
+                const target = hex.toLowerCase();
                 const dd = el('#colorDropdown');
-                let found = false;
-                for (let i = 0; i < dd.options.length; i++) {
-                    if (dd.options[i].value.toLowerCase() === currentColor) {
-                        dd.selectedIndex = i;
-                        found = true; break;
+                for (let i = 0; i !== dd.options.length; i++) {
+                    if (dd.options[i].value.toLowerCase() === target) {
+                        return dd.options[i].text.trim();
                     }
                 }
-                if (!found) dd.selectedIndex = 0; // "---"
-
-                if (!skipRgbUpdate) {
-                    const rgb = hexToRgb(hex);
-                    el('#rgb_r').value = rgb.r;
-                    el('#rgb_g').value = rgb.g;
-                    el('#rgb_b').value = rgb.b;
-                }
+                return null;
             };
 
-            const saveUndoState = () => {
+            const setCurrentColor = function (hex) {
+                const norm = normalizeHex(hex);
+                if (!norm) return;
+                currentColor = norm;
+                el('#currentColorInput').value = norm;
+
+                const dd = el('#colorDropdown');
+                let found = false;
+                for (let i = 0; i !== dd.options.length; i++) {
+                    if (dd.options[i].value.toLowerCase() === currentColor) {
+                        dd.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) dd.selectedIndex = 0;
+                updatePaletteHighlight();
+            };
+
+            const saveUndoState = function () {
                 undoCache = {
-                    v: [...verticalColors],
-                    h: [...horizontalColors]
+                    v: verticalColors.slice(),
+                    h: horizontalColors.slice()
                 };
                 updateUndoButton();
             };
 
-            const performUndo = () => {
+            const performUndo = function () {
                 if (!undoCache) return;
-                verticalColors = [...undoCache.v];
-                horizontalColors = [...undoCache.h];
+                verticalColors = undoCache.v.slice();
+                horizontalColors = undoCache.h.slice();
                 undoCache = null;
                 updateUndoButton();
                 drawCanvas();
             };
 
-            const clearUndoCache = () => {
+            const clearUndoCache = function () {
                 undoCache = null;
                 updateUndoButton();
             };
 
-            const updateUndoButton = () => {
+            const updateUndoButton = function () {
                 const btn = el('#undoButton');
                 if (undoCache) {
                     btn.classList.add('active');
@@ -627,124 +937,187 @@
                 }
             };
 
-            const setupColorListeners = () => {
-                const cInp = el('#currentColorInput');
-                cInp.addEventListener('input', e => setCurrentColor(e.target.value));
+            const setupColorListeners = function () {
+                el('#currentColorInput').addEventListener('input', function (e) {
+                    setCurrentColor(e.target.value);
+                });
 
-                el('#colorDropdown').addEventListener('change', e => {
+                el('#colorDropdown').addEventListener('change', function (e) {
                     if (e.target.value) setCurrentColor(e.target.value);
                 });
 
-                const updateFromRgb = () => {
-                const getVal = (id) => {
-                    let v = parseInt(el(id).value);
-                    return !isNaN(v) ? v : 0;
-                };
-                let r = Math.max(0, Math.min(255, getVal('#rgb_r')));
-                let g = Math.max(0, Math.min(255, getVal('#rgb_g')));
-                let b = Math.max(0, Math.min(255, getVal('#rgb_b')));
-                    el('#rgb_r').value = r; el('#rgb_g').value = g; el('#rgb_b').value = b;
-                    setCurrentColor(rgbToHex(r, g, b), true);
-                };
-                el('#rgb_r').addEventListener('change', updateFromRgb);
-                el('#rgb_g').addEventListener('change', updateFromRgb);
-                el('#rgb_b').addEventListener('change', updateFromRgb);
-            };
-
-            const setupPresets = () => {
-                const cont = el('#presetsContainer');
-                cont.innerHTML = '';
-                presets.forEach((p, idx) => {
-                    const group = document.createElement('div');
-                    group.className = 'preset-item';
-
-                    const btn = document.createElement('div');
-                    btn.className = 'preset-btn';
-                    btn.style.backgroundColor = p.hex;
-                    btn.title = `色${idx + 1}`;
-                    btn.onclick = () => setCurrentColor(p.hex);
-
-                    const pickerInp = document.createElement('input');
-                    pickerInp.type = 'color';
-                    pickerInp.value = p.hex;
-                    pickerInp.title = `色${idx + 1} を変更`;
-                    pickerInp.style.width = '24px';
-                    pickerInp.style.height = '24px';
-                    pickerInp.style.padding = '0';
-                    pickerInp.style.border = 'none';
-                    pickerInp.style.cursor = 'pointer';
-
-                    pickerInp.addEventListener('input', e => {
-                        const newColor = e.target.value;
-                        p.hex = newColor;
-                        btn.style.backgroundColor = newColor;
-                        setCurrentColor(newColor);
-                    });
-
-                    group.appendChild(btn);
-                    group.appendChild(pickerInp);
-                    cont.appendChild(group);
+                el('#btnSetPalette').addEventListener('click', function () {
+                    const slotKey = el('#paletteSlotSelect').value;
+                    if (!palette[slotKey]) return;
+                    const repName = findRepresentativeColorName(currentColor);
+                    palette[slotKey] = {
+                        hex: currentColor,
+                        name: repName ? repName : currentColor
+                    };
+                    renderPalette();
+                    savePaletteToStorage();
                 });
             };
 
+            const updatePaletteHighlight = function () {
+                const items = els('.palette-item');
+                for (let i = 0; i !== items.length; i++) {
+                    const item = items[i];
+                    const slotKey = item.getAttribute('data-slot');
+                    if (slotKey) {
+                        if (palette[slotKey]) {
+                            if (palette[slotKey].hex === currentColor) {
+                                item.classList.add('is-current');
+                            } else {
+                                item.classList.remove('is-current');
+                            }
+                        }
+                    }
+                }
+            };
+
+            const bindKeyActivate = function (elem, fn) {
+                elem.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' ? true : (e.key === ' ')) {
+                        e.preventDefault();
+                        fn();
+                    }
+                });
+            };
+
+            const renderPalette = function () {
+                const cont = el('#paletteContainer');
+                cont.innerHTML = '';
+                for (let i = 0; i !== SLOT_KEYS.length; i++) {
+                    (function (slotKey) {
+                        const p = palette[slotKey];
+
+                        const group = document.createElement('div');
+                        group.className = 'palette-item';
+                        group.setAttribute('data-slot', slotKey);
+
+                        const label = document.createElement('span');
+                        label.className = 'palette-slot-label';
+                        label.textContent = slotKey;
+
+                        const btn = document.createElement('div');
+                        btn.setAttribute('role', 'button');
+                        btn.setAttribute('tabindex', '0');
+                        btn.className = 'palette-btn';
+                        btn.style.setProperty('background-color', p.hex, 'important');
+                        btn.title = 'パレット' + slotKey + 'を現在の色へセット';
+                        const onSelectColor = function () {
+                            setCurrentColor(palette[slotKey].hex);
+                        };
+                        btn.addEventListener('click', onSelectColor);
+                        bindKeyActivate(btn, onSelectColor);
+
+                        const nameBox = document.createElement('div');
+                        nameBox.setAttribute('role', 'button');
+                        nameBox.setAttribute('tabindex', '0');
+                        nameBox.className = 'palette-name-box';
+                        nameBox.textContent = p.name;
+                        nameBox.title = p.name + '（タップで色見本帳を開く）';
+                        const onOpenViewer = function () {
+                            openColorViewer(slotKey);
+                        };
+                        nameBox.addEventListener('click', onOpenViewer);
+                        bindKeyActivate(nameBox, onOpenViewer);
+
+                        group.appendChild(label);
+                        group.appendChild(btn);
+                        group.appendChild(nameBox);
+                        cont.appendChild(group);
+                    })(SLOT_KEYS[i]);
+                }
+                updatePaletteHighlight();
+            };
+
             // --- Bulk Logic ---
-            const performApplyBulkColor = () => {
-                let target = container.querySelector('input[name="bulkTarget"]:checked').value;
-                let startRaw = parseInt(el('#bulkStart').value);
-                let start = !isNaN(startRaw) ? startRaw : 1;
-                let stepRaw = parseInt(el('#bulkStep').value);
-                let step = !isNaN(stepRaw) ? stepRaw : 0;
+            const performApplyBulkColor = function () {
+                const target = container.querySelector('input[name="bulkTarget"]:checked').value;
+                const startRaw = parseInt(el('#bulkStart').value, 10);
+                const start = !isNaN(startRaw) ? startRaw : 1;
+                const stepRaw = parseInt(el('#bulkStep').value, 10);
+                const step = !isNaN(stepRaw) ? stepRaw : 0;
 
-                let startIndex = start - 1;
-                if (startIndex < 0) { alert('開始位置は1以上を指定してください。'); return; }
+                const startIndex = start - 1;
+                if (Math.sign(startIndex) === -1) {
+                    alert('開始位置は1以上を指定してください。');
+                    return;
+                }
 
-                let t_arr = target === 'vertical' ? verticalColors : horizontalColors;
-
-                if (startIndex >= t_arr.length) return;
+                const tArr = target === 'vertical' ? verticalColors : horizontalColors;
+                if (Math.sign(startIndex - tArr.length) !== -1) return;
 
                 saveUndoState();
                 if (step === 0) {
-                    t_arr[startIndex] = currentColor;
-                } else {
-                    for (let i = startIndex; i < t_arr.length; i += step) {
-                        t_arr[i] = currentColor;
+                    tArr[startIndex] = currentColor;
+                } else if (Math.sign(step) === 1) {
+                    for (let i = startIndex; Math.sign(tArr.length - i) === 1; i += step) {
+                        tArr[i] = currentColor;
                     }
                 }
                 drawCanvas();
             };
 
             // --- Modifier Hover Logic ---
-            const performSetModifier = (type) => {
-                if (type === 'mirrorX') { modMirrorX = true; modInvertY = false; }
-                else if (type === 'invertY') { modMirrorX = false; modInvertY = true; }
-                else if (type === 'both') { modMirrorX = true; modInvertY = true; }
+            const performSetModifier = function (type) {
+                if (type === 'mirrorX') {
+                    modMirrorX = true;
+                    modInvertY = false;
+                } else if (type === 'invertY') {
+                    modMirrorX = false;
+                    modInvertY = true;
+                } else if (type === 'both') {
+                    modMirrorX = true;
+                    modInvertY = true;
+                }
                 drawCanvas();
             };
-            const performClearModifier = () => {
+
+            const performClearModifier = function () {
                 modMirrorX = false;
                 modInvertY = false;
                 drawCanvas();
             };
 
-            // --- general Controls ---
-            const setupControls = () => {
-                el('#numVertical').addEventListener('change', e => performAdjustSize('vertical', 0));
-                el('#numHorizontal').addEventListener('change', e => performAdjustSize('horizontal', 0));
+            // --- UpDown Controls ---
+            const applyUpDownFromInput = function () {
+                const inp = el('#upDownInput');
+                const parsed = parseUpDown(inp.value);
+                if (!parsed) {
+                    alert('UpDownは0と1と;で入力してください。');
+                    return;
+                }
+                currentPatternStr = parsed.normalized;
+                inp.value = parsed.normalized;
+                clearUndoCache();
+                drawCanvas();
+            };
 
-                container.querySelectorAll('.btn-adjust-v').forEach(btn => {
-                    btn.addEventListener('click', () => performAdjustSize('vertical', parseInt(btn.getAttribute('data-delta'))));
+            // --- General Controls ---
+            const setupControls = function () {
+                el('#numVertical').addEventListener('change', function () { performAdjustSize('vertical', 0); });
+                el('#numHorizontal').addEventListener('change', function () { performAdjustSize('horizontal', 0); });
+
+                els('.btn-adjust-v').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        performAdjustSize('vertical', parseInt(btn.getAttribute('data-delta'), 10));
+                    });
                 });
-                container.querySelectorAll('.btn-adjust-h').forEach(btn => {
-                    btn.addEventListener('click', () => performAdjustSize('horizontal', parseInt(btn.getAttribute('data-delta'))));
+                els('.btn-adjust-h').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        performAdjustSize('horizontal', parseInt(btn.getAttribute('data-delta'), 10));
+                    });
                 });
 
                 el('#btnApplyBulk').addEventListener('click', performApplyBulkColor);
-
                 el('#undoButton').addEventListener('click', performUndo);
 
                 // Collapsible Listeners
-                const setupCollapsible = (headerId, sectionId) => {
-                    el('#' + headerId).addEventListener('click', () => {
+                const setupCollapsible = function (headerId, sectionId) {
+                    el('#' + headerId).addEventListener('click', function () {
                         const sec = el('#' + sectionId);
                         const content = sec.querySelector('.collapsible-content');
                         sec.classList.toggle('collapsed');
@@ -754,10 +1127,10 @@
                 setupCollapsible('headerSize', 'sectionSize');
                 setupCollapsible('headerPattern', 'sectionPattern');
 
-                const bindMod = (id, type) => {
+                const bindMod = function (id, type) {
                     const block = el(id);
                     if (block) {
-                        block.addEventListener('mouseenter', () => performSetModifier(type));
+                        block.addEventListener('mouseenter', function () { performSetModifier(type); });
                         block.addEventListener('mouseleave', performClearModifier);
                     }
                 };
@@ -765,74 +1138,191 @@
                 bindMod('#modInvertY', 'invertY');
                 bindMod('#modBoth', 'both');
 
-                el('#patternDropdown').addEventListener('change', e => {
-                    currentPatternStr = e.target.value;
-                    el('#patternCodeDisplay').textContent = currentPatternStr;
-
-                    // Pattern name updates in canvas automatically
+                el('#patternDropdown').addEventListener('change', function (e) {
+                    const dd = e.target;
+                    const idx = dd.selectedIndex;
+                    if (Math.sign(idx) === -1) return;
+                    const opt = dd.options[idx];
+                    const parsed = parseUpDown(opt.value);
+                    if (!parsed) return;
+                    currentPatternStr = parsed.normalized;
+                    const attrName = opt.getAttribute('data-name');
+                    currentPatternName = attrName ? attrName : opt.text;
+                    el('#upDownInput').value = currentPatternStr;
                     clearUndoCache();
                     drawCanvas();
                 });
 
-                el('#pdfButton').addEventListener('click', () => {
+                el('#upDownInput').addEventListener('input', function () {
+                    currentPatternName = '';
+                    el('#patternDropdown').selectedIndex = -1;
+                    drawCanvas();
+                });
+
+                el('#upDownInput').addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        applyUpDownFromInput();
+                    }
+                });
+
+                el('#btnApplyUpDown').addEventListener('click', applyUpDownFromInput);
+
+                el('#pdfButton').addEventListener('click', function () {
                     const cv = el('#weaveCanvas');
                     try {
-                        const { jsPDF } = window.jspdf;
-                        const d = cv.height > cv.width ? 'p' : 'l';
+                        const jsPDF = window.jspdf.jsPDF;
+                        const d = Math.sign(cv.height - cv.width) === 1 ? 'p' : 'l';
                         const pdf = new jsPDF({ orientation: d, unit: 'mm', format: 'a4' });
-                        const pW = d === 'p' ? 210 : 297, pH = d === 'p' ? 297 : 210, m = 10;
-                        const id = cv.toDataURL("image/png");
+                        const pW = d === 'p' ? 210 : 297;
+                        const pH = d === 'p' ? 297 : 210;
+                        const m = 10;
+                        const imgData = cv.toDataURL('image/png');
 
-                        const imgProps = pdf.getImageProperties(id);
+                        const imgProps = pdf.getImageProperties(imgData);
                         const r = imgProps.width / imgProps.height;
-                        let w = pW - m * 2, h = w / r;
-                        if (h > pH - m * 2) { h = pH - m * 2; w = h * r; }
+                        let w = pW - m * 2;
+                        let h = w / r;
+                        if (Math.sign(h - (pH - m * 2)) === 1) {
+                            h = pH - m * 2;
+                            w = h * r;
+                        }
 
-                        pdf.addImage(id, 'PNG', m, m, w, h);
-                        pdf.save("square-color.pdf");
+                        pdf.addImage(imgData, 'PNG', m, m, w, h);
+                        pdf.save('square-color.pdf');
                     } catch (e) {
-                        alert("PDF生成エラー: " + e.message);
+                        alert('PDF生成エラー: ' + e.message);
                         console.error(e);
                     }
                 });
             };
 
+            // --- API Initialization (URL Query Parameters) ---
+            const applyUrlParameters = function () {
+                const urlParams = new window.URLSearchParams(window.location.search);
+
+                const modelParam = urlParams.get('cb_model');
+                if (modelParam !== null) {
+                    if (modelParam.trim().toLowerCase() !== 'square-color') {
+                        return;
+                    }
+                }
+
+                // Size: vertical (cb_v) and horizontal (cb_h)
+                const vParam = urlParams.get('cb_v');
+                if (vParam !== null) {
+                    const vVal = parseInt(vParam, 10);
+                    if (!isNaN(vVal)) {
+                        if (Math.sign(vVal) === 1) {
+                            vBands = vVal;
+                            el('#numVertical').value = vBands;
+                        }
+                    }
+                }
+
+                const hParam = urlParams.get('cb_h');
+                if (hParam !== null) {
+                    const hVal = parseInt(hParam, 10);
+                    if (!isNaN(hVal)) {
+                        if (Math.sign(hVal) === 1) {
+                            hBands = hVal;
+                            el('#numHorizontal').value = hBands;
+                        }
+                    }
+                }
+
+                // Pattern: cb_updown & cb_updown_name
+                const upDownParam = urlParams.get('cb_updown');
+                const upDownNameParam = urlParams.get('cb_updown_name');
+                const trimmedUpDownName = upDownNameParam !== null ? upDownNameParam.trim() : '';
+
+                if (upDownParam !== null) {
+                    const parsed = parseUpDown(upDownParam);
+                    if (parsed) {
+                        currentPatternStr = parsed.normalized;
+                        const labelName = trimmedUpDownName !== '' ? trimmedUpDownName : truncateLabel(parsed.normalized, DROPDOWN_NAME_MAX_LEN);
+                        currentPatternName = labelName;
+
+                        const dd = el('#patternDropdown');
+                        const opt = document.createElement('option');
+                        opt.value = parsed.normalized;
+                        opt.setAttribute('data-name', labelName);
+                        opt.textContent = labelName;
+                        dd.appendChild(opt);
+                        dd.selectedIndex = dd.options.length - 1;
+                        el('#upDownInput').value = parsed.normalized;
+                    }
+                } else if (trimmedUpDownName !== '') {
+                    const dd = el('#patternDropdown');
+                    for (let i = 0; i !== dd.options.length; i++) {
+                        const opt = dd.options[i];
+                        const optName = opt.getAttribute('data-name') ? opt.getAttribute('data-name') : opt.text;
+                        if (optName === trimmedUpDownName) {
+                            const parsed = parseUpDown(opt.value);
+                            if (parsed) {
+                                dd.selectedIndex = i;
+                                currentPatternStr = parsed.normalized;
+                                currentPatternName = optName;
+                                el('#upDownInput').value = currentPatternStr;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Palette Colors: cb_colorA..G and cb_colorA_name..G_name
+                for (let i = 0; i !== SLOT_KEYS.length; i++) {
+                    const k = SLOT_KEYS[i];
+                    const rawColor = urlParams.get('cb_color' + k);
+                    const rawName = urlParams.get('cb_color' + k + '_name');
+                    const normHex = normalizeHex(rawColor);
+                    const trimmedName = rawName !== null ? rawName.trim() : '';
+
+                    if (normHex) {
+                        palette[k] = {
+                            hex: normHex,
+                            name: trimmedName !== '' ? trimmedName : normHex
+                        };
+                    } else if (trimmedName !== '') {
+                        palette[k].name = trimmedName;
+                    }
+                }
+            };
+
+            // --- Pattern Matrix Helper ---
+            const getPatternMatrix = function () {
+                const parsed = parseUpDown(currentPatternStr);
+                return parsed ? parsed.matrix : [[1, 0], [0, 1]];
+            };
+
+            const getCellLogic = function (matrix, colIdx, rowIdx) {
+                const pHeight = matrix.length;
+                const pWidth = Math.sign(pHeight) === 1 ? matrix[0].length : 1;
+                const cRef = modMirrorX ? (vBands - 1 - colIdx) : colIdx;
+                const r = rowIdx % pHeight;
+                const c = cRef % pWidth;
+                let logic = matrix[r][c];
+                if (modInvertY) {
+                    logic = 1 - logic;
+                }
+                return logic;
+            };
+
             // --- Canvas Rendering ---
-            const drawCanvas = () => {
+            const drawCanvas = function () {
                 const cv = el('#weaveCanvas');
                 const ctx = cv.getContext('2d');
-
-                const matrix = currentPatternStr.split(';').filter(s => s.trim() !== '').map(row => row.split('').map(Number));
-                // Base index properly maps to (0,0) starting at bottom-left
-
-                let pHeight = matrix.length;
-                let pWidth = pHeight > 0 ? matrix[0].length : 1;
-
-                const getLogic = (colIdx, rowIdx) => {
-                    // Apply display modifiers
-                    let cRef = modMirrorX ? (vBands - 1 - colIdx) : colIdx;
-
-                    let r = rowIdx % pHeight;
-                    let c = cRef % pWidth;
-
-                    let logic = matrix[r][c];
-
-                    if (modInvertY) {
-                        logic = 1 - logic; // 0 becomes 1, 1 becomes 0
-                    }
-
-                    return logic;
-                };
+                const matrix = getPatternMatrix();
 
                 const logicCols = vBands;
                 const logicRows = hBands;
-                const totCols = logicCols + 2; // +1 left, +1 right
-                const totRows = logicRows + 2; // +1 top, +1 bottom
+                const totCols = logicCols + 2;
+                const totRows = logicRows + 2;
 
                 const contentW = totCols * CELL_SIZE;
                 const contentH = totRows * CELL_SIZE;
 
-                const FOOTER_SPACE = 65; // Extra space for Pattern Name and Time/URL
+                const FOOTER_SPACE = 65;
                 cv.width = contentW;
                 cv.height = contentH + FOOTER_SPACE;
 
@@ -840,77 +1330,72 @@
                 ctx.fillRect(0, 0, cv.width, cv.height);
 
                 // --- Draw Horizontal Bands ---
-                for (let hr = 0; hr < logicRows; hr++) {
-                    let y = (logicRows - hr) * CELL_SIZE;
-                    let c = horizontalColors[hr];
+                for (let hr = 0; hr !== logicRows; hr++) {
+                    const y = (logicRows - hr) * CELL_SIZE;
+                    const c = horizontalColors[hr];
                     ctx.fillStyle = c;
 
-                    let leftX = 0;
-                    let rightX = (totCols - 1) * CELL_SIZE;
+                    const leftX = 0;
+                    const rightX = (totCols - 1) * CELL_SIZE;
 
-                    ctx.fillRect(leftX, y, CELL_SIZE, CELL_SIZE); // Left end
-                    ctx.fillRect(rightX, y, CELL_SIZE, CELL_SIZE); // Right end
+                    ctx.fillRect(leftX, y, CELL_SIZE, CELL_SIZE);
+                    ctx.fillRect(rightX, y, CELL_SIZE, CELL_SIZE);
                     ctx.strokeStyle = 'rgba(0,0,0,0.1)';
                     ctx.strokeRect(leftX, y, CELL_SIZE, CELL_SIZE);
                     ctx.strokeRect(rightX, y, CELL_SIZE, CELL_SIZE);
 
-                    // Display Indicies
                     ctx.fillStyle = '#111827';
                     ctx.font = '10px sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    let numLabel = (hr + 1).toString();
+                    const numLabel = (hr + 1).toString();
                     ctx.fillText(numLabel, leftX + CELL_SIZE / 2, y + CELL_SIZE / 2);
                     ctx.fillText(numLabel, rightX + CELL_SIZE / 2, y + CELL_SIZE / 2);
                 }
 
                 // --- Draw Vertical Bands ---
-                for (let vc = 0; vc < logicCols; vc++) {
-                    let dispVc = modMirrorX ? (logicCols - 1 - vc) : vc; // Map visual column to actual array index
-                    let c = verticalColors[dispVc];
-                    let x = (vc + 1) * CELL_SIZE;
+                for (let vc = 0; vc !== logicCols; vc++) {
+                    const dispVc = modMirrorX ? (logicCols - 1 - vc) : vc;
+                    const c = verticalColors[dispVc];
+                    const x = (vc + 1) * CELL_SIZE;
                     ctx.fillStyle = c;
 
-                    let topY = 0;
-                    let botY = (totRows - 1) * CELL_SIZE;
+                    const topY = 0;
+                    const botY = (totRows - 1) * CELL_SIZE;
 
-                    ctx.fillRect(x, topY, CELL_SIZE, CELL_SIZE); // Top end
-                    ctx.fillRect(x, botY, CELL_SIZE, CELL_SIZE); // Bottom end
+                    ctx.fillRect(x, topY, CELL_SIZE, CELL_SIZE);
+                    ctx.fillRect(x, botY, CELL_SIZE, CELL_SIZE);
                     ctx.strokeStyle = 'rgba(0,0,0,0.1)';
                     ctx.strokeRect(x, topY, CELL_SIZE, CELL_SIZE);
                     ctx.strokeRect(x, botY, CELL_SIZE, CELL_SIZE);
 
-                    // Display Indicies
                     ctx.fillStyle = '#111827';
                     ctx.font = '10px sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    let numLabel = (dispVc + 1).toString();
+                    const numLabel = (dispVc + 1).toString();
                     ctx.fillText(numLabel, x + CELL_SIZE / 2, topY + CELL_SIZE / 2);
                     ctx.fillText(numLabel, x + CELL_SIZE / 2, botY + CELL_SIZE / 2);
                 }
 
                 // --- Draw Corner Cells (Special Actions) ---
-                // Top-Left (Vertical All)
                 ctx.fillStyle = '#e5e7eb';
                 ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
                 ctx.strokeRect(0, 0, CELL_SIZE, CELL_SIZE);
 
-                // Bottom-Left (Horizontal All)
-                let yBotL = (totRows - 1) * CELL_SIZE;
+                const yBotL = (totRows - 1) * CELL_SIZE;
                 ctx.fillRect(0, yBotL, CELL_SIZE, CELL_SIZE);
                 ctx.strokeRect(0, yBotL, CELL_SIZE, CELL_SIZE);
 
                 // --- Intersections ---
-                for (let hr = 0; hr < logicRows; hr++) {
-                    for (let vc = 0; vc < logicCols; vc++) {
-                        let dispVc = modMirrorX ? (logicCols - 1 - vc) : vc;
-                        let logic = getLogic(vc, hr);
+                for (let hr = 0; hr !== logicRows; hr++) {
+                    for (let vc = 0; vc !== logicCols; vc++) {
+                        const dispVc = modMirrorX ? (logicCols - 1 - vc) : vc;
+                        const logic = getCellLogic(matrix, vc, hr);
+                        const cellC = logic === 1 ? verticalColors[dispVc] : horizontalColors[hr];
 
-                        let cellC = logic === 1 ? verticalColors[dispVc] : horizontalColors[hr];
-
-                        let y = (logicRows - hr) * CELL_SIZE;
-                        let x = (vc + 1) * CELL_SIZE;
+                        const y = (logicRows - hr) * CELL_SIZE;
+                        const x = (vc + 1) * CELL_SIZE;
 
                         ctx.fillStyle = cellC;
                         ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
@@ -921,47 +1406,44 @@
 
                 // --- Weave Area Thick Border ---
                 ctx.lineWidth = 3;
-                ctx.strokeStyle = '#374151'; // Dark gray outline
+                ctx.strokeStyle = '#374151';
                 ctx.strokeRect(CELL_SIZE, CELL_SIZE, logicCols * CELL_SIZE, logicRows * CELL_SIZE);
-                ctx.lineWidth = 1; // Reset line width
+                ctx.lineWidth = 1;
 
                 // --- Canvas Footer (Time & URL & Pattern Name) ---
-                const selectedOpt = el('#patternDropdown').options[el('#patternDropdown').selectedIndex];
-                const attrName = selectedOpt.getAttribute('data-name');
-                const patternNameStr = "上下図名: " + (attrName ? attrName : selectedOpt.text);
+                const patternNameStr = '上下図名: ' + currentPatternName;
 
                 const now = new Date();
-                const pad = (n) => n.toString().padStart(2, '0');
-                const timeStr = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-                const footerText = `${timeStr}  https://labo.com/CraftBand/sharing/square-color/`;
+                const pad = function (n) { return n.toString().padStart(2, '0'); };
+                const timeStr = now.getFullYear() + '/' + pad(now.getMonth() + 1) + '/' + pad(now.getDate()) + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+                const footerText = timeStr + '  https://labo.com/CraftBand/sharing/square-color/';
 
                 ctx.save();
 
-                // Draw Pattern Name
-                ctx.textAlign = "left";
-                ctx.textBaseline = "top";
-                ctx.fillStyle = "#374151";
-                ctx.font = "bold 14px sans-serif";
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 14px sans-serif';
                 ctx.fillText(patternNameStr, 10, contentH + 12);
 
-                // Draw Date and URL
-                ctx.textAlign = "right"; ctx.textBaseline = "bottom";
-                ctx.font = "12px sans-serif"; ctx.fillStyle = "#666";
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'bottom';
+                ctx.font = '12px sans-serif';
+                ctx.fillStyle = '#666';
                 ctx.fillText(footerText, cv.width - 10, cv.height - 10);
 
-                // --- Modifiers Active Text (Optional, helps users know it's a preview mode)
                 if (modMirrorX ? true : modInvertY) {
-                    ctx.textAlign = "left";
-                    ctx.fillStyle = "#dc2626";
-                    ctx.font = "bold 12px sans-serif";
-                    ctx.fillText("[プレビュー表示中]", 10, cv.height - 10);
+                    ctx.textAlign = 'left';
+                    ctx.fillStyle = '#dc2626';
+                    ctx.font = 'bold 12px sans-serif';
+                    ctx.fillText('[プレビュー表示中]', 10, cv.height - 10);
                 }
 
                 ctx.restore();
             };
 
             // --- Interaction Logic ---
-            const getCanvasHit = (e) => {
+            const getCanvasHit = function (e) {
                 const cv = el('#weaveCanvas');
                 const rect = cv.getBoundingClientRect();
                 const scaleX = cv.width / rect.width;
@@ -983,97 +1465,112 @@
                 let hitCol = -1;
                 let hitRow = -1;
 
-                if (cellX === 0) if (cellY === 0) {
-                    hitType = 'top-left-corner';
-                    return { hitType, hitIdx };
-                }
-                if (cellX === 0) if (cellY === totRows - 1) {
-                    hitType = 'bot-left-corner';
-                    return { hitType, hitIdx };
-                }
-
-                if (cellY >= 1) if (cellY <= logicRows) {
-                    if (cellX === 0 ? true : (cellX === totCols - 1)) {
-                        hitType = 'h';
-                        hitIdx = logicRows - cellY; // Data index
-                        return { hitType, hitIdx };
+                if (cellX === 0) {
+                    if (cellY === 0) {
+                        hitType = 'top-left-corner';
+                        return { hitType: hitType, hitIdx: hitIdx };
+                    }
+                    if (cellY === totRows - 1) {
+                        hitType = 'bot-left-corner';
+                        return { hitType: hitType, hitIdx: hitIdx };
                     }
                 }
 
-                if (cellX >= 1) if (cellX <= logicCols) {
-                    if (cellY === 0 ? true : (cellY === totRows - 1)) {
-                        hitType = 'v';
-                        hitIdx = cellX - 1;
-                        if (modMirrorX) {
-                            hitIdx = logicCols - 1 - hitIdx; // Click maps correctly when mirrored
+                if (Math.sign(cellY - 1) !== -1) {
+                    if (Math.sign(logicRows - cellY) !== -1) {
+                        if (cellX === 0 ? true : (cellX === totCols - 1)) {
+                            hitType = 'h';
+                            hitIdx = logicRows - cellY;
+                            return { hitType: hitType, hitIdx: hitIdx };
                         }
-                        return { hitType, hitIdx };
                     }
                 }
 
-                // Grid Cells
-                if (cellX >= 1) if (cellX <= logicCols) if (cellY >= 1) if (cellY <= logicRows) {
-                    hitType = 'grid-cell';
-                    hitCol = cellX - 1;
-                    hitRow = logicRows - cellY;
-                    return { hitType, hitCol, hitRow };
+                if (Math.sign(cellX - 1) !== -1) {
+                    if (Math.sign(logicCols - cellX) !== -1) {
+                        if (cellY === 0 ? true : (cellY === totRows - 1)) {
+                            hitType = 'v';
+                            hitIdx = cellX - 1;
+                            if (modMirrorX) {
+                                hitIdx = logicCols - 1 - hitIdx;
+                            }
+                            return { hitType: hitType, hitIdx: hitIdx };
+                        }
+                    }
                 }
 
-                return { hitType, hitIdx };
+                if (Math.sign(cellX - 1) !== -1) {
+                    if (Math.sign(logicCols - cellX) !== -1) {
+                        if (Math.sign(cellY - 1) !== -1) {
+                            if (Math.sign(logicRows - cellY) !== -1) {
+                                hitType = 'grid-cell';
+                                hitCol = cellX - 1;
+                                hitRow = logicRows - cellY;
+                                return { hitType: hitType, hitCol: hitCol, hitRow: hitRow };
+                            }
+                        }
+                    }
+                }
+
+                return { hitType: hitType, hitIdx: hitIdx };
             };
 
             // --- Initial Setup ---
-            const initApp = () => {
-                setupPresets();
+            const initApp = function () {
+                // Priority: API, then localStorage, then Default
+                loadPaletteFromStorage();
+                applyUrlParameters();
+                savePaletteToStorage();
+
+                renderPalette();
                 setupColorListeners();
+                setupColorViewerListeners();
                 setupControls();
 
-                // Setup Canvas Interaction Listeners
-                el('#weaveCanvas').addEventListener('mousemove', e => {
-                    const { hitType } = getCanvasHit(e);
-                    el('#weaveCanvas').style.cursor = hitType ? 'pointer' : 'default';
+                el('#weaveCanvas').addEventListener('mousemove', function (e) {
+                    const hit = getCanvasHit(e);
+                    el('#weaveCanvas').style.cursor = hit.hitType ? 'pointer' : 'default';
                 });
 
-                el('#weaveCanvas').addEventListener('click', e => {
-                    const { hitType, hitIdx, hitCol, hitRow } = getCanvasHit(e);
+                el('#weaveCanvas').addEventListener('click', function (e) {
+                    const hit = getCanvasHit(e);
+                    const hitType = hit.hitType;
+                    const hitIdx = hit.hitIdx;
+                    const hitCol = hit.hitCol;
+                    const hitRow = hit.hitRow;
 
                     if (hitType === 'h') {
-                        if (hitIdx >= 0) if (hitIdx < hBands) {
-                            if (horizontalColors[hitIdx] !== currentColor) {
-                                saveUndoState();
-                                horizontalColors[hitIdx] = currentColor;
-                                drawCanvas();
+                        if (Math.sign(hitIdx) !== -1) {
+                            if (Math.sign(hBands - hitIdx) === 1) {
+                                if (horizontalColors[hitIdx] !== currentColor) {
+                                    saveUndoState();
+                                    horizontalColors[hitIdx] = currentColor;
+                                    drawCanvas();
+                                }
                             }
                         }
                     } else if (hitType === 'v') {
-                        if (hitIdx >= 0) if (hitIdx < vBands) {
-                            if (verticalColors[hitIdx] !== currentColor) {
-                                saveUndoState();
-                                verticalColors[hitIdx] = currentColor;
-                                drawCanvas();
+                        if (Math.sign(hitIdx) !== -1) {
+                            if (Math.sign(vBands - hitIdx) === 1) {
+                                if (verticalColors[hitIdx] !== currentColor) {
+                                    saveUndoState();
+                                    verticalColors[hitIdx] = currentColor;
+                                    drawCanvas();
+                                }
                             }
                         }
                     } else if (hitType === 'grid-cell') {
-                        // Determine which band is on top
-                        const matrix = currentPatternStr.split(';').filter(s => s.trim() !== '').map(row => row.split('').map(Number));
-                        const pHeight = matrix.length;
-                        const pWidth = pHeight > 0 ? matrix[0].length : 1;
-
-                        const r = hitRow % pHeight;
-                        const c = hitCol % pWidth;
-                        let logic = matrix[r][c];
-                        if (modInvertY) logic = 1 - logic;
+                        const matrix = getPatternMatrix();
+                        const cRef = modMirrorX ? (vBands - 1 - hitCol) : hitCol;
+                        const logic = getCellLogic(matrix, hitCol, hitRow);
 
                         if (logic === 1) {
-                            // Vertical is on top
-                            let actualIdx = modMirrorX ? (vBands - 1 - hitCol) : hitCol;
-                            if (verticalColors[actualIdx] !== currentColor) {
+                            if (verticalColors[cRef] !== currentColor) {
                                 saveUndoState();
-                                verticalColors[actualIdx] = currentColor;
+                                verticalColors[cRef] = currentColor;
                                 drawCanvas();
                             }
                         } else {
-                            // Horizontal is on top
                             if (horizontalColors[hitRow] !== currentColor) {
                                 saveUndoState();
                                 horizontalColors[hitRow] = currentColor;
@@ -1081,29 +1578,57 @@
                             }
                         }
                     } else if (hitType === 'top-left-corner') {
-                        saveUndoState();
-                        for (let i = 0; i < vBands; i++) verticalColors[i] = currentColor;
-                        drawCanvas();
+                        let changedV = false;
+                        for (let i = 0; i !== vBands; i++) {
+                            if (verticalColors[i] !== currentColor) {
+                                changedV = true;
+                                break;
+                            }
+                        }
+                        if (changedV) {
+                            saveUndoState();
+                            for (let i = 0; i !== vBands; i++) {
+                                verticalColors[i] = currentColor;
+                            }
+                            drawCanvas();
+                        }
                     } else if (hitType === 'bot-left-corner') {
-                        saveUndoState();
-                        for (let i = 0; i < hBands; i++) horizontalColors[i] = currentColor;
-                        drawCanvas();
+                        let changedH = false;
+                        for (let i = 0; i !== hBands; i++) {
+                            if (horizontalColors[i] !== currentColor) {
+                                changedH = true;
+                                break;
+                            }
+                        }
+                        if (changedH) {
+                            saveUndoState();
+                            for (let i = 0; i !== hBands; i++) {
+                                horizontalColors[i] = currentColor;
+                            }
+                            drawCanvas();
+                        }
                     }
                 });
 
-                // Initialize band arrays with their direction's default color.
-                verticalColors = Array(vBands).fill('#ff1493');
-                horizontalColors = Array(hBands).fill('#00bfff');
+                // Initial Canvas colors: Vertical = Palette A, Horizontal = Palette B
+                verticalColors = [];
+                for (let i = 0; i !== vBands; i++) {
+                    verticalColors.push(palette.A.hex);
+                }
+                horizontalColors = [];
+                for (let i = 0; i !== hBands; i++) {
+                    horizontalColors.push(palette.B.hex);
+                }
 
-                // Keep initial currentColor to Blue
-                setCurrentColor('#0000ff', true);
+                // Initial Current Color = Palette C
+                setCurrentColor(palette.C.hex);
                 updateUndoButton();
                 drawCanvas();
             };
 
-            // Start Execution
             initApp();
         })();
         //]]>
     </script>
 </div>
+<!-- /wp:html -->

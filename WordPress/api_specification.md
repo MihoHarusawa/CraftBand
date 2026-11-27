@@ -180,7 +180,9 @@ console.log(result);
 
 ## 4. 第2部：色と模様のシミュレーション系ツール仕様 (Color & Pattern Simulation Family)
 
-*※ 本章は、将来の機能拡張（`along-lines-calc`、`cross-base-calc` などのカラー・パターンシミュレーターへのAPI実装）のための予約セクションです。各ツールのAPI実装完了時に追記されます。*
+本セクションでは、色と模様のシミュレーション系ツール群における外部連携API仕様を整理します。共通の `cb_` プレフィックスおよび配色スロット命名（`cb_colorA`, `cb_colorB`, ...）を統一しています。
 
-- **along-lines-calc** : ライン沿い配色シミュレーター（予定）
-- **cross-base-calc** : 十字ベース配色シミュレーター（予定）
+- **square-color** : [square-color.md](./square-color/square-color.md) — 縦横編み配色・模様シミュレーター（`cb_model=square-color`, `cb_v`, `cb_h`, `cb_updown`, `cb_updown_name`, `cb_colorA`〜`cb_colorG`, `cb_colorA_name`〜`cb_colorG_name`、`color-viewer.html` 連携対応）
+- **along-lines-calc** : ライン沿い配色シミュレーター（`cb_code`, `cb_colorA`, `cb_colorB`）
+- **cross-base-calc** : 十字ベース配色シミュレーター（`cb_code`, `cb_colorA`, `cb_colorB`）
+- **color-viewer** : [color-viewer.md](./nowp-pages/color-viewer.md) — 共通色見本帳／色選択パーツ（`cb_req_id`, `cb_slot`, `cb_file_url`）

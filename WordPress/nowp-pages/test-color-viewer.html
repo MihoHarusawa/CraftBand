@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>色選択 連携テスト（test-color-viewer.html）</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Meiryo", sans-serif;
+      background: #f6f7f9;
+      color: #1f2937;
+      line-height: 1.5;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #d8dde6;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+      max-width: 760px;
+    }
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 1.15rem;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .mode-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .mode-selector label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    input[type="text"], button {
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border: 1px solid #d8dde6;
+      border-radius: 6px;
+    }
+    button {
+      cursor: pointer;
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .action-state {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+    }
+    .action-state.is-cancelled {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .result-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #f9fafb;
+    }
+    .sample-chip {
+      width: 56px;
+      height: 56px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+    .meta {
+      font-size: 0.84rem;
+      min-width: 0;
+      word-break: break-word;
+    }
+    .slot-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+  <section class="panel">
+    <h1>色見本帳 / 色合わせ 呼出しテスト</h1>
+
+    <div class="controls">
+      <div class="mode-selector" role="radiogroup" aria-label="呼び出すページ">
+        <label><input type="radio" name="pickerPage" value="viewer" checked /> 色見本帳</label>
+        <label><input type="radio" name="pickerPage" value="selectColors" /> 色合わせ</label>
+      </div>
+      <button type="button" id="openSlotABtn">A色を選ぶ</button>
+      <button type="button" id="openSlotBBtn">B色を選ぶ</button>
+    </div>
+
+    <div class="controls">
+      <input
+        type="text"
+        id="cbFileUrlInput"
+        style="flex: 1; min-width: 240px;"
+        placeholder="初期読込する XML / CBMESH のURL（色見本帳用・任意: cb_file_url）"
+      />
+      <button type="button" id="openWithUrlBtn">URL指定で開く</button>
+    </div>
+
+    <div class="action-state" id="actionStatus">待機中: 呼び出すページを選んでボタンを押してください</div>
+
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="sample-chip" id="chipA" style="background: #3b82f6;"></div>
+        <div class="meta">
+          <div class="slot-title">A色</div>
+          <div><strong>現在の色:</strong> <span id="hexA">#3b82f6</span></div>
+          <div><strong>色名:</strong> <span id="nameA">-</span></div>
+          <div><strong>製品情報:</strong> <span id="skuA">-</span></div>
+        </div>
+      </div>
+
+      <div class="result-box">
+        <div class="sample-chip" id="chipB" style="background: #f59e0b;"></div>
+        <div class="meta">
+          <div class="slot-title">B色</div>
+          <div><strong>現在の色:</strong> <span id="hexB">#f59e0b</span></div>
+          <div><strong>色名:</strong> <span id="nameB">-</span></div>
+          <div><strong>製品情報:</strong> <span id="skuB">-</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const CONFIG = {
+      viewerUrl: new URL("./color-viewer.html", window.location.href).toString(),
+      selectColorsUrl: new URL("./select-colors.html", window.location.href).toString(),
+      storageKeyBridgeEvent: "craftband_color_viewer_bridge_event_v1",
+      channelName: "craftband_color_viewer_channel_v1",
+    };
+
+    let activeReqId = "";
+    const handledReqIds = new Set();
+
+    const dom = {
+      modeRadios: Array.from(document.querySelectorAll('input[name="pickerPage"]')),
+      openSlotABtn: document.getElementById("openSlotABtn"),
+      openSlotBBtn: document.getElementById("openSlotBBtn"),
+      cbFileUrlInput: document.getElementById("cbFileUrlInput"),
+      openWithUrlBtn: document.getElementById("openWithUrlBtn"),
+      actionStatus: document.getElementById("actionStatus"),
+      slots: {
+        A: {
+          chip: document.getElementById("chipA"),
+          hex: document.getElementById("hexA"),
+          name: document.getElementById("nameA"),
+          sku: document.getElementById("skuA"),
+        },
+        B: {
+          chip: document.getElementById("chipB"),
+          hex: document.getElementById("hexB"),
+          name: document.getElementById("nameB"),
+          sku: document.getElementById("skuB"),
+        },
+      },
+    };
+
+    function getSelectedPageMode() {
+      const checked = dom.modeRadios.find((r) => r.checked);
+      return checked ? checked.value : "viewer";
+    }
+
+    function setActionStatus(text, isCancelled = false) {
+      dom.actionStatus.textContent = text;
+      dom.actionStatus.classList.toggle("is-cancelled", isCancelled);
+    }
+
+    function tryFocusMainWindow() {
+      try {
+        window.focus();
+      } catch (_) {}
+    }
+
+    function openPicker({ slot = "A", cbFileUrl = "", forceMode = "" } = {}) {
+      const mode = forceMode || getSelectedPageMode();
+      const isPairMode = mode === "selectColors";
+      const targetSlot = isPairMode ? "AB" : slot;
+
+      activeReqId = `${targetSlot}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+      const windowPrefix = isPairMode ? "select-colors" : "color-viewer";
+      const windowName = `${windowPrefix}_${activeReqId}`;
+
+      const baseUrl = isPairMode ? CONFIG.selectColorsUrl : CONFIG.viewerUrl;
+      const url = new URL(baseUrl);
+      url.searchParams.set("cb_req_id", activeReqId);
+      url.searchParams.set("cb_slot", targetSlot);
+      if (!isPairMode && cbFileUrl.trim()) {
+        url.searchParams.set("cb_file_url", cbFileUrl.trim());
+      }
+
+      const modeLabel = isPairMode ? "色合わせ（A・B二色）" : `色見本帳（${slot}色）`;
+      setActionStatus(`選択待ち（${modeLabel} / reqId: ${activeReqId}）`, false);
+
+      const win = window.open(url.toString(), windowName);
+      if (win && !win.closed) {
+        try {
+          win.focus();
+        } catch (_) {}
+      }
+    }
+
+    function applySlotColor(slotKey, { color, name, productInfo }) {
+      if (!/^#[0-9a-f]{6}$/i.test(color || "")) return false;
+      const target = dom.slots[slotKey];
+      if (!target) return false;
+
+      const normalized = color.toLowerCase();
+      target.chip.style.backgroundColor = normalized;
+      target.hex.textContent = normalized;
+      target.name.textContent = name || "-";
+      target.sku.textContent = productInfo || "-";
+      return true;
+    }
+
+    function handleViewerMessage(data) {
+      if (!data || typeof data !== "object") return;
+      const validTypes = ["COLOR_VIEWER_SELECT", "COLOR_VIEWER_SELECT_PAIR", "COLOR_VIEWER_CANCEL"];
+      if (!validTypes.includes(data.type)) return;
+
+      const reqId = (data.cb_req_id || "").trim();
+      if (activeReqId && reqId && reqId !== activeReqId) return;
+
+      const dedupeKey = `${data.type}:${reqId || "no_req"}`;
+      if (reqId && handledReqIds.has(dedupeKey)) return;
+      if (reqId) handledReqIds.add(dedupeKey);
+
+      if (data.type === "COLOR_VIEWER_SELECT") {
+        const slotKey = (data.cb_slot || "A").trim().toUpperCase() === "B" ? "B" : "A";
+        const ok = applySlotColor(slotKey, {
+          color: data.color,
+          name: data.name || "",
+          productInfo: data.productInfo || "",
+        });
+        if (ok) {
+          setActionStatus(`色見本帳から ${slotKey}色 を反映しました（${data.color.toLowerCase()}）`, false);
+          tryFocusMainWindow();
+        }
+      } else if (data.type === "COLOR_VIEWER_SELECT_PAIR") {
+        const okA = applySlotColor("A", {
+          color: data.colorA,
+          name: data.nameA || "",
+          productInfo: data.productInfoA || "",
+        });
+        const okB = applySlotColor("B", {
+          color: data.colorB,
+          name: data.nameB || "",
+          productInfo: data.productInfoB || "",
+        });
+        if (okA || okB) {
+          setActionStatus(
+            `色合わせから A色(${(data.colorA || "").toLowerCase()}) / B色(${(data.colorB || "").toLowerCase()}) を反映しました`,
+            false
+          );
+          tryFocusMainWindow();
+        }
+      } else if (data.type === "COLOR_VIEWER_CANCEL") {
+        setActionStatus(`キャンセルされました（選択せずに戻りました / slot: ${data.cb_slot || "-"}）`, true);
+        tryFocusMainWindow();
+      }
+    }
+
+    // 1. window.opener.postMessage 経路
+    window.addEventListener("message", (event) => {
+      if (event.origin !== window.location.origin) return;
+      handleViewerMessage(event.data);
+    });
+
+    // 2. BroadcastChannel 補助経路
+    if (typeof BroadcastChannel !== "undefined") {
+      const channel = new BroadcastChannel(CONFIG.channelName);
+      channel.addEventListener("message", (event) => {
+        handleViewerMessage(event.data);
+      });
+    }
+
+    // 3. localStorage イベント補助経路
+    window.addEventListener("storage", (event) => {
+      if (event.key !== CONFIG.storageKeyBridgeEvent || !event.newValue) return;
+      try {
+        const parsed = JSON.parse(event.newValue);
+        handleViewerMessage(parsed);
+        try {
+          localStorage.removeItem(CONFIG.storageKeyBridgeEvent);
+        } catch (_) {}
+      } catch (_) {}
+    });
+
+    dom.openSlotABtn.addEventListener("click", () => {
+      openPicker({ slot: "A" });
+    });
+
+    dom.openSlotBBtn.addEventListener("click", () => {
+      openPicker({ slot: "B" });
+    });
+
+    dom.openWithUrlBtn.addEventListener("click", () => {
+      openPicker({ slot: "A", cbFileUrl: dom.cbFileUrlInput.value, forceMode: "viewer" });
+    });
+  </script>
+</body>
+</html>

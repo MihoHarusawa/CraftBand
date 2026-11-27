@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>色見本帳</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card-bg: #ffffff;
+      --border: #d8dde6;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 8px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    input[type="text"], button {
+      font-size: 0.78rem;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+    }
+    input[type="text"] {
+      min-width: 0;
+      flex: 1 1 85px;
+    }
+    input[type="color"] {
+      width: 56px;
+      height: 38px;
+      padding: 2px;
+      border: 2px solid #94a3b8;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+    button {
+      cursor: pointer;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    button.save-btn {
+      background: #0f766e;
+      color: #fff;
+      border-color: #0f766e;
+      font-weight: 600;
+    }
+    button.save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 上部コンパクトバー */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+    .cancel-btn {
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-color: #cbd5e1;
+      color: #111827;
+      font-weight: 600;
+    }
+    .cancel-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .menu-toggle-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-color: #cbd5e1;
+      background: #e5e7eb;
+      color: #374151;
+      font-weight: 600;
+    }
+    .menu-toggle-btn:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1e3a8a;
+    }
+    .menu-toggle-btn.is-open {
+      background: #eff6ff;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .toggle-arrow {
+      font-size: 1.15em;
+      line-height: 1;
+    }
+    .band-badge {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .band-info {
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 4px;
+    }
+
+    /* 折りたたみ管理パネル（読込・保存・手動追加） */
+    .manage-panel {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .manage-panel.is-open {
+      display: block;
+    }
+    .manage-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .manage-row:last-child {
+      margin-bottom: 0;
+    }
+    .file-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.78rem;
+      padding: 5px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .file-btn.is-append {
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .file-btn input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .status {
+      font-size: 0.74rem;
+      color: var(--muted);
+      word-break: break-word;
+      margin-top: 4px;
+    }
+    .status:empty {
+      display: none;
+    }
+
+    /* ソートバー */
+    .grid-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin-bottom: 6px;
+    }
+    .sort-bar {
+      display: flex;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+    .sort-btn {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+    }
+    .sort-btn.is-active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .grid-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* 色見本グリッド */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+      gap: 6px;
+    }
+    .swatch-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: left;
+      padding: 0;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    .swatch-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+    .swatch-card.is-just-added {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    body.is-viewer-mode .swatch-card {
+      cursor: default;
+    }
+    body.is-viewer-mode .swatch-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .swatch-remove-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 17px;
+      height: 17px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(17, 24, 39, 0.25);
+      background: rgba(255, 255, 255, 0.88);
+      color: #374151;
+      font-size: 0.7rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .swatch-remove-btn:hover {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #b91c1c;
+    }
+    .swatch-chip {
+      width: 100%;
+      height: 44px;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .swatch-body {
+      padding: 5px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      width: 100%;
+    }
+    .swatch-name {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+    .swatch-sku {
+      display: block;
+      font-size: 0.66rem;
+      color: #4b5563;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .swatch-hex {
+      display: block;
+      font-size: 0.65rem;
+      color: #6b7280;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .empty-hint {
+      grid-column: 1 / -1;
+      text-align: left;
+      padding: 16px 14px;
+      font-size: 0.84rem;
+      line-height: 1.65;
+      white-space: pre-line;
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+    }
+
+    /* バンド種類名選択ポップアップ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+    .modal-dialog {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    }
+    .modal-title {
+      margin: 0 0 6px 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .modal-desc {
+      margin: 0 0 10px 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .band-choice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .band-choice-btn {
+      width: 100%;
+      text-align: left;
+      background: #f8fafc;
+      padding: 8px 10px;
+      font-weight: 600;
+      font-size: 0.84rem;
+    }
+    .band-choice-btn:hover {
+      background: #eff6ff;
+      border-color: var(--accent);
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <button type="button" class="cancel-btn" id="cancelSelectBtn">キャンセル</button>
+    <button type="button" class="menu-toggle-btn" id="toggleManageBtn" aria-expanded="false" aria-controls="managePanel">読込・保存 <span class="toggle-arrow" id="toggleArrow">▼</span></button>
+    <div class="band-badge" id="bandBadge">
+      <span id="bandNameText">色見本帳</span><span class="band-info" id="bandProductInfoText"></span>
+    </div>
+  </header>
+
+  <section class="manage-panel" id="managePanel">
+    <div class="manage-row">
+      <label class="file-btn">
+        新規読込
+        <input type="file" id="xmlFileReplaceInput" />
+      </label>
+      <label class="file-btn is-append">
+        追加読込
+        <input type="file" id="xmlFileAppendInput" />
+      </label>
+      <input type="text" id="bandNameInput" placeholder="バンドの種類名 (保存用)" />
+      <button type="button" class="save-btn" id="saveCbmeshBtn">保存 (.CBMESH)</button>
+    </div>
+    <div class="manage-row">
+      <input type="color" id="manualColorInput" value="#3b82f6" title="追加する色" />
+      <input type="text" id="manualNameInput" placeholder="色名（任意）" />
+      <input type="text" id="manualSkuInput" placeholder="製品情報（任意）" />
+      <button type="button" class="primary" id="addManualBtn">追加</button>
+    </div>
+    <div class="status" id="xmlStatus"></div>
+  </section>
+
+  <div class="grid-header">
+    <div class="sort-bar" aria-label="並べ替え">
+      <button type="button" class="sort-btn is-active" data-sort="similar">類似色順</button>
+      <button type="button" class="sort-btn" data-sort="name">名前順</button>
+      <button type="button" class="sort-btn" data-sort="product">製品情報順</button>
+    </div>
+    <div class="grid-note" id="viewStatus"></div>
+  </div>
+
+  <main class="grid" id="swatchGrid"></main>
+
+  <div class="modal-backdrop" id="bandModal" role="dialog" aria-modal="true" aria-labelledby="bandModalTitle">
+    <div class="modal-dialog">
+      <h2 class="modal-title" id="bandModalTitle">バンドの種類名を選択</h2>
+      <p class="modal-desc" id="bandModalDesc"></p>
+      <div class="band-choice-list" id="bandChoiceList"></div>
+      <div class="modal-footer">
+        <button type="button" id="closeModalBtn">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      // --- Config ---
+      const CONFIG = {
+        storageKeyColors: "craftband_color_viewer_colors_v1",
+        storageKeySort: "craftband_color_viewer_sort_v1",
+        storageKeyBandName: "craftband_color_viewer_band_name_v1",
+        storageKeyBandProductInfo: "craftband_color_viewer_band_product_info_v1",
+        storageKeyBridgeEvent: "craftband_color_viewer_bridge_event_v1",
+        channelName: "craftband_color_viewer_channel_v1",
+        templateUrl: new URL("./CRAFTBANDMESH-template.CBMESH", window.location.href).toString(),
+        defaultBandName: "default-band",
+        xmlNamespace: "http://tempuri.org/dstMasterTables.xsd",
+        allowedExtPattern: /\.(xml|cbmesh)$/i,
+        maxExcludedAlpha: 10,
+        hueBucketDeg: 15,
+        lightnessDiffThreshold: 0.02,
+        validSorts: ["similar", "name", "product"],
+      };
+
+      // --- Context & State ---
+      const urlParams = new URLSearchParams(window.location.search);
+      const openerContext = {
+        cbReqId: (urlParams.get("cb_req_id") || "").trim(),
+        cbSlot: (urlParams.get("cb_slot") || "").trim(),
+        cbFileUrl: (urlParams.get("cb_file_url") || "").trim(),
+      };
+      const isPickerMode = Boolean(openerContext.cbReqId || openerContext.cbSlot);
+
+      const state = {
+        colors: [],
+        sort: "similar",
+        bandName: CONFIG.defaultBandName,
+        bandProductInfo: "",
+        pinnedTopId: null,
+        uid: 1,
+      };
+
+      let cachedTemplateXmlText = null;
+
+      // --- DOM References ---
+      const dom = {
+        cancelSelectBtn: document.getElementById("cancelSelectBtn"),
+        bandBadge: document.getElementById("bandBadge"),
+        bandNameText: document.getElementById("bandNameText"),
+        bandProductInfoText: document.getElementById("bandProductInfoText"),
+        toggleManageBtn: document.getElementById("toggleManageBtn"),
+        toggleArrow: document.getElementById("toggleArrow"),
+        managePanel: document.getElementById("managePanel"),
+        xmlFileReplaceInput: document.getElementById("xmlFileReplaceInput"),
+        xmlFileAppendInput: document.getElementById("xmlFileAppendInput"),
+        bandNameInput: document.getElementById("bandNameInput"),
+        saveCbmeshBtn: document.getElementById("saveCbmeshBtn"),
+        xmlStatus: document.getElementById("xmlStatus"),
+        sortButtons: Array.from(document.querySelectorAll(".sort-btn")),
+        manualNameInput: document.getElementById("manualNameInput"),
+        manualColorInput: document.getElementById("manualColorInput"),
+        manualSkuInput: document.getElementById("manualSkuInput"),
+        addManualBtn: document.getElementById("addManualBtn"),
+        viewStatus: document.getElementById("viewStatus"),
+        swatchGrid: document.getElementById("swatchGrid"),
+        bandModal: document.getElementById("bandModal"),
+        bandModalDesc: document.getElementById("bandModalDesc"),
+        bandChoiceList: document.getElementById("bandChoiceList"),
+        closeModalBtn: document.getElementById("closeModalBtn"),
+      };
+
+      // --- Helpers ---
+      function createId() {
+        state.uid += 1;
+        return `c_${Date.now()}_${state.uid}`;
+      }
+
+      function setManagePanelOpen(isOpen) {
+        dom.managePanel.classList.toggle("is-open", isOpen);
+        dom.toggleManageBtn.classList.toggle("is-open", isOpen);
+        dom.toggleManageBtn.setAttribute("aria-expanded", String(isOpen));
+        dom.toggleArrow.textContent = isOpen ? "▲" : "▼";
+      }
+
+      function normalizeBandName(raw) {
+        const s = (raw || "").trim();
+        return s || CONFIG.defaultBandName;
+      }
+
+      function sanitizeFileNamePart(name) {
+        const cleaned = normalizeBandName(name).replace(/[\\/:*?"<>|]+/g, "_").trim();
+        return cleaned || CONFIG.defaultBandName;
+      }
+
+      function clampByte(n) {
+        return Math.max(0, Math.min(255, Number.isFinite(n) ? Math.trunc(n) : 0));
+      }
+
+      function rgbToHex(r, g, b) {
+        return "#" + [clampByte(r), clampByte(g), clampByte(b)].map((v) => v.toString(16).padStart(2, "0")).join("");
+      }
+
+      function hexToRgb(hex) {
+        const m = /^#?([0-9a-f]{6})$/i.exec((hex || "").trim());
+        if (!m) return { r: 0, g: 0, b: 0 };
+        const num = parseInt(m[1], 16);
+        return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+      }
+
+      function rgbToHsl(r, g, b) {
+        const rn = clampByte(r) / 255;
+        const gn = clampByte(g) / 255;
+        const bn = clampByte(b) / 255;
+        const max = Math.max(rn, gn, bn);
+        const min = Math.min(rn, gn, bn);
+        const d = max - min;
+        const l = (max + min) / 2;
+        let s = 0;
+        let h = 0;
+        if (d !== 0) {
+          s = d / (1 - Math.abs(2 * l - 1));
+          switch (max) {
+            case rn: h = ((gn - bn) / d) % 6; break;
+            case gn: h = (bn - rn) / d + 2; break;
+            case bn: h = (rn - gn) / d + 4; break;
+          }
+          h = Math.round(h * 60);
+          if (h < 0) h += 360;
+        }
+        return { h, s, l };
+      }
+
+      // --- Storage Module ---
+      const StorageModule = {
+        save() {
+          try {
+            localStorage.setItem(CONFIG.storageKeyColors, JSON.stringify(state.colors));
+            localStorage.setItem(CONFIG.storageKeySort, state.sort);
+            localStorage.setItem(CONFIG.storageKeyBandName, state.bandName);
+            localStorage.setItem(CONFIG.storageKeyBandProductInfo, state.bandProductInfo);
+          } catch (_) {
+            // ストレージ制限時も画面操作を継続
+          }
+        },
+        clearColors() {
+          state.colors = [];
+          state.bandName = CONFIG.defaultBandName;
+          state.bandProductInfo = "";
+          try {
+            localStorage.removeItem(CONFIG.storageKeyColors);
+            localStorage.removeItem(CONFIG.storageKeyBandName);
+            localStorage.removeItem(CONFIG.storageKeyBandProductInfo);
+          } catch (_) {
+            // ストレージ制限時も画面操作を継続
+          }
+        },
+        load() {
+          try {
+            const savedSort = localStorage.getItem(CONFIG.storageKeySort);
+            if (savedSort && CONFIG.validSorts.includes(savedSort)) {
+              state.sort = savedSort;
+            }
+            const rawColors = localStorage.getItem(CONFIG.storageKeyColors);
+            if (rawColors) {
+              const parsed = JSON.parse(rawColors);
+              if (Array.isArray(parsed)) {
+                state.colors = parsed.map((item) => {
+                  const r = clampByte(Number(item.r));
+                  const g = clampByte(Number(item.g));
+                  const b = clampByte(Number(item.b));
+                  const rawAlpha = Number(item.alpha);
+                  return {
+                    ...item,
+                    id: item.id || createId(),
+                    name: typeof item.name === "string" ? item.name : "",
+                    productInfo: typeof item.productInfo === "string" ? item.productInfo : "",
+                    r,
+                    g,
+                    b,
+                    alpha: Number.isFinite(rawAlpha) ? clampByte(rawAlpha) : 255,
+                    hex: /^#[0-9a-f]{6}$/i.test(item.hex || "") ? item.hex : rgbToHex(r, g, b),
+                  };
+                });
+              }
+            }
+            const savedBandName = localStorage.getItem(CONFIG.storageKeyBandName);
+            if (savedBandName && savedBandName.trim()) {
+              state.bandName = savedBandName.trim();
+            } else {
+              const inferred = state.colors.find((c) => c.bandType && c.bandType !== "(手作業)" && c.bandType !== "-");
+              state.bandName = inferred ? inferred.bandType : CONFIG.defaultBandName;
+            }
+            const savedBandProductInfo = localStorage.getItem(CONFIG.storageKeyBandProductInfo);
+            state.bandProductInfo = savedBandProductInfo ? savedBandProductInfo.trim() : "";
+          } catch (_) {
+            state.colors = [];
+            state.bandName = CONFIG.defaultBandName;
+            state.bandProductInfo = "";
+          }
+        },
+      };
+
+      // --- XML Parser Module ---
+      const XmlParserModule = {
+        hasAllowedExtension(target) {
+          return CONFIG.allowedExtPattern.test((target || "").trim());
+        },
+        parseXmlData(xmlText) {
+          const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+          if (doc.querySelector("parsererror")) {
+            throw new Error("XML/CBMESHファイルの解析に失敗しました");
+          }
+          const textOf = (parent, tag) => {
+            const el = parent.getElementsByTagName(tag)[0];
+            return el && el.textContent ? el.textContent.trim() : "";
+          };
+
+          const bandProductInfoMap = new Map();
+          for (const row of Array.from(doc.getElementsByTagName("tblバンドの種類"))) {
+            const bt = textOf(row, "f_sバンドの種類名");
+            if (bt) bandProductInfoMap.set(bt, textOf(row, "f_s製品情報"));
+          }
+
+          const records = Array.from(doc.getElementsByTagName("tbl描画色"))
+            .map((row) => {
+              const name = textOf(row, "f_s色");
+              const bandType = textOf(row, "f_sバンドの種類名") || "-";
+              const r = clampByte(Number(textOf(row, "f_i赤")));
+              const g = clampByte(Number(textOf(row, "f_i緑")));
+              const b = clampByte(Number(textOf(row, "f_i青")));
+              const rawAlpha = textOf(row, "f_i透明度");
+              const parsedAlpha = rawAlpha === "" ? 255 : Number(rawAlpha);
+              const alpha = Number.isFinite(parsedAlpha) ? clampByte(parsedAlpha) : 255;
+              return {
+                id: createId(),
+                name,
+                bandType,
+                r,
+                g,
+                b,
+                alpha,
+                hex: rgbToHex(r, g, b),
+                productInfo: textOf(row, "f_s製品情報"),
+              };
+            })
+            .filter((item) => item.name !== "" && item.alpha > CONFIG.maxExcludedAlpha);
+
+          return { records, bandProductInfoMap };
+        },
+        getBandTypes(records) {
+          return Array.from(new Set(records.map((r) => r.bandType)));
+        },
+        buildReplacedList(records, selectedBandType) {
+          const seen = new Set();
+          const result = [];
+          for (const r of records) {
+            if (r.bandType !== selectedBandType) continue;
+            const key = `${r.bandType}\u0000${r.name}`;
+            if (seen.has(key)) continue;
+            seen.add(key);
+            result.push({ ...r, id: createId() });
+          }
+          return result;
+        },
+        exactColorKey(item) {
+          return `${clampByte(item.r)},${clampByte(item.g)},${clampByte(item.b)}\u0000${(item.name || "").trim()}\u0000${(item.productInfo || "").trim()}`;
+        },
+        buildAppendedColors(existingColors, records, selectedBandType) {
+          const existingKeys = new Set(existingColors.map((c) => XmlParserModule.exactColorKey(c)));
+          const added = [];
+          let skipped = 0;
+          for (const r of records) {
+            if (r.bandType !== selectedBandType) continue;
+            const key = XmlParserModule.exactColorKey(r);
+            if (existingKeys.has(key)) {
+              skipped += 1;
+              continue;
+            }
+            existingKeys.add(key);
+            added.push({ ...r, id: createId() });
+          }
+          return { added, skipped };
+        },
+      };
+
+      // --- CBMESH Exporter Module (Template-based, on-demand) ---
+      const CbmeshExporterModule = {
+        async fetchTemplateXml() {
+          if (cachedTemplateXmlText) return cachedTemplateXmlText;
+          const response = await fetch(CONFIG.templateUrl, { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error(`テンプレート取得に失敗しました（HTTP ${response.status}）`);
+          }
+          cachedTemplateXmlText = await response.text();
+          return cachedTemplateXmlText;
+        },
+        setOrAppendChild(doc, ns, parent, tagName, value) {
+          let el = parent.getElementsByTagName(tagName)[0];
+          if (!el) {
+            el = doc.createElementNS(ns, tagName);
+            parent.appendChild(doc.createTextNode("\r\n    "));
+            parent.appendChild(el);
+          }
+          el.textContent = value;
+        },
+        buildUniqueColorList(colors) {
+          const seen = new Set();
+          const result = [];
+          for (const item of colors) {
+            const name = (item.name || "").trim();
+            if (!name || seen.has(name)) continue;
+            seen.add(name);
+            result.push({
+              name,
+              r: clampByte(item.r),
+              g: clampByte(item.g),
+              b: clampByte(item.b),
+              alpha: Number.isFinite(Number(item.alpha)) ? clampByte(Number(item.alpha)) : 255,
+              productInfo: (item.productInfo || "").trim(),
+            });
+          }
+          return result;
+        },
+        async buildCbmeshXml(colors, bandNameInput, bandProductInfo = "") {
+          const templateText = await CbmeshExporterModule.fetchTemplateXml();
+          const doc = new DOMParser().parseFromString(templateText, "application/xml");
+          if (doc.querySelector("parsererror")) {
+            throw new Error("テンプレートCBMESHの解析に失敗しました");
+          }
+
+          const root = doc.documentElement;
+          const ns = root.namespaceURI || CONFIG.xmlNamespace;
+          const bandName = normalizeBandName(bandNameInput);
+          const uniqueColors = CbmeshExporterModule.buildUniqueColorList(colors);
+          const colorNamesCsv = uniqueColors.map((c) => c.name).join(",");
+
+          // 1. tblバンドの種類のレコードを更新（なければ最小レコードを作成）
+          let bandRow = root.getElementsByTagName("tblバンドの種類")[0];
+          if (!bandRow) {
+            bandRow = doc.createElementNS(ns, "tblバンドの種類");
+            root.appendChild(doc.createTextNode("\r\n  "));
+            root.appendChild(bandRow);
+            bandRow.appendChild(doc.createTextNode("\r\n  "));
+          }
+          CbmeshExporterModule.setOrAppendChild(doc, ns, bandRow, "f_sバンドの種類名", bandName);
+          CbmeshExporterModule.setOrAppendChild(doc, ns, bandRow, "f_s色リスト", colorNamesCsv);
+          CbmeshExporterModule.setOrAppendChild(doc, ns, bandRow, "f_s製品情報", (bandProductInfo || "").trim());
+
+          // 2. 既存の tbl描画色 レコードを削除
+          for (const row of Array.from(root.getElementsByTagName("tbl描画色"))) {
+            if (row.parentNode) row.parentNode.removeChild(row);
+          }
+
+          // 3. 現在の色一覧を tbl描画色 レコードとして追加
+          for (const item of uniqueColors) {
+            const row = doc.createElementNS(ns, "tbl描画色");
+            const fields = [
+              ["f_s色", item.name],
+              ["f_sバンドの種類名", bandName],
+              ["f_i赤", item.r],
+              ["f_i緑", item.g],
+              ["f_i青", item.b],
+              ["f_d線幅", 1],
+              ["f_d中線幅", 0],
+              ["f_i透明度", item.alpha],
+              ["f_s線色", ""],
+              ["f_s中線色", ""],
+              ["f_s画像情報", ""],
+              ["f_s画像文字列", ""],
+              ["f_s製品情報", item.productInfo],
+              ["f_s備考", ""],
+            ];
+            for (const [tag, value] of fields) {
+              row.appendChild(doc.createTextNode("\r\n    "));
+              const el = doc.createElementNS(ns, tag);
+              if (value !== "") el.textContent = String(value);
+              row.appendChild(el);
+            }
+            row.appendChild(doc.createTextNode("\r\n  "));
+
+            root.appendChild(doc.createTextNode("  "));
+            root.appendChild(row);
+            root.appendChild(doc.createTextNode("\r\n"));
+          }
+
+          let xmlOut = new XMLSerializer().serializeToString(doc);
+          if (!xmlOut.startsWith("<?xml")) {
+            xmlOut = '<?xml version="1.0" standalone="yes"?>\r\n' + xmlOut;
+          }
+          return { xml: xmlOut, bandName, count: uniqueColors.length };
+        },
+        download(xmlText, bandName) {
+          const fileName = `CraftBandMesh-${sanitizeFileNamePart(bandName)}.CBMESH`;
+          const blob = new Blob([xmlText], { type: "application/xml;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          return fileName;
+        },
+      };
+
+      // --- Sorter Module ---
+      const SorterModule = {
+        byNameJa(a, b) {
+          return (a.name || "").localeCompare(b.name || "", "ja");
+        },
+        bySimilarColor(a, b) {
+          const hslA = rgbToHsl(a.r, a.g, a.b);
+          const hslB = rgbToHsl(b.r, b.g, b.b);
+          const bucketA = Math.floor(hslA.h / CONFIG.hueBucketDeg);
+          const bucketB = Math.floor(hslB.h / CONFIG.hueBucketDeg);
+          if (bucketA !== bucketB) return bucketA - bucketB;
+          if (Math.abs(hslA.l - hslB.l) > CONFIG.lightnessDiffThreshold) {
+            return hslA.l - hslB.l;
+          }
+          if (hslA.h !== hslB.h) return hslA.h - hslB.h;
+          if (a.r !== b.r) return a.r - b.r;
+          if (a.g !== b.g) return a.g - b.g;
+          return a.b - b.b;
+        },
+        byProductInfo(a, b) {
+          const pa = (a.productInfo || "").trim();
+          const pb = (b.productInfo || "").trim();
+          if (!pa && !pb) return SorterModule.byNameJa(a, b);
+          if (!pa) return 1;
+          if (!pb) return -1;
+          const cmp = pa.localeCompare(pb, "ja", { numeric: true, sensitivity: "base" });
+          return cmp !== 0 ? cmp : SorterModule.byNameJa(a, b);
+        },
+        sort(items, mode) {
+          const list = [...items];
+          if (mode === "name") return list.sort(SorterModule.byNameJa);
+          if (mode === "product") return list.sort(SorterModule.byProductInfo);
+          return list.sort(SorterModule.bySimilarColor);
+        },
+      };
+
+      // --- Opener & Same-Origin Bridge ---
+      const broadcastChannel =
+        isPickerMode && typeof BroadcastChannel !== "undefined"
+          ? new BroadcastChannel(CONFIG.channelName)
+          : null;
+
+      function notifyOpener(payload) {
+        const message = {
+          ...payload,
+          cb_req_id: openerContext.cbReqId,
+          cb_slot: openerContext.cbSlot,
+          sentAt: Date.now(),
+        };
+
+        if (window.opener && !window.opener.closed) {
+          try {
+            window.opener.postMessage(message, window.location.origin);
+          } catch (_) {
+            // 送信制限時は補助経路へフォールバック
+          }
+        }
+
+        if (window.parent && window.parent !== window) {
+          try {
+            window.parent.postMessage(message, window.location.origin);
+          } catch (_) {
+            // 送信制限時は補助経路へフォールバック
+          }
+        }
+
+        if (broadcastChannel) {
+          try {
+            broadcastChannel.postMessage(message);
+          } catch (_) {
+            // チャンネル送信不可時は無視
+          }
+        }
+
+        try {
+          localStorage.setItem(CONFIG.storageKeyBridgeEvent, JSON.stringify(message));
+        } catch (_) {
+          // ストレージ制限時は無視
+        }
+      }
+
+      function tryCloseViewer() {
+        try {
+          window.close();
+        } catch (_) {
+          // ブラウザ制限で閉じられない場合はそのまま継続
+        }
+      }
+
+      function sendColorToOpener(item) {
+        notifyOpener({
+          type: "COLOR_VIEWER_SELECT",
+          color: item.hex,
+          name: item.name,
+          productInfo: item.productInfo || "",
+        });
+        tryCloseViewer();
+      }
+
+      function cancelAndReturnToOpener() {
+        notifyOpener({ type: "COLOR_VIEWER_CANCEL" });
+        tryCloseViewer();
+      }
+
+      // --- Modal Controller ---
+      const BandModal = {
+        open(records, bandTypes, fileName, mode = "replace", bandProductInfoMap = new Map()) {
+          dom.bandModalDesc.textContent =
+            mode === "append"
+              ? `「${fileName}」に複数のバンド種類名があります。選ぶと現在の色一覧に追加します。`
+              : `「${fileName}」に複数のバンド種類名があります。選ぶと現在の色一覧を入れ替えます。`;
+          dom.bandChoiceList.innerHTML = "";
+
+          for (const bt of bandTypes) {
+            const count = records.filter((r) => r.bandType === bt).length;
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "band-choice-btn";
+            btn.textContent = `${bt}（${count}件）`;
+            btn.addEventListener("click", () => {
+              if (mode === "append") {
+                applyBandAppend(records, bt, fileName, bandProductInfoMap);
+              } else {
+                applyBandReplacement(records, bt, fileName, bandProductInfoMap);
+              }
+            });
+            dom.bandChoiceList.appendChild(btn);
+          }
+
+          dom.bandModal.classList.add("is-open");
+        },
+        close() {
+          dom.bandModal.classList.remove("is-open");
+        },
+      };
+
+      // --- Renderer Module ---
+      const RendererModule = {
+        syncHeader() {
+          const hasColors = state.colors.length > 0;
+          const displayName = hasColors ? normalizeBandName(state.bandName) : "色見本帳";
+          const prodInfo = hasColors ? (state.bandProductInfo || "").trim() : "";
+          dom.bandNameText.textContent = displayName;
+          dom.bandProductInfoText.textContent = prodInfo ? `(${prodInfo})` : "";
+          dom.bandBadge.title = prodInfo ? `${displayName} (${prodInfo})` : displayName;
+          dom.bandNameInput.value = !hasColors && state.bandName === CONFIG.defaultBandName ? "" : state.bandName;
+          dom.saveCbmeshBtn.disabled = !hasColors;
+        },
+        syncSortButtons() {
+          for (const btn of dom.sortButtons) {
+            btn.classList.toggle("is-active", btn.dataset.sort === state.sort);
+          }
+        },
+        createSwatchCard(item) {
+          const card = document.createElement("div");
+          card.className = item.id === state.pinnedTopId ? "swatch-card is-just-added" : "swatch-card";
+          if (isPickerMode) {
+            card.setAttribute("role", "button");
+            card.tabIndex = 0;
+          }
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "swatch-remove-btn";
+          removeBtn.title = `${item.name || "この色"}を削除`;
+          removeBtn.setAttribute("aria-label", `${item.name || "この色"}を削除`);
+          removeBtn.textContent = "×";
+          removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (!window.confirm("削除してよいですか？")) return;
+            removeColorCard(item.id);
+          });
+
+          const chip = document.createElement("div");
+          chip.className = "swatch-chip";
+          chip.style.backgroundColor = item.hex;
+
+          const body = document.createElement("div");
+          body.className = "swatch-body";
+
+          const nameEl = document.createElement("span");
+          nameEl.className = "swatch-name";
+          nameEl.textContent = item.name || "(無名)";
+          body.appendChild(nameEl);
+
+          if (item.productInfo) {
+            const skuEl = document.createElement("span");
+            skuEl.className = "swatch-sku";
+            skuEl.title = item.productInfo;
+            skuEl.textContent = item.productInfo;
+            body.appendChild(skuEl);
+          }
+
+          const hexEl = document.createElement("span");
+          hexEl.className = "swatch-hex";
+          hexEl.textContent = item.hex.toUpperCase();
+          body.appendChild(hexEl);
+
+          card.append(removeBtn, chip, body);
+
+          if (isPickerMode) {
+            card.addEventListener("click", () => sendColorToOpener(item));
+            card.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                sendColorToOpener(item);
+              }
+            });
+          }
+
+          return card;
+        },
+        renderGrid() {
+          RendererModule.syncHeader();
+          const sorted = SorterModule.sort(state.colors, state.sort);
+          if (state.pinnedTopId) {
+            const pinIdx = sorted.findIndex((item) => item.id === state.pinnedTopId);
+            if (pinIdx > 0) {
+              const [pinned] = sorted.splice(pinIdx, 1);
+              sorted.unshift(pinned);
+            } else if (pinIdx < 0) {
+              state.pinnedTopId = null;
+            }
+          }
+          dom.swatchGrid.innerHTML = "";
+
+          if (sorted.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "empty-hint";
+            empty.textContent = [
+              "この「色見本帳」に使いたい色をまとめて登録しておくと、以降は選ぶだけになります。",
+              "",
+              "👉色ピッカーで個別に選ぶ...色名(省略も可)をつけて「追加」",
+              "👉.CBMESH/.XML ファイルからまとめて読み込む...「新規読込」「追加読込」",
+              "",
+              "「読込・保存▼」から開いてください。後からでも追加できます。",
+              "",
+              "💡データはブラウザに一時保存されます。ファイルに残したければ「保存(.CBMESH)」して下さい。",
+            ].join("\n");
+            dom.swatchGrid.appendChild(empty);
+            dom.viewStatus.textContent = isPickerMode ? "0色" : "全0色";
+            return;
+          }
+
+          const fragment = document.createDocumentFragment();
+          for (const item of sorted) {
+            fragment.appendChild(RendererModule.createSwatchCard(item));
+          }
+          dom.swatchGrid.appendChild(fragment);
+          dom.viewStatus.textContent = isPickerMode ? "タップで選択、元画面へ" : `全${sorted.length}色`;
+        },
+      };
+
+      // --- Actions ---
+      function applyBandReplacement(records, selectedBandType, label, bandProductInfoMap = new Map()) {
+        state.colors = XmlParserModule.buildReplacedList(records, selectedBandType);
+        state.bandName = normalizeBandName(selectedBandType);
+        state.bandProductInfo = (bandProductInfoMap.get(selectedBandType) || "").trim();
+        state.pinnedTopId = null;
+        StorageModule.save();
+        BandModal.close();
+        RendererModule.renderGrid();
+        dom.xmlStatus.textContent = `${label}：「${state.bandName}」を新規読込しました（${state.colors.length}色）`;
+        setManagePanelOpen(false);
+      }
+
+      function applyBandAppend(records, selectedBandType, label, bandProductInfoMap = new Map()) {
+        const wasEmpty = state.colors.length === 0;
+        const { added, skipped } = XmlParserModule.buildAppendedColors(state.colors, records, selectedBandType);
+        if (wasEmpty && added.length > 0) {
+          state.bandName = normalizeBandName(selectedBandType);
+          state.bandProductInfo = (bandProductInfoMap.get(selectedBandType) || "").trim();
+        }
+        state.colors = state.colors.concat(added);
+        state.pinnedTopId = null;
+        StorageModule.save();
+        BandModal.close();
+        RendererModule.renderGrid();
+        dom.xmlStatus.textContent = `${label}：「${selectedBandType}」から${added.length}色を追加しました（重複${skipped}色スキップ・計${state.colors.length}色）`;
+        setManagePanelOpen(false);
+      }
+
+      function clearOnInvalidOrEmpty(label, message) {
+        StorageModule.clearColors();
+        state.pinnedTopId = null;
+        BandModal.close();
+        RendererModule.renderGrid();
+        dom.xmlStatus.textContent = `${label}：${message}（保存データをクリアしました）`;
+        setManagePanelOpen(true);
+      }
+
+      function reportLoadError(mode, label, message) {
+        if (mode === "replace") {
+          clearOnInvalidOrEmpty(label, message);
+        } else {
+          dom.xmlStatus.textContent = `${label}：${message}`;
+        }
+      }
+
+      function removeColorCard(id) {
+        state.colors = state.colors.filter((item) => item.id !== id);
+        state.pinnedTopId = null;
+        StorageModule.save();
+        RendererModule.renderGrid();
+      }
+
+      function addManualColor() {
+        const hex = dom.manualColorInput.value;
+        const rgb = hexToRgb(hex);
+        const name = dom.manualNameInput.value.trim() || hex.toUpperCase();
+        const productInfo = dom.manualSkuInput.value.trim();
+        const currentBand = normalizeBandName(dom.bandNameInput.value || state.bandName);
+        state.bandName = currentBand;
+
+        const existingIndex = state.colors.findIndex((item) => item.name === name);
+        const targetId = existingIndex >= 0 ? state.colors[existingIndex].id : createId();
+        const entry = {
+          id: targetId,
+          name,
+          bandType: currentBand,
+          r: rgb.r,
+          g: rgb.g,
+          b: rgb.b,
+          alpha: 255,
+          hex,
+          productInfo,
+        };
+
+        if (existingIndex >= 0) {
+          state.colors[existingIndex] = entry;
+        } else {
+          state.colors.push(entry);
+        }
+
+        state.pinnedTopId = targetId;
+        dom.manualNameInput.value = "";
+        dom.manualSkuInput.value = "";
+        StorageModule.save();
+        RendererModule.renderGrid();
+        dom.xmlStatus.textContent = `「${name}」を追加しました（合計${state.colors.length}色・先頭に表示中）`;
+      }
+
+      async function saveAsCbmesh() {
+        if (state.colors.length === 0) return;
+        const targetBandName = normalizeBandName(dom.bandNameInput.value || state.bandName);
+        state.bandName = targetBandName;
+        state.pinnedTopId = null;
+        StorageModule.save();
+        RendererModule.renderGrid();
+
+        dom.saveCbmeshBtn.disabled = true;
+        dom.xmlStatus.textContent = "CBMESHファイルを生成しています...";
+        try {
+          const { xml, bandName, count } = await CbmeshExporterModule.buildCbmeshXml(
+            state.colors,
+            targetBandName,
+            state.bandProductInfo
+          );
+          const fileName = CbmeshExporterModule.download(xml, bandName);
+          dom.xmlStatus.textContent = `「${fileName}」を保存しました（バンド名: ${bandName} / ${count}色）`;
+        } catch (err) {
+          dom.xmlStatus.textContent = `保存エラー：${err && err.message ? err.message : "テンプレートの読み込みに失敗しました"}`;
+        } finally {
+          dom.saveCbmeshBtn.disabled = state.colors.length === 0;
+        }
+      }
+
+      async function handleFileInputChange(inputEl, mode) {
+        const file = inputEl.files && inputEl.files[0];
+        if (!file) return;
+
+        const fileName = file.name;
+        if (!XmlParserModule.hasAllowedExtension(fileName)) {
+          reportLoadError(mode, fileName, "未対応の拡張子です（.XML または .CBMESH を選択してください）");
+          inputEl.value = "";
+          return;
+        }
+
+        try {
+          const xmlText = await file.text();
+          const { records, bandProductInfoMap } = XmlParserModule.parseXmlData(xmlText);
+          const bandTypes = XmlParserModule.getBandTypes(records);
+
+          if (records.length === 0 || bandTypes.length === 0) {
+            reportLoadError(mode, fileName, "有効な描画色レコードが見つかりませんでした");
+          } else if (bandTypes.length === 1) {
+            if (mode === "append") {
+              applyBandAppend(records, bandTypes[0], fileName, bandProductInfoMap);
+            } else {
+              applyBandReplacement(records, bandTypes[0], fileName, bandProductInfoMap);
+            }
+          } else {
+            BandModal.open(records, bandTypes, fileName, mode, bandProductInfoMap);
+          }
+        } catch (err) {
+          reportLoadError(mode, fileName, err.message || "ファイル読込エラー");
+        } finally {
+          inputEl.value = "";
+        }
+      }
+
+      // --- API Loader Module (?cb_file_url=) ---
+      const ApiLoaderModule = {
+        async loadFromQueryIfPresent() {
+          const rawUrl = openerContext.cbFileUrl;
+          if (!rawUrl) return;
+
+          let parsedUrl;
+          try {
+            parsedUrl = new URL(rawUrl, window.location.href);
+          } catch (_) {
+            clearOnInvalidOrEmpty(rawUrl, "不正なURLです");
+            return;
+          }
+
+          if (!/^https?:$/i.test(parsedUrl.protocol)) {
+            clearOnInvalidOrEmpty(rawUrl, "http または https のURLを指定してください");
+            return;
+          }
+
+          if (!XmlParserModule.hasAllowedExtension(parsedUrl.pathname)) {
+            clearOnInvalidOrEmpty(parsedUrl.toString(), "未対応の拡張子です（.XML または .CBMESH を指定してください）");
+            return;
+          }
+
+          try {
+            const response = await fetch(parsedUrl.toString(), { cache: "no-store" });
+            if (!response.ok) {
+              throw new Error(`取得に失敗しました（HTTP ${response.status}）`);
+            }
+            const xmlText = await response.text();
+            const { records, bandProductInfoMap } = XmlParserModule.parseXmlData(xmlText);
+            const bandTypes = XmlParserModule.getBandTypes(records);
+
+            if (records.length === 0 || bandTypes.length === 0) {
+              clearOnInvalidOrEmpty(parsedUrl.toString(), "有効な描画色レコードが見つかりませんでした");
+              return;
+            }
+
+            applyBandReplacement(records, bandTypes[0], parsedUrl.toString(), bandProductInfoMap);
+          } catch (err) {
+            clearOnInvalidOrEmpty(parsedUrl.toString(), err.message || "API読込エラー");
+          }
+        },
+      };
+
+      // --- Event Listeners ---
+      dom.cancelSelectBtn.addEventListener("click", () => {
+        if (isPickerMode) {
+          cancelAndReturnToOpener();
+        } else {
+          tryCloseViewer();
+        }
+      });
+
+      dom.toggleManageBtn.addEventListener("click", () => {
+        setManagePanelOpen(!dom.managePanel.classList.contains("is-open"));
+      });
+
+      dom.bandNameInput.addEventListener("change", () => {
+        state.bandName = normalizeBandName(dom.bandNameInput.value);
+        state.pinnedTopId = null;
+        StorageModule.save();
+        RendererModule.renderGrid();
+      });
+
+      dom.saveCbmeshBtn.addEventListener("click", saveAsCbmesh);
+
+      for (const btn of dom.sortButtons) {
+        btn.addEventListener("click", () => {
+          const nextSort = btn.dataset.sort;
+          if (!nextSort || !CONFIG.validSorts.includes(nextSort)) return;
+          state.sort = nextSort;
+          state.pinnedTopId = null;
+          RendererModule.syncSortButtons();
+          StorageModule.save();
+          RendererModule.renderGrid();
+        });
+      }
+
+      dom.xmlFileReplaceInput.addEventListener("change", () => {
+        handleFileInputChange(dom.xmlFileReplaceInput, "replace");
+      });
+
+      dom.xmlFileAppendInput.addEventListener("change", () => {
+        handleFileInputChange(dom.xmlFileAppendInput, "append");
+      });
+
+      dom.closeModalBtn.addEventListener("click", BandModal.close);
+      dom.bandModal.addEventListener("click", (e) => {
+        if (e.target === dom.bandModal) BandModal.close();
+      });
+      dom.addManualBtn.addEventListener("click", addManualColor);
+
+      // --- Initialize ---
+      dom.cancelSelectBtn.textContent = isPickerMode ? "キャンセル" : "閉じる";
+      document.body.classList.toggle("is-viewer-mode", !isPickerMode);
+      StorageModule.load();
+      RendererModule.syncSortButtons();
+      RendererModule.renderGrid();
+      setManagePanelOpen(state.colors.length === 0 && !openerContext.cbFileUrl);
+      ApiLoaderModule.loadFromQueryIfPresent();
+    })();
+  </script>
+</body>
+</html>

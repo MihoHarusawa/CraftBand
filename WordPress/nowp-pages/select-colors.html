@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>色合わせ</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0f1115;
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #ui-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px 15px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* 選択呼出し時のみ表示される上部アクションバー */
+        #picker-bar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        #picker-bar.is-visible {
+            display: flex;
+        }
+
+        .picker-btn {
+            font-size: 13px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #4b5563;
+            background: #1f2937;
+            color: #f3f4f6;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .picker-btn:hover {
+            background: #374151;
+            border-color: #6b7280;
+        }
+
+        .picker-btn.primary {
+            background: #2563eb;
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        .picker-btn.primary:hover {
+            background: #1d4ed8;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 2px 0 0 0;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        #instructions {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e6edf3;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 4px solid #e67e22;
+        }
+
+        .instructions-note {
+            font-size: 11px;
+            color: #8b949e;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        #empty-notice {
+            display: none;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #fde68a;
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+
+        #empty-notice.is-visible {
+            display: block;
+        }
+
+        #empty-notice a {
+            color: #93c5fd;
+            font-weight: bold;
+        }
+
+        #preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .grid-size-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .grid-size-bar input[type="range"] {
+            width: 110px;
+            height: 4px;
+            accent-color: #9ca3af;
+            cursor: pointer;
+            margin: 0;
+            opacity: 0.85;
+        }
+
+        #preview-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: rgba(15, 17, 21, 0.9);
+            border-radius: 8px;
+            border: 2px solid #30363d;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        #selection-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .selection-box {
+            flex: 1;
+            padding: 10px 14px;
+            background: rgba(15, 17, 21, 0.9);
+            border-radius: 8px;
+            border: 2px solid #30363d;
+            border-left: 15px solid #444;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            min-width: 0;
+        }
+
+        .selection-box.active {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .active-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            background: #e67e22;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: none;
+            width: fit-content;
+            margin-bottom: 5px;
+        }
+
+        .selection-box.active .active-label {
+            display: block;
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8b949e;
+        }
+
+        .val {
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-top: 5px;
+            min-height: 40px;
+            word-break: break-word;
+        }
+
+        .rgb-val {
+            font-size: 11px;
+            opacity: 0.78;
+            font-weight: normal;
+            font-family: monospace;
+            display: block;
+            margin-top: 2px;
+            color: #d1d5db;
+        }
+
+        #canvas-container {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 400px;
+            position: relative;
+            background-color: #0f1115;
+            border-top: 2px solid #30363d;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui-container">
+        <div id="picker-bar">
+            <button type="button" class="picker-btn" id="btn-cancel">キャンセル</button>
+            <button type="button" class="picker-btn primary" id="btn-confirm">二色を確定して戻る</button>
+        </div>
+
+        <h1 id="page-title">色合わせ</h1>
+
+        <div id="instructions">
+            <span class="highlight">【使い方】</span><br>
+            1. 下の「選択色A」または「選択色B」の枠をタップして、ターゲットを選択します。<br>
+            2. 画面下部の3D空間にある色の球をタップすると、その色が斜め格子に反映されます。<br>
+            <span class="instructions-note">※3D空間はスワイプ（ドラッグ）で回転、ピンチ操作で拡大・縮小できます。</span>
+        </div>
+
+        <div id="empty-notice">
+            色見本帳に色データが保存されていません。<br>
+            <a href="./color-viewer.html" target="_blank" rel="noopener">色見本帳（color-viewer.html）</a>でファイルを読み込むか色を追加すると、ここに表示されます。
+        </div>
+
+        <!-- 格子の粗さスライダー + 斜め格子プレビュー -->
+        <div id="preview-section">
+            <div class="grid-size-bar">
+                <label for="grid-scale-slider">格子の粗さ</label>
+                <input type="range" id="grid-scale-slider" min="1" max="5" step="1" value="3" aria-label="格子の粗さ" />
+            </div>
+            <div id="preview-box">
+                <svg id="preview-svg" width="100%" height="100%">
+                    <defs>
+                        <pattern id="diagonal-checker" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                            <rect id="pattern-rect-a1" x="0" y="0" width="30" height="30" fill="#ffffff" />
+                            <rect id="pattern-rect-b1" x="30" y="0" width="30" height="30" fill="#000000" />
+                            <rect id="pattern-rect-b2" x="0" y="30" width="30" height="30" fill="#000000" />
+                            <rect id="pattern-rect-a2" x="30" y="30" width="30" height="30" fill="#ffffff" />
+                        </pattern>
+                    </defs>
+                    <rect x="0" y="0" width="100%" height="100%" fill="url(#diagonal-checker)" />
+                </svg>
+            </div>
+        </div>
+
+        <div id="selection-container">
+            <div class="selection-box active" id="color-a">
+                <div class="active-label">選択ターゲット</div>
+                <h3>選択色 A</h3>
+                <div id="text-a" class="val">下の球体をタップ</div>
+            </div>
+            <div class="selection-box" id="color-b">
+                <div class="active-label">選択ターゲット</div>
+                <h3>選択色 B</h3>
+                <div id="text-b" class="val">下の球体をタップ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- Config ---
+        const CONFIG = {
+            storageKeyColors: 'craftband_color_viewer_colors_v1',
+            storageKeyBandName: 'craftband_color_viewer_band_name_v1',
+            storageKeyBridgeEvent: 'craftband_color_viewer_bridge_event_v1',
+            channelName: 'craftband_color_viewer_channel_v1',
+            gridTileSizes: [24, 40, 60, 90, 130],
+            autoRotateRadPerSec: (Math.PI * 2) / 60,
+            idleResumeMs: 20000,
+        };
+
+        const DEFAULT_COLORS = {
+            a: { name: '白', r: 255, g: 255, b: 255, productInfo: '' },
+            b: { name: '黒', r: 0, g: 0, b: 0, productInfo: '' },
+        };
+
+        // --- Context & State ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const openerContext = {
+            cbReqId: (urlParams.get('cb_req_id') || '').trim(),
+            cbSlot: (urlParams.get('cb_slot') || '').trim(),
+        };
+        const isPickerMode = Boolean(openerContext.cbReqId || openerContext.cbSlot);
+
+        let activeSlot = 'a';
+        const selectedColors = {
+            a: { ...DEFAULT_COLORS.a },
+            b: { ...DEFAULT_COLORS.b },
+        };
+
+        // --- DOM References ---
+        const dom = {
+            pickerBar: document.getElementById('picker-bar'),
+            btnCancel: document.getElementById('btn-cancel'),
+            btnConfirm: document.getElementById('btn-confirm'),
+            pageTitle: document.getElementById('page-title'),
+            emptyNotice: document.getElementById('empty-notice'),
+            gridScaleSlider: document.getElementById('grid-scale-slider'),
+            checkerPattern: document.getElementById('diagonal-checker'),
+            rects: {
+                a1: document.getElementById('pattern-rect-a1'),
+                a2: document.getElementById('pattern-rect-a2'),
+                b1: document.getElementById('pattern-rect-b1'),
+                b2: document.getElementById('pattern-rect-b2'),
+            },
+            slots: {
+                a: {
+                    box: document.getElementById('color-a'),
+                    text: document.getElementById('text-a'),
+                },
+                b: {
+                    box: document.getElementById('color-b'),
+                    text: document.getElementById('text-b'),
+                },
+            },
+            canvasContainer: document.getElementById('canvas-container'),
+        };
+
+        // --- Helpers ---
+        function clampByte(n) {
+            return Math.max(0, Math.min(255, Number.isFinite(n) ? Math.trunc(n) : 0));
+        }
+
+        function rgbToHex(r, g, b) {
+            return '#' + [clampByte(r), clampByte(g), clampByte(b)]
+                .map((v) => v.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function loadFromColorViewerStorage() {
+            let colors = [];
+            let bandName = '';
+
+            try {
+                const rawColors = localStorage.getItem(CONFIG.storageKeyColors);
+                if (rawColors) {
+                    const parsed = JSON.parse(rawColors);
+                    if (Array.isArray(parsed)) {
+                        colors = parsed
+                            .filter((item) => item && typeof item === 'object')
+                            .map((item) => ({
+                                name: typeof item.name === 'string' && item.name.trim() ? item.name.trim() : '(無名)',
+                                r: clampByte(Number(item.r)),
+                                g: clampByte(Number(item.g)),
+                                b: clampByte(Number(item.b)),
+                                productInfo: typeof item.productInfo === 'string' ? item.productInfo.trim() : '',
+                                bandType: typeof item.bandType === 'string' ? item.bandType.trim() : '',
+                            }));
+                    }
+                }
+                const savedBandName = localStorage.getItem(CONFIG.storageKeyBandName);
+                if (savedBandName && savedBandName.trim()) {
+                    bandName = savedBandName.trim();
+                } else {
+                    const inferred = colors.find((c) => c.bandType && c.bandType !== '(手作業)' && c.bandType !== '-');
+                    if (inferred) bandName = inferred.bandType;
+                }
+            } catch (_) {
+                colors = [];
+                bandName = '';
+            }
+
+            return { colors, bandName };
+        }
+
+        // --- Opener & Same-Origin Bridge ---
+        const broadcastChannel =
+            isPickerMode && typeof BroadcastChannel !== 'undefined'
+                ? new BroadcastChannel(CONFIG.channelName)
+                : null;
+
+        function notifyOpener(payload) {
+            const message = {
+                ...payload,
+                cb_req_id: openerContext.cbReqId,
+                cb_slot: openerContext.cbSlot,
+                sentAt: Date.now(),
+            };
+
+            if (window.opener && !window.opener.closed) {
+                try {
+                    window.opener.postMessage(message, window.location.origin);
+                } catch (_) {}
+            }
+
+            if (window.parent && window.parent !== window) {
+                try {
+                    window.parent.postMessage(message, window.location.origin);
+                } catch (_) {}
+            }
+
+            if (broadcastChannel) {
+                try {
+                    broadcastChannel.postMessage(message);
+                } catch (_) {}
+            }
+
+            try {
+                localStorage.setItem(CONFIG.storageKeyBridgeEvent, JSON.stringify(message));
+            } catch (_) {}
+        }
+
+        function tryCloseWindow() {
+            try {
+                window.close();
+            } catch (_) {}
+        }
+
+        function confirmAndReturnPair() {
+            const a = selectedColors.a || DEFAULT_COLORS.a;
+            const b = selectedColors.b || DEFAULT_COLORS.b;
+            notifyOpener({
+                type: 'COLOR_VIEWER_SELECT_PAIR',
+                colorA: rgbToHex(a.r, a.g, a.b),
+                nameA: a.name || DEFAULT_COLORS.a.name,
+                productInfoA: a.productInfo || '',
+                colorB: rgbToHex(b.r, b.g, b.b),
+                nameB: b.name || DEFAULT_COLORS.b.name,
+                productInfoB: b.productInfo || '',
+            });
+            tryCloseWindow();
+        }
+
+        function cancelAndReturn() {
+            notifyOpener({ type: 'COLOR_VIEWER_CANCEL' });
+            tryCloseWindow();
+        }
+
+        // --- Preview Grid & Selection UI ---
+        function applyGridScale(level) {
+            const idx = Math.max(0, Math.min(CONFIG.gridTileSizes.length - 1, Number(level) - 1));
+            const tile = CONFIG.gridTileSizes[idx];
+            const half = tile / 2;
+
+            dom.checkerPattern.setAttribute('width', String(tile));
+            dom.checkerPattern.setAttribute('height', String(tile));
+
+            const layout = [
+                [dom.rects.a1, 0, 0],
+                [dom.rects.b1, half, 0],
+                [dom.rects.b2, 0, half],
+                [dom.rects.a2, half, half],
+            ];
+            for (const [el, x, y] of layout) {
+                el.setAttribute('x', String(x));
+                el.setAttribute('y', String(y));
+                el.setAttribute('width', String(half));
+                el.setAttribute('height', String(half));
+            }
+        }
+
+        function setActiveSlot(slot) {
+            activeSlot = slot;
+            dom.slots.a.box.classList.toggle('active', slot === 'a');
+            dom.slots.b.box.classList.toggle('active', slot === 'b');
+        }
+
+        function updatePreview() {
+            const a = selectedColors.a || DEFAULT_COLORS.a;
+            const b = selectedColors.b || DEFAULT_COLORS.b;
+            const colAStr = `rgb(${a.r}, ${a.g}, ${a.b})`;
+            const colBStr = `rgb(${b.r}, ${b.g}, ${b.b})`;
+
+            dom.rects.a1.setAttribute('fill', colAStr);
+            dom.rects.a2.setAttribute('fill', colAStr);
+            dom.rects.b1.setAttribute('fill', colBStr);
+            dom.rects.b2.setAttribute('fill', colBStr);
+        }
+
+        function updateSelection(target, color) {
+            const slotDom = dom.slots[target];
+            if (!slotDom) return;
+            const rgbStr = `rgb(${color.r}, ${color.g}, ${color.b})`;
+
+            slotDom.text.textContent = '';
+            slotDom.text.appendChild(document.createTextNode(color.name));
+
+            const metaEl = document.createElement('span');
+            metaEl.className = 'rgb-val';
+            metaEl.textContent = color.productInfo
+                ? `${color.productInfo} / RGB: ${color.r}, ${color.g}, ${color.b}`
+                : `RGB: ${color.r}, ${color.g}, ${color.b}`;
+            slotDom.text.appendChild(metaEl);
+
+            const luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+            slotDom.text.style.color = luminance < 75 ? '#f3f4f6' : rgbStr;
+            slotDom.box.style.borderLeftColor = rgbStr;
+            slotDom.box.style.backgroundColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.15)`;
+
+            selectedColors[target] = color;
+            updatePreview();
+        }
+
+        // --- Three.js Scene & Lighting ---
+        const scene = new THREE.Scene();
+        const initialW = dom.canvasContainer.clientWidth || 300;
+        const initialH = dom.canvasContainer.clientHeight || 400;
+        const camera = new THREE.PerspectiveCamera(75, initialW / initialH, 0.1, 2000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(initialW, initialH);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        dom.canvasContainer.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        camera.position.set(380, 380, 380);
+        controls.target.set(127.5, 127.5, 127.5);
+        controls.enableDamping = true;
+
+        // 上下の環境光 + 右上前方からの主光源 + 反対側の弱いリムライト
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x1e2430, 0.6));
+
+        const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+        keyLight.position.set(360, 480, 320);
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight(0xbfd7ff, 0.45);
+        rimLight.position.set(-280, -140, -280);
+        scene.add(rimLight);
+
+        const grid = new THREE.LineSegments(
+            new THREE.EdgesGeometry(new THREE.BoxGeometry(255, 255, 255)),
+            new THREE.LineBasicMaterial({ color: 0x444d56 })
+        );
+        grid.position.set(127.5, 127.5, 127.5);
+        scene.add(grid);
+
+        const sphereGroup = new THREE.Group();
+        const sphereGeo = new THREE.SphereGeometry(14, 32, 32);
+        scene.add(sphereGroup);
+
+        function rebuildPalette() {
+            const { colors, bandName } = loadFromColorViewerStorage();
+
+            const heading = bandName ? `${bandName}の色合わせ` : '色合わせ';
+            dom.pageTitle.textContent = heading;
+            document.title = heading;
+            dom.emptyNotice.classList.toggle('is-visible', colors.length === 0);
+
+            while (sphereGroup.children.length > 0) {
+                const mesh = sphereGroup.children.pop();
+                if (mesh.material) mesh.material.dispose();
+            }
+
+            for (const color of colors) {
+                const material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color(`rgb(${color.r},${color.g},${color.b})`),
+                    specular: new THREE.Color(0x555555),
+                    shininess: 65,
+                });
+                const sphere = new THREE.Mesh(sphereGeo, material);
+                sphere.position.set(color.r, color.g, color.b);
+                sphere.userData = color;
+                sphereGroup.add(sphere);
+            }
+        }
+
+        // --- 自動回転制御（起動直後ON / 操作で停止 / 20秒無操作で再開） ---
+        let isAutoRotating = true;
+        let isInteracting = false;
+        let idleTimerId = null;
+        const yAxis = new THREE.Vector3(0, 1, 0);
+        const orbitOffset = new THREE.Vector3();
+
+        function clearIdleTimer() {
+            if (idleTimerId !== null) {
+                clearTimeout(idleTimerId);
+                idleTimerId = null;
+            }
+        }
+
+        function scheduleAutoRotateResume() {
+            clearIdleTimer();
+            if (isInteracting) return;
+            idleTimerId = setTimeout(() => {
+                idleTimerId = null;
+                if (!isInteracting) isAutoRotating = true;
+            }, CONFIG.idleResumeMs);
+        }
+
+        function pauseAutoRotateOnActivity() {
+            isAutoRotating = false;
+            scheduleAutoRotateResume();
+        }
+
+        controls.addEventListener('start', () => {
+            isInteracting = true;
+            isAutoRotating = false;
+            clearIdleTimer();
+        });
+
+        controls.addEventListener('end', () => {
+            isInteracting = false;
+            scheduleAutoRotateResume();
+        });
+
+        for (const evtName of ['pointerdown', 'wheel', 'touchstart', 'keydown', 'input']) {
+            window.addEventListener(evtName, pauseAutoRotateOnActivity, { passive: true });
+        }
+
+        // --- Raycaster（球体タップ選択） ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let pointerDownTime = 0;
+        let pointerDownPos = { x: 0, y: 0 };
+
+        renderer.domElement.addEventListener('pointerdown', (e) => {
+            pointerDownTime = Date.now();
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+        });
+
+        renderer.domElement.addEventListener('pointerup', (e) => {
+            const duration = Date.now() - pointerDownTime;
+            const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+
+            if (duration < 300 && dist < 10) {
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(sphereGroup.children, true);
+
+                if (intersects.length > 0) {
+                    updateSelection(activeSlot, intersects[0].object.userData);
+                }
+            }
+        });
+
+        // --- Event Listeners ---
+        dom.btnCancel.addEventListener('click', cancelAndReturn);
+        dom.btnConfirm.addEventListener('click', confirmAndReturnPair);
+        dom.slots.a.box.addEventListener('click', () => setActiveSlot('a'));
+        dom.slots.b.box.addEventListener('click', () => setActiveSlot('b'));
+        dom.gridScaleSlider.addEventListener('input', () => applyGridScale(dom.gridScaleSlider.value));
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === CONFIG.storageKeyColors || e.key === CONFIG.storageKeyBandName) {
+                rebuildPalette();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            const w = dom.canvasContainer.clientWidth;
+            const h = dom.canvasContainer.clientHeight;
+            if (!w || !h) return;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        // --- Initialize ---
+        dom.pickerBar.classList.toggle('is-visible', isPickerMode);
+        applyGridScale(dom.gridScaleSlider.value);
+        updateSelection('a', { ...DEFAULT_COLORS.a });
+        updateSelection('b', { ...DEFAULT_COLORS.b });
+        rebuildPalette();
+
+        let lastTime = performance.now();
+        function animate(now) {
+            requestAnimationFrame(animate);
+            const deltaSec = Math.min(0.1, Math.max(0, (now - lastTime) / 1000));
+            lastTime = now;
+
+            if (isAutoRotating && !isInteracting) {
+                orbitOffset.copy(camera.position).sub(controls.target);
+                orbitOffset.applyAxisAngle(yAxis, CONFIG.autoRotateRadPerSec * deltaSec);
+                camera.position.copy(controls.target).add(orbitOffset);
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
